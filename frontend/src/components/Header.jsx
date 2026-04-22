@@ -24,7 +24,7 @@ function Header() {
         </div>
       </section>
 
-      <header className="float-start w-100">
+      <header className="w-100 mb-5 pb-3">
         <nav className="navbar navbar-expand-lg navbar-light">
           <div className="container">
             <Link className="navbar-brand" to="/">

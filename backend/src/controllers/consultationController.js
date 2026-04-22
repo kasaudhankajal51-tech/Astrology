@@ -10,6 +10,7 @@ export const submitConsultation = asyncHandler(async (req, res) => {
   });
 });
 
+
 export const getConsultations = asyncHandler(async (req, res) => {
   const list = await consultationService.getAllConsultations();
   res.json({ success: true, data: list });

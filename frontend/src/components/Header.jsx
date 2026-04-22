@@ -340,6 +340,25 @@ function Header() {
           }
         }
 
+        @media (min-width: 992px) and (max-width: 1250px) {
+          .right-menui ul .consult-btn {
+            font-size: 12px !important;
+            padding: 10px 14px !important;
+            white-space: nowrap !important;
+          }
+          .navbar .navbar-nav .nav-link {
+            font-size: 12px !important;
+            padding-left: 8px !important;
+            padding-right: 8px !important;
+          }
+          .navbar .navbar-nav .nav-item {
+            margin-right: 5px !important;
+          }
+          .navbar-brand img {
+            height: 45px !important;
+          }
+        }
+
         @media (max-width: 576px) {
           .mobile-offcanvas {
             width: 50vw;

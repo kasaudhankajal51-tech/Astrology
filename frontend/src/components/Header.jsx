@@ -101,7 +101,7 @@ function Header() {
               <div className="right-menui">
                 <ul>
                   <li>
-                    <a data-bs-toggle="modal" href="#registerModal" className="btn consult-btn">BOOK CONSULTATION</a>
+                    <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header">BOOK CONSULTATION</a>
                   </li>
                 </ul>
               </div>
@@ -216,7 +216,7 @@ function Header() {
               </div>
             </li>
             <li className="nav-item mt-2">
-              <a data-bs-toggle="modal" href="#registerModal" className="btn consult-btn w-100" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header w-100" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
             </li>
           </ul>
         </div>
@@ -337,22 +337,77 @@ function Header() {
             max-width: none;
             object-fit: contain;
             display: block;
+            transition: all 0.3s ease;
+          }
+        }
+
+        .btn-consult-header {
+          background: linear-gradient(135deg, #ff6a00, #ff0080);
+          color: #fff;
+          border: none;
+          padding: 10px 20px;
+          border-radius: 30px;
+          font-weight: 700;
+          font-size: 14px;
+          letter-spacing: 0.5px;
+          white-space: nowrap;
+          box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
+          transition: all 0.3s ease;
+        }
+        
+        .btn-consult-header:hover {
+          color: #fff;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 20px rgba(255, 106, 0, 0.5);
+        }
+
+        /* Essential fix for laptop screens (992px - 1300px) to prevent wrapping */
+        @media (min-width: 992px) and (max-width: 1300px) {
+          .btn-consult-header {
+            font-size: 11px !important;
+            padding: 8px 12px !important;
+            letter-spacing: 0px !important;
+          }
+          .navbar .navbar-nav .nav-link {
+            font-size: 12px !important;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+          }
+          .navbar-brand img {
+            height: 40px !important;
           }
         }
 
         @media (max-width: 576px) {
           .mobile-offcanvas {
-            width: 50vw;
-            min-width: 240px;
+            width: 70vw;
+            min-width: 260px;
+          }
+          .navbar-brand img {
+            height: 40px;
           }
         }
+        
+        /* Modals and Forms inside Header */
+        .modal-content {
+          border: 1px solid rgba(255, 106, 0, 0.2) !important;
+          border-radius: 20px !important;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.8) !important;
+          backdrop-filter: blur(15px);
+        }
+        .modal-header {
+          border-bottom: 1px solid rgba(255, 106, 0, 0.15) !important;
+        }
+        
+        /* Reports Bar Scroll */
         .label {
           background: rgb(249, 232, 1);
-          color: #fff;
+          color: #000;
           font-weight: bold;
-          padding: 10px 20px;
+          padding: 8px 20px;
           white-space: nowrap;
           z-index: 2;
+          font-size: 14px;
         }
         .scroll-wrapper {
           overflow: hidden;
@@ -362,19 +417,20 @@ function Header() {
           display: inline-flex;
           gap: 40px;
           white-space: nowrap;
-          animation: scrollLeft 20s linear infinite;
+          animation: scrollLeft 25s linear infinite;
         }
         .item {
           color: #fff;
-          font-size: 14px;
+          font-size: 13px;
         }
         .new {
           background: #ffd43b;
           color: #000;
-          padding: 3px 8px;
+          padding: 2px 6px;
           margin-right: 6px;
-          border-radius: 5px;
-          font-size: 12px;
+          border-radius: 4px;
+          font-size: 11px;
+          text-transform: uppercase;
         }
         @keyframes scrollLeft {
           from { transform: translateX(0); }
@@ -385,41 +441,41 @@ function Header() {
       {/* Book Consultation Modal */}
       <div className="modal fade" id="registerModal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content" style={{ background: '#1a1a2e', color: '#fff' }}>
-            <div className="modal-header" style={{ borderBottom: '1px solid #333' }}>
-              <h5 className="modal-title">Book Consultation</h5>
+          <div className="modal-content" style={{ background: 'rgba(20, 15, 30, 0.95)', color: '#fff' }}>
+            <div className="modal-header">
+              <h5 className="modal-title" style={{ fontFamily: "'Merriweather Sans', serif", color: '#ff6a00' }}>Book Consultation</h5>
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div className="modal-body">
+            <div className="modal-body p-4">
               <form>
                 <div className="mb-3">
                   <label className="form-label">Full Name</label>
-                  <input type="text" className="form-control" style={{ background: '#0b1220', border: '1px solid #444', color: '#fff' }} placeholder="Enter your name" />
+                  <input type="text" className="form-control" placeholder="Enter your name" />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Email</label>
-                  <input type="email" className="form-control" style={{ background: '#0b1220', border: '1px solid #444', color: '#fff' }} placeholder="Enter your email" />
+                  <label className="form-label">Email Address</label>
+                  <input type="email" className="form-control" placeholder="Enter your email" />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Phone Number</label>
-                  <input type="tel" className="form-control" style={{ background: '#0b1220', border: '1px solid #444', color: '#fff' }} placeholder="Enter your phone" />
+                  <input type="tel" className="form-control" placeholder="Enter your phone" />
                 </div>
                 <div className="mb-3">
                   <label className="form-label">Consultation Type</label>
-                  <select className="form-select" style={{ background: '#0b1220', border: '1px solid #444', color: '#fff' }}>
+                  <select className="form-select">
                     <option>Select consultation type</option>
                     <option>Personal Horoscope</option>
                     <option>Marriage/Relationship</option>
                     <option>Career & Business</option>
-                    <option>Muhurat</option>
+                    <option>Muhurat Timing</option>
                     <option>Health Astrology</option>
                   </select>
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Message</label>
-                  <textarea className="form-control" rows="3" style={{ background: '#0b1220', border: '1px solid #444', color: '#fff' }} placeholder="Describe your concern"></textarea>
+                <div className="mb-4">
+                  <label className="form-label">Your Message</label>
+                  <textarea className="form-control" rows="3" placeholder="Describe your concern briefly..."></textarea>
                 </div>
-                <button type="submit" className="btn w-100" style={{ background: '#ff6a00', color: '#fff' }}>Submit Booking</button>
+                <button type="submit" className="btn btn-primary w-100 py-3">CONFIRM BOOKING</button>
               </form>
             </div>
           </div>

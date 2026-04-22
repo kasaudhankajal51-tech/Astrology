@@ -21,8 +21,89 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
     <style>
+      :root {
+        --cosmic-dark: #070913;
+        --cosmic-navy: #0b1220;
+        --cosmic-accent: #ff6a00;
+        --cosmic-glow: rgba(255, 106, 0, 0.4);
+        --cosmic-purple: #8a2be2;
+        --glass-bg: rgba(20, 15, 30, 0.6);
+        --glass-border: rgba(255, 106, 0, 0.15);
+      }
+      
+      body {
+        background-color: var(--cosmic-dark) !important;
+        color: #fff !important;
+        font-family: 'Josefin Sans', sans-serif;
+      }
+      
       input[type="date"], input[type="time"] {
         color-scheme: dark;
+      }
+      
+      /* Global Sleek Form Controls Override */
+      .form-control, .form-select {
+        background-color: rgba(0, 0, 0, 0.5) !important;
+        border: 1px solid rgba(255, 255, 255, 0.1) !important;
+        color: #fff !important;
+        border-radius: 12px !important;
+        padding: 12px 15px !important;
+        transition: all 0.3s ease !important;
+      }
+      
+      .form-control:focus, .form-select:focus {
+        background-color: rgba(0, 0, 0, 0.7) !important;
+        border-color: var(--cosmic-accent) !important;
+        box-shadow: 0 0 15px rgba(255, 106, 0, 0.3) !important;
+      }
+      
+      .form-control::placeholder {
+        color: #888 !important;
+        font-style: italic;
+      }
+
+      .form-label {
+        font-weight: 600;
+        letter-spacing: 1px;
+        color: #ccc;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+      }
+
+      /* Global Card / Glass Panel */
+      .card, .glass-panel {
+        background: var(--glass-bg) !important;
+        border: 1px solid var(--glass-border) !important;
+        backdrop-filter: blur(10px);
+        border-radius: 20px !important;
+        box-shadow: 0 15px 35px rgba(0,0,0,0.4) !important;
+      }
+
+      .card-header {
+        background: rgba(0,0,0,0.3) !important;
+        border-bottom: 1px solid var(--glass-border) !important;
+      }
+      
+      .card-title, h1, h2, h3, h4, h5, h6 {
+        font-family: 'Merriweather Sans', serif !important;
+      }
+
+      /* Buttons */
+      .btn-primary, .btn-dark, .btn-submit {
+        background: linear-gradient(135deg, #ff6a00, #ff0080) !important;
+        border: none !important;
+        color: white !important;
+        border-radius: 30px !important;
+        padding: 12px 25px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 1px !important;
+        box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3) !important;
+        transition: all 0.3s !important;
+      }
+
+      .btn-primary:hover, .btn-dark:hover, .btn-submit:hover {
+        box-shadow: 0 8px 25px rgba(255, 106, 0, 0.5) !important;
       }
     </style>
   </head>

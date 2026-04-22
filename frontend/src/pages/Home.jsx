@@ -276,7 +276,7 @@ function Home() {
         
         /* Buttons */
         .mystic-btn-primary { background: linear-gradient(135deg, #ff6a00, #ff0080); color: #fff; border: none; border-radius: 30px; padding: 12px 30px; font-weight: 700; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 20px rgba(255, 106, 0, 0.3); }
-        .mystic-btn-primary:hover { transform: translateY(-3px); box-shadow: 0 10px 25px rgba(255, 106, 0, 0.5); color: #fff; }
+        .mystic-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 25px rgba(255, 106, 0, 0.5); color: #fff; }
         .mystic-btn-outline { background: transparent; color: var(--cosmic-accent); border: 2px solid var(--cosmic-accent); border-radius: 30px; padding: 10px 28px; font-weight: 600; transition: all 0.3s; }
         .mystic-btn-outline:hover { background: var(--cosmic-accent); color: #fff; box-shadow: 0 5px 15px var(--cosmic-glow); }
 
@@ -329,7 +329,7 @@ function Home() {
         /* Services Section */
         .services-section { padding: 100px 0; background: linear-gradient(180deg, var(--cosmic-dark) 0%, var(--cosmic-navy) 100%); }
         .service-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-bottom: 25px; transition: all 0.3s ease; text-align: center; backdrop-filter: blur(10px); }
-        .service-card:hover { transform: translateY(-10px); background: rgba(255,255,255,0.06); border-color: rgba(255,106,0,0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
+        .service-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); border-color: rgba(255,106,0,0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
         .icon-wrapper { width: 70px; height: 70px; margin: 0 auto; background: rgba(255,106,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,106,0,0.2); transition: all 0.3s; }
         .service-card:hover .icon-wrapper { background: var(--cosmic-accent); border-color: #fff; transform: scale(1.1); }
         .icon-wrapper img { width: 35px; object-fit: contain; filter: brightness(0) invert(1); transition: 0.3s; }
@@ -344,7 +344,7 @@ function Home() {
         .video-track { display: flex; gap: 24px; overflow-x: auto; padding: 20px 0; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
         .video-track::-webkit-scrollbar { display: none; }
         .video-card { flex: 0 0 260px; scroll-snap-align: center; transition: transform 0.4s; }
-        .video-card:hover { transform: scale(1.03) translateY(-10px); }
+        .video-card:hover { transform: scale(1.03) translateY(-2px); }
         .video-inner { position: relative; border-radius: 20px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.4); aspect-ratio: 9/16; }
         .video-inner video { width: 100%; height: 100%; object-fit: cover; }
         .video-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
@@ -357,7 +357,7 @@ function Home() {
         /* Premium Reports */
         .reports-section { padding: 100px 0; background: linear-gradient(180deg, var(--cosmic-navy) 0%, var(--cosmic-dark) 100%); }
         .premium-report-card { border-radius: 20px; overflow: hidden; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.08); transition: all 0.4s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); display: flex; flex-direction: column; }
-        .premium-report-card:hover { transform: translateY(-15px); border-color: rgba(255,255,255,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
+        .premium-report-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
         
         .card-header-art { padding: 40px 20px 30px; text-align: center; position: relative; }
         .theme-emerald .card-header-art { background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); }

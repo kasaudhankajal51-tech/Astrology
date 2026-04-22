@@ -1,0 +1,19 @@
+[build]
+  base    = "frontend"
+  command = "npm run build"
+  publish = "dist"
+
+[functions]
+  directory = "../backend/functions"
+
+# ── API proxy: route /_/backend/* → Netlify Function ──────────────────────────
+[[redirects]]
+  from   = "/_/backend/*"
+  to     = "/.netlify/functions/api/:splat"
+  status = 200
+
+# ── SPA catch-all: React Router ───────────────────────────────────────────────
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200

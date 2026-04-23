@@ -7,6 +7,7 @@ import toolsRoutes from './routes/toolsRoutes.js';
 import consultationRoutes from './routes/consultationRoutes.js';
 import tarotRoutes from './routes/tarotRoutes.js';
 import loveRoutes from './routes/loveRoutes.js';
+import leadRoutes from './routes/leadRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -71,6 +72,7 @@ app.use('/api/tools', toolsRoutes);
 app.use('/api/consultation', consultationRoutes);
 app.use('/api/tarot', tarotRoutes);
 app.use('/api/love', loveRoutes);
+app.use('/api/leads', leadRoutes);
 
 
 

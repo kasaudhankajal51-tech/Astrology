@@ -17,6 +17,11 @@ import FreeTools from './pages/FreeTools';
 import Numerology from './pages/Numerology';
 import Tarot from './pages/Tarot';
 import Love from './pages/Love';
+import LandingPage from './pages/LandingPage';
+import Payment from './pages/Payment';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailed from './pages/PaymentFailed';
+import AdminLeads from './pages/AdminLeads';
 
 function App() {
   return (
@@ -41,6 +46,14 @@ function App() {
           <Route path="tarot" element={<Tarot />} />
           <Route path="love" element={<Love />} />
         </Route>
+        
+        {/* Standalone Landing Pages & Admin (No Header/Footer) */}
+        <Route path="/webinar" element={<LandingPage />} />
+        <Route path="/course-inquiry" element={<LandingPage />} />
+        <Route path="/payment" element={<Payment />} />
+        <Route path="/payment-success" element={<PaymentSuccess />} />
+        <Route path="/payment-failed" element={<PaymentFailed />} />
+        <Route path="/admin/leads" element={<AdminLeads />} />
       </Routes>
     </BrowserRouter>
   );

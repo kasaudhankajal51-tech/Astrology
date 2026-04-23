@@ -122,14 +122,17 @@ function Webinar() {
         <div className="container">
           <div className="stats-grid">
             <div className="stat-card" data-aos="fade-up">
+              <div className="stat-icon"><i className="fas fa-user-graduate"></i></div>
               <h3 className="stat-number">100,000+</h3>
               <p className="stat-label">Students Mentored</p>
             </div>
             <div className="stat-card" data-aos="fade-up" data-aos-delay="100">
+              <div className="stat-icon"><i className="fas fa-star"></i></div>
               <h3 className="stat-number">4.9/5</h3>
               <p className="stat-label">Average Rating</p>
             </div>
             <div className="stat-card" data-aos="fade-up" data-aos-delay="200">
+              <div className="stat-icon"><i className="fas fa-award"></i></div>
               <h3 className="stat-number">10+</h3>
               <p className="stat-label">Awards Won</p>
             </div>
@@ -140,26 +143,49 @@ function Webinar() {
       {/* 3. Why Section */}
       <section className="why-section">
         <div className="container">
-          <div className="section-header text-center">
-            <h2 className="why-title">Kabhi socha hai <br/><span className="text-highlight">"Why does this keep happening to me?"</span></h2>
-          </div>
-          <div className="why-grid">
-            {[
-              "You're working hard but promotions or recognition feel stuck",
-              "You attract the same type of person again and again.",
-              "You earn but somehow it doesn't stay or grow the way you want",
-              "You feel like you're living someone else's script, not your own",
-              "You feel misunderstood by people close to you."
-            ].map((text, i) => (
-              <div className="why-card" key={i} data-aos="fade-right" data-aos-delay={i*100}>
-                <span className="why-icon"><i className="fas fa-question-circle"></i></span>
-                <p>{text}</p>
+          <div className="row align-items-center">
+            <div className="col-lg-6" data-aos="fade-right">
+              <div className="section-header">
+                <h2 className="why-title">Kabhi socha hai <br/><span className="text-highlight">"Why does this keep happening to me?"</span></h2>
               </div>
-            ))}
+              <div className="why-grid">
+                {[
+                  "You're working hard but promotions or recognition feel stuck",
+                  "You attract the same type of person again and again.",
+                  "You earn but somehow it doesn't stay or grow the way you want",
+                  "You feel like you're living someone else's script, not your own",
+                  "You feel misunderstood by people close to you."
+                ].map((text, i) => (
+                  <div className="why-card" key={i}>
+                    <span className="why-icon"><i className="fas fa-question-circle"></i></span>
+                    <p>{text}</p>
+                  </div>
+                ))}
+              </div>
+              <p className="why-footer mt-5">The answer lies in your kundli 👇</p>
+              <div className="mt-4">
+                <button className="cta-button primary-cta pulse-anim">Uncover Life's Secrets – Join Now</button>
+              </div>
+            </div>
+            <div className="col-lg-6 d-none d-lg-block" data-aos="fade-left">
+              <div className="why-image-wrapper">
+                <img src="/images/life_struggles.png" alt="Life Struggles" className="img-fluid rounded-3 shadow-lg" />
+                <div className="image-overlay-glow"></div>
+              </div>
+            </div>
           </div>
-          <p className="why-footer text-center mt-5">The answer lies in your kundli 👇</p>
-          <div className="text-center mt-4">
-            <button className="cta-button primary-cta pulse-anim">Uncover Life's Secrets – Join Now</button>
+        </div>
+      </section>
+
+      {/* Decorative Blueprint Section */}
+      <section className="blueprint-deco-section">
+        <div className="container">
+          <div className="blueprint-banner" data-aos="zoom-in">
+            <img src="/images/cosmic_blueprint.png" alt="Cosmic Blueprint" className="blueprint-img" />
+            <div className="blueprint-content">
+              <h3>Your Destiny is Written in the Stars</h3>
+              <p>We help you read it.</p>
+            </div>
           </div>
         </div>
       </section>
@@ -174,14 +200,14 @@ function Webinar() {
           </div>
           <div className="learn-grid">
             {[
-              { icon: "fa-om", title: "Basics of Vedic Astrology", desc: "Understand the simple rules that Vedic astrology is built on." },
-              { icon: "fa-scroll", title: "Birth Chart/Kundali", desc: "Learn about the secrets hidden in your birth chart." },
-              { icon: "fa-planet-moon", title: "Planetary Influences", desc: "See how planets influence your job, love life, and money." },
-              { icon: "fa-galaxy", title: "Planetary Movements", desc: "Explore how the movement of planets affects your destiny." },
-              { icon: "fa-stars", title: "Actionable Advice", desc: "Get specific advice for career, wealth, and relationships." }
+              { icon: "/images/as1.png", title: "Basics of Vedic Astrology", desc: "Understand the simple rules that Vedic astrology is built on." },
+              { icon: "/images/as2.png", title: "Birth Chart/Kundali", desc: "Learn about the secrets hidden in your birth chart." },
+              { icon: "/images/as3.png", title: "Planetary Influences", desc: "See how planets influence your job, love life, and money." },
+              { icon: "/images/as4.png", title: "Planetary Movements", desc: "Explore how the movement of planets affects your destiny." },
+              { icon: "/images/as6.png", title: "Actionable Advice", desc: "Get specific advice for career, wealth, and relationships." }
             ].map((item, i) => (
               <div className="learn-card" key={i} data-aos="zoom-in" data-aos-delay={i*100}>
-                <div className="learn-icon"><i className={`fas ${item.icon}`}></i></div>
+                <div className="learn-icon-img"><img src={item.icon} alt={item.title} /></div>
                 <div className="learn-content">
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
@@ -384,25 +410,33 @@ function Webinar() {
         /* 2. Authority Section */
         .authority-section { padding: 50px 0; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center; }
+        .stat-icon { font-size: 2rem; color: var(--brand-accent); margin-bottom: 15px; opacity: 0.8; }
         .stat-number { font-size: clamp(1.5rem, 4vw, 2.8rem); font-weight: 900; color: var(--brand-accent); line-height: 1; }
         .stat-label { font-size: 0.8rem; color: var(--brand-gray); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 10px; }
 
         /* 3. Why Section */
         .why-section { padding: 100px 0; background: var(--brand-dark); }
         .why-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: #fff; }
-        .why-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; max-width: 1000px; margin: 40px auto 0; }
-        .why-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 25px; border-radius: 20px; display: flex; align-items: center; gap: 20px; transition: 0.3s; }
-        .why-card:hover { transform: translateY(-5px); border-color: var(--brand-accent); background: rgba(255, 106, 0, 0.05); }
-        .why-icon { color: var(--brand-accent); font-size: 1.5rem; }
-        .why-card p { margin: 0; font-size: 1.05rem; color: #ddd; line-height: 1.5; }
-        .why-footer { font-size: 1.3rem; font-weight: 700; color: var(--brand-accent); }
+        .why-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 30px; }
+        .why-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
+        .why-card:hover { transform: translateX(10px); border-color: var(--brand-accent); }
+        .why-image-wrapper { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .image-overlay-glow { position: absolute; inset: 0; background: linear-gradient(45deg, rgba(255,106,0,0.2) 0%, transparent 100%); pointer-events: none; }
+
+        .blueprint-deco-section { padding: 80px 0; background: var(--brand-navy); }
+        .blueprint-banner { position: relative; border-radius: 30px; overflow: hidden; height: 300px; display: flex; align-items: center; justify-content: center; text-align: center; }
+        .blueprint-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
+        .blueprint-content { position: relative; z-index: 2; padding: 0 20px; }
+        .blueprint-content h3 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; font-family: 'Merriweather Sans', serif; }
+        .blueprint-content p { font-size: 1.2rem; color: var(--brand-accent); font-weight: 700; }
 
         /* 4. Learn Section */
         .learn-section { padding: 100px 0; background: var(--brand-navy); }
         .learn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
         .learn-card { background: var(--glass-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 20px; transition: 0.4s; }
         .learn-card:hover { transform: translateY(-10px); border-color: var(--brand-accent); }
-        .learn-icon { width: 60px; height: 60px; background: rgba(255, 106, 0, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; color: var(--brand-accent); font-size: 1.8rem; border: 1px solid rgba(255, 106, 0, 0.2); }
+        .learn-icon-img { width: 60px; height: 60px; background: rgba(255, 106, 0, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 106, 0, 0.2); overflow: hidden; padding: 12px; }
+        .learn-icon-img img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
         .learn-content h4 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; font-weight: 700; }
         .learn-content p { color: var(--brand-gray); font-size: 0.95rem; line-height: 1.6; margin: 0; }
 

@@ -18,6 +18,7 @@ import Numerology from './pages/Numerology';
 import Tarot from './pages/Tarot';
 import Love from './pages/Love';
 import LandingPage from './pages/LandingPage';
+import Webinar from './pages/Webinar';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailed from './pages/PaymentFailed';
@@ -48,7 +49,7 @@ function App() {
         </Route>
         
         {/* Standalone Landing Pages & Admin (No Header/Footer) */}
-        <Route path="/webinar" element={<LandingPage />} />
+        <Route path="/webinar" element={<Webinar />} />
         <Route path="/course-inquiry" element={<LandingPage />} />
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />

@@ -1,9 +1,14 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import LogoCarousel from '../components/webinar/LogoCarousel';
+import NewsCarousel from '../components/webinar/NewsCarousel';
+import PictureGallery from '../components/webinar/PictureGallery';
+import VideoReviewCarousel from '../components/webinar/VideoReviewCarousel';
+import TextReviewCarousel from '../components/webinar/TextReviewCarousel';
+import CountdownTimer from '../components/webinar/CountdownTimer';
 
 function Webinar() {
-  const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
@@ -14,29 +19,10 @@ function Webinar() {
     if (window.AOS) {
       window.AOS.init({ duration: 1000, once: true });
     }
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.seconds > 0) return { ...prev, seconds: prev.seconds - 1 };
-        if (prev.minutes > 0) return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
-        if (prev.hours > 0) return { hours: prev.hours - 1, minutes: 59, seconds: 59 };
-        return prev;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
   }, []);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const loadRazorpay = () => {
-    return new Promise((resolve) => {
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
   };
 
   const handleSubmit = async (e) => {
@@ -58,7 +44,6 @@ function Webinar() {
       if (data.success) {
         toast.success('Registration initiated. Redirecting to secure payment...');
         setIsModalOpen(false);
-        // Redirect to the standalone payment page
         navigate(`/payment?leadId=${data.leadId}&name=${encodeURIComponent(data.name)}&email=${encodeURIComponent(data.email)}&phone=${data.phone}&amount=${data.amount}&orderId=${data.orderId}&keyId=${data.keyId}`);
       } else {
         toast.error(data.error || data.message || 'Failed to initiate registration. Please try again.');
@@ -98,6 +83,8 @@ function Webinar() {
                   <span>7:00 PM - 9:00 PM IST</span>
                 </div>
               </div>
+              
+              <CountdownTimer />
             </div>
             
             <div id="registration-form" className="hero-form-wrapper" data-aos="fade-left">
@@ -129,6 +116,10 @@ function Webinar() {
           </div>
         </div>
       </section>
+
+      {/* 1.5 Logo & News Carousels */}
+      <LogoCarousel />
+      <NewsCarousel />
 
       {/* 2. Authority Section */}
       <section className="authority-section">
@@ -189,6 +180,9 @@ function Webinar() {
           </div>
         </div>
       </section>
+
+      {/* Picture Gallery Section */}
+      <PictureGallery />
 
       {/* Decorative Blueprint Section */}
       <section className="blueprint-deco-section">
@@ -263,6 +257,12 @@ function Webinar() {
         </div>
       </section>
 
+      {/* Video Reviews Section */}
+      <VideoReviewCarousel />
+
+      {/* Text Reviews Section */}
+      <TextReviewCarousel />
+
       {/* 6. Itinerary Section */}
       <section className="breakdown-section">
         <div className="container">
@@ -331,26 +331,10 @@ function Webinar() {
               <span className="price-text">₹99/- <span className="small-text">Only</span></span>
               <span className="students-text">Few Seats Left</span>
             </div>
-            <div className="cta-timer">
-              <div className="timer-box">
-                <span className="timer-val">{String(timeLeft.hours).padStart(2, '0')}</span>
-                <span className="timer-label">H</span>
-              </div>
-              <span className="timer-sep">:</span>
-              <div className="timer-box">
-                <span className="timer-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
-                <span className="timer-label">M</span>
-              </div>
-              <span className="timer-sep">:</span>
-              <div className="timer-box">
-                <span className="timer-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
-                <span className="timer-label">S</span>
-              </div>
-            </div>
           </div>
           <div className="cta-right">
             <button onClick={() => setIsModalOpen(true)} className="register-btn-fixed pop-effect">
-              Register Now
+              Register Now – Reserve Your Spot
             </button>
           </div>
         </div>
@@ -499,7 +483,7 @@ function Webinar() {
           font-family: 'Outfit', sans-serif;
           background-color: var(--brand-dark);
           color: var(--brand-light);
-          padding-bottom: 100px;
+          padding-bottom: 120px;
           overflow-x: hidden;
         }
 
@@ -546,7 +530,7 @@ function Webinar() {
         .form-group input:focus { border-color: var(--brand-accent); outline: none; background: rgba(0,0,0,0.5); }
 
         /* 2. Authority Section */
-        .authority-section { padding: 50px 0; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
+        .authority-section { padding: 80px 0; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
         .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center; }
         .stat-icon { font-size: 2rem; color: var(--brand-accent); margin-bottom: 15px; opacity: 0.8; }
         .stat-number { font-size: clamp(1.5rem, 4vw, 2.8rem); font-weight: 900; color: var(--brand-accent); line-height: 1; }
@@ -620,33 +604,28 @@ function Webinar() {
           left: 50%;
           transform: translateX(-50%);
           width: 95%;
-          max-width: 800px;
+          max-width: 1000px;
           background: rgba(11, 18, 32, 0.9);
           backdrop-filter: blur(20px);
-          border-radius: 50px;
-          padding: 12px 30px;
+          border-radius: 100px;
+          padding: 15px 40px;
           box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           z-index: 1000;
           border: 1px solid var(--brand-accent);
         }
         .cta-container { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
         .price-info { display: flex; flex-direction: column; }
-        .price-text { font-size: 1.5rem; font-weight: 900; color: #fff; line-height: 1; }
-        .price-text .small-text { font-size: 0.8rem; color: var(--brand-accent); }
-        .students-text { font-size: 0.75rem; color: var(--brand-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
+        .price-text { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; }
+        .price-text .small-text { font-size: 0.9rem; color: var(--brand-accent); }
+        .students-text { font-size: 0.8rem; color: var(--brand-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
         
         .cta-left { display: flex; align-items: center; gap: 40px; }
-        .cta-timer { display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,0.3); padding: 8px 15px; border-radius: 15px; border: 1px solid var(--glass-border); }
-        .timer-box { display: flex; flex-direction: column; align-items: center; min-width: 30px; }
-        .timer-val { font-size: 1.1rem; font-weight: 800; color: var(--brand-accent); line-height: 1; }
-        .timer-label { font-size: 0.6rem; color: var(--brand-gray); font-weight: 700; }
-        .timer-sep { font-weight: 800; color: #fff; opacity: 0.5; }
 
-        .register-btn-fixed { background: var(--gradient-cta); color: #fff; border: none; padding: 12px 35px; border-radius: 50px; font-size: 1rem; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3); transition: 0.3s; }
+        .register-btn-fixed { background: var(--gradient-cta); color: #fff; border: none; padding: 18px 45px; border-radius: 100px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3); transition: 0.3s; }
         .register-btn-fixed:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(255, 106, 0, 0.5); }
 
         .pop-effect { animation: slowPop 3s infinite ease-in-out; }
-        @keyframes slowPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+        @keyframes slowPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
         .pulse-anim { animation: pulseBtn 2s infinite; }
         @keyframes pulseBtn { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 106, 0, 0.7); } 50% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 106, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 106, 0, 0); } }
 
@@ -661,15 +640,14 @@ function Webinar() {
           .instructor-image { max-width: 400px; margin: 0 auto; }
           .logo-strip { justify-content: center; }
           .cta-left { gap: 20px; }
-          .fixed-bottom-cta { width: 98%; padding: 10px 20px; }
+          .fixed-bottom-cta { width: 98%; padding: 12px 25px; border-radius: 30px; }
+          .price-text { font-size: 1.5rem; }
+          .register-btn-fixed { padding: 12px 25px; font-size: 1rem; }
         }
         @media (max-width: 767px) {
           .webinar-hero { padding-top: 80px; }
           .days-grid { grid-template-columns: 1fr; }
           .stats-grid { gap: 15px; }
-          .cta-timer { display: none; }
-          .price-text { font-size: 1.2rem; }
-          .register-btn-fixed { padding: 10px 20px; font-size: 0.9rem; }
           .lead-form-card { padding: 30px 20px; }
         }
         @media (max-width: 480px) {

@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const textReviews = [
@@ -5,101 +6,186 @@ const textReviews = [
   { id: 2, text: "I was skeptical at first, but the depth of knowledge shared in just 2 days was mind-blowing. Highly recommended for everyone.", author: "Megha Malhotra", role: "Business Owner" },
   { id: 3, text: "The way complex astrological concepts were explained made it so easy to understand. I finally know why certain patterns repeat in my life.", author: "Vikram Singh", role: "Creative Designer" },
   { id: 4, text: "Professional, insightful, and truly life-altering. Best investment of ₹99 I've ever made. The Q&A session was very helpful.", author: "Anjali Deshmukh", role: "Homemaker" },
+  { id: 5, text: "Truly a cosmic experience! The practical tips on birth chart reading were the highlight for me. Already seeing positive changes.", author: "Rohan Khanna", role: "Marketing Head" },
+  { id: 6, text: "A must-attend for anyone lost in their life path. The instructor is extremely knowledgeable and patient with all questions.", author: "Sanya Gupta", role: "Artist" },
 ];
 
 const TextReviewCarousel = () => {
+  const containerRef = useRef(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+
+  const checkScroll = () => {
+    if (containerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = containerRef.current;
+      setCanScrollLeft(scrollLeft > 0);
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+    }
+  };
+
+  const scroll = (direction) => {
+    if (containerRef.current) {
+      const amount = containerRef.current.clientWidth * 0.7;
+      containerRef.current.scrollBy({
+        left: direction === 'left' ? -amount : amount,
+        behavior: 'smooth'
+      });
+    }
+  };
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (el) {
+      el.addEventListener('scroll', checkScroll);
+      checkScroll();
+      return () => el.removeEventListener('scroll', checkScroll);
+    }
+  }, []);
+
   return (
     <section className="text-reviews-section">
       <div className="container">
-        <div className="reviews-grid">
-          {textReviews.map((review, idx) => (
-            <motion.div 
-              key={review.id} 
-              className="review-card"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: idx * 0.1 }}
-              viewport={{ once: true }}
+        <div className="section-header-flex">
+          <div className="header-left">
+            <h5 className="section-subtitle">Wall of Love</h5>
+            <h2 className="section-title">Words from our <span className="text-highlight">Community</span></h2>
+          </div>
+          <div className="carousel-nav">
+            <button 
+              className={`nav-btn prev ${!canScrollLeft ? 'disabled' : ''}`} 
+              onClick={() => scroll('left')}
+              disabled={!canScrollLeft}
             >
-              <div className="quote-icon"><i className="fas fa-quote-left"></i></div>
-              <p className="review-text">"{review.text}"</p>
-              <div className="review-author">
-                <div className="author-avatar">
-                  {review.author[0]}
+              <i className="fas fa-arrow-left"></i>
+            </button>
+            <button 
+              className={`nav-btn next ${!canScrollRight ? 'disabled' : ''}`} 
+              onClick={() => scroll('right')}
+              disabled={!canScrollRight}
+            >
+              <i className="fas fa-arrow-right"></i>
+            </button>
+          </div>
+        </div>
+
+        <div className="text-slider-wrapper">
+          <div className="text-slider-track" ref={containerRef}>
+            {textReviews.map((review) => (
+              <motion.div 
+                key={review.id} 
+                className="testimonial-card"
+                whileHover={{ scale: 1.02 }}
+              >
+                <div className="quote-mark">“</div>
+                <p className="testimonial-text">{review.text}</p>
+                <div className="testimonial-footer">
+                  <div className="avatar-circle">
+                    {review.author[0]}
+                  </div>
+                  <div className="user-info">
+                    <span className="user-name">{review.author}</span>
+                    <span className="user-role">{review.role}</span>
+                  </div>
                 </div>
-                <div className="author-details">
-                  <h4>{review.author}</h4>
-                  <p>{review.role}</p>
-                </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
       <style>{`
         .text-reviews-section {
-          padding: 80px 0;
+          padding: 100px 0;
           background: #070913;
+          border-top: 1px solid rgba(255, 106, 0, 0.1);
         }
-        .reviews-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 30px;
+        .text-slider-wrapper {
+          position: relative;
+          width: 100vw;
+          margin-left: calc(-50vw + 50%);
+          padding: 0 calc(50vw - 50% + 20px);
         }
-        .review-card {
+        .text-slider-track {
+          display: flex;
+          gap: 25px;
+          overflow-x: auto;
+          scroll-snap-type: x mandatory;
+          scrollbar-width: none;
+          padding: 20px 0 40px;
+        }
+        .text-slider-track::-webkit-scrollbar { display: none; }
+
+        .testimonial-card {
+          min-width: 400px;
+          scroll-snap-align: start;
           background: rgba(255, 255, 255, 0.02);
           border: 1px solid rgba(255, 255, 255, 0.05);
           padding: 40px;
-          border-radius: 30px;
+          border-radius: 40px;
           position: relative;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           transition: 0.3s;
         }
-        .review-card:hover {
-          background: rgba(255, 106, 0, 0.03);
-          border-color: rgba(255, 106, 0, 0.3);
-          transform: scale(1.02);
+        .testimonial-card:hover {
+          background: rgba(255, 255, 255, 0.04);
+          border-color: #ff6a00;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.4);
         }
-        .quote-icon {
+        .quote-mark {
+          position: absolute;
+          top: 20px;
+          right: 40px;
+          font-size: 8rem;
+          line-height: 1;
+          font-family: serif;
           color: #ff6a00;
-          font-size: 2rem;
-          margin-bottom: 20px;
-          opacity: 0.5;
+          opacity: 0.1;
         }
-        .review-text {
-          font-size: 1.1rem;
-          line-height: 1.7;
+        .testimonial-text {
+          font-size: 1.15rem;
+          line-height: 1.8;
           color: #ddd;
-          margin-bottom: 30px;
-          font-style: italic;
+          margin-bottom: 40px;
+          position: relative;
+          z-index: 1;
         }
-        .review-author {
+        .testimonial-footer {
           display: flex;
           align-items: center;
           gap: 15px;
         }
-        .author-avatar {
-          width: 50px;
-          height: 50px;
-          background: var(--gradient-cta, linear-gradient(135deg, #ff6a00, #ff0080));
+        .avatar-circle {
+          width: 60px;
+          height: 60px;
+          background: linear-gradient(135deg, #ff6a00, #ff0080);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
           color: #fff;
           font-weight: 800;
-          font-size: 1.2rem;
+          font-size: 1.4rem;
+          box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3);
         }
-        .author-details h4 {
+        .user-info {
+          display: flex;
+          flex-direction: column;
+        }
+        .user-name {
           color: #fff;
-          font-size: 1rem;
           font-weight: 700;
-          margin: 0;
+          font-size: 1.1rem;
         }
-        .author-details p {
+        .user-role {
           color: #ff6a00;
-          font-size: 0.8rem;
+          font-size: 0.85rem;
           font-weight: 600;
-          margin: 0;
+        }
+
+        @media (max-width: 768px) {
+          .testimonial-card { min-width: 300px; padding: 30px; }
+          .testimonial-text { font-size: 1rem; }
         }
       `}</style>
     </section>

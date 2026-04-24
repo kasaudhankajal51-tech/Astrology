@@ -21,14 +21,58 @@ const leadSchema = Joi.object({
   courseName: Joi.string().required()
 });
 
-// Setup basic transporter for nodemailer
-const transporter = nodemailer.createTransport({
-  service: 'gmail', 
-  auth: {
-    user: process.env.EMAIL_USER || 'test@example.com',
-    pass: process.env.EMAIL_PASS || 'password'
+const sendConfirmationEmail = async (lead) => {
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
+    },
+  });
+
+  const mailOptions = {
+    from: `"Astroga Support" <${process.env.EMAIL_USER}>`,
+    to: lead.email,
+    subject: 'Booking Confirmed: Mega Astrology Webinar',
+    html: `
+      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
+        <div style="background: #6b4a44; color: #ffffff; padding: 30px; text-align: center;">
+          <h1 style="margin: 0; font-size: 24px;">Registration Confirmed!</h1>
+        </div>
+        <div style="padding: 30px; color: #333; line-height: 1.6;">
+          <p>Namaste <strong>${lead.name}</strong>,</p>
+          <p>Your seat for the <strong>Mega Astrology Webinar</strong> has been successfully reserved. We are excited to guide you through your cosmic journey!</p>
+          
+          <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+            <p style="margin: 0;"><strong>Webinar Details:</strong></p>
+            <ul style="padding-left: 20px; margin: 10px 0;">
+              <li><strong>Event:</strong> 2-Day Mega Astrology Webinar</li>
+              <li><strong>Time:</strong> 7:00 PM - 9:00 PM IST</li>
+              <li><strong>Transaction ID:</strong> ${lead.transactionId || 'N/A'}</li>
+            </ul>
+          </div>
+
+          <p>A calendar invitation and the Zoom joining link will be sent to you 24 hours before the event starts.</p>
+          
+          <div style="text-align: center; margin-top: 30px;">
+            <a href="https://yourwebsite.com" style="background: #6b4a44; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Visit Our Community</a>
+          </div>
+        </div>
+        <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #777;">
+          <p>© ${new Date().getFullYear()} Astroga. All Rights Reserved.</p>
+          <p>If you have any questions, reply to this email.</p>
+        </div>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    logger.info(`Confirmation email sent to: ${lead.email}`);
+  } catch (err) {
+    logger.error('Email sending failed: ' + err.message);
   }
-});
+};
 
 // @desc    Submit new lead (Pre-payment)
 // @route   POST /api/leads
@@ -90,42 +134,6 @@ export const createLead = asyncHandler(async (req, res) => {
   }
 });
 
-// Helper function for sending confirmation email
-const sendConfirmationEmail = async (lead) => {
-  try {
-    await transporter.sendMail({
-      from: `"Astro Ava" <${process.env.EMAIL_USER || 'no-reply@astroava.com'}>`,
-      to: lead.email,
-      subject: `Booking Confirmed: ${lead.courseName || lead.type}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; border: 1px solid #e0e0e0; border-radius: 10px;">
-          <div style="text-align: center; margin-bottom: 20px;">
-            <h2 style="color: #ff6a00; margin: 0;">Astro Ava</h2>
-            <p style="color: #666; margin: 5px 0 0;">Your Cosmic Journey Begins Here</p>
-          </div>
-          <div style="background-color: #f9f9f9; padding: 20px; border-radius: 10px; margin-bottom: 20px;">
-            <h3 style="margin-top: 0; color: #333;">Hi ${lead.name},</h3>
-            <p style="color: #555; line-height: 1.6;">
-              We are thrilled to confirm your booking for the <strong>${lead.courseName || lead.type}</strong>. 
-              Your cosmic blueprint is waiting to be discovered!
-            </p>
-            <div style="background-color: #fff; padding: 15px; border-radius: 8px; border-left: 4px solid #ff6a00; margin: 20px 0;">
-              <p style="margin: 0; font-weight: bold; color: #333;">Booking Details:</p>
-              <p style="margin: 5px 0; color: #666;">Type: ${lead.type}</p>
-              <p style="margin: 5px 0; color: #666;">Reference ID: ${lead._id}</p>
-            </div>
-          </div>
-          <p style="color: #888; font-size: 12px; text-align: center; margin-top: 30px;">
-            If you have any questions, feel free to reply to this email or contact our support team.
-          </p>
-        </div>
-      `
-    });
-    logger.info(`✅ Professional confirmation email sent to: ${lead.email}`);
-  } catch (error) {
-    logger.error('Failed to send email: ' + error.message);
-  }
-};
 
 // @desc    Verify Razorpay Payment
 // @route   POST /api/leads/verify-payment

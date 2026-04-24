@@ -24,9 +24,8 @@ function PaymentSuccess() {
         </div>
         
         <div className="d-flex gap-3 justify-content-center mt-5">
-          <Link to="/" className="btn btn-outline-light px-4 py-3" style={{ borderRadius: '50px' }}>Return Home</Link>
-          <Link to="/admin/leads" className="btn btn-primary px-4 py-3" style={{ background: 'linear-gradient(135deg, #ff6a00, #ff0080)', border: 'none', borderRadius: '50px', fontWeight: '700' }}>
-            Check Admin Bookings
+          <Link to="/" className="btn btn-primary px-5 py-3" style={{ background: 'linear-gradient(135deg, #ff6a00, #ff0080)', border: 'none', borderRadius: '50px', fontWeight: '700' }}>
+            Return Home
           </Link>
         </div>
       </div>

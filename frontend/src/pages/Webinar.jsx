@@ -667,10 +667,16 @@ function Webinar() {
 
         /* Media Queries */
         @media (max-width: 991px) {
-          .cta-container { flex-direction: column; text-align: center; gap: 20px; }
-          .fixed-bottom-cta { border-radius: 20px; width: 98%; bottom: 10px; padding: 20px; }
-          .register-now-btn-premium { width: 100%; justify-content: center; padding: 15px; font-size: 1.1rem; }
-          .cta-left-content .cta-price-title { font-size: 1.3rem; }
+          .cta-container { flex-direction: column; text-align: center; gap: 12px; }
+          .fixed-bottom-cta { border-radius: 25px; width: 94%; bottom: 10px; padding: 12px 20px; }
+          .register-now-btn-premium { width: 100%; justify-content: center; padding: 12px; font-size: 1rem; border-radius: 15px; }
+          .cta-left-content .cta-price-title { font-size: 1.1rem; }
+          .cta-left-content .cta-subtitle { font-size: 0.8rem; }
+          .cta-timer-blocks { gap: 5px; }
+          .timer-unit { min-width: 38px; padding: 3px 6px; }
+          .unit-val { font-size: 0.9rem; }
+          .unit-lbl { font-size: 0.5rem; }
+          .timer-label { font-size: 0.6rem; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
           .modal-image-side { display: none; }
           .modal-form-side { padding: 40px 20px; }

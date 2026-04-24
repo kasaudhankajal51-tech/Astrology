@@ -45,50 +45,50 @@ const TextReviewCarousel = () => {
   return (
     <section className="text-reviews-section">
       <div className="container">
-        <div className="section-header-flex">
-          <div className="header-left">
-            <h5 className="section-subtitle">Wall of Love</h5>
-            <h2 className="section-title">Words from our <span className="text-highlight">Community</span></h2>
-          </div>
-          <div className="carousel-nav">
-            <button 
-              className={`nav-btn prev ${!canScrollLeft ? 'disabled' : ''}`} 
-              onClick={() => scroll('left')}
-              disabled={!canScrollLeft}
-            >
-              <i className="fas fa-arrow-left"></i>
-            </button>
-            <button 
-              className={`nav-btn next ${!canScrollRight ? 'disabled' : ''}`} 
-              onClick={() => scroll('right')}
-              disabled={!canScrollRight}
-            >
-              <i className="fas fa-arrow-right"></i>
-            </button>
-          </div>
+        <div className="section-header-centered text-center">
+          <h5 className="section-subtitle">Wall of Love</h5>
+          <h2 className="section-title">Words from our <span className="text-highlight">Community</span></h2>
+          <div className="header-underline mx-auto mt-3"></div>
         </div>
 
-        <div className="text-slider-wrapper">
-          <div className="text-slider-track" ref={containerRef}>
-            {textReviews.map((review) => (
-              <motion.div 
-                key={review.id} 
-                className="testimonial-card"
-                whileHover={{ scale: 1.02 }}
-              >
-                <div className="quote-mark">“</div>
-                <p className="testimonial-text">{review.text}</p>
-                <div className="testimonial-footer">
-                  <div className="avatar-circle">
-                    {review.author[0]}
+        <div className="text-slider-production-wrapper">
+          {/* Side Navigation Buttons */}
+          <button 
+            className={`side-nav-btn prev ${!canScrollLeft ? 'hidden' : ''}`} 
+            onClick={() => scroll('left')}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          
+          <button 
+            className={`side-nav-btn next ${!canScrollRight ? 'hidden' : ''}`} 
+            onClick={() => scroll('right')}
+          >
+            <i className="fas fa-chevron-right"></i>
+          </button>
+
+          <div className="text-slider-container">
+            <div className="text-slider-track" ref={containerRef}>
+              {textReviews.map((review) => (
+                <motion.div 
+                  key={review.id} 
+                  className="testimonial-card"
+                  whileHover={{ scale: 1.02 }}
+                >
+                  <div className="quote-mark">“</div>
+                  <p className="testimonial-text">{review.text}</p>
+                  <div className="testimonial-footer">
+                    <div className="avatar-circle">
+                      {review.author[0]}
+                    </div>
+                    <div className="user-info">
+                      <span className="user-name">{review.author}</span>
+                      <span className="user-role">{review.role}</span>
+                    </div>
                   </div>
-                  <div className="user-info">
-                    <span className="user-name">{review.author}</span>
-                    <span className="user-role">{review.role}</span>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -98,11 +98,48 @@ const TextReviewCarousel = () => {
           background: #070913;
           border-top: 1px solid rgba(255, 106, 0, 0.1);
         }
-        .text-slider-wrapper {
+        .section-header-centered {
+          margin-bottom: 60px;
+        }
+        .section-subtitle { color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; margin: 0; }
+        .header-underline { height: 4px; width: 60px; background: #ff6a00; border-radius: 2px; }
+
+        .text-slider-production-wrapper {
           position: relative;
-          width: 100vw;
-          margin-left: calc(-50vw + 50%);
-          padding: 0 calc(50vw - 50% + 20px);
+          padding: 0 40px;
+        }
+
+        .side-nav-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 50px;
+          height: 50px;
+          border-radius: 50%;
+          border: 1px solid rgba(255,255,255,0.1);
+          background: rgba(11, 18, 32, 0.8);
+          backdrop-filter: blur(10px);
+          color: #fff;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: 0.3s;
+          font-size: 1.1rem;
+          z-index: 10;
+        }
+        .side-nav-btn.prev { left: 0; }
+        .side-nav-btn.next { right: 0; }
+        .side-nav-btn:hover {
+          background: #ff6a00;
+          border-color: #ff6a00;
+          box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+        }
+        .side-nav-btn.hidden { opacity: 0; pointer-events: none; }
+
+        .text-slider-container {
+          overflow: hidden;
         }
         .text-slider-track {
           display: flex;
@@ -186,6 +223,8 @@ const TextReviewCarousel = () => {
         @media (max-width: 768px) {
           .testimonial-card { min-width: 300px; padding: 30px; }
           .testimonial-text { font-size: 1rem; }
+          .side-nav-btn { display: none; }
+          .text-slider-production-wrapper { padding: 0; }
         }
       `}</style>
     </section>

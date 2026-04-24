@@ -46,63 +46,63 @@ const VideoReviewCarousel = () => {
   return (
     <section className="video-reviews-section">
       <div className="container">
-        <div className="section-header-flex">
-          <div className="header-left">
-            <h5 className="section-subtitle">Real Impact</h5>
-            <h2 className="section-title">Success <span className="text-highlight">Stories</span></h2>
-          </div>
-          <div className="carousel-nav">
-            <button 
-              className={`nav-btn prev ${!canScrollLeft ? 'disabled' : ''}`} 
-              onClick={() => scroll('left')}
-              disabled={!canScrollLeft}
-            >
-              <i className="fas fa-chevron-left"></i>
-            </button>
-            <button 
-              className={`nav-btn next ${!canScrollRight ? 'disabled' : ''}`} 
-              onClick={() => scroll('right')}
-              disabled={!canScrollRight}
-            >
-              <i className="fas fa-chevron-right"></i>
-            </button>
-          </div>
+        <div className="section-header-centered text-center">
+          <h5 className="section-subtitle">Real Impact</h5>
+          <h2 className="section-title">Success <span className="text-highlight">Stories</span></h2>
+          <div className="header-underline mx-auto mt-3"></div>
         </div>
 
-        <div className="production-slider-container">
-          <div className="slider-track" ref={containerRef}>
-            {videoReviews.map((review) => (
-              <motion.div 
-                key={review.id} 
-                className="video-story-card"
-                whileHover={{ y: -8 }}
-                onClick={() => setActiveVideo(review)}
-              >
-                <div className="card-media-wrapper">
-                  <img src={review.poster} alt={review.title} className="story-poster" />
-                  <div className="glass-overlay">
-                    <div className="play-circle" style={{ backgroundColor: review.color }}>
-                      <i className="fas fa-play"></i>
+        <div className="production-slider-wrapper">
+          {/* Side Navigation Buttons */}
+          <button 
+            className={`side-nav-btn prev ${!canScrollLeft ? 'hidden' : ''}`} 
+            onClick={() => scroll('left')}
+          >
+            <i className="fas fa-chevron-left"></i>
+          </button>
+          
+          <button 
+            className={`side-nav-btn next ${!canScrollRight ? 'hidden' : ''}`} 
+            onClick={() => scroll('right')}
+          >
+            <i className="fas fa-chevron-right"></i>
+          </button>
+
+          <div className="slider-container-fluid">
+            <div className="slider-track" ref={containerRef}>
+              {videoReviews.map((review) => (
+                <motion.div 
+                  key={review.id} 
+                  className="video-story-card"
+                  whileHover={{ y: -8 }}
+                  onClick={() => setActiveVideo(review)}
+                >
+                  <div className="card-media-wrapper">
+                    <img src={review.poster} alt={review.title} className="story-poster" />
+                    <div className="glass-overlay">
+                      <div className="play-circle" style={{ backgroundColor: review.color }}>
+                        <i className="fas fa-play"></i>
+                      </div>
+                    </div>
+                    <div className="story-tag">Student Story</div>
+                  </div>
+                  <div className="card-info">
+                    <div className="stars">
+                      {[1,2,3,4,5].map(s => <i key={s} className="fas fa-star"></i>)}
+                    </div>
+                    <h3>{review.title}</h3>
+                    <div className="author-row">
+                      <div className="author-meta">
+                        <span className="author-name">{review.name}</span>
+                        <span className="author-status">
+                          <i className="fas fa-check-double"></i> Verified Student
+                        </span>
+                      </div>
                     </div>
                   </div>
-                  <div className="story-tag">Student Story</div>
-                </div>
-                <div className="card-info">
-                  <div className="stars">
-                    {[1,2,3,4,5].map(s => <i key={s} className="fas fa-star"></i>)}
-                  </div>
-                  <h3>{review.title}</h3>
-                  <div className="author-row">
-                    <div className="author-meta">
-                      <span className="author-name">{review.name}</span>
-                      <span className="author-status">
-                        <i className="fas fa-check-double"></i> Verified Student
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -150,22 +150,28 @@ const VideoReviewCarousel = () => {
           position: relative;
           overflow: hidden;
         }
-        .section-header-flex {
-          display: flex;
-          justify-content: space-between;
-          align-items: flex-end;
-          margin-bottom: 50px;
+        .section-header-centered {
+          margin-bottom: 60px;
         }
-        .header-left h5 { color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; }
-        .header-left h2 { font-size: clamp(1.8rem, 5vw, 2.8rem); font-weight: 900; color: #fff; margin: 0; }
-        
-        .carousel-nav { display: flex; gap: 12px; }
-        .nav-btn {
+        .section-subtitle { color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; margin: 0; }
+        .header-underline { height: 4px; width: 60px; background: #ff6a00; border-radius: 2px; }
+
+        .production-slider-wrapper {
+          position: relative;
+          padding: 0 40px;
+        }
+
+        .side-nav-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
           width: 50px;
           height: 50px;
           border-radius: 50%;
           border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(255,255,255,0.03);
+          background: rgba(11, 18, 32, 0.8);
+          backdrop-filter: blur(10px);
           color: #fff;
           display: flex;
           align-items: center;
@@ -173,20 +179,19 @@ const VideoReviewCarousel = () => {
           cursor: pointer;
           transition: 0.3s;
           font-size: 1.1rem;
+          z-index: 10;
         }
-        .nav-btn:hover:not(.disabled) {
+        .side-nav-btn.prev { left: 0; }
+        .side-nav-btn.next { right: 0; }
+        .side-nav-btn:hover {
           background: #ff6a00;
           border-color: #ff6a00;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(255, 106, 0, 0.3);
+          box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
         }
-        .nav-btn.disabled { opacity: 0.2; cursor: not-allowed; }
+        .side-nav-btn.hidden { opacity: 0; pointer-events: none; }
 
-        .production-slider-container {
-          position: relative;
-          width: 100vw;
-          margin-left: calc(-50vw + 50%);
-          padding: 0 calc(50vw - 50% + 20px);
+        .slider-container-fluid {
+          overflow: hidden;
         }
         .slider-track {
           display: flex;
@@ -195,6 +200,7 @@ const VideoReviewCarousel = () => {
           scroll-snap-type: x mandatory;
           scrollbar-width: none;
           padding: 15px 0 35px;
+          -ms-overflow-style: none;
         }
         .slider-track::-webkit-scrollbar { display: none; }
 
@@ -264,7 +270,7 @@ const VideoReviewCarousel = () => {
         .author-name { font-weight: 700; color: #fff; font-size: 1rem; }
         .author-status { font-size: 0.7rem; color: #ff6a00; font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
-        /* Modal */
+        /* Modal Upgrade */
         .premium-modal-overlay {
           position: fixed;
           inset: 0;
@@ -322,12 +328,10 @@ const VideoReviewCarousel = () => {
 
         @media (max-width: 768px) {
           .video-story-card { min-width: 280px; }
-          .carousel-nav { display: none; }
+          .side-nav-btn { display: none; }
+          .production-slider-wrapper { padding: 0; }
           .card-media-wrapper { height: 170px; }
           .video-reviews-section { padding: 80px 0; }
-          .video-caption { padding: 20px; }
-          .video-caption h4 { font-size: 1.1rem; }
-          .video-caption p { font-size: 0.9rem; }
         }
       `}</style>
     </section>

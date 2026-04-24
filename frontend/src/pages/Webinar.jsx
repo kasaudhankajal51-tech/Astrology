@@ -7,6 +7,7 @@ function Webinar() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -28,6 +29,16 @@ function Webinar() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const loadRazorpay = () => {
+    return new Promise((resolve) => {
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const phoneRegex = /^[0-9]{10}$/;
@@ -45,13 +56,15 @@ function Webinar() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Registration initiated. Redirecting to payment...');
-        navigate(data.paymentUrl);
+        toast.success('Registration initiated. Redirecting to secure payment...');
+        setIsModalOpen(false);
+        // Redirect to the standalone payment page
+        navigate(`/payment?leadId=${data.leadId}&name=${encodeURIComponent(data.name)}&email=${encodeURIComponent(data.email)}&phone=${data.phone}&amount=${data.amount}&orderId=${data.orderId}&keyId=${data.keyId}`);
       } else {
-        toast.error('Failed to submit. Please try again.');
+        toast.error(data.error || data.message || 'Failed to initiate registration. Please try again.');
       }
     } catch (err) {
-      toast.error('Network error. Please try again.');
+      toast.error('Connection Error: Unable to reach server. ' + err.message);
     } finally {
       setIsSubmitting(false);
     }
@@ -87,7 +100,7 @@ function Webinar() {
               </div>
             </div>
             
-            <div className="hero-form-wrapper" data-aos="fade-left">
+            <div id="registration-form" className="hero-form-wrapper" data-aos="fade-left">
               <div className="lead-form-card">
                 <div className="form-header">
                   <h3>Reserve Your Seat</h3>
@@ -107,7 +120,7 @@ function Webinar() {
                     <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Enter your 10-digit phone" />
                   </div>
                   <button type="submit" className="cta-button primary-cta w-100" disabled={isSubmitting}>
-                    {isSubmitting ? 'Processing...' : 'Book Your Seat Now'}
+                    {isSubmitting ? 'Processing...' : 'Register Now'}
                   </button>
                   <p className="secure-text text-center mt-3"><i className="fas fa-lock"></i> 100% Secure Payment</p>
                 </form>
@@ -164,7 +177,7 @@ function Webinar() {
               </div>
               <p className="why-footer mt-5">The answer lies in your kundli 👇</p>
               <div className="mt-4">
-                <button className="cta-button primary-cta pulse-anim">Uncover Life's Secrets – Join Now</button>
+                <button onClick={() => setIsModalOpen(true)} className="cta-button primary-cta pulse-anim">Register Now – Secure Your Spot</button>
               </div>
             </div>
             <div className="col-lg-6 d-none d-lg-block" data-aos="fade-left">
@@ -336,12 +349,54 @@ function Webinar() {
             </div>
           </div>
           <div className="cta-right">
-            <button className="register-btn-fixed pop-effect">
-              REGISTER NOW
+            <button onClick={() => setIsModalOpen(true)} className="register-btn-fixed pop-effect">
+              Register Now
             </button>
           </div>
         </div>
       </div>
+
+      {/* Registration Modal */}
+      {isModalOpen && (
+        <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && setIsModalOpen(false)}>
+          <div className="modal-container" data-aos="zoom-in">
+            <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
+            <div className="modal-content-wrapper">
+              <div className="modal-image-side">
+                <img src="/images/mentor_promo.png" alt="Astro Mentor" />
+                <div className="image-info-overlay">
+                  <h4>Cosmic Mastery</h4>
+                  <p>Unlocking the secrets of your stars</p>
+                </div>
+              </div>
+              <div className="modal-form-side">
+                <div className="form-header-mini">
+                  <h3>Final Step to Join</h3>
+                  <p>Limited Seats Available at ₹99/-</p>
+                </div>
+                <form onSubmit={handleSubmit} className="modal-form">
+                  <div className="form-group">
+                    <label>Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Name" />
+                  </div>
+                  <div className="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Email" />
+                  </div>
+                  <div className="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-digit number" />
+                  </div>
+                  <button type="submit" className="cta-button primary-cta w-100" disabled={isSubmitting}>
+                    {isSubmitting ? 'Processing...' : 'Complete Registration'}
+                  </button>
+                  <p className="secure-text"><i className="fas fa-lock"></i> Secured by Razorpay</p>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       <style>{`
         :root {
@@ -355,6 +410,89 @@ function Webinar() {
           --gradient-cta: linear-gradient(135deg, #ff6a00 0%, #ff0080 100%);
           --glass-bg: rgba(255, 255, 255, 0.03);
           --glass-border: rgba(255, 255, 255, 0.08);
+        }
+
+        .modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0,0,0,0.85);
+          backdrop-filter: blur(8px);
+          z-index: 2000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+
+        .modal-container {
+          background: var(--brand-navy);
+          width: 100%;
+          max-width: 900px;
+          border-radius: 30px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid var(--brand-accent);
+          box-shadow: 0 0 50px rgba(255, 106, 0, 0.2);
+        }
+
+        .modal-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: none;
+          border: none;
+          color: #fff;
+          font-size: 2rem;
+          cursor: pointer;
+          z-index: 10;
+          line-height: 1;
+        }
+
+        .modal-content-wrapper {
+          display: grid;
+          grid-template-columns: 1fr 1.2fr;
+        }
+
+        .modal-image-side {
+          position: relative;
+          min-height: 400px;
+        }
+
+        .modal-image-side img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .image-info-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 30px;
+          background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
+        }
+
+        .image-info-overlay h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
+        .image-info-overlay p { font-size: 0.9rem; color: var(--brand-accent); font-weight: 700; }
+
+        .modal-form-side {
+          padding: 50px;
+          background: rgba(11, 18, 32, 0.95);
+        }
+
+        .form-header-mini h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
+        .form-header-mini p { color: var(--brand-accent); font-weight: 700; margin-bottom: 30px; }
+
+        .modal-form .form-group { margin-bottom: 15px; }
+        .modal-form label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-gray); margin-bottom: 5px; display: block; }
+        .modal-form input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: #fff; }
+        .modal-form .secure-text { text-align: center; font-size: 0.75rem; color: var(--brand-gray); margin-top: 15px; }
+
+        @media (max-width: 768px) {
+          .modal-content-wrapper { grid-template-columns: 1fr; }
+          .modal-image-side { display: none; }
+          .modal-form-side { padding: 40px 20px; }
         }
 
         .webinar-landing {

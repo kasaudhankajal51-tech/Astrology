@@ -13,12 +13,41 @@ function Webinar() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [activeFaq, setActiveFaq] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
   const navigate = useNavigate();
 
   useEffect(() => {
     if (window.AOS) {
       window.AOS.init({ duration: 1000, once: true });
     }
+
+    // Standardized Timer Logic (Sync with Hero Timer)
+    const timerKey = 'webinar_timer_end';
+    let endTime = localStorage.getItem(timerKey);
+    
+    if (!endTime) {
+      endTime = new Date().getTime() + 24 * 60 * 60 * 1000;
+      localStorage.setItem(timerKey, endTime);
+    } else {
+      endTime = parseInt(endTime);
+    }
+
+    const interval = setInterval(() => {
+      const now = new Date().getTime();
+      const distance = endTime - now;
+
+      if (distance < 0) {
+        const newEnd = new Date().getTime() + 24 * 60 * 60 * 1000;
+        localStorage.setItem(timerKey, newEnd);
+      } else {
+        const h = Math.floor(distance / (1000 * 60 * 60));
+        const m = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        const s = Math.floor((distance % (1000 * 60)) / 1000);
+        setTimeLeft({ hours: h, minutes: m, seconds: s });
+      }
+    }, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const handleChange = (e) => {
@@ -84,7 +113,8 @@ function Webinar() {
                 </div>
               </div>
               
-              <CountdownTimer />
+              <CountdownTimer timeLeft={timeLeft} />
+
             </div>
             
             <div id="registration-form" className="hero-form-wrapper" data-aos="fade-left">
@@ -326,15 +356,34 @@ function Webinar() {
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
         <div className="cta-container">
-          <div className="cta-left">
-            <div className="price-info">
-              <span className="price-text">₹99/- <span className="small-text">Only</span></span>
-              <span className="students-text">Few Seats Left</span>
+          <div className="cta-left-content">
+            <h4 className="cta-price-title">₹99/- Only <span className="seats-alert">(Few Seats Left)</span></h4>
+            <p className="cta-subtitle">Empowering over 1 Lakh+ students and counting</p>
+          </div>
+          
+          <div className="cta-timer-section">
+            <span className="timer-label">OFFER ENDS IN:</span>
+            <div className="cta-timer-blocks">
+              <div className="timer-unit">
+                <span className="unit-val">{String(timeLeft.hours).padStart(2, '0')}</span>
+                <span className="unit-lbl">HOURS</span>
+              </div>
+              <span className="unit-sep">:</span>
+              <div className="timer-unit">
+                <span className="unit-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
+                <span className="unit-lbl">MINS</span>
+              </div>
+              <span className="unit-sep">:</span>
+              <div className="timer-unit">
+                <span className="unit-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
+                <span className="unit-lbl">SECS</span>
+              </div>
             </div>
           </div>
-          <div className="cta-right">
-            <button onClick={() => setIsModalOpen(true)} className="register-btn-fixed pop-effect">
-              Register Now – Reserve Your Spot
+
+          <div className="cta-right-btn">
+            <button onClick={() => setIsModalOpen(true)} className="register-now-btn-premium">
+              Register Now <i className="fas fa-arrow-right"></i>
             </button>
           </div>
         </div>
@@ -396,94 +445,11 @@ function Webinar() {
           --glass-border: rgba(255, 255, 255, 0.08);
         }
 
-        .modal-overlay {
-          position: fixed;
-          inset: 0;
-          background: rgba(0,0,0,0.85);
-          backdrop-filter: blur(8px);
-          z-index: 2000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          padding: 20px;
-        }
-
-        .modal-container {
-          background: var(--brand-navy);
-          width: 100%;
-          max-width: 900px;
-          border-radius: 30px;
-          overflow: hidden;
-          position: relative;
-          border: 1px solid var(--brand-accent);
-          box-shadow: 0 0 50px rgba(255, 106, 0, 0.2);
-        }
-
-        .modal-close {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
-          border: none;
-          color: #fff;
-          font-size: 2rem;
-          cursor: pointer;
-          z-index: 10;
-          line-height: 1;
-        }
-
-        .modal-content-wrapper {
-          display: grid;
-          grid-template-columns: 1fr 1.2fr;
-        }
-
-        .modal-image-side {
-          position: relative;
-          min-height: 400px;
-        }
-
-        .modal-image-side img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .image-info-overlay {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 30px;
-          background: linear-gradient(to top, rgba(0,0,0,0.9), transparent);
-        }
-
-        .image-info-overlay h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
-        .image-info-overlay p { font-size: 0.9rem; color: var(--brand-accent); font-weight: 700; }
-
-        .modal-form-side {
-          padding: 50px;
-          background: rgba(11, 18, 32, 0.95);
-        }
-
-        .form-header-mini h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
-        .form-header-mini p { color: var(--brand-accent); font-weight: 700; margin-bottom: 30px; }
-
-        .modal-form .form-group { margin-bottom: 15px; }
-        .modal-form label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-gray); margin-bottom: 5px; display: block; }
-        .modal-form input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: #fff; }
-        .modal-form .secure-text { text-align: center; font-size: 0.75rem; color: var(--brand-gray); margin-top: 15px; }
-
-        @media (max-width: 768px) {
-          .modal-content-wrapper { grid-template-columns: 1fr; }
-          .modal-image-side { display: none; }
-          .modal-form-side { padding: 40px 20px; }
-        }
-
         .webinar-landing {
           font-family: 'Outfit', sans-serif;
           background-color: var(--brand-dark);
           color: var(--brand-light);
-          padding-bottom: 120px;
+          padding-bottom: 150px;
           overflow-x: hidden;
         }
 
@@ -495,6 +461,57 @@ function Webinar() {
         .header-underline { height: 4px; width: 60px; background: var(--brand-accent); border-radius: 2px; margin-top: 15px; }
         .text-center { text-align: center; }
 
+        /* Fixed Bottom CTA Upgrade */
+        .fixed-bottom-cta {
+          position: fixed;
+          bottom: 20px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 95%;
+          max-width: 1100px;
+          background: #f8f9ff;
+          border-radius: 40px;
+          padding: 15px 40px;
+          box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+          z-index: 2000;
+          border: 2px solid #e2e8f0;
+          color: #1a202c;
+        }
+        .cta-container { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+        
+        .cta-left-content .cta-price-title { font-size: 1.5rem; font-weight: 900; margin: 0; color: #2d3748; }
+        .cta-price-title .seats-alert { color: #e53e3e; font-size: 1rem; font-weight: 700; }
+        .cta-left-content .cta-subtitle { color: #ff0080; font-weight: 700; font-size: 0.95rem; margin: 5px 0 0; }
+
+        .cta-timer-section { display: flex; flex-direction: column; align-items: center; gap: 5px; }
+        .timer-label { font-size: 0.7rem; font-weight: 800; color: #718096; letter-spacing: 1px; }
+        .cta-timer-blocks { display: flex; align-items: center; gap: 8px; }
+        .timer-unit { display: flex; flex-direction: column; align-items: center; background: #2d3748; color: #fff; padding: 5px 10px; border-radius: 8px; min-width: 45px; }
+        .unit-val { font-size: 1.1rem; font-weight: 900; line-height: 1; }
+        .unit-lbl { font-size: 0.55rem; text-transform: uppercase; font-weight: 800; margin-top: 2px; }
+        .unit-sep { font-weight: 900; color: #2d3748; font-size: 1.2rem; }
+
+        .register-now-btn-premium {
+          background: linear-gradient(135deg, #f53d68 0%, #d61e4a 100%);
+          color: #fff;
+          border: none;
+          padding: 18px 45px;
+          border-radius: 20px;
+          font-size: 1.3rem;
+          font-weight: 900;
+          cursor: pointer;
+          transition: 0.3s;
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          box-shadow: 0 10px 25px rgba(245, 61, 104, 0.4);
+        }
+        .register-now-btn-premium:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(245, 61, 104, 0.6); }
+
+        /* Hero Timer Fix for consistency */
+        .countdown-timer-container { margin-top: 25px !important; }
+
+        /* General Styles */
         .cta-button {
           display: inline-block;
           background: var(--gradient-cta);
@@ -597,65 +614,67 @@ function Webinar() {
         .faq-answer.active { max-height: 200px; opacity: 1; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); }
         .faq-answer p { color: var(--brand-gray); line-height: 1.6; margin: 0; }
 
-        /* Fixed Bottom CTA */
-        .fixed-bottom-cta {
+        /* Modal Upgrade */
+        .modal-overlay {
           position: fixed;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 95%;
-          max-width: 1000px;
-          background: rgba(11, 18, 32, 0.9);
-          backdrop-filter: blur(20px);
-          border-radius: 100px;
-          padding: 15px 40px;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
-          z-index: 1000;
-          border: 1px solid var(--brand-accent);
+          inset: 0;
+          background: rgba(0,0,0,0.85);
+          backdrop-filter: blur(8px);
+          z-index: 5000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
         }
-        .cta-container { display: flex; justify-content: space-between; align-items: center; gap: 20px; }
-        .price-info { display: flex; flex-direction: column; }
-        .price-text { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; }
-        .price-text .small-text { font-size: 0.9rem; color: var(--brand-accent); }
-        .students-text { font-size: 0.8rem; color: var(--brand-gray); font-weight: 700; text-transform: uppercase; letter-spacing: 1px; }
-        
-        .cta-left { display: flex; align-items: center; gap: 40px; }
 
-        .register-btn-fixed { background: var(--gradient-cta); color: #fff; border: none; padding: 18px 45px; border-radius: 100px; font-size: 1.2rem; font-weight: 900; cursor: pointer; box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3); transition: 0.3s; }
-        .register-btn-fixed:hover { transform: scale(1.05); box-shadow: 0 8px 20px rgba(255, 106, 0, 0.5); }
+        .modal-container {
+          background: var(--brand-navy);
+          width: 100%;
+          max-width: 900px;
+          border-radius: 30px;
+          overflow: hidden;
+          position: relative;
+          border: 1px solid var(--brand-accent);
+          box-shadow: 0 0 50px rgba(255, 106, 0, 0.2);
+        }
 
-        .pop-effect { animation: slowPop 3s infinite ease-in-out; }
-        @keyframes slowPop { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.05); } }
-        .pulse-anim { animation: pulseBtn 2s infinite; }
-        @keyframes pulseBtn { 0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 106, 0, 0.7); } 50% { transform: scale(1.02); box-shadow: 0 0 0 15px rgba(255, 106, 0, 0); } 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 106, 0, 0); } }
+        .modal-close {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: none;
+          border: none;
+          color: #fff;
+          font-size: 2rem;
+          cursor: pointer;
+          z-index: 10;
+          line-height: 1;
+        }
+
+        .modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; }
+        .modal-image-side { position: relative; min-height: 400px; }
+        .modal-image-side img { width: 100%; height: 100%; object-fit: cover; }
+        .image-info-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 30px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
+        .image-info-overlay h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
+        .image-info-overlay p { font-size: 0.9rem; color: var(--brand-accent); font-weight: 700; }
+        .modal-form-side { padding: 50px; background: rgba(11, 18, 32, 0.95); }
+        .form-header-mini h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
+        .form-header-mini p { color: var(--brand-accent); font-weight: 700; margin-bottom: 30px; }
+        .modal-form .form-group { margin-bottom: 15px; }
+        .modal-form label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-gray); margin-bottom: 5px; display: block; }
+        .modal-form input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: #fff; }
+        .modal-form .secure-text { text-align: center; font-size: 0.75rem; color: var(--brand-gray); margin-top: 15px; }
 
         /* Media Queries */
-        @media (max-width: 1200px) {
-          .instructor-grid { gap: 40px; }
-        }
         @media (max-width: 991px) {
+          .cta-container { flex-direction: column; text-align: center; gap: 20px; }
+          .fixed-bottom-cta { border-radius: 20px; width: 98%; bottom: 10px; padding: 20px; }
+          .register-now-btn-premium { width: 100%; justify-content: center; padding: 15px; font-size: 1.1rem; }
+          .cta-left-content .cta-price-title { font-size: 1.3rem; }
+          .modal-content-wrapper { grid-template-columns: 1fr; }
+          .modal-image-side { display: none; }
+          .modal-form-side { padding: 40px 20px; }
           .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 50px; }
-          .hero-video-wrapper { max-width: 600px; margin: 0 auto; }
-          .instructor-grid { grid-template-columns: 1fr; text-align: center; }
-          .instructor-image { max-width: 400px; margin: 0 auto; }
-          .logo-strip { justify-content: center; }
-          .cta-left { gap: 20px; }
-          .fixed-bottom-cta { width: 98%; padding: 12px 25px; border-radius: 30px; }
-          .price-text { font-size: 1.5rem; }
-          .register-btn-fixed { padding: 12px 25px; font-size: 1rem; }
-        }
-        @media (max-width: 767px) {
-          .webinar-hero { padding-top: 80px; }
-          .days-grid { grid-template-columns: 1fr; }
-          .stats-grid { gap: 15px; }
-          .lead-form-card { padding: 30px 20px; }
-        }
-        @media (max-width: 480px) {
-          .stat-number { font-size: 1.4rem; }
-          .stat-label { font-size: 0.6rem; letter-spacing: 1px; }
-          .section-title { font-size: 1.8rem; }
-          .fixed-bottom-cta { bottom: 10px; border-radius: 20px; }
-          .price-info { gap: 2px; }
         }
       `}</style>
     </div>

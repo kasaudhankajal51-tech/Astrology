@@ -654,13 +654,13 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Rich Multi-Color Animated Dark CTA - No Blue */
+        /* Dark Blue & Purple Spectrum Animated CTA */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(-45deg, #050505, #2e1065, #450a0a, #064e3b, #4c1d95, #050505);
+          background: linear-gradient(-45deg, #041c2c, #062137, #0d1b3e, #1e1b4b, #2e1065, #041c2c);
           background-size: 400% 400%;
           animation: multiGradient 15s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
           border-top: 2px solid rgba(255, 255, 255, 0.1);
@@ -712,42 +712,42 @@ function Webinar() {
 
         .cta-center-btn { display: flex; justify-content: center; }
         .cta-reg-btn-v3 {
-          background: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
+          background: #EE6662;
           color: #fff;
-          padding: 14px 40px;
-          border-radius: 12px;
-          font-weight: 900;
-          font-size: 1.2rem;
+          padding: 10px 25px;
+          border-radius: 10px;
+          font-weight: 800;
+          font-size: 1rem;
           border: none;
           cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           white-space: nowrap;
-          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition: all 0.3s ease;
+          box-shadow: 0 5px 15px rgba(238, 102, 98, 0.4);
         }
 
         .glow-popup {
-          animation: glowPopupPulse 2s infinite ease-in-out;
-          box-shadow: 0 0 20px rgba(238, 102, 98, 0.6);
+          animation: glowPulseSmall 2s infinite ease-in-out;
           position: relative;
         }
 
-        @keyframes glowPopupPulse {
+        @keyframes glowPulseSmall {
           0% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
-          50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(238, 102, 98, 0.8), 0 0 60px rgba(238, 102, 98, 0.3); }
+          50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(238, 102, 98, 0.6); }
           100% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
         }
 
         .cta-reg-btn-v3 i {
           background: rgba(255, 255, 255, 0.2);
-          width: 28px;
-          height: 28px;
+          width: 24px;
+          height: 24px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.9rem;
+          font-size: 0.8rem;
         }
 
         .cta-right-timer { display: flex; justify-content: flex-end; }

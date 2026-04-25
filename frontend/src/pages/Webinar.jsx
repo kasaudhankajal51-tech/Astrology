@@ -831,14 +831,16 @@ function Webinar() {
         @media (max-width: 991px) {
           .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
           .why-card-v2 { width: 100%; }
-          .cta-inner { flex-direction: column; padding: 12px 15px; gap: 12px; }
-          .cta-mobile-row { width: 100%; gap: 10px; justify-content: center; }
-          .cta-price-info h4 { font-size: 1.4rem; }
-          .cta-price-info h4 small { display: inline; margin-left: 5px; }
-          .cta-reg-btn { width: auto; align-self: center; padding: 10px 30px; font-size: 1rem; }
-          .cta-timer-wrapper .minimal-timer { padding: 6px 12px; }
+          .cta-inner { flex-direction: column; padding: 10px 12px; gap: 10px; }
+          .cta-mobile-row { width: 100%; gap: 5px; justify-content: space-between; display: flex; align-items: center; }
+          .cta-price-info { gap: 8px; }
+          .cta-price-info h4 { font-size: 1.2rem; }
+          .cta-price-info h4 small { display: block; font-size: 0.7rem; margin-left: 0; }
+          .price-badge { padding: 3px 8px; font-size: 0.65rem; }
+          .cta-reg-btn { width: auto; align-self: center; padding: 8px 30px; font-size: 1.1rem; margin-top: 5px; }
+          .cta-timer-wrapper .minimal-timer { padding: 4px 8px; gap: 5px; }
           .cta-timer-wrapper .timer-label { display: none; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.95rem; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.9rem; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
           .modal-image-side { padding: 40px; text-align: center; }
           .modal-image-side h4 { font-size: 1.8rem; }
@@ -847,11 +849,11 @@ function Webinar() {
         }
 
         @media (max-width: 480px) {
-          .cta-price-info h4 { font-size: 1.1rem; }
-          .price-badge { font-size: 0.65rem; padding: 3px 8px; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.85rem; }
-          .cta-reg-btn { padding: 8px 20px; font-size: 0.9rem; gap: 6px; }
-          .cta-mobile-row { flex-wrap: wrap; gap: 5px; }
+          .cta-price-info h4 { font-size: 1rem; }
+          .price-badge { font-size: 0.6rem; padding: 2px 6px; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.8rem; }
+          .cta-reg-btn { padding: 8px 25px; font-size: 1rem; gap: 5px; }
+          .cta-mobile-row { flex-wrap: nowrap; }
         }
       `}</style>
     </div>

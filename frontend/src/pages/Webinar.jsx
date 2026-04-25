@@ -756,6 +756,7 @@ function Webinar() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           line-height: 1;
+          transform: translateY(4px);
         }
 
         .price-sparkle-v4 { animation: sparklePulse 3s infinite ease-in-out; }

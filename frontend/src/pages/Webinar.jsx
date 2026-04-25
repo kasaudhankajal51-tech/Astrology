@@ -370,16 +370,11 @@ function Webinar() {
           <div className="cta-top-row-v4">
             <div className="cta-left-v4">
               <div className="offer-badge-v4">
-                <i className="fas fa-bolt"></i> <span className="typing-text">LIMITED TIME OFFER</span>
+                <i className="fas fa-bolt"></i> <span>LIMITED TIME OFFER</span>
               </div>
               <div className="price-display-v4">
                 <span className="only-text-v4">Only</span>
                 <span className="amount-v4">₹99</span>
-                <span className="price-sparkle-v4">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#FFD700" />
-                  </svg>
-                </span>
               </div>
             </div>
 
@@ -392,7 +387,7 @@ function Webinar() {
 
           <div className="cta-bottom-row-v4">
             <button onClick={() => setIsModalOpen(true)} className="register-now-btn-v5">
-              <span className="btn-text-v4">Register Now</span>
+              <span className="btn-text-v4">Enroll Now</span>
               <span className="btn-icon-v4"><i className="fas fa-arrow-right"></i></span>
             </button>
           </div>
@@ -750,20 +745,6 @@ function Webinar() {
           text-transform: uppercase;
         }
 
-        .typing-text {
-          display: inline-block;
-          overflow: hidden;
-          border-right: 2px solid #ff9d00;
-          white-space: nowrap;
-          animation: typing 4s steps(20) infinite, blink 0.5s step-end infinite;
-        }
-
-        @keyframes typing {
-          0%, 100% { width: 0; }
-          40%, 60% { width: 100%; }
-        }
-
-        @keyframes blink { from, to { border-color: transparent; } 50% { border-color: #ff9d00; } }
 
         .price-display-v4 { display: flex; align-items: baseline; gap: 8px; }
         .only-text-v4 { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
@@ -792,10 +773,10 @@ function Webinar() {
         }
 
         .cta-vertical-divider-v4 {
-          width: 1px;
-          height: 35px;
-          background: linear-gradient(to bottom, transparent, rgba(255, 157, 0, 0.4), transparent);
-          margin: 0 10px;
+          width: 1.5px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.2);
+          margin: 0 15px;
         }
 
         .cta-right-v4 { flex: 1; display: flex; justify-content: flex-end; }
@@ -863,9 +844,19 @@ function Webinar() {
         }
 
         @media (max-width: 600px) {
-          .amount-v4 { font-size: 2.2rem; }
+          .amount-v4 { font-size: 2.5rem; }
+          .only-text-v4 { font-size: 1.2rem; }
+          .register-now-btn-v5 { font-size: 1.4rem; padding: 12px; }
+          .cta-top-row-v4 { gap: 5px; }
+          .cta-vertical-divider-v4 { margin: 0 8px; height: 40px; }
+          .offer-badge-v4 { font-size: 0.45rem; padding: 1px 6px; }
+        }
+
+        @media (max-width: 400px) {
+          .amount-v4 { font-size: 2rem; }
           .only-text-v4 { font-size: 1rem; }
-          .register-now-btn-v5 { font-size: 1.1rem; padding: 8px; }
+          .register-now-btn-v5 { font-size: 1.2rem; }
+          .cta-container-v4 { padding: 0 10px; }
         }
 
         /* Premium Modal Upgrade */

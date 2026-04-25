@@ -66,60 +66,69 @@ const CountdownTimer = ({ minimal = false }) => {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 8px;
+            gap: 4px;
           }
           .timer-header-mini {
-            font-size: 0.6rem;
+            font-size: 0.55rem;
             font-weight: 800;
-            color: rgba(255, 255, 255, 0.7);
-            letter-spacing: 1.2px;
+            color: rgba(255, 255, 255, 0.8);
+            letter-spacing: 1.5px;
             text-transform: uppercase;
+            text-align: center;
+            width: 100%;
           }
           .timer-box-wrapper {
-            background: rgba(0, 0, 0, 0.4);
-            padding: 8px 12px;
-            border-radius: 10px;
-            border: 1px solid rgba(255, 140, 0, 0.3);
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            background: rgba(20, 20, 20, 0.8);
+            padding: 10px 15px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 140, 0, 0.2);
+            box-shadow: inset 0 0 15px rgba(0, 0, 0, 1);
           }
           .timer-display-mini {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
           }
           .timer-slot {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 35px;
+            min-width: 32px;
           }
           .slot-val {
-            font-size: 1.6rem;
-            font-weight: 900;
+            font-size: 1.8rem;
+            font-weight: 700;
             color: #ff9d00;
             line-height: 1;
             font-family: 'Orbitron', 'Courier New', monospace;
-            text-shadow: 0 0 8px rgba(255, 157, 0, 0.6);
+            text-shadow: 0 0 12px rgba(255, 157, 0, 0.8);
           }
           .slot-label {
-            font-size: 0.5rem;
+            font-size: 0.45rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.5);
-            margin-top: 3px;
+            color: rgba(255, 255, 255, 0.6);
+            margin-top: 4px;
             letter-spacing: 0.5px;
           }
           .slot-sep {
             color: #ff9d00;
-            font-weight: 900;
-            font-size: 1.4rem;
+            font-weight: 700;
+            font-size: 1.5rem;
             margin-top: -12px;
-            text-shadow: 0 0 8px rgba(255, 157, 0, 0.6);
+            text-shadow: 0 0 12px rgba(255, 157, 0, 0.8);
           }
-          @media (max-width: 480px) {
+          @media (max-width: 600px) {
+            .slot-val { font-size: 1.6rem; }
+            .slot-sep { font-size: 1.3rem; margin-top: -10px; }
+            .timer-box-wrapper { padding: 8px 12px; }
+            .timer-slot { min-width: 28px; }
+            .timer-display-mini { gap: 8px; }
+          }
+          @media (max-width: 400px) {
             .slot-val { font-size: 1.4rem; }
-            .slot-sep { font-size: 1.2rem; margin-top: -10px; }
+            .slot-sep { font-size: 1.1rem; margin-top: -8px; }
             .timer-box-wrapper { padding: 6px 10px; }
-            .timer-slot { min-width: 30px; }
+            .timer-slot { min-width: 24px; }
           }
         `}</style>
       </div>

@@ -356,32 +356,37 @@ function Webinar() {
         </div>
       </section>
 
-      {/* Fixed Bottom CTA */}
-      <div className="fixed-bottom-cta">
-        <div className="cta-inner">
-          <div className="cta-content-wrapper">
-            <div className="cta-left-side">
-              <div className="premium-badge-v3">
+      {/* Fixed Bottom CTA - Redesigned to match image */}
+      <div className="fixed-bottom-cta-v4">
+        <div className="cta-container-v4">
+          <div className="cta-top-row-v4">
+            <div className="cta-left-v4">
+              <div className="offer-badge-v4">
                 <i className="fas fa-bolt"></i> LIMITED TIME OFFER
               </div>
-              <div className="cta-price-v3">
-                <div className="price-main-v3">
-                  <span className="price-amt-v3">₹99/- Only</span>
-                  <span className="seats-tag-v3">(Few Seats Left)</span>
-                </div>
-                <p className="counting-text-v3">Empowering over 1 Lakh+ students and counting</p>
+              <div className="price-display-v4">
+                <span className="only-text-v4">Only</span>
+                <span className="amount-v4">₹99</span>
+                <span className="price-sparkle-v4">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L14.5 9.5L22 12L14.5 14.5L12 22L9.5 14.5L2 12L9.5 9.5L12 2Z" fill="#FFD700" />
+                  </svg>
+                </span>
               </div>
             </div>
 
-            <div className="cta-timer-v3">
-               <CountdownTimer minimal={true} />
-            </div>
+            <div className="cta-vertical-divider-v4"></div>
 
-            <div className="cta-action-v3">
-              <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn-v3 glow-popup">
-                Register Now <i className="fas fa-arrow-right"></i>
-              </button>
+            <div className="cta-right-v4">
+              <CountdownTimer minimal={true} />
             </div>
+          </div>
+
+          <div className="cta-bottom-row-v4">
+            <button onClick={() => setIsModalOpen(true)} className="enroll-now-btn-v4">
+              <span className="btn-text-v4">Enroll Now</span>
+              <span className="btn-icon-v4"><i className="fas fa-arrow-right"></i></span>
+            </button>
           </div>
         </div>
       </div>
@@ -654,25 +659,23 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Dark Blue & Purple Spectrum Animated CTA */
-        .fixed-bottom-cta {
+        /* Redesigned Fixed Bottom CTA - Match Image */
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
+        .fixed-bottom-cta-v4 {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(-45deg, #041c2c, #062137, #0d1b3e, #1e1b4b, #2e1065, #041c2c);
-          background-size: 400% 400%;
-          animation: multiGradient 15s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
-          border-top: 2px solid rgba(255, 255, 255, 0.1);
-          padding: 15px 0;
+          background: #121212;
+          padding: 10px 0 8px;
           z-index: 2000;
-          box-shadow: 0 -10px 50px rgba(0,0,0,0.8);
-        }
-
-        @keyframes multiGradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
+          border-top-left-radius: 20px;
+          border-top-right-radius: 20px;
+          box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          font-family: 'Outfit', sans-serif;
+          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
         }
 
         @keyframes slideUpBar {
@@ -680,136 +683,212 @@ function Webinar() {
           to { transform: translateY(0); opacity: 1; }
         }
 
-        .cta-content-wrapper {
-          display: grid;
-          grid-template-columns: 1fr auto auto;
-          align-items: center;
-          gap: 40px;
-          max-width: 1200px;
+        .cta-container-v4 {
+          max-width: 1100px;
           margin: 0 auto;
           padding: 0 20px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
         }
 
-        .cta-left-side { display: flex; flex-direction: column; gap: 5px; }
-        .premium-badge-v3 {
-          background: rgba(245, 158, 11, 0.15);
-          color: #F59E0B;
-          padding: 4px 12px;
-          border-radius: 6px;
-          font-weight: 800;
-          font-size: 0.65rem;
-          width: fit-content;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          border: 1px solid rgba(245, 158, 11, 0.3);
-        }
-
-        .cta-price-v3 { display: flex; flex-direction: column; gap: 2px; }
-        .price-main-v3 { display: flex; align-items: baseline; gap: 10px; }
-        .price-amt-v3 { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
-        .seats-tag-v3 { color: #EE6662; font-size: 0.85rem; font-weight: 700; }
-        .counting-text-v3 { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; margin: 0; font-weight: 500; }
-
-        .cta-center-btn { display: flex; justify-content: center; }
-        .cta-reg-btn-v3 {
-          background: linear-gradient(135deg, #5d4911 0%, #8a6d1c 50%, #5d4911 100%);
-          color: #fff;
-          padding: 6px 8px 6px 20px;
-          border-radius: 50px;
-          font-weight: 800;
-          font-size: 0.95rem;
-          border: none;
-          cursor: pointer;
+        .cta-top-row-v4 {
           display: flex;
           align-items: center;
-          gap: 12px;
-          white-space: nowrap;
-          transition: all 0.3s ease;
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 4px 15px rgba(93, 73, 17, 0.5);
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          justify-content: space-between;
+          gap: 15px;
         }
 
-        .cta-reg-btn-v3::after {
+        .cta-left-v4 {
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .offer-badge-v4 {
+          background: rgba(255, 157, 0, 0.1);
+          color: #ff9d00;
+          padding: 3px 10px;
+          border-radius: 6px;
+          font-size: 0.55rem;
+          font-weight: 800;
+          letter-spacing: 1px;
+          width: fit-content;
+          border: 1px solid rgba(255, 157, 0, 0.3);
+          text-transform: uppercase;
+          animation: badgePulse 2s infinite ease-in-out;
+        }
+
+        @keyframes badgePulse {
+          0%, 100% { background: rgba(255, 157, 0, 0.1); }
+          50% { background: rgba(255, 157, 0, 0.25); transform: scale(1.02); }
+        }
+
+        .offer-badge-v4 i {
+          color: #ff9d00;
+          margin-right: 5px;
+        }
+
+        .price-display-v4 {
+          display: flex;
+          align-items: baseline;
+          gap: 8px;
+        }
+
+        .only-text-v4 {
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #ffffff;
+        }
+
+        .amount-v4 {
+          font-size: 3.2rem;
+          font-weight: 900;
+          background: linear-gradient(180deg, #FFD700 0%, #FF8C00 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          line-height: 1;
+          animation: priceHeartbeat 2.5s infinite ease-in-out;
+        }
+
+        @keyframes priceHeartbeat {
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px transparent); }
+          50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+        }
+
+        .price-sparkle-v4 {
+          margin-bottom: 20px;
+          animation: sparkleRotate 4s infinite linear;
+        }
+
+        @keyframes sparkleRotate {
+          0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
+          25% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+          50% { transform: scale(1) rotate(180deg); opacity: 0.6; }
+          75% { transform: scale(1.4) rotate(270deg); opacity: 1; }
+          100% { transform: scale(1) rotate(360deg); opacity: 0.6; }
+        }
+
+        .cta-vertical-divider-v4 {
+          width: 1px;
+          height: 40px;
+          background: rgba(255, 255, 255, 0.15);
+          margin: 0 10px;
+        }
+
+        .cta-right-v4 {
+          flex: 1;
+          display: flex;
+          justify-content: flex-end;
+        }
+
+        .cta-bottom-row-v4 {
+          width: 100%;
+        }
+
+        .enroll-now-btn-v4 {
+          width: 100%;
+          background: linear-gradient(180deg, #ff9d00 0%, #ff6a00 100%);
+          border: none;
+          padding: 12px 20px;
+          border-radius: 15px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          color: #ffffff;
+          font-size: 1.4rem;
+          font-weight: 900;
+          cursor: pointer;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4);
+          position: relative;
+          overflow: hidden;
+          animation: buttonGlowPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes buttonGlowPulse {
+          0%, 100% { box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4); }
+          50% { box-shadow: 0 8px 30px rgba(255, 106, 0, 0.7); transform: scale(1.02); }
+        }
+
+        .enroll-now-btn-v4::after {
           content: "";
           position: absolute;
           top: -50%;
           left: -150%;
           width: 200%;
           height: 200%;
-          background: linear-gradient(
-            to right,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.5) 50%,
-            rgba(255, 255, 255, 0) 100%
-          );
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
           transform: rotate(30deg);
-          animation: slidingShine 3s infinite ease-in-out;
+          animation: shineSwipe 3s infinite ease-in-out;
         }
 
-        @keyframes slidingShine {
+        @keyframes shineSwipe {
           0% { left: -150%; }
-          100% { left: 150%; }
+          30%, 100% { left: 150%; }
         }
 
-        .glow-popup {
-          animation: goldenGlow 2s infinite ease-in-out;
+        .enroll-now-btn-v4:hover {
+          transform: translateY(-2px) scale(1.03);
+          filter: brightness(1.1);
         }
 
-        @keyframes goldenGlow {
-          0% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
-          50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(212, 175, 55, 0.7); }
-          100% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
-        }
-
-        .cta-reg-btn-v3 i {
-          background: #fff;
-          width: 28px;
-          height: 28px;
+        .btn-icon-v4 {
+          background: rgba(0, 0, 0, 0.15);
+          width: 32px;
+          height: 32px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.75rem;
-          color: #8a6d1c;
-          position: relative;
-          z-index: 2;
-          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+          font-size: 0.9rem;
+          border: 1px solid rgba(255,255,255,0.2);
         }
 
-        .cta-right-timer { display: flex; justify-content: flex-end; }
-        .cta-action-v3 { display: flex; justify-content: flex-end; }
+        /* Desktop Layout Override */
+        @media (min-width: 992px) {
+          .cta-container-v4 {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            gap: 30px;
+          }
+          .cta-top-row-v4 {
+            flex: 1;
+            margin-bottom: 0;
+            justify-content: flex-start;
+            gap: 30px;
+          }
+          .cta-bottom-row-v4 {
+            width: auto;
+            flex-shrink: 0;
+          }
+          .enroll-now-btn-v4 {
+            width: auto;
+            padding: 10px 30px;
+            font-size: 1.3rem;
+          }
+        }
 
         @media (max-width: 991px) {
-          .fixed-bottom-cta { padding: 12px 0; }
-          .cta-content-wrapper {
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            padding: 0 15px;
-          }
-          .cta-left-side { grid-column: 1; }
-          .cta-timer-v3 { grid-column: 2; display: flex; justify-content: flex-end; transform: scale(0.9); }
-          .cta-action-v3 { grid-column: 1 / span 2; display: flex; justify-content: center; width: 100%; margin-top: 5px; }
-          .cta-reg-btn-v3 { 
-            width: auto; 
-            min-width: 200px;
-            justify-content: center; 
-            padding: 10px 25px; 
-            font-size: 1rem; 
-            border-radius: 10px;
-          }
-          
-          .price-amt-v3 { font-size: 1.3rem; }
-          .seats-tag-v3 { font-size: 0.7rem; }
-          .counting-text-v3 { font-size: 0.6rem; }
-          .premium-badge-v3 { font-size: 0.55rem; padding: 3px 8px; }
+          .only-text-v4 { font-size: 1.2rem; }
+          .amount-v4 { font-size: 2.8rem; }
+          .enroll-now-btn-v4 { font-size: 1.3rem; padding: 12px; }
         }
 
-        @media (max-width: 480px) {
-          .cta-content-wrapper { gap: 10px; }
-          .price-amt-v3 { font-size: 1.3rem; }
+        @media (max-width: 600px) {
+          .only-text-v4 { font-size: 1.1rem; }
+          .amount-v4 { font-size: 2.2rem; }
+          .enroll-now-btn-v4 { font-size: 1.1rem; padding: 10px; }
+          .btn-icon-v4 { width: 28px; height: 28px; font-size: 0.75rem; }
+          .cta-container-v4 { padding: 0 15px; gap: 8px; }
+          .cta-top-row-v4 { gap: 8px; }
+        }
+        @media (max-width: 400px) {
+          .amount-v4 { font-size: 1.8rem; }
+          .only-text-v4 { font-size: 0.95rem; }
         }
 
         /* Premium Modal Upgrade */

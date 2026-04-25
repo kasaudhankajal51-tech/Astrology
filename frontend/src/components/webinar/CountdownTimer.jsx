@@ -41,71 +41,85 @@ const CountdownTimer = ({ minimal = false }) => {
     return (
       <div className="digital-timer-minimal">
         <div className="timer-header-mini">OFFER ENDS IN</div>
-        <div className="timer-display-mini">
-          <div className="timer-slot">
-            <span className="slot-val">{String(timeLeft.hours).padStart(2, '0')}</span>
-            <span className="slot-label">HRS</span>
-          </div>
-          <span className="slot-sep">:</span>
-          <div className="timer-slot">
-            <span className="slot-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
-            <span className="slot-label">MINS</span>
-          </div>
-          <span className="slot-sep">:</span>
-          <div className="timer-slot">
-            <span className="slot-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
-            <span className="slot-label">SECS</span>
+        <div className="timer-box-wrapper">
+          <div className="timer-display-mini">
+            <div className="timer-slot">
+              <span className="slot-val">{String(timeLeft.hours).padStart(2, '0')}</span>
+              <span className="slot-label">HRS</span>
+            </div>
+            <span className="slot-sep">:</span>
+            <div className="timer-slot">
+              <span className="slot-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
+              <span className="slot-label">MINS</span>
+            </div>
+            <span className="slot-sep">:</span>
+            <div className="timer-slot">
+              <span className="slot-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
+              <span className="slot-label">SECS</span>
+            </div>
           </div>
         </div>
         <style>{`
+          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+          
           .digital-timer-minimal {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 8px;
           }
           .timer-header-mini {
-            font-size: 0.65rem;
-            font-weight: 700;
-            color: #64748b;
-            letter-spacing: 1px;
+            font-size: 0.6rem;
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.7);
+            letter-spacing: 1.2px;
             text-transform: uppercase;
+          }
+          .timer-box-wrapper {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 12px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
           }
           .timer-display-mini {
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
           }
           .timer-slot {
             display: flex;
             flex-direction: column;
             align-items: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 4px 8px;
-            border-radius: 6px;
-            border: 1px solid rgba(245, 158, 11, 0.2);
-            min-width: 40px;
+            min-width: 35px;
           }
           .slot-val {
-            font-size: 1.4rem;
+            font-size: 1.6rem;
             font-weight: 900;
-            color: #F59E0B;
+            color: #ff9d00;
             line-height: 1;
-            font-family: 'Courier New', Courier, monospace;
-            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            font-family: 'Orbitron', 'Courier New', monospace;
+            text-shadow: 0 0 8px rgba(255, 157, 0, 0.6);
           }
           .slot-label {
             font-size: 0.5rem;
             font-weight: 700;
             color: rgba(255, 255, 255, 0.5);
-            margin-top: 2px;
+            margin-top: 3px;
+            letter-spacing: 0.5px;
           }
           .slot-sep {
-            color: #F59E0B;
+            color: #ff9d00;
             font-weight: 900;
-            font-size: 1.2rem;
-            margin-bottom: 8px;
-            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+            font-size: 1.4rem;
+            margin-top: -12px;
+            text-shadow: 0 0 8px rgba(255, 157, 0, 0.6);
+          }
+          @media (max-width: 480px) {
+            .slot-val { font-size: 1.4rem; }
+            .slot-sep { font-size: 1.2rem; margin-top: -10px; }
+            .timer-box-wrapper { padding: 6px 10px; }
+            .timer-slot { min-width: 30px; }
           }
         `}</style>
       </div>

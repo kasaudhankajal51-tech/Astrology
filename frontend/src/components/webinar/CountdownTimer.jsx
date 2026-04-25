@@ -67,7 +67,7 @@ const CountdownTimer = ({ minimal = false }) => {
           .timer-header-mini {
             font-size: 0.65rem;
             font-weight: 700;
-            color: #94a3b8;
+            color: #64748b;
             letter-spacing: 1px;
             text-transform: uppercase;
           }
@@ -97,7 +97,7 @@ const CountdownTimer = ({ minimal = false }) => {
           .slot-label {
             font-size: 0.5rem;
             font-weight: 700;
-            color: #64748b;
+            color: rgba(255, 255, 255, 0.5);
             margin-top: 2px;
           }
           .slot-sep {

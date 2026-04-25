@@ -359,25 +359,30 @@ function Webinar() {
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
         <div className="cta-inner">
-          <div className="cta-left-side">
-            <div className="premium-badge">
-              <i className="fas fa-bolt"></i> LIMITED TIME OFFER
+          <div className="cta-content-wrapper">
+            <div className="cta-left-side">
+              <div className="premium-badge-v3">
+                <i className="fas fa-bolt"></i> LIMITED TIME OFFER
+              </div>
+              <div className="cta-price-v3">
+                <div className="price-main-v3">
+                  <span className="price-amt-v3">₹99/- Only</span>
+                  <span className="seats-tag-v3">(Few Seats Left)</span>
+                </div>
+                <p className="counting-text-v3">Empowering over 1 Lakh+ students and counting</p>
+              </div>
             </div>
-            <div className="cta-price-block">
-              <span className="price-label">Only</span>
-              <span className="price-amount">₹99</span>
+
+            <div className="cta-timer-v3">
+               <CountdownTimer minimal={true} />
+            </div>
+
+            <div className="cta-action-v3">
+              <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn-v3 glow-popup">
+                Register Now <i className="fas fa-arrow-right"></i>
+              </button>
             </div>
           </div>
-
-          <div className="cta-divider"></div>
-          
-          <div className="cta-timer-side">
-             <CountdownTimer minimal={true} />
-          </div>
-
-          <button onClick={() => setIsModalOpen(true)} className="cta-enroll-btn">
-            Enroll Now <i className="fas fa-arrow-right"></i>
-          </button>
         </div>
       </div>
 
@@ -649,18 +654,25 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Sleek Fixed Bottom CTA - Full Width Digital Aesthetic */
+        /* Multi-Color Animated Dark CTA */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: #111111;
-          border-top: 1px solid rgba(245, 158, 11, 0.3);
-          padding: 12px 0;
+          background: linear-gradient(-45deg, #0f172a, #1e1b4b, #2d1b4e, #1e3a8a, #0f172a);
+          background-size: 400% 400%;
+          animation: multiGradient 10s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          border-top: 2px solid rgba(255, 255, 255, 0.1);
+          padding: 15px 0;
           z-index: 2000;
-          box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
-          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          box-shadow: 0 -10px 50px rgba(0,0,0,0.8);
+        }
+
+        @keyframes multiGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
         @keyframes slideUpBar {
@@ -668,91 +680,67 @@ function Webinar() {
           to { transform: translateY(0); opacity: 1; }
         }
 
-        .cta-inner { 
-          display: flex; 
-          justify-content: space-between; 
-          align-items: center; 
+        .cta-content-wrapper {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          align-items: center;
+          gap: 40px;
           max-width: 1200px;
           margin: 0 auto;
           padding: 0 20px;
-          gap: 20px; 
         }
 
-        .cta-left-side {
-          display: flex;
-          flex-direction: column;
-          gap: 5px;
-        }
-
-        .premium-badge {
-          background: rgba(245, 158, 11, 0.1);
-          color: #F59E0B;
+        .cta-left-side { display: flex; flex-direction: column; gap: 5px; }
+        .premium-badge-v3 {
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
           padding: 4px 12px;
           border-radius: 6px;
           font-weight: 800;
-          font-size: 0.7rem;
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          border: 1px solid rgba(245, 158, 11, 0.2);
+          font-size: 0.65rem;
           width: fit-content;
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 1px;
+          border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .cta-price-block {
-          display: flex;
-          align-items: baseline;
-          gap: 10px;
-        }
+        .cta-price-v3 { display: flex; flex-direction: column; gap: 2px; }
+        .price-main-v3 { display: flex; align-items: baseline; gap: 10px; }
+        .price-amt-v3 { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+        .seats-tag-v3 { color: #EE6662; font-size: 0.85rem; font-weight: 700; }
+        .counting-text-v3 { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; margin: 0; font-weight: 500; }
 
-        .price-label {
+        .cta-center-btn { display: flex; justify-content: center; }
+        .cta-reg-btn-v3 {
+          background: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
           color: #fff;
-          font-size: 1.4rem;
-          font-weight: 700;
-        }
-
-        .price-amount {
-          font-size: 2.8rem;
+          padding: 14px 40px;
+          border-radius: 12px;
           font-weight: 900;
-          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          line-height: 1;
-          filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
-        }
-
-        .cta-divider {
-          width: 1px;
-          height: 50px;
-          background: rgba(255, 255, 255, 0.1);
-        }
-
-        .cta-enroll-btn { 
-          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
-          color: #111; 
-          padding: 16px 40px; 
-          border-radius: 16px; 
-          font-weight: 900; 
-          font-size: 1.2rem; 
-          border: none; 
-          cursor: pointer; 
-          transition: 0.3s; 
+          font-size: 1.2rem;
+          border: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
           gap: 12px;
           white-space: nowrap;
-          box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .cta-enroll-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
-          filter: brightness(1.1);
+        .glow-popup {
+          animation: glowPopupPulse 2s infinite ease-in-out;
+          box-shadow: 0 0 20px rgba(238, 102, 98, 0.6);
+          position: relative;
         }
 
-        .cta-enroll-btn i {
-          background: rgba(0, 0, 0, 0.1);
+        @keyframes glowPopupPulse {
+          0% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
+          50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(238, 102, 98, 0.8), 0 0 60px rgba(238, 102, 98, 0.3); }
+          100% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
+        }
+
+        .cta-reg-btn-v3 i {
+          background: rgba(255, 255, 255, 0.2);
           width: 28px;
           height: 28px;
           border-radius: 50%;
@@ -762,63 +750,29 @@ function Webinar() {
           font-size: 0.9rem;
         }
 
+        .cta-right-timer { display: flex; justify-content: flex-end; }
+        .cta-action-v3 { display: flex; justify-content: flex-end; }
+
         @media (max-width: 991px) {
-          .fixed-bottom-cta {
-            bottom: 0;
-            width: 100%;
-            border-radius: 0;
-            padding: 20px;
-            transform: none;
-            left: 0;
-          }
-          
-          @keyframes slideUpBar {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-          }
-
-          .cta-inner {
-            flex-direction: column;
+          .fixed-bottom-cta { padding: 15px 0; }
+          .cta-content-wrapper {
+            grid-template-columns: 1fr 1fr;
             gap: 15px;
+            padding: 0 15px;
           }
-
-          .cta-left-side {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-          }
-
-          .cta-divider {
-            display: none;
-          }
-
-          .cta-timer-side {
-            width: 100%;
-          }
-
-          .cta-enroll-btn {
-            width: 100%;
-            justify-content: center;
-          }
-
-          .price-amount {
-            font-size: 2rem;
-          }
+          .cta-left-side { grid-column: 1; }
+          .cta-timer-v3 { grid-column: 2; display: flex; justify-content: flex-end; }
+          .cta-action-v3 { grid-column: 1 / span 2; display: flex; justify-content: center; width: 100%; margin-top: 5px; }
+          .cta-reg-btn-v3 { width: 100%; justify-content: center; padding: 12px; font-size: 1.1rem; }
           
-          .price-label {
-            font-size: 1rem;
-          }
+          .price-amt-v3 { font-size: 1.5rem; }
+          .seats-tag-v3 { font-size: 0.75rem; }
+          .counting-text-v3 { font-size: 0.65rem; }
         }
 
         @media (max-width: 480px) {
-          .cta-left-side {
-            flex-direction: column;
-            align-items: flex-start;
-          }
-          .cta-inner {
-            gap: 12px;
-          }
+          .cta-content-wrapper { gap: 10px; }
+          .price-amt-v3 { font-size: 1.3rem; }
         }
 
         /* Premium Modal Upgrade */

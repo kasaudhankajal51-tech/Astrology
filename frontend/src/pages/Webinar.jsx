@@ -659,6 +659,12 @@ function Webinar() {
           padding: 10px 0;
           z-index: 2000;
           box-shadow: 0 -15px 40px rgba(0,0,0,0.3);
+          animation: slideUpBar 0.8s ease-out;
+        }
+
+        @keyframes slideUpBar {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
         .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; gap: 20px; }
         .cta-mobile-row { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 20px; }
@@ -731,7 +737,15 @@ function Webinar() {
         .cta-timer-wrapper .minimal-timer {
           background: rgba(255, 255, 255, 0.05);
           border: 1px solid rgba(255, 255, 255, 0.1);
+          animation: timerBorderPulse 2s infinite;
         }
+        
+        @keyframes timerBorderPulse {
+          0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
+          50% { border-color: rgba(238, 102, 98, 0.5); box-shadow: 0 0 10px rgba(238, 102, 98, 0.2); }
+          100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
+        }
+        
         .cta-timer-wrapper .timer-label { color: #EE6662; }
         .cta-timer-wrapper .timer-vals { color: #fff; }
 
@@ -818,7 +832,7 @@ function Webinar() {
           .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
           .why-card-v2 { width: 100%; }
           .cta-inner { flex-direction: column; padding: 12px 15px; gap: 12px; }
-          .cta-mobile-row { width: 100%; gap: 10px; }
+          .cta-mobile-row { width: 100%; gap: 10px; justify-content: center; }
           .cta-price-info h4 { font-size: 1.4rem; }
           .cta-price-info h4 small { display: inline; margin-left: 5px; }
           .cta-reg-btn { width: auto; align-self: center; padding: 10px 30px; font-size: 1rem; }
@@ -830,6 +844,14 @@ function Webinar() {
           .modal-image-side h4 { font-size: 1.8rem; }
           .modal-form-side { padding: 40px; }
           .day-card { padding: 40px 25px; }
+        }
+
+        @media (max-width: 480px) {
+          .cta-price-info h4 { font-size: 1.1rem; }
+          .price-badge { font-size: 0.65rem; padding: 3px 8px; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.85rem; }
+          .cta-reg-btn { padding: 8px 20px; font-size: 0.9rem; gap: 6px; }
+          .cta-mobile-row { flex-wrap: wrap; gap: 5px; }
         }
       `}</style>
     </div>

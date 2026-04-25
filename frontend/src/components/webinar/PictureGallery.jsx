@@ -4,7 +4,7 @@ const galleryImages = [
   { url: '/images/ruiy-img01.jpg', title: 'Mentorship Program' },
   { url: '/images/bg-bannerpic.jpg', title: 'Student Community' },
   { url: '/images/cosmic_blueprint.png', title: 'Vedic Insights' },
-  { url: '/images/middle-img.png', title: 'Expert Guidance' },
+ 
 ];
 
 const PictureGallery = () => {

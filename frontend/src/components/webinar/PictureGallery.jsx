@@ -35,7 +35,7 @@ const PictureGallery = () => {
       <style>{`
         .gallery-section {
           padding: 100px 0;
-          background: #fff;
+          background: #fdfaff;
         }
         .gallery-grid {
           display: grid;

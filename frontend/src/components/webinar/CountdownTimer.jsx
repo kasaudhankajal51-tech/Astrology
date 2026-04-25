@@ -6,11 +6,11 @@ const CountdownTimer = ({ minimal = false }) => {
   useEffect(() => {
     // 24 Hour Persistence Logic
     const getTargetTime = () => {
-      const stored = localStorage.getItem('webinar_timer_v3');
+      const stored = localStorage.getItem('webinar_timer_v4');
       if (stored) return parseInt(stored);
       
       const newTarget = Date.now() + 24 * 60 * 60 * 1000;
-      localStorage.setItem('webinar_timer_v3', newTarget.toString());
+      localStorage.setItem('webinar_timer_v4', newTarget.toString());
       return newTarget;
     };
 

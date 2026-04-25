@@ -22,7 +22,7 @@ function Webinar() {
     }
 
     // Standardized Timer Logic (Sync with Hero Timer)
-    const timerKey = 'webinar_timer_end';
+    const timerKey = 'webinar_timer_v4';
     let endTime = localStorage.getItem(timerKey);
     
     if (!endTime) {
@@ -359,19 +359,21 @@ function Webinar() {
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
         <div className="cta-inner">
-          <div className="cta-price-info">
-            <div className="price-badge">Limited Offer</div>
-            <div>
-              <h4>₹99/- Only <small className="fs-6">(Few Seats Left)</small></h4>
-              <p>Empowering over 1 Lakh+ students and counting</p>
+          <div className="cta-mobile-row">
+            <div className="cta-price-info">
+              <div className="price-badge">Limited Offer</div>
+              <div className="price-text-box">
+                <h4>₹99/- Only <small>(Few Seats Left)</small></h4>
+                <p className="d-none d-md-block">Empowering over 1 Lakh+ students and counting</p>
+              </div>
+            </div>
+            
+            <div className="cta-timer-wrapper">
+               <CountdownTimer minimal={true} />
             </div>
           </div>
-          
-          <div className="cta-timer-wrapper d-none d-lg-block">
-             <CountdownTimer minimal={true} />
-          </div>
 
-          <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn">
+          <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn glow-animation">
             Register Now <i className="fas fa-arrow-right"></i>
           </button>
         </div>
@@ -501,22 +503,22 @@ function Webinar() {
         .m-stat p { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 0; }
 
         /* Featured In */
-        .featured-section { padding: 40px 0; background: #f1f5f9; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .featured-section { padding: 40px 0; background: #FAF9F6; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
         .featured-label { background: var(--brand-purple); color: #fff; padding: 8px 30px; border-radius: 10px; font-weight: 700; margin: -60px auto 30px; display: table; position: relative; z-index: 10; }
         .logos-flex { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; opacity: 0.7; }
         .logos-flex img { height: 35px; filter: grayscale(1); }
 
         /* Why Section (Life Struggles) */
-        .why-section { padding: 100px 0; }
+        .why-section { padding: 100px 0; background: #ffffff; }
         .why-title { font-size: 2.8rem; font-weight: 800; color: var(--brand-purple); text-align: center; margin-bottom: 60px; }
         .why-cards-flex { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
-        .why-card-v2 { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 15px; width: calc(50% - 10px); border: 1px solid #f1f5f9; transition: 0.3s; }
+        .why-card-v2 { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 15px; width: calc(50% - 10px); border: 1px solid #f3e8ff; transition: 0.3s; }
         .why-card-v2:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--brand-coral); }
         .why-card-v2 .icon { color: var(--brand-coral); font-size: 1.5rem; }
         .why-card-v2 p { margin: 0; font-size: 1rem; font-weight: 600; color: var(--text-dark); }
 
         /* Learn Section */
-        .learn-section { padding: 100px 0; }
+        .learn-section { padding: 100px 0; background: #ffffff; }
         .learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 50px; }
         .learn-card-v2 { background: #FDF4FF; padding: 30px; border-radius: 15px; border: 1px solid #F3E8FF; display: flex; gap: 20px; align-items: flex-start; }
         .learn-icon-v2 { font-size: 2rem; color: var(--brand-purple); opacity: 0.8; }
@@ -564,7 +566,7 @@ function Webinar() {
         }
 
         /* Patterns Section */
-        .patterns-section { padding: 100px 0; text-align: center; }
+        .patterns-section { padding: 100px 0; text-align: center; background: #FAF9F6; }
         .patterns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
         .pattern-card { background: #fff; padding: 40px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid #f1f5f9; }
         .pattern-icon { font-size: 3rem; color: var(--brand-purple); margin-bottom: 20px; }
@@ -645,40 +647,107 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Sleek Fixed Bottom CTA */
+        /* Sleek Fixed Bottom CTA - Enhanced with Dark Theme & Glow */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: rgba(255, 255, 255, 0.95);
-          backdrop-filter: blur(15px);
-          border-top: 1px solid #e2e8f0;
-          padding: 12px 0;
+          background: linear-gradient(135deg, #2D1B4E 0%, #1A1033 100%);
+          backdrop-filter: blur(20px);
+          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          padding: 10px 0;
           z-index: 2000;
-          box-shadow: 0 -15px 40px rgba(0,0,0,0.08);
+          box-shadow: 0 -15px 40px rgba(0,0,0,0.3);
+          animation: slideUpBar 0.8s ease-out;
         }
-        .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .cta-price-info { display: flex; align-items: center; gap: 20px; }
-        .price-badge { background: #FFF1F2; color: var(--brand-coral); padding: 5px 15px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
-        .cta-price-info h4 { font-size: 2.2rem; font-weight: 900; color: var(--brand-purple); margin: 0; }
-        .cta-price-info p { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin: 0; }
+
+        @keyframes slideUpBar {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+        .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; gap: 20px; }
+        .cta-mobile-row { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 20px; }
+        .cta-price-info { display: flex; align-items: center; gap: 15px; }
+        .price-badge { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #fff; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; animation: badgePulse 2s infinite; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3); }
+        .cta-price-info h4 { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.1; }
+        .cta-price-info h4 small { font-size: 0.8rem; opacity: 0.8; font-weight: 600; color: #EE6662; }
+        .cta-price-info p { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 500; margin: 0; }
+        
         .cta-reg-btn { 
           background: var(--gradient-coral); 
           color: #fff; 
-          padding: 16px 45px; 
-          border-radius: 15px; 
+          padding: 14px 35px; 
+          border-radius: 12px; 
           font-weight: 800; 
-          font-size: 1.3rem; 
+          font-size: 1.15rem; 
           border: none; 
           cursor: pointer; 
           transition: 0.3s; 
-          box-shadow: 0 10px 25px rgba(238, 102, 98, 0.4); 
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
+          white-space: nowrap;
         }
-        .cta-reg-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(238, 102, 98, 0.5); }
+
+        .glow-animation {
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 0 20px rgba(238, 102, 98, 0.6);
+          animation: intenseGlow 2s infinite ease-in-out;
+        }
+
+        .glow-animation::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(
+            to bottom right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.1) 45%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 0.1) 55%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          transform: rotate(45deg);
+          animation: shimmerSweep 3s infinite;
+          pointer-events: none;
+        }
+
+        @keyframes intenseGlow {
+          0% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
+          50% { box-shadow: 0 0 30px rgba(238, 102, 98, 0.8), 0 0 50px rgba(238, 102, 98, 0.4); transform: scale(1.03); }
+          100% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
+        }
+
+        @keyframes shimmerSweep {
+          0% { transform: translate(-100%, -100%) rotate(45deg); }
+          20%, 100% { transform: translate(100%, 100%) rotate(45deg); }
+        }
+
+        @keyframes badgePulse {
+          0% { transform: scale(1); }
+          50% { transform: scale(1.05); }
+          100% { transform: scale(1); }
+        }
+
+        .cta-timer-wrapper .minimal-timer {
+          background: rgba(255, 255, 255, 0.05);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+          animation: timerBorderPulse 2s infinite;
+        }
+        
+        @keyframes timerBorderPulse {
+          0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
+          50% { border-color: rgba(238, 102, 98, 0.5); box-shadow: 0 0 10px rgba(238, 102, 98, 0.2); }
+          100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
+        }
+        
+        .cta-timer-wrapper .timer-label { color: #EE6662; }
+        .cta-timer-wrapper .timer-vals { color: #fff; }
 
         /* Premium Modal Upgrade */
         .modal-overlay {
@@ -762,14 +831,27 @@ function Webinar() {
         @media (max-width: 991px) {
           .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
           .why-card-v2 { width: 100%; }
-          .cta-inner { flex-direction: column; gap: 15px; text-align: center; }
-          .cta-reg-btn { width: 100%; }
-          .cta-price-info { flex-direction: column; gap: 5px; }
+          .cta-inner { flex-direction: column; padding: 12px 15px; gap: 12px; }
+          .cta-mobile-row { width: 100%; gap: 10px; justify-content: center; }
+          .cta-price-info h4 { font-size: 1.4rem; }
+          .cta-price-info h4 small { display: inline; margin-left: 5px; }
+          .cta-reg-btn { width: auto; align-self: center; padding: 10px 30px; font-size: 1rem; }
+          .cta-timer-wrapper .minimal-timer { padding: 6px 12px; }
+          .cta-timer-wrapper .timer-label { display: none; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.95rem; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
           .modal-image-side { padding: 40px; text-align: center; }
           .modal-image-side h4 { font-size: 1.8rem; }
           .modal-form-side { padding: 40px; }
           .day-card { padding: 40px 25px; }
+        }
+
+        @media (max-width: 480px) {
+          .cta-price-info h4 { font-size: 1.1rem; }
+          .price-badge { font-size: 0.65rem; padding: 3px 8px; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.85rem; }
+          .cta-reg-btn { padding: 8px 20px; font-size: 0.9rem; gap: 6px; }
+          .cta-mobile-row { flex-wrap: wrap; gap: 5px; }
         }
       `}</style>
     </div>

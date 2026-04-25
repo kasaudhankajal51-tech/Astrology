@@ -675,6 +675,12 @@ function Webinar() {
           box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
           border-top: 1px solid rgba(255, 255, 255, 0.1);
           font-family: 'Outfit', sans-serif;
+          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+
+        @keyframes slideUpBar {
+          from { transform: translateY(100%); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
 
         .cta-container-v4 {
@@ -701,16 +707,22 @@ function Webinar() {
         }
 
         .offer-badge-v4 {
-          background: rgba(255, 255, 255, 0.08);
-          color: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 157, 0, 0.1);
+          color: #ff9d00;
           padding: 3px 10px;
           border-radius: 6px;
           font-size: 0.55rem;
           font-weight: 800;
           letter-spacing: 1px;
           width: fit-content;
-          border: 1px solid rgba(255, 255, 255, 0.15);
+          border: 1px solid rgba(255, 157, 0, 0.3);
           text-transform: uppercase;
+          animation: badgePulse 2s infinite ease-in-out;
+        }
+
+        @keyframes badgePulse {
+          0%, 100% { background: rgba(255, 157, 0, 0.1); }
+          50% { background: rgba(255, 157, 0, 0.25); transform: scale(1.02); }
         }
 
         .offer-badge-v4 i {
@@ -737,16 +749,24 @@ function Webinar() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           line-height: 1;
+          animation: priceHeartbeat 2.5s infinite ease-in-out;
+        }
+
+        @keyframes priceHeartbeat {
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px transparent); }
+          50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
         }
 
         .price-sparkle-v4 {
           margin-bottom: 20px;
-          animation: sparkleRotate 3s infinite linear;
+          animation: sparkleRotate 4s infinite linear;
         }
 
         @keyframes sparkleRotate {
           0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-          50% { transform: scale(1.3) rotate(180deg); opacity: 1; }
+          25% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+          50% { transform: scale(1) rotate(180deg); opacity: 0.6; }
+          75% { transform: scale(1.4) rotate(270deg); opacity: 1; }
           100% { transform: scale(1) rotate(360deg); opacity: 0.6; }
         }
 
@@ -783,11 +803,36 @@ function Webinar() {
           cursor: pointer;
           transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4);
+          position: relative;
+          overflow: hidden;
+          animation: buttonGlowPulse 2s infinite ease-in-out;
+        }
+
+        @keyframes buttonGlowPulse {
+          0%, 100% { box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4); }
+          50% { box-shadow: 0 8px 30px rgba(255, 106, 0, 0.7); transform: scale(1.02); }
+        }
+
+        .enroll-now-btn-v4::after {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -150%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
+          transform: rotate(30deg);
+          animation: shineSwipe 3s infinite ease-in-out;
+        }
+
+        @keyframes shineSwipe {
+          0% { left: -150%; }
+          30%, 100% { left: 150%; }
         }
 
         .enroll-now-btn-v4:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 10px 30px rgba(255, 106, 0, 0.6);
+          transform: translateY(-2px) scale(1.03);
+          filter: brightness(1.1);
         }
 
         .btn-icon-v4 {

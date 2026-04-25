@@ -22,7 +22,7 @@ function Webinar() {
     }
 
     // Standardized Timer Logic (Sync with Hero Timer)
-    const timerKey = 'webinar_timer_end';
+    const timerKey = 'webinar_timer_v4';
     let endTime = localStorage.getItem(timerKey);
     
     if (!endTime) {

@@ -692,8 +692,8 @@ function Webinar() {
 
         .cta-left-side { display: flex; flex-direction: column; gap: 5px; }
         .premium-badge-v3 {
-          background: rgba(255, 255, 255, 0.1);
-          color: #fff;
+          background: rgba(245, 158, 11, 0.15);
+          color: #F59E0B;
           padding: 4px 12px;
           border-radius: 6px;
           font-weight: 800;
@@ -701,7 +701,7 @@ function Webinar() {
           width: fit-content;
           text-transform: uppercase;
           letter-spacing: 1px;
-          border: 1px solid rgba(255, 255, 255, 0.2);
+          border: 1px solid rgba(245, 158, 11, 0.3);
         }
 
         .cta-price-v3 { display: flex; flex-direction: column; gap: 2px; }

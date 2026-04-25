@@ -370,7 +370,7 @@ function Webinar() {
           <div className="cta-top-row-v4">
             <div className="cta-left-v4">
               <div className="offer-badge-v4">
-                <i className="fas fa-bolt"></i> <span className="typing-text">LIMITED TIME OFFER</span>
+                <i className="fas fa-bolt"></i> <span>LIMITED TIME OFFER</span>
               </div>
               <div className="price-display-v4">
                 <span className="only-text-v4">Only</span>
@@ -745,20 +745,6 @@ function Webinar() {
           text-transform: uppercase;
         }
 
-        .typing-text {
-          display: inline-block;
-          overflow: hidden;
-          border-right: 2px solid #ff9d00;
-          white-space: nowrap;
-          animation: typing 4s steps(20) infinite, blink 0.5s step-end infinite;
-        }
-
-        @keyframes typing {
-          0%, 100% { width: 0; }
-          40%, 60% { width: 100%; }
-        }
-
-        @keyframes blink { from, to { border-color: transparent; } 50% { border-color: #ff9d00; } }
 
         .price-display-v4 { display: flex; align-items: baseline; gap: 8px; }
         .only-text-v4 { font-size: 1.2rem; font-weight: 700; color: #ffffff; }

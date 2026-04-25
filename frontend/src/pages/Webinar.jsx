@@ -129,7 +129,7 @@ function Webinar() {
               <div className="mentor-summary-card">
                 <div className="featured-label-mini text-center mb-3"><span className="badge bg-danger">Your Instructor</span></div>
                 <div className="mentor-header">
-                  <img src="/images/middle-img.png" alt="Mentor" className="mentor-pic-small" />
+                  <img src="/images/mentor-ava.png" alt="Mentor" className="mentor-pic-small" />
                   <div className="mentor-title-box">
                     <h3>Astro Ava</h3>
                     <p>Expert in Vedic astrology and other disciplines of astrology, recognized as India's leading voice in astrology.</p>
@@ -280,13 +280,13 @@ function Webinar() {
             </div>
             <div className="mentor-v2-img-side" data-aos="fade-left">
               <div className="mentor-image-v2">
-                <img src="/images/middle-img.png" alt="Astro Ava" />
+                <img src="/images/mentor-ava.png" alt="Astro Ava" />
               </div>
               <div className="mentor-media-logos">
-                 <span>AAJ TAK</span>
-                 <span>FOX</span>
-                 <span>OUTLOOK</span>
-                 <span>LATESTLY</span>
+                 <div className="media-logo-item"><span>Aaj Tak</span></div>
+                 <div className="media-logo-item"><span>Fox Interviewer</span></div>
+                 <div className="media-logo-item"><span>Outlook</span></div>
+                 <div className="media-logo-item"><span>LatestLY</span></div>
               </div>
             </div>
           </div>
@@ -534,8 +534,34 @@ function Webinar() {
         
         .mentor-image-v2 { position: relative; border-radius: 30px; overflow: hidden; border: 10px solid rgba(255,255,255,0.05); }
         .mentor-image-v2 img { width: 100%; display: block; }
-        .mentor-media-logos { background: #fff; padding: 15px 30px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
-        .mentor-media-logos img { height: 25px; filter: grayscale(1); opacity: 0.8; }
+        .mentor-media-logos { 
+          background: #fff; 
+          padding: 20px 30px; 
+          border-radius: 20px; 
+          display: flex; 
+          justify-content: space-around; 
+          align-items: center; 
+          margin-top: 30px; 
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .media-logo-item {
+          font-weight: 900;
+          color: #1a1a1a;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          opacity: 0.8;
+          transition: 0.3s;
+        }
+        .media-logo-item:hover {
+          opacity: 1;
+          transform: scale(1.05);
+        }
+        .media-logo-item span {
+          display: block;
+          border-left: 2px solid var(--brand-coral);
+          padding-left: 10px;
+        }
 
         /* Patterns Section */
         .patterns-section { padding: 100px 0; text-align: center; }

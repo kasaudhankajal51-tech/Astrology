@@ -359,23 +359,30 @@ function Webinar() {
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
         <div className="cta-inner">
-          <div className="cta-mobile-row">
-            <div className="cta-price-info">
-              <div className="price-badge">Limited Offer</div>
-              <div className="price-text-box">
-                <h4>₹99/- Only <small>(Few Seats Left)</small></h4>
-                <p className="d-none d-md-block">Empowering over 1 Lakh+ students and counting</p>
+          <div className="cta-content-wrapper">
+            <div className="cta-left-side">
+              <div className="premium-badge-v3">
+                <i className="fas fa-bolt"></i> LIMITED TIME OFFER
+              </div>
+              <div className="cta-price-v3">
+                <div className="price-main-v3">
+                  <span className="price-amt-v3">₹99/- Only</span>
+                  <span className="seats-tag-v3">(Few Seats Left)</span>
+                </div>
+                <p className="counting-text-v3">Empowering over 1 Lakh+ students and counting</p>
               </div>
             </div>
-            
-            <div className="cta-timer-wrapper">
+
+            <div className="cta-timer-v3">
                <CountdownTimer minimal={true} />
             </div>
-          </div>
 
-          <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn glow-animation">
-            Register Now <i className="fas fa-arrow-right"></i>
-          </button>
+            <div className="cta-action-v3">
+              <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn-v3 glow-popup">
+                Register Now <i className="fas fa-arrow-right"></i>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -647,107 +654,126 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Sleek Fixed Bottom CTA - Enhanced with Dark Theme & Glow */
+        /* Multi-Color Animated Dark CTA */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(135deg, #2D1B4E 0%, #1A1033 100%);
-          backdrop-filter: blur(20px);
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          padding: 10px 0;
+          background: linear-gradient(-45deg, #0f172a, #1e1b4b, #2d1b4e, #1e3a8a, #0f172a);
+          background-size: 400% 400%;
+          animation: multiGradient 10s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          border-top: 2px solid rgba(255, 255, 255, 0.1);
+          padding: 15px 0;
           z-index: 2000;
-          box-shadow: 0 -15px 40px rgba(0,0,0,0.3);
-          animation: slideUpBar 0.8s ease-out;
+          box-shadow: 0 -10px 50px rgba(0,0,0,0.8);
+        }
+
+        @keyframes multiGradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
 
         @keyframes slideUpBar {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
-        .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; gap: 20px; }
-        .cta-mobile-row { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 20px; }
-        .cta-price-info { display: flex; align-items: center; gap: 15px; }
-        .price-badge { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #fff; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; animation: badgePulse 2s infinite; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3); }
-        .cta-price-info h4 { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.1; }
-        .cta-price-info h4 small { font-size: 0.8rem; opacity: 0.8; font-weight: 600; color: #EE6662; }
-        .cta-price-info p { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 500; margin: 0; }
-        
-        .cta-reg-btn { 
-          background: var(--gradient-coral); 
-          color: #fff; 
-          padding: 14px 35px; 
-          border-radius: 12px; 
-          font-weight: 800; 
-          font-size: 1.15rem; 
-          border: none; 
-          cursor: pointer; 
-          transition: 0.3s; 
+
+        .cta-content-wrapper {
+          display: grid;
+          grid-template-columns: 1fr auto auto;
+          align-items: center;
+          gap: 40px;
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
+
+        .cta-left-side { display: flex; flex-direction: column; gap: 5px; }
+        .premium-badge-v3 {
+          background: rgba(245, 158, 11, 0.15);
+          color: #F59E0B;
+          padding: 4px 12px;
+          border-radius: 6px;
+          font-weight: 800;
+          font-size: 0.65rem;
+          width: fit-content;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .cta-price-v3 { display: flex; flex-direction: column; gap: 2px; }
+        .price-main-v3 { display: flex; align-items: baseline; gap: 10px; }
+        .price-amt-v3 { font-size: 1.8rem; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 0 10px rgba(255, 255, 255, 0.2); }
+        .seats-tag-v3 { color: #EE6662; font-size: 0.85rem; font-weight: 700; }
+        .counting-text-v3 { color: rgba(255, 255, 255, 0.5); font-size: 0.75rem; margin: 0; font-weight: 500; }
+
+        .cta-center-btn { display: flex; justify-content: center; }
+        .cta-reg-btn-v3 {
+          background: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
+          color: #fff;
+          padding: 14px 40px;
+          border-radius: 12px;
+          font-weight: 900;
+          font-size: 1.2rem;
+          border: none;
+          cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
           white-space: nowrap;
+          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        .glow-animation {
-          position: relative;
-          overflow: hidden;
+        .glow-popup {
+          animation: glowPopupPulse 2s infinite ease-in-out;
           box-shadow: 0 0 20px rgba(238, 102, 98, 0.6);
-          animation: intenseGlow 2s infinite ease-in-out;
+          position: relative;
         }
 
-        .glow-animation::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.1) 45%,
-            rgba(255, 255, 255, 0.4) 50%,
-            rgba(255, 255, 255, 0.1) 55%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          transform: rotate(45deg);
-          animation: shimmerSweep 3s infinite;
-          pointer-events: none;
+        @keyframes glowPopupPulse {
+          0% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
+          50% { transform: scale(1.08); box-shadow: 0 0 40px rgba(238, 102, 98, 0.8), 0 0 60px rgba(238, 102, 98, 0.3); }
+          100% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
         }
 
-        @keyframes intenseGlow {
-          0% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
-          50% { box-shadow: 0 0 30px rgba(238, 102, 98, 0.8), 0 0 50px rgba(238, 102, 98, 0.4); transform: scale(1.03); }
-          100% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
+        .cta-reg-btn-v3 i {
+          background: rgba(255, 255, 255, 0.2);
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
         }
 
-        @keyframes shimmerSweep {
-          0% { transform: translate(-100%, -100%) rotate(45deg); }
-          20%, 100% { transform: translate(100%, 100%) rotate(45deg); }
+        .cta-right-timer { display: flex; justify-content: flex-end; }
+        .cta-action-v3 { display: flex; justify-content: flex-end; }
+
+        @media (max-width: 991px) {
+          .fixed-bottom-cta { padding: 15px 0; }
+          .cta-content-wrapper {
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            padding: 0 15px;
+          }
+          .cta-left-side { grid-column: 1; }
+          .cta-timer-v3 { grid-column: 2; display: flex; justify-content: flex-end; }
+          .cta-action-v3 { grid-column: 1 / span 2; display: flex; justify-content: center; width: 100%; margin-top: 5px; }
+          .cta-reg-btn-v3 { width: 100%; justify-content: center; padding: 12px; font-size: 1.1rem; }
+          
+          .price-amt-v3 { font-size: 1.5rem; }
+          .seats-tag-v3 { font-size: 0.75rem; }
+          .counting-text-v3 { font-size: 0.65rem; }
         }
 
-        @keyframes badgePulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
+        @media (max-width: 480px) {
+          .cta-content-wrapper { gap: 10px; }
+          .price-amt-v3 { font-size: 1.3rem; }
         }
-
-        .cta-timer-wrapper .minimal-timer {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          animation: timerBorderPulse 2s infinite;
-        }
-        
-        @keyframes timerBorderPulse {
-          0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
-          50% { border-color: rgba(238, 102, 98, 0.5); box-shadow: 0 0 10px rgba(238, 102, 98, 0.2); }
-          100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
-        }
-        
-        .cta-timer-wrapper .timer-label { color: #EE6662; }
-        .cta-timer-wrapper .timer-vals { color: #fff; }
 
         /* Premium Modal Upgrade */
         .modal-overlay {
@@ -831,16 +857,14 @@ function Webinar() {
         @media (max-width: 991px) {
           .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
           .why-card-v2 { width: 100%; }
-          .cta-inner { flex-direction: column; padding: 10px 12px; gap: 10px; }
-          .cta-mobile-row { width: 100%; gap: 5px; justify-content: space-between; display: flex; align-items: center; }
-          .cta-price-info { gap: 8px; }
-          .cta-price-info h4 { font-size: 1.2rem; }
-          .cta-price-info h4 small { display: block; font-size: 0.7rem; margin-left: 0; }
-          .price-badge { padding: 3px 8px; font-size: 0.65rem; }
-          .cta-reg-btn { width: auto; align-self: center; padding: 8px 30px; font-size: 1.1rem; margin-top: 5px; }
-          .cta-timer-wrapper .minimal-timer { padding: 4px 8px; gap: 5px; }
+          .cta-inner { flex-direction: column; padding: 12px 15px; gap: 12px; }
+          .cta-mobile-row { width: 100%; gap: 10px; justify-content: center; }
+          .cta-price-info h4 { font-size: 1.4rem; }
+          .cta-price-info h4 small { display: inline; margin-left: 5px; }
+          .cta-reg-btn { width: auto; align-self: center; padding: 10px 30px; font-size: 1rem; }
+          .cta-timer-wrapper .minimal-timer { padding: 6px 12px; }
           .cta-timer-wrapper .timer-label { display: none; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.9rem; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.95rem; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
           .modal-image-side { padding: 40px; text-align: center; }
           .modal-image-side h4 { font-size: 1.8rem; }
@@ -849,11 +873,11 @@ function Webinar() {
         }
 
         @media (max-width: 480px) {
-          .cta-price-info h4 { font-size: 1rem; }
-          .price-badge { font-size: 0.6rem; padding: 2px 6px; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.8rem; }
-          .cta-reg-btn { padding: 8px 25px; font-size: 1rem; gap: 5px; }
-          .cta-mobile-row { flex-wrap: nowrap; }
+          .cta-price-info h4 { font-size: 1.1rem; }
+          .price-badge { font-size: 0.65rem; padding: 3px 8px; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.85rem; }
+          .cta-reg-btn { padding: 8px 20px; font-size: 0.9rem; gap: 6px; }
+          .cta-mobile-row { flex-wrap: wrap; gap: 5px; }
         }
       `}</style>
     </div>

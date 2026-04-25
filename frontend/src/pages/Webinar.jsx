@@ -712,42 +712,71 @@ function Webinar() {
 
         .cta-center-btn { display: flex; justify-content: center; }
         .cta-reg-btn-v3 {
-          background: #EE6662;
+          background: linear-gradient(135deg, #d4af37 0%, #f9d976 50%, #d4af37 100%);
           color: #fff;
-          padding: 10px 25px;
-          border-radius: 10px;
+          padding: 8px 10px 8px 25px;
+          border-radius: 50px;
           font-weight: 800;
-          font-size: 1rem;
+          font-size: 1.1rem;
           border: none;
           cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 15px;
           white-space: nowrap;
           transition: all 0.3s ease;
-          box-shadow: 0 5px 15px rgba(238, 102, 98, 0.4);
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .cta-reg-btn-v3::after {
+          content: "";
+          position: absolute;
+          top: -50%;
+          left: -150%;
+          width: 200%;
+          height: 200%;
+          background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          transform: rotate(30deg);
+          animation: slidingShine 3s infinite ease-in-out;
+        }
+
+        @keyframes slidingShine {
+          0% { left: -150%; }
+          100% { left: 150%; }
         }
 
         .glow-popup {
-          animation: glowPulseSmall 2s infinite ease-in-out;
-          position: relative;
+          animation: goldenGlow 2s infinite ease-in-out;
         }
 
-        @keyframes glowPulseSmall {
-          0% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
-          50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(238, 102, 98, 0.6); }
-          100% { transform: scale(1); box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); }
+        @keyframes goldenGlow {
+          0% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
+          50% { transform: scale(1.05); box-shadow: 0 0 25px rgba(212, 175, 55, 0.7); }
+          100% { transform: scale(1); box-shadow: 0 0 10px rgba(212, 175, 55, 0.4); }
         }
 
         .cta-reg-btn-v3 i {
-          background: rgba(255, 255, 255, 0.2);
-          width: 24px;
-          height: 24px;
+          background: #fff;
+          width: 35px;
+          height: 35px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.8rem;
+          font-size: 0.9rem;
+          color: #d4af37;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
 
         .cta-right-timer { display: flex; justify-content: flex-end; }

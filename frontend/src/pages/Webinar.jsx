@@ -359,22 +359,24 @@ function Webinar() {
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
         <div className="cta-inner">
-          <div className="cta-mobile-row">
-            <div className="cta-price-info">
-              <div className="price-badge">Limited Offer</div>
-              <div className="price-text-box">
-                <h4>₹99/- Only <small>(Few Seats Left)</small></h4>
-                <p className="d-none d-md-block">Empowering over 1 Lakh+ students and counting</p>
-              </div>
+          <div className="cta-left-side">
+            <div className="premium-badge">
+              <i className="fas fa-bolt"></i> LIMITED TIME OFFER
             </div>
-            
-            <div className="cta-timer-wrapper">
-               <CountdownTimer minimal={true} />
+            <div className="cta-price-block">
+              <span className="price-label">Only</span>
+              <span className="price-amount">₹99</span>
             </div>
           </div>
 
-          <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn glow-animation">
-            Register Now <i className="fas fa-arrow-right"></i>
+          <div className="cta-divider"></div>
+          
+          <div className="cta-timer-side">
+             <CountdownTimer minimal={true} />
+          </div>
+
+          <button onClick={() => setIsModalOpen(true)} className="cta-enroll-btn">
+            Enroll Now <i className="fas fa-arrow-right"></i>
           </button>
         </div>
       </div>
@@ -647,107 +649,177 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Sleek Fixed Bottom CTA - Enhanced with Dark Theme & Glow */
+        /* Sleek Fixed Bottom CTA - Full Width Digital Aesthetic */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(135deg, #2D1B4E 0%, #1A1033 100%);
-          backdrop-filter: blur(20px);
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
-          padding: 10px 0;
+          background: #111111;
+          border-top: 1px solid rgba(245, 158, 11, 0.3);
+          padding: 12px 0;
           z-index: 2000;
-          box-shadow: 0 -15px 40px rgba(0,0,0,0.3);
-          animation: slideUpBar 0.8s ease-out;
+          box-shadow: 0 -10px 30px rgba(0,0,0,0.5);
+          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         @keyframes slideUpBar {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
-        .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; gap: 20px; }
-        .cta-mobile-row { display: flex; align-items: center; justify-content: space-between; flex: 1; gap: 20px; }
-        .cta-price-info { display: flex; align-items: center; gap: 15px; }
-        .price-badge { background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%); color: #fff; padding: 5px 12px; border-radius: 8px; font-weight: 800; font-size: 0.75rem; text-transform: uppercase; animation: badgePulse 2s infinite; box-shadow: 0 4px 10px rgba(217, 119, 6, 0.3); }
-        .cta-price-info h4 { font-size: 1.8rem; font-weight: 900; color: #fff; margin: 0; line-height: 1.1; }
-        .cta-price-info h4 small { font-size: 0.8rem; opacity: 0.8; font-weight: 600; color: #EE6662; }
-        .cta-price-info p { font-size: 0.85rem; color: rgba(255,255,255,0.6); font-weight: 500; margin: 0; }
-        
-        .cta-reg-btn { 
-          background: var(--gradient-coral); 
-          color: #fff; 
-          padding: 14px 35px; 
-          border-radius: 12px; 
-          font-weight: 800; 
-          font-size: 1.15rem; 
+
+        .cta-inner { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 20px;
+          gap: 20px; 
+        }
+
+        .cta-left-side {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+        }
+
+        .premium-badge {
+          background: rgba(245, 158, 11, 0.1);
+          color: #F59E0B;
+          padding: 4px 12px;
+          border-radius: 6px;
+          font-weight: 800;
+          font-size: 0.7rem;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          border: 1px solid rgba(245, 158, 11, 0.2);
+          width: fit-content;
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+        }
+
+        .cta-price-block {
+          display: flex;
+          align-items: baseline;
+          gap: 10px;
+        }
+
+        .price-label {
+          color: #fff;
+          font-size: 1.4rem;
+          font-weight: 700;
+        }
+
+        .price-amount {
+          font-size: 2.8rem;
+          font-weight: 900;
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          line-height: 1;
+          filter: drop-shadow(0 0 8px rgba(245, 158, 11, 0.4));
+        }
+
+        .cta-divider {
+          width: 1px;
+          height: 50px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-enroll-btn { 
+          background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+          color: #111; 
+          padding: 16px 40px; 
+          border-radius: 16px; 
+          font-weight: 900; 
+          font-size: 1.2rem; 
           border: none; 
           cursor: pointer; 
           transition: 0.3s; 
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 12px;
           white-space: nowrap;
+          box-shadow: 0 10px 25px rgba(245, 158, 11, 0.3);
         }
 
-        .glow-animation {
-          position: relative;
-          overflow: hidden;
-          box-shadow: 0 0 20px rgba(238, 102, 98, 0.6);
-          animation: intenseGlow 2s infinite ease-in-out;
+        .cta-enroll-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(245, 158, 11, 0.4);
+          filter: brightness(1.1);
         }
 
-        .glow-animation::after {
-          content: '';
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 200%;
-          height: 200%;
-          background: linear-gradient(
-            to bottom right,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.1) 45%,
-            rgba(255, 255, 255, 0.4) 50%,
-            rgba(255, 255, 255, 0.1) 55%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          transform: rotate(45deg);
-          animation: shimmerSweep 3s infinite;
-          pointer-events: none;
+        .cta-enroll-btn i {
+          background: rgba(0, 0, 0, 0.1);
+          width: 28px;
+          height: 28px;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.9rem;
         }
 
-        @keyframes intenseGlow {
-          0% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
-          50% { box-shadow: 0 0 30px rgba(238, 102, 98, 0.8), 0 0 50px rgba(238, 102, 98, 0.4); transform: scale(1.03); }
-          100% { box-shadow: 0 0 10px rgba(238, 102, 98, 0.4); transform: scale(1); }
+        @media (max-width: 991px) {
+          .fixed-bottom-cta {
+            bottom: 0;
+            width: 100%;
+            border-radius: 0;
+            padding: 20px;
+            transform: none;
+            left: 0;
+          }
+          
+          @keyframes slideUpBar {
+            from { transform: translateY(100%); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+          }
+
+          .cta-inner {
+            flex-direction: column;
+            gap: 15px;
+          }
+
+          .cta-left-side {
+            flex-direction: row;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+          }
+
+          .cta-divider {
+            display: none;
+          }
+
+          .cta-timer-side {
+            width: 100%;
+          }
+
+          .cta-enroll-btn {
+            width: 100%;
+            justify-content: center;
+          }
+
+          .price-amount {
+            font-size: 2rem;
+          }
+          
+          .price-label {
+            font-size: 1rem;
+          }
         }
 
-        @keyframes shimmerSweep {
-          0% { transform: translate(-100%, -100%) rotate(45deg); }
-          20%, 100% { transform: translate(100%, 100%) rotate(45deg); }
+        @media (max-width: 480px) {
+          .cta-left-side {
+            flex-direction: column;
+            align-items: flex-start;
+          }
+          .cta-inner {
+            gap: 12px;
+          }
         }
-
-        @keyframes badgePulse {
-          0% { transform: scale(1); }
-          50% { transform: scale(1.05); }
-          100% { transform: scale(1); }
-        }
-
-        .cta-timer-wrapper .minimal-timer {
-          background: rgba(255, 255, 255, 0.05);
-          border: 1px solid rgba(255, 255, 255, 0.1);
-          animation: timerBorderPulse 2s infinite;
-        }
-        
-        @keyframes timerBorderPulse {
-          0% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
-          50% { border-color: rgba(238, 102, 98, 0.5); box-shadow: 0 0 10px rgba(238, 102, 98, 0.2); }
-          100% { border-color: rgba(255, 255, 255, 0.1); box-shadow: 0 0 0 rgba(238, 102, 98, 0); }
-        }
-        
-        .cta-timer-wrapper .timer-label { color: #EE6662; }
-        .cta-timer-wrapper .timer-vals { color: #fff; }
 
         /* Premium Modal Upgrade */
         .modal-overlay {
@@ -831,16 +903,14 @@ function Webinar() {
         @media (max-width: 991px) {
           .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
           .why-card-v2 { width: 100%; }
-          .cta-inner { flex-direction: column; padding: 10px 12px; gap: 10px; }
-          .cta-mobile-row { width: 100%; gap: 5px; justify-content: space-between; display: flex; align-items: center; }
-          .cta-price-info { gap: 8px; }
-          .cta-price-info h4 { font-size: 1.2rem; }
-          .cta-price-info h4 small { display: block; font-size: 0.7rem; margin-left: 0; }
-          .price-badge { padding: 3px 8px; font-size: 0.65rem; }
-          .cta-reg-btn { width: auto; align-self: center; padding: 8px 30px; font-size: 1.1rem; margin-top: 5px; }
-          .cta-timer-wrapper .minimal-timer { padding: 4px 8px; gap: 5px; }
+          .cta-inner { flex-direction: column; padding: 12px 15px; gap: 12px; }
+          .cta-mobile-row { width: 100%; gap: 10px; justify-content: center; }
+          .cta-price-info h4 { font-size: 1.4rem; }
+          .cta-price-info h4 small { display: inline; margin-left: 5px; }
+          .cta-reg-btn { width: auto; align-self: center; padding: 10px 30px; font-size: 1rem; }
+          .cta-timer-wrapper .minimal-timer { padding: 6px 12px; }
           .cta-timer-wrapper .timer-label { display: none; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.9rem; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.95rem; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
           .modal-image-side { padding: 40px; text-align: center; }
           .modal-image-side h4 { font-size: 1.8rem; }
@@ -849,11 +919,11 @@ function Webinar() {
         }
 
         @media (max-width: 480px) {
-          .cta-price-info h4 { font-size: 1rem; }
-          .price-badge { font-size: 0.6rem; padding: 2px 6px; }
-          .cta-timer-wrapper .timer-vals { font-size: 0.8rem; }
-          .cta-reg-btn { padding: 8px 25px; font-size: 1rem; gap: 5px; }
-          .cta-mobile-row { flex-wrap: nowrap; }
+          .cta-price-info h4 { font-size: 1.1rem; }
+          .price-badge { font-size: 0.65rem; padding: 3px 8px; }
+          .cta-timer-wrapper .timer-vals { font-size: 0.85rem; }
+          .cta-reg-btn { padding: 8px 20px; font-size: 0.9rem; gap: 6px; }
+          .cta-mobile-row { flex-wrap: wrap; gap: 5px; }
         }
       `}</style>
     </div>

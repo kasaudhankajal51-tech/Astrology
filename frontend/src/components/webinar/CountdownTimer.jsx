@@ -39,17 +39,74 @@ const CountdownTimer = ({ minimal = false }) => {
 
   if (minimal) {
     return (
-      <div className="minimal-timer">
-        <span className="timer-label">Ends In:</span>
-        <div className="timer-vals">
-          <span>{String(timeLeft.hours).padStart(2, '0')}h</span>
-          <span>{String(timeLeft.minutes).padStart(2, '0')}m</span>
-          <span>{String(timeLeft.seconds).padStart(2, '0')}s</span>
+      <div className="digital-timer-minimal">
+        <div className="timer-header-mini">OFFER ENDS IN</div>
+        <div className="timer-display-mini">
+          <div className="timer-slot">
+            <span className="slot-val">{String(timeLeft.hours).padStart(2, '0')}</span>
+            <span className="slot-label">HRS</span>
+          </div>
+          <span className="slot-sep">:</span>
+          <div className="timer-slot">
+            <span className="slot-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
+            <span className="slot-label">MINS</span>
+          </div>
+          <span className="slot-sep">:</span>
+          <div className="timer-slot">
+            <span className="slot-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
+            <span className="slot-label">SECS</span>
+          </div>
         </div>
         <style>{`
-          .minimal-timer { display: flex; align-items: center; gap: 12px; background: #FFF1F2; padding: 10px 20px; border-radius: 12px; border: 1px solid #FECACA; }
-          .timer-label { font-size: 0.8rem; font-weight: 800; color: #EE6662; text-transform: uppercase; }
-          .timer-vals { display: flex; gap: 8px; font-weight: 900; color: #3B2261; font-size: 1.1rem; }
+          .digital-timer-minimal {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+          }
+          .timer-header-mini {
+            font-size: 0.65rem;
+            font-weight: 700;
+            color: #94a3b8;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+          }
+          .timer-display-mini {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+          .timer-slot {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid rgba(245, 158, 11, 0.2);
+            min-width: 40px;
+          }
+          .slot-val {
+            font-size: 1.4rem;
+            font-weight: 900;
+            color: #F59E0B;
+            line-height: 1;
+            font-family: 'Courier New', Courier, monospace;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+          }
+          .slot-label {
+            font-size: 0.5rem;
+            font-weight: 700;
+            color: #64748b;
+            margin-top: 2px;
+          }
+          .slot-sep {
+            color: #F59E0B;
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-bottom: 8px;
+            text-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+          }
         `}</style>
       </div>
     );

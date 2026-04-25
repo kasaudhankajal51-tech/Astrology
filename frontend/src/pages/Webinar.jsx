@@ -654,15 +654,15 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Multi-Color Animated Dark CTA */
+        /* Rich Multi-Color Animated Dark CTA - No Blue */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(-45deg, #0f172a, #1e1b4b, #2d1b4e, #1e3a8a, #0f172a);
+          background: linear-gradient(-45deg, #050505, #2e1065, #450a0a, #064e3b, #4c1d95, #050505);
           background-size: 400% 400%;
-          animation: multiGradient 10s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+          animation: multiGradient 15s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
           border-top: 2px solid rgba(255, 255, 255, 0.1);
           padding: 15px 0;
           z-index: 2000;
@@ -754,20 +754,28 @@ function Webinar() {
         .cta-action-v3 { display: flex; justify-content: flex-end; }
 
         @media (max-width: 991px) {
-          .fixed-bottom-cta { padding: 15px 0; }
+          .fixed-bottom-cta { padding: 12px 0; }
           .cta-content-wrapper {
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            gap: 12px;
             padding: 0 15px;
           }
           .cta-left-side { grid-column: 1; }
-          .cta-timer-v3 { grid-column: 2; display: flex; justify-content: flex-end; }
+          .cta-timer-v3 { grid-column: 2; display: flex; justify-content: flex-end; transform: scale(0.9); }
           .cta-action-v3 { grid-column: 1 / span 2; display: flex; justify-content: center; width: 100%; margin-top: 5px; }
-          .cta-reg-btn-v3 { width: 100%; justify-content: center; padding: 12px; font-size: 1.1rem; }
+          .cta-reg-btn-v3 { 
+            width: auto; 
+            min-width: 200px;
+            justify-content: center; 
+            padding: 10px 25px; 
+            font-size: 1rem; 
+            border-radius: 10px;
+          }
           
-          .price-amt-v3 { font-size: 1.5rem; }
-          .seats-tag-v3 { font-size: 0.75rem; }
-          .counting-text-v3 { font-size: 0.65rem; }
+          .price-amt-v3 { font-size: 1.3rem; }
+          .seats-tag-v3 { font-size: 0.7rem; }
+          .counting-text-v3 { font-size: 0.6rem; }
+          .premium-badge-v3 { font-size: 0.55rem; padding: 3px 8px; }
         }
 
         @media (max-width: 480px) {

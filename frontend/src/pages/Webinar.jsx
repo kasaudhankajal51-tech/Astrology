@@ -358,11 +358,19 @@ function Webinar() {
 
       {/* Fixed Bottom CTA - Redesigned to match image */}
       <div className="fixed-bottom-cta-v4">
+        {/* Animated Background Stars */}
+        <div className="cta-stars-container">
+          <div className="cta-star s1"></div>
+          <div className="cta-star s2"></div>
+          <div className="cta-star s3"></div>
+          <div className="cta-star s4"></div>
+        </div>
+
         <div className="cta-container-v4">
           <div className="cta-top-row-v4">
             <div className="cta-left-v4">
               <div className="offer-badge-v4">
-                <i className="fas fa-bolt"></i> LIMITED TIME OFFER
+                <i className="fas fa-bolt"></i> <span className="typing-text">LIMITED TIME OFFER</span>
               </div>
               <div className="price-display-v4">
                 <span className="only-text-v4">Only</span>
@@ -383,8 +391,8 @@ function Webinar() {
           </div>
 
           <div className="cta-bottom-row-v4">
-            <button onClick={() => setIsModalOpen(true)} className="enroll-now-btn-v4">
-              <span className="btn-text-v4">Enroll Now</span>
+            <button onClick={() => setIsModalOpen(true)} className="register-now-btn-v5">
+              <span className="btn-text-v4">Register Now</span>
               <span className="btn-icon-v4"><i className="fas fa-arrow-right"></i></span>
             </button>
           </div>
@@ -667,20 +675,30 @@ function Webinar() {
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(-45deg, #0f0f0f, #1a1a1a, #0a0a0a, #151515);
+          background: linear-gradient(-45deg, #0a0a0a, #151515, #000000, #1a1a1a);
           background-size: 400% 400%;
-          padding: 10px 0 8px;
+          padding: 8px 0 6px;
           z-index: 2000;
           border-top-left-radius: 20px;
           border-top-right-radius: 20px;
-          box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
-          border-top: 1.5px solid transparent;
+          box-shadow: 0 -15px 50px rgba(0, 0, 0, 0.9);
+          border-top: 2px solid rgba(255, 157, 0, 0.3);
           font-family: 'Outfit', sans-serif;
-          animation: 
-            slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both,
-            bgFlow 15s ease infinite,
-            borderGlow 3s linear infinite;
+          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both, bgFlow 15s ease infinite;
           overflow: hidden;
+        }
+
+        /* Magic Stars Background */
+        .cta-stars-container { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
+        .cta-star { position: absolute; background: #fff; border-radius: 50%; opacity: 0; }
+        .s1 { width: 2px; height: 2px; top: 20%; left: 10%; animation: starTwinkle 4s infinite 0.5s; }
+        .s2 { width: 3px; height: 3px; top: 60%; left: 85%; animation: starTwinkle 5s infinite 1.2s; }
+        .s3 { width: 1px; height: 1px; top: 40%; left: 50%; animation: starTwinkle 3s infinite 2s; }
+        .s4 { width: 2px; height: 2px; top: 80%; left: 30%; animation: starTwinkle 6s infinite 0.8s; }
+
+        @keyframes starTwinkle {
+          0%, 100% { transform: scale(0); opacity: 0; }
+          50% { transform: scale(1.5); opacity: 0.6; box-shadow: 0 0 10px #fff; }
         }
 
         @keyframes bgFlow {
@@ -689,44 +707,18 @@ function Webinar() {
           100% { background-position: 0% 50%; }
         }
 
-        @keyframes borderGlow {
-          0% { border-top-color: rgba(255, 157, 0, 0.1); }
-          50% { border-top-color: rgba(255, 157, 0, 0.6); }
-          100% { border-top-color: rgba(255, 157, 0, 0.1); }
-        }
-
-        /* Magic Dust / Particles */
-        .fixed-bottom-cta-v4::before {
-          content: "";
-          position: absolute;
-          inset: 0;
-          background-image: 
-            radial-gradient(circle at 20% 30%, rgba(255, 157, 0, 0.05) 1px, transparent 1px),
-            radial-gradient(circle at 80% 70%, rgba(255, 157, 0, 0.05) 1px, transparent 1px),
-            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-          background-size: 100px 100px;
-          animation: dustFloat 10s linear infinite;
-          pointer-events: none;
-          z-index: 0;
-        }
-
-        @keyframes dustFloat {
-          from { background-position: 0 0; }
-          to { background-position: 100px 100px; }
-        }
-
         @keyframes slideUpBar {
           from { transform: translateY(100%); opacity: 0; }
           to { transform: translateY(0); opacity: 1; }
         }
 
         .cta-container-v4 {
-          max-width: 1100px;
+          max-width: 1000px;
           margin: 0 auto;
           padding: 0 20px;
           display: flex;
           flex-direction: column;
-          gap: 10px;
+          gap: 6px;
           position: relative;
           z-index: 1;
         }
@@ -742,203 +734,138 @@ function Webinar() {
           flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 4px;
+          gap: 2px;
         }
 
         .offer-badge-v4 {
           background: rgba(255, 157, 0, 0.1);
           color: #ff9d00;
-          padding: 3px 10px;
-          border-radius: 6px;
-          font-size: 0.55rem;
-          font-weight: 800;
-          letter-spacing: 1px;
+          padding: 2px 8px;
+          border-radius: 4px;
+          font-size: 0.5rem;
+          font-weight: 900;
+          letter-spacing: 2px;
           width: fit-content;
-          border: 1px solid rgba(255, 157, 0, 0.3);
+          border: 1px solid rgba(255, 157, 0, 0.4);
           text-transform: uppercase;
-          animation: badgePulse 2s infinite ease-in-out;
-          box-shadow: 0 0 10px rgba(255, 157, 0, 0.1);
         }
 
-        @keyframes badgePulse {
-          0%, 100% { background: rgba(255, 157, 0, 0.1); box-shadow: 0 0 10px rgba(255, 157, 0, 0.1); }
-          50% { background: rgba(255, 157, 0, 0.3); transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 157, 0, 0.3); }
+        .typing-text {
+          display: inline-block;
+          overflow: hidden;
+          border-right: 2px solid #ff9d00;
+          white-space: nowrap;
+          animation: typing 4s steps(20) infinite, blink 0.5s step-end infinite;
         }
 
-        .offer-badge-v4 i {
-          color: #ff9d00;
-          margin-right: 5px;
+        @keyframes typing {
+          0%, 100% { width: 0; }
+          40%, 60% { width: 100%; }
         }
 
-        .price-display-v4 {
-          display: flex;
-          align-items: baseline;
-          gap: 8px;
-        }
+        @keyframes blink { from, to { border-color: transparent; } 50% { border-color: #ff9d00; } }
 
-        .only-text-v4 {
-          font-size: 1.4rem;
-          font-weight: 700;
-          color: #ffffff;
-        }
+        .price-display-v4 { display: flex; align-items: baseline; gap: 8px; }
+        .only-text-v4 { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
 
         .amount-v4 {
-          font-size: 3.2rem;
+          font-size: 2.8rem;
           font-weight: 900;
           background: linear-gradient(180deg, #FFD700 0%, #FF8C00 100%);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           line-height: 1;
-          animation: priceHeartbeat 2.5s infinite ease-in-out;
-          filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
+          animation: priceGlitch 5s infinite;
         }
 
-        @keyframes priceHeartbeat {
-          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
-          50% { transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); }
+        @keyframes priceGlitch {
+          0%, 90%, 100% { transform: skew(0); }
+          92% { transform: skew(3deg); filter: hue-rotate(10deg); }
+          94% { transform: skew(-3deg); filter: hue-rotate(-10deg); }
+          96% { transform: skew(1deg); }
         }
 
-        .price-sparkle-v4 {
-          margin-bottom: 20px;
-          animation: sparkleRotate 4s infinite linear;
-        }
-
-        @keyframes sparkleRotate {
-          0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-          25% { transform: scale(1.6) rotate(90deg); opacity: 1; }
-          50% { transform: scale(1) rotate(180deg); opacity: 0.6; }
-          75% { transform: scale(1.6) rotate(270deg); opacity: 1; }
-          100% { transform: scale(1) rotate(360deg); opacity: 0.6; }
+        .price-sparkle-v4 { animation: sparklePulse 3s infinite ease-in-out; }
+        @keyframes sparklePulse {
+          0%, 100% { transform: scale(1) rotate(0deg); opacity: 0.5; }
+          50% { transform: scale(1.5) rotate(180deg); opacity: 1; filter: drop-shadow(0 0 10px #FFD700); }
         }
 
         .cta-vertical-divider-v4 {
           width: 1px;
-          height: 40px;
-          background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
+          height: 35px;
+          background: linear-gradient(to bottom, transparent, rgba(255, 157, 0, 0.4), transparent);
           margin: 0 10px;
         }
 
-        .cta-right-v4 {
-          flex: 1;
-          display: flex;
-          justify-content: flex-end;
-        }
+        .cta-right-v4 { flex: 1; display: flex; justify-content: flex-end; }
+        .cta-bottom-row-v4 { width: 100%; }
 
-        .cta-bottom-row-v4 {
-          width: 100%;
-        }
-
-        .enroll-now-btn-v4 {
+        .register-now-btn-v5 {
           width: 100%;
           background: linear-gradient(180deg, #ff9d00 0%, #ff6a00 100%);
           border: none;
-          padding: 12px 20px;
-          border-radius: 15px;
+          padding: 10px 20px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 15px;
+          gap: 12px;
           color: #ffffff;
-          font-size: 1.4rem;
+          font-size: 1.3rem;
           font-weight: 900;
           cursor: pointer;
           transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-          box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4);
           position: relative;
           overflow: hidden;
-          animation: buttonGlowPulse 3s infinite ease-in-out;
+          box-shadow: 0 4px 15px rgba(255, 106, 0, 0.4);
         }
 
-        @keyframes buttonGlowPulse {
-          0%, 100% { box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4); }
-          50% { box-shadow: 0 10px 40px rgba(255, 106, 0, 0.8); transform: scale(1.02); }
-        }
-
-        .enroll-now-btn-v4::after {
+        .register-now-btn-v5::before {
           content: "";
           position: absolute;
-          top: -50%;
-          left: -150%;
-          width: 200%;
-          height: 200%;
-          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
-          transform: rotate(35deg);
-          animation: shineSwipe 4s infinite ease-in-out;
+          inset: -2px;
+          background: conic-gradient(from 0deg, transparent 0%, #fff 25%, transparent 50%, #fff 75%, transparent 100%);
+          animation: rotateBorder 3s linear infinite;
+          opacity: 0.2;
+          z-index: 0;
         }
 
-        @keyframes shineSwipe {
-          0% { left: -150%; }
-          20% { left: 150%; }
-          100% { left: 150%; }
-        }
+        @keyframes rotateBorder { to { transform: rotate(360deg); } }
 
-        .enroll-now-btn-v4:hover {
-          transform: translateY(-3px) scale(1.05);
-          filter: brightness(1.15);
-          box-shadow: 0 15px 50px rgba(255, 106, 0, 0.9);
-        }
-
+        .btn-text-v4 { position: relative; z-index: 2; }
         .btn-icon-v4 {
-          background: rgba(0, 0, 0, 0.2);
-          width: 32px;
-          height: 32px;
+          position: relative;
+          z-index: 2;
+          background: rgba(255, 255, 255, 0.2);
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.9rem;
-          border: 1px solid rgba(255,255,255,0.3);
+          font-size: 0.8rem;
           transition: 0.3s;
         }
 
-        .enroll-now-btn-v4:hover .btn-icon-v4 {
-          transform: translateX(5px) scale(1.1);
-          background: #fff;
-          color: #ff6a00;
+        .register-now-btn-v5:hover {
+          transform: translateY(-3px) scale(1.02);
+          box-shadow: 0 10px 30px rgba(255, 106, 0, 0.8);
         }
 
-        /* Desktop Layout Override */
+        .register-now-btn-v5:hover .btn-icon-v4 { transform: translateX(5px); background: #fff; color: #ff6a00; }
+
         @media (min-width: 992px) {
-          .cta-container-v4 {
-            flex-direction: row;
-            align-items: center;
-            justify-content: space-between;
-            gap: 30px;
-          }
-          .cta-top-row-v4 {
-            flex: 1;
-            margin-bottom: 0;
-            justify-content: flex-start;
-            gap: 30px;
-          }
-          .cta-bottom-row-v4 {
-            width: auto;
-            flex-shrink: 0;
-          }
-          .enroll-now-btn-v4 {
-            width: auto;
-            padding: 10px 30px;
-            font-size: 1.3rem;
-          }
-        }
-
-        @media (max-width: 991px) {
-          .only-text-v4 { font-size: 1.2rem; }
-          .amount-v4 { font-size: 2.8rem; }
-          .enroll-now-btn-v4 { font-size: 1.3rem; padding: 12px; }
+          .cta-container-v4 { flex-direction: row; align-items: center; gap: 30px; }
+          .cta-top-row-v4 { flex: 1; margin-bottom: 0; gap: 30px; }
+          .cta-bottom-row-v4 { width: auto; }
+          .register-now-btn-v5 { width: auto; min-width: 250px; }
         }
 
         @media (max-width: 600px) {
-          .only-text-v4 { font-size: 1.1rem; }
           .amount-v4 { font-size: 2.2rem; }
-          .enroll-now-btn-v4 { font-size: 1.1rem; padding: 10px; }
-          .btn-icon-v4 { width: 28px; height: 28px; font-size: 0.75rem; }
-          .cta-container-v4 { padding: 0 15px; gap: 8px; }
-          .cta-top-row-v4 { gap: 8px; }
-        }
-        @media (max-width: 400px) {
-          .amount-v4 { font-size: 1.8rem; }
-          .only-text-v4 { font-size: 0.95rem; }
+          .only-text-v4 { font-size: 1rem; }
+          .register-now-btn-v5 { font-size: 1.1rem; padding: 8px; }
         }
 
         /* Premium Modal Upgrade */

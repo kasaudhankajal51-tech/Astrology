@@ -654,13 +654,13 @@ function Webinar() {
         .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
         .faq-chevron.rotate { transform: rotate(180deg); }
 
-        /* Rich Multi-Color Animated Dark CTA - No Blue */
+        /* Dark Blue & Purple Spectrum Animated CTA */
         .fixed-bottom-cta {
           position: fixed;
           bottom: 0;
           left: 0;
           width: 100%;
-          background: linear-gradient(-45deg, #050505, #2e1065, #450a0a, #064e3b, #4c1d95, #050505);
+          background: linear-gradient(-45deg, #041c2c, #062137, #0d1b3e, #1e1b4b, #2e1065, #041c2c);
           background-size: 400% 400%;
           animation: multiGradient 15s ease infinite, slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1);
           border-top: 2px solid rgba(255, 255, 255, 0.1);

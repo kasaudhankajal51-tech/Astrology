@@ -712,22 +712,22 @@ function Webinar() {
 
         .cta-center-btn { display: flex; justify-content: center; }
         .cta-reg-btn-v3 {
-          background: linear-gradient(135deg, #d4af37 0%, #f9d976 50%, #d4af37 100%);
+          background: linear-gradient(135deg, #5d4911 0%, #8a6d1c 50%, #5d4911 100%);
           color: #fff;
-          padding: 8px 10px 8px 25px;
+          padding: 6px 8px 6px 20px;
           border-radius: 50px;
           font-weight: 800;
-          font-size: 1.1rem;
+          font-size: 0.95rem;
           border: none;
           cursor: pointer;
           display: flex;
           align-items: center;
-          gap: 15px;
+          gap: 12px;
           white-space: nowrap;
           transition: all 0.3s ease;
           position: relative;
           overflow: hidden;
-          box-shadow: 0 4px 15px rgba(212, 175, 55, 0.4);
+          box-shadow: 0 4px 15px rgba(93, 73, 17, 0.5);
           text-transform: uppercase;
           letter-spacing: 1px;
         }
@@ -766,14 +766,14 @@ function Webinar() {
 
         .cta-reg-btn-v3 i {
           background: #fff;
-          width: 35px;
-          height: 35px;
+          width: 28px;
+          height: 28px;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 0.9rem;
-          color: #d4af37;
+          font-size: 0.75rem;
+          color: #8a6d1c;
           position: relative;
           z-index: 2;
           box-shadow: 0 2px 5px rgba(0,0,0,0.1);

@@ -667,15 +667,52 @@ function Webinar() {
           bottom: 0;
           left: 0;
           width: 100%;
-          background: #121212;
+          background: linear-gradient(-45deg, #0f0f0f, #1a1a1a, #0a0a0a, #151515);
+          background-size: 400% 400%;
           padding: 10px 0 8px;
           z-index: 2000;
           border-top-left-radius: 20px;
           border-top-right-radius: 20px;
-          box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.8);
-          border-top: 1px solid rgba(255, 255, 255, 0.1);
+          box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
+          border-top: 1.5px solid transparent;
           font-family: 'Outfit', sans-serif;
-          animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+          animation: 
+            slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both,
+            bgFlow 15s ease infinite,
+            borderGlow 3s linear infinite;
+          overflow: hidden;
+        }
+
+        @keyframes bgFlow {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+
+        @keyframes borderGlow {
+          0% { border-top-color: rgba(255, 157, 0, 0.1); }
+          50% { border-top-color: rgba(255, 157, 0, 0.6); }
+          100% { border-top-color: rgba(255, 157, 0, 0.1); }
+        }
+
+        /* Magic Dust / Particles */
+        .fixed-bottom-cta-v4::before {
+          content: "";
+          position: absolute;
+          inset: 0;
+          background-image: 
+            radial-gradient(circle at 20% 30%, rgba(255, 157, 0, 0.05) 1px, transparent 1px),
+            radial-gradient(circle at 80% 70%, rgba(255, 157, 0, 0.05) 1px, transparent 1px),
+            radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+          background-size: 100px 100px;
+          animation: dustFloat 10s linear infinite;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        @keyframes dustFloat {
+          from { background-position: 0 0; }
+          to { background-position: 100px 100px; }
         }
 
         @keyframes slideUpBar {
@@ -690,6 +727,8 @@ function Webinar() {
           display: flex;
           flex-direction: column;
           gap: 10px;
+          position: relative;
+          z-index: 1;
         }
 
         .cta-top-row-v4 {
@@ -718,11 +757,12 @@ function Webinar() {
           border: 1px solid rgba(255, 157, 0, 0.3);
           text-transform: uppercase;
           animation: badgePulse 2s infinite ease-in-out;
+          box-shadow: 0 0 10px rgba(255, 157, 0, 0.1);
         }
 
         @keyframes badgePulse {
-          0%, 100% { background: rgba(255, 157, 0, 0.1); }
-          50% { background: rgba(255, 157, 0, 0.25); transform: scale(1.02); }
+          0%, 100% { background: rgba(255, 157, 0, 0.1); box-shadow: 0 0 10px rgba(255, 157, 0, 0.1); }
+          50% { background: rgba(255, 157, 0, 0.3); transform: scale(1.05); box-shadow: 0 0 15px rgba(255, 157, 0, 0.3); }
         }
 
         .offer-badge-v4 i {
@@ -750,11 +790,12 @@ function Webinar() {
           -webkit-text-fill-color: transparent;
           line-height: 1;
           animation: priceHeartbeat 2.5s infinite ease-in-out;
+          filter: drop-shadow(0 0 2px rgba(0,0,0,0.5));
         }
 
         @keyframes priceHeartbeat {
-          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 0px transparent); }
-          50% { transform: scale(1.05); filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.4)); }
+          0%, 100% { transform: scale(1); filter: drop-shadow(0 0 2px rgba(0,0,0,0.5)); }
+          50% { transform: scale(1.08); filter: drop-shadow(0 0 15px rgba(255, 215, 0, 0.5)); }
         }
 
         .price-sparkle-v4 {
@@ -764,16 +805,16 @@ function Webinar() {
 
         @keyframes sparkleRotate {
           0% { transform: scale(1) rotate(0deg); opacity: 0.6; }
-          25% { transform: scale(1.4) rotate(90deg); opacity: 1; }
+          25% { transform: scale(1.6) rotate(90deg); opacity: 1; }
           50% { transform: scale(1) rotate(180deg); opacity: 0.6; }
-          75% { transform: scale(1.4) rotate(270deg); opacity: 1; }
+          75% { transform: scale(1.6) rotate(270deg); opacity: 1; }
           100% { transform: scale(1) rotate(360deg); opacity: 0.6; }
         }
 
         .cta-vertical-divider-v4 {
           width: 1px;
           height: 40px;
-          background: rgba(255, 255, 255, 0.15);
+          background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.2), transparent);
           margin: 0 10px;
         }
 
@@ -801,16 +842,16 @@ function Webinar() {
           font-size: 1.4rem;
           font-weight: 900;
           cursor: pointer;
-          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
           box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4);
           position: relative;
           overflow: hidden;
-          animation: buttonGlowPulse 2s infinite ease-in-out;
+          animation: buttonGlowPulse 3s infinite ease-in-out;
         }
 
         @keyframes buttonGlowPulse {
           0%, 100% { box-shadow: 0 6px 20px rgba(255, 106, 0, 0.4); }
-          50% { box-shadow: 0 8px 30px rgba(255, 106, 0, 0.7); transform: scale(1.02); }
+          50% { box-shadow: 0 10px 40px rgba(255, 106, 0, 0.8); transform: scale(1.02); }
         }
 
         .enroll-now-btn-v4::after {
@@ -820,23 +861,25 @@ function Webinar() {
           left: -150%;
           width: 200%;
           height: 200%;
-          background: linear-gradient(to right, transparent, rgba(255,255,255,0.4), transparent);
-          transform: rotate(30deg);
-          animation: shineSwipe 3s infinite ease-in-out;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: rotate(35deg);
+          animation: shineSwipe 4s infinite ease-in-out;
         }
 
         @keyframes shineSwipe {
           0% { left: -150%; }
-          30%, 100% { left: 150%; }
+          20% { left: 150%; }
+          100% { left: 150%; }
         }
 
         .enroll-now-btn-v4:hover {
-          transform: translateY(-2px) scale(1.03);
-          filter: brightness(1.1);
+          transform: translateY(-3px) scale(1.05);
+          filter: brightness(1.15);
+          box-shadow: 0 15px 50px rgba(255, 106, 0, 0.9);
         }
 
         .btn-icon-v4 {
-          background: rgba(0, 0, 0, 0.15);
+          background: rgba(0, 0, 0, 0.2);
           width: 32px;
           height: 32px;
           border-radius: 50%;
@@ -844,7 +887,14 @@ function Webinar() {
           align-items: center;
           justify-content: center;
           font-size: 0.9rem;
-          border: 1px solid rgba(255,255,255,0.2);
+          border: 1px solid rgba(255,255,255,0.3);
+          transition: 0.3s;
+        }
+
+        .enroll-now-btn-v4:hover .btn-icon-v4 {
+          transform: translateX(5px) scale(1.1);
+          background: #fff;
+          color: #ff6a00;
         }
 
         /* Desktop Layout Override */

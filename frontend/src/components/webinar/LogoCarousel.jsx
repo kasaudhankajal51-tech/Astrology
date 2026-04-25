@@ -54,11 +54,11 @@ const LogoCarousel = () => {
         }
         .logo-carousel-track::before {
           left: 0;
-          background: linear-gradient(to right, #070913, transparent);
+          background: linear-gradient(to right, #ffffff, transparent);
         }
         .logo-carousel-track::after {
           right: 0;
-          background: linear-gradient(to left, #070913, transparent);
+          background: linear-gradient(to left, #ffffff, transparent);
         }
         .logo-carousel-list {
           display: flex;

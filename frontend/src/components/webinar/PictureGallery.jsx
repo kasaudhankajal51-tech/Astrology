@@ -35,7 +35,7 @@ const PictureGallery = () => {
       <style>{`
         .gallery-section {
           padding: 100px 0;
-          background: #070913;
+          background: #fff;
         }
         .gallery-grid {
           display: grid;
@@ -48,7 +48,8 @@ const PictureGallery = () => {
           overflow: hidden;
           position: relative;
           aspect-ratio: 4/3;
-          border: 1px solid rgba(255, 106, 0, 0.1);
+          border: 1px solid #e2e8f0;
+          box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
         .gallery-img-wrapper {
           width: 100%;
@@ -65,7 +66,7 @@ const PictureGallery = () => {
         .gallery-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to top, rgba(7, 9, 19, 0.9), transparent);
+          background: linear-gradient(to top, rgba(59, 34, 97, 0.9), transparent);
           display: flex;
           align-items: flex-end;
           padding: 30px;
@@ -79,7 +80,7 @@ const PictureGallery = () => {
           margin-bottom: 5px;
         }
         .overlay-content p {
-          color: #ff6a00;
+          color: var(--brand-coral, #EE6662);
           font-size: 0.9rem;
           font-weight: 700;
         }

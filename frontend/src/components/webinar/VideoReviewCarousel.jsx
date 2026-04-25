@@ -146,16 +146,16 @@ const VideoReviewCarousel = () => {
       <style>{`
         .video-reviews-section {
           padding: 100px 0;
-          background: #070913;
+          background: #fff;
           position: relative;
           overflow: hidden;
         }
         .section-header-centered {
           margin-bottom: 60px;
         }
-        .section-subtitle { color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
-        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; margin: 0; }
-        .header-underline { height: 4px; width: 60px; background: #ff6a00; border-radius: 2px; }
+        .section-subtitle { color: var(--brand-coral, #EE6662); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--brand-purple, #3B2261); margin: 0; }
+        .header-underline { height: 4px; width: 60px; background: var(--brand-coral, #EE6662); border-radius: 2px; }
 
         .production-slider-wrapper {
           position: relative;
@@ -170,9 +170,9 @@ const VideoReviewCarousel = () => {
           height: 50px;
           border-radius: 50%;
           border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(11, 18, 32, 0.8);
+          background: rgba(255, 255, 255, 0.9);
           backdrop-filter: blur(10px);
-          color: #fff;
+          color: var(--brand-purple, #3B2261);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -180,13 +180,15 @@ const VideoReviewCarousel = () => {
           transition: 0.3s;
           font-size: 1.1rem;
           z-index: 10;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .side-nav-btn.prev { left: 0; }
         .side-nav-btn.next { right: 0; }
         .side-nav-btn:hover {
-          background: #ff6a00;
-          border-color: #ff6a00;
-          box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+          background: var(--brand-coral, #EE6662);
+          border-color: var(--brand-coral, #EE6662);
+          color: #fff;
+          box-shadow: 0 0 20px rgba(238, 102, 98, 0.4);
         }
         .side-nav-btn.hidden { opacity: 0; pointer-events: none; }
 
@@ -207,12 +209,13 @@ const VideoReviewCarousel = () => {
         .video-story-card {
           min-width: 310px;
           scroll-snap-align: start;
-          background: #0b1220;
+          background: #fff;
           border-radius: 24px;
           overflow: hidden;
-          border: 1px solid rgba(255,255,255,0.05);
+          border: 1px solid #e2e8f0;
           cursor: pointer;
           transition: 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
         .card-media-wrapper {
           position: relative;
@@ -225,7 +228,7 @@ const VideoReviewCarousel = () => {
         .glass-overlay {
           position: absolute;
           inset: 0;
-          background: linear-gradient(to top, rgba(7, 9, 19, 0.6), transparent);
+          background: linear-gradient(to top, rgba(59, 34, 97, 0.4), transparent);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -264,11 +267,11 @@ const VideoReviewCarousel = () => {
 
         .card-info { padding: 22px; }
         .stars { color: #ffc107; font-size: 0.75rem; margin-bottom: 12px; display: flex; gap: 3px; }
-        .card-info h3 { font-size: 1.05rem; font-weight: 800; color: #fff; margin-bottom: 15px; line-height: 1.4; }
+        .card-info h3 { font-size: 1.05rem; font-weight: 800; color: var(--brand-purple, #3B2261); margin-bottom: 15px; line-height: 1.4; }
         
         .author-meta { display: flex; flex-direction: column; gap: 3px; }
-        .author-name { font-weight: 700; color: #fff; font-size: 1rem; }
-        .author-status { font-size: 0.7rem; color: #ff6a00; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+        .author-name { font-weight: 700; color: var(--brand-purple, #3B2261); font-size: 1rem; }
+        .author-status { font-size: 0.7rem; color: var(--brand-coral, #EE6662); font-weight: 700; display: flex; align-items: center; gap: 6px; }
 
         /* Modal Upgrade */
         .premium-modal-overlay {

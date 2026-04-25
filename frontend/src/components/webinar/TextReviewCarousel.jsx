@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const textReviews = [
-  { id: 1, text: "This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you Astro Arun Pandit!", author: "Siddharth Jain", role: "Software Engineer" },
+  { id: 1, text: "This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you Astro Ava!", author: "Siddharth Jain", role: "Software Engineer" },
   { id: 2, text: "I was skeptical at first, but the depth of knowledge shared in just 2 days was mind-blowing. Highly recommended for everyone.", author: "Megha Malhotra", role: "Business Owner" },
   { id: 3, text: "The way complex astrological concepts were explained made it so easy to understand. I finally know why certain patterns repeat in my life.", author: "Vikram Singh", role: "Creative Designer" },
   { id: 4, text: "Professional, insightful, and truly life-altering. Best investment of ₹99 I've ever made. The Q&A session was very helpful.", author: "Anjali Deshmukh", role: "Homemaker" },
@@ -95,15 +95,15 @@ const TextReviewCarousel = () => {
       <style>{`
         .text-reviews-section {
           padding: 100px 0;
-          background: #070913;
-          border-top: 1px solid rgba(255, 106, 0, 0.1);
+          background: #f8fafc;
+          border-top: 1px solid #e2e8f0;
         }
         .section-header-centered {
           margin-bottom: 60px;
         }
-        .section-subtitle { color: #ff6a00; letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
-        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: #fff; margin: 0; }
-        .header-underline { height: 4px; width: 60px; background: #ff6a00; border-radius: 2px; }
+        .section-subtitle { color: var(--brand-coral, #EE6662); letter-spacing: 4px; text-transform: uppercase; margin-bottom: 12px; font-weight: 800; font-size: 0.85rem; display: block; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 900; color: var(--brand-purple, #3B2261); margin: 0; }
+        .header-underline { height: 4px; width: 60px; background: var(--brand-coral, #EE6662); border-radius: 2px; }
 
         .text-slider-production-wrapper {
           position: relative;
@@ -118,9 +118,9 @@ const TextReviewCarousel = () => {
           height: 50px;
           border-radius: 50%;
           border: 1px solid rgba(255,255,255,0.1);
-          background: rgba(11, 18, 32, 0.8);
+          background: #fff;
           backdrop-filter: blur(10px);
-          color: #fff;
+          color: var(--brand-purple, #3B2261);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -128,13 +128,15 @@ const TextReviewCarousel = () => {
           transition: 0.3s;
           font-size: 1.1rem;
           z-index: 10;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
         .side-nav-btn.prev { left: 0; }
         .side-nav-btn.next { right: 0; }
         .side-nav-btn:hover {
-          background: #ff6a00;
-          border-color: #ff6a00;
-          box-shadow: 0 0 20px rgba(255, 106, 0, 0.4);
+          background: var(--brand-coral, #EE6662);
+          border-color: var(--brand-coral, #EE6662);
+          color: #fff;
+          box-shadow: 0 0 20px rgba(238, 102, 98, 0.4);
         }
         .side-nav-btn.hidden { opacity: 0; pointer-events: none; }
 
@@ -154,8 +156,8 @@ const TextReviewCarousel = () => {
         .testimonial-card {
           min-width: 400px;
           scroll-snap-align: start;
-          background: rgba(255, 255, 255, 0.02);
-          border: 1px solid rgba(255, 255, 255, 0.05);
+          background: #fff;
+          border: 1px solid #e2e8f0;
           padding: 40px;
           border-radius: 40px;
           position: relative;
@@ -163,6 +165,7 @@ const TextReviewCarousel = () => {
           flex-direction: column;
           justify-content: space-between;
           transition: 0.3s;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.05);
         }
         .testimonial-card:hover {
           background: rgba(255, 255, 255, 0.04);
@@ -176,13 +179,13 @@ const TextReviewCarousel = () => {
           font-size: 8rem;
           line-height: 1;
           font-family: serif;
-          color: #ff6a00;
-          opacity: 0.1;
+          color: var(--brand-coral, #EE6662);
+          opacity: 0.08;
         }
         .testimonial-text {
           font-size: 1.15rem;
           line-height: 1.8;
-          color: #ddd;
+          color: #4a5568;
           margin-bottom: 40px;
           position: relative;
           z-index: 1;
@@ -195,7 +198,7 @@ const TextReviewCarousel = () => {
         .avatar-circle {
           width: 60px;
           height: 60px;
-          background: linear-gradient(135deg, #ff6a00, #ff0080);
+          background: var(--brand-purple, #3B2261);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -203,19 +206,19 @@ const TextReviewCarousel = () => {
           color: #fff;
           font-weight: 800;
           font-size: 1.4rem;
-          box-shadow: 0 5px 15px rgba(255, 106, 0, 0.3);
+          box-shadow: 0 5px 15px rgba(59, 34, 97, 0.2);
         }
         .user-info {
           display: flex;
           flex-direction: column;
         }
         .user-name {
-          color: #fff;
+          color: var(--brand-purple, #3B2261);
           font-weight: 700;
           font-size: 1.1rem;
         }
         .user-role {
-          color: #ff6a00;
+          color: var(--brand-coral, #EE6662);
           font-size: 0.85rem;
           font-weight: 600;
         }

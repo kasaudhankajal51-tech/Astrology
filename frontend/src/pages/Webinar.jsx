@@ -89,222 +89,221 @@ function Webinar() {
       {/* 1. Hero Section */}
       <section className="webinar-hero">
         <div className="container">
-          <div className="hero-grid">
-            <div className="hero-content" data-aos="fade-right">
-              <div className="pulse-badge">LIVE ONLINE WEBINAR</div>
-              <h1 className="hero-title">
-                Struggling to Find Direction in Life? <br/>
-                <span className="text-highlight">Discover Your Cosmic Blueprint</span>
-              </h1>
-              
-              <div className="hero-video-wrapper mt-4">
-                <video src="/videohomefinal.mp4" controls poster="/images/bg-bannerpic.jpg" className="sales-video"></video>
-                <div className="video-glow"></div>
+          <div className="hero-badge-wrapper" data-aos="fade-up">
+            <div className="hero-badge">
+              <span className="icon"><i className="fas fa-calendar-alt"></i></span>
+              2-Days Mega Astrology Webinar
+            </div>
+          </div>
+          
+          <h1 className="hero-title" data-aos="fade-up">
+            Remove <span className="text-highlight">Uncertainty</span> from Your <span className="text-highlight">Career, Relationships and Finances</span> using <span className="text-purple">Astrology</span>
+          </h1>
+          
+          <div className="hero-main-grid mt-5">
+            <div className="hero-video-box" data-aos="fade-right">
+              <video src="/videohomefinal.mp4" controls poster="/images/bg-bannerpic.jpg" className="w-100 d-block"></video>
+              <div className="video-label-tag">BY – ASTRO AVA</div>
+            </div>
+
+            <div className="hero-info-side" data-aos="fade-left">
+              <div className="info-cards-grid">
+                <div className="info-card">
+                  <div className="info-icon"><i className="fas fa-calendar-day"></i></div>
+                  <div className="info-text"><h4>Date</h4><p>25th – 26th April</p></div>
+                </div>
+                <div className="info-card">
+                  <div className="info-icon"><i className="fas fa-clock"></i></div>
+                  <div className="info-text"><h4>Time:</h4><p>1:00 PM</p></div>
+                </div>
+                <div className="info-card">
+                  <div className="info-icon"><i className="fas fa-hourglass-half"></i></div>
+                  <div className="info-text"><h4>Duration:</h4><p>4 Hours</p></div>
+                </div>
+                <div className="info-card">
+                  <div className="info-icon"><i className="fas fa-laptop"></i></div>
+                  <div className="info-text"><h4>Format:</h4><p>2 days Webinar</p></div>
+                </div>
               </div>
 
-              <div className="webinar-meta mt-4">
-                <div className="meta-item">
-                  <i className="fas fa-calendar-alt"></i>
-                  <span>Upcoming Weekend</span>
+              <div className="mentor-summary-card">
+                <div className="featured-label-mini text-center mb-3"><span className="badge bg-danger">Your Instructor</span></div>
+                <div className="mentor-header">
+                  <img src="/images/middle-img.png" alt="Mentor" className="mentor-pic-small" />
+                  <div className="mentor-title-box">
+                    <h3>Astro Ava</h3>
+                    <p>Expert in Vedic astrology and other disciplines of astrology, recognized as India's leading voice in astrology.</p>
+                  </div>
                 </div>
-                <div className="meta-item">
-                  <i className="fas fa-clock"></i>
-                  <span>7:00 PM - 9:00 PM IST</span>
+                <div className="mentor-stats-row">
+                  <div className="m-stat"><h4>1 Lakh+</h4><p>Students taught</p></div>
+                  <div className="m-stat"><h4>50 Million+</h4><p>Views across social media</p></div>
+                  <div className="m-stat"><h4>50+ Years</h4><p>of legacy</p></div>
                 </div>
               </div>
-              
-              <CountdownTimer timeLeft={timeLeft} />
-
             </div>
-            
-            <div id="registration-form" className="hero-form-wrapper" data-aos="fade-left">
-              <div className="lead-form-card">
-                <div className="form-header">
-                  <h3>Reserve Your Seat</h3>
-                  <p className="alert-text"><i className="fas fa-exclamation-circle"></i> Limited Spots: Only ₹99/-</p>
-                </div>
-                <form onSubmit={handleSubmit} className="lead-form">
-                  <div className="form-group">
-                    <label>Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your full name" />
-                  </div>
-                  <div className="form-group">
-                    <label>Email Address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter your best email" />
-                  </div>
-                  <div className="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Enter your 10-digit phone" />
-                  </div>
-                  <button type="submit" className="cta-button primary-cta w-100" disabled={isSubmitting}>
-                    {isSubmitting ? 'Processing...' : 'Register Now'}
-                  </button>
-                  <p className="secure-text text-center mt-3"><i className="fas fa-lock"></i> 100% Secure Payment</p>
-                </form>
-              </div>
-            </div>
+          </div>
+          
+          <div className="text-center mt-5" data-aos="zoom-in">
+            <button onClick={() => setIsModalOpen(true)} className="cta-button">Uncover Life’s Secrets – Join Now</button>
+            <p className="mt-3 fw-bold">Book Your Seat Now – Hurry Up! <span className="text-danger">Few Seats Left</span></p>
           </div>
         </div>
       </section>
 
-      {/* 1.5 Logo & News Carousels */}
+      {/* Carousels Section */}
       <LogoCarousel />
       <NewsCarousel />
 
-      {/* 2. Authority Section */}
-      <section className="authority-section">
-        <div className="container">
-          <div className="stats-grid">
-            <div className="stat-card" data-aos="fade-up">
-              <div className="stat-icon"><i className="fas fa-user-graduate"></i></div>
-              <h3 className="stat-number">100,000+</h3>
-              <p className="stat-label">Students Mentored</p>
-            </div>
-            <div className="stat-card" data-aos="fade-up" data-aos-delay="100">
-              <div className="stat-icon"><i className="fas fa-star"></i></div>
-              <h3 className="stat-number">4.9/5</h3>
-              <p className="stat-label">Average Rating</p>
-            </div>
-            <div className="stat-card" data-aos="fade-up" data-aos-delay="200">
-              <div className="stat-icon"><i className="fas fa-award"></i></div>
-              <h3 className="stat-number">10+</h3>
-              <p className="stat-label">Awards Won</p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 3. Why Section */}
+      {/* Why Section */}
       <section className="why-section">
         <div className="container">
-          <div className="row align-items-center">
-            <div className="col-lg-6" data-aos="fade-right">
-              <div className="section-header">
-                <h2 className="why-title">Kabhi socha hai <br/><span className="text-highlight">"Why does this keep happening to me?"</span></h2>
+          <h2 className="why-title" data-aos="fade-up">Kabhi socha hai <span className="text-highlight">“Why does this keep happening to me?”</span></h2>
+          <div className="why-cards-flex" data-aos="fade-up">
+            {[
+              "You're working hard but promotions or recognition feel stuck",
+              "You attract the same type of person again and again.",
+              "You earn but somehow it doesn't stay or grow the way you want",
+              "You feel like you're living someone else's script, not your own",
+              "You feel misunderstood by people close to you."
+            ].map((text, i) => (
+              <div className="why-card-v2" key={i}>
+                <span className="icon"><i className="fas fa-question-circle"></i></span>
+                <p>{text}</p>
               </div>
-              <div className="why-grid">
-                {[
-                  "You're working hard but promotions or recognition feel stuck",
-                  "You attract the same type of person again and again.",
-                  "You earn but somehow it doesn't stay or grow the way you want",
-                  "You feel like you're living someone else's script, not your own",
-                  "You feel misunderstood by people close to you."
-                ].map((text, i) => (
-                  <div className="why-card" key={i}>
-                    <span className="why-icon"><i className="fas fa-question-circle"></i></span>
-                    <p>{text}</p>
-                  </div>
-                ))}
-              </div>
-              <p className="why-footer mt-5">The answer lies in your kundli 👇</p>
-              <div className="mt-4">
-                <button onClick={() => setIsModalOpen(true)} className="cta-button primary-cta pulse-anim">Register Now – Secure Your Spot</button>
-              </div>
-            </div>
-            <div className="col-lg-6 d-none d-lg-block" data-aos="fade-left">
-              <div className="why-image-wrapper">
-                <img src="/images/life_struggles.png" alt="Life Struggles" className="img-fluid rounded-3 shadow-lg" />
-                <div className="image-overlay-glow"></div>
-              </div>
-            </div>
+            ))}
+          </div>
+          <p className="text-center mt-5 fw-bold fs-5">The answer lies in your kundli 👇</p>
+          <div className="text-center mt-4">
+            <button onClick={() => setIsModalOpen(true)} className="cta-button">Uncover Life’s Secrets – Join Now</button>
           </div>
         </div>
       </section>
 
-      {/* Picture Gallery Section */}
+      {/* Picture Gallery */}
       <PictureGallery />
 
-      {/* Decorative Blueprint Section */}
-      <section className="blueprint-deco-section">
+      {/* Patterns Section */}
+      <section className="patterns-section bg-light py-5">
         <div className="container">
-          <div className="blueprint-banner" data-aos="zoom-in">
-            <img src="/images/cosmic_blueprint.png" alt="Cosmic Blueprint" className="blueprint-img" />
-            <div className="blueprint-content">
-              <h3>Your Destiny is Written in the Stars</h3>
-              <p>We help you read it.</p>
+          <h2 className="section-title mb-3">Astrology is not about predictions. It's about <span className="text-highlight">PATTERNS.</span></h2>
+          <p className="text-muted mb-5">Planets ki positions, houses ka system, signs ka energy—ye sab ek framework hai jo explain karta hai:</p>
+          
+          <div className="patterns-grid">
+            <div className="pattern-card" data-aos="fade-up">
+              <div className="pattern-icon"><i className="fas fa-fingerprint"></i></div>
+              <h4>Aapki personality ka blueprint</h4>
+              <p>why you react the way you do</p>
+            </div>
+            <div className="pattern-card" data-aos="fade-up" data-aos-delay="100">
+              <div className="pattern-icon"><i className="fas fa-coins"></i></div>
+              <h4>Career aur money ka zone</h4>
+              <p>kaunse areas naturally strong hain, kahan effort zyada lagega</p>
+            </div>
+            <div className="pattern-card" data-aos="fade-up" data-aos-delay="200">
+              <div className="pattern-icon"><i className="fas fa-users"></i></div>
+              <h4>Relationships ka dynamics</h4>
+              <p>why you attract certain people, aur unke saath issues kyun repeat hote hain</p>
+            </div>
+            <div className="pattern-card" data-aos="fade-up">
+              <div className="pattern-icon"><i className="fas fa-heartbeat"></i></div>
+              <h4>Health aur energy cycles</h4>
+              <p>kab body support karti hai, kab rest chahiye</p>
+            </div>
+            <div className="pattern-card" data-aos="fade-up" data-aos-delay="100">
+              <div className="pattern-icon"><i className="fas fa-history"></i></div>
+              <h4>Timing</h4>
+              <p>kab push karna hai, kab wait karna hai</p>
+            </div>
+            <div className="text-center d-flex align-items-center justify-content-center">
+               <button onClick={() => setIsModalOpen(true)} className="cta-button">Uncover Life’s Secrets – Join Now</button>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 4. What You Will Learn */}
+      {/* What You Will Learn */}
       <section className="learn-section">
         <div className="container">
-          <div className="section-header text-center">
-            <h5 className="section-subtitle">The Curriculum</h5>
-            <h2 className="section-title">What You Will Learn In <span className="text-highlight">2 Days</span></h2>
-            <div className="header-underline mx-auto"></div>
-          </div>
+          <h2 className="section-title text-center mb-5">What <span className="text-highlight">You Will Learn</span> In 2 Days</h2>
           <div className="learn-grid">
             {[
-              { icon: "/images/as1.png", title: "Basics of Vedic Astrology", desc: "Understand the simple rules that Vedic astrology is built on." },
-              { icon: "/images/as2.png", title: "Birth Chart/Kundali", desc: "Learn about the secrets hidden in your birth chart." },
-              { icon: "/images/as3.png", title: "Planetary Influences", desc: "See how planets influence your job, love life, and money." },
-              { icon: "/images/as4.png", title: "Planetary Movements", desc: "Explore how the movement of planets affects your destiny." },
-              { icon: "/images/as6.png", title: "Actionable Advice", desc: "Get specific advice for career, wealth, and relationships." }
+              { icon: "fa-sun", title: "Basics of Vedic Astrology:", desc: "Understand the simple rules that Vedic astrology is built on." },
+              { icon: "fa-th", title: "Understanding Your Birth Chart/Kundali", desc: "Learn about the secrets in your birth chart." },
+              { icon: "fa-star", title: "How Planets Affect Your Life:", desc: "See how planets influence important parts of your life like your job, love life, and money." },
+              { icon: "fa-globe", title: "Effects of Planetary Movements:", desc: "Explore how the movement of planets can affect you." },
+              { icon: "fa-gem", title: "Astrology Advice for Different Life Areas:", desc: "Get specific advice for bettering your career, relationships, and health." },
+              { icon: "fa-book-open", title: "Practical Applications of Astrology:", desc: "How to read patterns in other people's charts" },
+              { icon: "fa-comment-dots", title: "Case studies:", desc: "Real charts, real situations, real insights" },
+              { icon: "fa-arrow-right", title: "Next steps:", desc: "How to start your own consultation as a highly-paid astrologer" }
             ].map((item, i) => (
-              <div className="learn-card" key={i} data-aos="zoom-in" data-aos-delay={i*100}>
-                <div className="learn-icon-img"><img src={item.icon} alt={item.title} /></div>
-                <div className="learn-content">
+              <div className="learn-card-v2" key={i} data-aos="fade-up">
+                <div className="learn-icon-v2"><i className={`fas ${item.icon}`}></i></div>
+                <div className="learn-content-v2">
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
                 </div>
               </div>
             ))}
           </div>
+          <div className="text-center mt-5">
+            <button onClick={() => setIsModalOpen(true)} className="cta-button">Uncover Life’s Secrets – Join Now</button>
+          </div>
         </div>
       </section>
 
-      {/* 5. Instructor Section */}
-      <section className="instructor-section">
+      {/* Social Proof Carousels */}
+      <VideoReviewCarousel />
+      <TextReviewCarousel />
+
+      {/* Meet Your Mentor */}
+      <section className="mentor-v2-section">
         <div className="container">
-          <div className="instructor-grid">
-            <div className="instructor-image" data-aos="fade-right">
-              <div className="image-wrapper">
-                <img src="/images/middle-img.png" alt="Astro Arun Pandit" />
-                <div className="experience-badge-mini">16+ Years Experience</div>
+          <h2 className="mentor-v2-title">Meet Your <span className="text-highlight">Mentor</span></h2>
+          <div className="mentor-v2-grid">
+            <div className="mentor-v2-info" data-aos="fade-right">
+              <ul className="mentor-list">
+                <li><i className="fas fa-chevron-right"></i> 51+ years of legacy</li>
+                <li><i className="fas fa-chevron-right"></i> Thousands of successful consultations completed</li>
+                <li><i className="fas fa-chevron-right"></i> Expert in Vedic Astrology, Numerology, and Vastu</li>
+                <li><i className="fas fa-chevron-right"></i> Proven track record of training successful astrologers.</li>
+                <li><i className="fas fa-chevron-right"></i> Global clientele from India, US, UK, & Middle East</li>
+              </ul>
+              <div className="mentor-bio-long">
+                <p><strong>Award Winning Expert in Astrology & more</strong><br/>Astro Ava, an award-winning expert in astrology and various related disciplines, like numerology, vastu shastra, palmistry, tarot reading.</p>
+                <p className="mt-4"><strong>Spiritual Speaker & Podcaster</strong><br/>Astro Ava, a profound spiritual luminary and TEDx speaker has graced prestigious platforms and takes Q&A series for seekers. His Podcast Show- Astro Ava invites famous celebrities to engage in enlightening conversations</p>
+                <p className="mt-4"><strong>Occult Instructor</strong><br/>His expertise lies in Numerology, Astrology, Vastu Shastra, Palmistry and has taught 5K+ students. He is a renowned astrologer and numerologist taking forward a legacy of 49 years</p>
               </div>
-              <div className="logo-strip mt-4">
-                <span className="media-tag">Aaj Tak</span>
-                <span className="media-tag">Outlook</span>
-                <span className="media-tag">LatestLy</span>
+              <div className="mt-5">
+                <button onClick={() => setIsModalOpen(true)} className="cta-button">Uncover Life’s Secrets – Join Now</button>
               </div>
             </div>
-            <div className="instructor-info" data-aos="fade-left">
-              <h5 className="section-subtitle">Meet Your Mentor</h5>
-              <h2 className="instructor-name">Astro <span className="text-highlight">Arun Pandit</span></h2>
-              <p className="instructor-bio">
-                A legacy of 51+ years, guiding thousands towards clarity through the ancient wisdom of Vedic Astrology, Numerology, and Vastu.
-              </p>
-              <ul className="instructor-achievements">
-                <li><i className="fas fa-check-circle"></i> 100,000+ Students Mentored</li>
-                <li><i className="fas fa-check-circle"></i> Expert in Predictive Astrology</li>
-                <li><i className="fas fa-check-circle"></i> Featured in Major Media Outlets</li>
-                <li><i className="fas fa-check-circle"></i> Proven Remedies for Life Problems</li>
-              </ul>
+            <div className="mentor-v2-img-side" data-aos="fade-left">
+              <div className="mentor-image-v2">
+                <img src="/images/middle-img.png" alt="Astro Ava" />
+              </div>
+              <div className="mentor-media-logos">
+                 <span>AAJ TAK</span>
+                 <span>FOX</span>
+                 <span>OUTLOOK</span>
+                 <span>LATESTLY</span>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Video Reviews Section */}
-      <VideoReviewCarousel />
-
-      {/* Text Reviews Section */}
-      <TextReviewCarousel />
-
-      {/* 6. Itinerary Section */}
-      <section className="breakdown-section">
+      {/* Itinerary Section (Day 1 & 2) */}
+      <section className="breakdown-section py-5 bg-white">
         <div className="container">
           <div className="section-header text-center">
             <h2 className="section-title">2-Day <span className="text-highlight">Itinerary</span></h2>
-            <div className="header-underline mx-auto"></div>
           </div>
           <div className="days-grid">
             <div className="day-card" data-aos="fade-up">
               <div className="day-header">DAY 1</div>
               <h3 className="day-title">The Foundation</h3>
-              <ul className="day-content">
+              <ul className="day-content text-dark">
                 <li><i className="fas fa-play"></i> 12 Zodiac Signs & Houses Decode</li>
                 <li><i className="fas fa-play"></i> Role of 9 Planets in Life</li>
                 <li><i className="fas fa-play"></i> Basic Birth Chart Reading</li>
@@ -314,7 +313,7 @@ function Webinar() {
             <div className="day-card" data-aos="fade-up" data-aos-delay="200">
               <div className="day-header">DAY 2</div>
               <h3 className="day-title">Prediction & Remedies</h3>
-              <ul className="day-content">
+              <ul className="day-content text-dark">
                 <li><i className="fas fa-play"></i> Career & Wealth Indicators</li>
                 <li><i className="fas fa-play"></i> Relationship Compatibility</li>
                 <li><i className="fas fa-play"></i> Low-cost Daily Remedies</li>
@@ -325,24 +324,28 @@ function Webinar() {
         </div>
       </section>
 
-      {/* 9. FAQ Section */}
+      {/* FAQ Section - Image Match */}
       <section className="faq-section">
         <div className="container">
-          <div className="section-header text-center">
-            <h2 className="section-title">Common <span className="text-highlight">Questions</span></h2>
+          <div className="section-header">
+            <h2 className="faq-title-main">
+              <span className="faq-title-highlight">FAQ’S:</span> <span className="faq-title-text">Here’s everything you may ask</span>
+            </h2>
           </div>
           <div className="faq-grid">
             {[
-              { q: "Where can I join the webinar?", a: "The webinar will be held online via Zoom. You will receive the link in your email and WhatsApp after registration." },
-              { q: "Where will the webinar take place?", a: "It is a 100% online live session. You can join from the comfort of your home." },
-              { q: "Will there be reminders sent out?", a: "Yes, we send reminders 24 hours, 1 hour, and 15 minutes before the session starts." },
-              { q: "Is there a registration fee?", a: "There is a nominal commitment fee of ₹99/- to ensure only serious learners join." },
-              { q: "Who should attend this webinar?", a: "Anyone interested in learning astrology, whether you are a beginner or looking to deepen your knowledge." }
+              { q: "Where can I join the webinar?", a: "After a successful payment, you’ll be directed to a thank you page. There, you can click on the Join WhatsApp button to join the webinar’s group." },
+              { q: "Where will the webinar take place?", a: "The webinar will be conducted online via Zoom. You can easily join from any where using a mobile device or laptop." },
+              { q: "Will there be reminders sent out before the webinar begins?", a: "Absolutely! We’ll ensure you’re reminded about the webinar through emails, SMS, and WhatsApp notifications." },
+              { q: "Is there a registration fee for the webinar?", a: "While this webinar’s content is valued at ₹1999, we are offering it for just ₹99 to make it accessible for everyone." },
+              { q: "Who should attend this webinar?", a: "This webinar is ideal for anyone interested in gaining deeper insights into astrology—whether you’re a beginner curious about the basics or someone looking to understand advanced astrological concepts." },
+              { q: "What should I have ready for the webinar?", a: "All you need is an open mind ready to explore the universe of astrology. Having a notebook handy to jot down important points would be beneficial." },
+              { q: "Can I participate in this webinar with my family or partners?", a: "Yes, absolutely! We encourage you to join with your family or partners. Learning together can enhance understanding and application of the astrological insights shared." }
             ].map((faq, idx) => (
-              <div className="faq-item" key={idx} onClick={() => setActiveFaq(activeFaq === idx ? null : idx)} data-aos="fade-up">
+              <div className="faq-item" key={idx} onClick={() => setActiveFaq(activeFaq === idx ? null : idx)}>
                 <div className="faq-question">
                   <span>{faq.q}</span>
-                  <i className={`fas fa-chevron-${activeFaq === idx ? 'up' : 'down'}`}></i>
+                  <i className={`fas fa-chevron-down faq-chevron ${activeFaq === idx ? 'rotate' : ''}`}></i>
                 </div>
                 <div className={`faq-answer ${activeFaq === idx ? 'active' : ''}`}>
                   <p>{faq.a}</p>
@@ -355,75 +358,62 @@ function Webinar() {
 
       {/* Fixed Bottom CTA */}
       <div className="fixed-bottom-cta">
-        <div className="cta-container">
-          <div className="cta-left-content">
-            <h4 className="cta-price-title">₹99/- Only <span className="seats-alert">(Few Seats Left)</span></h4>
-            <p className="cta-subtitle">Empowering over 1 Lakh+ students and counting</p>
-          </div>
-          
-          <div className="cta-timer-section">
-            <span className="timer-label">OFFER ENDS IN:</span>
-            <div className="cta-timer-blocks">
-              <div className="timer-unit">
-                <span className="unit-val">{String(timeLeft.hours).padStart(2, '0')}</span>
-                <span className="unit-lbl">HOURS</span>
-              </div>
-              <span className="unit-sep">:</span>
-              <div className="timer-unit">
-                <span className="unit-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
-                <span className="unit-lbl">MINS</span>
-              </div>
-              <span className="unit-sep">:</span>
-              <div className="timer-unit">
-                <span className="unit-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
-                <span className="unit-lbl">SECS</span>
-              </div>
+        <div className="cta-inner">
+          <div className="cta-price-info">
+            <div className="price-badge">Limited Offer</div>
+            <div>
+              <h4>₹99/- Only <small className="fs-6">(Few Seats Left)</small></h4>
+              <p>Empowering over 1 Lakh+ students and counting</p>
             </div>
           </div>
-
-          <div className="cta-right-btn">
-            <button onClick={() => setIsModalOpen(true)} className="register-now-btn-premium">
-              Register Now <i className="fas fa-arrow-right"></i>
-            </button>
+          
+          <div className="cta-timer-wrapper d-none d-lg-block">
+             <CountdownTimer minimal={true} />
           </div>
+
+          <button onClick={() => setIsModalOpen(true)} className="cta-reg-btn">
+            Register Now <i className="fas fa-arrow-right"></i>
+          </button>
         </div>
       </div>
 
-      {/* Registration Modal */}
+      {/* Registration Modal (Premium Polished) */}
       {isModalOpen && (
         <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && setIsModalOpen(false)}>
-          <div className="modal-container" data-aos="zoom-in">
-            <button className="modal-close" onClick={() => setIsModalOpen(false)}>&times;</button>
+          <div className="modal-container">
+            <button className="modal-close" onClick={() => setIsModalOpen(false)}><i className="fas fa-times"></i></button>
             <div className="modal-content-wrapper">
               <div className="modal-image-side">
-                <img src="/images/mentor_promo.png" alt="Astro Mentor" />
-                <div className="image-info-overlay">
-                  <h4>Cosmic Mastery</h4>
-                  <p>Unlocking the secrets of your stars</p>
-                </div>
+                <h4>Join the <br/><span className="text-highlight">Masterclass</span></h4>
+                <p>Unlock your cosmic potential with India's leading astrology mentor.</p>
+                <ul className="modal-points">
+                  <li><i className="fas fa-check-circle"></i> 2 Days Live Training</li>
+                  <li><i className="fas fa-check-circle"></i> Practical Reading Skills</li>
+                  <li><i className="fas fa-check-circle"></i> Q&A with Astro Ava</li>
+                </ul>
               </div>
               <div className="modal-form-side">
                 <div className="form-header-mini">
-                  <h3>Final Step to Join</h3>
+                  <h3>Reserve Your Seat</h3>
                   <p>Limited Seats Available at ₹99/-</p>
                 </div>
                 <form onSubmit={handleSubmit} className="modal-form">
                   <div className="form-group">
                     <label>Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Name" />
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter Your Full Name" />
                   </div>
                   <div className="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Email" />
+                    <label>Email Address</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter Your Best Email" />
                   </div>
                   <div className="form-group">
                     <label>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-digit number" />
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-Digit Mobile Number" />
                   </div>
-                  <button type="submit" className="cta-button primary-cta w-100" disabled={isSubmitting}>
+                  <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
                     {isSubmitting ? 'Processing...' : 'Complete Registration'}
                   </button>
-                  <p className="secure-text"><i className="fas fa-lock"></i> Secured by Razorpay</p>
+                  <p className="secure-text"><i className="fas fa-lock me-2"></i> Secured by Razorpay</p>
                 </form>
               </div>
             </div>
@@ -433,193 +423,243 @@ function Webinar() {
 
       <style>{`
         :root {
-          --brand-dark: #070913;
-          --brand-navy: #0b1220;
-          --brand-accent: #ff6a00;
-          --brand-highlight: #ff0080;
-          --brand-light: #ffffff;
-          --brand-gray: #a0aec0;
-          --gradient-bg: linear-gradient(135deg, #070913 0%, #1a0b2e 100%);
-          --gradient-cta: linear-gradient(135deg, #ff6a00 0%, #ff0080 100%);
-          --glass-bg: rgba(255, 255, 255, 0.03);
-          --glass-border: rgba(255, 255, 255, 0.08);
+          --brand-purple: #3B2261;
+          --brand-coral: #EE6662;
+          --brand-coral-dark: #D9534F;
+          --bg-light: #F8FAFC;
+          --text-dark: #1E293B;
+          --text-muted: #64748B;
+          --card-bg: #FFFFFF;
+          --gradient-coral: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
+          --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+          --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+          --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         .webinar-landing {
           font-family: 'Outfit', sans-serif;
-          background-color: var(--brand-dark);
-          color: var(--brand-light);
-          padding-bottom: 150px;
+          background-color: var(--bg-light);
+          background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
+          background-size: 24px 24px;
+          color: var(--text-dark);
+          padding-bottom: 120px;
           overflow-x: hidden;
         }
 
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .text-highlight { background: linear-gradient(135deg, var(--brand-accent), var(--brand-highlight)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .section-header { margin-bottom: 50px; }
-        .section-title { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; line-height: 1.2; font-family: 'Merriweather Sans', serif; }
-        .section-subtitle { color: var(--brand-accent); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; display: block; }
-        .header-underline { height: 4px; width: 60px; background: var(--brand-accent); border-radius: 2px; margin-top: 15px; }
-        .text-center { text-align: center; }
-
-        /* Fixed Bottom CTA Upgrade */
-        .fixed-bottom-cta {
-          position: fixed;
-          bottom: 20px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 95%;
-          max-width: 1100px;
-          background: #f8f9ff;
-          border-radius: 40px;
-          padding: 15px 40px;
-          box-shadow: 0 25px 60px rgba(0,0,0,0.4);
-          z-index: 2000;
-          border: 2px solid #e2e8f0;
-          color: #1a202c;
-        }
-        .cta-container { display: flex; justify-content: space-between; align-items: center; gap: 30px; }
+        .text-highlight { color: var(--brand-coral); }
+        .text-purple { color: var(--brand-purple); }
+        .section-header { margin-bottom: 50px; text-align: center; }
+        .section-title { font-size: clamp(2rem, 5vw, 3rem); font-weight: 800; line-height: 1.2; color: var(--brand-purple); }
+        .section-subtitle { color: var(--brand-coral); font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 700; margin-bottom: 10px; display: block; }
         
-        .cta-left-content .cta-price-title { font-size: 1.5rem; font-weight: 900; margin: 0; color: #2d3748; }
-        .cta-price-title .seats-alert { color: #e53e3e; font-size: 1rem; font-weight: 700; }
-        .cta-left-content .cta-subtitle { color: #ff0080; font-weight: 700; font-size: 0.95rem; margin: 5px 0 0; }
-
-        .cta-timer-section { display: flex; flex-direction: column; align-items: center; gap: 5px; }
-        .timer-label { font-size: 0.7rem; font-weight: 800; color: #718096; letter-spacing: 1px; }
-        .cta-timer-blocks { display: flex; align-items: center; gap: 8px; }
-        .timer-unit { display: flex; flex-direction: column; align-items: center; background: #2d3748; color: #fff; padding: 5px 10px; border-radius: 8px; min-width: 45px; }
-        .unit-val { font-size: 1.1rem; font-weight: 900; line-height: 1; }
-        .unit-lbl { font-size: 0.55rem; text-transform: uppercase; font-weight: 800; margin-top: 2px; }
-        .unit-sep { font-weight: 900; color: #2d3748; font-size: 1.2rem; }
-
-        .register-now-btn-premium {
-          background: linear-gradient(135deg, #f53d68 0%, #d61e4a 100%);
-          color: #fff;
-          border: none;
-          padding: 18px 45px;
-          border-radius: 20px;
-          font-size: 1.3rem;
-          font-weight: 900;
-          cursor: pointer;
-          transition: 0.3s;
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          box-shadow: 0 10px 25px rgba(245, 61, 104, 0.4);
-        }
-        .register-now-btn-premium:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 15px 30px rgba(245, 61, 104, 0.6); }
-
-        /* Hero Timer Fix for consistency */
-        .countdown-timer-container { margin-top: 25px !important; }
-
-        /* General Styles */
         .cta-button {
           display: inline-block;
-          background: var(--gradient-cta);
+          background: var(--gradient-coral);
           color: #fff;
           font-size: 1.1rem;
           font-weight: 700;
-          padding: 16px 30px;
-          border-radius: 50px;
+          padding: 16px 36px;
+          border-radius: 12px;
           border: none;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 8px 25px rgba(255, 106, 0, 0.4);
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          box-shadow: 0 10px 20px rgba(238, 102, 98, 0.3);
+          text-transform: none;
         }
-        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 12px 30px rgba(255, 106, 0, 0.6); }
+        .cta-button:hover { transform: translateY(-2px); box-shadow: 0 15px 30px rgba(238, 102, 98, 0.4); color: #fff; }
 
-        /* 1. Hero Section */
-        .webinar-hero { padding: 120px 0 80px; background: var(--gradient-bg); position: relative; }
-        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 60px; align-items: center; }
-        .pulse-badge { display: inline-block; background: rgba(255, 106, 0, 0.15); color: var(--brand-accent); padding: 8px 16px; border-radius: 50px; border: 1px solid var(--brand-accent); font-weight: 800; font-size: 0.8rem; margin-bottom: 25px; letter-spacing: 1px; }
-        .hero-title { font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 800; line-height: 1.1; margin-bottom: 20px; font-family: 'Merriweather Sans', serif; }
-        .hero-video-wrapper { position: relative; width: 100%; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.5); border: 2px solid var(--glass-border); }
-        .sales-video { width: 100%; display: block; aspect-ratio: 16/9; object-fit: cover; }
-        .video-glow { position: absolute; inset: 0; background: radial-gradient(circle at center, transparent 30%, rgba(0,0,0,0.4) 100%); pointer-events: none; }
+        /* Hero Section Redesign */
+        .webinar-hero { padding: 100px 0 60px; position: relative; }
+        .hero-badge-wrapper { display: flex; justify-content: center; margin-bottom: 30px; }
+        .hero-badge { background: var(--brand-purple); color: #fff; padding: 8px 24px; border-radius: 40px; display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 0.9rem; }
+        .hero-badge .icon { background: var(--brand-coral); padding: 5px; border-radius: 8px; font-size: 1rem; }
         
-        .lead-form-card { background: rgba(11, 18, 32, 0.95); border: 1px solid var(--brand-accent); padding: 40px; border-radius: 25px; box-shadow: 0 30px 60px rgba(0,0,0,0.6); backdrop-filter: blur(15px); }
-        .form-header h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 10px; text-align: center; }
-        .alert-text { color: var(--brand-accent); font-weight: 700; text-align: center; margin-bottom: 25px; font-size: 0.9rem; }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; font-size: 0.85rem; color: var(--brand-gray); margin-bottom: 8px; font-weight: 600; text-transform: uppercase; }
-        .form-group input { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.3); color: #fff; font-size: 1rem; transition: 0.3s; }
-        .form-group input:focus { border-color: var(--brand-accent); outline: none; background: rgba(0,0,0,0.5); }
+        .hero-title { font-size: clamp(2.2rem, 5vw, 3.8rem); font-weight: 900; line-height: 1.1; text-align: center; color: var(--brand-purple); max-width: 1000px; margin: 0 auto 25px; }
+        .hero-subtitle { font-size: 1.2rem; color: var(--text-muted); text-align: center; max-width: 800px; margin: 0 auto 50px; line-height: 1.6; }
 
-        /* 2. Authority Section */
-        .authority-section { padding: 80px 0; background: rgba(0,0,0,0.3); border-top: 1px solid var(--glass-border); border-bottom: 1px solid var(--glass-border); }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; text-align: center; }
-        .stat-icon { font-size: 2rem; color: var(--brand-accent); margin-bottom: 15px; opacity: 0.8; }
-        .stat-number { font-size: clamp(1.5rem, 4vw, 2.8rem); font-weight: 900; color: var(--brand-accent); line-height: 1; }
-        .stat-label { font-size: 0.8rem; color: var(--brand-gray); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; margin-top: 10px; }
+        .hero-main-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 40px; align-items: start; }
+        
+        .hero-video-box { position: relative; border-radius: 15px; overflow: hidden; box-shadow: var(--shadow-lg); border: 1px solid #e2e8f0; }
+        .video-label-tag { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--brand-purple); color: #fff; padding: 12px 20px; font-weight: 700; font-size: 0.9rem; z-index: 5; text-transform: uppercase; letter-spacing: 1px; }
 
-        /* 3. Why Section */
-        .why-section { padding: 100px 0; background: var(--brand-dark); }
-        .why-title { font-size: clamp(1.8rem, 4vw, 2.8rem); font-weight: 800; color: #fff; }
-        .why-grid { display: grid; grid-template-columns: 1fr; gap: 15px; margin-top: 30px; }
-        .why-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px; border-radius: 15px; display: flex; align-items: center; gap: 15px; transition: 0.3s; }
-        .why-card:hover { transform: translateX(10px); border-color: var(--brand-accent); }
-        .why-image-wrapper { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
-        .image-overlay-glow { position: absolute; inset: 0; background: linear-gradient(45deg, rgba(255,106,0,0.2) 0%, transparent 100%); pointer-events: none; }
+        .info-cards-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .info-card { background: var(--brand-purple); color: #fff; padding: 25px; border-radius: 20px; display: flex; align-items: center; gap: 20px; transition: 0.3s; }
+        .info-icon { background: var(--brand-coral); width: 50px; height: 50px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; flex-shrink: 0; }
+        .info-text h4 { font-size: 0.85rem; color: #fff; opacity: 0.8; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .info-text p { font-size: 1.1rem; font-weight: 700; margin: 0; }
 
-        .blueprint-deco-section { padding: 80px 0; background: var(--brand-navy); }
-        .blueprint-banner { position: relative; border-radius: 30px; overflow: hidden; height: 300px; display: flex; align-items: center; justify-content: center; text-align: center; }
-        .blueprint-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.4; }
-        .blueprint-content { position: relative; z-index: 2; padding: 0 20px; }
-        .blueprint-content h3 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; font-family: 'Merriweather Sans', serif; }
-        .blueprint-content p { font-size: 1.2rem; color: var(--brand-accent); font-weight: 700; }
+        .mentor-summary-card { background: var(--card-bg); border-radius: 20px; padding: 30px; margin-top: 30px; box-shadow: var(--shadow-md); border: 1px solid #e2e8f0; }
+        .mentor-header { display: flex; align-items: center; gap: 20px; margin-bottom: 20px; }
+        .mentor-pic-small { width: 100px; height: 100px; border-radius: 10px; object-fit: cover; background: #e2e8f0; }
+        .mentor-title-box h3 { font-size: 1.4rem; color: var(--brand-purple); font-weight: 800; margin-bottom: 5px; }
+        .mentor-title-box p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.4; margin: 0; }
+        
+        .mentor-stats-row { display: flex; justify-content: space-between; border-top: 1px solid #f1f5f9; padding-top: 20px; gap: 10px; }
+        .m-stat { text-align: center; flex: 1; }
+        .m-stat h4 { font-size: 1.3rem; color: var(--brand-purple); font-weight: 900; margin-bottom: 3px; }
+        .m-stat p { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; margin: 0; }
 
-        /* 4. Learn Section */
-        .learn-section { padding: 100px 0; background: var(--brand-navy); }
-        .learn-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; margin-top: 50px; }
-        .learn-card { background: var(--glass-bg); padding: 30px; border-radius: 24px; border: 1px solid var(--glass-border); display: flex; flex-direction: column; gap: 20px; transition: 0.4s; }
-        .learn-card:hover { transform: translateY(-10px); border-color: var(--brand-accent); }
-        .learn-icon-img { width: 60px; height: 60px; background: rgba(255, 106, 0, 0.1); border-radius: 18px; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255, 106, 0, 0.2); overflow: hidden; padding: 12px; }
-        .learn-icon-img img { width: 100%; height: 100%; object-fit: contain; filter: brightness(0) invert(1); }
-        .learn-content h4 { font-size: 1.3rem; margin-bottom: 10px; color: #fff; font-weight: 700; }
-        .learn-content p { color: var(--brand-gray); font-size: 0.95rem; line-height: 1.6; margin: 0; }
+        /* Featured In */
+        .featured-section { padding: 40px 0; background: #f1f5f9; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
+        .featured-label { background: var(--brand-purple); color: #fff; padding: 8px 30px; border-radius: 10px; font-weight: 700; margin: -60px auto 30px; display: table; position: relative; z-index: 10; }
+        .logos-flex { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 30px; opacity: 0.7; }
+        .logos-flex img { height: 35px; filter: grayscale(1); }
 
-        /* 5. Instructor Section */
-        .instructor-section { padding: 100px 0; background: var(--brand-dark); }
-        .instructor-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 80px; align-items: center; }
-        .image-wrapper { position: relative; border-radius: 30px; overflow: hidden; border: 5px solid var(--glass-border); }
-        .image-wrapper img { width: 100%; display: block; }
-        .experience-badge-mini { position: absolute; bottom: 20px; right: 20px; background: var(--gradient-cta); padding: 10px 20px; border-radius: 15px; font-weight: 800; font-size: 0.8rem; box-shadow: 0 10px 20px rgba(0,0,0,0.3); }
-        .instructor-name { font-size: clamp(2.5rem, 5vw, 3.5rem); font-weight: 800; margin-bottom: 20px; line-height: 1.1; }
-        .instructor-bio { font-size: 1.1rem; color: var(--brand-gray); line-height: 1.8; margin-bottom: 30px; }
-        .instructor-achievements { list-style: none; padding: 0; }
-        .instructor-achievements li { display: flex; align-items: center; gap: 12px; font-size: 1.1rem; margin-bottom: 15px; font-weight: 500; }
-        .instructor-achievements i { color: var(--brand-accent); font-size: 1.2rem; }
-        .media-tag { background: rgba(255,255,255,0.05); padding: 6px 15px; border-radius: 8px; font-weight: 700; font-size: 0.8rem; color: #fff; border: 1px solid var(--glass-border); }
-        .logo-strip { display: flex; gap: 12px; flex-wrap: wrap; }
+        /* Why Section (Life Struggles) */
+        .why-section { padding: 100px 0; }
+        .why-title { font-size: 2.8rem; font-weight: 800; color: var(--brand-purple); text-align: center; margin-bottom: 60px; }
+        .why-cards-flex { display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; }
+        .why-card-v2 { background: var(--card-bg); padding: 25px; border-radius: 15px; box-shadow: var(--shadow-sm); display: flex; align-items: center; gap: 15px; width: calc(50% - 10px); border: 1px solid #f1f5f9; transition: 0.3s; }
+        .why-card-v2:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); border-color: var(--brand-coral); }
+        .why-card-v2 .icon { color: var(--brand-coral); font-size: 1.5rem; }
+        .why-card-v2 p { margin: 0; font-size: 1rem; font-weight: 600; color: var(--text-dark); }
 
-        /* 6. Itinerary Section */
-        .breakdown-section { padding: 100px 0; background: var(--brand-navy); }
+        /* Learn Section */
+        .learn-section { padding: 100px 0; }
+        .learn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; margin-top: 50px; }
+        .learn-card-v2 { background: #FDF4FF; padding: 30px; border-radius: 15px; border: 1px solid #F3E8FF; display: flex; gap: 20px; align-items: flex-start; }
+        .learn-icon-v2 { font-size: 2rem; color: var(--brand-purple); opacity: 0.8; }
+        .learn-content-v2 h4 { font-size: 1.2rem; font-weight: 800; color: var(--brand-purple); margin-bottom: 8px; }
+        .learn-content-v2 p { color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.5; }
+
+        /* Meet Your Mentor */
+        .mentor-v2-section { padding: 100px 0; background: var(--brand-purple); color: #fff; position: relative; overflow: hidden; }
+        .mentor-v2-title { font-size: 3rem; font-weight: 800; text-align: center; margin-bottom: 60px; }
+        .mentor-v2-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+        .mentor-list { list-style: none; padding: 0; }
+        .mentor-list li { display: flex; align-items: flex-start; gap: 15px; margin-bottom: 20px; font-size: 1.1rem; font-weight: 600; color: rgba(255,255,255,0.9); }
+        .mentor-list li i { color: var(--brand-coral); margin-top: 5px; }
+        .mentor-bio-long { margin-top: 30px; font-size: 1rem; line-height: 1.7; color: rgba(255,255,255,0.8); }
+        
+        .mentor-image-v2 { position: relative; border-radius: 30px; overflow: hidden; border: 10px solid rgba(255,255,255,0.05); }
+        .mentor-image-v2 img { width: 100%; display: block; }
+        .mentor-media-logos { background: #fff; padding: 15px 30px; border-radius: 15px; display: flex; justify-content: space-between; align-items: center; margin-top: 20px; }
+        .mentor-media-logos img { height: 25px; filter: grayscale(1); opacity: 0.8; }
+
+        /* Patterns Section */
+        .patterns-section { padding: 100px 0; text-align: center; }
+        .patterns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; margin-top: 50px; }
+        .pattern-card { background: #fff; padding: 40px 30px; border-radius: 20px; box-shadow: var(--shadow-md); border: 1px solid #f1f5f9; }
+        .pattern-icon { font-size: 3rem; color: var(--brand-purple); margin-bottom: 20px; }
+        .pattern-card h4 { font-size: 1.3rem; font-weight: 800; color: var(--brand-purple); margin-bottom: 10px; }
+        .pattern-card p { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* Polished Itinerary Section */
+        .breakdown-section { padding: 100px 0; background: #fff; }
         .days-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 50px; }
-        .day-card { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 40px; border-radius: 25px; position: relative; transition: 0.3s; }
-        .day-card:hover { border-color: var(--brand-accent); transform: scale(1.02); }
-        .day-header { position: absolute; top: 0; right: 0; background: var(--brand-accent); color: #fff; padding: 10px 25px; border-bottom-left-radius: 25px; font-weight: 900; font-size: 0.9rem; letter-spacing: 1px; }
-        .day-title { font-size: 1.8rem; font-weight: 800; margin-bottom: 25px; color: var(--brand-accent); }
+        .day-card { 
+          background: #fff; 
+          border: 1px solid #e2e8f0; 
+          padding: 50px 40px; 
+          border-radius: 30px; 
+          position: relative; 
+          transition: 0.4s; 
+          box-shadow: var(--shadow-md);
+        }
+        .day-card:hover { transform: translateY(-10px); border-color: var(--brand-coral); box-shadow: var(--shadow-lg); }
+        .day-header { 
+          position: absolute; 
+          top: -20px; 
+          left: 40px; 
+          background: var(--brand-coral); 
+          color: #fff; 
+          padding: 10px 30px; 
+          border-radius: 12px; 
+          font-weight: 900; 
+          font-size: 1rem; 
+          box-shadow: 0 10px 20px rgba(238, 102, 98, 0.3);
+        }
+        .day-title { font-size: 2rem; font-weight: 800; margin-bottom: 30px; color: var(--brand-purple); }
         .day-content { list-style: none; padding: 0; }
-        .day-content li { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 15px; font-size: 1rem; color: #ddd; }
-        .day-content i { color: var(--brand-accent); margin-top: 5px; font-size: 0.8rem; }
+        .day-content li { display: flex; align-items: center; gap: 15px; margin-bottom: 20px; font-size: 1.1rem; color: var(--text-dark); font-weight: 500; }
+        .day-content i { color: var(--brand-coral); font-size: 0.9rem; background: #FFF1F2; width: 30px; height: 30px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        /* 9. FAQ Section */
-        .faq-section { padding: 100px 0; background: var(--brand-dark); }
-        .faq-grid { display: flex; flex-direction: column; gap: 15px; max-width: 800px; margin: 40px auto 0; }
-        .faq-item { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 20px 25px; border-radius: 15px; cursor: pointer; transition: 0.3s; }
-        .faq-item:hover { border-color: var(--brand-accent); }
-        .faq-question { display: flex; justify-content: space-between; align-items: center; font-weight: 700; font-size: 1.1rem; }
-        .faq-answer { max-height: 0; overflow: hidden; transition: all 0.4s ease; opacity: 0; }
-        .faq-answer.active { max-height: 200px; opacity: 1; margin-top: 15px; padding-top: 15px; border-top: 1px solid var(--glass-border); }
-        .faq-answer p { color: var(--brand-gray); line-height: 1.6; margin: 0; }
+        /* Modern FAQ Section - Image Match */
+        .faq-section { padding: 100px 0; background: #fff; }
+        .faq-title-main { font-size: 2.8rem; font-weight: 800; text-align: center; margin-bottom: 50px; }
+        .faq-title-highlight { color: var(--brand-coral); }
+        .faq-title-text { color: var(--brand-purple); }
 
-        /* Modal Upgrade */
+        .faq-grid { display: flex; flex-direction: column; gap: 15px; max-width: 900px; margin: 40px auto 0; }
+        .faq-item { 
+          background: var(--brand-purple); 
+          border: none; 
+          border-radius: 12px; 
+          cursor: pointer; 
+          transition: 0.3s; 
+          overflow: hidden;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .faq-item:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.15); }
+        .faq-question { 
+          display: flex; 
+          justify-content: space-between; 
+          align-items: center; 
+          font-weight: 700; 
+          font-size: 1.15rem; 
+          padding: 22px 35px;
+          color: #fff;
+        }
+        .faq-answer { 
+          background: #fff;
+          padding: 0 35px;
+          max-height: 0;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          opacity: 0;
+          color: var(--text-dark);
+        }
+        .faq-answer.active { 
+          padding: 25px 35px;
+          max-height: 400px; 
+          opacity: 1; 
+          border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .faq-answer p { color: var(--text-dark); line-height: 1.7; margin: 0; font-size: 1.05rem; }
+        .faq-chevron { font-size: 1.2rem; transition: 0.3s; color: #fff; opacity: 0.9; }
+        .faq-chevron.rotate { transform: rotate(180deg); }
+
+        /* Sleek Fixed Bottom CTA */
+        .fixed-bottom-cta {
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          background: rgba(255, 255, 255, 0.95);
+          backdrop-filter: blur(15px);
+          border-top: 1px solid #e2e8f0;
+          padding: 12px 0;
+          z-index: 2000;
+          box-shadow: 0 -15px 40px rgba(0,0,0,0.08);
+        }
+        .cta-inner { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .cta-price-info { display: flex; align-items: center; gap: 20px; }
+        .price-badge { background: #FFF1F2; color: var(--brand-coral); padding: 5px 15px; border-radius: 10px; font-weight: 800; font-size: 0.85rem; text-transform: uppercase; }
+        .cta-price-info h4 { font-size: 2.2rem; font-weight: 900; color: var(--brand-purple); margin: 0; }
+        .cta-price-info p { font-size: 0.95rem; color: var(--text-muted); font-weight: 600; margin: 0; }
+        .cta-reg-btn { 
+          background: var(--gradient-coral); 
+          color: #fff; 
+          padding: 16px 45px; 
+          border-radius: 15px; 
+          font-weight: 800; 
+          font-size: 1.3rem; 
+          border: none; 
+          cursor: pointer; 
+          transition: 0.3s; 
+          box-shadow: 0 10px 25px rgba(238, 102, 98, 0.4); 
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+        .cta-reg-btn:hover { transform: translateY(-5px); box-shadow: 0 15px 35px rgba(238, 102, 98, 0.5); }
+
+        /* Premium Modal Upgrade */
         .modal-overlay {
           position: fixed;
           inset: 0;
-          background: rgba(0,0,0,0.85);
-          backdrop-filter: blur(8px);
+          background: rgba(59, 34, 97, 0.4);
+          backdrop-filter: blur(10px);
           z-index: 5000;
           display: flex;
           align-items: center;
@@ -628,59 +668,82 @@ function Webinar() {
         }
 
         .modal-container {
-          background: var(--brand-navy);
+          background: #fff;
           width: 100%;
           max-width: 900px;
-          border-radius: 30px;
+          border-radius: 40px;
           overflow: hidden;
           position: relative;
-          border: 1px solid var(--brand-accent);
-          box-shadow: 0 0 50px rgba(255, 106, 0, 0.2);
+          box-shadow: 0 40px 100px rgba(0,0,0,0.2);
+          border: none;
         }
 
         .modal-close {
           position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
+          top: 25px;
+          right: 25px;
+          background: rgba(0,0,0,0.05);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
           border: none;
-          color: #fff;
-          font-size: 2rem;
+          color: #333;
+          font-size: 1.5rem;
           cursor: pointer;
           z-index: 10;
-          line-height: 1;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: 0.3s;
         }
+        .modal-close:hover { background: #fee2e2; color: #ef4444; }
 
-        .modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; }
-        .modal-image-side { position: relative; min-height: 400px; }
-        .modal-image-side img { width: 100%; height: 100%; object-fit: cover; }
-        .image-info-overlay { position: absolute; bottom: 0; left: 0; right: 0; padding: 30px; background: linear-gradient(to top, rgba(0,0,0,0.9), transparent); }
-        .image-info-overlay h4 { font-size: 1.5rem; font-weight: 800; margin-bottom: 5px; }
-        .image-info-overlay p { font-size: 0.9rem; color: var(--brand-accent); font-weight: 700; }
-        .modal-form-side { padding: 50px; background: rgba(11, 18, 32, 0.95); }
-        .form-header-mini h3 { font-size: 1.8rem; font-weight: 800; margin-bottom: 5px; }
-        .form-header-mini p { color: var(--brand-accent); font-weight: 700; margin-bottom: 30px; }
-        .modal-form .form-group { margin-bottom: 15px; }
-        .modal-form label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--brand-gray); margin-bottom: 5px; display: block; }
-        .modal-form input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--glass-border); background: rgba(0,0,0,0.2); color: #fff; }
-        .modal-form .secure-text { text-align: center; font-size: 0.75rem; color: var(--brand-gray); margin-top: 15px; }
+        .modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; min-height: 550px; }
+        .modal-image-side { 
+          position: relative; 
+          background: var(--brand-purple);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          padding: 60px;
+          color: #fff;
+        }
+        .modal-image-side h4 { font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+        .modal-image-side p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 40px; }
+        .modal-points { list-style: none; padding: 0; }
+        .modal-points li { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-weight: 600; }
+        .modal-points i { color: var(--brand-coral); font-size: 1.2rem; }
 
-        /* Media Queries */
+        .modal-form-side { padding: 60px; background: #fff; display: flex; flex-direction: column; justify-content: center; }
+        .form-header-mini h3 { font-size: 2rem; font-weight: 900; color: var(--brand-purple); margin-bottom: 10px; }
+        .form-header-mini p { color: var(--brand-coral); font-weight: 800; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+        
+        .modal-form .form-group { margin-bottom: 20px; }
+        .modal-form label { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: block; text-transform: uppercase; }
+        .modal-form input { 
+          width: 100%; 
+          padding: 15px 20px; 
+          border-radius: 12px; 
+          border: 1.5px solid #e2e8f0; 
+          background: #f8fafc; 
+          color: #1e293b; 
+          font-size: 1rem;
+          transition: 0.3s;
+        }
+        .modal-form input:focus { border-color: var(--brand-purple); background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(59, 34, 151, 0.05); }
+        .modal-form .secure-text { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 20px; font-weight: 600; }
+
         @media (max-width: 991px) {
-          .cta-container { flex-direction: column; text-align: center; gap: 12px; }
-          .fixed-bottom-cta { border-radius: 25px; width: 94%; bottom: 10px; padding: 12px 20px; }
-          .register-now-btn-premium { width: 100%; justify-content: center; padding: 12px; font-size: 1rem; border-radius: 15px; }
-          .cta-left-content .cta-price-title { font-size: 1.1rem; }
-          .cta-left-content .cta-subtitle { font-size: 0.8rem; }
-          .cta-timer-blocks { gap: 5px; }
-          .timer-unit { min-width: 38px; padding: 3px 6px; }
-          .unit-val { font-size: 0.9rem; }
-          .unit-lbl { font-size: 0.5rem; }
-          .timer-label { font-size: 0.6rem; }
+          .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
+          .why-card-v2 { width: 100%; }
+          .cta-inner { flex-direction: column; gap: 15px; text-align: center; }
+          .cta-reg-btn { width: 100%; }
+          .cta-price-info { flex-direction: column; gap: 5px; }
           .modal-content-wrapper { grid-template-columns: 1fr; }
-          .modal-image-side { display: none; }
-          .modal-form-side { padding: 40px 20px; }
-          .hero-grid { grid-template-columns: 1fr; text-align: center; gap: 50px; }
+          .modal-image-side { padding: 40px; text-align: center; }
+          .modal-image-side h4 { font-size: 1.8rem; }
+          .modal-form-side { padding: 40px; }
+          .day-card { padding: 40px 25px; }
         }
       `}</style>
     </div>

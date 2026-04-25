@@ -746,7 +746,7 @@ function Webinar() {
         }
 
 
-        .price-display-v4 { display: flex; align-items: baseline; gap: 8px; }
+        .price-display-v4 { display: flex; align-items: center; gap: 8px; }
         .only-text-v4 { font-size: 1.2rem; font-weight: 700; color: #ffffff; }
 
         .amount-v4 {
@@ -756,14 +756,6 @@ function Webinar() {
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           line-height: 1;
-          animation: priceGlitch 5s infinite;
-        }
-
-        @keyframes priceGlitch {
-          0%, 90%, 100% { transform: skew(0); }
-          92% { transform: skew(3deg); filter: hue-rotate(10deg); }
-          94% { transform: skew(-3deg); filter: hue-rotate(-10deg); }
-          96% { transform: skew(1deg); }
         }
 
         .price-sparkle-v4 { animation: sparklePulse 3s infinite ease-in-out; }

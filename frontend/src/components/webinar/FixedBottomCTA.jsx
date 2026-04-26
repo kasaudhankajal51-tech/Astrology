@@ -213,8 +213,10 @@ function EnrollButton({ onClick, isMobile }) {
       style={{ 
         ...styles.btn, 
         ...(hovered ? styles.btnHover : {}),
-        padding: isMobile ? "10px 24px" : "15px 48px",
-        fontSize: isMobile ? "1.3rem" : "2.2rem"
+        padding: isMobile ? "6px 20px" : "5px 40px",
+        fontSize: isMobile ? "1.8rem" : "4.5rem",
+        height: "auto",
+        width: isMobile ? "100%" : "auto", // Make it fit content on desktop to avoid stretching
       }}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -294,7 +296,17 @@ export default function FixedBottomCTA({ onEnrollNow }) {
   };
 
   return (
-    <div style={dynamicStyles.cta}>
+    <div style={dynamicStyles.cta} className="cta-animated-glow">
+      <style>{`
+        @keyframes ctaGlowPulse {
+          0% { box-shadow: 0 0 15px rgba(255, 130, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+          50% { box-shadow: 0 0 50px rgba(255, 130, 0, 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.15); }
+          100% { box-shadow: 0 0 15px rgba(255, 130, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.05); }
+        }
+        .cta-animated-glow {
+          animation: ctaGlowPulse 4s infinite ease-in-out;
+        }
+      `}</style>
       <div style={styles.ambientGlow} />
 
       <div style={dynamicStyles.mainRow}>
@@ -310,9 +322,9 @@ export default function FixedBottomCTA({ onEnrollNow }) {
               alignItems: "center",
               gap: 4,
               padding: isMobile ? "2px 6px" : "3px 10px",
-              border: "1px solid rgba(255, 170, 0, 0.4)",
+              border: "1px solid #ff6a00",
               borderRadius: "4px",
-              background: "rgba(255, 170, 0, 0.05)",
+              background: "rgba(255, 106, 0, 0.1)",
               textShadow: "0 0 10px rgba(255,170,0,0.3)"
             }}>
               <span>⚡ LIMITED TIME OFFER</span>
@@ -429,7 +441,7 @@ const styles = {
   btn: {
     position: "relative", zIndex: 1, width: "100%",
     display: "flex", alignItems: "center", justifyContent: "center", gap: 14,
-    padding: "15px 28px", border: "none", borderRadius: 100, cursor: "pointer",
+    padding: "15px 28px", border: "none", borderRadius: 12, cursor: "pointer",
     background: "linear-gradient(100deg, #ff9800 0%, #ff6200 45%, #ff4000 100%)",
     boxShadow:
       "0 6px 28px rgba(255,90,0,0.45), inset 0 1px 0 rgba(255,220,100,0.25)",
@@ -442,7 +454,7 @@ const styles = {
       "0 10px 36px rgba(255,90,0,0.58), inset 0 1px 0 rgba(255,220,100,0.25)",
   },
   btnShine: {
-    position: "absolute", inset: 0, borderRadius: 100,
+    position: "absolute", inset: 0, borderRadius: 12,
     background: "linear-gradient(180deg, rgba(255,255,255,0.10) 0%, transparent 55%)",
     pointerEvents: "none",
   },

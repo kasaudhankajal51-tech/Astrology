@@ -202,25 +202,29 @@ export default function FixedBottomCTA({ onJoinNow }) {
           /* ── MOBILE layout: badge+price left | timer right, button full-width below ── */
           <>
             <div style={ss.mobileTopRow}>
-              {/* Left: badge + price */}
-              <div style={ss.mobileLeft}>
-                <div style={ss.badge}>
-                  <svg width="9" height="11" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
-                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-                  </svg>
-                  <span>LIMITED TIME OFFER</span>
-                </div>
-                <div style={ss.priceRow}>
-                  <span style={ss.onlyText}>Only</span>
-                  <span style={ss.amount}>₹99</span>
-                </div>
-              </div>
+  {/* Left */}
+  <div style={ss.mobileLeft}>
+    <div style={ss.badge}>
+      <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
+        <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+      </svg>
+      <span>LIMITED TIME OFFER</span>
+    </div>
 
-              {/* Right: timer */}
-              <div style={ss.mobileRight}>
-                <DigitalTimer />
-              </div>
-            </div>
+    <div style={ss.priceRow}>
+      <span style={ss.onlyText}>Only</span>
+      <span style={ss.amount}>₹99</span>
+    </div>
+  </div>
+
+  {/* 🔥 Divider (NEW) */}
+  <div style={ss.mobileDivider}></div>
+
+  {/* Right */}
+  <div style={ss.mobileRight}>
+    <DigitalTimer />
+  </div>
+</div>
 
             {/* Full-width button */}
             <div style={{ paddingTop: 10 }}>
@@ -326,8 +330,8 @@ const ss = {
     letterSpacing: "0.8px", textTransform: "uppercase",
   },
 
-  priceRow: { display: "flex", alignItems: "center", gap: 5 },
-  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)" },
+  priceRow: { display: "flex", alignItems: "center", gap: 5 ,padding: "5px" },
+  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)",marginLeft:"15px" },
   amount: {
     fontSize: "3.7rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
@@ -335,11 +339,21 @@ const ss = {
     backgroundClip: "text", lineHeight: 1,
     filter: "drop-shadow(0 0 8px rgba(255,140,0,0.4))",
   },
-
+mobileDivider: {
+  width: "2px",
+  height: 60,
+  background: "linear-gradient(to bottom, transparent, #ff9900 40%, #ff5500 60%, transparent)",
+  boxShadow: `
+    0 0 6px rgba(255,150,0,0.9),
+    0 0 18px rgba(255,120,0,0.7),
+    0 0 40px rgba(255,80,0,0.5)
+  `,
+  borderRadius: "3px",
+},
   // Timer
-  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5 },
+  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5,padding: "5px" },
   timerLabel: {
-    margin: 0, fontSize: 8, fontWeight: 700,
+    margin: 0, fontSize: 8, fontWeight: 400,
     color: "rgba(255,255,255,0.60)", letterSpacing: "2px", textTransform: "uppercase",
   },
   timerBox: {

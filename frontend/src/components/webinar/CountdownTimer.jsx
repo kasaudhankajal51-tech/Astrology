@@ -60,75 +60,78 @@ const CountdownTimer = ({ minimal = false }) => {
           </div>
         </div>
         <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
           
           .digital-timer-minimal {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
+            gap: 10px;
           }
           .timer-header-mini {
-            font-size: 0.55rem;
-            font-weight: 800;
-            color: rgba(255, 255, 255, 0.8);
-            letter-spacing: 1.5px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            color: #ffffff;
+            letter-spacing: 2px;
             text-transform: uppercase;
             text-align: center;
             width: 100%;
+            opacity: 0.8;
           }
           .timer-box-wrapper {
-            background: rgba(20, 20, 20, 0.8);
-            padding: 10px 15px;
+            background: #000000;
+            padding: 12px 25px;
             border-radius: 12px;
-            border: 1px solid rgba(255, 140, 0, 0.2);
-            box-shadow: inset 0 0 15px rgba(0, 0, 0, 1);
+            border: 1px solid rgba(255, 157, 0, 0.4);
+            box-shadow: 0 0 25px rgba(0, 0, 0, 1);
           }
           .timer-display-mini {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
           }
           .timer-slot {
             display: flex;
             flex-direction: column;
             align-items: center;
-            min-width: 32px;
+            min-width: 50px;
           }
           .slot-val {
-            font-size: 1.8rem;
+            font-size: 2.8rem;
             font-weight: 700;
             color: #ff9d00;
             line-height: 1;
-            font-family: 'Orbitron', 'Courier New', monospace;
-            text-shadow: 0 0 12px rgba(255, 157, 0, 0.8);
+            font-family: 'Orbitron', sans-serif;
+            text-shadow: 0 0 25px rgba(255, 157, 0, 0.9);
           }
           .slot-label {
-            font-size: 0.45rem;
+            font-size: 0.6rem;
             font-weight: 700;
-            color: rgba(255, 255, 255, 0.6);
-            margin-top: 4px;
-            letter-spacing: 0.5px;
+            color: #ffffff;
+            margin-top: 8px;
+            letter-spacing: 1.5px;
+            opacity: 0.6;
           }
           .slot-sep {
             color: #ff9d00;
             font-weight: 700;
-            font-size: 1.5rem;
-            margin-top: -12px;
-            text-shadow: 0 0 12px rgba(255, 157, 0, 0.8);
+            font-size: 2.2rem;
+            margin-top: -20px;
+            text-shadow: 0 0 25px rgba(255, 157, 0, 0.9);
           }
           @media (max-width: 600px) {
-            .slot-val { font-size: 1.6rem; }
-            .slot-sep { font-size: 1.3rem; margin-top: -10px; }
-            .timer-box-wrapper { padding: 8px 12px; }
-            .timer-slot { min-width: 28px; }
-            .timer-display-mini { gap: 8px; }
+            .slot-val { font-size: 2.2rem; }
+            .slot-sep { font-size: 1.8rem; margin-top: -15px; }
+            .timer-box-wrapper { padding: 10px 18px; }
+            .timer-slot { min-width: 40px; }
+            .timer-display-mini { gap: 10px; }
           }
-          @media (max-width: 400px) {
-            .slot-val { font-size: 1.4rem; }
-            .slot-sep { font-size: 1.1rem; margin-top: -8px; }
-            .timer-box-wrapper { padding: 6px 10px; }
-            .timer-slot { min-width: 24px; }
+          @media (max-width: 480px) {
+            .slot-val { font-size: 1.8rem; }
+            .slot-sep { font-size: 1.5rem; margin-top: -12px; }
+            .timer-box-wrapper { padding: 8px 15px; }
+            .timer-slot { min-width: 35px; }
+            .timer-display-mini { gap: 8px; }
           }
         `}</style>
       </div>

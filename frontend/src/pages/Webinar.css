@@ -417,7 +417,7 @@
   inset: 0;
   background: rgba(59, 34, 97, 0.4);
   backdrop-filter: blur(10px);
-  z-index: 5000;
+  z-index: 100001;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -455,27 +455,27 @@
 }
 .modal-close:hover { background: #fee2e2; color: #ef4444; }
 
-.modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; min-height: 550px; }
+.modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; min-height: 480px; }
 .modal-image-side { 
   position: relative; 
   background: var(--brand-purple);
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 60px;
+  padding: 40px;
   color: #fff;
 }
 .modal-image-side h4 { font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
-.modal-image-side p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 40px; }
+.modal-image-side p { font-size: 1.1rem; opacity: 0.8; margin-bottom: 20px; }
 .modal-points { list-style: none; padding: 0; }
-.modal-points li { display: flex; align-items: center; gap: 15px; margin-bottom: 15px; font-weight: 600; }
+.modal-points li { display: flex; align-items: center; gap: 15px; margin-bottom: 10px; font-weight: 600; }
 .modal-points i { color: var(--brand-coral); font-size: 1.2rem; }
 
-.modal-form-side { padding: 60px; background: #fff; display: flex; flex-direction: column; justify-content: center; }
+.modal-form-side { padding: 40px; background: #fff; display: flex; flex-direction: column; justify-content: center; }
 .form-header-mini h3 { font-size: 2rem; font-weight: 900; color: var(--brand-purple); margin-bottom: 10px; }
-.form-header-mini p { color: var(--brand-coral); font-weight: 800; margin-bottom: 35px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+.form-header-mini p { color: var(--brand-coral); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
 
-.modal-form .form-group { margin-bottom: 20px; }
+.modal-form .form-group { margin-bottom: 15px; }
 .modal-form label { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: block; text-transform: uppercase; }
 .modal-form input { 
   width: 100%; 

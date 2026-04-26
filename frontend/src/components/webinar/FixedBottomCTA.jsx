@@ -331,7 +331,7 @@ const ss = {
   },
 
   priceRow: { display: "flex", alignItems: "center", gap: 5 ,padding: "5px" },
-  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)" },
+  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)",marginLeft:"15px" },
   amount: {
     fontSize: "3.7rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",

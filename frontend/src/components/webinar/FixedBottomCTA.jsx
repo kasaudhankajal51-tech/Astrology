@@ -4,8 +4,9 @@ import { useState, useEffect } from "react";
 // PURE SVG 7-SEGMENT DISPLAY — DS-Digital replica
 // ─────────────────────────────────────────────────────────────────────────────
 
-const W = 18, H = 27, T = 3.5, G = 1.8, SK = 0;
-
+const W = 18, H = 30, T = 3.5, G = 1.4, SK = 0;
+// reasoning tej hota to samjh aata kya likha hai ye sab 
+// w= wid, g= gap
 const SEG_POINTS = {
   a: [[G+SK,G],[W-G+SK,G],[W-G-T+SK,G+T],[G+T+SK,G+T]],
   b: [[W-G+SK,G*2],[W-G,H/2-G],[W-G-T,H/2-G-T],[W-G-T+SK,G*2+T]],
@@ -59,7 +60,7 @@ function Digit({ char }) {
 }
 
 function SegColon({ visible }) {
-  const DW = 3.5, DH = 6, CX = 5;
+  const DW = 3.2, DH = 7, CX = 6;
   const color = visible ? "#ff8c00" : "rgba(255,90,0,0.09)";
   const glow  = visible
     ? "drop-shadow(0 0 3px rgba(255,160,0,0.95)) drop-shadow(0 0 8px rgba(255,90,0,0.7))"
@@ -291,10 +292,10 @@ const BASE_CTA = {
 
 const ss = {
   cta: BASE_CTA,
-  ctaMobile:  { borderRadius: "16px 16px 0 0", padding: "8px 10px 8px" },
+  ctaMobile:  { borderRadius: "16px 16px 0 0", padding: "5px 6px 5px" },
   ctaDesktop: { 
     borderRadius: "24px 24px 0 0", 
-    padding: "12px 60px 16px",
+    padding: "10px 40px 12px",
     width: "100%",
     bottom: 0,
     left: 0,
@@ -342,15 +343,16 @@ const ss = {
     display: "inline-flex", alignItems: "center", gap: 5,
     background: "rgba(255,255,255,0.07)",
     border: "1px solid rgba(255,255,255,0.13)",
-    borderRadius: "5px", padding: "3px 10px", width: "fit-content",
+    borderRadius: "5px", padding: "3px 2px", width: "fit-content",
+    marginLeft:10,
     fontSize: 7, fontWeight: 700, color: "rgba(235, 112, 24, 0.88)",
     letterSpacing: "0.8px", textTransform: "uppercase",
   },
 
-  priceRow: { display: "flex", alignItems: "baseline", gap: 6, padding: "2px 5px" },
-  onlyText: { fontSize: "1.4rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", marginLeft: "10px", textTransform: "uppercase", letterSpacing: "1px" },
+  priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 2px" },
+  onlyText: { fontSize: "1.35rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", marginLeft: "10px", textTransform: "uppercase", letterSpacing: "1px" },
   amount: {
-    fontSize: "3.5rem", fontWeight: 900,
+    fontSize: "2.6rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
@@ -396,14 +398,14 @@ mobileDivider: {
   btn: {
     position: "relative", zIndex: 1,
     display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
-    border: "none", borderRadius: 100, cursor: "pointer",
+    border: "none", borderRadius: 10, cursor: "pointer",
     background: "linear-gradient(100deg, #ff9800 0%, #ff6200 45%, #ff4000 100%)",
     boxShadow: "0 5px 24px rgba(255,90,0,0.42), inset 0 1px 0 rgba(255,220,100,0.22)",
     transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     overflow: "hidden", fontFamily: "'Poppins', sans-serif",
     whiteSpace: "nowrap",
   },
-  btnMobile: { width: "100%", padding: "12px 20px" },
+  btnMobile: { width: "100%", padding: "8px 16px" },
   btnDesktop: { width: "fit-content", minWidth: "240px", padding: "14px 40px" },
   btnHover: {
     transform: "translateY(-2px) scale(1.02)",
@@ -419,9 +421,9 @@ mobileDivider: {
     background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)",
     pointerEvents: "none",
   },
-  btnText: { fontSize: "1.4rem", fontWeight: 800, color: "#fff", letterSpacing: "0.2px", position: "relative" },
+  btnText: { fontSize: "1.3rem", fontWeight: 800, color: "#fff", letterSpacing: "0.2px", position: "relative" },
   btnIcon: {
-    width: 30, height: 30, flexShrink: 0,
+    width: 30, height:26 , flexShrink: 0,
     background: "rgba(255,255,255,0.18)", borderRadius: "50%",
     display: "flex", alignItems: "center", justifyContent: "center",
     position: "relative",

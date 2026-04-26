@@ -136,19 +136,25 @@ function DigitalTimer() {
 }
 
 // ─── Enroll Button ────────────────────────────────────────────────────────────
-function EnrollButton({ onClick }) {
+function EnrollButton({ onClick, isMobile }) {
   const [hovered, setHovered] = useState(false);
+  const btnStyle = {
+    ...ss.btn,
+    ...(isMobile ? ss.btnMobile : ss.btnDesktop),
+    ...(hovered ? ss.btnHover : {}),
+  };
+
   return (
     <button
-      style={{ ...ss.btn, ...(hovered ? ss.btnHover : {}) }}
+      style={btnStyle}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
       onClick={onClick}
     >
       <div style={ss.btnShine} />
-      <div style={ss.shimmer} />
+      <div style={ss.shimmer} className="btn-shimmer" />
       <span style={ss.btnText}>Enroll Now</span>
-      <span style={ss.btnIcon}>
+      <span style={ss.btnIcon} className="arrow-anim">
         <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
           <path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
@@ -180,7 +186,7 @@ export default function FixedBottomCTA({ onJoinNow }) {
       <style>{`
         @keyframes ctaGlow {
           0%,100% { box-shadow: 0 -4px 24px rgba(255,120,0,0.18), inset 0 1px 0 rgba(255,255,255,0.05); }
-          50%      { box-shadow: 0 -4px 48px rgba(255,120,0,0.40), inset 0 1px 0 rgba(255,255,255,0.10); }
+          50%      { box-shadow: 0 -6px 48px rgba(255,120,0,0.40), inset 0 1px 0 rgba(255,255,255,0.10); }
         }
         @keyframes shimmerSweep {
           0%   { transform: translateX(-120%) skewX(-20deg); }
@@ -228,14 +234,14 @@ export default function FixedBottomCTA({ onJoinNow }) {
 
             {/* Full-width button */}
             <div style={{ paddingTop: 10 }}>
-              <EnrollButton onClick={onJoinNow} />
+              <EnrollButton onClick={onJoinNow} isMobile={true} />
             </div>
           </>
         ) : (
-          /* ── DESKTOP layout: price | divider | timer | button ── */
+          /* ── DESKTOP layout: Price (Left) | Divider | Timer + Button (Right) ── */
           <>
             <div style={ss.desktopRow}>
-              {/* Price */}
+              {/* Left Side: Price */}
               <div style={ss.desktopLeft}>
                 <div style={ss.badge}>
                   <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
@@ -249,18 +255,17 @@ export default function FixedBottomCTA({ onJoinNow }) {
                 </div>
               </div>
 
-              <div style={ss.vDivider} />
+              {/* Enhanced Vertical Divider */}
+              <div style={ss.mobileDivider}></div>
 
-              {/* Timer */}
-              <div style={ss.desktopCenter}>
-                <DigitalTimer />
-              </div>
-
-              <div style={ss.vDivider} />
-
-              {/* Button */}
+              {/* Right Side: Timer & Button Group */}
               <div style={ss.desktopRight}>
-                <EnrollButton onClick={onJoinNow} />
+                <div style={ss.desktopTimerWrapper}>
+                  <DigitalTimer />
+                </div>
+                <div style={ss.desktopButtonWrapper}>
+                  <EnrollButton onClick={onJoinNow} isMobile={false} />
+                </div>
               </div>
             </div>
           </>
@@ -287,7 +292,18 @@ const BASE_CTA = {
 const ss = {
   cta: BASE_CTA,
   ctaMobile:  { borderRadius: "16px 16px 0 0", padding: "8px 10px 8px" },
-  ctaDesktop: { borderRadius: "20px 20px 0 0", padding: "10px 35px 14px" },
+  ctaDesktop: { 
+    borderRadius: "24px 24px 0 0", 
+    padding: "12px 60px 16px",
+    width: "100%",
+    bottom: 0,
+    left: 0,
+    transform: "none",
+    border: "1.5px solid rgba(255,160,30,0.25)",
+    borderBottom: "none",
+    backdropFilter: "blur(15px)",
+    backgroundColor: "rgba(12, 12, 12, 0.94)",
+  },
 
   ambientGlow: {
     position: "absolute", inset: 0,
@@ -303,17 +319,18 @@ const ss = {
     justifyContent: "space-between", gap: 10,
     position: "relative", zIndex: 1,
   },
-  mobileLeft:  { display: "flex", flexDirection: "column", gap: 5, flex: 1 },
-  mobileRight: { display: "flex", alignItems: "center", justifyContent: "flex-end", flexShrink: 0 },
+  mobileLeft:  { display: "flex", flexDirection: "column", gap: 5, flex: 0.85, alignItems: "flex-start" },
+  mobileRight: { display: "flex", alignItems: "center", justifyContent: "flex-end", flex: 1.15 },
 
   // Desktop row
   desktopRow: {
-    display: "flex", alignItems: "center",
-    gap: 0, position: "relative", zIndex: 1,
+    display: "flex", alignItems: "center", justifyContent: "space-between",
+    width: "100%", position: "relative", zIndex: 1,
   },
-  desktopLeft:   { flex: 1, display: "flex", flexDirection: "column", gap: 6, paddingRight: 32 },
-  desktopCenter: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 24px" },
-  desktopRight:  { flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingLeft: 32 },
+  desktopLeft:   { display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-start" },
+  desktopRight:  { display: "flex", alignItems: "center", gap: 60 },
+  desktopTimerWrapper: { display: "flex", alignItems: "center" },
+  desktopButtonWrapper: { display: "flex", alignItems: "center" },
 
   vDivider: {
     width: 1, height: 72, flexShrink: 0,
@@ -330,14 +347,14 @@ const ss = {
     letterSpacing: "0.8px", textTransform: "uppercase",
   },
 
-  priceRow: { display: "flex", alignItems: "center", gap: 5 ,padding: "5px" },
-  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)",marginLeft:"15px" },
+  priceRow: { display: "flex", alignItems: "baseline", gap: 6, padding: "2px 5px" },
+  onlyText: { fontSize: "1.4rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", marginLeft: "10px", textTransform: "uppercase", letterSpacing: "1px" },
   amount: {
-    fontSize: "3.7rem", fontWeight: 900,
+    fontSize: "3.5rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
-    filter: "drop-shadow(0 0 8px rgba(255,140,0,0.4))",
+    filter: "drop-shadow(0 2px 10px rgba(255,140,0,0.3))",
   },
 mobileDivider: {
   width: "2px",
@@ -357,10 +374,11 @@ mobileDivider: {
     color: "rgba(255,255,255,0.60)", letterSpacing: "2px", textTransform: "uppercase",
   },
   timerBox: {
-    background: "#080808", padding: "4px 8px",
-    borderRadius: 10, border: "1px solid rgba(255,140,0,0.22)",
-    boxShadow: "inset 0 2px 10px rgba(0,0,0,0.95), 0 0 14px rgba(255,100,0,0.07)",
+    background: "rgba(10, 10, 10, 0.8)", padding: "6px 12px",
+    borderRadius: 12, border: "1px solid rgba(255,140,0,0.25)",
+    boxShadow: "inset 0 2px 15px rgba(0,0,0,0.8), 0 0 20px rgba(255,100,0,0.1)",
     position: "relative", overflow: "hidden",
+    backdropFilter: "blur(4px)",
   },
   scanlines: {
     position: "absolute", inset: 0, borderRadius: 10,
@@ -378,17 +396,18 @@ mobileDivider: {
   btn: {
     position: "relative", zIndex: 1,
     display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
-    width: "100%",
-    padding: "5px 8px", border: "none", borderRadius: 10, cursor: "pointer",
+    border: "none", borderRadius: 100, cursor: "pointer",
     background: "linear-gradient(100deg, #ff9800 0%, #ff6200 45%, #ff4000 100%)",
     boxShadow: "0 5px 24px rgba(255,90,0,0.42), inset 0 1px 0 rgba(255,220,100,0.22)",
-    transition: "transform 0.15s, box-shadow 0.15s",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
     overflow: "hidden", fontFamily: "'Poppins', sans-serif",
     whiteSpace: "nowrap",
   },
+  btnMobile: { width: "100%", padding: "12px 20px" },
+  btnDesktop: { width: "fit-content", minWidth: "240px", padding: "14px 40px" },
   btnHover: {
-    transform: "translateY(-1px)",
-    boxShadow: "0 9px 32px rgba(255,90,0,0.55), inset 0 1px 0 rgba(255,220,100,0.25)",
+    transform: "translateY(-2px) scale(1.02)",
+    boxShadow: "0 12px 32px rgba(255,90,0,0.55), inset 0 1px 0 rgba(255,220,100,0.3)",
   },
   btnShine: {
     position: "absolute", inset: 0, borderRadius: 100,

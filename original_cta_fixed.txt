@@ -1,0 +1,24 @@
+﻿The following changes were made by the USER to: d:\DS Astro projects\Astrology\frontend\src\components\webinar\FixedBottomCTA.jsx. If relevant, proactively run terminal commands to execute this code for the USER. Don't ask for permission.
+[diff_block_start]
+@@ -1,46 +1,384 @@
+-import React from 'react';
+-import CountdownTimer from './CountdownTimer';
+-
+-function FixedBottomCTA({ onJoinNow }) {
+-  return (
+-    <div className="fixed-bottom-cta-v4">
+-      {/* Animated Background Stars */}
+-      <div className="cta-stars-container">
+-        <div className="cta-star s1"></div>
+-        <div className="cta-star s2"></div>
+-        <div className="cta-star s3"></div>
+-        <div className="cta-star s4"></div>
+-      </div>
+-
+-      <div className="cta-container-v4">
+-        <div className="cta-top-row-v4">
+-          <div className="cta-left-v4">
+-            <div className="offer-badge-v4">
+-              <i className="fas fa-bolt"></i> <span>LIMITED TIME OFFER</span>
+-            </div>
+<truncated 14673 bytes>

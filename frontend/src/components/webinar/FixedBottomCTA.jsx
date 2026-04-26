@@ -1,45 +1,396 @@
-import React from 'react';
-import CountdownTimer from './CountdownTimer';
+import { useState, useEffect } from "react";
 
-function FixedBottomCTA({ onJoinNow }) {
+// ─────────────────────────────────────────────────────────────────────────────
+// PURE SVG 7-SEGMENT DISPLAY — DS-Digital replica
+// ─────────────────────────────────────────────────────────────────────────────
+
+const W = 18, H = 27, T = 3.5, G = 1.8, SK = 0;
+
+const SEG_POINTS = {
+  a: [[G+SK,G],[W-G+SK,G],[W-G-T+SK,G+T],[G+T+SK,G+T]],
+  b: [[W-G+SK,G*2],[W-G,H/2-G],[W-G-T,H/2-G-T],[W-G-T+SK,G*2+T]],
+  c: [[W-G,H/2+G],[W-G-SK,H-G*2],[W-G-T-SK,H-G*2-T],[W-G-T,H/2+G+T]],
+  d: [[G+T-SK,H-G-T],[W-G-T-SK,H-G-T],[W-G-SK,H-G],[G-SK,H-G]],
+  e: [[G,H/2+G],[G+T,H/2+G+T],[G+T-SK,H-G*2-T],[G-SK,H-G*2]],
+  f: [[G+SK,G*2],[G+T+SK,G*2+T],[G+T,H/2-G-T],[G,H/2-G]],
+  g: [[G+T,H/2-T/2],[W-G-T,H/2-T/2],[W-G-T,H/2+T/2],[G+T,H/2+T/2]],
+};
+
+const DIGIT_MAP = {
+  "0":["a","b","c","d","e","f"],
+  "1":["b","c"],
+  "2":["a","b","g","e","d"],
+  "3":["a","b","g","c","d"],
+  "4":["f","g","b","c"],
+  "5":["a","f","g","c","d"],
+  "6":["a","f","g","e","c","d"],
+  "7":["a","b","c"],
+  "8":["a","b","c","d","e","f","g"],
+  "9":["a","b","c","d","f","g"],
+};
+
+const pts = (arr) => arr.map(([x, y]) => `${x},${y}`).join(" ");
+const SEGS = Object.fromEntries(Object.entries(SEG_POINTS).map(([k, v]) => [k, pts(v)]));
+
+const ON_COLOR  = "#ffaa22";
+const OFF_COLOR = "rgba(255,90,0,0.09)";
+const ON_FILTER =
+  "drop-shadow(0 0 2px rgba(255,180,30,1)) " +
+  "drop-shadow(0 0 6px rgba(255,130,0,0.85)) " +
+  "drop-shadow(0 0 14px rgba(255,80,0,0.55))";
+
+function Digit({ char }) {
+  const on = new Set(DIGIT_MAP[char] || []);
   return (
-    <div className="fixed-bottom-cta-v4">
-      {/* Animated Background Stars */}
-      <div className="cta-stars-container">
-        <div className="cta-star s1"></div>
-        <div className="cta-star s2"></div>
-        <div className="cta-star s3"></div>
-        <div className="cta-star s4"></div>
+    <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} style={{ overflow: "visible", display: "block" }}>
+      {Object.entries(SEGS).map(([key, points]) => {
+        const lit = on.has(key);
+        return (
+          <polygon
+            key={key}
+            points={points}
+            fill={lit ? ON_COLOR : OFF_COLOR}
+            style={{ filter: lit ? ON_FILTER : "none" }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+function SegColon({ visible }) {
+  const DW = 3.5, DH = 6, CX = 5;
+  const color = visible ? "#ff8c00" : "rgba(255,90,0,0.09)";
+  const glow  = visible
+    ? "drop-shadow(0 0 3px rgba(255,160,0,0.95)) drop-shadow(0 0 8px rgba(255,90,0,0.7))"
+    : "none";
+  return (
+    <svg width={12} height={H} viewBox={`0 0 12 ${H}`} style={{ overflow: "visible", display: "block" }}>
+      <rect x={CX-DW/2} y={H*0.28-DH/2} width={DW} height={DH} rx={1.5} fill={color} style={{ filter: glow }} />
+      <rect x={CX-DW/2} y={H*0.72-DH/2} width={DW} height={DH} rx={1.5} fill={color} style={{ filter: glow }} />
+    </svg>
+  );
+}
+
+function DigitPair({ value, label }) {
+  const str = String(value).padStart(2, "0");
+  return (
+    <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
+      <div style={{ display: "flex", gap: 2 }}>
+        <Digit char={str[0]} />
+        <Digit char={str[1]} />
       </div>
+      <span style={ss.segLabel}>{label}</span>
+    </div>
+  );
+}
 
-      <div className="cta-container-v4">
-        <div className="cta-top-row-v4">
-          <div className="cta-left-v4">
-            <div className="offer-badge-v4">
-              <i className="fas fa-bolt"></i> <span>LIMITED TIME OFFER</span>
-            </div>
-            <div className="price-display-v4">
-              <span className="only-text-v4">Only</span>
-              <span className="amount-v4">₹99</span>
-            </div>
-          </div>
+// ─── Timer ────────────────────────────────────────────────────────────────────
+const STORAGE_KEY = "webinar_cta_timer_v3";
 
-          <div className="cta-vertical-divider-v4"></div>
+function getOrCreateTarget(hours = 24) {
+  try {
+    const s = localStorage.getItem(STORAGE_KEY);
+    if (s) return parseInt(s, 10);
+  } catch (_) {}
+  const t = Date.now() + hours * 3600 * 1000;
+  try { localStorage.setItem(STORAGE_KEY, String(t)); } catch (_) {}
+  return t;
+}
 
-          <div className="cta-right-v4">
-            <CountdownTimer minimal={true} />
-          </div>
-        </div>
+function DigitalTimer() {
+  const [time, setTime]     = useState({ h: 24, m: 0, s: 0 });
+  const [colonOn, setColon] = useState(true);
 
-        <div className="cta-bottom-row-v4">
-          <button onClick={onJoinNow} className="register-now-btn-v5">
-            <span className="btn-text-v4">Enroll Now</span>
-            <span className="btn-icon-v4"><i className="fas fa-arrow-right"></i></span>
-          </button>
+  useEffect(() => {
+    const target = getOrCreateTarget(24);
+    const tick = () => {
+      const diff = Math.max(0, target - Date.now());
+      setTime({
+        h: Math.floor(diff / 3600000),
+        m: Math.floor(diff / 60000) % 60,
+        s: Math.floor(diff / 1000) % 60,
+      });
+      setColon((v) => !v);
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  return (
+    <div style={ss.timerRoot}>
+      <p style={ss.timerLabel}>OFFER ENDS IN</p>
+      <div style={ss.timerBox}>
+        <div style={ss.scanlines} />
+        <div style={ss.timerInner}>
+          <DigitPair value={time.h} label="HRS"  />
+          <div style={{ marginTop: -10 }}><SegColon visible={colonOn} /></div>
+          <DigitPair value={time.m} label="MINS" />
+          <div style={{ marginTop: -10 }}><SegColon visible={colonOn} /></div>
+          <DigitPair value={time.s} label="SECS" />
         </div>
       </div>
     </div>
   );
 }
 
-export default FixedBottomCTA;
+// ─── Enroll Button ────────────────────────────────────────────────────────────
+function EnrollButton({ onClick }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      style={{ ...ss.btn, ...(hovered ? ss.btnHover : {}) }}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onClick={onClick}
+    >
+      <div style={ss.btnShine} />
+      <div style={ss.shimmer} />
+      <span style={ss.btnText}>Enroll Now</span>
+      <span style={ss.btnIcon}>
+        <svg width="13" height="13" viewBox="0 0 14 14" fill="none">
+          <path d="M2 7h10M8 3l4 4-4 4" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+      </span>
+    </button>
+  );
+}
+
+// ─── useIsMobile ──────────────────────────────────────────────────────────────
+function useIsMobile(breakpoint = 600) {
+  const [mobile, setMobile] = useState(() =>
+    typeof window !== "undefined" ? window.innerWidth < breakpoint : false
+  );
+  useEffect(() => {
+    const handler = () => setMobile(window.innerWidth < breakpoint);
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, [breakpoint]);
+  return mobile;
+}
+
+// ─── Main Export ──────────────────────────────────────────────────────────────
+export default function FixedBottomCTA({ onJoinNow }) {
+  const isMobile = useIsMobile(600);
+
+  return (
+    <>
+      {/* Inject keyframes once */}
+      <style>{`
+        @keyframes ctaGlow {
+          0%,100% { box-shadow: 0 -4px 24px rgba(255,120,0,0.18), inset 0 1px 0 rgba(255,255,255,0.05); }
+          50%      { box-shadow: 0 -4px 48px rgba(255,120,0,0.40), inset 0 1px 0 rgba(255,255,255,0.10); }
+        }
+        @keyframes shimmerSweep {
+          0%   { transform: translateX(-120%) skewX(-20deg); }
+          100% { transform: translateX(250%)  skewX(-20deg); }
+        }
+        @keyframes arrowPulse {
+          0%,100% { transform: translateX(0); }
+          50%     { transform: translateX(4px); }
+        }
+        .cta-root   { animation: ctaGlow 3.5s ease-in-out infinite; }
+        .btn-shimmer{ animation: shimmerSweep 3s ease-in-out infinite; }
+        .arrow-anim { animation: arrowPulse 1s ease-in-out infinite; }
+      `}</style>
+
+      <div className="cta-root" style={{ ...ss.cta, ...(isMobile ? ss.ctaMobile : ss.ctaDesktop) }}>
+        <div style={ss.ambientGlow} />
+
+        {isMobile ? (
+          /* ── MOBILE layout: badge+price left | timer right, button full-width below ── */
+          <>
+            <div style={ss.mobileTopRow}>
+              {/* Left: badge + price */}
+              <div style={ss.mobileLeft}>
+                <div style={ss.badge}>
+                  <svg width="9" height="11" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                  </svg>
+                  <span>LIMITED TIME OFFER</span>
+                </div>
+                <div style={ss.priceRow}>
+                  <span style={ss.onlyText}>Only</span>
+                  <span style={ss.amount}>₹99</span>
+                </div>
+              </div>
+
+              {/* Right: timer */}
+              <div style={ss.mobileRight}>
+                <DigitalTimer />
+              </div>
+            </div>
+
+            {/* Full-width button */}
+            <div style={{ paddingTop: 10 }}>
+              <EnrollButton onClick={onJoinNow} />
+            </div>
+          </>
+        ) : (
+          /* ── DESKTOP layout: price | divider | timer | button ── */
+          <>
+            <div style={ss.desktopRow}>
+              {/* Price */}
+              <div style={ss.desktopLeft}>
+                <div style={ss.badge}>
+                  <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                  </svg>
+                  <span>LIMITED TIME OFFER</span>
+                </div>
+                <div style={ss.priceRow}>
+                  <span style={ss.onlyText}>Only</span>
+                  <span style={ss.amount}>₹99</span>
+                </div>
+              </div>
+
+              <div style={ss.vDivider} />
+
+              {/* Timer */}
+              <div style={ss.desktopCenter}>
+                <DigitalTimer />
+              </div>
+
+              <div style={ss.vDivider} />
+
+              {/* Button */}
+              <div style={ss.desktopRight}>
+                <EnrollButton onClick={onJoinNow} />
+              </div>
+            </div>
+          </>
+        )}
+      </div>
+    </>
+  );
+}
+
+// ─── Style constants ──────────────────────────────────────────────────────────
+const BASE_CTA = {
+  position: "fixed",
+  bottom: 0,
+  left: 0,
+  width: "100%",
+  zIndex: 9999,
+  background: "linear-gradient(135deg, #1a1a1a 0%, #111 60%, #1c1410 100%)",
+  border: "1.5px solid rgba(255,160,30,0.20)",
+  borderBottom: "none",
+  overflow: "hidden",
+  fontFamily: "'Poppins', 'Segoe UI', sans-serif",
+};
+
+const ss = {
+  cta: BASE_CTA,
+  ctaMobile:  { borderRadius: "16px 16px 0 0", padding: "8px 10px 8px" },
+  ctaDesktop: { borderRadius: "20px 20px 0 0", padding: "10px 35px 14px" },
+
+  ambientGlow: {
+    position: "absolute", inset: 0,
+    background:
+      "radial-gradient(ellipse at 15% 50%, rgba(255,140,0,0.07) 0%, transparent 55%)," +
+      "radial-gradient(ellipse at 85% 50%, rgba(255,100,0,0.05) 0%, transparent 55%)",
+    pointerEvents: "none",
+  },
+
+  // Mobile rows
+  mobileTopRow: {
+    display: "flex", alignItems: "center",
+    justifyContent: "space-between", gap: 10,
+    position: "relative", zIndex: 1,
+  },
+  mobileLeft:  { display: "flex", flexDirection: "column", gap: 5, flex: 1 },
+  mobileRight: { display: "flex", alignItems: "center", justifyContent: "flex-end", flexShrink: 0 },
+
+  // Desktop row
+  desktopRow: {
+    display: "flex", alignItems: "center",
+    gap: 0, position: "relative", zIndex: 1,
+  },
+  desktopLeft:   { flex: 1, display: "flex", flexDirection: "column", gap: 6, paddingRight: 32 },
+  desktopCenter: { flex: 1, display: "flex", alignItems: "center", justifyContent: "center", padding: "0 24px" },
+  desktopRight:  { flex: 1, display: "flex", alignItems: "center", justifyContent: "flex-end", paddingLeft: 32 },
+
+  vDivider: {
+    width: 1, height: 72, flexShrink: 0,
+    background: "linear-gradient(to bottom, transparent, rgba(255,150,0,0.28), transparent)",
+  },
+
+  // Badge
+  badge: {
+    display: "inline-flex", alignItems: "center", gap: 5,
+    background: "rgba(255,255,255,0.07)",
+    border: "1px solid rgba(255,255,255,0.13)",
+    borderRadius: "5px", padding: "3px 10px", width: "fit-content",
+    fontSize: 7, fontWeight: 700, color: "rgba(235, 112, 24, 0.88)",
+    letterSpacing: "0.8px", textTransform: "uppercase",
+  },
+
+  priceRow: { display: "flex", alignItems: "center", gap: 5 },
+  onlyText: { fontSize: "1.7rem", fontWeight: 600, color: "rgba(255,255,255,0.88)" },
+  amount: {
+    fontSize: "3.7rem", fontWeight: 900,
+    background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
+    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+    backgroundClip: "text", lineHeight: 1,
+    filter: "drop-shadow(0 0 8px rgba(255,140,0,0.4))",
+  },
+
+  // Timer
+  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5 },
+  timerLabel: {
+    margin: 0, fontSize: 8, fontWeight: 700,
+    color: "rgba(255,255,255,0.60)", letterSpacing: "2px", textTransform: "uppercase",
+  },
+  timerBox: {
+    background: "#080808", padding: "4px 8px",
+    borderRadius: 10, border: "1px solid rgba(255,140,0,0.22)",
+    boxShadow: "inset 0 2px 10px rgba(0,0,0,0.95), 0 0 14px rgba(255,100,0,0.07)",
+    position: "relative", overflow: "hidden",
+  },
+  scanlines: {
+    position: "absolute", inset: 0, borderRadius: 10,
+    background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.055) 3px, rgba(0,0,0,0.055) 4px)",
+    pointerEvents: "none", zIndex: 2,
+  },
+  timerInner: { display: "flex", alignItems: "center", gap: 3, position: "relative", zIndex: 1 },
+  segLabel: {
+    fontSize: 7, fontWeight: 700,
+    color: "rgba(255,255,255,0.35)", letterSpacing: "1px",
+    textTransform: "uppercase", fontFamily: "'Poppins', sans-serif",
+  },
+
+  // Button
+  btn: {
+    position: "relative", zIndex: 1,
+    display: "flex", alignItems: "center", justifyContent: "center", gap: 12,
+    width: "100%",
+    padding: "5px 8px", border: "none", borderRadius: 10, cursor: "pointer",
+    background: "linear-gradient(100deg, #ff9800 0%, #ff6200 45%, #ff4000 100%)",
+    boxShadow: "0 5px 24px rgba(255,90,0,0.42), inset 0 1px 0 rgba(255,220,100,0.22)",
+    transition: "transform 0.15s, box-shadow 0.15s",
+    overflow: "hidden", fontFamily: "'Poppins', sans-serif",
+    whiteSpace: "nowrap",
+  },
+  btnHover: {
+    transform: "translateY(-1px)",
+    boxShadow: "0 9px 32px rgba(255,90,0,0.55), inset 0 1px 0 rgba(255,220,100,0.25)",
+  },
+  btnShine: {
+    position: "absolute", inset: 0, borderRadius: 100,
+    background: "linear-gradient(180deg, rgba(255,255,255,0.09) 0%, transparent 52%)",
+    pointerEvents: "none",
+  },
+  shimmer: {
+    position: "absolute", top: 0, width: "35%", height: "80%",
+    background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent)",
+    pointerEvents: "none",
+  },
+  btnText: { fontSize: "1.4rem", fontWeight: 800, color: "#fff", letterSpacing: "0.2px", position: "relative" },
+  btnIcon: {
+    width: 30, height: 30, flexShrink: 0,
+    background: "rgba(255,255,255,0.18)", borderRadius: "50%",
+    display: "flex", alignItems: "center", justifyContent: "center",
+    position: "relative",
+  },
+};

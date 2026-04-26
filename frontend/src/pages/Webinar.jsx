@@ -374,7 +374,12 @@ function Webinar() {
               </div>
               <div className="price-display-v4">
                 <span className="only-text-v4">Only</span>
-                <span className="amount-v4">₹99</span>
+                <div className="amount-wrapper-v4">
+                  <span className="amount-v4">₹99</span>
+                  <div className="price-sparkles-v4">
+                    <span></span><span></span><span></span>
+                  </div>
+                </div>
               </div>
             </div>
 
@@ -439,25 +444,7 @@ function Webinar() {
       )}
 
       <style>{`
-        :root {
-          --brand-purple: #3B2261;
-          --brand-coral: #EE6662;
-          --brand-coral-dark: #D9534F;
-          --bg-light: #F8FAFC;
-          --text-dark: #1E293B;
-          --text-muted: #64748B;
-          --card-bg: #FFFFFF;
-          --gradient-coral: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
-          --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-          --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-          --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-        }
-
         .webinar-landing {
-          font-family: 'Outfit', sans-serif;
-          background-color: var(--bg-light);
-          background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-          background-size: 24px 24px;
           color: var(--text-dark);
           padding-bottom: 120px;
           overflow-x: hidden;
@@ -670,13 +657,14 @@ function Webinar() {
           bottom: 0;
           left: 0;
           width: 100%;
-          background: #111111;
+          background: rgba(15, 15, 15, 0.98);
+          backdrop-filter: blur(25px);
           padding: 15px 0 10px;
           z-index: 2000;
-          border-top-left-radius: 24px;
-          border-top-right-radius: 24px;
-          box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.8);
-          border-top: 1.5px solid rgba(255, 157, 0, 0.2);
+          border-top-left-radius: 25px;
+          border-top-right-radius: 25px;
+          box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.9);
+          border-top: 1px solid rgba(255, 157, 0, 0.3);
           font-family: 'Outfit', sans-serif;
           animation: slideUpBar 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
           overflow: hidden;
@@ -703,51 +691,68 @@ function Webinar() {
           align-items: center;
           justify-content: space-between;
           width: 100%;
+          padding: 0 10px;
         }
 
         .cta-left-v4 {
-          flex: 1;
           display: flex;
           flex-direction: column;
-          gap: 5px;
+          gap: 8px;
         }
 
         .offer-badge-v4 {
-          background: rgba(255, 157, 0, 0.1);
+          border: 1px solid rgba(255, 157, 0, 0.3);
           color: #ff9d00;
-          padding: 4px 12px;
+          padding: 3px 12px;
           border-radius: 50px;
-          font-size: 0.65rem;
+          font-size: 0.6rem;
           font-weight: 800;
-          letter-spacing: 1.5px;
+          letter-spacing: 2px;
           width: fit-content;
-          border: 1px solid rgba(255, 157, 0, 0.4);
           text-transform: uppercase;
           display: flex;
           align-items: center;
-          gap: 6px;
+          gap: 8px;
         }
 
-        .offer-badge-v4 i { font-size: 0.7rem; }
+        .offer-badge-v4 i { font-size: 0.7rem; color: #ff9d00; }
 
-        .price-display-v4 { display: flex; align-items: center; gap: 8px; }
-        .only-text-v4 { font-size: 1.4rem; font-weight: 700; color: #ffffff; opacity: 0.9; }
+        .price-display-v4 { display: flex; align-items: center; gap: 15px; margin-top: 5px; }
+        .only-text-v4 { font-size: 2.2rem; font-weight: 700; color: #ffffff; letter-spacing: -0.5px; }
 
+        .amount-wrapper-v4 { position: relative; display: flex; align-items: center; }
         .amount-v4 {
-          font-size: 4.5rem;
-          font-weight: 950;
-          color: #ffbc00;
-          line-height: 1;
-          letter-spacing: -2px;
-          filter: drop-shadow(0 0 10px rgba(255, 188, 0, 0.4));
-          transform: translateY(5px);
+          font-family: 'Montserrat', sans-serif;
+          font-size: 5.5rem;
+          font-weight: 900;
+          background: linear-gradient(180deg, #FFEF00 20%, #FF8A00 90%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          line-height: 0.9;
+          letter-spacing: -3px;
+          filter: drop-shadow(0 0 15px rgba(255, 138, 0, 0.5));
+        }
+
+        .price-sparkles-v4 {
+          position: absolute;
+          top: -5px;
+          right: -15px;
+          display: flex;
+          gap: 3px;
+        }
+        .price-sparkles-v4 span {
+          width: 2px;
+          height: 8px;
+          background: #ff9d00;
+          border-radius: 10px;
+          transform: rotate(25deg);
         }
 
         .cta-vertical-divider-v4 {
           width: 1px;
-          height: 70px;
+          height: 80px;
           background: rgba(255, 255, 255, 0.1);
-          margin: 0 25px;
+          margin: 0 30px;
         }
 
         .cta-right-v4 { flex: 1; display: flex; justify-content: center; }
@@ -755,7 +760,7 @@ function Webinar() {
 
         .register-now-btn-v5 {
           width: 100%;
-          background: linear-gradient(90deg, #ff9d00 0%, #ff6a00 100%);
+          background: linear-gradient(180deg, #ff9d00 0%, #ff6a00 100%);
           border: none;
           padding: 16px 30px;
           border-radius: 100px;
@@ -764,11 +769,12 @@ function Webinar() {
           justify-content: center;
           gap: 15px;
           color: #ffffff;
-          font-size: 1.8rem;
+          font-size: 2rem;
           font-weight: 900;
           cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 10px 25px rgba(255, 106, 0, 0.3);
+          transition: 0.3s;
+          box-shadow: 0 10px 40px rgba(255, 106, 0, 0.6);
+          position: relative;
         }
 
         .btn-text-v4 { flex: 1; text-align: center; }
@@ -790,31 +796,38 @@ function Webinar() {
         }
 
         @media (min-width: 992px) {
-          .cta-container-v4 { flex-direction: row; align-items: center; gap: 40px; padding: 10px 40px; }
-          .cta-top-row-v4 { flex: 1; gap: 40px; }
-          .cta-bottom-row-v4 { width: auto; }
-          .register-now-btn-v5 { width: auto; min-width: 350px; padding: 15px 40px; }
-          .fixed-bottom-cta-v4 { padding: 15px 0; border-top-left-radius: 30px; border-top-right-radius: 30px; }
+          .fixed-bottom-cta-v4 {
+            width: 100%;
+            left: 0;
+            bottom: 0;
+            padding: 20px 0;
+            border-top-left-radius: 35px;
+            border-top-right-radius: 35px;
+          }
+          .cta-container-v4 { max-width: 1200px; flex-direction: row; align-items: center; justify-content: space-between; gap: 40px; }
+          .cta-top-row-v4 { flex: 1; gap: 40px; padding: 0; }
+          .cta-bottom-row-v4 { width: auto; padding: 0; }
+          .register-now-btn-v5 { width: auto; min-width: 350px; padding: 18px 40px; font-size: 2.2rem; }
+          .amount-v4 { font-size: 5rem; }
         }
 
         @media (max-width: 768px) {
           .amount-v4 { font-size: 3.5rem; }
-          .only-text-v4 { font-size: 1.2rem; }
-          .register-now-btn-v5 { font-size: 1.5rem; padding: 14px 25px; }
-          .btn-icon-v4 { width: 32px; height: 32px; font-size: 0.9rem; }
+          .only-text-v4 { font-size: 1.4rem; }
+          .register-now-btn-v5 { font-size: 1.6rem; }
           .cta-vertical-divider-v4 { margin: 0 15px; height: 60px; }
         }
 
         @media (max-width: 480px) {
-          .fixed-bottom-cta-v4 { padding: 15px 0 10px; border-top-left-radius: 20px; border-top-right-radius: 20px; }
-          .amount-v4 { font-size: 3rem; letter-spacing: -1.5px; }
-          .only-text-v4 { font-size: 1.2rem; margin-right: -4px; }
-          .register-now-btn-v5 { font-size: 1.4rem; padding: 14px 20px; gap: 10px; }
-          .btn-icon-v4 { width: 30px; height: 30px; font-size: 0.8rem; }
-          .cta-top-row-v4 { gap: 8px; padding: 0 10px; }
+          .fixed-bottom-cta-v4 { padding: 12px 0 8px; border-top-left-radius: 20px; border-top-right-radius: 20px; }
+          .amount-v4 { font-size: 3.5rem; letter-spacing: -2px; }
+          .only-text-v4 { font-size: 1.5rem; }
+          .register-now-btn-v5 { font-size: 1.5rem; padding: 14px 20px; }
+          .cta-top-row-v4 { padding: 0 15px; gap: 5px; }
           .cta-vertical-divider-v4 { margin: 0 10px; height: 50px; }
-          .offer-badge-v4 { font-size: 0.55rem; padding: 2px 8px; }
-          .cta-container-v4 { gap: 10px; padding: 0 15px; }
+          .offer-badge-v4 { font-size: 0.5rem; padding: 2px 8px; letter-spacing: 1px; }
+          .cta-container-v4 { gap: 10px; padding: 0; }
+          .price-sparkles-v4 { top: -5px; right: -12px; }
         }
 
         /* Premium Modal Upgrade */

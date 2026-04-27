@@ -1,4 +1,5 @@
 import React from 'react';
+import './RegistrationModal.css';
 
 function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting }) {
   if (!isOpen) return null;
@@ -6,16 +7,18 @@ function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubm
   return (
     <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
       <div className="modal-container">
-        <button className="modal-close" onClick={onClose}><i className="fas fa-times"></i></button>
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          <i className="fa fa-times" aria-hidden="true"></i>
+        </button>
         <div className="modal-scroll-area">
           <div className="modal-content-wrapper">
             <div className="modal-image-side">
               <h4>Join the <br/><span className="text-highlight">Masterclass</span></h4>
               <p>Unlock your cosmic potential with India's leading astrology mentor.</p>
               <ul className="modal-points">
-                <li><i className="fas fa-check-circle"></i> 2 Days Live Training</li>
-                <li><i className="fas fa-check-circle"></i> Practical Reading Skills</li>
-                <li><i className="fas fa-check-circle"></i> Q&A with Astro Ava</li>
+                <li><i className="fa fa-check-circle"></i> 2 Days Live Training</li>
+                <li><i className="fa fa-check-circle"></i> Practical Reading Skills</li>
+                <li><i className="fa fa-check-circle"></i> Q&A with Astro Ava</li>
               </ul>
             </div>
             <div className="modal-form-side">

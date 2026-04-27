@@ -7,16 +7,18 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
   return (
     <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
       <div className="modal-container">
-        <button className="modal-close" onClick={onClose}><i className="fas fa-times"></i></button>
+        <button className="modal-close" onClick={onClose} aria-label="Close">
+          <i className="fa fa-times" aria-hidden="true"></i>
+        </button>
         <div className="modal-scroll-area">
           <div className="modal-content-wrapper">
             <div className="modal-image-side">
               <h4>Book Your <br/><span className="text-highlight">Consultation</span></h4>
               <p>Get personalized insights and life guidance from India's leading astrology mentor.</p>
               <ul className="modal-points">
-                <li><i className="fas fa-check-circle"></i> Detailed Birth Chart Analysis</li>
-                <li><i className="fas fa-check-circle"></i> Career & Relationship Guidance</li>
-                <li><i className="fas fa-check-circle"></i> Remedies & Future Predictions</li>
+                <li><i className="fa fa-check-circle"></i> Detailed Birth Chart Analysis</li>
+                <li><i className="fa fa-check-circle"></i> Career & Relationship Guidance</li>
+                <li><i className="fa fa-check-circle"></i> Remedies & Future Predictions</li>
               </ul>
             </div>
             <div className="modal-form-side">

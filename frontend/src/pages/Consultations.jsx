@@ -199,6 +199,12 @@ function Consultations() {
           padding: 60px 0 100px;
           background: var(--cosmic-dark);
           min-height: 100vh;
+          overflow-x: hidden;
+        }
+
+        /* Prevent AOS horizontal scroll */
+        body {
+          overflow-x: hidden;
         }
 
         .title-underline {

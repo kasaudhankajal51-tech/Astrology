@@ -7,39 +7,41 @@ function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubm
     <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
       <div className="modal-container">
         <button className="modal-close" onClick={onClose}><i className="fas fa-times"></i></button>
-        <div className="modal-content-wrapper">
-          <div className="modal-image-side">
-            <h4>Join the <br/><span className="text-highlight">Masterclass</span></h4>
-            <p>Unlock your cosmic potential with India's leading astrology mentor.</p>
-            <ul className="modal-points">
-              <li><i className="fas fa-check-circle"></i> 2 Days Live Training</li>
-              <li><i className="fas fa-check-circle"></i> Practical Reading Skills</li>
-              <li><i className="fas fa-check-circle"></i> Q&A with Astro Ava</li>
-            </ul>
-          </div>
-          <div className="modal-form-side">
-            <div className="form-header-mini">
-              <h3>Reserve Your Seat</h3>
-              <p>Limited Seats Available at ₹99/-</p>
+        <div className="modal-scroll-area">
+          <div className="modal-content-wrapper">
+            <div className="modal-image-side">
+              <h4>Join the <br/><span className="text-highlight">Masterclass</span></h4>
+              <p>Unlock your cosmic potential with India's leading astrology mentor.</p>
+              <ul className="modal-points">
+                <li><i className="fas fa-check-circle"></i> 2 Days Live Training</li>
+                <li><i className="fas fa-check-circle"></i> Practical Reading Skills</li>
+                <li><i className="fas fa-check-circle"></i> Q&A with Astro Ava</li>
+              </ul>
             </div>
-            <form onSubmit={handleSubmit} className="modal-form">
-              <div className="form-group">
-                <label>Full Name</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter Your Full Name" />
+            <div className="modal-form-side">
+              <div className="form-header-mini">
+                <h3>Reserve Your Seat</h3>
+                <p>Limited Seats Available at ₹99/-</p>
               </div>
-              <div className="form-group">
-                <label>Email Address</label>
-                <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter Your Best Email" />
-              </div>
-              <div className="form-group">
-                <label>Phone Number</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-Digit Mobile Number" />
-              </div>
-              <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
-                {isSubmitting ? 'Processing...' : 'Complete Registration'}
-              </button>
-              <p className="secure-text"><i className="fas fa-lock me-2"></i> Secured by Razorpay</p>
-            </form>
+              <form onSubmit={handleSubmit} className="modal-form">
+                <div className="form-group">
+                  <label>Full Name</label>
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter Your Full Name" />
+                </div>
+                <div className="form-group">
+                  <label>Email Address</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter Your Best Email" />
+                </div>
+                <div className="form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-Digit Mobile Number" />
+                </div>
+                <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
+                  {isSubmitting ? 'Processing...' : 'Complete Registration'}
+                </button>
+                <p className="secure-text"><i className="fas fa-lock me-2"></i> Secured by Razorpay</p>
+              </form>
+            </div>
           </div>
         </div>
       </div>

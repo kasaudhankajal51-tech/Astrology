@@ -1,16 +1,18 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import ConsultationModal from '../components/ConsultationModal';
 
 function Consultations() {
   const [formData, setFormData] = useState({
-    countryCode: '',
-    mobile: '',
     name: '',
     email: '',
-    dob: '',
-    tob: '',
-    location: ''
+    phone: '',
+    consultationType: '',
+    message: ''
   });
-  const [message, setMessage] = useState('');
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [popupData, setPopupData] = useState({ title: '', desc: '', isOpen: false });
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -18,357 +20,389 @@ function Consultations() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsSubmitting(true);
     try {
-      const response = await fetch('/api/consultation', {
+      const response = await fetch('http://localhost:5000/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({ ...formData, type: 'Consultation', courseName: formData.consultationType || 'General Consultation' })
       });
       const data = await response.json();
-      if (response.ok) {
-        setMessage('Booking submitted successfully!');
-        setFormData({ countryCode: '', mobile: '', name: '', email: '', dob: '', tob: '', location: '' });
+      if (data.success) {
+        toast.success('Consultation booked successfully!');
+        setIsModalOpen(false);
+        setFormData({ name: '', email: '', phone: '', consultationType: '', message: '' });
       } else {
-        setMessage(data.error || 'Error submitting booking');
+        toast.error(data.error || 'Error submitting booking');
       }
     } catch (error) {
-      setMessage('Error submitting booking');
+      toast.error('Connection Error: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
-  const openModal = () => {
-    const modal = document.getElementById('bookingModal');
-    if (modal) {
-      modal.style.display = 'flex';
-    }
-  };
-
-  const closeModal = () => {
-    const modal = document.getElementById('bookingModal');
-    if (modal) {
-      modal.style.display = 'none';
-    }
-    setMessage('');
+  const openModal = (type = '') => {
+    if (type) setFormData(prev => ({ ...prev, consultationType: type }));
+    setIsModalOpen(true);
   };
 
   const openPopup = (title, desc) => {
-    const popup = document.getElementById('popup');
-    const popupTitle = document.getElementById('popup-title');
-    const popupDesc = document.getElementById('popup-desc');
-    if (popup && popupTitle && popupDesc) {
-      popupTitle.textContent = title;
-      popupDesc.textContent = desc;
-      popup.style.display = 'flex';
-    }
+    setPopupData({ title, desc, isOpen: true });
   };
 
   const closePopup = () => {
-    const popup = document.getElementById('popup');
-    if (popup) {
-      popup.style.display = 'none';
-    }
+    setPopupData({ ...popupData, isOpen: false });
   };
+
+  const consultationCategories = [
+    {
+      name: "Marriage/Relationship",
+      cards: [
+        {
+          title: "Marriage Timing",
+          desc: "Detailed consultation about your marriage timing based on birth chart analysis.",
+          badge: "Consultation for Married Life issues",
+          badgeColor: "purple",
+          img: "https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&q=80&w=800",
+          short: "Marriage timing"
+        },
+        {
+          title: "Love vs Arranged Marriage",
+          desc: "Understanding your marriage prospects and compatibility.",
+          badge: "Consultation for Manglik Dosh",
+          badgeColor: "pink",
+          img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800",
+          short: "Love vs arranged marriage"
+        },
+        {
+          title: "Delay in Marriage",
+          desc: "Astrological reasons and remedies for marriage delays.",
+          badge: "Consultation for Love Marriage Issues",
+          badgeColor: "pink",
+          img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
+          short: "Delay in marriage"
+        },
+        {
+          title: "Relationship Problems",
+          desc: "Solutions for relationship issues through astrology.",
+          badge: "Consultation for Future Life Partner",
+          badgeColor: "orange",
+          img: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&q=80&w=800",
+          short: "Relationship problems"
+        }
+      ]
+    },
+    {
+      name: "Personal Horoscope",
+      cards: [
+        {
+          title: "Personal Horoscope",
+          desc: "Complete personal horoscope analysis for clarity in all life aspects.",
+          badge: "Personal Birth Chart Reading",
+          badgeColor: "purple",
+          img: "https://images.unsplash.com/photo-1515940175183-6798529cb860?auto=format&fit=crop&q=80&w=800",
+          short: "Personal Horoscope Analysis"
+        },
+        {
+          title: "Mangal Dosha",
+          desc: "Analysis and remedies for Mangal Dosha and its impact on your life.",
+          badge: "Consultation for Manglik Dosh",
+          badgeColor: "pink",
+          img: "https://images.unsplash.com/photo-1532983330958-4b32bc9bb07d?auto=format&fit=crop&q=80&w=800",
+          short: "Mangal Dosha Analysis"
+        },
+        {
+          title: "Pre-Marriage Counselling",
+          desc: "Counselling before marriage for better understanding and compatibility.",
+          badge: "Pre-Marriage Astrological Counselling",
+          badgeColor: "red",
+          img: "https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d2?auto=format&fit=crop&q=80&w=800",
+          short: "Pre-Marriage Counselling"
+        }
+      ]
+    }
+  ];
 
   return (
     <>
-      <section className="consultation-section">
-        <h2 className="main-title">CONSULTATION</h2>
-
-        <div className="category-bar">Marriage/Relationship</div>
-        <div className="card-grid">
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999" alt="Marriage" />
-              <div className="badge purple">Consultation<br />for Married Life<br />issues</div>
-            </div>
-            <p>Marriage timing</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Marriage Timing', 'Detailed consultation about your marriage timing based on birth chart analysis.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
+      <section className="consultation-page">
+        <div className="container">
+          <div className="text-center mb-5">
+            <h5 className="section-subtitle" data-aos="fade-up">Professional Guidance</h5>
+            <h2 className="section-title text-white mt-2" data-aos="fade-up">CONSULTATION</h2>
+            <div className="title-underline mx-auto"></div>
           </div>
 
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="Manglik" />
-              <div className="badge pink">Consultation<br />for Manglik<br />Dosh</div>
+          {consultationCategories.map((cat, idx) => (
+            <div key={idx} className="category-group mb-5">
+              <div className="category-header mb-4" data-aos="fade-right">
+                <span className="category-line"></span>
+                <h3 className="category-title">{cat.name}</h3>
+                <span className="category-line"></span>
+              </div>
+              
+              <div className="card-grid">
+                {cat.cards.map((card, cIdx) => (
+                  <div className="consult-card" key={cIdx} data-aos="zoom-in" data-aos-delay={cIdx * 100}>
+                    <div className="card-media">
+                      <img src={card.img} alt={card.title} />
+                      <div className="card-overlay"></div>
+                      <div className={`premium-badge ${card.badgeColor}`}>
+                        <span>{card.badge}</span>
+                      </div>
+                    </div>
+                    <div className="card-content">
+                      <h4>{card.short}</h4>
+                      <div className="card-btns">
+                        <button className="btn-mystic-sm outline" onClick={() => openPopup(card.title, card.desc)}>
+                          Details
+                        </button>
+                        <button className="btn-mystic-sm primary" onClick={() => openModal(card.title)}>
+                          Book Now
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-            <p>Love vs arranged marriage</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Love vs Arranged Marriage', 'Understanding your marriage prospects and compatibility.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1519741497674-611481863552" alt="Love Marriage" />
-              <div className="badge pink">Consultation<br />for Love Marriage<br />Issues</div>
-            </div>
-            <p>Delay in marriage</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Delay in Marriage', 'Astrological reasons and remedies for marriage delays.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1526045612212-70caf35c14df" alt="Future Partner" />
-              <div className="badge orange">Consultation<br />for Future Life<br />Partner</div>
-            </div>
-            <p>Relationship problems</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Relationship Problems', 'Solutions for relationship issues through astrology.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1526045612212-70caf35c14df" alt="Married Life" />
-              <div className="badge orange">Consultation<br />for Future Life<br />Partner</div>
-            </div>
-            <p>Married life stability</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Married Life Stability', 'Analysis of married life and stability factors.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-        </div>
-
-        <div className="category-bar">Personal Horoscope</div>
-        <div className="card-grid">
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1516589091380-5d8e87df6999" alt="Personal" />
-              <div className="badge purple">Consultation<br />for Married Life<br />issues</div>
-            </div>
-            <p>Astrology Consultation for Married Life issues</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Personal Horoscope', 'Complete personal horoscope analysis.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d" alt="Mangal Dosha" />
-              <div className="badge pink">Consultation<br />for Manglik<br />Dosh</div>
-            </div>
-            <p>Astrology Consultation for Mangal Dosha</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Mangal Dosha', 'Analysis and remedies for Mangal Dosha.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
-
-          <div className="card">
-            <div className="card-img">
-              <img src="https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d2" alt="Pre-Marriage" />
-              <div className="badge red">Consultation<br />for Pre Marriage<br />Counselling</div>
-            </div>
-            <p>Consultation for Pre-Marriage Counselling</p>
-            <div className="btns">
-              <button className="read" onClick={() => openPopup('Pre-Marriage Counselling', 'Counselling before marriage for better understanding.')}>Read more</button>
-              <button className="book" onClick={openModal}>Book Now</button>
-            </div>
-          </div>
+          ))}
         </div>
       </section>
 
-      {/* Booking Modal */}
-      <div id="bookingModal" className="modal" style={{ display: 'none' }}>
-        <div className="modal-content">
-          <span className="close" onClick={closeModal}>&times;</span>
-          <h3>Book Consultation</h3>
-          {message && <div className="alert alert-info">{message}</div>}
-          <form onSubmit={handleSubmit}>
-            <div className="form-group mb-3">
-              <input type="text" name="name" className="form-control" placeholder="Your Name *" value={formData.name} onChange={handleChange} required />
-            </div>
-            <div className="form-group mb-3 d-flex gap-2">
-              <input type="text" name="countryCode" className="form-control w-25" placeholder="+91" value={formData.countryCode} onChange={handleChange} />
-              <input type="text" name="mobile" className="form-control" placeholder="Mobile Number *" value={formData.mobile} onChange={handleChange} required />
-            </div>
-            <div className="form-group mb-3">
-              <input type="email" name="email" className="form-control" placeholder="Email Address" value={formData.email} onChange={handleChange} />
-            </div>
-            <div className="form-group mb-3">
-              <input type="text" name="dob" className="form-control" placeholder="Date of Birth (DD/MM/YYYY)" value={formData.dob} onChange={handleChange} />
-            </div>
-            <div className="form-group mb-3">
-              <input type="text" name="tob" className="form-control" placeholder="Time of Birth" value={formData.tob} onChange={handleChange} />
-            </div>
-            <div className="form-group mb-3">
-              <input type="text" name="location" className="form-control" placeholder="Birth Location" value={formData.location} onChange={handleChange} />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">Submit Booking</button>
-          </form>
+      {/* Info Popup */}
+      {popupData.isOpen && (
+        <div className="mystic-popup-overlay" onClick={closePopup}>
+          <div className="mystic-popup-content glass-panel" onClick={e => e.stopPropagation()}>
+            <button className="popup-close" onClick={closePopup}>&times;</button>
+            <h3 className="text-gradient mb-3">{popupData.title}</h3>
+            <p className="text-light opacity-75">{popupData.desc}</p>
+            <button className="btn-mystic-sm primary mt-4 w-100" onClick={() => { closePopup(); openModal(popupData.title); }}>
+              Book This Consultation
+            </button>
+          </div>
         </div>
-      </div>
+      )}
 
-      {/* Popup */}
-      <div id="popup" className="popup">
-        <div className="popup-content">
-          <span className="close" onClick={closePopup}>&times;</span>
-          <h3 id="popup-title"></h3>
-          <p id="popup-desc"></p>
-        </div>
-      </div>
+      <ConsultationModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
 
       <style>{`
-        .consultation-section {
-          padding: 40px 20px;
-          border-radius: 12px;
-          max-width: 1400px;
-          margin: 0 auto;
+        .consultation-page {
+          padding: 60px 0 100px;
+          background: var(--cosmic-dark);
+          min-height: 100vh;
         }
-        .main-title {
-          text-align: center;
-          background: linear-gradient(90deg, #0b1220, #0d1b3a);
-          color: #fff;
-          padding: 20px;
-          border-radius: 12px;
+
+        .title-underline {
+          width: 80px;
+          height: 4px;
+          background: linear-gradient(90deg, #ff6a00, #ff0080);
+          border-radius: 2px;
+          margin-top: 15px;
+        }
+
+        .category-header {
+          display: flex;
+          align-items: center;
+          gap: 20px;
+          justify-content: center;
+        }
+
+        .category-line {
+          flex: 0 1 100px;
+          height: 1px;
+          background: rgba(255, 255, 255, 0.1);
+        }
+
+        .category-title {
+          font-family: 'Merriweather Sans', serif;
+          font-size: 1.5rem;
+          color: var(--cosmic-accent);
+          text-transform: uppercase;
+          letter-spacing: 2px;
           font-weight: 700;
-          letter-spacing: 1px;
+          margin: 0;
         }
-        .category-bar {
-          margin: 20px 0;
-          background: #2f55d4;
-          color: #fff;
-          padding: 12px 20px;
-          font-weight: 600;
-          border-radius: 5px;
-        }
+
         .card-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 20px;
+          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+          gap: 30px;
         }
-        .card {
-          background: #e6d3b3;
-          padding: 10px;
-          border-radius: 6px;
-          transition: 0.3s;
+
+        .consult-card {
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
+          border-radius: 24px;
+          overflow: hidden;
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          display: flex;
+          flex-direction: column;
+          backdrop-filter: blur(10px);
         }
-        .card:hover {
-          transform: translateY(-5px);
+
+        .consult-card:hover {
+          transform: translateY(-10px);
+          border-color: rgba(255, 106, 0, 0.3);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+          background: rgba(255, 255, 255, 0.06);
         }
-        .card-img {
+
+        .card-media {
           position: relative;
+          height: 200px;
           overflow: hidden;
         }
-        .card-img img {
+
+        .card-media img {
           width: 100%;
-          height: 180px;
+          height: 100%;
           object-fit: cover;
+          transition: transform 0.6s;
         }
-        .badge {
+
+        .consult-card:hover .card-media img {
+          transform: scale(1.1);
+        }
+
+        .card-overlay {
           position: absolute;
-          bottom: -20px;
-          left: 60px;
-          width: 80%;
-          padding: 20px;
-          color: yellow;
-          font-weight: bold;
+          inset: 0;
+          background: linear-gradient(to top, rgba(7, 9, 19, 0.8), transparent);
+        }
+
+        .premium-badge {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+          padding: 15px;
           text-align: center;
-          border-top-left-radius: 250px;
-          border-top-right-radius: 50px;
-          height: 100px;
-        }
-        .purple { background: #6a2c91; }
-        .pink { background: #e6007e; }
-        .red { background: #d4145a; }
-        .orange { background: #f25c2a; }
-        .card p {
-          margin-top: 30px;
-          font-size: 14px;
-          color: #000;
-        }
-        .btns {
-          display: flex;
-          justify-content: space-between;
-          margin-top: 10px;
-        }
-        .read {
-          background: #f6b26b;
-          border: none;
-          padding: 8px 12px;
-          cursor: pointer;
-        }
-        .book {
-          background: #ff6a00;
+          font-weight: 700;
+          font-size: 0.8rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
           color: #fff;
+          backdrop-filter: blur(5px);
+        }
+
+        .premium-badge.purple { background: linear-gradient(90deg, rgba(138, 43, 226, 0.8), rgba(75, 0, 130, 0.8)); }
+        .premium-badge.pink { background: linear-gradient(90deg, rgba(255, 0, 128, 0.8), rgba(200, 0, 100, 0.8)); }
+        .premium-badge.orange { background: linear-gradient(90deg, rgba(255, 106, 0, 0.8), rgba(255, 69, 0, 0.8)); }
+        .premium-badge.red { background: linear-gradient(90deg, rgba(212, 20, 90, 0.8), rgba(150, 0, 50, 0.8)); }
+
+        .card-content {
+          padding: 25px;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+        }
+
+        .card-content h4 {
+          font-size: 1.2rem;
+          font-weight: 700;
+          color: #fff;
+          margin-bottom: 20px;
+          line-height: 1.4;
+        }
+
+        .card-btns {
+          display: flex;
+          gap: 12px;
+        }
+
+        .btn-mystic-sm {
+          flex: 1;
+          padding: 10px 5px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: 0.3s;
           border: none;
-          padding: 8px 12px;
-          cursor: pointer;
-          text-decoration: none;
+          text-align: center;
         }
+
+        .btn-mystic-sm.outline {
+          background: transparent;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          color: #fff;
+        }
+
+        .btn-mystic-sm.outline:hover {
+          background: rgba(255, 255, 255, 0.1);
+          border-color: #fff;
+        }
+
+        .btn-mystic-sm.primary {
+          background: linear-gradient(135deg, #ff6a00, #ff0080);
+          color: #fff;
+          box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
+        }
+
+        .btn-mystic-sm.primary:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(255, 106, 0, 0.5);
+        }
+
+        /* Popup Styles */
+        .mystic-popup-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(0, 0, 0, 0.8);
+          backdrop-filter: blur(8px);
+          z-index: 10000;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 20px;
+        }
+
+        .mystic-popup-content {
+          max-width: 500px;
+          width: 100%;
+          padding: 40px;
+          position: relative;
+          animation: popupSlideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes popupSlideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+
+        .popup-close {
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          font-size: 2rem;
+          background: none;
+          border: none;
+          color: rgba(255, 255, 255, 0.5);
+          cursor: pointer;
+          transition: 0.3s;
+        }
+
+        .popup-close:hover {
+          color: #fff;
+          transform: rotate(90deg);
+        }
+
         @media (max-width: 768px) {
-          .main-title { font-size: 18px; }
-          .consultation-section { padding: 80px 15px !important; }
-          .category-bar { font-size: 14px; padding: 10px; }
-          .card-grid { grid-template-columns: 1fr; gap: 15px; }
-          .card { border-radius: 10px; padding: 12px; }
-          .card-img img { height: 200px; }
-        }
-
-        .modal {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.7);
-          justify-content: center;
-          align-items: center;
-          z-index: 9999;
-        }
-        .modal-content {
-          background: #fff;
-          padding: 25px;
-          width: 90%;
-          max-width: 500px;
-          border-radius: 10px;
-          text-align: center;
-          animation: modalFade 0.3s ease;
-        }
-        @keyframes modalFade {
-          from { transform: scale(0.7); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-
-        .popup {
-          display: none;
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          background: rgba(0,0,0,0.7);
-          justify-content: center;
-          align-items: center;
-          z-index: 999;
-        }
-        .popup-content {
-          background: #fff;
-          padding: 25px;
-          width: 90%;
-          max-width: 500px;
-          border-radius: 10px;
-          text-align: center;
-          animation: popupFade 0.3s ease;
-        }
-        @keyframes popupFade {
-          from { transform: scale(0.7); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
-        }
-        .close {
-          float: right;
-          font-size: 22px;
-          cursor: pointer;
+          .consultation-page { padding: 40px 15px; }
+          .category-title { font-size: 1.2rem; }
+          .card-grid { grid-template-columns: 1fr; }
+          .consult-card { max-width: 400px; margin: 0 auto; }
         }
       `}</style>
     </>

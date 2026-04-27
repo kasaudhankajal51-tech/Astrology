@@ -210,22 +210,16 @@ export default function FixedBottomCTA({ onJoinNow }) {
           <>
             <div style={ss.mobileTopRow}>
               {/* Left Container */}
-              <div style={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
-                <div style={ss.priceRoot}>
-                  <div style={ss.timerLabel}>(SPECIAL)</div>
-                  <div style={ss.priceBox}>
-                    <div style={ss.scanlines} />
-                    <div style={ss.badge}>
-                      <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
-                        <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-                      </svg>
-                      <span>LIMITED TIME OFFER</span>
-                    </div>
-                    <div style={ss.priceRow}>
-                      <span style={ss.onlyText}>Only</span>
-                      <span style={ss.amount}>₹99</span>
-                    </div>
-                  </div>
+              <div style={ss.mobileLeft}>
+                <div style={ss.badge}>
+                  <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
+                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                  </svg>
+                  <span>LIMITED TIME OFFER</span>
+                </div>
+                <div style={ss.priceRow}>
+                  <span style={ss.onlyText}>Only</span>
+                  <span style={ss.amount}>₹99</span>
                 </div>
               </div>
 
@@ -247,21 +241,17 @@ export default function FixedBottomCTA({ onJoinNow }) {
           /* ── DESKTOP layout: Price (Left) | Divider | Timer + Button (Right) ── */
           <>
             <div style={ss.desktopRow}>
-              {/* Left Side: Price Box */}
-              <div style={ss.priceRoot}>
-                <div style={ss.timerLabel}>(SPECIAL)</div>
-                <div style={ss.priceBox}>
-                  <div style={ss.scanlines} />
-                  <div style={ss.badge}>
-                    <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
-                      <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-                    </svg>
-                    <span>LIMITED TIME OFFER</span>
-                  </div>
-                  <div style={ss.priceRow}>
-                    <span style={ss.onlyText}>Only</span>
-                    <span style={ss.amount}>₹99</span>
-                  </div>
+              {/* Left Side: Price */}
+              <div style={ss.desktopLeft}>
+                <div style={ss.badge}>
+                  <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
+                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                  </svg>
+                  <span>LIMITED TIME OFFER</span>
+                </div>
+                <div style={ss.priceRow}>
+                  <span style={ss.onlyText}>Only</span>
+                  <span style={ss.amount}>₹99</span>
                 </div>
               </div>
 
@@ -358,9 +348,9 @@ const ss = {
   },
 
   priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 0" },
-  onlyText: { fontSize: "1.35rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "1px" },
+  onlyText: { fontSize: "1.5rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "1px" },
   amount: {
-    fontSize: "2.6rem", fontWeight: 900,
+    fontSize: "3.2rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
@@ -393,31 +383,19 @@ const ss = {
     flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
-    width: "100%",
-    maxWidth: "180px",
-    height: "75px",
     gap: 2,
   },
   // Timer
-  priceRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "5px" },
   timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "5px" },
   timerLabel: {
     margin: 0, fontSize: 8, fontWeight: 400,
     color: "rgba(255,255,255,0.60)", letterSpacing: "2px", textTransform: "uppercase",
   },
   timerBox: {
-    background: "rgba(10, 10, 10, 0.8)",
-    width: "100%",
-    maxWidth: "180px",
-    height: "75px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: 12,
-    border: "1px solid rgba(255,140,0,0.25)",
+    background: "rgba(10, 10, 10, 0.8)", padding: "6px 12px",
+    borderRadius: 12, border: "1px solid rgba(255,140,0,0.25)",
     boxShadow: "inset 0 2px 15px rgba(0,0,0,0.8), 0 0 20px rgba(255,100,0,0.1)",
-    position: "relative",
-    overflow: "hidden",
+    position: "relative", overflow: "hidden",
     backdropFilter: "blur(4px)",
   },
   scanlines: {

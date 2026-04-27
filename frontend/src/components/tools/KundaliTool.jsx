@@ -291,7 +291,7 @@ function KundaliTool({ onBack }) {
         </div>
 
       <div className="row justify-content-center">
-        <div className="col-md-9">
+        <div className="col-lg-10 col-xl-9">
           <div className="d-flex justify-content-end mb-3">
             <button 
               className="btn btn-sm btn-outline-orange"
@@ -331,59 +331,59 @@ function KundaliTool({ onBack }) {
               <i className="fas fa-magic me-2"></i> Load Sample Profile
             </button>
           </div>
-          <div className="form-box p-5 rounded bg-dark-glass shadow-lg">
+          <div className="form-box p-4 p-md-5 rounded bg-dark-glass shadow-lg border border-secondary border-opacity-25">
             <form onSubmit={calculate}>
               <div className="row g-4">
                 <div className="col-12">
-                   <h5 className="text-orange border-bottom border-secondary pb-2 mb-3">1. Personal Information</h5>
+                   <h5 className="text-orange border-bottom border-secondary border-opacity-50 pb-2 mb-3">1. Personal Information</h5>
                 </div>
                 <div className="col-md-12">
-                  <div className="form-floating text-white">
-                    <input type="text" className="form-control bg-transparent text-white border-secondary" id="name" placeholder="Full Name"
+                  <div className="form-group mb-3">
+                    <label htmlFor="name" className="small text-muted mb-2">Full Name</label>
+                    <input type="text" className="form-control form-control-lg bg-dark-glass text-white border-secondary" id="name" placeholder="Enter full name"
                       value={formData.name} onChange={e => setFormData({...formData, name: e.target.value})} required />
-                    <label htmlFor="name text-white">Full Name</label>
                   </div>
                 </div>
                 
                 <div className="col-12 mt-4">
-                   <h5 className="text-orange border-bottom border-secondary pb-2 mb-3">2. Birth Coordinates</h5>
+                   <h5 className="text-orange border-bottom border-secondary border-opacity-50 pb-2 mb-3">2. Birth Coordinates</h5>
                 </div>
                 <div className="col-md-6">
                   <div className="form-group mb-3">
-                    <label className="small text-muted mb-1">Date of Birth</label>
-                    <input type="date" className="form-control form-control-lg bg-transparent text-white border-secondary" 
+                    <label className="small text-muted mb-2">Date of Birth</label>
+                    <input type="date" className="form-control form-control-lg bg-dark-glass text-white border-secondary" 
                       value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} required />
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="form-group mb-3">
-                    <label className="small text-muted mb-1">Time of Birth</label>
-                    <input type="time" className="form-control form-control-lg bg-transparent text-white border-secondary" 
+                    <label className="small text-muted mb-2">Time of Birth</label>
+                    <input type="time" className="form-control form-control-lg bg-dark-glass text-white border-secondary" 
                       value={formData.tob} onChange={e => setFormData({...formData, tob: e.target.value})} required />
                   </div>
                 </div>
                 <div className="col-md-12 position-relative">
-                   <div className="form-floating text-white mb-3">
-                    <input type="text" className="form-control bg-transparent text-white border-secondary" id="place" 
-                      placeholder="Search birth place..."
+                   <div className="form-group mb-3">
+                    <label htmlFor="place" className="small text-muted mb-2">Birth Place (Search City/Town)</label>
+                    <input type="text" className="form-control form-control-lg bg-dark-glass text-white border-secondary" id="place" 
+                      placeholder="Search city, town or village..."
                       value={query}
                       onChange={e => handleLocationSearch(e.target.value)}
                       required />
-                    <label htmlFor="place">Birth Place (Search City/Town)</label>
                   </div>
                   
                   {suggestions.length > 0 && (
-                    <div className="suggestions-dropdown position-absolute w-100 bg-dark shadow-lg rounded p-2" style={{ zIndex: 1000, top: '100%', marginTop: '-15px' }}>
+                    <div className="suggestions-dropdown position-absolute w-100 bg-dark shadow-lg rounded p-2" style={{ zIndex: 1000, top: '100%', marginTop: '-10px' }}>
                       {suggestions.map((loc, i) => (
-                        <div key={i} className="suggestion-item p-2 text-white border-bottom border-secondary" 
+                        <div key={i} className="suggestion-item p-3 text-white border-bottom border-secondary border-opacity-25" 
                            onClick={() => selectLocation(loc)} style={{ cursor: 'pointer' }}>
-                          <i className="fas fa-map-marker-alt me-2 text-orange"></i>
+                          <i className="fas fa-map-marker-alt me-3 text-orange"></i>
                           {loc.display_name}
                         </div>
                       ))}
                     </div>
                   )}
-                  {searching && <div className="p-2 text-muted small">Searching for locations...</div>}
+                  {searching && <div className="p-2 text-muted small"><i className="fas fa-spinner fa-spin me-2"></i>Searching locations...</div>}
                 </div>
               </div>
               <button type="submit" className="btn btn-primary btn-lg w-100 mt-5 enroll-btn" disabled={loading}>
@@ -407,7 +407,8 @@ function KundaliTool({ onBack }) {
           border-radius: 2px;
           margin-top: 15px;
         }
-        .bg-dark-glass { background: rgba(0,0,0,0.5); backdrop-filter: blur(15px); border: 1px solid rgba(255,106,0,0.2); }
+        .bg-dark-glass { background: rgba(0,0,0,0.6); backdrop-filter: blur(15px); border: 1px solid rgba(255,106,0,0.15); }
+        .form-control.bg-dark-glass { background: rgba(255,255,255,0.05); }
         .text-orange { color: #ff6a00; }
         .enroll-btn { 
           background: linear-gradient(135deg, #ff6a00, #ff8c00); 
@@ -416,11 +417,22 @@ function KundaliTool({ onBack }) {
           font-weight: 700;
           letter-spacing: 1px;
           text-transform: uppercase;
+          box-shadow: 0 10px 20px rgba(255, 106, 0, 0.3);
+          transition: 0.3s;
         }
-        .form-control:focus { background: rgba(0,0,0,0.3) !important; color: white !important; }
-        .form-floating label { color: #888; }
+        .enroll-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 15px 30px rgba(255, 106, 0, 0.4);
+        }
+        .form-control:focus { background: rgba(255,255,255,0.1) !important; color: white !important; border-color: #ff6a00 !important; box-shadow: 0 0 0 0.25rem rgba(255, 106, 0, 0.25); }
         .suggestion-item:hover { background: rgba(255,106,0,0.2); }
+        
+        @media (max-width: 768px) {
+          .form-box { padding: 1.5rem !important; }
+          .display-4 { font-size: 2.2rem; }
+        }
       `}</style>
+
       </div>
     </div>
   );

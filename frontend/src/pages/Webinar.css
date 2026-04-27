@@ -433,6 +433,15 @@
   position: relative;
   box-shadow: 0 40px 100px rgba(0,0,0,0.2);
   border: none;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.modal-scroll-area {
+  overflow-y: auto;
+  flex: 1;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modal-close {
@@ -529,13 +538,14 @@
   .cta-timer-wrapper .minimal-timer { padding: 6px 12px; }
   .cta-timer-wrapper .timer-label { display: none; }
   .cta-timer-wrapper .timer-vals { font-size: 0.95rem; }
-  .modal-content-wrapper { grid-template-columns: 1fr; }
-  .modal-image-side { padding: 40px; text-align: center; }
+  .modal-container { border-radius: 20px; max-height: 95vh; margin: 10px; width: calc(100% - 20px); }
+  .modal-image-side { padding: 30px 20px; text-align: center; }
   .modal-image-side h4 { font-size: 1.8rem; }
-  .modal-form-side { padding: 40px; }
-  .modal-close { color: #fff; background: rgba(255,255,255,0.1); }
+  .modal-form-side { padding: 30px 20px; }
+  .modal-close { color: #fff; background: rgba(255,255,255,0.1); top: 15px; right: 15px; }
   .modal-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
   .day-card { padding: 40px 25px; }
+  .webinar-landing { padding-bottom: 180px; }
 }
 
 @media (max-width: 480px) {

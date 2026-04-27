@@ -209,29 +209,34 @@ export default function FixedBottomCTA({ onJoinNow }) {
           /* ── MOBILE layout: badge+price left | timer right, button full-width below ── */
           <>
             <div style={ss.mobileTopRow}>
-  {/* Left */}
-  <div style={ss.mobileLeft}>
-    <div style={ss.badge}>
-      <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
-        <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-      </svg>
-      <span>LIMITED TIME OFFER</span>
-    </div>
+              {/* Left Container */}
+              <div style={{ flex: 1, display: "flex", justifyContent: "flex-start" }}>
+                <div style={ss.priceRoot}>
+                  <div style={ss.timerLabel}>(SPECIAL)</div>
+                  <div style={ss.priceBox}>
+                    <div style={ss.scanlines} />
+                    <div style={ss.badge}>
+                      <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
+                        <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                      </svg>
+                      <span>LIMITED TIME OFFER</span>
+                    </div>
+                    <div style={ss.priceRow}>
+                      <span style={ss.onlyText}>Only</span>
+                      <span style={ss.amount}>₹99</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-    <div style={ss.priceRow}>
-      <span style={ss.onlyText}>Only</span>
-      <span style={ss.amount}>₹99</span>
-    </div>
-  </div>
+              {/* 🔥 Vertical Divider */}
+              <div style={ss.dividerLine}></div>
 
-  {/* 🔥 Divider (NEW) */}
-  <div style={ss.mobileDivider}></div>
-
-  {/* Right */}
-  <div style={ss.mobileRight}>
-    <DigitalTimer />
-  </div>
-</div>
+              {/* Right Container */}
+              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+                <DigitalTimer />
+              </div>
+            </div>
 
             {/* Full-width button */}
             <div style={{ paddingTop: 10 }}>
@@ -242,22 +247,26 @@ export default function FixedBottomCTA({ onJoinNow }) {
           /* ── DESKTOP layout: Price (Left) | Divider | Timer + Button (Right) ── */
           <>
             <div style={ss.desktopRow}>
-              {/* Left Side: Price */}
-              <div style={ss.desktopLeft}>
-                <div style={ss.badge}>
-                  <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
-                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-                  </svg>
-                  <span>LIMITED TIME OFFER</span>
-                </div>
-                <div style={ss.priceRow}>
-                  <span style={ss.onlyText}>Only</span>
-                  <span style={ss.amount}>₹99</span>
+              {/* Left Side: Price Box */}
+              <div style={ss.priceRoot}>
+                <div style={ss.timerLabel}>(SPECIAL)</div>
+                <div style={ss.priceBox}>
+                  <div style={ss.scanlines} />
+                  <div style={ss.badge}>
+                    <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
+                      <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+                    </svg>
+                    <span>LIMITED TIME OFFER</span>
+                  </div>
+                  <div style={ss.priceRow}>
+                    <span style={ss.onlyText}>Only</span>
+                    <span style={ss.amount}>₹99</span>
+                  </div>
                 </div>
               </div>
 
-              {/* Enhanced Vertical Divider */}
-              <div style={ss.mobileDivider}></div>
+              {/* 🔥 Vertical Divider */}
+              <div style={ss.dividerLine}></div>
 
               {/* Right Side: Timer & Button Group */}
               <div style={ss.desktopRight}>
@@ -329,7 +338,7 @@ const ss = {
     width: "100%", position: "relative", zIndex: 1,
   },
   desktopLeft:   { display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-start" },
-  desktopRight:  { display: "flex", alignItems: "center", gap: 60 },
+  desktopRight:  { display: "flex", alignItems: "center", gap: 30 },
   desktopTimerWrapper: { display: "flex", alignItems: "center" },
   desktopButtonWrapper: { display: "flex", alignItems: "center" },
 
@@ -343,43 +352,72 @@ const ss = {
     display: "inline-flex", alignItems: "center", gap: 5,
     background: "rgba(255,255,255,0.07)",
     border: "1px solid rgba(255,255,255,0.13)",
-    borderRadius: "5px", padding: "3px 2px", width: "fit-content",
-    marginLeft:10,
+    borderRadius: "5px", padding: "3px 6px", width: "fit-content",
     fontSize: 7, fontWeight: 700, color: "rgba(235, 112, 24, 0.88)",
     letterSpacing: "0.8px", textTransform: "uppercase",
   },
 
-  priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 2px" },
-  onlyText: { fontSize: "1.35rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", marginLeft: "10px", textTransform: "uppercase", letterSpacing: "1px" },
+  priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 0" },
+  onlyText: { fontSize: "1.35rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "1px" },
   amount: {
     fontSize: "2.6rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
     filter: "drop-shadow(0 2px 10px rgba(255,140,0,0.3))",
+    marginTop: -2,
   },
-mobileDivider: {
-  width: "2px",
-  height: 60,
-  background: "linear-gradient(to bottom, transparent, #ff9900 40%, #ff5500 60%, transparent)",
-  boxShadow: `
-    0 0 6px rgba(255,150,0,0.9),
-    0 0 18px rgba(255,120,0,0.7),
-    0 0 40px rgba(255,80,0,0.5)
-  `,
-  borderRadius: "3px",
-},
+  dividerLine: {
+    width: "2px",
+    height: 60,
+    background: "linear-gradient(to bottom, transparent, #ff9900 40%, #ff5500 60%, transparent)",
+    boxShadow: `
+      0 0 6px rgba(255,150,0,0.9),
+      0 0 18px rgba(255,120,0,0.7),
+      0 0 40px rgba(255,80,0,0.5)
+    `,
+    borderRadius: "3px",
+    flexShrink: 0,
+    margin: "0 10px",
+  },
+  priceBox: {
+    background: "rgba(10, 10, 10, 0.8)",
+    padding: "6px 12px",
+    borderRadius: 12,
+    border: "1px solid rgba(255,140,0,0.25)",
+    boxShadow: "inset 0 2px 15px rgba(0,0,0,0.8), 0 0 20px rgba(255,100,0,0.1)",
+    position: "relative",
+    overflow: "hidden",
+    backdropFilter: "blur(4px)",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
+    maxWidth: "180px",
+    height: "75px",
+    gap: 2,
+  },
   // Timer
-  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5,padding: "5px" },
+  priceRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "5px" },
+  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "5px" },
   timerLabel: {
     margin: 0, fontSize: 8, fontWeight: 400,
     color: "rgba(255,255,255,0.60)", letterSpacing: "2px", textTransform: "uppercase",
   },
   timerBox: {
-    background: "rgba(10, 10, 10, 0.8)", padding: "6px 12px",
-    borderRadius: 12, border: "1px solid rgba(255,140,0,0.25)",
+    background: "rgba(10, 10, 10, 0.8)",
+    width: "100%",
+    maxWidth: "180px",
+    height: "75px",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: 12,
+    border: "1px solid rgba(255,140,0,0.25)",
     boxShadow: "inset 0 2px 15px rgba(0,0,0,0.8), 0 0 20px rgba(255,100,0,0.1)",
-    position: "relative", overflow: "hidden",
+    position: "relative",
+    overflow: "hidden",
     backdropFilter: "blur(4px)",
   },
   scanlines: {

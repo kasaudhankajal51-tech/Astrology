@@ -20,7 +20,7 @@ function About() {
                 <span className="text">Trusted Consultations</span>
               </div>
               <h1 className="display-3 fw-bold text-white mb-4">
-                Meet <span className="text-gradient">Dr. Damini</span>
+                Meet <span className="text-gradient">Damini Ma'am</span>
               </h1>
               <p className="lead text-light opacity-75 mb-5">
                 Guided by knowledge, driven by purpose, and focused on your growth. Discover the cosmic narrative written in your stars.
@@ -32,7 +32,7 @@ function About() {
             <div className="col-lg-6" data-aos="fade-left">
               <div className="hero-img-container">
                 <div className="glow-circle"></div>
-                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=800" className="hero-img-main" alt="astrologer" />
+                <img src="/manimage.png" className="hero-img-main" alt="astrologer" />
               </div>
             </div>
           </div>

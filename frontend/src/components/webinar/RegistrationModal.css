@@ -42,30 +42,24 @@
 
 .modal-close {
   position: absolute;
-  top: 20px;
-  right: 20px;
-  background: rgba(0,0,0,0.1);
-  width: 40px;
-  height: 40px;
+  top: 15px;
+  right: 15px;
+  background: #3B2261;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  border: none;
-  color: #333;
-  font-size: 1.5rem;
+  border: 2px solid rgba(255,255,255,0.2);
+  color: #fff;
+  font-size: 1.2rem;
   cursor: pointer;
-  z-index: 1000; /* High z-index */
+  z-index: 10001; /* Higher than any modal content */
   display: flex;
   align-items: center;
   justify-content: center;
   transition: 0.3s;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.3);
 }
-/* Absolute for desktop/wrapper */
-.modal-close-abs {
-  position: absolute;
-  top: 25px;
-  right: 25px;
-  z-index: 100;
-}
-.modal-close:hover { background: #fee2e2; color: #ef4444; }
+.modal-close:hover { background: var(--brand-coral); transform: rotate(90deg); border-color: #fff; }
 
 .modal-content-wrapper { display: grid; grid-template-columns: 1fr 1.2fr; min-height: 480px; }
 .modal-image-side { 
@@ -154,10 +148,35 @@
 }
 
 @media (max-width: 991px) {
-  .modal-content-wrapper { grid-template-columns: 1fr; }
-  .modal-image-side { padding: 40px; text-align: center; }
+  .modal-container { 
+    max-height: 95vh; 
+    margin: 10px; 
+    border-radius: 24px; 
+    width: calc(100% - 20px); 
+  }
+  .modal-content-wrapper { grid-template-columns: 1fr; min-height: auto; }
+  .modal-image-side { 
+    padding: 50px 30px 30px; 
+    text-align: center; 
+    min-height: auto;
+  }
   .modal-image-side h4 { font-size: 1.8rem; }
-  .modal-form-side { padding: 40px; }
-  .modal-close { color: #fff; background: rgba(255,255,255,0.1); }
-  .modal-close:hover { background: rgba(255,255,255,0.2); color: #fff; }
+  .modal-form-side { padding: 30px 20px; }
+  .form-header-mini h3 { font-size: 1.6rem; }
+  .modal-close { 
+    top: 10px; 
+    right: 10px; 
+    width: 32px;
+    height: 32px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .modal-container { margin: 5px; width: calc(100% - 10px); border-radius: 20px; }
+  .modal-image-side { padding: 40px 20px 20px; }
+  .modal-image-side h4 { font-size: 1.5rem; }
+  .modal-points li { font-size: 0.9rem; gap: 10px; }
+  .modal-form-side { padding: 20px 15px; }
+  .cta-reg-btn { padding: 15px 20px; font-size: 1rem; }
 }

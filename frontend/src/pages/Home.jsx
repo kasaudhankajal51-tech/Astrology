@@ -1,8 +1,77 @@
-import { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import ConsultationModal from '../components/ConsultationModal';
 
 function Home() {
   const trackRef = useRef(null);
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '', 
+    phone: '',
+    consultationType: '',
+    message: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Proper Validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^[0-9]{10}$/;
+    
+    if (!formData.name || formData.name.length < 3) {
+      toast.error('Please enter a valid name (min 3 chars).');
+      return;
+    }
+    if (!emailRegex.test(formData.email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+    if (!phoneRegex.test(formData.phone)) {
+      toast.error('Please enter a valid 10-digit phone number.');
+      return;
+    }
+    if (!formData.consultationType) {
+      toast.error('Please select a consultation type.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      const res = await fetch('http://localhost:5000/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, type: 'Consultation', courseName: 'Professional Consultation' }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Consultation booked successfully!');
+        setIsModalOpen(false);
+        setFormData({ name: '', email: '', phone: '', consultationType: '', message: '' });
+      } else {
+        toast.error(data.error || data.message || 'Failed to book. Please try again.');
+      }
+    } catch (err) {
+      toast.error('Connection Error: ' + err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  const handleOpenModal = (e) => {
+    if (e) e.preventDefault();
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => setIsModalOpen(false);
 
   useEffect(() => {
     if (window.AOS) {
@@ -41,7 +110,7 @@ function Home() {
                   mysteries of yourself and others.
                 </p>
                 <div data-aos="fade-up">
-                  <a href="#" className="btn mystic-btn-primary">ENROLL NOW <i className="fas fa-arrow-right ms-2"></i></a>
+                  <button onClick={handleOpenModal} className="btn mystic-btn-primary">ENROLL NOW <i className="fas fa-arrow-right ms-2"></i></button>
                 </div>
               </div>
               <div className="col-lg-6 d-none d-lg-flex justify-content-center">
@@ -400,6 +469,14 @@ function Home() {
           .video-card { flex: 0 0 200px; }
         }
       `}</style>
+      <ConsultationModal 
+        isOpen={isModalOpen} 
+        onClose={handleCloseModal}
+        formData={formData}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        isSubmitting={isSubmitting}
+      />
     </>
   );
 }

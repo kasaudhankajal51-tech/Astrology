@@ -18,7 +18,9 @@ const leadSchema = Joi.object({
   email: Joi.string().email().required(),
   phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
   type: Joi.string().required(),
-  courseName: Joi.string().required()
+  courseName: Joi.string().allow('', null),
+  consultationType: Joi.string().allow('', null),
+  message: Joi.string().allow('', null)
 });
 
 const sendConfirmationEmail = async (lead) => {
@@ -83,11 +85,11 @@ export const createLead = asyncHandler(async (req, res) => {
     throw new Error(error.details[0].message);
   }
 
-  const { name, email, phone, type, courseName } = req.body;
+  const { name, email, phone, type, courseName, consultationType, message } = req.body;
 
   // 1. Create Lead in Database
   const lead = await Lead.create({
-    name, email, phone, type, courseName,
+    name, email, phone, type, courseName, consultationType, message,
     paymentStatus: 'Pending'
   });
 
@@ -231,6 +233,8 @@ export const exportLeads = asyncHandler(async (req, res) => {
     { header: 'Phone', key: 'phone', width: 20 },
     { header: 'Type', key: 'type', width: 15 },
     { header: 'Course/Webinar', key: 'courseName', width: 25 },
+    { header: 'Consultation Type', key: 'consultationType', width: 20 },
+    { header: 'Message', key: 'message', width: 40 },
     { header: 'Status', key: 'paymentStatus', width: 15 },
   ];
 
@@ -242,6 +246,8 @@ export const exportLeads = asyncHandler(async (req, res) => {
       phone: lead.phone,
       type: lead.type,
       courseName: lead.courseName || '-',
+      consultationType: lead.consultationType || '-',
+      message: lead.message || '-',
       paymentStatus: lead.paymentStatus,
     });
   });

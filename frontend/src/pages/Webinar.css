@@ -490,6 +490,34 @@
 .modal-form input:focus { border-color: var(--brand-purple); background: #fff; outline: none; box-shadow: 0 0 0 4px rgba(59, 34, 151, 0.05); }
 .modal-form .secure-text { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 20px; font-weight: 600; }
 
+.cta-reg-btn {
+  background: var(--gradient-coral);
+  color: #fff;
+  border: none;
+  padding: 18px 30px;
+  border-radius: 12px;
+  font-weight: 800;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 10px 20px rgba(238, 102, 98, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 10px;
+}
+
+.cta-reg-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 30px rgba(238, 102, 98, 0.4);
+}
+
+.cta-reg-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
 @media (max-width: 991px) {
   .hero-main-grid, .mentor-v2-grid, .patterns-grid, .learn-grid, .days-grid { grid-template-columns: 1fr; }
   .why-card-v2 { width: 100%; }

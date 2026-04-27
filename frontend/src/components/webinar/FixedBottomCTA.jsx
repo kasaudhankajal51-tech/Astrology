@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // PURE SVG 7-SEGMENT DISPLAY — DS-Digital replica
 // ─────────────────────────────────────────────────────────────────────────────
 
-const W = 18, H = 30, T = 3.5, G = 1.4, SK = 0;
+const W = 15, H = 26, T = 3.2, G = 1.2, SK = 0;
 // reasoning tej hota to samjh aata kya likha hai ye sab 
 // w= wid, g= gap
 const SEG_POINTS = {
@@ -210,7 +210,7 @@ export default function FixedBottomCTA({ onJoinNow }) {
           <>
             <div style={ss.mobileTopRow}>
               {/* Left Container */}
-              <div style={ss.mobileLeft}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <div style={ss.badge}>
                   <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
                     <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
@@ -222,12 +222,12 @@ export default function FixedBottomCTA({ onJoinNow }) {
                   <span style={ss.amount}>₹99</span>
                 </div>
               </div>
-
+ 
               {/* 🔥 Vertical Divider */}
               <div style={ss.dividerLine}></div>
-
+ 
               {/* Right Container */}
-              <div style={{ flex: 1, display: "flex", justifyContent: "flex-end" }}>
+              <div style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <DigitalTimer />
               </div>
             </div>
@@ -242,7 +242,7 @@ export default function FixedBottomCTA({ onJoinNow }) {
           <>
             <div style={ss.desktopRow}>
               {/* Left Side: Price */}
-              <div style={ss.desktopLeft}>
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
                 <div style={ss.badge}>
                   <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
                     <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
@@ -254,12 +254,12 @@ export default function FixedBottomCTA({ onJoinNow }) {
                   <span style={ss.amount}>₹99</span>
                 </div>
               </div>
-
+ 
               {/* 🔥 Vertical Divider */}
               <div style={ss.dividerLine}></div>
-
+ 
               {/* Right Side: Timer & Button Group */}
-              <div style={ss.desktopRight}>
+              <div style={{ flex: 1.2, display: "flex", alignItems: "center", justifyContent: "space-evenly", gap: 20 }}>
                 <div style={ss.desktopTimerWrapper}>
                   <DigitalTimer />
                 </div>
@@ -319,8 +319,8 @@ const ss = {
     justifyContent: "space-between", gap: 10,
     position: "relative", zIndex: 1,
   },
-  mobileLeft:  { display: "flex", flexDirection: "column", gap: 5, flex: 0.85, alignItems: "flex-start" },
-  mobileRight: { display: "flex", alignItems: "center", justifyContent: "flex-end", flex: 1.15 },
+  mobileLeft:  { display: "flex", flexDirection: "column", gap: 5, flex: 1, alignItems: "center" },
+  mobileRight: { display: "flex", alignItems: "center", justifyContent: "center", flex: 1 },
 
   // Desktop row
   desktopRow: {
@@ -347,15 +347,14 @@ const ss = {
     letterSpacing: "0.8px", textTransform: "uppercase",
   },
 
-  priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 0" },
+  priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 0", marginTop: 6 },
   onlyText: { fontSize: "1.5rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "1px" },
   amount: {
-    fontSize: "3.2rem", fontWeight: 900,
+    fontSize: "3.8rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
     filter: "drop-shadow(0 2px 10px rgba(255,140,0,0.3))",
-    marginTop: -2,
   },
   dividerLine: {
     width: "2px",

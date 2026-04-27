@@ -351,15 +351,21 @@ function KundaliTool({ onBack }) {
                 <div className="col-md-6">
                   <div className="form-group mb-3">
                     <label className="small text-muted mb-2">Date of Birth</label>
-                    <input type="date" className="form-control form-control-lg bg-dark-glass text-white border-secondary" 
-                      value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} required />
+                    <div className="position-relative">
+                      <input type="date" className="form-control form-control-lg bg-dark-glass text-white border-secondary custom-date-input" 
+                        value={formData.dob} onChange={e => setFormData({...formData, dob: e.target.value})} required />
+                      <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-6">
                   <div className="form-group mb-3">
                     <label className="small text-muted mb-2">Time of Birth</label>
-                    <input type="time" className="form-control form-control-lg bg-dark-glass text-white border-secondary" 
-                      value={formData.tob} onChange={e => setFormData({...formData, tob: e.target.value})} required />
+                    <div className="position-relative">
+                      <input type="time" className="form-control form-control-lg bg-dark-glass text-white border-secondary custom-time-input" 
+                        value={formData.tob} onChange={e => setFormData({...formData, tob: e.target.value})} required />
+                      <i className="fas fa-clock position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-12 position-relative">
@@ -427,6 +433,26 @@ function KundaliTool({ onBack }) {
         .form-control:focus { background: rgba(255,255,255,0.1) !important; color: white !important; border-color: #ff6a00 !important; box-shadow: 0 0 0 0.25rem rgba(255, 106, 0, 0.25); }
         .suggestion-item:hover { background: rgba(255,106,0,0.2); }
         
+        /* Native Date/Time Picker Visibility Fixes */
+        .custom-date-input, .custom-time-input {
+          color-scheme: dark;
+          padding-right: 40px !important; /* Make room for the icon */
+        }
+        
+        .custom-date-input::-webkit-calendar-picker-indicator,
+        .custom-time-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0; /* Hide the native icon but keep it clickable */
+          cursor: pointer;
+          z-index: 2;
+        }
+
         @media (max-width: 768px) {
           .form-box { padding: 1.5rem !important; }
           .display-4 { font-size: 2.2rem; }

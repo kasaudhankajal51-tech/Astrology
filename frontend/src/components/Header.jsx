@@ -423,6 +423,52 @@ function Header() {
           color: #fff;
           font-size: 13px;
         }
+        
+        .consultation-banner-wrapper {
+          position: relative;
+          border-radius: 15px;
+          overflow: hidden;
+          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+          border: 1px solid rgba(255, 106, 0, 0.2);
+        }
+        
+        .consultation-banner-wrapper img {
+          width: 100%;
+          height: 180px;
+          object-fit: cover;
+          display: block;
+          transition: transform 0.5s ease;
+        }
+        
+        .consultation-banner-wrapper:hover img {
+          transform: scale(1.05);
+        }
+        
+        .banner-overlay {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          right: 0;
+          padding: 20px;
+          background: linear-gradient(to top, rgba(11, 12, 16, 0.95), transparent);
+          color: #fff;
+        }
+        
+        .banner-overlay h4 {
+          font-size: 1.2rem;
+          margin: 0;
+          color: #ff6a00;
+          font-weight: 700;
+          text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .banner-overlay p {
+          font-size: 0.85rem;
+          margin: 5px 0 0;
+          opacity: 0.9;
+          font-style: italic;
+        }
+
         .new {
           background: #ffd43b;
           color: #000;
@@ -447,6 +493,13 @@ function Header() {
               <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body p-4">
+              <div className="consultation-banner-wrapper mb-4">
+                <img src="/images/consultation_banner.png" alt="Consultation" />
+                <div className="banner-overlay">
+                  <h4>Expert Private Consultation</h4>
+                  <p>Gain deep insights and solutions from our master astrologers.</p>
+                </div>
+              </div>
               <form>
                 <div className="mb-3">
                   <label className="form-label">Full Name</label>

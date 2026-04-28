@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import KundaliTool from '../components/tools/KundaliTool';
 import HoroscopeTool from '../components/tools/HoroscopeTool';
@@ -7,6 +7,10 @@ import ZodiacFinder from '../components/tools/ZodiacFinder';
 
 function FreeTools() {
   const [activeTool, setActiveTool] = useState(null);
+  
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [activeTool]);
 
   const tools = [
     { id: 'kundali', name: 'Kundali / Birth Chart', desc: 'Generate your free birth chart', icon: 'fa-star' },

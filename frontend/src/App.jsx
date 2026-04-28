@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 import MainLayout from './layouts/MainLayout';
 import Home from './pages/Home';
 import Consultations from './pages/Consultations';
@@ -28,6 +29,7 @@ import { Toaster } from 'react-hot-toast';
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       <Routes>
         <Route path="/" element={<MainLayout />}>

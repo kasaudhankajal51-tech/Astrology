@@ -41,12 +41,12 @@ function Blog() {
           <div className="text-center" data-aos="fade-down">
             <h5 className="section-subtitle">Wisdom & Insights</h5>
             <h1 className="display-4 fw-bold text-white mb-3">Cosmic <span className="text-gradient">Blog</span></h1>
-            <nav aria-label="breadcrumb">
+            {/* <nav aria-label="breadcrumb">
               <ol className="breadcrumb justify-content-center">
                 <li className="breadcrumb-item"><a href="/" className="text-white text-decoration-none opacity-75">Home</a></li>
                 <li className="breadcrumb-item active text-white" aria-current="page">Blog</li>
               </ol>
-            </nav>
+            </nav> */}
           </div>
         </div>
       </section>
@@ -114,7 +114,7 @@ function Blog() {
               <aside className="blog-sidebar">
                 {/* Search */}
                 <div className="sidebar-widget glass-panel mb-5" data-aos="fade-left">
-                  <h4 className="widget-title mb-4">Search</h4>
+                  <h4 className="widget-title mb-4 mt-4">Search</h4>
                   <div className="search-box position-relative">
                     <input type="text" className="form-control-custom" placeholder="Search insights..." />
                     <button className="search-btn"><i className="fas fa-search"></i></button>
@@ -123,7 +123,7 @@ function Blog() {
 
                 {/* Categories */}
                 <div className="sidebar-widget glass-panel mb-5" data-aos="fade-left" data-aos-delay="100">
-                  <h4 className="widget-title mb-4">Categories</h4>
+                  <h4 className="widget-title mb-4 mt-4">Categories</h4>
                   <ul className="list-unstyled category-list">
                     {categories.map((cat, idx) => (
                       <li key={idx}>
@@ -138,7 +138,7 @@ function Blog() {
 
                 {/* Recent Posts */}
                 <div className="sidebar-widget glass-panel mb-5" data-aos="fade-left" data-aos-delay="200">
-                  <h4 className="widget-title mb-4">Recent Posts</h4>
+                  <h4 className="widget-title mb-4 mt-4">Recent Posts</h4>
                   <div className="recent-posts-list">
                     {recentPosts.map((post, idx) => (
                       <a href="#" key={idx} className="recent-post-item d-flex gap-3 mb-4 text-decoration-none">
@@ -180,9 +180,11 @@ function Blog() {
           overflow: hidden;
         }
 
-        /* Prevent AOS horizontal scroll */
-        body {
+        /* Prevent AOS horizontal scroll and screen shifting */
+        html, body {
           overflow-x: hidden;
+          width: 100%;
+          position: relative;
         }
 
         .hero-overlay {
@@ -326,6 +328,7 @@ function Blog() {
 
         /* Sidebar Styles */
         .widget-title {
+          text-align: center;
           font-family: 'Merriweather Sans', serif;
           font-size: 1.3rem;
           font-weight: 700;
@@ -338,7 +341,8 @@ function Blog() {
           content: '';
           position: absolute;
           bottom: 0;
-          left: 0;
+          left: 50%;
+          transform: translateX(-50%);
           width: 40px;
           height: 3px;
           background: var(--cosmic-accent);
@@ -470,6 +474,7 @@ function Blog() {
         @media (max-width: 991px) {
           .blog-hero { padding: 100px 0 60px; }
           .blog-card-horizontal { height: auto !important; }
+          .blog-card-horizontal:hover { transform: none; }
         }
 
         @media (max-width: 768px) {

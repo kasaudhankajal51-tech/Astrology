@@ -98,13 +98,16 @@ function Love() {
               </div>
               <div className="form-group mb-3">
                 <label>Your Date of Birth</label>
-                <input 
-                  type="date" 
-                  className="form-control" 
-                  value={formData.dob1}
-                  onChange={(e) => setFormData({ ...formData, dob1: e.target.value })}
-                  required
-                />
+                <div className="position-relative">
+                  <input 
+                    type="date" 
+                    className="form-control custom-date-input" 
+                    value={formData.dob1}
+                    onChange={(e) => setFormData({ ...formData, dob1: e.target.value })}
+                    required
+                  />
+                  <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                </div>
               </div>
               <hr className="my-4" style={{ borderColor: 'rgba(255,106,0,0.3)' }}/>
               <div className="form-group mb-3">
@@ -120,13 +123,16 @@ function Love() {
               </div>
               <div className="form-group mb-4">
                 <label>Partner&apos;s Date of Birth</label>
-                <input 
-                  type="date" 
-                  className="form-control" 
-                  value={formData.dob2}
-                  onChange={(e) => setFormData({ ...formData, dob2: e.target.value })}
-                  required
-                />
+                <div className="position-relative">
+                  <input 
+                    type="date" 
+                    className="form-control custom-date-input" 
+                    value={formData.dob2}
+                    onChange={(e) => setFormData({ ...formData, dob2: e.target.value })}
+                    required
+                  />
+                  <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                </div>
               </div>
               <button type="submit" className="btn btn-danger w-100 py-2" disabled={loading}>
                 {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Calculating...</> : 'Calculate Love %'}
@@ -203,9 +209,19 @@ function Love() {
         .love-calc input:focus { background: #2a2a2a; border-color: #dc3545; color: #fff; box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); }
         .pulse { animation: heartPulse 1.5s infinite; }
         .fade-in { animation: fadeIn 0.6s ease-in; }
-        
         @keyframes heartPulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .custom-date-input {
+          color-scheme: dark;
+          position: relative;
+        }
+        .custom-date-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%; height: 100%;
+          opacity: 0; cursor: pointer; z-index: 2;
+        }
       `}</style>
     </section>
   );

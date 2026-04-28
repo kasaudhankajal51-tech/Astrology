@@ -94,29 +94,36 @@ function CertificationCourses() {
         <div className="hero-bg-overlay"></div>
         <div className="container hero-content">
           <div className="row align-items-center">
-            <div className="col-lg-6">
-              <div className="hero-badge">
+            <div className="col-lg-6 text-lg-start text-center">
+              <div className="hero-infographic" data-aos="fade-up">
+                <img src="/images/certification_info.png" alt="Certification Program" />
+              </div>
+              <div className="hero-badge" data-aos="fade-up" data-aos-delay="100">
                 <span className="pulse-dot"></span>
                 Enrollment Open - Next Batch Starting Soon
               </div>
-              <h1 className="hero-title">
-                Professional
+              <h1 className="hero-title" data-aos="fade-up" data-aos-delay="200">
+                <span className="text-white">Professional</span>
                 <span className="gradient-text">Certification Program</span>
               </h1>
-              <p className="hero-desc">
+              <p className="hero-desc" data-aos="fade-up" data-aos-delay="300">
                 Complete 6-month certification program. From beginner basics to professional 
                 practice - become a certified Vedic Astrologer.
               </p>
-              <div className="hero-highlights">
+              
+              <div className="hero-highlights-modern" data-aos="fade-up" data-aos-delay="400">
                 {highlights.map((h, i) => (
-                  <div key={i} className="h-item">
+                  <div key={i} className="h-item-modern">
                     <span className="h-icon">{h.icon}</span>
-                    <span className="h-num">{h.num}</span>
-                    <span className="h-label">{h.label}</span>
+                    <div className="h-text-wrap">
+                      <span className="h-num">{h.num}</span>
+                      <span className="h-label">{h.label}</span>
+                    </div>
                   </div>
                 ))}
               </div>
-              <div className="hero-cta-row">
+
+              <div className="hero-cta-row mt-4" data-aos="fade-up" data-aos-delay="500">
                 <button className="btn-primary-hero" onClick={() => setShowModal(true)}>
                   <span>Join Now ₹2,499</span>
                   <small>was ₹9,999</small>
@@ -127,8 +134,9 @@ function CertificationCourses() {
                 </div>
               </div>
             </div>
-            <div className="col-lg-6">
-              <div className="hero-visual">
+
+            <div className="col-lg-6 mt-lg-0 mt-5">
+              <div className="hero-visual-center" data-aos="zoom-in" data-aos-delay="600">
                 <div className="main-image-wrapper">
                   <img src="/images/horocurty03.jpg" alt="Certification Course" />
                   <div className="play-overlay" onClick={() => setShowModal(true)}>
@@ -444,7 +452,7 @@ function CertificationCourses() {
         }
 
         .hero-badge {
-          display: inline-flex;
+          display: flex;
           align-items: center;
           gap: 10px;
           background: rgba(255,106,0,0.2);
@@ -453,8 +461,25 @@ function CertificationCourses() {
           border-radius: 30px;
           font-size: 14px;
           font-weight: 500;
-          margin-top: 40px;
-          margin-bottom: 25px;
+          margin: 0 auto 25px;
+          width: fit-content;
+        }
+
+        .hero-infographic {
+          text-align: center;
+          margin-bottom: 15px;
+        }
+
+        .hero-infographic img {
+          height: 140px;
+          width: auto;
+          filter: drop-shadow(0 0 15px rgba(255, 106, 0, 0.6));
+          animation: float-slow 4s ease-in-out infinite;
+        }
+
+        @keyframes float-slow {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
         }
 
         .pulse-dot {
@@ -475,6 +500,7 @@ function CertificationCourses() {
           font-weight: 800;
           line-height: 1.2;
           margin-bottom: 20px;
+          text-align: center;
         }
 
         .gradient-text {
@@ -490,49 +516,57 @@ function CertificationCourses() {
           color: rgba(255,255,255,0.7);
           line-height: 1.7;
           margin-bottom: 30px;
-          max-width: 500px;
+          max-width: 650px;
         }
 
-        .hero-highlights {
+        .hero-highlights-modern {
           display: grid;
-          grid-template-columns: repeat(4, 1fr);
+          grid-template-columns: repeat(2, 1fr);
           gap: 15px;
-          margin-bottom: 35px;
+          margin: 0 0 30px;
         }
 
-        .h-item {
-          background: rgba(255,255,255,0.05);
+        .h-item-modern {
+          background: rgba(255,255,255,0.03);
           backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 12px;
-          padding: 18px 12px;
-          text-align: center;
+          border: 1px solid rgba(255,255,255,0.08);
+          border-radius: 16px;
+          padding: 12px 15px;
+          display: flex;
+          align-items: center;
+          gap: 15px;
           transition: all 0.3s ease;
         }
 
-        .h-item:hover {
-          transform: translateY(-3px);
-          border-color: rgba(255,106,0,0.3);
+        .h-item-modern:hover {
+          transform: translateY(-5px);
+          border-color: rgba(255,106,0,0.4);
+          background: rgba(255,106,0,0.05);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .h-icon {
-          font-size: 22px;
-          display: block;
-          margin-bottom: 8px;
+          font-size: 24px;
+        }
+
+        .h-text-wrap {
+          text-align: left;
         }
 
         .h-num {
           display: block;
-          font-size: 1.4rem;
+          font-size: 1.2rem;
           font-weight: 700;
           color: #ff6a00;
+          line-height: 1;
         }
 
         .h-label {
           display: block;
-          font-size: 12px;
-          color: rgba(255,255,255,0.6);
-          margin-top: 4px;
+          font-size: 11px;
+          color: rgba(255,255,255,0.5);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
         }
 
         .hero-cta-row {
@@ -587,10 +621,11 @@ function CertificationCourses() {
           line-height: 1.3;
         }
 
-        /* Hero Visual */
-        .hero-visual {
+        .hero-visual-center {
+          max-width: 900px;
+          margin-left: auto;
+          margin-right: auto;
           position: relative;
-          height: 100%;
         }
 
         .main-image-wrapper {
@@ -1342,7 +1377,7 @@ function CertificationCourses() {
           .hero-title {
             font-size: 2.2rem;
           }
-          .hero-highlights {
+          .hero-highlights-modern {
             grid-template-columns: repeat(2, 1fr);
           }
           .includes-grid {
@@ -1367,7 +1402,7 @@ function CertificationCourses() {
           .hero-title {
             font-size: 1.8rem;
           }
-          .hero-highlights {
+          .hero-highlights-modern {
             grid-template-columns: repeat(2, 1fr);
           }
           .floating-card {

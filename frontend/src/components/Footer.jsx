@@ -21,7 +21,7 @@ function Footer() {
               </div>
             </div>
             
-            <div className="col-12 col-md-4 col-lg-3">
+            <div className="col-12 col-md-4 col-lg-3 text-center text-md-start">
               <div className="colm-footer">
                 <h5 className="footer-heading">Consultations</h5>
                 <ul className="footer-links">
@@ -34,7 +34,7 @@ function Footer() {
               </div>
             </div>
             
-            <div className="col-12 col-md-4 col-lg-2">
+            <div className="col-12 col-md-4 col-lg-2 text-center text-md-start">
               <div className="colm-footer">
                 <h5 className="footer-heading">Quick Links</h5>
                 <ul className="footer-links">
@@ -47,7 +47,7 @@ function Footer() {
               </div>
             </div>
             
-            <div className="col-12 col-md-4 col-lg-3">
+            <div className="col-12 col-md-4 col-lg-3 text-center text-md-start">
               <div className="colm-footer">
                 <h5 className="footer-heading">Contact Us</h5>
                 <ul className="footer-contact">
@@ -133,8 +133,9 @@ function Footer() {
 
         @media (max-width: 991px) {
           .footer-heading::after { left: 50%; transform: translateX(-50%); }
-          .colm-footer { text-align: center; margin-bottom: 20px; }
+          .colm-footer { text-align: center; margin-bottom: 30px; }
           .footer-links, .footer-contact { align-items: center; justify-content: center; display: flex; flex-direction: column; }
+          .footer-contact li { justify-content: center; width: 100%; align-items: center; text-align: center; }
         }
 
         .footer-links, .footer-contact { 

@@ -92,7 +92,10 @@ const STORAGE_KEY = "webinar_cta_timer_v3";
 function getOrCreateTarget(hours = 24) {
   try {
     const s = localStorage.getItem(STORAGE_KEY);
-    if (s) return parseInt(s, 10);
+    if (s) {
+      const stored = parseInt(s, 10);
+      if (stored > Date.now()) return stored;
+    }
   } catch (_) {}
   const t = Date.now() + hours * 3600 * 1000;
   try { localStorage.setItem(STORAGE_KEY, String(t)); } catch (_) {}
@@ -104,9 +107,14 @@ function DigitalTimer() {
   const [colonOn, setColon] = useState(true);
 
   useEffect(() => {
-    const target = getOrCreateTarget(24);
+    let target = getOrCreateTarget(24);
     const tick = () => {
-      const diff = Math.max(0, target - Date.now());
+      const now = Date.now();
+      if (target <= now) {
+        target = now + 24 * 3600 * 1000;
+        try { localStorage.setItem(STORAGE_KEY, String(target)); } catch (_) {}
+      }
+      const diff = target - now;
       setTime({
         h: Math.floor(diff / 3600000),
         m: Math.floor(diff / 60000) % 60,

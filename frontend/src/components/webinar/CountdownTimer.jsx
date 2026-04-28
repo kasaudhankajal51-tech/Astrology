@@ -7,24 +7,27 @@ const CountdownTimer = ({ minimal = false }) => {
     // 24 Hour Persistence Logic
     const getTargetTime = () => {
       const stored = localStorage.getItem('webinar_timer_v4');
-      if (stored) return parseInt(stored);
+      if (stored) {
+        const target = parseInt(stored);
+        if (target > Date.now()) return target;
+      }
       
       const newTarget = Date.now() + 24 * 60 * 60 * 1000;
       localStorage.setItem('webinar_timer_v4', newTarget.toString());
       return newTarget;
     };
 
-    const targetTime = getTargetTime();
+    let targetTime = getTargetTime();
 
     const timer = setInterval(() => {
       const now = Date.now();
-      const difference = targetTime - now;
+      let difference = targetTime - now;
 
       if (difference <= 0) {
         // Reset for another 24 hours
-        const resetTarget = Date.now() + 24 * 60 * 60 * 1000;
-        localStorage.setItem('webinar_timer_end', resetTarget.toString());
-        return;
+        targetTime = Date.now() + 24 * 60 * 60 * 1000;
+        localStorage.setItem('webinar_timer_v4', targetTime.toString());
+        difference = targetTime - Date.now();
       }
 
       setTimeLeft({

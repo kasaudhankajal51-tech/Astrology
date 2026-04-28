@@ -64,32 +64,32 @@ function Consultations() {
           desc: "Detailed consultation about your marriage timing based on birth chart analysis.",
           badge: "Consultation for Married Life issues",
           badgeColor: "purple",
-          img: "https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&q=80&w=800",
+          img: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&q=80&w=800",
           short: "Marriage timing"
         },
         {
           title: "Love vs Arranged Marriage",
-          desc: "Understanding your marriage prospects and compatibility.",
-          badge: "Consultation for Manglik Dosh",
+          desc: "Understanding your marriage prospects and compatibility through ancient Vedic methods.",
+          badge: "Love Marriage Analysis",
           badgeColor: "pink",
-          img: "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&q=80&w=800",
-          short: "Love vs arranged marriage"
+          img: "https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&q=80&w=800",
+          short: "Love vs Arranged"
         },
         {
           title: "Delay in Marriage",
-          desc: "Astrological reasons and remedies for marriage delays.",
-          badge: "Consultation for Love Marriage Issues",
-          badgeColor: "pink",
-          img: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=800",
-          short: "Delay in marriage"
+          desc: "Astrological reasons and effective Vedic remedies for overcoming marriage delays.",
+          badge: "Remedial Consultation",
+          badgeColor: "orange",
+          img: "https://images.unsplash.com/photo-1518621736915-f3b1c41bfd00?auto=format&fit=crop&q=80&w=800",
+          short: "Delay in Marriage"
         },
         {
           title: "Relationship Problems",
-          desc: "Solutions for relationship issues through astrology.",
-          badge: "Consultation for Future Life Partner",
-          badgeColor: "orange",
-          img: "https://images.unsplash.com/photo-1526045612212-70caf35c14df?auto=format&fit=crop&q=80&w=800",
-          short: "Relationship problems"
+          desc: "Heal your relationship and find harmony through deep astrological insight.",
+          badge: "Relationship Healing",
+          badgeColor: "pink",
+          img: "https://images.unsplash.com/photo-1534533983688-c7b8e13fd3b6?auto=format&fit=crop&q=80&w=800",
+          short: "Relationship Issues"
         }
       ]
     },
@@ -98,27 +98,27 @@ function Consultations() {
       cards: [
         {
           title: "Personal Horoscope",
-          desc: "Complete personal horoscope analysis for clarity in all life aspects.",
-          badge: "Personal Birth Chart Reading",
+          desc: "Complete personal horoscope analysis for clarity in all life aspects and future roadmap.",
+          badge: "Premium Chart Reading",
           badgeColor: "purple",
-          img: "https://images.unsplash.com/photo-1515940175183-6798529cb860?auto=format&fit=crop&q=80&w=800",
-          short: "Personal Horoscope Analysis"
+          img: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800",
+          short: "Full Horoscope"
         },
         {
           title: "Mangal Dosha",
-          desc: "Analysis and remedies for Mangal Dosha and its impact on your life.",
-          badge: "Consultation for Manglik Dosh",
+          desc: "Deep analysis and proven remedies for Mangal Dosha and its impact on your life path.",
+          badge: "Manglik Dosh Expert",
           badgeColor: "pink",
-          img: "https://images.unsplash.com/photo-1532983330958-4b32bc9bb07d?auto=format&fit=crop&q=80&w=800",
-          short: "Mangal Dosha Analysis"
+          img: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&q=80&w=800",
+          short: "Mangal Dosha"
         },
         {
           title: "Pre-Marriage Counselling",
-          desc: "Counselling before marriage for better understanding and compatibility.",
-          badge: "Pre-Marriage Astrological Counselling",
+          desc: "Counselling before marriage for better understanding, compatibility and spiritual alignment.",
+          badge: "Compatibility Check",
           badgeColor: "red",
-          img: "https://images.unsplash.com/photo-1529336953121-ad5a0d43d0d2?auto=format&fit=crop&q=80&w=800",
-          short: "Pre-Marriage Counselling"
+          img: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&q=80&w=800",
+          short: "Pre-Marriage Info"
         }
       ]
     }
@@ -399,16 +399,25 @@ function Consultations() {
           transition: 0.3s;
         }
 
-        .popup-close:hover {
-          color: #fff;
-          transform: rotate(90deg);
+        .card-grid {
+          display: grid;
+          grid-template-columns: repeat(3, 1fr);
+          gap: 30px;
+        }
+
+        @media (max-width: 1200px) {
+          .card-grid { grid-template-columns: repeat(2, 1fr); }
         }
 
         @media (max-width: 768px) {
           .consultation-page { padding: 40px 15px; }
           .category-title { font-size: 1.2rem; }
-          .card-grid { grid-template-columns: 1fr; }
-          .consult-card { max-width: 400px; margin: 0 auto; }
+          .card-grid { 
+            grid-template-columns: 1fr; 
+            max-width: 450px;
+            margin: 0 auto;
+          }
+          .consult-card { margin-bottom: 20px; }
         }
       `}</style>
     </>

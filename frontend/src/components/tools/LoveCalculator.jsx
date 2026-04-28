@@ -23,11 +23,17 @@ function PartnerCard({ label, data, onChange }) {
       <div className="row g-2" style={{ marginBottom:14 }}>
         <div className="col-7">
           <label style={lbl}>Date of Birth</label>
-          <input style={inp} type="date" value={data.dob} onChange={(e) => onChange({ ...data, dob:e.target.value })} required />
+          <div className="position-relative">
+            <input style={inp} type="date" className="custom-date-input" value={data.dob} onChange={(e) => onChange({ ...data, dob:e.target.value })} required />
+            <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+          </div>
         </div>
         <div className="col-5">
           <label style={lbl}>Birth Time</label>
-          <input style={inp} type="time" value={data.tob} onChange={(e) => onChange({ ...data, tob:e.target.value })} />
+          <div className="position-relative">
+            <input style={inp} type="time" className="custom-time-input" value={data.tob} onChange={(e) => onChange({ ...data, tob:e.target.value })} />
+            <i className="fas fa-clock position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+          </div>
         </div>
       </div>
       <div>
@@ -137,6 +143,18 @@ function LoveCalculator({ onBack }) {
         .suggestion-item:hover{background:rgba(255,106,0,0.12)}
         .suggestion-primary{font-weight:600}
         .suggestion-secondary{color:#777;font-size:0.8em}
+        
+        .custom-date-input, .custom-time-input {
+          color-scheme: dark;
+          padding-right: 40px !important;
+        }
+        .custom-date-input::-webkit-calendar-picker-indicator,
+        .custom-time-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%; height: 100%;
+          opacity: 0; cursor: pointer; z-index: 2;
+        }
       `}</style>
     </div>
   );

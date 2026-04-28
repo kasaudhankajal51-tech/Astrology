@@ -68,13 +68,16 @@ function Numerology() {
               </div>
               <div className="form-group mb-4">
                 <label>Date of Birth</label>
-                <input 
-                  type="date" 
-                  className="form-control" 
-                  value={formData.dob}
-                  onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
-                  required
-                />
+                <div className="position-relative">
+                  <input 
+                    type="date" 
+                    className="form-control custom-date-input" 
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                    required
+                  />
+                  <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                </div>
               </div>
               <button type="submit" className="btn btn-primary w-100 py-2" disabled={loading}>
                 {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Calculating...</> : 'Calculate My Numbers'}
@@ -168,6 +171,17 @@ function Numerology() {
         .mantra-box { background: rgba(255, 106, 0, 0.1); border: 1px solid rgba(255, 106, 0, 0.2); }
         .fade-in { animation: fadeIn 0.5s ease-in; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .custom-date-input {
+          color-scheme: dark;
+          position: relative;
+        }
+        .custom-date-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%; height: 100%;
+          opacity: 0; cursor: pointer; z-index: 2;
+        }
       `}</style>
     </section>
   );

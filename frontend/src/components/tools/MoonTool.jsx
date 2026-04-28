@@ -45,11 +45,17 @@ function MoonTool({ onBack }) {
               <div className="row g-2" style={{ marginBottom:22 }}>
                 <div className="col-7">
                   <label style={lbl}>Date of Birth</label>
-                  <input style={inp} type="date" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob:e.target.value })} required />
+                  <div className="position-relative">
+                    <input style={inp} type="date" className="custom-date-input" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob:e.target.value })} required />
+                    <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                  </div>
                 </div>
                 <div className="col-5">
                   <label style={lbl}>Birth Time</label>
-                  <input style={inp} type="time" value={formData.tob} onChange={(e) => setFormData({ ...formData, tob:e.target.value })} />
+                  <div className="position-relative">
+                    <input style={inp} type="time" className="custom-time-input" value={formData.tob} onChange={(e) => setFormData({ ...formData, tob:e.target.value })} />
+                    <i className="fas fa-clock position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                  </div>
                 </div>
               </div>
               <button style={btn} type="submit" disabled={loading}>
@@ -126,7 +132,20 @@ function MoonTool({ onBack }) {
           </div>
         </div>
       )}
-      <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      <style>{`
+        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .custom-date-input, .custom-time-input {
+          color-scheme: dark;
+          padding-right: 40px !important;
+        }
+        .custom-date-input::-webkit-calendar-picker-indicator,
+        .custom-time-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%; height: 100%;
+          opacity: 0; cursor: pointer; z-index: 2;
+        }
+      `}</style>
     </div>
   );
 }

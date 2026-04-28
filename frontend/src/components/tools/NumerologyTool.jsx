@@ -90,9 +90,12 @@ function NumerologyTool({ onBack }) {
               </div>
               <div style={{ marginBottom:22 }}>
                 <label style={lbl}>Date of Birth</label>
-                <input style={inp} type="date"
-                  value={formData.dob}
-                  onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required />
+                <div className="position-relative">
+                  <input style={inp} type="date" className="custom-date-input"
+                    value={formData.dob}
+                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required />
+                  <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+                </div>
               </div>
               <button style={btn} type="submit" disabled={loading}>
                 {loading ? <><span className="spinner-border spinner-border-sm" />  Calculating…</> : 'Calculate My Numbers'}
@@ -180,7 +183,19 @@ function NumerologyTool({ onBack }) {
           )}
         </div>
       )}
-      <style>{`@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}`}</style>
+      <style>{`
+        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+        .custom-date-input {
+          color-scheme: dark;
+          padding-right: 40px !important;
+        }
+        .custom-date-input::-webkit-calendar-picker-indicator {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          width: 100%; height: 100%;
+          opacity: 0; cursor: pointer; z-index: 2;
+        }
+      `}</style>
     </div>
   );
 }

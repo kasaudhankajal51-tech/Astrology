@@ -219,7 +219,7 @@ export default function FixedBottomCTA({ onJoinNow }) {
             <div style={ss.mobileTopRow}>
               {/* Left Container */}
               <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={ss.badge}>
+                <div style={{ ...ss.badge, fontSize: 7 }}>
                   <svg width="9" height="11" viewBox="0 0 10 13" fill="none">
                     <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
                   </svg>
@@ -246,37 +246,35 @@ export default function FixedBottomCTA({ onJoinNow }) {
             </div>
           </>
         ) : (
-          /* ── DESKTOP layout: Price (Left) | Divider | Timer + Button (Right) ── */
-          <>
-            <div style={ss.desktopRow}>
-              {/* Left Side: Price */}
-              <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                <div style={ss.badge}>
-                  <svg width="10" height="13" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
-                    <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
-                  </svg>
-                  <span>LIMITED TIME OFFER</span>
-                </div>
-                <div style={ss.priceRow}>
-                  <span style={ss.onlyText}>Only</span>
-                  <span style={ss.amount}>₹99</span>
-                </div>
-              </div>
- 
-              {/* 🔥 Vertical Divider */}
-              <div style={ss.dividerLine}></div>
- 
-              {/* Right Side: Timer & Button Group */}
-              <div style={{ flex: 1.2, display: "flex", alignItems: "center", justifyContent: "space-evenly", gap: 20 }}>
-                <div style={ss.desktopTimerWrapper}>
-                  <DigitalTimer />
-                </div>
-                <div style={ss.desktopButtonWrapper}>
-                  <EnrollButton onClick={onJoinNow} isMobile={false} />
-                </div>
-              </div>
+          /* ── DESKTOP layout: Badge | Price | Divider | Timer | Button ── */
+          <div style={ss.desktopRow}>
+            {/* 1. Badge */}
+            <div style={ss.badge}>
+              <svg width="12" height="15" viewBox="0 0 10 13" fill="none" style={{ flexShrink: 0 }}>
+                <path d="M6 0L0 7.5h4L2.5 13 10 5H6L7.5 0z" fill="#ffaa00" />
+              </svg>
+              <span>LIMITED TIME OFFER</span>
             </div>
-          </>
+
+            {/* 2. Price Row */}
+            <div style={ss.priceRowDesktop}>
+              <span style={ss.onlyTextDesktop}>ONLY</span>
+              <span style={ss.amountDesktop}>₹99</span>
+            </div>
+
+            {/* 🔥 Vertical Divider */}
+            <div style={ss.dividerLine}></div>
+
+            {/* 3. Timer */}
+            <div style={ss.desktopTimerWrapper}>
+              <DigitalTimer />
+            </div>
+
+            {/* 4. Enroll Button */}
+            <div style={ss.desktopButtonWrapper}>
+              <EnrollButton onClick={onJoinNow} isMobile={false} />
+            </div>
+          </div>
         )}
       </div>
     </>
@@ -301,8 +299,8 @@ const ss = {
   cta: BASE_CTA,
   ctaMobile:  { borderRadius: "16px 16px 0 0", padding: "5px 6px 5px" },
   ctaDesktop: { 
-    borderRadius: "24px 24px 0 0", 
-    padding: "10px 40px 12px",
+    borderRadius: "20px 20px 0 0", 
+    padding: "8px 60px 10px",
     width: "100%",
     bottom: 0,
     left: 0,
@@ -332,11 +330,10 @@ const ss = {
 
   // Desktop row
   desktopRow: {
-    display: "flex", alignItems: "center", justifyContent: "space-between",
-    width: "100%", position: "relative", zIndex: 1,
+    display: "flex", alignItems: "center", justifyContent: "center",
+    width: "100%", position: "relative", zIndex: 1, gap: "60px",
   },
-  desktopLeft:   { display: "flex", flexDirection: "column", gap: 5, alignItems: "flex-start" },
-  desktopRight:  { display: "flex", alignItems: "center", gap: 30 },
+  priceRowDesktop: { display: "flex", alignItems: "center", gap: "18px" },
   desktopTimerWrapper: { display: "flex", alignItems: "center" },
   desktopButtonWrapper: { display: "flex", alignItems: "center" },
 
@@ -348,21 +345,30 @@ const ss = {
   // Badge
   badge: {
     display: "inline-flex", alignItems: "center", gap: 5,
-    background: "rgba(255,255,255,0.07)",
-    border: "1px solid rgba(255,255,255,0.13)",
+    background: "rgba(255,255,255,0.05)",
+    border: "1.2px solid rgba(255,255,255,0.15)",
     borderRadius: "5px", padding: "3px 6px", width: "fit-content",
-    fontSize: 7, fontWeight: 700, color: "rgba(235, 112, 24, 0.88)",
-    letterSpacing: "0.8px", textTransform: "uppercase",
+    fontSize: 10, fontWeight: 700, color: "#ff9900",
+    boxShadow: "inset 0 0 10px rgba(0,0,0,0.3)",
+    letterSpacing: "1px", textTransform: "uppercase",
   },
 
   priceRow: { display: "flex", alignItems: "center", gap: 6, padding: "2px 0", marginTop: 6 },
-  onlyText: { fontSize: "1.5rem", fontWeight: 500, color: "rgba(255,255,255,0.7)", textTransform: "uppercase", letterSpacing: "1px" },
+  onlyText: { fontSize: "1.5rem", fontWeight: 500, color: "#fff", textTransform: "uppercase", letterSpacing: "1px" },
+  onlyTextDesktop: { fontSize: "2.2rem", fontWeight: 800, color: "#fff", textTransform: "uppercase", letterSpacing: "2px" },
   amount: {
-    fontSize: "3.8rem", fontWeight: 900,
+    fontSize: "3.2rem", fontWeight: 900,
     background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
     WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
     backgroundClip: "text", lineHeight: 1,
-    filter: "drop-shadow(0 2px 10px rgba(255,140,0,0.3))",
+    filter: "drop-shadow(0 2px 8px rgba(255,140,0,0.3))",
+  },
+  amountDesktop: {
+    fontSize: "5.2rem", fontWeight: 950,
+    background: "linear-gradient(135deg, #ffcc44 0%, #ff8800 50%, #ff5500 100%)",
+    WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent",
+    backgroundClip: "text", lineHeight: 1,
+    filter: "drop-shadow(0 4px 15px rgba(255,140,0,0.4))",
   },
   dividerLine: {
     width: "2px",

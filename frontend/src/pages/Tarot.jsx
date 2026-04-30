@@ -225,184 +225,145 @@ function Tarot() {
 
       <style>{`
         .tarot-ritual-container {
-          background-color: #0b0c10;
-          color: #fff;
+          background-color: var(--cosmic-bg);
+          color: var(--cosmic-text);
           position: relative;
           overflow: hidden;
+          padding-top: 80px;
         }
-        .mystical-bg {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at center, rgba(30,10,60,0.4) 0%, rgba(10,5,20,0.9) 70%, #050508 100%);
-          z-index: 1;
-        }
-        .z-index-2 { z-index: 2; }
-        
+
         .tarot-title {
-          font-family: 'Merriweather Sans', serif;
+          font-family: 'Playfair Display', serif;
           font-weight: 800;
+          font-size: clamp(2.5rem, 6vw, 3.8rem);
+          color: var(--cosmic-text);
+          margin-bottom: 0.5rem;
+        }
+
+        .tarot-subtitle {
+          color: var(--cosmic-accent-pink);
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          font-weight: 800;
+        }
+
+        .ritual-input-box {
+          background: var(--cosmic-white);
+          border: 1px solid var(--glass-border);
+          border-radius: 40px;
+          padding: 60px !important;
+          box-shadow: var(--premium-shadow);
+        }
+
+        .tarot-icon-large {
           font-size: 3rem;
-          background: linear-gradient(to right, #ffd700, #ff8c00, #ff0080);
+          background: var(--cosmic-gradient);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          letter-spacing: 2px;
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
+          margin-bottom: 20px;
         }
-        .tarot-subtitle { color: #aaa; font-size: 1.1rem; letter-spacing: 1px; }
 
-        /* Input Arena */
-        .ritual-input-box {
-          background: rgba(20, 15, 35, 0.6);
-          border: 1px solid rgba(255, 106, 0, 0.3);
-          border-radius: 20px;
-          backdrop-filter: blur(10px);
-          box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,106,0,0.05);
-        }
-        .tarot-icon-large { font-size: 3rem; color: #ff6a00; text-shadow: 0 0 20px #ff6a00; animation: pulseGlow 3s infinite; }
-        
         .mystic-input {
           width: 100%;
-          background: rgba(0,0,0,0.5);
-          border: none;
-          border-bottom: 2px solid #ff6a00;
-          color: #fff;
-          font-size: 1.2rem;
-          padding: 15px;
+          background: var(--cosmic-bg);
+          border: 1.5px solid var(--glass-border);
+          border-radius: 20px;
+          color: var(--cosmic-text);
+          font-size: 1.1rem;
+          padding: 18px;
           text-align: center;
-          outline: none;
-          transition: all 0.3s;
+          transition: 0.3s;
         }
-        .mystic-input:focus { background: rgba(0,0,0,0.8); border-bottom-color: #ffd700; box-shadow: 0 10px 20px -10px rgba(255,215,0,0.3); }
-        .mystic-input::placeholder { color: #666; font-style: italic; }
+
+        .mystic-input:focus {
+          background: var(--cosmic-white);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 0 0 4px var(--cosmic-accent-soft);
+        }
 
         .mystic-btn {
-          background: linear-gradient(135deg, #ff6a00, #ee0979);
+          background: var(--cosmic-gradient);
+          color: #fff;
           border: none;
-          color: white;
-          padding: 15px 30px;
-          font-size: 1.1rem;
-          font-weight: bold;
-          border-radius: 30px;
-          cursor: pointer;
-          transition: all 0.3s;
+          padding: 18px;
+          border-radius: 50px;
+          font-weight: 800;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
-          letter-spacing: 1px;
-          box-shadow: 0 5px 20px rgba(238, 9, 121, 0.4);
+          box-shadow: 0 10px 25px rgba(227, 27, 122, 0.3);
         }
-        .mystic-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(238, 9, 121, 0.6); }
 
-        .mystic-outline-btn {
-          background: transparent;
-          border: 1px solid #ff6a00;
-          color: #ff6a00;
-          padding: 10px 25px;
-          border-radius: 25px;
-          transition: all 0.3s;
+        .mystic-btn:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 35px rgba(227, 27, 122, 0.5);
         }
-        .mystic-outline-btn:hover { background: rgba(255,106,0,0.1); box-shadow: 0 0 15px rgba(255,106,0,0.4); }
 
-        /* Arena & Fan */
-        .ritual-arena { margin-top: 80px; height: 400px; position: relative; }
-        .ritual-prompt { font-family: 'Merriweather Sans', serif; color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); animation: fadePulse 2s infinite alternate; }
-
-        .deck-fan-container {
-          position: relative;
-          height: 200px;
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-          margin-top: 100px;
-          perspective: 1000px;
-        }
-        
         .ritual-card-back {
-          position: absolute;
-          width: 80px;
-          height: 140px;
-          background: linear-gradient(135deg, #2a0845, #100b20);
-          border: 2px solid #ff6a00;
-          border-radius: 8px;
-          transform-origin: bottom center;
-          transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s, box-shadow 0.3s;
-          cursor: pointer;
-          box-shadow: -5px 0 15px rgba(0,0,0,0.6);
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          background: var(--cosmic-white);
+          border: 2px solid var(--glass-border);
+          border-radius: 12px;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.05);
         }
+
         .ritual-card-back .card-pattern {
-          width: 90%; height: 92%;
-          border: 1px dashed rgba(255,106,0,0.5);
-          background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,106,0,0.05) 10px, rgba(255,106,0,0.05) 20px);
-          border-radius: 4px;
+          border-color: var(--cosmic-accent-pink);
+          opacity: 0.2;
         }
+
         .ritual-card-back::after {
-          content: '✧'; position: absolute; font-size: 24px; color: #ff6a00; text-shadow: 0 0 10px #ff6a00;
+          color: var(--cosmic-accent-pink);
+          text-shadow: none;
         }
 
-        .deck-fan-container:not(.is-shuffling) .ritual-card-back:hover {
-          z-index: 50 !important;
-          box-shadow: 0 0 30px rgba(255,106,0,0.8);
-          /* The hover transform adds a slight pop up */
-          margin-bottom: 20px;
-          border-color: #ffd700;
-        }
-        .selected-card { box-shadow: 0 0 50px rgba(255,106,0,1); cursor: default; }
-
-        /* Shuffling Animation overlay */
-        .is-shuffling .ritual-card-back { animation: fastShuffle 0.2s infinite; }
-
-        /* Reading Panel & Flip */
-        .result-arena { margin-top: 40px; }
         .reading-panel {
-          background: rgba(20, 15, 30, 0.8);
-          border: 1px solid rgba(138, 43, 226, 0.3);
-          border-radius: 20px;
-          backdrop-filter: blur(15px);
-          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+          background: var(--cosmic-white);
+          border: 1px solid var(--glass-border);
+          border-radius: 40px;
+          box-shadow: var(--premium-shadow);
         }
-        .reading-heading { color: #ff6a00; font-family: 'Merriweather Sans', serif; border-bottom: 1px solid rgba(255,106,0,0.2); padding-bottom: 15px; }
-        .reading-label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; }
-        .reading-text { font-size: 1.15rem; line-height: 1.8; color: #e0e0e0; }
-        
+
+        .reading-heading {
+          font-family: 'Playfair Display', serif;
+          color: var(--cosmic-text);
+          font-weight: 700;
+          border-color: var(--glass-border);
+        }
+
+        .reading-text {
+          color: var(--cosmic-text-muted);
+          font-weight: 500;
+        }
+
         .wisdom-block {
-          background: rgba(255, 106, 0, 0.05);
-          border-left: 4px solid #ff6a00;
-          border-radius: 0 10px 10px 0;
+          background: var(--cosmic-accent-soft);
+          border-left: 5px solid var(--cosmic-accent-pink);
         }
-        .wisdom-text { font-size: 1.1rem; color: #ffd700; font-style: italic; }
 
-        /* 3D Card Flip */
-        .result-card-container { width: 220px; height: 380px; perspective: 1000px; }
-        .tarot-card-reveal { width: 100%; height: 100%; }
-        .tarot-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-        .tarot-card-reveal.flipped .tarot-card-inner { transform: rotateY(180deg); }
-        .tarot-card-front-side, .tarot-card-back-side { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; }
-        
-        .tarot-card-front-side .static-back { position: relative; width: 100%; height: 100%; transform: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        
-        .tarot-card-back-side { 
-          background: linear-gradient(135deg, #1f1c2c, #928dab);
-          transform: rotateY(180deg);
-          border: 2px solid #ffd700;
-          box-shadow: 0 0 40px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
-          display: flex; flex-direction: column; justify-content: center; align-items: center;
-          padding: 20px;
+        .wisdom-text {
+          color: var(--cosmic-text);
+          font-weight: 600;
         }
-        .card-symbol { font-size: 4rem; color: #ffd700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-        .card-title { font-family: 'Merriweather Sans', serif; font-weight: bold; color: #fff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .card-badge { padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; }
-        .bg-upright { background: rgba(40, 167, 69, 0.2); border: 1px solid #28a745; color: #28a745; }
-        .bg-reversed { background: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #dc3545; }
 
-        /* Animations */
-        .fade-in { animation: fadeIn 0.5s ease-in both; }
-        .fade-in-slow { animation: fadeIn 1s ease-in both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadePulse { from { opacity: 0.7; } to { opacity: 1; } }
-        @keyframes pulseGlow { 0% { text-shadow: 0 0 10px #ff6a00; transform: scale(1); } 50% { text-shadow: 0 0 30px #ff6a00, 0 0 50px #ff0080; transform: scale(1.1); } 100% { text-shadow: 0 0 10px #ff6a00; transform: scale(1); } }
-        @keyframes fastShuffle { 0% { transform: translate(0,0); } 25% { transform: translate(2px,-2px); } 50% { transform: translate(-2px,0); } 75% { transform: translate(0,2px); } 100% { transform: translate(0,0); } }
+        .tarot-card-back-side {
+          background: var(--cosmic-white);
+          border: 3px solid var(--cosmic-accent-pink);
+          box-shadow: 0 15px 40px rgba(227, 27, 122, 0.2);
+        }
+
+        .card-title {
+          color: var(--cosmic-text);
+          font-family: 'Playfair Display', serif;
+        }
+
+        .text-gradient {
+          background: var(--cosmic-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 800;
+        }
+
+        @keyframes pulseGlow { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
       `}</style>
     </section>
   );

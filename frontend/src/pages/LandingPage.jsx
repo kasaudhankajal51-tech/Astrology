@@ -16,7 +16,35 @@ function LandingPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    if (window.AOS) window.AOS.init({ duration: 1000, once: true });
+    // Initialize AOS with proper settings
+    if (window.AOS) {
+      window.AOS.init({
+        duration: 800,
+        once: true,
+        offset: 50,
+        easing: 'ease-in-out'
+      });
+    } else {
+      // Fallback - load AOS if not present
+      const script = document.createElement('script');
+      script.src = 'https://unpkg.com/aos@2.3.1/dist/aos.js';
+      script.onload = () => {
+        if (window.AOS) {
+          window.AOS.init({
+            duration: 800,
+            once: true,
+            offset: 50,
+            easing: 'ease-in-out'
+          });
+        }
+      };
+      document.head.appendChild(script);
+      
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = 'https://unpkg.com/aos@2.3.1/dist/aos.css';
+      document.head.appendChild(link);
+    }
     
     const timer = setInterval(() => {
       setTimeLeft(prev => {
@@ -33,7 +61,7 @@ function LandingPage() {
     Webinar: {
       title: "Unlock the Secrets of Your Future",
       subtitle: "Join the 2-Day Mega Astrology Workshop & Transform Your Life",
-      badge: "FREE LIVE MASTERCLASS",
+      badge: "✨ FREE LIVE MASTERCLASS ✨",
       courseName: "2-Day Mega Astrology Webinar",
       accent: "#ff6a00", 
       accentSecondary: "#ff0080",
@@ -41,16 +69,16 @@ function LandingPage() {
       heroVideo: "/videohomefinal.mp4",
       layout: "split",
       stats: [
-        { label: "Students", val: "1L+" },
-        { label: "Rating", val: "4.9/5" },
-        { label: "Experience", val: "16y+" }
+        { label: "Happy Students", val: "1L+" },
+        { label: "Star Rating", val: "4.9/5" },
+        { label: "Expert Experience", val: "16+ Years" }
       ],
-      cta: "CLAIM MY FREE SEAT"
+      cta: "🎯 CLAIM MY FREE SEAT 🎯"
     },
     Course: {
       title: "Master Vedic Astrology",
       subtitle: "From Beginner to Professional Certified Astrologer in 12 Weeks",
-      badge: "ISO 9001:2015 CERTIFIED",
+      badge: "🌟 ISO 9001:2015 CERTIFIED 🌟",
       courseName: "Advanced Vedic Astrology Certification",
       accent: "#8a2be2", 
       accentSecondary: "#4b0082",
@@ -58,17 +86,17 @@ function LandingPage() {
       heroVideo: "/videohomefinal.mp4",
       layout: "centered",
       stats: [
-        { label: "Duration", val: "12 Weeks" },
-        { label: "Modules", val: "24+" },
-        { label: "Level", val: "Beginner to Pro" }
+        { label: "Course Duration", val: "12 Weeks" },
+        { label: "Expert Modules", val: "24+" },
+        { label: "Learning Level", val: "Beginner → Pro" }
       ],
       curriculum: [
-        { title: "The Foundation", desc: "Planetary strengths, houses, and zodiac signs mastery." },
-        { title: "Predictive Mastery", desc: "Timing events using Dasha and Gochar (Transit) systems." },
-        { title: "Remedial Science", desc: "Gemstones, Mantras, and modern Vedic remedies." },
-        { title: "Professional Practice", desc: "How to handle clients and build a consultation career." }
+        { title: "🌟 The Foundation", desc: "Planetary strengths, houses, and zodiac signs mastery." },
+        { title: "📊 Predictive Mastery", desc: "Timing events using Dasha and Gochar (Transit) systems." },
+        { title: "💎 Remedial Science", desc: "Gemstones, Mantras, and modern Vedic remedies." },
+        { title: "🎓 Professional Practice", desc: "How to handle clients and build a consultation career." }
       ],
-      cta: "ENROLL IN MASTERCLASS"
+      cta: "🚀 ENROLL IN MASTERCLASS 🚀"
     }
   }[type];
 
@@ -77,7 +105,15 @@ function LandingPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!/^[0-9]{10}$/.test(formData.phone)) {
-      toast.error('Enter a valid 10-digit phone.');
+      toast.error('📞 Please enter a valid 10-digit phone number.');
+      return;
+    }
+    if (formData.name.trim().length < 3) {
+      toast.error('📝 Please enter your full name (min 3 characters).');
+      return;
+    }
+    if (!formData.email.includes('@') || !formData.email.includes('.')) {
+      toast.error('📧 Please enter a valid email address.');
       return;
     }
     setIsSubmitting(true);
@@ -89,202 +125,698 @@ function LandingPage() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Registration Success!');
+        toast.success('✅ Registration Successful!');
         navigate(data.paymentUrl);
-      } else toast.error('Error submitting form.');
-    } catch (err) { toast.error('Network Error.'); }
+      } else toast.error('❌ Error submitting form. Please try again.');
+    } catch (err) { toast.error('🌐 Network Error. Please check your connection.'); }
     finally { setIsSubmitting(false); }
   };
 
   return (
     <div className={`lp-container lp-${type.toLowerCase()}`}>
-      {/* 1. Global Theme Styles */}
+      {/* Global Theme Styles - Brighter, Bolder, Accessible */}
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&display=swap');
+        
         :root {
-          --lp-accent: #EE6662;
-          --lp-accent-sec: #D9534F;
-          --lp-purple: #3B2261;
-          --bg-light: #F8FAFC;
-          --text-dark: #1E293B;
-          --text-muted: #64748B;
+          --lp-purple: #6C3CE1;
+          --lp-purple-light: #8B5CF6;
+          --lp-accent: #FF6B35;
+          --lp-accent-pink: #E31B7A;
+          --lp-text-dark: #1A1A2E;
+          --lp-text-muted: #2D3A4B;
+          --lp-bg-white: #FFFFFF;
+          --lp-bg-offwhite: #F8FAFF;
+          --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+          --shadow-md: 0 10px 30px rgba(0,0,0,0.08);
+          --shadow-lg: 0 25px 50px -12px rgba(0,0,0,0.15);
+          --shadow-xl: 0 35px 60px -15px rgba(108,60,225,0.2);
         }
+        
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+        }
+        
+        body {
+          font-size: 18px;
+        }
+        
         .lp-container { 
-          background-color: var(--bg-light); 
-          background-image: radial-gradient(#e2e8f0 1px, transparent 1px);
-          background-size: 24px 24px;
-          color: var(--text-dark); 
-          font-family: 'Outfit', sans-serif; 
+          background: linear-gradient(135deg, var(--lp-bg-white) 0%, var(--lp-bg-offwhite) 100%);
+          color: var(--lp-text-dark); 
+          font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; 
           overflow-x: hidden; 
+          line-height: 1.5;
         }
-        .text-gradient { background: linear-gradient(135deg, var(--lp-purple), var(--lp-accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .text-highlight { color: var(--lp-accent); }
+        
+        /* AOS animations */
+        [data-aos] {
+          opacity: 0;
+          transition-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        [data-aos].aos-animate {
+          opacity: 1;
+        }
+        
+        .text-gradient { 
+          background: linear-gradient(135deg, var(--lp-purple) 0%, var(--lp-accent) 100%);
+          -webkit-background-clip: text; 
+          -webkit-text-fill-color: transparent; 
+          background-clip: text;
+        }
+        
+        .text-highlight { 
+          color: var(--lp-accent); 
+        }
         
         .mystic-btn { 
-          background: linear-gradient(135deg, var(--lp-accent), var(--lp-accent-sec)); 
+          background: linear-gradient(135deg, var(--lp-purple) 0%, var(--lp-accent) 100%);
           color: #fff; 
           border: none; 
-          border-radius: 12px; 
-          padding: 15px 32px; 
+          border-radius: 60px; 
+          padding: 16px 36px; 
           font-weight: 700; 
-          transition: 0.3s; 
-          box-shadow: 0 10px 20px rgba(238, 102, 98, 0.2); 
+          font-size: 1.1rem;
+          transition: all 0.3s ease; 
+          box-shadow: 0 8px 20px rgba(108, 60, 225, 0.3); 
           cursor: pointer; 
-          font-size: 1rem; 
+          letter-spacing: 0.5px;
+          width: 100%;
         }
-        .mystic-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 35px rgba(238, 102, 98, 0.3); color: #fff; }
-
-        /* Minimal Nav */
-        .lp-nav { position: fixed; top: 0; width: 100%; padding: 15px 0; z-index: 100; background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); border-bottom: 1px solid #e2e8f0; }
-        .logo-text { font-family: 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 900; color: var(--lp-purple); }
-
-        /* Hero */
-        .lp-hero { position: relative; padding: 140px 0 80px; min-height: 100vh; display: flex; align-items: center; }
-        .hero-bg { position: absolute; inset: 0; z-index: 0; }
-        .hero-bg img { width: 100%; height: 100%; object-fit: cover; opacity: 0.05; }
         
-        .hero-content { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 0 20px; width: 100%; }
-        .split-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
-        .centered-layout { text-align: center; max-width: 900px; margin: 0 auto; }
-
-        .badge-premium { display: inline-block; padding: 8px 20px; background: var(--lp-purple); border-radius: 50px; color: #fff; font-weight: 700; font-size: 0.75rem; letter-spacing: 1px; margin-bottom: 25px; }
-        .hero-h1 { font-size: clamp(2.5rem, 6vw, 4rem); font-weight: 900; line-height: 1.1; margin-bottom: 25px; color: var(--lp-purple); }
-        .hero-p { font-size: 1.2rem; color: var(--text-muted); margin-bottom: 45px; line-height: 1.6; }
-
+        .mystic-btn:hover { 
+          transform: translateY(-3px); 
+          box-shadow: 0 15px 35px rgba(108, 60, 225, 0.45); 
+          filter: brightness(1.05);
+        }
+        
+        .mystic-btn-outline {
+          background: transparent;
+          border: 2px solid var(--lp-purple);
+          color: var(--lp-purple);
+          box-shadow: none;
+          padding: 12px 30px;
+          font-weight: 700;
+          font-size: 0.95rem;
+          transition: all 0.2s;
+          cursor: pointer;
+        }
+        
+        .mystic-btn-outline:hover {
+          background: var(--lp-purple);
+          color: white;
+          transform: translateY(-2px);
+        }
+        
+        /* Modern Nav */
+        .lp-nav { 
+          position: fixed; 
+          top: 0; 
+          width: 100%; 
+          padding: 18px 0; 
+          z-index: 1000; 
+          background: rgba(255,255,255,0.95); 
+          backdrop-filter: blur(12px); 
+          border-bottom: 1px solid rgba(0,0,0,0.05);
+          transition: all 0.3s;
+        }
+        
+        .container {
+          max-width: 1280px;
+          margin: 0 auto;
+          padding: 0 32px;
+        }
+        
+        .d-flex {
+          display: flex;
+        }
+        
+        .justify-content-between {
+          justify-content: space-between;
+        }
+        
+        .align-items-center {
+          align-items: center;
+        }
+        
+        .logo-text { 
+          font-family: 'Inter', sans-serif; 
+          font-size: 1.8rem; 
+          font-weight: 800; 
+          background: linear-gradient(135deg, var(--lp-purple) 30%, var(--lp-accent) 80%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          letter-spacing: -0.02em;
+        }
+        
+        /* Hero Section */
+        .lp-hero { 
+          position: relative; 
+          padding: 160px 0 100px; 
+          min-height: 100vh; 
+          display: flex; 
+          align-items: center; 
+        }
+        
+        .hero-bg { 
+          position: absolute; 
+          inset: 0; 
+          z-index: 0; 
+          opacity: 0.05;
+          background: radial-gradient(circle at 20% 40%, var(--lp-purple-light) 0%, transparent 70%);
+        }
+        
+        .hero-content { 
+          position: relative; 
+          z-index: 2; 
+          max-width: 1280px; 
+          margin: 0 auto; 
+          padding: 0 32px; 
+          width: 100%; 
+        }
+        
+        .split-layout { 
+          display: grid; 
+          grid-template-columns: 1fr 1fr; 
+          gap: 80px; 
+          align-items: center; 
+        }
+        
+        .centered-layout { 
+          text-align: center; 
+          max-width: 950px; 
+          margin: 0 auto; 
+        }
+        
+        .badge-premium { 
+          display: inline-block; 
+          padding: 8px 22px; 
+          background: linear-gradient(135deg, rgba(108,60,225,0.1) 0%, rgba(255,107,53,0.1) 100%);
+          border-radius: 60px; 
+          color: var(--lp-purple); 
+          font-weight: 800; 
+          font-size: 0.85rem; 
+          letter-spacing: 1px; 
+          margin-bottom: 28px; 
+          border: 1px solid rgba(108,60,225,0.2);
+        }
+        
+        .hero-h1 { 
+          font-size: clamp(2.5rem, 6vw, 4.5rem); 
+          font-weight: 800; 
+          line-height: 1.2; 
+          margin-bottom: 28px; 
+          color: var(--lp-text-dark);
+          letter-spacing: -0.02em;
+        }
+        
+        .hero-p { 
+          font-size: 1.2rem; 
+          color: var(--lp-text-muted); 
+          margin-bottom: 48px; 
+          line-height: 1.7; 
+          max-width: 90%;
+          font-weight: 500;
+        }
+        
         /* Video Card */
-        .video-box { border-radius: 20px; overflow: hidden; border: 1px solid #e2e8f0; box-shadow: 0 20px 50px rgba(0,0,0,0.1); max-width: 550px; margin: 0 auto 50px; position: relative; background: #fff; }
-        .video-box video { width: 100%; display: block; }
-        .play-overlay { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; background: rgba(0,0,0,0.1); }
-        .play-overlay i { font-size: 4rem; color: #fff; opacity: 0.8; }
-
+        .video-box { 
+          border-radius: 32px; 
+          overflow: hidden; 
+          background: #fff; 
+          box-shadow: var(--shadow-xl); 
+          max-width: 540px; 
+          margin: 0 0 40px 0; 
+          transition: all 0.4s;
+          border: 1px solid rgba(255,255,255,0.3);
+        }
+        
+        .video-box:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 40px 70px -20px rgba(108,60,225,0.3);
+        }
+        
+        .video-box video { 
+          width: 100%; 
+          display: block; 
+          aspect-ratio: 16 / 9;
+          object-fit: cover;
+        }
+        
         /* Form Card */
-        .form-card-glass { background: #fff; border: 1px solid #e2e8f0; border-top: 5px solid var(--lp-accent); border-radius: 24px; padding: 45px; box-shadow: 0 40px 100px rgba(0,0,0,0.05); }
-        .form-card-glass h3 { font-size: 1.8rem; font-weight: 900; margin-bottom: 30px; color: var(--lp-purple); }
-        .input-box { margin-bottom: 20px; text-align: left; }
-        .input-box label { display: block; margin-bottom: 8px; color: var(--text-dark); font-size: 0.85rem; font-weight: 700; text-transform: uppercase; }
-        .input-box input { width: 100%; padding: 15px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; color: var(--text-dark); transition: 0.3s; font-size: 1rem; }
-        .input-box input:focus { border-color: var(--lp-accent); background: #fff; outline: none; }
-
+        .form-card-glass { 
+          background: rgba(255,255,255,0.98); 
+          backdrop-filter: blur(2px);
+          border: 1px solid rgba(108,60,225,0.12); 
+          border-radius: 36px; 
+          padding: 52px 44px; 
+          box-shadow: var(--shadow-md); 
+          transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-card-glass:hover {
+          transform: translateY(-5px);
+          box-shadow: var(--shadow-xl);
+        }
+        
+        .form-card-glass h3 { 
+          font-size: 1.9rem; 
+          font-weight: 800; 
+          margin-bottom: 36px; 
+          color: var(--lp-text-dark);
+          text-align: center;
+        }
+        
+        .input-box { 
+          margin-bottom: 28px; 
+          text-align: left; 
+        }
+        
+        .input-box label { 
+          display: block; 
+          margin-bottom: 10px; 
+          color: var(--lp-text-dark); 
+          font-size: 0.9rem; 
+          font-weight: 700; 
+        }
+        
+        .input-box input { 
+          width: 100%; 
+          padding: 16px 20px; 
+          background: var(--lp-bg-offwhite); 
+          border: 2px solid #E5E7EB; 
+          border-radius: 24px; 
+          color: var(--lp-text-dark); 
+          transition: all 0.2s; 
+          font-size: 1rem; 
+          font-family: inherit;
+          font-weight: 500;
+        }
+        
+        .input-box input:focus { 
+          border-color: var(--lp-purple); 
+          background: #fff; 
+          outline: none; 
+          box-shadow: 0 0 0 4px rgba(108,60,225,0.15);
+        }
+        
+        .w-100 {
+          width: 100%;
+        }
+        
+        .text-center {
+          text-align: center;
+        }
+        
+        .mt-3 {
+          margin-top: 1rem;
+        }
+        
+        .mt-4 {
+          margin-top: 1.5rem;
+        }
+        
+        .mb-5 {
+          margin-bottom: 3rem;
+        }
+        
+        .small {
+          font-size: 0.85rem;
+        }
+        
+        .text-muted {
+          color: var(--lp-text-muted);
+        }
+        
         /* Curriculum Section */
-        .curr-section { padding: 100px 0; background: #fff; border-top: 1px solid #e2e8f0; }
-        .curr-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; margin-top: 60px; }
-        .curr-card { background: #FDF4FF; border: 1px solid #F3E8FF; padding: 40px; border-radius: 20px; transition: 0.4s; }
-        .curr-card:hover { border-color: var(--lp-accent); transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        .curr-card i { font-size: 2rem; color: var(--lp-purple); margin-bottom: 20px; display: block; }
-        .curr-card h4 { font-size: 1.4rem; margin-bottom: 15px; color: var(--lp-purple); font-weight: 800; }
-        .curr-card p { color: var(--text-muted); line-height: 1.6; }
-
+        .curr-section { 
+          padding: 120px 0; 
+          background: var(--lp-bg-offwhite); 
+        }
+        
+        .curr-grid { 
+          display: grid; 
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+          gap: 32px; 
+          margin-top: 60px; 
+        }
+        
+        .curr-card { 
+          background: var(--lp-bg-white); 
+          border: 1px solid rgba(108,60,225,0.1); 
+          padding: 42px 32px; 
+          border-radius: 32px; 
+          transition: all 0.3s; 
+          box-shadow: var(--shadow-sm);
+        }
+        
+        .curr-card:hover { 
+          border-color: var(--lp-purple-light); 
+          transform: translateY(-8px); 
+          box-shadow: var(--shadow-lg); 
+        }
+        
+        .curr-card i { 
+          font-size: 2.5rem; 
+          color: var(--lp-purple); 
+          margin-bottom: 24px; 
+          display: block; 
+        }
+        
+        .curr-card h4 { 
+          font-size: 1.5rem; 
+          margin-bottom: 16px; 
+          color: var(--lp-text-dark); 
+          font-weight: 800; 
+        }
+        
+        .curr-card p { 
+          color: var(--lp-text-muted); 
+          line-height: 1.65; 
+          font-size: 1rem;
+          font-weight: 500;
+        }
+        
         /* Instructor */
-        .inst-section { padding: 100px 0; }
-        .inst-flex { display: flex; align-items: center; gap: 60px; max-width: 1000px; margin: 0 auto; }
-        .inst-img { flex: 0 0 350px; border-radius: 20px; overflow: hidden; border: 8px solid #fff; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
-        .inst-img img { width: 100%; display: block; }
-        .inst-text h2 { font-size: 2.5rem; margin-bottom: 20px; color: var(--lp-purple); font-weight: 900; }
-        .inst-text p { font-size: 1.1rem; color: var(--text-muted); line-height: 1.8; }
-
+        .inst-section { 
+          padding: 120px 0; 
+          background: var(--lp-bg-white); 
+        }
+        
+        .inst-flex { 
+          display: flex; 
+          align-items: center; 
+          gap: 80px; 
+          max-width: 1100px; 
+          margin: 0 auto; 
+        }
+        
+        .inst-img { 
+          flex: 0 0 340px; 
+          border-radius: 36px; 
+          overflow: hidden; 
+          border: 6px solid var(--lp-bg-white); 
+          box-shadow: var(--shadow-lg); 
+        }
+        
+        .inst-img img { 
+          width: 100%; 
+          display: block; 
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
+        }
+        
+        .inst-text h2 { 
+          font-size: 2.5rem; 
+          margin-bottom: 24px; 
+          color: var(--lp-text-dark); 
+          font-weight: 800; 
+          letter-spacing: -0.02em;
+        }
+        
+        .inst-text p { 
+          font-size: 1.1rem; 
+          color: var(--lp-text-muted); 
+          line-height: 1.7; 
+          font-weight: 500;
+        }
+        
         /* Stats Bar */
-        .stats-bar { padding: 60px 0; background: #fff; border-top: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0; }
-        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); text-align: center; max-width: 1000px; margin: 0 auto; }
-        .stat-val { font-size: 3rem; font-weight: 900; color: var(--lp-purple); line-height: 1; margin-bottom: 10px; }
-        .stat-label { color: var(--lp-accent); font-weight: 800; text-transform: uppercase; letter-spacing: 1px; font-size: 0.8rem; }
-
+        .stats-bar { 
+          padding: 80px 0; 
+          background: linear-gradient(135deg, var(--lp-purple) 0%, var(--lp-accent) 100%);
+          color: white;
+        }
+        
+        .stats-grid { 
+          display: grid; 
+          grid-template-columns: repeat(3, 1fr); 
+          text-align: center; 
+          max-width: 1000px; 
+          margin: 0 auto; 
+          gap: 50px;
+        }
+        
+        .stat-val { 
+          font-size: 3.5rem; 
+          font-weight: 800; 
+          line-height: 1; 
+          margin-bottom: 12px; 
+          color: white;
+        }
+        
+        .stat-label { 
+          font-weight: 700; 
+          letter-spacing: 1.5px; 
+          font-size: 0.95rem; 
+          opacity: 0.95;
+          text-transform: uppercase;
+        }
+        
         /* Countdown */
-        .countdown-strip { padding: 100px 0; text-align: center; background: #fff; border-top: 1px solid #e2e8f0; }
-        .timer-row { display: flex; justify-content: center; gap: 40px; margin: 50px 0; }
-        .t-box { background: var(--lp-purple); padding: 25px; border-radius: 20px; min-width: 110px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); }
-        .t-box h4 { font-size: 2.8rem; font-weight: 900; color: #fff; margin: 0; }
-        .t-box p { margin-top: 10px; color: rgba(255,255,255,0.7); font-size: 0.9rem; font-weight: 800; text-transform: uppercase; }
-
+        .countdown-strip { 
+          padding: 120px 0; 
+          text-align: center; 
+          background: linear-gradient(135deg, #F8F9FF 0%, #FFFFFF 100%);
+        }
+        
+        .timer-row { 
+          display: flex; 
+          justify-content: center; 
+          gap: 32px; 
+          margin: 56px 0 48px; 
+        }
+        
+        .t-box { 
+          background: linear-gradient(135deg, #FFFFFF 0%, #F8FAFF 100%);
+          padding: 32px 28px; 
+          border-radius: 36px; 
+          min-width: 130px; 
+          box-shadow: var(--shadow-md); 
+          border: 1px solid rgba(108,60,225,0.1);
+        }
+        
+        .t-box h4 { 
+          font-size: 3.5rem; 
+          font-weight: 800; 
+          color: var(--lp-purple); 
+          margin: 0; 
+          line-height: 1;
+        }
+        
+        .t-box p { 
+          margin-top: 14px; 
+          color: var(--lp-text-muted); 
+          font-size: 0.9rem; 
+          font-weight: 700; 
+          text-transform: uppercase; 
+          letter-spacing: 1.5px;
+        }
+        
+        .big-btn {
+          padding: 18px 50px;
+          font-size: 1.2rem;
+          width: auto;
+          display: inline-block;
+        }
+        
+        /* Responsive */
         @media (max-width: 991px) {
-          .split-layout { grid-template-columns: 1fr; text-align: center; }
-          .inst-flex { flex-direction: column; text-align: center; }
-          .inst-img { flex: 0 0 auto; width: 250px; margin: 0 auto; }
-          .stats-grid { grid-template-columns: 1fr; gap: 50px; }
-          .timer-row { gap: 15px; }
-          .t-box { min-width: 90px; padding: 20px; }
-          .t-box h4 { font-size: 2.2rem; }
-          .lp-hero { padding-top: 100px; }
+          .split-layout { 
+            grid-template-columns: 1fr; 
+            gap: 60px; 
+            text-align: center; 
+          }
+          
+          .hero-p {
+            max-width: 100%;
+          }
+          
+          .video-box {
+            margin: 0 auto 40px;
+          }
+          
+          .inst-flex { 
+            flex-direction: column; 
+            text-align: center; 
+            gap: 48px;
+          }
+          
+          .inst-img { 
+            flex: 0 0 auto; 
+            width: 300px; 
+            margin: 0 auto; 
+          }
+          
+          .stats-grid { 
+            grid-template-columns: 1fr; 
+            gap: 48px; 
+          }
+          
+          .timer-row { 
+            gap: 20px; 
+            flex-wrap: wrap;
+            justify-content: center;
+          }
+          
+          .t-box { 
+            min-width: 110px; 
+            padding: 24px 20px; 
+          }
+          
+          .t-box h4 { 
+            font-size: 2.5rem; 
+          }
+          
+          .lp-hero { 
+            padding-top: 130px; 
+          }
+          
+          .form-card-glass {
+            padding: 40px 28px;
+            max-width: 500px;
+            margin: 0 auto;
+          }
+          
+          .container {
+            padding: 0 24px;
+          }
+        }
+        
+        @media (max-width: 640px) {
+          .container {
+            padding: 0 20px;
+          }
+          
+          .hero-h1 {
+            font-size: 2rem;
+          }
+          
+          .hero-p {
+            font-size: 1rem;
+          }
+          
+          .stats-bar {
+            padding: 60px 0;
+          }
+          
+          .stat-val {
+            font-size: 2.5rem;
+          }
+          
+          .t-box {
+            min-width: 85px;
+            padding: 18px 12px;
+          }
+          
+          .t-box h4 {
+            font-size: 1.8rem;
+          }
+          
+          .t-box p {
+            font-size: 0.7rem;
+          }
+          
+          .big-btn {
+            padding: 14px 28px;
+            font-size: 1rem;
+          }
+          
+          .form-card-glass h3 {
+            font-size: 1.5rem;
+          }
+          
+          .curr-card {
+            padding: 32px 24px;
+          }
+          
+          .curr-card h4 {
+            font-size: 1.3rem;
+          }
         }
       `}</style>
 
       {/* Minimal Navigation */}
-      <nav className="lp-nav">
+      <nav className="lp-nav" data-aos="fade-down" data-aos-duration="600">
         <div className="container d-flex justify-content-between align-items-center">
-          <div className="logo-text">Astro <span className="text-gradient">Ava</span></div>
-          <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="btn mystic-btn-outline d-none d-md-block" style={{padding: '8px 25px'}}>Register Now</button>
+          <div className="logo-text">✨ AstroAva ✨</div>
+          <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mystic-btn-outline d-none d-md-block">
+            📋 Register Now
+          </button>
         </div>
       </nav>
 
       {/* Hero Section */}
       <section className="lp-hero">
-        <div className="hero-bg">
-          <img src={content.heroImage} alt="cosmos" />
-          <div className="hero-overlay"></div>
-        </div>
+        <div className="hero-bg"></div>
         
         <div className="hero-content">
           {content.layout === 'split' ? (
             <div className="split-layout">
-              <div data-aos="fade-right">
+              <div data-aos="fade-right" data-aos-duration="800" data-aos-delay="100">
                 <span className="badge-premium">{content.badge}</span>
                 <h1 className="hero-h1">Let the Stars Shape<br/><span className="text-gradient">Your Journey</span></h1>
                 <p className="hero-p">{content.subtitle}</p>
-                <div className="video-box">
+                <div className="video-box" data-aos="zoom-in" data-aos-duration="700" data-aos-delay="200">
                   <video src={content.heroVideo} autoPlay muted loop playsInline></video>
-                  <div className="play-overlay"><i className="fas fa-play-circle"></i></div>
                 </div>
               </div>
-              <div data-aos="fade-left">
+              <div data-aos="fade-left" data-aos-duration="800" data-aos-delay="300">
                 <div className="form-card-glass">
-                  <h3 className="text-center">Secure Your Spot</h3>
+                  <h3>🔮 Secure Your Spot 🔮</h3>
                   <form onSubmit={handleSubmit}>
                     <div className="input-box">
-                      <label>Full Name</label>
-                      <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter Your Name" />
+                      <label>📝 Full Name</label>
+                      <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your full name" />
                     </div>
                     <div className="input-box">
-                      <label>Email Address</label>
-                      <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter Your Email" />
+                      <label>📧 Email Address</label>
+                      <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="you@example.com" />
                     </div>
                     <div className="input-box">
-                      <label>Phone Number</label>
-                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 Digit Number" />
+                      <label>📞 Phone Number</label>
+                      <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
                     </div>
-                    <button type="submit" className="mystic-btn w-100" disabled={isSubmitting}>
-                      {isSubmitting ? 'Processing...' : content.cta}
+                    <button type="submit" className="mystic-btn" disabled={isSubmitting}>
+                      {isSubmitting ? '⏳ Processing...' : content.cta}
                     </button>
                   </form>
-                  <p className="text-center mt-3 text-muted small"><i className="fas fa-lock me-2"></i> Your data is safe and secure.</p>
+                  <p className="text-center mt-3 text-muted small">🔒 Your data is 100% safe & secure 🔒</p>
                 </div>
               </div>
             </div>
           ) : (
-            <div className="centered-layout" data-aos="zoom-in">
-              <span className="badge-premium">{content.badge}</span>
-              <h1 className="hero-h1">{content.title}</h1>
-              <p className="hero-p">{content.subtitle}</p>
+            <div className="centered-layout">
+              <div data-aos="fade-down" data-aos-duration="700">
+                <span className="badge-premium">{content.badge}</span>
+                <h1 className="hero-h1">{content.title}</h1>
+                <p className="hero-p">{content.subtitle}</p>
+              </div>
               
-              <div className="video-box" style={{maxWidth: '700px'}}>
+              <div className="video-box" style={{maxWidth: '720px', margin: '0 auto 48px'}} data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">
                 <video src={content.heroVideo} autoPlay muted loop playsInline></video>
-                <div className="play-overlay"><i className="fas fa-play-circle"></i></div>
               </div>
 
-              <div className="form-card-glass" style={{maxWidth: '550px', margin: '0 auto'}}>
-                <h3 className="text-center">Download Curriculum & Register</h3>
+              <div className="form-card-glass" style={{maxWidth: '560px', margin: '0 auto'}} data-aos="fade-up" data-aos-duration="800" data-aos-delay="200">
+                <h3>📚 Download Curriculum & Register 📚</h3>
                 <form onSubmit={handleSubmit}>
                   <div className="input-box">
-                    <label>Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={handleChange} required />
+                    <label>📝 Full Name</label>
+                    <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your full name" />
                   </div>
                   <div className="input-box">
-                    <label>Email Address</label>
-                    <input type="email" name="email" value={formData.email} onChange={handleChange} required />
+                    <label>📧 Email Address</label>
+                    <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="you@example.com" />
                   </div>
                   <div className="input-box">
-                    <label>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required />
+                    <label>📞 Phone Number</label>
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
                   </div>
-                  <button type="submit" className="mystic-btn w-100" disabled={isSubmitting}>
-                    {isSubmitting ? 'Enrolling...' : content.cta}
+                  <button type="submit" className="mystic-btn" disabled={isSubmitting}>
+                    {isSubmitting ? '⏳ Enrolling...' : content.cta}
                   </button>
                 </form>
               </div>
@@ -293,14 +825,14 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* Stats Section */}
+      {/* Stats Section - Brighter Gradient */}
       <section className="stats-bar">
         <div className="container">
           <div className="stats-grid">
             {content.stats.map((s, i) => (
-              <div className="stat-item" key={i} data-aos="fade-up" data-aos-delay={i*100}>
+              <div className="stat-item" key={i} data-aos="fade-up" data-aos-duration="600" data-aos-delay={i * 150}>
                 <div className="stat-val">{s.val}</div>
-                <div className="stat-label">{s.label}</div>
+                <div className="stat-label">⭐ {s.label} ⭐</div>
               </div>
             ))}
           </div>
@@ -311,13 +843,13 @@ function LandingPage() {
       {type === 'Course' && content.curriculum && (
         <section className="curr-section">
           <div className="container">
-            <div className="text-center mb-5" data-aos="fade-up">
-              <h5 className="badge-premium">The Curriculum</h5>
+            <div className="text-center mb-5" data-aos="fade-up" data-aos-duration="700">
+              <span className="badge-premium">📖 The Curriculum 📖</span>
               <h2 className="hero-h1">What You Will <span className="text-gradient">Learn</span></h2>
             </div>
             <div className="curr-grid">
               {content.curriculum.map((item, i) => (
-                <div className="curr-card" key={i} data-aos="fade-up" data-aos-delay={i*100}>
+                <div className="curr-card" key={i} data-aos="fade-up" data-aos-duration="600" data-aos-delay={i * 100}>
                   <i className="fas fa-book-open"></i>
                   <h4>{item.title}</h4>
                   <p>{item.desc}</p>
@@ -331,19 +863,21 @@ function LandingPage() {
       {/* Instructor Section */}
       <section className="inst-section">
         <div className="container">
-          <div className="inst-flex" data-aos="fade-right">
-            <div className="inst-img">
+          <div className="inst-flex">
+            <div className="inst-img" data-aos="fade-right" data-aos-duration="800">
               <img src="/images/bg-bannerpic.jpg" alt="Instructor" />
             </div>
-            <div className="inst-text">
-              <h5 className="badge-premium">The Mentor</h5>
+            <div className="inst-text" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
+              <span className="badge-premium">👨‍🏫 The Mentor 👩‍🏫</span>
               <h2>Master the Art with <span className="text-gradient">Expert Guidance</span></h2>
               <p>
                 With over 16 years of experience in Vedic Astrology, our lead instructor has helped thousands 
                 of students unlock their true potential. This course is designed to take you from a curious 
                 beginner to a professional consultant with practical, real-world case studies.
               </p>
-              <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mystic-btn mt-4">Join The Journey</button>
+              <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mystic-btn mt-4" style={{width: 'auto'}}>
+                🚀 Join The Journey 🚀
+              </button>
             </div>
           </div>
         </div>
@@ -351,16 +885,16 @@ function LandingPage() {
 
       {/* Countdown Strip */}
       <section className="countdown-strip">
-        <div className="container" data-aos="flip-up">
-          <h2 className="hero-h1">Registration <span className="text-gradient">Closing Soon</span></h2>
-          <p className="hero-p">Don't miss the chance to start your professional career.</p>
+        <div className="container" data-aos="flip-up" data-aos-duration="800">
+          <h2 className="hero-h1">⏰ Registration <span className="text-gradient">Closing Soon</span> ⏰</h2>
+          <p className="hero-p" style={{maxWidth: '600px', margin: '0 auto'}}>Don't miss the chance to start your professional career.</p>
           <div className="timer-row">
             <div className="t-box"><h4>{String(timeLeft.hours).padStart(2, '0')}</h4><p>Hours</p></div>
             <div className="t-box"><h4>{String(timeLeft.minutes).padStart(2, '0')}</h4><p>Mins</p></div>
             <div className="t-box"><h4>{String(timeLeft.seconds).padStart(2, '0')}</h4><p>Secs</p></div>
           </div>
-          <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="mystic-btn big-btn">
-            Reserve Your Seat Now
+          <button onClick={() => window.scrollTo({top:0, behavior:'smooth'})} className="mystic-btn big-btn" data-aos="zoom-in" data-aos-duration="600" data-aos-delay="200">
+            🎯 Reserve Your Seat Now 🎯
           </button>
         </div>
       </section>

@@ -145,13 +145,16 @@ function Home() {
             <div className="row align-items-center g-5">
               <div className="col-lg-6">
                 <div className="img-box01 position-relative">
-                  <figure className="moon-img">
-                    <img alt="moon" src="/images/moon.jpg" className="img-fluid" />
+                  <figure className="moon-img" data-aos="fade-right">
+                    <img alt="moon" src="/images/moon.jpg" />
                   </figure>
-                  <figure className="floating-element d-none d-md-block" data-aos="fade-down">
-                    <img alt="sm" src="/images/imok.png" />
+                  <figure className="floating-element" data-aos="fade-left">
+                    <img alt="woman" src="/images/bg-bannerpic.jpg" />
                   </figure>
-                  <div className="experience-badge text-center" data-aos="fade-up">
+                  <figure className="bottom-img" data-aos="fade-up">
+                    <img alt="tarot" src="/images/premium_tarot.png" />
+                  </figure>
+                  <div className="experience-badge text-center" data-aos="zoom-in">
                     <h4>16+</h4>
                     <span>Years Experience</span>
                   </div>
@@ -159,7 +162,7 @@ function Home() {
               </div>
               <div className="col-lg-6">
                 <h5 className="section-subtitle" data-aos="fade-down">About Astro Ava</h5>
-                <h2 className="section-title text-white my-3" data-aos="fade-down">
+                <h2 className="section-title my-3" data-aos="fade-down">
                   Unlock a Brilliant Future with Astrology
                 </h2>
                 <p className="section-desc mt-3" data-aos="fade-up">
@@ -174,12 +177,13 @@ function Home() {
         </section>
 
         {/* Services Section */}
+        {/* Services Section */}
         <section className="services-section w-100">
           <div className="container">
             <div className="text-center mb-5">
-              <h5 className="section-subtitle" data-aos="fade-up">Our Expertise</h5>
-              <h2 className="section-title text-white mt-2" data-aos="fade-up">Guiding You Through Life</h2>
-              <p className="mx-auto text-muted mt-3" style={{maxWidth: '600px'}} data-aos="fade-down">
+              <h5 className="section-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
+              <h2 className="section-title mt-2" data-aos="fade-up">Guiding You Through Life</h2>
+              <p className="mx-auto mt-3" style={{maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: '#2c3e50'}} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
               </p>
             </div>
@@ -188,13 +192,13 @@ function Home() {
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="100">
                   <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
-                  <h4 className="text-white mt-3">Personal Horoscope</h4>
-                  <p className="mt-2 text-muted">Learn astrology from experienced and trusted mentors.</p>
+                  <h4 className="mt-3">Personal Horoscope</h4>
+                  <p className="mt-2">Learn astrology from experienced and trusted mentors.</p>
                 </div>
                 <div className="service-card" data-aos="fade-up" data-aos-delay="200">
                   <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
-                  <h4 className="text-white mt-3">Relationships</h4>
-                  <p className="mt-2 text-muted">Gain practical knowledge with real-life case studies.</p>
+                  <h4 className="mt-3">Relationships</h4>
+                  <p className="mt-2">Gain practical knowledge with real-life case studies.</p>
                 </div>
               </div>
               
@@ -208,50 +212,209 @@ function Home() {
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="300">
                   <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
-                  <h4 className="text-white mt-3">Career & Business</h4>
-                  <p className="mt-2 text-muted">Understand career and financial predictions deeply.</p>
+                  <h4 className="mt-3">Career & Business</h4>
+                  <p className="mt-2">Understand career and financial predictions deeply.</p>
                 </div>
                 <div className="service-card" data-aos="fade-up" data-aos-delay="400">
                   <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
-                  <h4 className="text-white mt-3">Muhurat Timing</h4>
-                  <p className="mt-2 text-muted">Find the most auspicious time for your endeavors.</p>
+                  <h4 className="mt-3">Muhurat Timing</h4>
+                  <p className="mt-2">Find the most auspicious time for your endeavors.</p>
                 </div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Video Testimonials */}
-        <section className="testimonial-section">
-          <div className="container">
-            <div className="text-center mb-5">
-              <h5 className="section-subtitle">Real Stories</h5>
-              <h2 className="section-title text-white">Client Testimonials</h2>
-            </div>
-            <div className="video-wrapper position-relative">
-              <button className="nav-btn left-btn" onClick={() => scrollTestimonials('left')}><i className="fas fa-chevron-left"></i></button>
-              
-              <div className="video-track" ref={trackRef}>
-                {[1, 2, 3, 4, 5].map((i) => (
-                  <div className="video-card" key={i}>
-                    <div className="video-inner">
-                      <video src="/videohomefinal.mp4" autoPlay muted loop playsInline></video>
-                      <div className="video-overlay"><i className="fas fa-play-circle text-white fs-1"></i></div>
-                    </div>
-                  </div>
-                ))}
+
+
+        {/* Video Testimonials - Professional Production Level */}
+    {/* Video Testimonials */}
+<section className="testimonial-section">
+  <div className="container">
+    <div className="section-header text-center mb-5">
+      <span className="section-badge">
+        <span className="badge-icon">⭐</span> Real Stories
+      </span>
+      {/* Heading with gradient color on "Clients Say" only */}
+      <h2 className="section-title mt-3">
+        What Our <span className="text-gradient">Clients Say</span>
+      </h2>
+      <p className="section-description mx-auto mt-3">
+        Trusted by thousands of satisfied clients worldwide
+      </p>
+    </div>
+    
+    <div className="testimonial-slider-wrapper position-relative">
+      <button className="nav-btn left-btn" onClick={() => scrollTestimonials('left')}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+      
+      <div className="testimonial-track" ref={trackRef}>
+        {/* Testimonial Card 1 */}
+        <div className="testimonial-card">
+          <div className="card-inner">
+            <div className="quote-icon">“</div>
+            <div className="video-container">
+              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+              <div className="play-btn-overlay">
+                <div className="play-circle">
+                  <i className="fas fa-play"></i>
+                </div>
               </div>
-              
-              <button className="nav-btn right-btn" onClick={() => scrollTestimonials('right')}><i className="fas fa-chevron-right"></i></button>
+            </div>
+            <div className="testimonial-content">
+              <p className="testimonial-text">
+                "The astrological guidance I received completely transformed my perspective. Highly recommended!"
+              </p>
+              <div className="client-info">
+                <div className="client-avatar">
+                  <img src="/images/avatar1.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/1.jpg'} />
+                </div>
+                <div className="client-details">
+                  <h4>Priya Sharma</h4>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
-        </section>
-
+        </div>
+        
+        
+        {/* Testimonial Card 3 */}
+        <div className="testimonial-card">
+          <div className="card-inner">
+            <div className="quote-icon">“</div>
+            <div className="video-container">
+              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+              <div className="play-btn-overlay">
+                <div className="play-circle">
+                  <i className="fas fa-play"></i>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-content">
+              <p className="testimonial-text">
+                "The career guidance helped me make the right decisions. I'm now in a much better place professionally."
+              </p>
+              <div className="client-info">
+                <div className="client-avatar">
+                  <img src="/images/avatar3.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/3.jpg'} />
+                </div>
+                <div className="client-details">
+                  <h4>Anjali Patel</h4>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star-half-alt"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Testimonial Card 4 */}
+        <div className="testimonial-card">
+          <div className="card-inner">
+            <div className="quote-icon">“</div>
+            <div className="video-container">
+              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+              <div className="play-btn-overlay">
+                <div className="play-circle">
+                  <i className="fas fa-play"></i>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-content">
+              <p className="testimonial-text">
+                "Amazing experience! The remedies suggested were simple yet effective. Feeling blessed."
+              </p>
+              <div className="client-info">
+                <div className="client-avatar">
+                  <img src="/images/avatar4.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/men/4.jpg'} />
+                </div>
+                <div className="client-details">
+                  <h4>Vikram Singh</h4>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        {/* Testimonial Card 5 */}
+        <div className="testimonial-card">
+          <div className="card-inner">
+            <div className="quote-icon">“</div>
+            <div className="video-container">
+              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+              <div className="play-btn-overlay">
+                <div className="play-circle">
+                  <i className="fas fa-play"></i>
+                </div>
+              </div>
+            </div>
+            <div className="testimonial-content">
+              <p className="testimonial-text">
+                "The relationship compatibility analysis was spot on! Truly grateful for this service."
+              </p>
+              <div className="client-info">
+                <div className="client-avatar">
+                  <img src="/images/avatar5.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/5.jpg'} />
+                </div>
+                <div className="client-details">
+                  <h4>Neha Gupta</h4>
+                  <div className="rating">
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                    <i className="fas fa-star"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <button className="nav-btn right-btn" onClick={() => scrollTestimonials('right')}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+          <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      </button>
+    </div>
+    
+    {/* Navigation Dots */}
+    <div className="slider-dots">
+      <span className="dot active"></span>
+      <span className="dot"></span>
+      <span className="dot"></span>
+      <span className="dot"></span>
+    </div>
+  </div>
+</section>
         {/* Popular Reports Section */}
         <section className="reports-section">
           <div className="container">
             <div className="text-center mb-5">
-              <h2 className="section-title text-white">Most Popular Reports</h2>
+              <h2 className="section-title">Most Popular Reports</h2>
               <p className="text-muted mt-2">Trusted by 50,000+ seekers worldwide for clarity and life guidance.</p>
             </div>
             
@@ -330,145 +493,6 @@ function Home() {
         </section>
       </main>
 
-      <style>{`
-        /* Global & Utility */
-        :root {
-          --cosmic-dark: #070913;
-          --cosmic-navy: #0b1220;
-          --cosmic-accent: #ff6a00;
-          --cosmic-glow: rgba(255, 106, 0, 0.4);
-          --cosmic-purple: #8a2be2;
-        }
-        body { background-color: var(--cosmic-dark); color: #fff; }
-        .section-title { font-size: clamp(2rem, 4vw, 3rem); font-weight: 800; font-family: 'Merriweather Sans', serif; }
-        .section-subtitle { color: var(--cosmic-accent); font-size: 1rem; text-transform: uppercase; letter-spacing: 3px; font-weight: 600; }
-        .text-gradient { background: linear-gradient(135deg, #ff6a00, #ff0080); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        
-        /* Buttons */
-        .mystic-btn-primary { background: linear-gradient(135deg, #ff6a00, #ff0080); color: #fff; border: none; border-radius: 30px; padding: 12px 30px; font-weight: 700; letter-spacing: 1px; transition: all 0.3s ease; box-shadow: 0 5px 20px rgba(255, 106, 0, 0.3); }
-        .mystic-btn-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 25px rgba(255, 106, 0, 0.5); color: #fff; }
-        .mystic-btn-outline { background: transparent; color: var(--cosmic-accent); border: 2px solid var(--cosmic-accent); border-radius: 30px; padding: 10px 28px; font-weight: 600; transition: all 0.3s; }
-        .mystic-btn-outline:hover { background: var(--cosmic-accent); color: #fff; box-shadow: 0 5px 15px var(--cosmic-glow); }
-
-        /* Banner Section */
-        .banner-section { position: relative; padding: 120px 0 100px; min-height: 80vh; display: flex; align-items: center; overflow: hidden; }
-        .img-main-banner { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; }
-        .img-main-banner img { width: 100%; height: 100%; object-fit: cover; }
-        .banner-overlay { position: absolute; inset: 0; background: linear-gradient(to right, rgba(7,9,19,0.95) 0%, rgba(7,9,19,0.7) 50%, rgba(7,9,19,0.4) 100%); }
-        .banner-title { font-size: clamp(2.5rem, 5vw, 4.5rem); font-weight: 800; line-height: 1.2; }
-        .banner-desc { font-size: 1.1rem; color: #ddd; line-height: 1.8; max-width: 90%; }
-        
-        /* Cosmic Orbit Animation */
-        .cosmic-orbit-container { position: relative; width: 400px; height: 400px; display: flex; align-items: center; justify-content: center; }
-        .big-circle { position: absolute; width: 380px; height: 380px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.2); animation: spinRight 40s linear infinite; }
-        .small-circle { position: absolute; width: 240px; height: 240px; border-radius: 50%; border: 1px dashed rgba(255,255,255,0.3); animation: spinLeft 25s linear infinite; }
-        .icon-block { position: absolute; width: 50px; height: 50px; background: rgba(20,20,35,0.8); border: 1px solid rgba(255,106,0,0.3); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 15px rgba(255,106,0,0.2); backdrop-filter: blur(5px); }
-        .icon-block img { width: 60%; object-fit: contain; }
-        
-        /* Positioning icons on orbits using CSS vars for clean math */
-        .big-circle .icon-block:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-        .big-circle .icon-block:nth-child(2) { top: 20%; right: -10px; }
-        .big-circle .icon-block:nth-child(3) { bottom: 20%; right: -10px; }
-        .big-circle .icon-block:nth-child(4) { bottom: -25px; left: calc(50% - 25px); }
-        .big-circle .icon-block:nth-child(5) { top: 40%; left: -20px; }
-        
-        .small-circle .icon-block:nth-child(1) { top: -25px; left: calc(50% - 25px); }
-        .small-circle .icon-block:nth-child(2) { bottom: 10px; right: 0; }
-        .small-circle .icon-block:nth-child(3) { bottom: 10px; left: 0; }
-        
-        .center-logo { position: absolute; z-index: 10; width: 120px; height: 120px; display: flex; align-items: center; justify-content: center; }
-        .center-logo img { width: 100%; position: relative; z-index: 2; animation: float 4s ease-in-out infinite; }
-        .glow-orb { position: absolute; width: 80%; height: 80%; background: var(--cosmic-accent); border-radius: 50%; filter: blur(30px); opacity: 0.6; animation: pulseGlow 3s infinite alternate; }
-
-        @keyframes spinRight { 100% { transform: rotate(360deg); } }
-        @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
-        @keyframes pulseGlow { 0% { opacity: 0.4; transform: scale(1); } 100% { opacity: 0.8; transform: scale(1.3); } }
-
-        /* About Section */
-        .about-part-section { padding: 100px 0; background: var(--cosmic-dark); }
-        .moon-img { position: relative; border-radius: 20px; overflow: hidden; box-shadow: 0 20px 40px rgba(0,0,0,0.6); border: 1px solid rgba(255,255,255,0.05); }
-        .moon-img img { transition: transform 0.5s; width: 100%; display: block; }
-        .moon-img:hover img { transform: scale(1.05); }
-        .floating-element { position: absolute; top: -40px; right: -30px; z-index: 2; animation: float 5s ease-in-out infinite; }
-        .floating-element img { width: 150px; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.5)); }
-        .experience-badge { position: absolute; bottom: 30px; left: -20px; background: linear-gradient(135deg, #ff6a00, #ff0080); padding: 25px 30px; border-radius: 20px; box-shadow: 0 15px 30px rgba(255,106,0,0.3); z-index: 3; }
-        .experience-badge h4 { font-size: 2.5rem; font-weight: 800; margin: 0; line-height: 1; }
-        .experience-badge span { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; opacity: 0.9; }
-
-        /* Services Section */
-        .services-section { padding: 100px 0; background: linear-gradient(180deg, var(--cosmic-dark) 0%, var(--cosmic-navy) 100%); }
-        .service-card { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 20px; padding: 30px; margin-bottom: 25px; transition: all 0.3s ease; text-align: center; backdrop-filter: blur(10px); }
-        .service-card:hover { transform: translateY(-2px); background: rgba(255,255,255,0.06); border-color: rgba(255,106,0,0.3); box-shadow: 0 15px 30px rgba(0,0,0,0.3); }
-        .icon-wrapper { width: 70px; height: 70px; margin: 0 auto; background: rgba(255,106,0,0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; border: 1px solid rgba(255,106,0,0.2); transition: all 0.3s; }
-        .service-card:hover .icon-wrapper { background: var(--cosmic-accent); border-color: #fff; transform: scale(1.1); }
-        .icon-wrapper img { width: 35px; object-fit: contain; filter: brightness(0) invert(1); transition: 0.3s; }
-        
-        .service-center-img .img-anim { position: relative; z-index: 1; }
-        .service-center-img .img-anim img { width: 280px; animation: spinRight 60s linear infinite; opacity: 0.5; }
-        .center-overlay { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 200px; z-index: 2; filter: drop-shadow(0 20px 30px rgba(0,0,0,0.8)); }
-
-        /* Video Testimonials */
-        .testimonial-section { padding: 80px 0; background: var(--cosmic-navy); overflow: hidden; }
-        .video-wrapper { display: flex; align-items: center; position: relative; }
-        .video-track { display: flex; gap: 24px; overflow-x: auto; padding: 20px 0; scroll-snap-type: x mandatory; scroll-behavior: smooth; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
-        .video-track::-webkit-scrollbar { display: none; }
-        .video-card { flex: 0 0 260px; scroll-snap-align: center; transition: transform 0.4s; }
-        .video-card:hover { transform: scale(1.03) translateY(-2px); }
-        .video-inner { position: relative; border-radius: 20px; overflow: hidden; border: 2px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.4); aspect-ratio: 9/16; }
-        .video-inner video { width: 100%; height: 100%; object-fit: cover; }
-        .video-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.2); display: flex; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s; }
-        .video-inner:hover .video-overlay { opacity: 1; }
-        .nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; border-radius: 50%; border: none; background: rgba(255,255,255,0.1); color: #fff; backdrop-filter: blur(5px); z-index: 10; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; cursor: pointer; transition: all 0.3s; }
-        .nav-btn:hover { background: var(--cosmic-accent); box-shadow: 0 0 20px var(--cosmic-glow); }
-        .left-btn { left: 10px; }
-        .right-btn { right: 10px; }
-
-        /* Premium Reports */
-        .reports-section { padding: 100px 0; background: linear-gradient(180deg, var(--cosmic-navy) 0%, var(--cosmic-dark) 100%); }
-        .premium-report-card { border-radius: 20px; overflow: hidden; background: rgba(20,20,30,0.8); border: 1px solid rgba(255,255,255,0.08); transition: all 0.4s ease; box-shadow: 0 20px 40px rgba(0,0,0,0.4); display: flex; flex-direction: column; }
-        .premium-report-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.2); box-shadow: 0 30px 60px rgba(0,0,0,0.6); }
-        
-        .card-header-art { padding: 40px 20px 30px; text-align: center; position: relative; }
-        .theme-emerald .card-header-art { background: linear-gradient(135deg, #0ba360 0%, #3cba92 100%); }
-        .theme-amethyst .card-header-art { background: linear-gradient(135deg, #6c5ce7 0%, #a29bfe 100%); }
-        .theme-ruby .card-header-art { background: linear-gradient(135deg, #ff0844 0%, #ffb199 100%); }
-        
-        .badge-discount { position: absolute; top: 15px; right: 15px; background: #fff; color: #333; padding: 6px 12px; font-size: 0.75rem; font-weight: 800; border-radius: 30px; text-transform: uppercase; box-shadow: 0 4px 10px rgba(0,0,0,0.2); }
-        .report-title { font-family: 'Merriweather Sans', serif; font-weight: 700; font-size: 1.8rem; margin-bottom: 5px; color: #fff; text-shadow: 0 2px 5px rgba(0,0,0,0.3); }
-        .report-price-hero { font-size: 1.5rem; font-weight: 800; margin: 0; color: rgba(255,255,255,0.9); }
-        
-        .card-body-content { padding: 30px 25px; flex-grow: 1; display: flex; flex-direction: column; }
-        .card-body-content h4 { font-size: 1.3rem; font-weight: 700; margin-bottom: 15px; color: #fff; }
-        .card-body-content p { font-size: 1rem; line-height: 1.6; flex-grow: 1; }
-        
-        .card-footer-action { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.1); }
-        .price-tag { font-size: 1.4rem; font-weight: 800; color: #fff; display: flex; align-items: baseline; gap: 8px; }
-        .price-tag del { font-size: 0.9rem; color: #888; font-weight: 400; }
-        
-        .action-btns { display: flex; gap: 10px; }
-        .btn-read, .btn-buy { padding: 8px 18px; border-radius: 8px; font-weight: 600; font-size: 0.9rem; transition: all 0.3s; border: none; cursor: pointer; }
-        .btn-read { background: transparent; border: 1px solid rgba(255,255,255,0.2); color: #fff; }
-        .btn-read:hover { background: rgba(255,255,255,0.1); }
-        .btn-buy { background: #fff; color: #333; }
-        .btn-buy:hover { background: #f0f0f0; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,255,255,0.2); }
-        .theme-emerald .btn-buy { color: #0ba360; }
-        .theme-amethyst .btn-buy { color: #6c5ce7; }
-        .theme-ruby .btn-buy { color: #ff0844; }
-
-        /* Media Queries */
-        @media (max-width: 991px) {
-          .banner-section { text-align: center; padding-top: 150px; }
-          .banner-desc { margin: 0 auto 30px; }
-          .experience-badge { left: 50%; transform: translateX(-50%); bottom: -20px; }
-          .img-box01 { margin-bottom: 40px; }
-        }
-        @media (max-width: 767px) {
-          .about-part-section { padding: 60px 0; text-align: center; }
-          .services-section { padding: 60px 0; }
-          .video-card { flex: 0 0 200px; }
-        }
-      `}</style>
       <ConsultationModal 
         isOpen={isModalOpen} 
         onClose={handleCloseModal}
@@ -477,6 +501,870 @@ function Home() {
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
       />
+
+      <style jsx>{`
+        body {
+          background-color: var(--cosmic-bg);
+          color: var(--cosmic-text);
+          font-family: 'Inter', sans-serif;
+        }
+
+        .section-title {
+          font-size: clamp(2.5rem, 6vw, 3.8rem);
+          font-weight: 700;
+          font-family: 'Playfair Display', serif;
+          color: var(--cosmic-text);
+          line-height: 1.1;
+        }
+
+        .section-subtitle {
+          color: var(--cosmic-accent-pink);
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          font-weight: 800;
+          margin-bottom: 20px;
+          display: block;
+        }
+
+        .text-gradient {
+          background: var(--cosmic-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        .mystic-btn-primary {
+          background: var(--cosmic-gradient);
+          color: #fff;
+          border: none;
+          border-radius: 50px;
+          padding: 16px 40px;
+          font-weight: 800;
+          letter-spacing: 1.5px;
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          box-shadow: 0 10px 25px rgba(227, 27, 122, 0.3);
+          text-transform: uppercase;
+          font-size: 0.85rem;
+        }
+
+        .mystic-btn-primary:hover {
+          transform: translateY(-5px);
+          box-shadow: 0 15px 35px rgba(227, 27, 122, 0.5);
+          color: #fff;
+        }
+
+        .mystic-btn-outline {
+          background: var(--cosmic-white);
+          color: var(--cosmic-text);
+          border: 1px solid var(--glass-border);
+          border-radius: 50px;
+          padding: 14px 35px;
+          font-weight: 800;
+          transition: 0.3s;
+          box-shadow: var(--premium-shadow);
+        }
+
+        .mystic-btn-outline:hover {
+          background: var(--cosmic-accent-soft);
+          border-color: var(--cosmic-accent-pink);
+          color: var(--cosmic-accent-pink);
+          transform: translateY(-3px);
+        }
+
+        /* Banner Section */
+        .banner-section {
+          position: relative;
+          padding: 180px 0 120px;
+          min-height: 95vh;
+          display: flex;
+          align-items: center;
+          overflow: hidden;
+          background: var(--cosmic-bg);
+        }
+
+        .img-main-banner {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: -1;
+        }
+
+        .img-main-banner img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          opacity: 0.15;
+          filter: saturate(0.5);
+        }
+
+        .banner-overlay {
+          position: absolute;
+          inset: 0;
+          background: radial-gradient(circle at 70% 30%, var(--cosmic-accent-soft), transparent 60%);
+        }
+
+        .banner-title {
+          font-size: clamp(3rem, 7vw, 5.5rem);
+          font-weight: 800;
+          line-height: 1;
+          color: var(--cosmic-text);
+          font-family: 'Playfair Display', serif;
+        }
+
+        .banner-desc {
+          font-size: 1.2rem;
+          color: var(--cosmic-text-muted) !important;
+          line-height: 1.8;
+          max-width: 90%;
+          font-weight: 500;
+        }
+
+        .spm-small {
+          color: var(--cosmic-accent-pink);
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 5px;
+          font-size: 0.85rem;
+          margin-bottom: 25px;
+          display: block;
+        }
+
+        /* Cosmic Orbit */
+        .cosmic-orbit-container {
+          position: relative;
+          width: 500px;
+          height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+
+        .big-circle {
+          position: absolute;
+          width: 480px;
+          height: 480px;
+          border-radius: 50%;
+          border: 1px dashed var(--glass-border);
+          animation: spinRight 40s linear infinite;
+        }
+
+        .small-circle {
+          position: absolute;
+          width: 320px;
+          height: 320px;
+          border-radius: 50%;
+          border: 1px dashed var(--cosmic-accent-pink);
+          opacity: 0.3;
+          animation: spinLeft 25s linear infinite;
+        }
+
+        .icon-block {
+          position: absolute;
+          width: 65px;
+          height: 65px;
+          background: var(--cosmic-white);
+          border: 1.5px solid var(--glass-border);
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: var(--premium-shadow);
+          transition: all 0.4s;
+        }
+
+        .icon-block img {
+          width: 50%;
+          filter: grayscale(1) brightness(0.2);
+          opacity: 0.7;
+        }
+
+        .icon-block:hover {
+          transform: scale(1.2) rotate(10deg);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 15px 30px rgba(227, 27, 122, 0.2);
+        }
+
+        .icon-block:hover img {
+          filter: none;
+          opacity: 1;
+        }
+
+        .center-logo {
+          position: absolute;
+          z-index: 10;
+          width: 180px;
+          height: 180px;
+        }
+
+        .center-logo img {
+          width: 100%;
+          filter: drop-shadow(0 20px 40px rgba(0,0,0,0.1));
+          animation: float 5s ease-in-out infinite;
+        }
+
+        .glow-orb {
+          position: absolute;
+          width: 120%;
+          height: 120%;
+          background: var(--cosmic-gradient);
+          border-radius: 50%;
+          filter: blur(50px);
+          opacity: 0.2;
+          top: -10%;
+          left: -10%;
+        }
+
+        @keyframes spinRight { 100% { transform: rotate(360deg); } }
+        @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+
+        /* About Section Staggered Layout */
+        .img-box01 {
+          position: relative;
+          height: 550px;
+          width: 100%;
+        }
+
+        .moon-img {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 85%;
+          height: 220px;
+          border-radius: 40px;
+          border: 12px solid var(--cosmic-bg);
+          box-shadow: var(--premium-shadow);
+          overflow: hidden;
+          z-index: 1;
+          margin: 0;
+        }
+
+        .moon-img img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .floating-element {
+          position: absolute;
+          top: 120px;
+          right: 0;
+          width: 60%;
+          height: 350px;
+          z-index: 2;
+          margin: 0;
+        }
+
+        .floating-element img {
+          width: 100%;
+          height: 100%;
+          border-radius: 30px;
+          object-fit: cover;
+          box-shadow: var(--premium-shadow);
+          transform: perspective(1000px) rotateY(-5deg);
+        }
+
+        .bottom-img {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          width: 55%;
+          height: 280px;
+          z-index: 3;
+          margin: 0;
+        }
+
+        .bottom-img img {
+          width: 100%;
+          height: 100%;
+          border-radius: 20px;
+          object-fit: cover;
+          box-shadow: var(--premium-shadow);
+          transform: perspective(1000px) rotateY(5deg);
+        }
+
+        .experience-badge {
+          background: var(--cosmic-white);
+          padding: 20px 30px;
+          border-radius: 30px;
+          border: 1px solid var(--glass-border);
+          box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+          position: absolute;
+          bottom: -20px;
+          right: 20px;
+          z-index: 10;
+        }
+
+        .experience-badge h4 { 
+          font-size: 2.8rem; 
+          font-weight: 800; 
+          background: var(--cosmic-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin: 0; 
+        }
+        .experience-badge span { 
+          font-size: 0.75rem; 
+          font-weight: 800; 
+          text-transform: uppercase; 
+          letter-spacing: 1px; 
+          color: var(--cosmic-text-muted); 
+        }
+
+        @media (max-width: 991px) {
+          .img-box01 {
+            height: 450px;
+            margin-bottom: 50px;
+          }
+          .moon-img { height: 180px; width: 90%; }
+          .floating-element { height: 280px; top: 100px; width: 65%; }
+          .bottom-img { height: 220px; width: 60%; }
+        }
+
+        @media (max-width: 576px) {
+          .img-box01 {
+            height: 380px;
+          }
+          .moon-img { height: 140px; border-width: 6px; border-radius: 20px; }
+          .floating-element { height: 220px; top: 80px; border-radius: 20px; }
+          .bottom-img { height: 180px; border-radius: 15px; }
+          .experience-badge {
+            padding: 12px 20px;
+            bottom: -10px;
+            right: 10px;
+          }
+          .experience-badge h4 { font-size: 1.8rem; }
+          .experience-badge span { font-size: 0.6rem; }
+        }
+
+        /* Services */
+        .services-section {
+          padding: 120px 0;
+          background: var(--cosmic-bg);
+        }
+
+        .service-card {
+          background: var(--cosmic-white);
+          padding: 45px 35px;
+          border-radius: 35px;
+          border: 1px solid var(--glass-border);
+          box-shadow: var(--premium-shadow);
+          transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .service-card:hover {
+          transform: translateY(-12px);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.06);
+        }
+
+        .icon-wrapper {
+        }
+
+        .icon-wrapper img {
+          width: 48px;
+          object-fit: contain;
+          transition: 0.4s;
+        }
+
+        .service-card:hover .icon-wrapper img {
+          filter: brightness(0) invert(1);
+        }
+
+        .service-card h4 {
+          font-size: 1.7rem;
+          font-weight: 800;
+          color: #1a1a1a;
+        }
+
+        .service-card p {
+          font-size: 1rem;
+          font-weight: 500;
+        }
+
+        /* Testimonials Section - Professional */
+        .testimonial-section {
+          padding: 100px 0;
+          background: #fff;
+          overflow: hidden;
+          border-top: 1px solid #f1f5f9;
+        }
+
+        .section-badge {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 6px 16px;
+          background: rgba(108,60,225,0.1);
+          border-radius: 50px;
+          color: #6C3CE1;
+          font-weight: 600;
+          font-size: 0.8rem;
+        }
+
+        .badge-icon {
+          font-size: 0.9rem;
+        }
+
+        .section-description {
+          max-width: 500px;
+          font-size: 1rem;
+          color: #6B7280;
+        }
+
+        .testimonial-slider-wrapper {
+          position: relative;
+          padding: 20px 0;
+          max-width: 1400px;
+          margin: 0 auto;
+        }
+
+        .testimonial-track {
+          display: flex;
+          gap: 24px;
+          overflow-x: auto;
+          scroll-behavior: smooth;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 10px 40px;
+        }
+
+        .testimonial-track::-webkit-scrollbar {
+          display: none;
+        }
+
+        .testimonial-card {
+          flex: 0 0 320px;
+          transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .testimonial-card:hover {
+          transform: translateY(-8px);
+        }
+
+        .card-inner {
+          background: #FFFFFF;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          transition: all 0.3s ease;
+          border: 1px solid rgba(108,60,225,0.08);
+          position: relative;
+        }
+
+        .testimonial-card:hover .card-inner {
+          box-shadow: 0 20px 40px rgba(108,60,225,0.12);
+          border-color: rgba(108,60,225,0.2);
+        }
+
+        .quote-icon {
+          position: absolute;
+          top: 15px;
+          right: 20px;
+          font-size: 4rem;
+          font-family: Georgia, serif;
+          color: rgba(108,60,225,0.1);
+          line-height: 1;
+          z-index: 1;
+        }
+
+        .video-container {
+          position: relative;
+          width: 100%;
+          height: 180px;
+          overflow: hidden;
+          cursor: pointer;
+        }
+
+        .video-container video {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.5s ease;
+        }
+
+        .testimonial-card:hover .video-container video {
+          transform: scale(1.05);
+        }
+
+        .play-btn-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          background: rgba(0,0,0,0.3);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: opacity 0.3s ease;
+        }
+
+        .video-container:hover .play-btn-overlay {
+          opacity: 1;
+        }
+
+        .play-circle {
+          width: 50px;
+          height: 50px;
+          background: white;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .play-circle i {
+          color: #6C3CE1;
+          font-size: 1.2rem;
+          margin-left: 3px;
+        }
+
+        .play-circle:hover {
+          transform: scale(1.1);
+          background: #6C3CE1;
+        }
+
+        .play-circle:hover i {
+          color: white;
+        }
+
+        .testimonial-content {
+          padding: 20px;
+        }
+
+        .testimonial-text {
+          font-size: 0.9rem;
+          line-height: 1.6;
+          color: #4B5563;
+          margin-bottom: 20px;
+          font-style: italic;
+          min-height: 80px;
+        }
+
+        .client-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding-top: 12px;
+          border-top: 1px solid rgba(108,60,225,0.1);
+        }
+
+        .client-avatar {
+          width: 45px;
+          height: 45px;
+          border-radius: 50%;
+          overflow: hidden;
+          border: 2px solid #6C3CE1;
+        }
+
+        .client-avatar img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .client-details h4 {
+          font-size: 0.95rem;
+          font-weight: 700;
+          color: #1F2937;
+          margin-bottom: 4px;
+        }
+
+        .rating {
+          display: flex;
+          gap: 3px;
+        }
+
+        .rating i {
+          font-size: 0.7rem;
+        }
+
+        .nav-btn {
+          position: absolute;
+          top: 50%;
+          transform: translateY(-50%);
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: white;
+          border: 1px solid rgba(108,60,225,0.2);
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          z-index: 10;
+        }
+
+        .nav-btn:hover {
+          background: #6C3CE1;
+          border-color: #6C3CE1;
+          transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-btn:hover svg {
+          stroke: white;
+        }
+
+        .nav-btn svg {
+          stroke: #6C3CE1;
+          transition: stroke 0.3s ease;
+        }
+
+        .left-btn {
+          left: -20px;
+        }
+
+        .right-btn {
+          right: -20px;
+        }
+
+        .slider-dots {
+          display: flex;
+          justify-content: center;
+          gap: 10px;
+          margin-top: 40px;
+        }
+
+        .dot {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background: rgba(108,60,225,0.3);
+          cursor: pointer;
+          transition: all 0.3s ease;
+        }
+
+        .dot.active {
+          width: 25px;
+          border-radius: 10px;
+          background: #6C3CE1;
+        }
+
+        .dot:hover {
+          background: #6C3CE1;
+          transform: scale(1.2);
+        }
+
+        /* Reports Section */
+        .reports-section {
+          padding: 120px 0;
+          background: #f8fafc;
+          border-top: 1px solid #f1f5f9;
+        }
+
+        .premium-report-card {
+          border-radius: 24px;
+          overflow: hidden;
+          background: #fff;
+          border: 1px solid #f1f5f9;
+          transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
+          box-shadow: 0 15px 40px rgba(0,0,0,0.03);
+          display: flex;
+          flex-direction: column;
+        }
+
+        .premium-report-card:hover {
+          transform: translateY(-12px);
+          border-color: var(--cosmic-accent);
+          box-shadow: 0 40px 80px rgba(0,0,0,0.08);
+        }
+
+        .card-header-art {
+          padding: 50px 25px 40px;
+          text-align: center;
+          position: relative;
+        }
+
+        .theme-emerald .card-header-art {
+          background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+        }
+
+        .theme-amethyst .card-header-art {
+          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
+        }
+
+        .theme-ruby .card-header-art {
+          background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
+        }
+
+        .badge-discount {
+          position: absolute;
+          top: 20px;
+          right: 20px;
+          background: #fff;
+          color: #1e293b;
+          padding: 7px 14px;
+          font-size: 0.8rem;
+          font-weight: 800;
+          border-radius: 50px;
+          text-transform: uppercase;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        .report-title {
+          font-family: 'Merriweather Sans', serif;
+          font-weight: 800;
+          font-size: 2rem;
+          margin-bottom: 8px;
+          color: #1e293b;
+        }
+
+        .report-price-hero {
+          font-size: 1.6rem;
+          font-weight: 800;
+          margin: 0;
+          color: #334155;
+        }
+
+        .card-body-content {
+          padding: 35px 30px;
+          flex-grow: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .card-body-content h4 {
+          font-size: 1.4rem;
+          font-weight: 800;
+          margin-bottom: 15px;
+          color: var(--cosmic-text);
+        }
+
+        .card-body-content p {
+          font-size: 1.05rem;
+          line-height: 1.6;
+          flex-grow: 1;
+          color: var(--cosmic-text-muted);
+        }
+
+        .card-footer-action {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 25px;
+          padding-top: 25px;
+          border-top: 1px solid #f1f5f9;
+        }
+
+        .price-tag {
+          font-size: 1.5rem;
+          font-weight: 900;
+          color: var(--cosmic-text);
+          display: flex;
+          align-items: baseline;
+          gap: 10px;
+        }
+
+        .price-tag del {
+          font-size: 1rem;
+          color: #94a3b8;
+          font-weight: 500;
+        }
+
+        .action-btns {
+          display: flex;
+          gap: 12px;
+        }
+
+        .btn-read, .btn-buy {
+          padding: 10px 22px;
+          border-radius: 12px;
+          font-weight: 700;
+          font-size: 0.95rem;
+          transition: all 0.3s;
+          border: none;
+          cursor: pointer;
+        }
+
+        .btn-read {
+          background: #f8fafc;
+          border: 1px solid #e2e8f0;
+          color: var(--cosmic-text);
+        }
+
+        .btn-read:hover {
+          background: #e2e8f0;
+        }
+
+        .btn-buy {
+          background: var(--cosmic-text);
+          color: #fff;
+        }
+
+        .btn-buy:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+        }
+
+        .theme-emerald .btn-buy { background: #10b981; }
+        .theme-amethyst .btn-buy { background: #8b5cf6; }
+        .theme-ruby .btn-buy { background: #ef4444; }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 1200px) {
+          .banner-title { font-size: 3.5rem; }
+          .cosmic-orbit-container { width: 400px; height: 400px; }
+          .big-circle { width: 380px; height: 380px; }
+          .small-circle { width: 250px; height: 250px; }
+        }
+
+        @media (max-width: 991px) {
+          .banner-section { text-align: center; padding: 120px 0 80px; }
+          .banner-desc { margin: 0 auto 30px; }
+          .img-box01 { margin-bottom: 80px; }
+          .experience-badge { left: 50%; transform: translateX(-50%); bottom: -30px; }
+          .cosmic-orbit-container { width: 350px; height: 350px; margin: 40px auto 0; }
+          .big-circle { width: 320px; height: 320px; }
+          .small-circle { width: 220px; height: 220px; }
+          .icon-block { width: 45px; height: 45px; }
+          .section-title { font-size: 2.8rem; }
+        }
+
+        @media (max-width: 767px) {
+          .banner-section { padding-top: 100px; }
+          .banner-title { font-size: 2.5rem; }
+          .banner-desc { font-size: 1.1rem; }
+          .about-part-section, .services-section, .testimonial-section, .reports-section { padding: 80px 0; }
+          .section-title { font-size: 2.2rem; }
+          .testimonial-card { flex: 0 0 280px; }
+          .video-container { height: 160px; }
+          .testimonial-text { font-size: 0.85rem; min-height: 70px; }
+          .nav-btn { width: 32px; height: 32px; }
+          .left-btn { left: -10px; }
+          .right-btn { right: -10px; }
+          .cosmic-orbit-container { width: 280px; height: 280px; }
+          .big-circle { width: 260px; height: 260px; }
+          .small-circle { width: 180px; height: 180px; }
+          .icon-block { width: 40px; height: 40px; }
+          .experience-badge { padding: 20px 25px; border-radius: 18px; }
+          .experience-badge h4 { font-size: 2rem; }
+        }
+
+        @media (max-width: 576px) {
+          .banner-title { font-size: 2.2rem; }
+          .testimonial-card { flex: 0 0 260px; }
+          .video-container { height: 140px; }
+          .testimonial-content { padding: 16px; }
+          .client-avatar { width: 38px; height: 38px; }
+          .client-details h4 { font-size: 0.85rem; }
+          .cosmic-orbit-container { width: 240px; height: 240px; }
+          .big-circle { width: 220px; height: 220px; }
+          .small-circle { width: 150px; height: 150px; }
+          .icon-block { width: 35px; height: 35px; }
+          .action-btns { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
+          .mystic-btn-primary, .mystic-btn-outline { width: 100%; text-align: center; }
+          .experience-badge { width: 160px; padding: 15px; }
+          .experience-badge h4 { font-size: 1.8rem; }
+        }
+      `}</style>
     </>
   );
 }

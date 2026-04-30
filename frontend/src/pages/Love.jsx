@@ -198,30 +198,125 @@ function Love() {
       )}
 
       <style>{`
-        .love-content, .love-calc, .love-result-card { background: rgba(255,255,255,0.05); border-radius: 15px; }
-        .love-content h3, .love-calc h3 { color: #ff6a00; margin-bottom: 20px; }
-        .love-content p, .love-content li { color: #ccc; line-height: 1.8; }
-        .service-box { background: rgba(255,255,255,0.08); border-radius: 10px; transition: 0.3s; }
-        .service-box:hover { background: rgba(255,255,255,0.15); transform: translateY(-5px); }
-        .service-box p { color: #fff; font-size: 14px; }
-        .love-calc label { color: #fff; margin-bottom: 8px; display: block; }
-        .love-calc input { background: #222; border: 1px solid #444; color: #fff; }
-        .love-calc input:focus { background: #2a2a2a; border-color: #dc3545; color: #fff; box-shadow: 0 0 0 0.25rem rgba(220, 53, 69, 0.25); }
+        .love-page {
+          padding: 160px 0 100px;
+          background: var(--cosmic-bg);
+          min-height: 100vh;
+        }
+
+        .section-subtitle {
+          color: var(--cosmic-accent-pink);
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          font-weight: 800;
+          font-size: 0.85rem;
+          margin-bottom: 15px;
+          display: block;
+        }
+
+        .love-content, .love-calc, .love-result-card {
+          background: var(--cosmic-white);
+          border: 1px solid var(--glass-border);
+          border-radius: 35px;
+          box-shadow: var(--premium-shadow);
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .love-content:hover, .love-calc:hover {
+          transform: translateY(-10px);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+
+        .love-content h3, .love-calc h3 {
+          font-family: 'Playfair Display', serif;
+          font-weight: 700;
+          color: var(--cosmic-text);
+          margin-bottom: 25px;
+        }
+
+        .love-content p, .love-content li {
+          color: var(--cosmic-text-muted);
+          line-height: 1.8;
+          font-weight: 500;
+        }
+
+        .service-box {
+          background: var(--cosmic-bg);
+          border: 1px solid var(--glass-border);
+          border-radius: 20px;
+          transition: 0.3s;
+        }
+
+        .service-box:hover {
+          background: var(--cosmic-accent-soft);
+          border-color: var(--cosmic-accent-pink);
+          transform: translateY(-5px);
+        }
+
+        .service-box p {
+          color: var(--cosmic-text);
+          font-weight: 700;
+          font-size: 14px;
+        }
+
+        .form-control {
+          background: var(--cosmic-bg);
+          border: 1.5px solid var(--glass-border);
+          padding: 15px 20px;
+          border-radius: 18px;
+          color: var(--cosmic-text);
+          font-weight: 600;
+        }
+
+        .form-control:focus {
+          background: var(--cosmic-white);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 0 0 4px var(--cosmic-accent-soft);
+        }
+
+        .btn-danger {
+          background: var(--cosmic-gradient);
+          border: none;
+          border-radius: 18px;
+          padding: 15px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          box-shadow: 0 10px 20px rgba(227, 27, 122, 0.2);
+        }
+
+        .btn-danger:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(227, 27, 122, 0.4);
+        }
+
+        .love-result-card {
+          padding: 50px !important;
+        }
+
+        .interpretation-box {
+          background: var(--cosmic-accent-soft) !important;
+          border: 1px solid var(--cosmic-accent-pink) !important;
+          border-radius: 20px !important;
+        }
+
+        .interpretation-box p {
+          color: var(--cosmic-text) !important;
+          font-weight: 600;
+        }
+
+        .metric-box {
+          background: var(--cosmic-bg) !important;
+          border: 1px solid var(--glass-border);
+          border-radius: 15px !important;
+        }
+
         .pulse { animation: heartPulse 1.5s infinite; }
-        .fade-in { animation: fadeIn 0.6s ease-in; }
         @keyframes heartPulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
         
-        .custom-date-input {
-          color-scheme: dark;
-          position: relative;
-        }
-        .custom-date-input::-webkit-calendar-picker-indicator {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          width: 100%; height: 100%;
-          opacity: 0; cursor: pointer; z-index: 2;
-        }
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
     </section>
   );

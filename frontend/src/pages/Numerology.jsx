@@ -161,27 +161,110 @@ function Numerology() {
       )}
 
       <style>{`
-        .numero-card, .result-card, .favourable-card { background: rgba(255,255,255,0.05); border-radius: 15px; }
-        .numero-card h3, .numero-calc h3 { color: #ff6a00; margin-bottom: 20px; }
-        .numero-card p, .numero-card li { color: #ccc; line-height: 1.8; }
-        .numero-calc { background: rgba(255,255,255,0.08); border-radius: 15px; }
-        .numero-calc label { color: #fff; margin-bottom: 8px; display: block; }
-        .numero-calc input { background: #222; border: 1px solid #444; color: #fff; }
-        .numero-calc input:focus { background: #2a2a2a; border-color: #ff6a00; color: #fff; box-shadow: 0 0 0 0.25rem rgba(255, 106, 0, 0.25); }
-        .mantra-box { background: rgba(255, 106, 0, 0.1); border: 1px solid rgba(255, 106, 0, 0.2); }
-        .fade-in { animation: fadeIn 0.5s ease-in; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .custom-date-input {
-          color-scheme: dark;
-          position: relative;
+        .numerology-page {
+          padding: 160px 0 100px;
+          background: var(--cosmic-bg);
+          min-height: 100vh;
         }
-        .custom-date-input::-webkit-calendar-picker-indicator {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          width: 100%; height: 100%;
-          opacity: 0; cursor: pointer; z-index: 2;
+
+        .section-subtitle {
+          color: var(--cosmic-accent-pink);
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          font-weight: 800;
+          font-size: 0.85rem;
+          margin-bottom: 15px;
+          display: block;
         }
+
+        .section-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(2.5rem, 5vw, 3.5rem);
+          font-weight: 700;
+          color: var(--cosmic-text);
+          margin-bottom: 20px;
+        }
+
+        .numero-card, .numero-calc, .result-card, .favourable-card {
+          background: var(--cosmic-white);
+          border: 1px solid var(--glass-border);
+          border-radius: 35px;
+          box-shadow: var(--premium-shadow);
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .numero-card:hover, .numero-calc:hover {
+          transform: translateY(-10px);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        }
+
+        .numero-card h3, .numero-calc h3 {
+          font-family: 'Playfair Display', serif;
+          font-weight: 700;
+          color: var(--cosmic-text);
+          margin-bottom: 25px;
+        }
+
+        .numero-card p, .numero-card li {
+          color: var(--cosmic-text-muted);
+          line-height: 1.8;
+          font-weight: 500;
+        }
+
+        .form-control {
+          background: var(--cosmic-bg);
+          border: 1.5px solid var(--glass-border);
+          padding: 15px 20px;
+          border-radius: 18px;
+          color: var(--cosmic-text);
+          font-weight: 600;
+        }
+
+        .form-control:focus {
+          background: var(--cosmic-white);
+          border-color: var(--cosmic-accent-pink);
+          box-shadow: 0 0 0 4px var(--cosmic-accent-soft);
+        }
+
+        .btn-primary {
+          background: var(--cosmic-gradient);
+          border: none;
+          border-radius: 18px;
+          padding: 15px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          box-shadow: 0 10px 20px rgba(227, 27, 122, 0.2);
+        }
+
+        .btn-primary:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(227, 27, 122, 0.4);
+        }
+
+        .result-card h1 {
+          font-family: 'Playfair Display', serif;
+          font-weight: 800;
+          color: var(--cosmic-accent-pink) !important;
+        }
+
+        .mantra-box {
+          background: var(--cosmic-accent-soft);
+          border: 1px solid var(--cosmic-accent-pink);
+          border-radius: 25px;
+          padding: 40px;
+        }
+
+        .text-gradient {
+          background: var(--cosmic-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          font-weight: 800;
+        }
+
+        .fade-in { animation: fadeIn 0.8s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
       `}</style>
     </section>
   );

@@ -68,18 +68,19 @@ function Tarot() {
 
   return (
     <section className="tarot-ritual-container fade-in">
-      {/* Mystical Background Overlay */}
-      <div className="mystical-bg"></div>
+      {/* Mystical Background Overlay - Light Theme */}
+      <div className="mystical-bg-light"></div>
       
       <div className="container position-relative z-index-2 py-5" style={{ minHeight: '85vh' }}>
         
         {/* Header */}
         <div className="text-center mb-5">
           <h1 className="tarot-title">The Mystic Tarot</h1>
+          <div className="title-separator mx-auto"></div>
           <p className="tarot-subtitle">Connect with the ancient energies of the Oracle</p>
         </div>
 
-        {error && <div className="alert alert-danger text-center mx-auto" style={{maxWidth: '500px'}}>{error}</div>}
+        {error && <div className="alert alert-danger text-center mx-auto" style={{maxWidth: '500px', borderRadius: '12px'}}>{error}</div>}
 
         {/* Stage 1: Input */}
         {stage === 'input' && (
@@ -87,7 +88,7 @@ function Tarot() {
             <div className="col-md-6 text-center">
               <div className="ritual-input-box p-5">
                 <div className="tarot-icon-large mb-4">✧</div>
-                <h3 className="text-white mb-3">What seeks your heart?</h3>
+                <h3 className="mb-3" style={{ color: '#1a1a2e', fontWeight: 700 }}>What seeks your heart?</h3>
                 <form onSubmit={startRitual}>
                   <input 
                     type="text" 
@@ -118,7 +119,6 @@ function Tarot() {
             <div className={`deck-fan-container ${stage === 'shuffling' ? 'is-shuffling' : ''}`}>
               {cards.map((idx) => {
                 // Calculate fan spread
-                // Spread from -50deg to +50deg
                 const offset = idx - (totalCards - 1) / 2;
                 const angle = offset * 4.5; 
                 const yOffset = Math.abs(offset) * 3;
@@ -126,18 +126,15 @@ function Tarot() {
                 
                 let isSelected = selectedIdx === idx;
                 
-                // Style logic based on stage
                 let style = {};
                 let className = "ritual-card-back";
                 
                 if (stage === 'shuffling') {
-                  // Cards stacked, slight random jitter
                   style = { transform: `translate(${Math.random()*10 - 5}px, ${Math.random()*10 - 5}px) rotate(${Math.random()*10 - 5}deg)` };
                 } else if (stage === 'select') {
                   style = { transform: `translate(${xOffset}px, ${yOffset}px) rotate(${angle}deg)` };
                 } else if (stage === 'drawing') {
                   if (isSelected) {
-                    // Fly to center, grow, rotate to 0
                     style = { 
                       transform: `translate(0px, -150px) scale(1.6) rotate(0deg)`,
                       zIndex: 100,
@@ -145,7 +142,6 @@ function Tarot() {
                     };
                     className += " selected-card";
                   } else {
-                    // Fade out other cards
                     style = { 
                       transform: `translate(${xOffset}px, ${yOffset}px) rotate(${angle}deg)`,
                       opacity: 0,
@@ -204,7 +200,7 @@ function Tarot() {
                 
                 <div className="meaning-block mb-4">
                   <span className="reading-label">Core Energy</span>
-                  <p className="text-white fs-5">{cardResult.meaning}</p>
+                  <p className="fs-5" style={{ color: '#4a4a6a', marginBottom: 0 }}>{cardResult.meaning}</p>
                 </div>
                 
                 <div className="interpretation-block mb-4">
@@ -224,185 +220,427 @@ function Tarot() {
       </div>
 
       <style>{`
+        :root {
+          --cosmic-accent: #ff6a00;
+          --cosmic-accent-orange: #ff8c00;
+          --cosmic-accent-pink: #e31b7a;
+          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
+          --cosmic-accent-soft: #ffe4f0;
+          --cosmic-text: #1a1a2e;
+          --cosmic-text-muted: #4a4a6a;
+          --glass-border: #e0c8b8;
+          --premium-shadow: 0 6px 20px rgba(0,0,0,0.08);
+          --cosmic-bg: #f8f9fc;
+          --cosmic-white: #ffffff;
+        }
+
         .tarot-ritual-container {
-          background-color: #0b0c10;
-          color: #fff;
+          background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f2f8 100%);
+          min-height: 100vh;
           position: relative;
-          overflow: hidden;
+          overflow-x: hidden;
+          padding: 60px 0 80px;
         }
-        .mystical-bg {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at center, rgba(30,10,60,0.4) 0%, rgba(10,5,20,0.9) 70%, #050508 100%);
-          z-index: 1;
+
+        .mystical-bg-light {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          pointer-events: none;
+          z-index: 0;
+          background: 
+            radial-gradient(ellipse at 20% 30%, rgba(255,106,0,0.03) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(227,27,122,0.02) 0%, transparent 50%);
         }
-        .z-index-2 { z-index: 2; }
-        
+
         .tarot-title {
-          font-family: 'Merriweather Sans', serif;
+          font-family: 'Playfair Display', serif;
           font-weight: 800;
-          font-size: 3rem;
-          background: linear-gradient(to right, #ffd700, #ff8c00, #ff0080);
+          font-size: clamp(2rem, 5vw, 3.5rem);
+          color: #1a1a2e;
+          margin-bottom: 0.5rem;
+          background: linear-gradient(135deg, #1a1a2e, #2d2d5e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          letter-spacing: 2px;
-          margin-bottom: 0.5rem;
-          text-transform: uppercase;
         }
-        .tarot-subtitle { color: #aaa; font-size: 1.1rem; letter-spacing: 1px; }
 
-        /* Input Arena */
-        .ritual-input-box {
-          background: rgba(20, 15, 35, 0.6);
-          border: 1px solid rgba(255, 106, 0, 0.3);
-          border-radius: 20px;
-          backdrop-filter: blur(10px);
-          box-shadow: 0 0 40px rgba(0,0,0,0.5), inset 0 0 20px rgba(255,106,0,0.05);
+        .title-separator {
+          width: 60px;
+          height: 4px;
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
+          border-radius: 2px;
+          margin: 15px auto;
         }
-        .tarot-icon-large { font-size: 3rem; color: #ff6a00; text-shadow: 0 0 20px #ff6a00; animation: pulseGlow 3s infinite; }
-        
+
+        .tarot-subtitle {
+          color: #e31b7a;
+          font-size: 0.85rem;
+          text-transform: uppercase;
+          letter-spacing: 4px;
+          font-weight: 700;
+          margin-top: 10px;
+        }
+
+        .ritual-input-box {
+          background: var(--cosmic-white);
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 28px;
+          padding: 50px 40px !important;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        }
+
+        .tarot-icon-large {
+          font-size: 3.5rem;
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          margin-bottom: 20px;
+        }
+
         .mystic-input {
           width: 100%;
-          background: rgba(0,0,0,0.5);
-          border: none;
-          border-bottom: 2px solid #ff6a00;
-          color: #fff;
-          font-size: 1.2rem;
-          padding: 15px;
+          background: #f8f9fc;
+          border: 1.5px solid #e0e0e8;
+          border-radius: 16px;
+          color: #1a1a2e;
+          font-size: 1rem;
+          padding: 16px 20px;
           text-align: center;
-          outline: none;
-          transition: all 0.3s;
+          transition: all 0.3s ease;
         }
-        .mystic-input:focus { background: rgba(0,0,0,0.8); border-bottom-color: #ffd700; box-shadow: 0 10px 20px -10px rgba(255,215,0,0.3); }
-        .mystic-input::placeholder { color: #666; font-style: italic; }
+
+        .mystic-input:focus {
+          outline: none;
+          border-color: #ff6a00;
+          background: #ffffff;
+          box-shadow: 0 0 0 4px rgba(255,106,0,0.1);
+        }
+
+        .mystic-input::placeholder {
+          color: #aaa;
+        }
 
         .mystic-btn {
-          background: linear-gradient(135deg, #ff6a00, #ee0979);
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
+          color: #fff;
           border: none;
-          color: white;
-          padding: 15px 30px;
-          font-size: 1.1rem;
-          font-weight: bold;
-          border-radius: 30px;
-          cursor: pointer;
-          transition: all 0.3s;
+          padding: 16px;
+          border-radius: 50px;
+          font-weight: 700;
+          letter-spacing: 1.5px;
           text-transform: uppercase;
+          font-size: 14px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .mystic-btn:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 12px 30px rgba(227,27,122,0.4);
+        }
+
+        .ritual-prompt {
+          color: #1a1a2e;
+          font-weight: 600;
+          font-size: 1.3rem;
           letter-spacing: 1px;
-          box-shadow: 0 5px 20px rgba(238, 9, 121, 0.4);
         }
-        .mystic-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(238, 9, 121, 0.6); }
-
-        .mystic-outline-btn {
-          background: transparent;
-          border: 1px solid #ff6a00;
-          color: #ff6a00;
-          padding: 10px 25px;
-          border-radius: 25px;
-          transition: all 0.3s;
-        }
-        .mystic-outline-btn:hover { background: rgba(255,106,0,0.1); box-shadow: 0 0 15px rgba(255,106,0,0.4); }
-
-        /* Arena & Fan */
-        .ritual-arena { margin-top: 80px; height: 400px; position: relative; }
-        .ritual-prompt { font-family: 'Merriweather Sans', serif; color: #ffd700; text-shadow: 0 0 10px rgba(255,215,0,0.5); animation: fadePulse 2s infinite alternate; }
 
         .deck-fan-container {
           position: relative;
-          height: 200px;
-          display: flex;
-          justify-content: center;
-          align-items: flex-end;
-          margin-top: 100px;
-          perspective: 1000px;
-        }
-        
-        .ritual-card-back {
-          position: absolute;
-          width: 80px;
-          height: 140px;
-          background: linear-gradient(135deg, #2a0845, #100b20);
-          border: 2px solid #ff6a00;
-          border-radius: 8px;
-          transform-origin: bottom center;
-          transition: transform 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.5s, box-shadow 0.3s;
-          cursor: pointer;
-          box-shadow: -5px 0 15px rgba(0,0,0,0.6);
+          height: 420px;
           display: flex;
           justify-content: center;
           align-items: center;
+          width: 100%;
         }
-        .ritual-card-back .card-pattern {
-          width: 90%; height: 92%;
-          border: 1px dashed rgba(255,106,0,0.5);
-          background: repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(255,106,0,0.05) 10px, rgba(255,106,0,0.05) 20px);
-          border-radius: 4px;
+
+        .ritual-card-back {
+          position: absolute;
+          width: 140px;
+          height: 210px;
+          background: #ffffff;
+          border: 2px solid #e0e0e8;
+          border-radius: 12px;
+          box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+          cursor: pointer;
+          transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+          will-change: transform;
+          transform-origin: center center;
         }
+
+        .ritual-card-back:hover {
+          border-color: #ff6a00;
+          box-shadow: 0 12px 28px rgba(255,106,0,0.2);
+          transform: translateY(-8px) rotate(0deg) scale(1.05) !important;
+        }
+
+        .card-pattern {
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          width: 60px;
+          height: 60px;
+          border: 2px solid #e31b7a;
+          border-radius: 50%;
+          opacity: 0.15;
+        }
+
         .ritual-card-back::after {
-          content: '✧'; position: absolute; font-size: 24px; color: #ff6a00; text-shadow: 0 0 10px #ff6a00;
+          content: '?';
+          position: absolute;
+          top: 50%;
+          left: 50%;
+          transform: translate(-50%, -50%);
+          font-size: 24px;
+          font-weight: 800;
+          color: #e31b7a;
+          opacity: 0.3;
         }
 
-        .deck-fan-container:not(.is-shuffling) .ritual-card-back:hover {
-          z-index: 50 !important;
-          box-shadow: 0 0 30px rgba(255,106,0,0.8);
-          /* The hover transform adds a slight pop up */
-          margin-bottom: 20px;
-          border-color: #ffd700;
+        .selected-card {
+          transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
         }
-        .selected-card { box-shadow: 0 0 50px rgba(255,106,0,1); cursor: default; }
 
-        /* Shuffling Animation overlay */
-        .is-shuffling .ritual-card-back { animation: fastShuffle 0.2s infinite; }
-
-        /* Reading Panel & Flip */
-        .result-arena { margin-top: 40px; }
-        .reading-panel {
-          background: rgba(20, 15, 30, 0.8);
-          border: 1px solid rgba(138, 43, 226, 0.3);
-          border-radius: 20px;
-          backdrop-filter: blur(15px);
-          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+        .static-back {
+          position: relative !important;
+          transform: none !important;
+          margin: 0 auto;
         }
-        .reading-heading { color: #ff6a00; font-family: 'Merriweather Sans', serif; border-bottom: 1px solid rgba(255,106,0,0.2); padding-bottom: 15px; }
-        .reading-label { display: block; font-size: 0.8rem; text-transform: uppercase; letter-spacing: 2px; color: #888; margin-bottom: 8px; }
-        .reading-text { font-size: 1.15rem; line-height: 1.8; color: #e0e0e0; }
-        
-        .wisdom-block {
-          background: rgba(255, 106, 0, 0.05);
-          border-left: 4px solid #ff6a00;
-          border-radius: 0 10px 10px 0;
-        }
-        .wisdom-text { font-size: 1.1rem; color: #ffd700; font-style: italic; }
 
-        /* 3D Card Flip */
-        .result-card-container { width: 220px; height: 380px; perspective: 1000px; }
-        .tarot-card-reveal { width: 100%; height: 100%; }
-        .tarot-card-inner { position: relative; width: 100%; height: 100%; text-align: center; transition: transform 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); transform-style: preserve-3d; }
-        .tarot-card-reveal.flipped .tarot-card-inner { transform: rotateY(180deg); }
-        .tarot-card-front-side, .tarot-card-back-side { position: absolute; width: 100%; height: 100%; backface-visibility: hidden; border-radius: 12px; }
-        
-        .tarot-card-front-side .static-back { position: relative; width: 100%; height: 100%; transform: none !important; box-shadow: 0 10px 30px rgba(0,0,0,0.8); }
-        
-        .tarot-card-back-side { 
-          background: linear-gradient(135deg, #1f1c2c, #928dab);
+        /* Result Card Styling */
+        .result-card-container {
+          width: 240px;
+          height: 360px;
+          perspective: 1000px;
+        }
+
+        .tarot-card-reveal {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          transition: transform 0.8s;
+          transform-style: preserve-3d;
+        }
+
+        .tarot-card-reveal.flipped {
           transform: rotateY(180deg);
-          border: 2px solid #ffd700;
-          box-shadow: 0 0 40px rgba(255, 215, 0, 0.3), inset 0 0 20px rgba(0,0,0,0.8);
-          display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+
+        .tarot-card-front-side, .tarot-card-back-side {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          border-radius: 16px;
+          overflow: hidden;
+        }
+
+        .tarot-card-front-side {
+          transform: rotateY(0deg);
+        }
+
+        .tarot-card-back-side {
+          background: #ffffff;
+          border: 3px solid #e31b7a;
+          border-radius: 16px;
+          transform: rotateY(180deg);
+          box-shadow: 0 15px 40px rgba(227,27,122,0.15);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
           padding: 20px;
         }
-        .card-symbol { font-size: 4rem; color: #ffd700; text-shadow: 0 2px 10px rgba(0,0,0,0.5); margin-bottom: 20px; }
-        .card-title { font-family: 'Merriweather Sans', serif; font-weight: bold; color: #fff; font-size: 1.5rem; text-transform: uppercase; letter-spacing: 1px; }
-        .card-badge { padding: 5px 15px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; margin-top: 15px; }
-        .bg-upright { background: rgba(40, 167, 69, 0.2); border: 1px solid #28a745; color: #28a745; }
-        .bg-reversed { background: rgba(220, 53, 69, 0.2); border: 1px solid #dc3545; color: #dc3545; }
+
+        .card-content {
+          text-align: center;
+        }
+
+        .card-symbol {
+          font-size: 48px;
+          margin-bottom: 15px;
+        }
+
+        .card-title {
+          font-size: 18px;
+          font-weight: 800;
+          color: #1a1a2e;
+          margin-bottom: 10px;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .card-badge {
+          display: inline-block;
+          padding: 5px 15px;
+          border-radius: 30px;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .bg-upright {
+          background: linear-gradient(135deg, rgba(40,167,69,0.15), rgba(40,167,69,0.05));
+          color: #28a745;
+          border: 1px solid rgba(40,167,69,0.3);
+        }
+
+        .bg-reversed {
+          background: linear-gradient(135deg, rgba(220,53,69,0.15), rgba(220,53,69,0.05));
+          color: #dc3545;
+          border: 1px solid rgba(220,53,69,0.3);
+        }
+
+        .reading-panel {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 28px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          height: 100%;
+        }
+
+        .reading-heading {
+          font-family: 'Playfair Display', serif;
+          color: #1a1a2e;
+          font-weight: 800;
+          font-size: 1.8rem;
+          border-bottom: 2px solid #f0f0f0;
+          padding-bottom: 15px;
+        }
+
+        .reading-label {
+          display: inline-block;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 2px;
+          color: #e31b7a;
+          margin-bottom: 12px;
+        }
+
+        .reading-text {
+          color: #4a4a6a;
+          font-weight: 500;
+          line-height: 1.8;
+          font-size: 1rem;
+        }
+
+        .wisdom-block {
+          background: linear-gradient(135deg, #fff8f0, #ffffff);
+          border-left: 4px solid #e31b7a;
+          border-radius: 16px;
+        }
+
+        .wisdom-text {
+          color: #1a1a2e;
+          font-weight: 600;
+          font-style: italic;
+          line-height: 1.7;
+        }
+
+        .text-warning {
+          color: #ff6a00 !important;
+        }
+
+        .mystic-outline-btn {
+          background: transparent;
+          border: 2px solid #ff6a00;
+          color: #ff6a00;
+          padding: 12px 28px;
+          border-radius: 50px;
+          font-weight: 700;
+          font-size: 13px;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          cursor: pointer;
+        }
+
+        .mystic-outline-btn:hover {
+          background: #ff6a00;
+          color: #fff;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(255,106,0,0.3);
+        }
 
         /* Animations */
-        .fade-in { animation: fadeIn 0.5s ease-in both; }
-        .fade-in-slow { animation: fadeIn 1s ease-in both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes fadePulse { from { opacity: 0.7; } to { opacity: 1; } }
-        @keyframes pulseGlow { 0% { text-shadow: 0 0 10px #ff6a00; transform: scale(1); } 50% { text-shadow: 0 0 30px #ff6a00, 0 0 50px #ff0080; transform: scale(1.1); } 100% { text-shadow: 0 0 10px #ff6a00; transform: scale(1); } }
-        @keyframes fastShuffle { 0% { transform: translate(0,0); } 25% { transform: translate(2px,-2px); } 50% { transform: translate(-2px,0); } 75% { transform: translate(0,2px); } 100% { transform: translate(0,0); } }
+        .fade-in {
+          animation: fadeIn 0.6s ease-out;
+        }
+
+        .fade-in-slow {
+          animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+          .ritual-input-box {
+            padding: 30px 25px !important;
+          }
+          .deck-fan-container {
+            height: 350px;
+          }
+          .ritual-card-back {
+            width: 100px;
+            height: 150px;
+          }
+          .result-card-container {
+            width: 200px;
+            height: 300px;
+            margin-bottom: 30px;
+          }
+          .card-symbol {
+            font-size: 32px;
+          }
+          .reading-panel {
+            padding: 25px !important;
+          }
+          .reading-heading {
+            font-size: 1.4rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .ritual-card-back {
+            width: 80px;
+            height: 120px;
+          }
+          .card-pattern {
+            width: 35px;
+            height: 35px;
+          }
+          .ritual-card-back::after {
+            font-size: 16px;
+          }
+          .result-card-container {
+            width: 170px;
+            height: 255px;
+          }
+        }
+
+        .z-index-2 {
+          z-index: 2;
+        }
+
+        .container {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 0 20px;
+        }
       `}</style>
     </section>
   );

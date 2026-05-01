@@ -1,127 +1,275 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 
-const inp = { width:'100%', display:'block', background:'rgba(0,0,0,0.45)', border:'1px solid rgba(255,255,255,0.13)', color:'#fff', padding:'10px 14px', borderRadius:8, fontSize:14, outline:'none', boxSizing:'border-box' };
-const lbl = { display:'block', fontSize:11, color:'#999', textTransform:'uppercase', letterSpacing:'1px', marginBottom:6, fontWeight:500 };
-const btn = { display:'inline-flex', alignItems:'center', justifyContent:'center', gap:8, background:'linear-gradient(135deg,#ff6a00,#ee0979)', border:'none', color:'#fff', padding:'11px 24px', borderRadius:8, fontWeight:600, fontSize:14, cursor:'pointer', width:'100%', boxShadow:'0 4px 14px rgba(255,106,0,0.3)' };
-const card = { background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:14, backdropFilter:'blur(10px)' };
-const backBtn = { background:'transparent', border:'1px solid rgba(255,106,0,0.4)', color:'#ff6a00', padding:'7px 16px', borderRadius:6, fontSize:13, cursor:'pointer', marginBottom:28 };
-const infoRow = { display:'flex', alignItems:'center', gap:10, padding:'11px 14px', borderRadius:10, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)' };
+const inp = {
+  width: '100%',
+  display: 'block',
+  background: '#f8f9fc',
+  border: '1px solid #e0e0e8',
+  color: '#1a1a2e',
+  padding: '12px 16px',
+  borderRadius: 12,
+  fontSize: 14,
+  outline: 'none',
+  boxSizing: 'border-box',
+  transition: 'all 0.3s ease'
+};
+
+const lbl = {
+  display: 'block',
+  fontSize: 11,
+  color: '#6b6b8a',
+  textTransform: 'uppercase',
+  letterSpacing: '1px',
+  marginBottom: 6,
+  fontWeight: 600
+};
+
+const btn = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  gap: 8,
+  background: 'linear-gradient(135deg, #ff6a00, #e31b7a)',
+  border: 'none',
+  color: '#fff',
+  padding: '14px 28px',
+  borderRadius: 50,
+  fontWeight: 700,
+  fontSize: 14,
+  cursor: 'pointer',
+  width: '100%',
+  boxShadow: '0 4px 14px rgba(227,27,122,0.3)',
+  transition: 'all 0.3s ease'
+};
+
+const card = {
+  background: '#ffffff',
+  border: '1px solid rgba(0,0,0,0.06)',
+  borderRadius: 20,
+  boxShadow: '0 4px 15px rgba(0,0,0,0.05)',
+  transition: 'all 0.3s ease'
+};
+
+const backBtn = {
+  background: 'transparent',
+  border: '1px solid rgba(255,106,0,0.3)',
+  color: '#ff6a00',
+  padding: '8px 20px',
+  borderRadius: 25,
+  fontSize: 13,
+  fontWeight: 500,
+  cursor: 'pointer',
+  marginBottom: 28,
+  transition: 'all 0.3s ease'
+};
+
+const infoRow = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 12,
+  padding: '14px 18px',
+  borderRadius: 14,
+  background: '#f8f9fc',
+  border: '1px solid #f0f0f0'
+};
 
 function MoonTool({ onBack }) {
-  const [formData, setFormData] = useState({ name:'', dob:'', tob:'12:00' });
-  const [result,   setResult]   = useState(null);
-  const [loading,  setLoading]  = useState(false);
-  const [error,    setError]    = useState('');
+  const [formData, setFormData] = useState({ name: '', dob: '', tob: '12:00' });
+  const [result, setResult] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
   const calculate = async (e) => {
-    e.preventDefault(); setLoading(true); setError('');
+    e.preventDefault();
+    setLoading(true);
+    setError('');
     try {
-      const res  = await fetch(`${API_BASE}/api/tools/moon`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(formData) });
+      const res = await fetch(`${API_BASE}/api/tools/moon`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData)
+      });
       const resp = await res.json();
       if (!resp) throw new Error('Calculation failed');
       setResult(resp);
-    } catch (err) { setError(err.message || 'Lunar calculation failed'); }
-    finally { setLoading(false); }
+    } catch (err) {
+      setError(err.message || 'Lunar calculation failed');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div style={{ color:'#fff' }}>
-      <button style={backBtn} onClick={onBack}>← Back to Tools</button>
-      <div className="text-center mb-4">
-        <h2 className="t-heading">🌙 Moon Sign &amp; Phase</h2>
-        <p style={{ color:'#aaa', fontSize:15 }}>Discover your Vedic moon sign, lunar phase &amp; emotional blueprint</p>
-      </div>
+    <div style={{
+      background: 'linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f2f8 100%)',
+      minHeight: '100vh',
+      padding: '40px 20px'
+    }}>
+      <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+        <button
+          style={backBtn}
+          onClick={onBack}
+          onMouseEnter={(e) => { e.currentTarget.style.background = '#ff6a00'; e.currentTarget.style.color = '#fff'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = '#ff6a00'; }}
+        >
+          ← Back to Tools
+        </button>
 
-      <div className="row justify-content-center mb-4">
-        <div className="col-lg-5 col-md-7">
-          <div style={{ ...card, padding:28 }}>
-            <form onSubmit={calculate}>
-              <div style={{ marginBottom:16 }}>
-                <label style={lbl}>Full Name</label>
-                <input style={inp} type="text" placeholder="Enter your name"
-                  value={formData.name} onChange={(e) => setFormData({ ...formData, name:e.target.value })} required />
-              </div>
-              <div className="row g-2" style={{ marginBottom:22 }}>
-                <div className="col-7">
-                  <label style={lbl}>Date of Birth</label>
-                  <div className="position-relative">
-                    <input style={inp} type="date" className="custom-date-input" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob:e.target.value })} required />
-                    <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
+        <div className="text-center mb-5">
+          <h2 style={{
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            background: 'linear-gradient(135deg, #1a1a2e, #2d2d5e)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            marginBottom: '10px'
+          }}>
+            🌙 Moon Sign &amp; Phase
+          </h2>
+          <div style={{
+            width: '60px',
+            height: '4px',
+            background: 'linear-gradient(135deg, #ff6a00, #e31b7a)',
+            borderRadius: '2px',
+            margin: '15px auto 20px'
+          }}></div>
+          <p style={{ color: '#6b6b8a', fontSize: 15, maxWidth: '500px', margin: '0 auto' }}>
+            Discover your Vedic moon sign, lunar phase &amp; emotional blueprint
+          </p>
+        </div>
+
+        <div className="row justify-content-center mb-5">
+          <div className="col-lg-5 col-md-7">
+            <div style={{ ...card, padding: '32px 28px' }}>
+              <form onSubmit={calculate}>
+                <div style={{ marginBottom: 20 }}>
+                  <label style={lbl}>Full Name</label>
+                  <input
+                    style={inp}
+                    type="text"
+                    placeholder="Enter your name"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    required
+                    onFocus={(e) => { e.currentTarget.style.borderColor = '#ff6a00'; e.currentTarget.style.background = '#ffffff'; }}
+                    onBlur={(e) => { e.currentTarget.style.borderColor = '#e0e0e8'; e.currentTarget.style.background = '#f8f9fc'; }}
+                  />
+                </div>
+                <div className="row g-3" style={{ marginBottom: 24 }}>
+                  <div className="col-7">
+                    <label style={lbl}>Date of Birth</label>
+                    <div className="position-relative">
+                      <input
+                        style={inp}
+                        type="date"
+                        className="custom-date-input-light"
+                        value={formData.dob}
+                        onChange={(e) => setFormData({ ...formData, dob: e.target.value })}
+                        required
+                      />
+                      <i className="fas fa-calendar-alt position-absolute" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.5, color: '#6b6b8a' }}></i>
+                    </div>
+                  </div>
+                  <div className="col-5">
+                    <label style={lbl}>Birth Time</label>
+                    <div className="position-relative">
+                      <input
+                        style={inp}
+                        type="time"
+                        className="custom-time-input-light"
+                        value={formData.tob}
+                        onChange={(e) => setFormData({ ...formData, tob: e.target.value })}
+                      />
+                      <i className="fas fa-clock position-absolute" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.5, color: '#6b6b8a' }}></i>
+                    </div>
                   </div>
                 </div>
-                <div className="col-5">
-                  <label style={lbl}>Birth Time</label>
-                  <div className="position-relative">
-                    <input style={inp} type="time" className="custom-time-input" value={formData.tob} onChange={(e) => setFormData({ ...formData, tob:e.target.value })} />
-                    <i className="fas fa-clock position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
-                  </div>
-                </div>
-              </div>
-              <button style={btn} type="submit" disabled={loading}>
-                {loading ? <><span className="spinner-border spinner-border-sm" />  Calculating…</> : 'Get Moon Report'}
-              </button>
-              {error && <p style={{ color:'#f87171', fontSize:13, textAlign:'center', marginTop:10 }}>{error}</p>}
-            </form>
+                <button
+                  style={btn}
+                  type="submit"
+                  disabled={loading}
+                  onMouseEnter={(e) => { if (!loading) e.currentTarget.style.transform = 'translateY(-3px)'; }}
+                  onMouseLeave={(e) => { if (!loading) e.currentTarget.style.transform = 'none'; }}
+                >
+                  {loading ? <><span className="spinner-border spinner-border-sm" style={{ marginRight: 8 }} /> Calculating…</> : 'Get Moon Report'}
+                </button>
+                {error && <p style={{ color: '#dc3545', fontSize: 13, textAlign: 'center', marginTop: 15 }}>{error}</p>}
+              </form>
+            </div>
           </div>
         </div>
-      </div>
 
-      {result && (
-        <div style={{ animation:'fadeUp 0.5s ease both' }}>
-          <div className="row justify-content-center">
-            <div className="col-lg-9">
-              {/* Phase header */}
-              <div style={{ ...card, padding:'28px 24px', textAlign:'center', marginBottom:20 }}>
-                <div style={{ fontSize:13, color:'#aaa', textTransform:'uppercase', letterSpacing:'2px', marginBottom:8 }}>{result.name}'s Moon Phase Report</div>
-                <div style={{ fontSize:'clamp(26px,5vw,42px)', fontWeight:900, color:'#fff', letterSpacing:2, marginBottom:4 }}>{result.phase?.name}</div>
-                <div style={{ fontSize:18, color:'#ffd700', fontStyle:'italic' }}>{result.phase?.title}</div>
-              </div>
-
-              <div className="row g-3">
-                {/* Keywords */}
-                <div className="col-md-6">
-                  <div style={{ ...card, padding:24, height:'100%' }}>
-                    <div style={{ fontSize:14, fontWeight:700, color:'#ff6a00', borderLeft:'3px solid #ff6a00', paddingLeft:12, marginBottom:16 }}>Key Characteristics</div>
-                    {result.phase?.keywords?.map((kw,i) => (
-                      <div key={i} style={{ display:'flex', alignItems:'center', gap:10, marginBottom:12 }}>
-                        <span style={{ width:8, height:8, borderRadius:'50%', background:'#ff6a00', flexShrink:0, display:'inline-block' }} />
-                        <span style={{ color:'#ddd', fontSize:15 }}>{kw}</span>
-                      </div>
-                    ))}
+        {result && (
+          <div style={{ animation: 'fadeUp 0.5s ease both' }}>
+            <div className="row justify-content-center">
+              <div className="col-lg-9">
+                {/* Phase header */}
+                <div style={{ ...card, padding: '32px 28px', textAlign: 'center', marginBottom: 24 }}>
+                  <div style={{ fontSize: 12, color: '#e31b7a', textTransform: 'uppercase', letterSpacing: '3px', marginBottom: 10, fontWeight: 600 }}>
+                    {result.name}'s Moon Phase Report
+                  </div>
+                  <div style={{ fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, color: '#1a1a2e', letterSpacing: 2, marginBottom: 8 }}>
+                    {result.phase?.name}
+                  </div>
+                  <div style={{ fontSize: 18, color: '#ff6a00', fontStyle: 'italic', fontWeight: 500 }}>
+                    {result.phase?.title}
                   </div>
                 </div>
-                {/* Details */}
-                <div className="col-md-6">
-                  <div className="row g-3">
-                    <div className="col-12">
-                      <div style={{ ...card, padding:'16px 20px', textAlign:'center' }}>
-                        <div style={{ fontSize:11, color:'#777', textTransform:'uppercase', marginBottom:4 }}>Phase Number</div>
-                        <div style={{ fontSize:48, fontWeight:900, color:'#ff6a00', lineHeight:1 }}>#{result.phase?.number}</div>
+
+                <div className="row g-4">
+                  {/* Keywords */}
+                  <div className="col-md-6">
+                    <div style={{ ...card, padding: 28, height: '100%' }}>
+                      <div style={{ fontSize: 14, fontWeight: 700, color: '#ff6a00', borderLeft: '3px solid #ff6a00', paddingLeft: 14, marginBottom: 20 }}>
+                        Key Characteristics
                       </div>
+                      {result.phase?.keywords?.map((kw, i) => (
+                        <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+                          <span style={{ width: 8, height: 8, borderRadius: '50%', background: 'linear-gradient(135deg, #ff6a00, #e31b7a)', flexShrink: 0 }} />
+                          <span style={{ color: '#4a4a6a', fontSize: 14 }}>{kw}</span>
+                        </div>
+                      ))}
                     </div>
-                    <div className="col-6">
-                      <div style={infoRow}>
-                        <div>
-                          <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', marginBottom:2 }}>Phase Start</div>
-                          <div style={{ fontWeight:700, color:'#fff', fontSize:14 }}>{result.phase?.startDeg}°</div>
+                  </div>
+
+                  {/* Details */}
+                  <div className="col-md-6">
+                    <div className="row g-4">
+                      <div className="col-12">
+                        <div style={{ ...card, padding: '20px 24px', textAlign: 'center' }}>
+                          <div style={{ fontSize: 11, color: '#6b6b8a', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 6 }}>Phase Number</div>
+                          <div style={{ fontSize: 52, fontWeight: 800, background: 'linear-gradient(135deg, #ff6a00, #e31b7a)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', lineHeight: 1 }}>
+                            #{result.phase?.number}
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-6">
-                      <div style={infoRow}>
-                        <div>
-                          <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', marginBottom:2 }}>Phase End</div>
-                          <div style={{ fontWeight:700, color:'#fff', fontSize:14 }}>{result.phase?.endDeg}°</div>
+                      <div className="col-6">
+                        <div style={infoRow}>
+                          <div>
+                            <div style={{ fontSize: 10, color: '#6b6b8a', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>Phase Start</div>
+                            <div style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 15 }}>{result.phase?.startDeg}°</div>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <div className="col-12">
-                      <div style={infoRow}>
-                        <span style={{ fontSize:20 }}>🌙</span>
-                        <div>
-                          <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', marginBottom:2 }}>Vedic Moon Sign</div>
-                          <div style={{ fontWeight:700, color:'#fff', fontSize:16 }}>{result.moonSign} <span style={{ color:'#666', fontSize:12 }}>({result.moonDegree}°)</span></div>
+                      <div className="col-6">
+                        <div style={infoRow}>
+                          <div>
+                            <div style={{ fontSize: 10, color: '#6b6b8a', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>Phase End</div>
+                            <div style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 15 }}>{result.phase?.endDeg}°</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="col-12">
+                        <div style={infoRow}>
+                          <span style={{ fontSize: 24 }}>🌙</span>
+                          <div>
+                            <div style={{ fontSize: 10, color: '#6b6b8a', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 4 }}>Vedic Moon Sign</div>
+                            <div style={{ fontWeight: 700, color: '#1a1a2e', fontSize: 18 }}>
+                              {result.moonSign}
+                              <span style={{ color: '#aaa', fontSize: 13, marginLeft: 6 }}>({result.moonDegree}°)</span>
+                            </div>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -130,20 +278,68 @@ function MoonTool({ onBack }) {
               </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
+
       <style>{`
-        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-        .custom-date-input, .custom-time-input {
-          color-scheme: dark;
+        @keyframes fadeUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        
+        .custom-date-input-light,
+        .custom-time-input-light {
+          color-scheme: light;
           padding-right: 40px !important;
         }
-        .custom-date-input::-webkit-calendar-picker-indicator,
-        .custom-time-input::-webkit-calendar-picker-indicator {
+        
+        .custom-date-input-light::-webkit-calendar-picker-indicator,
+        .custom-time-input-light::-webkit-calendar-picker-indicator {
           position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          width: 100%; height: 100%;
-          opacity: 0; cursor: pointer; z-index: 2;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+          cursor: pointer;
+          z-index: 2;
+        }
+        
+        .container {
+          max-width: 1000px;
+          margin: 0 auto;
+        }
+        
+        .spinner-border {
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          vertical-align: text-bottom;
+          border: 2px solid currentColor;
+          border-right-color: transparent;
+          border-radius: 50%;
+          animation: spinner-border 0.75s linear infinite;
+        }
+        
+        @keyframes spinner-border {
+          to { transform: rotate(360deg); }
+        }
+        
+        @media (max-width: 768px) {
+          [style*="padding: 32px 28px"] {
+            padding: 24px 20px !important;
+          }
+          [style*="padding: 28px"] {
+            padding: 20px !important;
+          }
         }
       `}</style>
     </div>

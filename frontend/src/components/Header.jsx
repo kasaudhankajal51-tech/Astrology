@@ -24,12 +24,14 @@ function Header() {
         </div>
       </section>
 
-      <header className="w-100 mb-5 pb-3">
-        <nav className="navbar navbar-expand-lg navbar-light">
-          <div className="container">
-            <Link className="navbar-brand" to="/">
-              <img alt="logo" src="/images/logo.png" />
+      <header className="w-100 font-xl mb-0" style={{ background: 'var(--cosmic-bg)' }}>
+        <nav className="navbar navbar-expand-lg navbar-light py-0">
+          <div className="container-fluid px-2 px-md-3 px-lg-4">
+            <Link className="navbar-brand d-flex align-items-center p-0" to="/">
+              <img alt="logo" src="/images/logo.png" className="logo-crop" />
+              <div className="fb-logo-name ms-2">Astro<em>Ava</em></div>
             </Link>
+             
             <button
               className="navbar-toggler"
               type="button"
@@ -120,98 +122,60 @@ function Header() {
             <li className="nav-item">
               <Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link>
             </li>
-
             <li className="nav-item">
-              <button
-                className="nav-link mobile-menu-toggle"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mobile-consultations"
-                aria-expanded="false"
-                aria-controls="mobile-consultations"
-              >
+              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-consultations">
                 CONSULTATIONS
               </button>
               <div className="collapse mobile-submenu" id="mobile-consultations">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link></li>
-                  <li className="nav-item"><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Career & Bussiness</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Muhurat</a></li>
-                  <li className="nav-item"><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Health Astrology</a></li>
+                  <li><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link></li>
+                  <li><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Career & Business</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Muhurat</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Health Astrology</a></li>
                 </ul>
               </div>
             </li>
+            <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
             <li className="nav-item">
-              <Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link>
-            </li>
-            <li className="nav-item">
-              <Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link>
-            </li>
-
-            <li className="nav-item">
-              <button
-                className="nav-link mobile-menu-toggle"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mobile-courses"
-                aria-expanded="false"
-                aria-controls="mobile-courses"
-              >
+              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-courses">
                 COURSES
               </button>
               <div className="collapse mobile-submenu" id="mobile-courses">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><Link className="nav-link" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/advanced-astrology" data-bs-dismiss="offcanvas">Advanced Astrology</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/predictive-astrology" data-bs-dismiss="offcanvas">Predictive Astrology</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link></li>
+                  <li><Link className="nav-link" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link></li>
+                  <li><Link className="nav-link" to="/advanced-astrology" data-bs-dismiss="offcanvas">Advanced Astrology</Link></li>
+                  <li><Link className="nav-link" to="/predictive-astrology" data-bs-dismiss="offcanvas">Predictive Astrology</Link></li>
+                  <li><Link className="nav-link" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link></li>
                 </ul>
               </div>
             </li>
-
             <li className="nav-item">
-              <button
-                className="nav-link mobile-menu-toggle"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mobile-astro-shop"
-                aria-expanded="false"
-                aria-controls="mobile-astro-shop"
-              >
+              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-astro-shop">
                 ASTRO SHOP / STORE
               </button>
               <div className="collapse mobile-submenu" id="mobile-astro-shop">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><a className="nav-link" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" data-bs-dismiss="offcanvas">Gemstones</a></li>
-                  <li className="nav-item"><a className="nav-link" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" data-bs-dismiss="offcanvas">Rudraksha</a></li>
-                  <li className="nav-item"><a className="nav-link" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" data-bs-dismiss="offcanvas">Yantras</a></li>
-                  <li className="nav-item"><a className="nav-link" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" data-bs-dismiss="offcanvas">Puja Kits</a></li>
-                  <li className="nav-item"><a className="nav-link" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" data-bs-dismiss="offcanvas">Bracelets</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Gemstones</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Rudraksha</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Yantras</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Puja Kits</a></li>
+                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Bracelets</a></li>
                 </ul>
               </div>
             </li>
-
             <li className="nav-item">
-              <button
-                className="nav-link mobile-menu-toggle"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#mobile-free-tools"
-                aria-expanded="false"
-                aria-controls="mobile-free-tools"
-              >
+              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-free-tools">
                 FREE TOOLS
               </button>
               <div className="collapse mobile-submenu" id="mobile-free-tools">
                 <ul className="navbar-nav">
-                  <li className="nav-item"><Link className="nav-link" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/numerology" data-bs-dismiss="offcanvas">Numerology</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/tarot" data-bs-dismiss="offcanvas">Tarot Reading</Link></li>
-                  <li className="nav-item"><Link className="nav-link" to="/love" data-bs-dismiss="offcanvas">Love Calculator</Link></li>
+                  <li><Link className="nav-link" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link></li>
+                  <li><Link className="nav-link" to="/numerology" data-bs-dismiss="offcanvas">Numerology</Link></li>
+                  <li><Link className="nav-link" to="/tarot" data-bs-dismiss="offcanvas">Tarot Reading</Link></li>
+                  <li><Link className="nav-link" to="/love" data-bs-dismiss="offcanvas">Love Calculator</Link></li>
                 </ul>
               </div>
             </li>
@@ -223,50 +187,255 @@ function Header() {
       </div>
 
       <style>{`
+        :root {
+          --cosmic-accent: #ff6a00;
+          --cosmic-accent-orange: #ff8c00;
+          --cosmic-accent-pink: #e31b7a;
+          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
+          --cosmic-accent-soft: #ffe4f0;
+          --cosmic-text: #1a1a1a;
+          --cosmic-text-muted: #4a4a4a;
+          --glass-border: #e0c8b8;
+          --premium-shadow: 0 6px 14px rgba(0,0,0,0.08);
+          --cosmic-bg: #fffbf5;
+          --cosmic-white: #ffffff;
+        }
+
+        /* REPORT BAR - Fully Responsive */
         .report-bar {
           display: flex;
           align-items: center;
-          background: linear-gradient(90deg, rgb(9,12,52), rgb(25,11,26));
-          padding: 10px 0;
-          overflow: hidden;
+          background: var(--cosmic-bg);
+          padding: 8px 0;
+          overflow-x: hidden;
+          border-bottom: 1px solid var(--glass-border);
+          width: 100%;
         }
-
-        .mobile-offcanvas {
-          background: linear-gradient(180deg, rgb(9, 12, 52), rgb(25, 11, 26));
+        
+        .report-bar .label {
+          background: var(--cosmic-gradient);
           color: #fff;
-          width: 50vw;
-          max-width: 420px;
-          min-width: 280px;
+          font-weight: bold;
+          padding: 8px 5%;
+          white-space: nowrap;
+          z-index: 2;
+          font-size: clamp(11px, 2vw, 13px);
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          flex-shrink: 0;
+        }
+        
+        .scroll-wrapper {
+          overflow-x: hidden;
+          flex: 1;
+          width: 100%;
+        }
+        
+        .scroll-content {
+          display: inline-flex;
+          gap: clamp(20px, 3vw, 40px);
+          white-space: nowrap;
+          animation: scrollLeft 25s linear infinite;
+        }
+        
+        .item {
+          color: var(--cosmic-text);
+          font-size: clamp(11px, 2vw, 13px);
+          font-weight: 500;
+        }
+        
+        .new {
+          background: var(--cosmic-gradient);
+          color: #fff;
+          padding: 2px 8px;
+          margin-right: 8px;
+          border-radius: 6px;
+          font-size: clamp(9px, 1.8vw, 11px);
+          text-transform: uppercase;
+          font-weight: 800;
+        }
+        
+        @keyframes scrollLeft {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
         }
 
+        /* NAVBAR - Fully Responsive with container-fluid */
+        .container-fluid {
+          width: 100%;
+          max-width: 100%;
+          margin: 0 auto;
+        }
+        
+        /* Logo Crop Logic - Shows only icon, hides embedded white text */
+        .logo-crop {
+          height: clamp(40px, 5vw, 60px);
+          width: clamp(40px, 5vw, 60px); /* Square crop to isolate icon */
+          object-fit: cover;
+          object-position: left;
+          transition: all 0.3s ease;
+        }
+        
+        .fb-logo-name {
+          font-weight: 800;
+          font-size: clamp(20px, 4vw, 38px);
+          color: var(--cosmic-text);
+          letter-spacing: -0.5px;
+          white-space: nowrap;
+        }
+        
+        .fb-logo-name em {
+          font-style: italic;
+          color: var(--cosmic-accent-pink);
+        }
+
+        /* Desktop Navigation - Responsive */
+        @media (min-width: 992px) {
+          .navbar .nav-link {
+            color: var(--cosmic-text) !important;
+            font-weight: 700;
+            padding: 10px clamp(8px, 1vw, 15px) !important;
+            font-size: clamp(11px, 1.2vw, 14px);
+            white-space: nowrap;
+            transition: all 0.3s;
+          }
+          
+          .navbar .nav-link:hover {
+            color: var(--cosmic-accent-pink) !important;
+          }
+          
+          .btn-consult-header {
+            background: var(--cosmic-gradient);
+            color: #fff !important;
+            border: none;
+            padding: clamp(8px, 1.2vw, 12px) clamp(16px, 2vw, 24px);
+            border-radius: 50px;
+            font-weight: 800;
+            font-size: clamp(10px, 1.1vw, 13px);
+            letter-spacing: 0.8px;
+            white-space: nowrap;
+            box-shadow: var(--premium-shadow);
+            transition: all 0.3s ease;
+            display: inline-block;
+            text-decoration: none;
+          }
+          
+          .btn-consult-header:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(227, 27, 122, 0.3);
+          }
+          
+          /* Critical Fix: Ensure button never overflows */
+          .right-menui ul {
+            margin: 0;
+            padding: 0;
+            list-style: none;
+          }
+          
+          .navbar-collapse {
+            flex: 1;
+          }
+          
+          .navbar-nav {
+            flex-wrap: wrap;
+          }
+        }
+        
+        /* Tablet and Medium Screens (992px - 1400px) */
+        @media (min-width: 992px) and (max-width: 1400px) {
+          .container-fluid {
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+          }
+          
+          .navbar .nav-link {
+            font-size: 11px !important;
+            padding-left: 6px !important;
+            padding-right: 6px !important;
+          }
+          
+          .btn-consult-header {
+            font-size: 10px !important;
+            padding: 8px 12px !important;
+          }
+          
+          .fb-logo-name {
+            font-size: 22px !important;
+          }
+          
+          .logo-crop {
+            height: 45px !important;
+          }
+        }
+        
+        /* Large Desktop (1400px+) */
+        @media (min-width: 1400px) {
+          .container-fluid {
+            padding-left: 40px;
+            padding-right: 40px;
+          }
+        }
+        
+        /* Extra Large Desktop */
+        @media (min-width: 1800px) {
+          .container-fluid {
+            padding-left: 60px;
+            padding-right: 60px;
+          }
+        }
+
+        /* Mobile Styles */
+        @media (max-width: 991px) {
+          .navbar-brand {
+            margin-right: 0;
+          }
+          
+          .logo-crop {
+            height: 40px;
+          }
+          
+          .fb-logo-name {
+            font-size: 20px;
+          }
+          
+          .navbar-toggler {
+            color: var(--cosmic-text) !important;
+            border-color: var(--glass-border) !important;
+          }
+        }
+
+        /* Mobile Offcanvas - Percentage Width */
+        .mobile-offcanvas {
+          background: var(--cosmic-white);
+          color: var(--cosmic-text);
+          width: 70% !important;
+          max-width: 400px;
+          min-width: 260px;
+          box-shadow: -10px 0 30px rgba(0,0,0,0.05);
+        }
+        
+        @media (max-width: 576px) {
+          .mobile-offcanvas {
+            width: 80% !important;
+          }
+        }
+        
         .mobile-offcanvas .offcanvas-header {
-          border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-          padding: 16px 16px;
+          border-bottom: 1px solid #f1f5f9;
+          padding: 16px;
         }
-
+        
         .mobile-offcanvas .offcanvas-title {
           font-weight: 700;
-          letter-spacing: 0.2px;
-          margin: 0;
+          color: var(--cosmic-text);
         }
-
-        .mobile-offcanvas .btn-close {
-          filter: invert(1) grayscale(100%);
-          opacity: 0.9;
-        }
-
-        .mobile-offcanvas .offcanvas-body {
-          padding: 10px 12px 16px;
-        }
-
+        
         .mobile-offcanvas .nav-link {
-          color: rgba(255, 255, 255, 0.92);
-          padding: 12px 12px;
-          border-radius: 10px;
+          color: var(--cosmic-text);
+          padding: 12px;
           font-weight: 600;
-          letter-spacing: 0.2px;
         }
-
+        
         .mobile-offcanvas .mobile-menu-toggle {
           width: 100%;
           text-align: left;
@@ -275,173 +444,62 @@ function Header() {
           display: flex;
           align-items: center;
           justify-content: space-between;
+          color: var(--cosmic-text);
         }
-
-        .mobile-offcanvas .mobile-menu-toggle::after {
-          content: '▾';
-          font-weight: 700;
-          opacity: 0.85;
-        }
-
-        .mobile-offcanvas .mobile-menu-toggle[aria-expanded="true"]::after {
-          transform: rotate(180deg);
-        }
-
+        
         .mobile-offcanvas .mobile-submenu {
-          padding-left: 10px;
-          margin-top: 4px;
-          margin-bottom: 8px;
-          border-left: 1px solid rgba(255, 255, 255, 0.12);
+          padding-left: 15px;
+          border-left: 1px solid #f1f5f9;
         }
-
+        
         .mobile-offcanvas .mobile-submenu .nav-link {
-          padding: 10px 12px;
           font-weight: 500;
-          opacity: 0.95;
-        }
-
-        .mobile-offcanvas .nav-link:hover,
-        .mobile-offcanvas .nav-link:focus {
-          color: #fff;
-          background: rgba(255, 255, 255, 0.08);
-        }
-
-        .mobile-offcanvas .nav-item + .nav-item {
-          margin-top: 2px;
-        }
-
-        .mobile-offcanvas .consult-btn {
-          background: #ff6a00;
-          color: #fff;
-          border: 0;
-          padding: 12px 14px;
-          border-radius: 12px;
-          font-weight: 700;
-        }
-
-        .mobile-offcanvas .consult-btn:hover,
-        .mobile-offcanvas .consult-btn:focus {
-          background: #ff7a1a;
-          color: #fff;
-        }
-
-        @media (min-width: 992px) {
-          .navbar-brand {
-            display: flex;
-            align-items: center;
-          }
-
-          .navbar-brand img {
-            height: 56px;
-            width: auto !important;
-            max-width: none;
-            object-fit: contain;
-            display: block;
-            transition: all 0.3s ease;
-          }
-        }
-
-        .btn-consult-header {
-          background: linear-gradient(135deg, #ff6a00, #ff0080);
-          color: #fff;
-          border: none;
-          padding: 10px 20px;
-          border-radius: 30px;
-          font-weight: 700;
-          font-size: 14px;
-          letter-spacing: 0.5px;
-          white-space: nowrap;
-          box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3);
-          transition: all 0.3s ease;
+          opacity: 0.8;
+          padding: 10px 12px;
         }
         
-        .btn-consult-header:hover {
-          color: #fff;
-          transform: translateY(-2px);
-          box-shadow: 0 6px 20px rgba(255, 106, 0, 0.5);
+        .mobile-offcanvas .btn-consult-header {
+          background: var(--cosmic-gradient);
+          color: #fff !important;
+          text-align: center;
+          display: block;
         }
 
-        /* Essential fix for laptop screens (992px - 1300px) to prevent wrapping */
-        @media (min-width: 992px) and (max-width: 1300px) {
-          .btn-consult-header {
-            font-size: 11px !important;
-            padding: 8px 12px !important;
-            letter-spacing: 0px !important;
-          }
-          .navbar .navbar-nav .nav-link {
-            font-size: 12px !important;
-            padding-left: 6px !important;
-            padding-right: 6px !important;
-          }
-          .navbar-brand img {
-            height: 40px !important;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .mobile-offcanvas {
-            width: 70vw;
-            min-width: 260px;
-          }
-          .navbar-brand img {
-            height: 40px;
-          }
-        }
-        
-        /* Modals and Forms inside Header */
+        /* Modal - Original Colors Maintained */
         .modal-content {
-          border: 1px solid rgba(255, 106, 0, 0.2) !important;
-          border-radius: 20px !important;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.8) !important;
-          backdrop-filter: blur(15px);
-        }
-        .modal-header {
-          border-bottom: 1px solid rgba(255, 106, 0, 0.15) !important;
+          background: var(--cosmic-white) !important;
+          border: none !important;
+          border-radius: 24px !important;
+          box-shadow: 0 25px 60px rgba(0,0,0,0.1) !important;
         }
         
-        /* Reports Bar Scroll */
-        .label {
-          background: rgb(249, 232, 1);
-          color: #000;
-          font-weight: bold;
-          padding: 8px 20px;
-          white-space: nowrap;
-          z-index: 2;
-          font-size: 14px;
+        .modal-header {
+          border-bottom: 1px solid #f1f5f9 !important;
+          padding: 20px 25px !important;
         }
-        .scroll-wrapper {
-          overflow: hidden;
-          flex: 1;
+        
+        .modal-title {
+          font-weight: 800 !important;
+          color: var(--cosmic-text) !important;
+          font-family: 'Merriweather Sans', serif;
+          color: #ff6a00 !important;
         }
-        .scroll-content {
-          display: inline-flex;
-          gap: 40px;
-          white-space: nowrap;
-          animation: scrollLeft 25s linear infinite;
-        }
-        .item {
-          color: #fff;
-          font-size: 13px;
+        
+        .modal-body {
+          padding: 25px !important;
         }
         
         .consultation-banner-wrapper {
           position: relative;
           border-radius: 15px;
           overflow: hidden;
-          box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-          border: 1px solid rgba(255, 106, 0, 0.2);
+          margin-bottom: 20px;
         }
         
         .consultation-banner-wrapper img {
           width: 100%;
-          height: 180px;
+          height: auto;
           object-fit: cover;
-          display: block;
-          transition: transform 0.5s ease;
-        }
-        
-        .consultation-banner-wrapper:hover img {
-          transform: scale(1.05);
         }
         
         .banner-overlay {
@@ -450,47 +508,53 @@ function Header() {
           left: 0;
           right: 0;
           padding: 20px;
-          background: linear-gradient(to top, rgba(11, 12, 16, 0.95), transparent);
-          color: #fff;
+          background: linear-gradient(to top, rgba(255,255,255,0.95), transparent);
         }
         
-        .banner-overlay h4 {
-          font-size: 1.2rem;
-          margin: 0;
-          color: #ff6a00;
-          font-weight: 700;
-          text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        .btn-primary {
+          background: var(--cosmic-gradient);
+          border: none;
+          font-weight: 800;
+          padding: 12px;
+          border-radius: 50px;
+          color: white;
         }
         
-        .banner-overlay p {
-          font-size: 0.85rem;
-          margin: 5px 0 0;
+        .btn-primary:hover {
+          background: var(--cosmic-gradient);
           opacity: 0.9;
-          font-style: italic;
+        }
+        
+        /* Dropdown Styles - Original */
+        .dropdown-menu {
+          border-radius: 16px;
+          border: 1px solid rgba(0,0,0,0.05);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        
+        .dropdown-item {
+          font-size: 14px;
+          transition: all 0.2s;
+        }
+        
+        .dropdown-item:hover {
+          background: linear-gradient(135deg, #fff0f5, #fff5eb);
+          color: var(--cosmic-accent-pink);
         }
 
-        .new {
-          background: #ffd43b;
-          color: #000;
-          padding: 2px 6px;
-          margin-right: 6px;
-          border-radius: 4px;
-          font-size: 11px;
-          text-transform: uppercase;
-        }
-        @keyframes scrollLeft {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
+        /* Utility */
+        .w-100 {
+          width: 100% !important;
         }
       `}</style>
 
       {/* Book Consultation Modal */}
       <div className="modal fade" id="registerModal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content" style={{ background: 'rgba(20, 15, 30, 0.95)', color: '#fff' }}>
+          <div className="modal-content">
             <div className="modal-header">
-              <h5 className="modal-title" style={{ fontFamily: "'Merriweather Sans', serif", color: '#ff6a00' }}>Book Consultation</h5>
-              <button type="button" className="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+              <h5 className="modal-title">Book Consultation</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div className="modal-body p-4">
               <div className="consultation-banner-wrapper mb-4">

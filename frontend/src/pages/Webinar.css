@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+
 :root {
   --brand-purple: #3B2261;
   --brand-coral: #EE6662;
@@ -222,7 +224,6 @@
 .faq-chevron.rotate { transform: rotate(180deg); }
 
 /* Redesigned Fixed Bottom CTA - Match Image */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
 .fixed-bottom-cta-v4 {
   position: fixed;

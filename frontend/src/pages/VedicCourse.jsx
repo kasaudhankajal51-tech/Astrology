@@ -445,7 +445,9 @@ function VedicCourse() {
         }
 
         .hero-badge-light {
-          display: inline-flex;
+          display: flex;
+          width: fit-content;
+          margin: 0 auto 25px;
           align-items: center;
           gap: 10px;
           background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
@@ -454,7 +456,6 @@ function VedicCourse() {
           border-radius: 50px;
           font-size: 13px;
           font-weight: 600;
-          margin-bottom: 25px;
           color: #e31b7a;
           backdrop-filter: blur(10px);
         }

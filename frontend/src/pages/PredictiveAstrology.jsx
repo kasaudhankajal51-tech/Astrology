@@ -7,7 +7,7 @@ function PredictiveAstrology() {
     email: '',
     phone: '',
     city: '',
-    experience: 'beginner'
+    experience: 'intermediate'
   });
 
   const handleInputChange = (e) => {
@@ -24,46 +24,12 @@ function PredictiveAstrology() {
     alert('Redirecting to secure payment gateway...\nCourse Fee: ₹999');
   };
 
-  const courseStats = [
-    { icon: '📅', value: '25-30', label: 'Classes' },
-    { icon: '⏰', value: '2 Days', label: 'Per Week' },
-    { icon: '💻', value: 'Live', label: 'Online Mode' },
-    { icon: '📜', value: '100%', label: 'Certificate' }
+  const highlights = [
+    { num: '35+', label: 'Hours Content', icon: '⏱️' },
+    { num: '8', label: 'Weeks Duration', icon: '📅' },
+    { num: '1.5K+', label: 'Students', icon: '👥' },
+    { num: '4.9', label: 'Rating', icon: '⭐' }
   ];
-
-  const learningTopics = [
-    { icon: '♈', title: '12 Zodiac Signs', desc: 'Rashis characteristics & behaviors' },
-    { icon: '🪐', title: '9 Planets', desc: 'Navagrahas effects & influences' },
-    { icon: '🏠', title: '12 Houses', desc: 'Bhavas life areas & significations' },
-    { icon: '🌙', title: '27 Nakshatras', desc: 'Lunar Mansions deep study' },
-    { icon: '✨', title: 'Yogas', desc: 'Planetary combinations' },
-    { icon: '⏳', title: 'Dasha Systems', desc: 'Timing events & predictions' }
-  ];
-
-  const [activeTab, setActiveTab] = useState('overview');
-
-  const tabs = [
-    { id: 'overview', label: 'Overview', icon: '📋' },
-    { id: 'curriculum', label: 'Curriculum', icon: '📚' },
-    { id: 'features', label: 'Features', icon: '⭐' },
-    { id: 'reviews', label: 'Reviews', icon: '💬' }
-  ];
-
-  const curriculumItems = [
-    { week: 'Week 1-2', title: 'Foundations of Vedic Astrology', topics: ['History & Philosophy', 'Zodiac Signs (Rashis)', 'Basic Chart Structure'] },
-    { week: 'Week 3-4', title: 'Planetary Powers', topics: ['9 Navagrahas Deep Dive', 'Planetary Strengths', 'Aspects & Conjunctions'] },
-    { week: 'Week 5-6', title: 'Houses & Life Areas', topics: ['12 Bhavas Explained', 'House Lords', 'Karakas (Significators)'] },
-    { week: 'Week 7-8', title: 'Nakshatras & Timing', topics: ['27 Lunar Mansions', 'Dasha Systems', 'Transits Analysis'] },
-    { week: 'Week 9-10', title: 'Predictive Techniques', topics: ['Yogas & Combinations', 'Marriage Matching', 'Career & Finance'] }
-  ];
-
-  const reviews = [
-    { name: 'Rajesh Kumar', rating: 5, text: 'Now I can confidently predict timing of events. The transit section is gold!', avatar: '/images/10350949.png' },
-    { name: 'Meera Patel', rating: 5, text: 'Best predictive astrology course online. Practical and accurate techniques.', avatar: '/images/10350961.png' },
-    { name: 'Anil Sharma', rating: 4, text: 'Great focus on practical prediction. Changed how I read charts completely.', avatar: '/images/10350969.png' }
-  ];
-
-  const [currentStep, setCurrentStep] = useState(0);
 
   const courseSteps = [
     { icon: '🎯', title: 'Event Prediction', desc: 'Predict specific events' },
@@ -74,11 +40,12 @@ function PredictiveAstrology() {
     { icon: '🌟', title: 'Yearly', desc: 'Annual forecasting' }
   ];
 
-  const highlights = [
-    { num: '35+', label: 'Hours Content', icon: '⏱️' },
-    { num: '8', label: 'Weeks Duration', icon: '📅' },
-    { num: '1.5K+', label: 'Students', icon: '👥' },
-    { num: '4.9', label: 'Rating', icon: '⭐' }
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const reviews = [
+    { name: 'Rajesh Kumar', rating: 5, text: 'Now I can confidently predict timing of events. The transit section is gold!', avatar: '/images/10350949.png' },
+    { name: 'Meera Patel', rating: 5, text: 'Best predictive astrology course online. Practical and accurate techniques.', avatar: '/images/10350961.png' },
+    { name: 'Anil Sharma', rating: 4, text: 'Great focus on practical prediction. Changed how I read charts completely.', avatar: '/images/10350969.png' }
   ];
 
   const faqs = [
@@ -88,46 +55,46 @@ function PredictiveAstrology() {
   ];
 
   return (
-    <section className="course-modern">
+    <section className="course-light-predictive">
       {/* Full Width Hero */}
-      <div className="hero-fullwidth">
-        <div className="container hero-content">
+      <div className="hero-fullwidth-light">
+        <div className="container hero-content-light">
           <div className="row align-items-center">
             <div className="col-lg-6 text-lg-start text-center">
-              <div className="hero-infographic" data-aos="fade-up">
+              <div className="hero-infographic-light" data-aos="fade-up">
                 <img src="/images/predictive_info.png" alt="Predictive Astrology" />
               </div>
-              <div className="hero-badge" data-aos="fade-up" data-aos-delay="100">
-                <span className="pulse-dot"></span>
+              <div className="hero-badge-light" data-aos="fade-up" data-aos-delay="100">
+                <span className="pulse-dot-light"></span>
                 Enrollment Open - Next Batch Starting Soon
               </div>
-              <h1 className="hero-title" data-aos="fade-up" data-aos-delay="200">
-                <span className="text-white">Professional</span>
-                <span className="gradient-text">Predictive Astrology Course</span>
+              <h1 className="hero-title-light" data-aos="fade-up" data-aos-delay="200">
+                <span>Professional</span>
+                <span className="gradient-text-light">Predictive Astrology Course</span>
               </h1>
-              <p className="hero-desc" data-aos="fade-up" data-aos-delay="300">
+              <p className="hero-desc-light" data-aos="fade-up" data-aos-delay="300">
                 Master the art of prediction. Learn timing of events using Vimshottari Dasha, 
                 Transits, and advanced planetary combinations for accurate forecasting.
               </p>
               
-              <div className="hero-highlights-modern" data-aos="fade-up" data-aos-delay="400">
+              <div className="hero-highlights-light" data-aos="fade-up" data-aos-delay="400">
                 {highlights.map((h, i) => (
-                  <div key={i} className="h-item-modern">
-                    <span className="h-icon">{h.icon}</span>
-                    <div className="h-text-wrap">
-                      <span className="h-num">{h.num}</span>
-                      <span className="h-label">{h.label}</span>
+                  <div key={i} className="h-item-light">
+                    <span className="h-icon-light">{h.icon}</span>
+                    <div className="h-text-wrap-light">
+                      <span className="h-num-light">{h.num}</span>
+                      <span className="h-label-light">{h.label}</span>
                     </div>
                   </div>
                 ))}
               </div>
 
-              <div className="hero-cta-row mt-4" data-aos="fade-up" data-aos-delay="500">
-                <button className="btn-primary-hero" onClick={() => setShowModal(true)}>
+              <div className="hero-cta-row-light mt-4" data-aos="fade-up" data-aos-delay="500">
+                <button className="btn-primary-light" onClick={() => setShowModal(true)}>
                   <span>Join Now ₹1,499</span>
                   <small>was ₹5,999</small>
                 </button>
-                <div className="price-guarantee">
+                <div className="price-guarantee-light">
                   <i className="fas fa-shield-alt"></i>
                   <span>7-Day<br/>Refund</span>
                 </div>
@@ -135,11 +102,11 @@ function PredictiveAstrology() {
             </div>
 
             <div className="col-lg-6 mt-lg-0 mt-5">
-              <div className="hero-visual-center" data-aos="zoom-in" data-aos-delay="600">
-                <div className="main-image-wrapper">
-                  <img src="/images/tengyart-VgijAV-e97Y-unsplash.jpg" alt="Predictive Course" />
-                  <div className="play-overlay" onClick={() => setShowModal(true)}>
-                    <div className="play-circle">
+              <div className="hero-visual-center-light" data-aos="zoom-in" data-aos-delay="600">
+                <div className="main-image-wrapper-light">
+                  <img src="/images/tengyart-VgijAV-e97Y-unsplash.jpg" alt="Predictive Astrology Course" />
+                  <div className="play-overlay-light" onClick={() => setShowModal(true)}>
+                    <div className="play-circle-light">
                       <i className="fas fa-play"></i>
                     </div>
                     <span>Watch Preview</span>
@@ -152,23 +119,23 @@ function PredictiveAstrology() {
       </div>
 
       {/* Learning Path Timeline */}
-      <div className="timeline-section">
+      <div className="timeline-section-light">
         <div className="container">
-          <h2 className="section-title-center">Your Learning Journey</h2>
-          <p className="section-sub">6 stages from beginner to professional astrologer</p>
+          <h2 className="section-title-center-light">Your Learning Journey</h2>
+          <p className="section-sub-light">6 stages to master predictive techniques</p>
           
-          <div className="timeline-track">
+          <div className="timeline-track-light">
             {courseSteps.map((step, idx) => (
               <div 
                 key={idx} 
-                className={`timeline-node ${currentStep === idx ? 'active' : ''}`}
+                className={`timeline-node-light ${currentStep === idx ? 'active' : ''}`}
                 onClick={() => setCurrentStep(idx)}
               >
-                <div className="node-circle">
-                  <span className="node-icon">{step.icon}</span>
-                  {currentStep === idx && <div className="node-ring"></div>}
+                <div className="node-circle-light">
+                  <span className="node-icon-light">{step.icon}</span>
+                  {currentStep === idx && <div className="node-ring-light"></div>}
                 </div>
-                <div className="node-info">
+                <div className="node-info-light">
                   <h4>{step.title}</h4>
                   <p>{step.desc}</p>
                 </div>
@@ -176,9 +143,9 @@ function PredictiveAstrology() {
             ))}
           </div>
           
-          <div className="timeline-content">
-            <div className="tc-card">
-              <span className="tc-icon">{courseSteps[currentStep].icon}</span>
+          <div className="timeline-content-light">
+            <div className="tc-card-light">
+              <span className="tc-icon-light">{courseSteps[currentStep].icon}</span>
               <h3>Stage {currentStep + 1}: {courseSteps[currentStep].title}</h3>
               <p>
                 {currentStep === 0 && 'Learn to predict specific life events with remarkable accuracy. Master the techniques for identifying what events will manifest in a person\'s life and when they will occur.'}
@@ -194,38 +161,38 @@ function PredictiveAstrology() {
       </div>
 
       {/* What's Included Grid */}
-      <div className="includes-section">
+      <div className="includes-section-light">
         <div className="container">
-          <h2 className="section-title-center">Everything You Get</h2>
-          <div className="includes-grid">
-            <div className="include-card premium">
-              <div className="ic-icon"><i className="fas fa-video"></i></div>
+          <h2 className="section-title-center-light">Everything You Get</h2>
+          <div className="includes-grid-light">
+            <div className="include-card-light premium">
+              <div className="ic-icon-light"><i className="fas fa-video"></i></div>
               <h4>Live Classes</h4>
               <p>Interactive sessions with expert astrologers twice a week</p>
-              <span className="ic-badge">20-24 Sessions</span>
+              <span className="ic-badge-light">20-24 Sessions</span>
             </div>
-            <div className="include-card">
-              <div className="ic-icon"><i className="fas fa-book"></i></div>
+            <div className="include-card-light">
+              <div className="ic-icon-light"><i className="fas fa-book"></i></div>
               <h4>Study Materials</h4>
               <p>PDFs, charts, templates and reference guides</p>
             </div>
-            <div className="include-card">
-              <div className="ic-icon"><i className="fas fa-infinity"></i></div>
+            <div className="include-card-light">
+              <div className="ic-icon-light"><i className="fas fa-infinity"></i></div>
               <h4>Lifetime Access</h4>
               <p>All recordings and materials available forever</p>
             </div>
-            <div className="include-card">
-              <div className="ic-icon"><i className="fas fa-certificate"></i></div>
+            <div className="include-card-light">
+              <div className="ic-icon-light"><i className="fas fa-certificate"></i></div>
               <h4>Certificate</h4>
               <p>Professional certification upon completion</p>
             </div>
-            <div className="include-card">
-              <div className="ic-icon"><i className="fas fa-users"></i></div>
+            <div className="include-card-light">
+              <div className="ic-icon-light"><i className="fas fa-users"></i></div>
               <h4>Community</h4>
               <p>Private group for discussions and support</p>
             </div>
-            <div className="include-card">
-              <div className="ic-icon"><i className="fas fa-headset"></i></div>
+            <div className="include-card-light">
+              <div className="ic-icon-light"><i className="fas fa-headset"></i></div>
               <h4>Doubt Support</h4>
               <p>Get your questions answered by instructors</p>
             </div>
@@ -234,25 +201,25 @@ function PredictiveAstrology() {
       </div>
 
       {/* Instructor Spotlight */}
-      <div className="instructor-section">
+      <div className="instructor-section-light">
         <div className="container">
           <div className="row align-items-center">
             <div className="col-lg-5">
-              <div className="instructor-image">
+              <div className="instructor-image-light">
                 <img src="/images/istockphoto-1200677760-612x612.jpg" alt="Sarah Mitchell" />
-                <div className="exp-badge">15+ Years Experience</div>
+                <div className="exp-badge-light">10+ Years Experience</div>
               </div>
             </div>
             <div className="col-lg-7">
-              <div className="instructor-info">
-                <span className="ii-label">Your Guide</span>
+              <div className="instructor-info-light">
+                <span className="ii-label-light">Your Guide</span>
                 <h2>Sarah Mitchell</h2>
-                <p className="ii-desc">
+                <p className="ii-desc-light">
                   International astrologer with 10+ years of experience in predictive astrology. 
                   Expert in transit analysis and timing predictions. Known for accurate 
                   forecasting and practical teaching approach.
                 </p>
-                <div className="ii-stats">
+                <div className="ii-stats-light">
                   <div><strong>2,500+</strong><span>Students Taught</span></div>
                   <div><strong>10+</strong><span>Years Experience</span></div>
                   <div><strong>1</strong><span>Book Authored</span></div>
@@ -264,42 +231,42 @@ function PredictiveAstrology() {
       </div>
 
       {/* Reviews Carousel */}
-      <div className="reviews-section">
+      <div className="reviews-section-light">
         <div className="container">
-          <h2 className="section-title-center">What Students Say</h2>
-          <div className="reviews-carousel">
+          <h2 className="section-title-center-light">What Students Say</h2>
+          <div className="reviews-carousel-light">
             {reviews.map((review, idx) => (
-              <div key={idx} className="review-box">
-                <div className="rb-header">
+              <div key={idx} className="review-box-light">
+                <div className="rb-header-light">
                   <img src={review.avatar} alt={review.name} />
                   <div>
                     <h5>{review.name}</h5>
-                    <div className="rb-stars">{'★'.repeat(review.rating)}</div>
+                    <div className="rb-stars-light">{'★'.repeat(review.rating)}</div>
                   </div>
                 </div>
                 <p>"{review.text}"</p>
               </div>
             ))}
           </div>
-          <div className="rating-big">
-            <span className="rb-num">4.9</span>
-            <span className="rb-total">out of 5 stars</span>
+          <div className="rating-big-light">
+            <span className="rb-num-light">4.9</span>
+            <span className="rb-total-light">out of 5 stars</span>
           </div>
         </div>
       </div>
 
       {/* FAQ Accordion */}
-      <div className="faq-section">
+      <div className="faq-section-light">
         <div className="container">
-          <h2 className="section-title-center">Common Questions</h2>
-          <div className="faq-list">
+          <h2 className="section-title-center-light">Common Questions</h2>
+          <div className="faq-list-light">
             {faqs.map((faq, idx) => (
-              <div key={idx} className="faq-item">
-                <div className="faq-q">
+              <div key={idx} className="faq-item-light">
+                <div className="faq-q-light">
                   <span>{faq.q}</span>
                   <i className="fas fa-chevron-down"></i>
                 </div>
-                <div className="faq-a">{faq.a}</div>
+                <div className="faq-a-light">{faq.a}</div>
               </div>
             ))}
           </div>
@@ -307,22 +274,22 @@ function PredictiveAstrology() {
       </div>
 
       {/* Final CTA */}
-      <div className="final-cta">
+      <div className="final-cta-light">
         <div className="container">
-          <div className="cta-box">
+          <div className="cta-box-light">
             <h2>Ready to Master Predictive Astrology?</h2>
             <p>Join 1,500+ students on this transformative journey</p>
-            <div className="cta-price-row">
-              <div className="cp-left">
-                <span className="cp-current">₹999</span>
-                <span className="cp-old">₹3,999</span>
-                <span className="cp-save">Save 75%</span>
+            <div className="cta-price-row-light">
+              <div className="cp-left-light">
+                <span className="cp-current-light">₹999</span>
+                <span className="cp-old-light">₹3,999</span>
+                <span className="cp-save-light">Save 75%</span>
               </div>
-              <button className="cp-btn" onClick={() => setShowModal(true)}>
+              <button className="cp-btn-light" onClick={() => setShowModal(true)}>
                 Enroll Now
               </button>
             </div>
-            <div className="cta-trust">
+            <div className="cta-trust-light">
               <span><i className="fas fa-lock"></i> Secure Payment</span>
               <span><i className="fas fa-undo"></i> 7-Day Refund</span>
               <span><i className="fas fa-check-circle"></i> Instant Access</span>
@@ -333,67 +300,67 @@ function PredictiveAstrology() {
 
       {/* Enrollment Modal */}
       {showModal && (
-        <div className="modal-overlay" onClick={() => setShowModal(false)}>
-          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
-            <div className="modal-header">
+        <div className="modal-overlay-light" onClick={() => setShowModal(false)}>
+          <div className="modal-content-light" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header-light">
               <h4>Enroll in Predictive Astrology</h4>
-              <button className="close-btn" onClick={() => setShowModal(false)}>×</button>
+              <button className="close-btn-light" onClick={() => setShowModal(false)}>×</button>
             </div>
             <form onSubmit={handleSubmit}>
-              <div className="modal-body">
-                <div className="form-group">
+              <div className="modal-body-light">
+                <div className="form-group-light">
                   <label>Full Name *</label>
                   <input
                     type="text"
                     name="name"
-                    className="form-control"
+                    className="form-control-light"
                     value={formData.name}
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your full name"
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-light">
                   <label>Email Address *</label>
                   <input
                     type="email"
                     name="email"
-                    className="form-control"
+                    className="form-control-light"
                     value={formData.email}
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your email"
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-light">
                   <label>Phone Number *</label>
                   <input
                     type="tel"
                     name="phone"
-                    className="form-control"
+                    className="form-control-light"
                     value={formData.phone}
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your phone number"
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-light">
                   <label>City/Location *</label>
                   <input
                     type="text"
                     name="city"
-                    className="form-control"
+                    className="form-control-light"
                     value={formData.city}
                     onChange={handleInputChange}
                     required
                     placeholder="Enter your city"
                   />
                 </div>
-                <div className="form-group">
+                <div className="form-group-light">
                   <label>Experience Level</label>
                   <select
                     name="experience"
-                    className="form-control"
+                    className="form-control-light"
                     value={formData.experience}
                     onChange={handleInputChange}
                   >
@@ -402,16 +369,16 @@ function PredictiveAstrology() {
                     <option value="expert">Expert - Want mastery</option>
                   </select>
                 </div>
-                <div className="fee-info">
-                  <p><strong>Course Fee:</strong> <span className="fee-amount">₹999</span></p>
-                  <p className="text-muted">Was ₹3,999 - Save 75% today</p>
+                <div className="fee-info-light">
+                  <p><strong>Course Fee:</strong> <span className="fee-amount-light">₹999</span></p>
+                  <p className="text-muted-light">Was ₹3,999 - Save 75% today</p>
                 </div>
               </div>
-              <div className="modal-footer">
-                <button type="button" className="btn btn-secondary" onClick={() => setShowModal(false)}>
+              <div className="modal-footer-light">
+                <button type="button" className="btn-secondary-light" onClick={() => setShowModal(false)}>
                   Cancel
                 </button>
-                <button type="submit" className="btn btn-payment" onClick={handlePayment}>
+                <button type="submit" className="btn-payment-light" onClick={handlePayment}>
                   <i className="fas fa-lock"></i> Pay ₹999 & Enroll
                 </button>
               </div>
@@ -421,232 +388,239 @@ function PredictiveAstrology() {
       )}
 
       <style>{`
-        .course-modern {
-          background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f0f23 100%);
+        /* ============================================
+           LIGHT THEME - PREDICTIVE ASTROLOGY COURSE
+           Same styling as Vedic & Advanced Courses
+           ============================================ */
+        
+        .course-light-predictive {
+          background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f2f8 100%);
           min-height: 100vh;
-          color: #fff;
+          color: #1a1a2e;
         }
 
-        /* Full Width Hero */
-        .hero-fullwidth {
+        /* Hero Section */
+        .hero-fullwidth-light {
           position: relative;
           padding: 80px 0 60px;
           overflow: hidden;
+          background: linear-gradient(135deg, #ffffff 0%, #f8f4e8 100%);
         }
 
-        .hero-bg-overlay {
-          position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: 
-            radial-gradient(ellipse at 20% 50%, rgba(255,106,0,0.15) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 80%, rgba(138,43,226,0.1) 0%, transparent 50%);
-        }
-
-        .hero-content {
+        .hero-content-light {
           position: relative;
           z-index: 2;
         }
 
-        .hero-badge {
+        .hero-badge-light {
           display: flex;
+          width: fit-content;
+          margin: 0 auto 25px;
           align-items: center;
           gap: 10px;
-          background: rgba(255,106,0,0.2);
-          border: 1px solid rgba(255,106,0,0.4);
-          padding: 10px 20px;
-          border-radius: 30px;
-          font-size: 14px;
-          font-weight: 500;
-          margin: 0 auto 25px;
-          width: fit-content;
+          background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
+          border: 1px solid rgba(255,106,0,0.3);
+          padding: 10px 24px;
+          border-radius: 50px;
+          font-size: 13px;
+          font-weight: 600;
+          color: #e31b7a;
+          backdrop-filter: blur(10px);
         }
 
-        .hero-infographic {
-          text-align: center;
-          margin-bottom: 15px;
-        }
-
-        .hero-infographic img {
-          height: 140px;
-          width: auto;
-          filter: drop-shadow(0 0 15px rgba(255, 106, 0, 0.6));
-          animation: float-slow 4s ease-in-out infinite;
-        }
-
-        @keyframes float-slow {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-
-        .pulse-dot {
+        .pulse-dot-light {
           width: 8px;
           height: 8px;
           background: #28a745;
           border-radius: 50%;
-          animation: pulse-green 2s infinite;
+          animation: pulse-green-light 2s infinite;
         }
 
-        @keyframes pulse-green {
+        @keyframes pulse-green-light {
           0%, 100% { opacity: 1; transform: scale(1); }
           50% { opacity: 0.5; transform: scale(1.2); }
         }
 
-        .hero-title {
+        .hero-infographic-light {
+          text-align: center;
+          margin-bottom: 15px;
+        }
+
+        .hero-infographic-light img {
+          height: 140px;
+          width: auto;
+          filter: drop-shadow(0 0 20px rgba(255,106,0,0.3));
+          animation: float-slow-light 4s ease-in-out infinite;
+        }
+
+        @keyframes float-slow-light {
+          0%, 100% { transform: translateY(0); }
+          50% { transform: translateY(-10px); }
+        }
+
+        .hero-title-light {
           font-size: 3.2rem;
           font-weight: 800;
           line-height: 1.2;
           margin-bottom: 20px;
-          text-align: center;
+          color: #1a1a2e;
         }
 
-        .gradient-text {
-          display: block;
-          background: linear-gradient(135deg, #ff6a00, #ff8c00, #ffb700);
+        .hero-title-light span:first-child {
+          background: linear-gradient(135deg, #1a1a2e, #2d2d5e);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
         }
 
-        .hero-desc {
+        .gradient-text-light {
+          display: block;
+          background: linear-gradient(135deg, #ff6a00, #e31b7a, #ff8c00);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+
+        .hero-desc-light {
           font-size: 1.15rem;
-          color: rgba(255,255,255,0.7);
+          color: #4a4a6a;
           line-height: 1.7;
           margin-bottom: 30px;
           max-width: 650px;
         }
 
-        .hero-highlights-modern {
+        .hero-highlights-light {
           display: grid;
           grid-template-columns: repeat(2, 1fr);
           gap: 15px;
-          margin: 0 0 30px;
+          margin-bottom: 30px;
         }
 
-        .h-item-modern {
-          background: rgba(255,255,255,0.03);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255,255,255,0.08);
+        .h-item-light {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.08);
           border-radius: 16px;
-          padding: 12px 15px;
+          padding: 12px 18px;
           display: flex;
           align-items: center;
           gap: 15px;
           transition: all 0.3s ease;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
 
-        .h-item-modern:hover {
-          transform: translateY(-5px);
-          border-color: rgba(255,106,0,0.4);
-          background: rgba(255,106,0,0.05);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        .h-item-light:hover {
+          transform: translateY(-3px);
+          border-color: #ff6a00;
+          box-shadow: 0 8px 25px rgba(255,106,0,0.12);
         }
 
-        .h-icon {
-          font-size: 24px;
+        .h-icon-light {
+          font-size: 28px;
         }
 
-        .h-text-wrap {
+        .h-text-wrap-light {
           text-align: left;
         }
 
-        .h-num {
+        .h-num-light {
           display: block;
-          font-size: 1.2rem;
-          font-weight: 700;
+          font-size: 1.3rem;
+          font-weight: 800;
           color: #ff6a00;
           line-height: 1;
         }
 
-        .h-label {
+        .h-label-light {
           display: block;
           font-size: 11px;
-          color: rgba(255,255,255,0.5);
+          color: #6b6b8a;
           text-transform: uppercase;
           letter-spacing: 0.5px;
         }
 
-        .hero-cta-row {
+        .hero-cta-row-light {
           display: flex;
           align-items: center;
           gap: 25px;
+          flex-wrap: wrap;
         }
 
-        .btn-primary-hero {
-          background: linear-gradient(135deg, #ff6a00, #ff8c00);
+        .btn-primary-light {
+          background: linear-gradient(135deg, #ff6a00, #e31b7a, #ff8c00);
+          background-size: 200% 200%;
           color: #fff;
           border: none;
-          padding: 18px 40px;
+          padding: 16px 40px;
           border-radius: 50px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 10px 30px rgba(255,106,0,0.3);
+          box-shadow: 0 10px 25px rgba(227,27,122,0.3);
         }
 
-        .btn-primary-hero span {
+        .btn-primary-light:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 35px rgba(227,27,122,0.4);
+          background-position: 100% 100%;
+        }
+
+        .btn-primary-light span {
           display: block;
           font-size: 1.2rem;
-          font-weight: 700;
+          font-weight: 800;
         }
 
-        .btn-primary-hero small {
+        .btn-primary-light small {
           display: block;
-          font-size: 13px;
-          opacity: 0.9;
+          font-size: 12px;
+          opacity: 0.85;
           text-decoration: line-through;
         }
 
-        .btn-primary-hero:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 40px rgba(255,106,0,0.4);
-        }
-
-        .price-guarantee {
+        .price-guarantee-light {
           display: flex;
           align-items: center;
           gap: 12px;
-          color: rgba(255,255,255,0.7);
+          color: #4a4a6a;
         }
 
-        .price-guarantee i {
+        .price-guarantee-light i {
           font-size: 28px;
           color: #28a745;
         }
 
-        .price-guarantee span {
-          font-size: 13px;
+        .price-guarantee-light span {
+          font-size: 12px;
           line-height: 1.3;
+          font-weight: 500;
         }
 
-        .hero-visual-center {
+        .hero-visual-center-light {
           max-width: 900px;
           margin-left: auto;
           margin-right: auto;
           position: relative;
         }
 
-        .main-image-wrapper {
+        .main-image-wrapper-light {
           position: relative;
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.15);
         }
 
-        .main-image-wrapper img {
+        .main-image-wrapper-light img {
           width: 100%;
           height: 380px;
           object-fit: cover;
         }
 
-        .play-overlay {
+        .play-overlay-light {
           position: absolute;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0,0,0,0.4);
+          background: rgba(0,0,0,0.3);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -655,14 +629,14 @@ function PredictiveAstrology() {
           transition: all 0.3s ease;
         }
 
-        .play-overlay:hover {
-          background: rgba(0,0,0,0.3);
+        .play-overlay-light:hover {
+          background: rgba(0,0,0,0.2);
         }
 
-        .play-circle {
+        .play-circle-light {
           width: 70px;
           height: 70px;
-          background: rgba(255,106,0,0.9);
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -671,130 +645,83 @@ function PredictiveAstrology() {
           transition: all 0.3s ease;
         }
 
-        .play-circle:hover {
+        .play-circle-light:hover {
           transform: scale(1.1);
         }
 
-        .play-circle i {
+        .play-circle-light i {
           font-size: 24px;
           margin-left: 4px;
+          color: white;
         }
 
-        .play-overlay span {
+        .play-overlay-light span {
           font-size: 14px;
-          font-weight: 500;
-        }
-
-        .floating-card {
-          position: absolute;
-          background: rgba(255,255,255,0.1);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 16px;
-          padding: 15px 20px;
-          z-index: 10;
-          animation: float 3s ease-in-out infinite;
-        }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-10px); }
-        }
-
-        .price-float {
-          top: -20px;
-          right: -20px;
-          text-align: center;
-        }
-
-        .f-head {
-          font-size: 11px;
-          color: rgba(255,255,255,0.6);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-        }
-
-        .f-price {
-          font-size: 2rem;
-          font-weight: 700;
-          color: #ff6a00;
-        }
-
-        .f-strike {
-          font-size: 14px;
-          color: rgba(255,255,255,0.5);
-          text-decoration: line-through;
-        }
-
-        .reviews-float {
-          bottom: 30px;
-          left: -30px;
-          animation-delay: 1.5s;
-        }
-
-        .stars-mini {
-          color: #ffc107;
-          font-size: 14px;
-          letter-spacing: 2px;
-        }
-
-        .r-text {
-          font-size: 12px;
-          color: rgba(255,255,255,0.8);
-          margin-top: 5px;
+          font-weight: 600;
+          color: white;
         }
 
         /* Timeline Section */
-        .timeline-section {
+        .timeline-section-light {
           padding: 80px 0;
-          background: rgba(0,0,0,0.2);
+          background: #ffffff;
         }
 
-        .section-title-center {
+        .section-title-center-light {
           text-align: center;
-          font-size: 2.2rem;
-          font-weight: 700;
-          margin-bottom: 10px;
+          font-size: 2.4rem;
+          font-weight: 800;
+          margin-bottom: 12px;
+          color: #1a1a2e;
         }
 
-        .section-sub {
+        .section-sub-light {
           text-align: center;
-          color: rgba(255,255,255,0.6);
+          color: #6b6b8a;
           margin-bottom: 50px;
+          font-size: 1rem;
         }
 
-        .timeline-track {
+        .timeline-track-light {
           display: flex;
           justify-content: space-between;
           gap: 20px;
           margin-bottom: 40px;
           position: relative;
+          flex-wrap: wrap;
         }
 
-        .timeline-track::before {
+        .timeline-track-light::before {
           content: '';
           position: absolute;
-          top: 30px;
+          top: 28px;
           left: 0;
           right: 0;
-          height: 3px;
-          background: linear-gradient(90deg, rgba(255,106,0,0.3), rgba(255,106,0,0.1));
+          height: 2px;
+          background: linear-gradient(90deg, #ff6a00, #e31b7a, #ff8c00);
           z-index: 0;
         }
 
-        .timeline-node {
+        @media (max-width: 768px) {
+          .timeline-track-light::before {
+            display: none;
+          }
+        }
+
+        .timeline-node-light {
           flex: 1;
           text-align: center;
           cursor: pointer;
           position: relative;
           z-index: 1;
+          min-width: 100px;
         }
 
-        .node-circle {
-          width: 60px;
-          height: 60px;
-          background: rgba(255,255,255,0.1);
-          border: 2px solid rgba(255,255,255,0.2);
+        .node-circle-light {
+          width: 56px;
+          height: 56px;
+          background: #ffffff;
+          border: 2px solid #e0e0e8;
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -804,18 +731,24 @@ function PredictiveAstrology() {
           transition: all 0.3s ease;
         }
 
-        .timeline-node.active .node-circle,
-        .timeline-node:hover .node-circle {
-          background: rgba(255,106,0,0.2);
-          border-color: #ff6a00;
+        .timeline-node-light.active .node-circle-light,
+        .timeline-node-light:hover .node-circle-light {
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
+          border-color: transparent;
           transform: scale(1.1);
         }
 
-        .node-icon {
-          font-size: 24px;
+        .timeline-node-light.active .node-icon-light,
+        .timeline-node-light:hover .node-icon-light {
+          filter: brightness(0) invert(1);
         }
 
-        .node-ring {
+        .node-icon-light {
+          font-size: 24px;
+          transition: all 0.3s ease;
+        }
+
+        .node-ring-light {
           position: absolute;
           top: -5px;
           left: -5px;
@@ -823,415 +756,490 @@ function PredictiveAstrology() {
           bottom: -5px;
           border: 2px solid #ff6a00;
           border-radius: 50%;
-          animation: ring-pulse 2s infinite;
+          animation: ring-pulse-light 2s infinite;
         }
 
-        @keyframes ring-pulse {
+        @keyframes ring-pulse-light {
           0% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(1.3); opacity: 0; }
+          100% { transform: scale(1.4); opacity: 0; }
         }
 
-        .node-info h4 {
-          font-size: 15px;
+        .node-info-light h4 {
+          font-size: 14px;
           margin-bottom: 5px;
-          color: #fff;
+          color: #1a1a2e;
+          font-weight: 700;
         }
 
-        .node-info p {
-          font-size: 12px;
-          color: rgba(255,255,255,0.5);
+        .node-info-light p {
+          font-size: 11px;
+          color: #6b6b8a;
           margin: 0;
         }
 
-        .timeline-content {
+        .timeline-content-light {
           max-width: 800px;
           margin: 0 auto;
         }
 
-        .tc-card {
-          background: rgba(255,255,255,0.05);
-          backdrop-filter: blur(20px);
-          border: 1px solid rgba(255,255,255,0.1);
-          border-radius: 20px;
+        .tc-card-light {
+          background: linear-gradient(135deg, #f8f9fc, #ffffff);
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 24px;
           padding: 40px;
           text-align: center;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
-        .tc-icon {
+        .tc-icon-light {
           font-size: 50px;
           display: block;
           margin-bottom: 20px;
         }
 
-        .tc-card h3 {
+        .tc-card-light h3 {
           font-size: 1.5rem;
           margin-bottom: 20px;
           color: #ff6a00;
         }
 
-        .tc-card p {
-          color: rgba(255,255,255,0.7);
+        .tc-card-light p {
+          color: #4a4a6a;
           line-height: 1.8;
           font-size: 15px;
         }
 
         /* Includes Section */
-        .includes-section {
+        .includes-section-light {
           padding: 80px 0;
+          background: #f8f9fc;
         }
 
-        .includes-grid {
+        .includes-grid-light {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 25px;
         }
 
-        .include-card {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px;
+        @media (max-width: 991px) {
+          .includes-grid-light {
+            grid-template-columns: repeat(2, 1fr);
+          }
+        }
+
+        @media (max-width: 576px) {
+          .includes-grid-light {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .include-card-light {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 20px;
           padding: 30px;
           text-align: center;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
         }
 
-        .include-card:hover {
+        .include-card-light:hover {
           transform: translateY(-5px);
           border-color: rgba(255,106,0,0.3);
-          box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+          box-shadow: 0 20px 35px rgba(0,0,0,0.1);
         }
 
-        .include-card.premium {
-          background: linear-gradient(135deg, rgba(255,106,0,0.15), rgba(255,106,0,0.05));
-          border-color: rgba(255,106,0,0.3);
+        .include-card-light.premium {
+          background: linear-gradient(135deg, #fff8f0, #ffffff);
+          border-color: rgba(255,106,0,0.2);
         }
 
-        .ic-icon {
+        .ic-icon-light {
           width: 60px;
           height: 60px;
-          background: rgba(255,106,0,0.15);
-          border-radius: 15px;
+          background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
+          border-radius: 18px;
           display: flex;
           align-items: center;
           justify-content: center;
           margin: 0 auto 20px;
         }
 
-        .ic-icon i {
+        .ic-icon-light i {
           font-size: 26px;
           color: #ff6a00;
         }
 
-        .include-card h4 {
-          font-size: 1.1rem;
+        .include-card-light h4 {
+          font-size: 1.2rem;
           margin-bottom: 10px;
+          color: #1a1a2e;
         }
 
-        .include-card p {
+        .include-card-light p {
           font-size: 14px;
-          color: rgba(255,255,255,0.6);
+          color: #6b6b8a;
           margin-bottom: 15px;
+          line-height: 1.5;
         }
 
-        .ic-badge {
+        .ic-badge-light {
           display: inline-block;
-          background: rgba(255,106,0,0.2);
-          color: #ff6a00;
-          padding: 5px 15px;
-          border-radius: 20px;
+          background: linear-gradient(135deg, rgba(255,106,0,0.15), rgba(227,27,122,0.1));
+          color: #e31b7a;
+          padding: 6px 16px;
+          border-radius: 30px;
           font-size: 12px;
-          font-weight: 500;
+          font-weight: 700;
         }
 
         /* Instructor Section */
-        .instructor-section {
+        .instructor-section-light {
           padding: 80px 0;
-          background: rgba(0,0,0,0.2);
+          background: #ffffff;
         }
 
-        .instructor-image {
+        .instructor-image-light {
           position: relative;
         }
 
-        .instructor-image img {
+        .instructor-image-light img {
           width: 100%;
           max-width: 350px;
-          border-radius: 20px;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.4);
+          border-radius: 24px;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.12);
         }
 
-        .exp-badge {
+        .exp-badge-light {
           position: absolute;
-          bottom: 30px;
-          right: 0;
-          background: linear-gradient(135deg, #ff6a00, #ff8c00);
+          bottom: 20px;
+          right: 20px;
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
           color: #fff;
-          padding: 12px 25px;
-          border-radius: 30px;
-          font-weight: 600;
-          box-shadow: 0 10px 30px rgba(255,106,0,0.3);
+          padding: 10px 24px;
+          border-radius: 40px;
+          font-weight: 700;
+          font-size: 14px;
+          box-shadow: 0 8px 20px rgba(227,27,122,0.3);
         }
 
-        .instructor-info {
+        .instructor-info-light {
           padding-left: 40px;
         }
 
-        .ii-label {
+        @media (max-width: 991px) {
+          .instructor-info-light {
+            padding-left: 0;
+            margin-top: 40px;
+            text-align: center;
+          }
+        }
+
+        .ii-label-light {
           display: inline-block;
-          background: rgba(255,106,0,0.15);
-          color: #ff6a00;
-          padding: 8px 20px;
-          border-radius: 20px;
+          background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
+          color: #e31b7a;
+          padding: 8px 24px;
+          border-radius: 30px;
           font-size: 13px;
-          font-weight: 500;
+          font-weight: 700;
           margin-bottom: 20px;
         }
 
-        .instructor-info h2 {
+        .instructor-info-light h2 {
           font-size: 2.2rem;
           margin-bottom: 20px;
-          line-height: 1.3;
+          color: #1a1a2e;
+          font-weight: 800;
         }
 
-        .ii-desc {
-          font-size: 1.1rem;
-          color: rgba(255,255,255,0.7);
-          line-height: 1.8;
+        .ii-desc-light {
+          font-size: 1.05rem;
+          color: #4a4a6a;
+          line-height: 1.7;
           margin-bottom: 30px;
         }
 
-        .ii-stats {
+        .ii-stats-light {
           display: flex;
           gap: 40px;
+          flex-wrap: wrap;
         }
 
-        .ii-stats div {
+        @media (max-width: 991px) {
+          .ii-stats-light {
+            justify-content: center;
+          }
+        }
+
+        .ii-stats-light div {
           text-align: center;
         }
 
-        .ii-stats strong {
+        .ii-stats-light strong {
           display: block;
           font-size: 2rem;
           color: #ff6a00;
+          font-weight: 800;
         }
 
-        .ii-stats span {
-          font-size: 14px;
-          color: rgba(255,255,255,0.6);
+        .ii-stats-light span {
+          font-size: 13px;
+          color: #6b6b8a;
+          font-weight: 500;
         }
 
         /* Reviews Section */
-        .reviews-section {
+        .reviews-section-light {
           padding: 80px 0;
+          background: linear-gradient(135deg, #f8f9fc, #ffffff);
         }
 
-        .reviews-carousel {
+        .reviews-carousel-light {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
           gap: 25px;
           margin-bottom: 40px;
         }
 
-        .review-box {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 16px;
-          padding: 25px;
+        @media (max-width: 991px) {
+          .reviews-carousel-light {
+            grid-template-columns: 1fr;
+          }
         }
 
-        .rb-header {
+        .review-box-light {
+          background: #ffffff;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 20px;
+          padding: 25px;
+          transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+        }
+
+        .review-box-light:hover {
+          transform: translateY(-3px);
+          box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+          border-color: rgba(255,106,0,0.2);
+        }
+
+        .rb-header-light {
           display: flex;
           align-items: center;
           gap: 15px;
-          margin-bottom: 15px;
+          margin-bottom: 18px;
         }
 
-        .rb-header img {
-          width: 50px;
-          height: 50px;
+        .rb-header-light img {
+          width: 52px;
+          height: 52px;
           border-radius: 50%;
           object-fit: cover;
+          border: 2px solid #ff6a00;
         }
 
-        .rb-header h5 {
+        .rb-header-light h5 {
           margin: 0 0 5px 0;
-          font-size: 15px;
+          font-size: 16px;
+          font-weight: 700;
+          color: #1a1a2e;
         }
 
-        .rb-stars {
+        .rb-stars-light {
           color: #ffc107;
-          font-size: 14px;
+          font-size: 13px;
+          letter-spacing: 2px;
         }
 
-        .review-box > p {
-          color: rgba(255,255,255,0.7);
-          font-size: 15px;
+        .review-box-light > p {
+          color: #4a4a6a;
+          font-size: 14px;
           line-height: 1.6;
           margin: 0;
+          font-style: italic;
         }
 
-        .rating-big {
+        .rating-big-light {
           text-align: center;
         }
 
-        .rb-num {
+        .rb-num-light {
           font-size: 4rem;
-          font-weight: 700;
+          font-weight: 800;
           color: #ff6a00;
         }
 
-        .rb-total {
+        .rb-total-light {
           display: block;
-          color: rgba(255,255,255,0.6);
+          color: #6b6b8a;
           font-size: 14px;
         }
 
         /* FAQ Section */
-        .faq-section {
+        .faq-section-light {
           padding: 60px 0;
-          background: rgba(0,0,0,0.2);
+          background: #ffffff;
         }
 
-        .faq-list {
+        .faq-list-light {
           max-width: 800px;
           margin: 0 auto;
         }
 
-        .faq-item {
-          background: rgba(255,255,255,0.03);
-          border: 1px solid rgba(255,255,255,0.08);
-          border-radius: 12px;
-          margin-bottom: 15px;
+        .faq-item-light {
+          background: #f8f9fc;
+          border: 1px solid rgba(0,0,0,0.06);
+          border-radius: 16px;
+          margin-bottom: 16px;
           overflow: hidden;
+          transition: all 0.3s ease;
         }
 
-        .faq-q {
+        .faq-item-light:hover {
+          border-color: rgba(255,106,0,0.3);
+        }
+
+        .faq-q-light {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 20px 25px;
+          padding: 18px 24px;
           cursor: pointer;
-          font-weight: 500;
+          font-weight: 700;
+          color: #1a1a2e;
         }
 
-        .faq-q i {
-          color: rgba(255,255,255,0.5);
+        .faq-q-light i {
+          color: #ff6a00;
           transition: transform 0.3s ease;
         }
 
-        .faq-a {
-          padding: 0 25px 20px;
-          color: rgba(255,255,255,0.7);
-          font-size: 15px;
+        .faq-a-light {
+          padding: 0 24px 20px;
+          color: #4a4a6a;
+          font-size: 14px;
           line-height: 1.6;
         }
 
         /* Final CTA */
-        .final-cta {
+        .final-cta-light {
           padding: 80px 0;
+          background: linear-gradient(135deg, #f8f9fc, #f0f2f8);
         }
 
-        .cta-box {
-          background: linear-gradient(135deg, rgba(255,106,0,0.15), rgba(138,43,226,0.1));
-          border: 1px solid rgba(255,106,0,0.2);
-          border-radius: 24px;
-          padding: 60px;
+        .cta-box-light {
+          background: linear-gradient(135deg, #ffffff, #faf8ff);
+          border: 1px solid rgba(255,106,0,0.15);
+          border-radius: 32px;
+          padding: 50px;
           text-align: center;
           max-width: 900px;
           margin: 0 auto;
+          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
         }
 
-        .cta-box h2 {
+        @media (max-width: 768px) {
+          .cta-box-light {
+            padding: 35px 25px;
+          }
+        }
+
+        .cta-box-light h2 {
           font-size: 2.2rem;
           margin-bottom: 15px;
+          color: #1a1a2e;
+          font-weight: 800;
         }
 
-        .cta-box > p {
-          color: rgba(255,255,255,0.7);
+        .cta-box-light > p {
+          color: #6b6b8a;
           font-size: 1.1rem;
           margin-bottom: 35px;
         }
 
-        .cta-price-row {
+        .cta-price-row-light {
           display: flex;
           align-items: center;
           justify-content: center;
           gap: 30px;
           margin-bottom: 30px;
+          flex-wrap: wrap;
         }
 
-        .cp-left {
+        .cp-left-light {
           display: flex;
           align-items: center;
           gap: 15px;
+          flex-wrap: wrap;
         }
 
-        .cp-current {
+        .cp-current-light {
           font-size: 3rem;
-          font-weight: 700;
+          font-weight: 800;
           color: #ff6a00;
         }
 
-        .cp-old {
-          font-size: 1.5rem;
-          color: rgba(255,255,255,0.4);
+        .cp-old-light {
+          font-size: 1.3rem;
+          color: #aaa;
           text-decoration: line-through;
         }
 
-        .cp-save {
-          background: rgba(40,167,69,0.2);
+        .cp-save-light {
+          background: linear-gradient(135deg, rgba(40,167,69,0.15), rgba(40,167,69,0.08));
           color: #28a745;
-          padding: 6px 15px;
-          border-radius: 20px;
+          padding: 6px 16px;
+          border-radius: 30px;
           font-size: 13px;
-          font-weight: 600;
+          font-weight: 700;
         }
 
-        .cp-btn {
-          background: linear-gradient(135deg, #ff6a00, #ff8c00);
+        .cp-btn-light {
+          background: linear-gradient(135deg, #ff6a00, #e31b7a);
           color: #fff;
           border: none;
-          padding: 18px 50px;
-          font-size: 1.1rem;
-          font-weight: 600;
+          padding: 16px 48px;
+          font-size: 1rem;
+          font-weight: 700;
           border-radius: 50px;
           cursor: pointer;
           transition: all 0.3s ease;
-          box-shadow: 0 10px 30px rgba(255,106,0,0.3);
+          box-shadow: 0 8px 20px rgba(227,27,122,0.3);
         }
 
-        .cp-btn:hover {
+        .cp-btn-light:hover {
           transform: translateY(-3px);
-          box-shadow: 0 15px 40px rgba(255,106,0,0.4);
+          box-shadow: 0 15px 35px rgba(227,27,122,0.4);
         }
 
-        .cta-trust {
+        .cta-trust-light {
           display: flex;
           justify-content: center;
           gap: 30px;
+          flex-wrap: wrap;
         }
 
-        .cta-trust span {
+        .cta-trust-light span {
           display: flex;
           align-items: center;
           gap: 8px;
-          color: rgba(255,255,255,0.6);
-          font-size: 14px;
+          color: #6b6b8a;
+          font-size: 13px;
         }
 
-        .cta-trust i {
+        .cta-trust-light i {
           color: #28a745;
         }
 
-        /* Modal */
-        .modal-overlay {
+        /* Modal - Light Theme */
+        .modal-overlay-light {
           position: fixed;
           top: 0;
           left: 0;
           right: 0;
           bottom: 0;
-          background: rgba(0,0,0,0.9);
-          backdrop-filter: blur(10px);
+          background: rgba(0,0,0,0.6);
+          backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
@@ -1239,110 +1247,118 @@ function PredictiveAstrology() {
           padding: 20px;
         }
 
-        .modal-content {
-          background: linear-gradient(135deg, #1a1a2e, #16213e);
-          border: 1px solid rgba(255,106,0,0.3);
-          border-radius: 20px;
+        .modal-content-light {
+          background: #ffffff;
+          border-radius: 28px;
           width: 100%;
           max-width: 480px;
           max-height: 90vh;
           overflow-y: auto;
+          box-shadow: 0 30px 60px rgba(0,0,0,0.2);
         }
 
-        .modal-header {
+        .modal-header-light {
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 25px;
-          border-bottom: 1px solid rgba(255,255,255,0.1);
+          padding: 24px 28px;
+          border-bottom: 1px solid rgba(0,0,0,0.08);
         }
 
-        .modal-header h4 {
+        .modal-header-light h4 {
           color: #ff6a00;
           margin: 0;
-          font-size: 1.3rem;
+          font-size: 1.4rem;
+          font-weight: 800;
         }
 
-        .close-btn {
-          background: rgba(255,255,255,0.1);
+        .close-btn-light {
+          background: #f0f0f0;
           border: none;
-          color: #fff;
-          font-size: 22px;
+          color: #666;
+          font-size: 20px;
           cursor: pointer;
-          width: 40px;
-          height: 40px;
+          width: 36px;
+          height: 36px;
           border-radius: 50%;
           transition: all 0.3s ease;
         }
 
-        .close-btn:hover {
-          background: rgba(255,106,0,0.3);
+        .close-btn-light:hover {
+          background: rgba(255,106,0,0.15);
+          color: #ff6a00;
         }
 
-        .modal-body {
-          padding: 25px;
+        .modal-body-light {
+          padding: 28px;
         }
 
-        .form-group {
+        .form-group-light {
           margin-bottom: 20px;
         }
 
-        .form-group label {
-          color: rgba(255,255,255,0.8);
+        .form-group-light label {
+          color: #1a1a2e;
           display: block;
           margin-bottom: 8px;
-          font-size: 14px;
+          font-size: 13px;
+          font-weight: 600;
         }
 
-        .form-control {
+        .form-control-light {
           width: 100%;
-          padding: 14px 18px;
-          border: 1px solid rgba(255,255,255,0.15);
-          border-radius: 12px;
-          background: rgba(255,255,255,0.05);
-          color: #fff;
-          font-size: 15px;
+          padding: 12px 16px;
+          border: 1px solid rgba(0,0,0,0.1);
+          border-radius: 14px;
+          background: #f8f9fc;
+          color: #1a1a2e;
+          font-size: 14px;
           transition: all 0.3s ease;
         }
 
-        .form-control:focus {
+        .form-control-light:focus {
           outline: none;
           border-color: #ff6a00;
-          background: rgba(255,255,255,0.08);
+          background: #ffffff;
+          box-shadow: 0 0 0 3px rgba(255,106,0,0.1);
         }
 
-        select.form-control option {
-          background: #1a1a2e;
-          color: #fff;
+        select.form-control-light option {
+          background: #ffffff;
+          color: #1a1a2e;
         }
 
-        .modal-footer {
+        .modal-footer-light {
           display: flex;
           gap: 15px;
-          padding: 0 25px 25px;
+          padding: 0 28px 28px;
         }
 
-        .modal-footer .btn {
+        .btn-secondary-light {
           flex: 1;
-          padding: 15px;
-          border-radius: 12px;
+          padding: 14px;
+          border-radius: 14px;
           font-weight: 600;
           cursor: pointer;
           transition: all 0.3s ease;
-          font-size: 15px;
+          font-size: 14px;
+          background: #f0f0f0;
+          border: none;
+          color: #666;
         }
 
-        .btn-secondary {
-          background: rgba(255,255,255,0.1);
-          border: 1px solid rgba(255,255,255,0.2);
-          color: rgba(255,255,255,0.8);
+        .btn-secondary-light:hover {
+          background: #e0e0e0;
         }
 
-        .btn-secondary:hover {
-          background: rgba(255,255,255,0.15);
-        }
-
-        .btn-payment {
+        .btn-payment-light {
+          flex: 1;
+          padding: 14px;
+          border-radius: 14px;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          font-size: 14px;
           background: linear-gradient(135deg, #28a745, #34ce57);
           border: none;
           color: #fff;
@@ -1352,72 +1368,71 @@ function PredictiveAstrology() {
           gap: 8px;
         }
 
-        .btn-payment:hover {
+        .btn-payment-light:hover {
           opacity: 0.9;
+          transform: translateY(-2px);
         }
 
-        .fee-info {
-          background: rgba(255,106,0,0.1);
-          border: 1px solid rgba(255,106,0,0.3);
-          padding: 20px;
-          border-radius: 12px;
+        .fee-info-light {
+          background: linear-gradient(135deg, rgba(255,106,0,0.08), rgba(227,27,122,0.05));
+          border: 1px solid rgba(255,106,0,0.15);
+          padding: 18px;
+          border-radius: 16px;
           text-align: center;
           margin-top: 25px;
         }
 
-        .fee-amount {
+        .fee-amount-light {
           color: #ff6a00;
-          font-size: 26px;
-          font-weight: 700;
+          font-size: 28px;
+          font-weight: 800;
         }
 
-        /* Responsive */
+        .text-muted-light {
+          color: #6b6b8a;
+          font-size: 12px;
+        }
+
+        /* Responsive Styles */
         @media (max-width: 991px) {
-          .hero-title {
-            font-size: 2.2rem;
+          .hero-title-light {
+            font-size: 2.4rem;
           }
-          .hero-highlights-modern {
+          .hero-highlights-light {
             grid-template-columns: repeat(2, 1fr);
-          }
-          .includes-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .reviews-carousel {
-            grid-template-columns: 1fr;
-          }
-          .timeline-track {
-            flex-wrap: wrap;
-          }
-          .instructor-info {
-            padding-left: 0;
-            margin-top: 40px;
-          }
-          .ii-stats {
-            justify-content: center;
           }
         }
 
         @media (max-width: 768px) {
-          .hero-title {
+          .hero-title-light {
             font-size: 1.8rem;
           }
-          .hero-highlights-modern {
-            grid-template-columns: repeat(2, 1fr);
-          }
-          .floating-card {
-            display: none;
-          }
-          .includes-grid {
+          .hero-highlights-light {
             grid-template-columns: 1fr;
           }
-          .cta-price-row {
-            flex-direction: column;
+          .btn-primary-light {
+            padding: 12px 30px;
           }
-          .timeline-track::before {
-            display: none;
-          }
-          .timeline-node {
+          .timeline-node-light {
             flex: 0 0 calc(50% - 10px);
+          }
+          .tc-card-light {
+            padding: 25px;
+          }
+          .cp-current-light {
+            font-size: 2.2rem;
+          }
+        }
+
+        @media (max-width: 576px) {
+          .hero-title-light {
+            font-size: 1.5rem;
+          }
+          .hero-infographic-light img {
+            height: 100px;
+          }
+          .section-title-center-light {
+            font-size: 1.8rem;
           }
         }
       `}</style>

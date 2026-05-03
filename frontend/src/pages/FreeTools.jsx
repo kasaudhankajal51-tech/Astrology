@@ -69,66 +69,87 @@ function FreeTools() {
       </div>
 
       <style>{`
+        :root {
+          --cosmic-accent: #c6843f;
+          --cosmic-accent-dark: #9c5a1e;
+          --cosmic-accent-deep: #65250c;
+          --cosmic-gradient: linear-gradient(135deg, #c6843f, #9c5a1e);
+          --cosmic-accent-soft: #ffefd6;
+          --cosmic-text: #65250c;
+          --cosmic-text-muted: #9c847b;
+          --glass-border: #f3e5d8;
+          --premium-shadow: 0 15px 35px rgba(198,132,63,0.08);
+          --cosmic-bg: #ffffff;
+          --cosmic-white: #ffffff;
+        }
+
         .freetools-section {
-          background-color: var(--cosmic-bg);
+          background-color: #ffffff;
           min-height: 80vh;
-          color: var(--cosmic-text);
+          color: #65250c;
           padding: 80px 0 100px;
         }
         
         .cosmic-subtitle {
-          color: var(--cosmic-accent-pink);
-          font-size: 0.85rem;
+          color: #c6843f;
+          font-size: 0.9rem;
           text-transform: uppercase;
-          letter-spacing: 4px;
+          letter-spacing: 6px;
           font-weight: 800;
+          margin-bottom: 20px;
+          display: block;
         }
         
         .cosmic-title {
-          font-size: clamp(2.5rem, 5vw, 3.5rem);
-          font-weight: 700;
+          font-size: clamp(3.2rem, 8vw, 5.2rem);
+          font-weight: 900;
           font-family: 'Playfair Display', serif;
-          color: var(--cosmic-text);
+          color: #65250c;
+          line-height: 1.1;
+          margin-bottom: 30px;
         }
         
         .cosmic-desc {
-          color: var(--cosmic-text-muted);
-          font-size: 1.1rem;
-          line-height: 1.7;
+          color: #9c847b;
+          font-size: clamp(1.1rem, 2vw, 1.4rem);
+          line-height: 1.8;
+          max-width: 850px;
+          margin: 0 auto;
+          font-weight: 500;
         }
 
         .tool-card {
-          background: var(--cosmic-white);
-          border: 1px solid var(--glass-border);
-          border-radius: 30px;
-          padding: 45px 35px;
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-          box-shadow: var(--premium-shadow);
+          background: #ffffff;
+          border: 1px solid #f3e5d8;
+          border-radius: 32px;
+          padding: 50px 40px;
+          transition: all 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+          box-shadow: 0 10px 30px rgba(198,132,63,0.05);
         }
         
         .tool-card:hover {
-          transform: translateY(-12px);
-          border-color: var(--cosmic-accent-pink);
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+          transform: translateY(-15px);
+          border-color: #c6843f;
+          box-shadow: 0 25px 50px rgba(198,132,63,0.12);
         }
         
         .tool-icon-wrapper {
-          width: 85px;
-          height: 85px;
-          background: var(--cosmic-accent-soft);
+          width: 90px;
+          height: 90px;
+          background: #ffefd6;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 25px;
-          border: 1px solid var(--glass-border);
-          transition: all 0.4s;
+          margin-bottom: 30px;
+          border: 1px solid #f3e5d8;
+          transition: all 0.5s;
         }
         
         .tool-card:hover .tool-icon-wrapper {
-          background: var(--cosmic-gradient);
-          box-shadow: 0 10px 20px rgba(227, 27, 122, 0.2);
-          transform: scale(1.1) rotate(5deg);
+          background: linear-gradient(135deg, #c6843f, #9c5a1e);
+          box-shadow: 0 15px 30px rgba(198,132,63,0.3);
+          transform: scale(1.1) rotate(8deg);
           border-color: transparent;
         }
         
@@ -137,50 +158,52 @@ function FreeTools() {
         }
         
         .tool-icon-wrapper i {
-          color: var(--cosmic-accent-pink);
+          color: #c6843f;
           transition: color 0.4s;
         }
         
         .tool-name {
-          color: var(--cosmic-text);
-          font-weight: 700;
-          font-size: 1.5rem;
-          margin-bottom: 15px;
+          color: #65250c;
+          font-weight: 800;
+          font-size: 1.6rem;
+          margin-bottom: 18px;
           font-family: 'Playfair Display', serif;
         }
         
         .tool-desc {
-          color: var(--cosmic-text-muted);
+          color: #9c847b;
           font-size: 1rem;
-          line-height: 1.6;
+          line-height: 1.7;
+          font-weight: 500;
         }
 
         .mystic-btn-outline {
-          background: var(--cosmic-white);
-          color: var(--cosmic-text);
-          border: 1px solid var(--glass-border);
+          background: #ffefd6;
+          color: #9c5a1e;
+          border: 1px solid #f3e5d8;
           border-radius: 50px;
-          padding: 14px 25px;
+          padding: 16px 30px;
           font-weight: 800;
-          transition: all 0.3s;
+          transition: all 0.4s;
           text-transform: uppercase;
-          letter-spacing: 1px;
-          font-size: 0.8rem;
+          letter-spacing: 2px;
+          font-size: 0.75rem;
+          width: 100%;
         }
         
         .mystic-btn-outline:hover {
-          background: var(--cosmic-gradient);
+          background: linear-gradient(135deg, #c6843f, #9c5a1e);
           color: #fff;
           border-color: transparent;
-          box-shadow: 0 8px 20px rgba(227, 27, 122, 0.3);
-          transform: translateY(-2px);
+          box-shadow: 0 12px 25px rgba(198,132,63,0.3);
+          transform: translateY(-3px);
         }
 
-        .fade-in { animation: fadeIn 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) both; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(40px); } to { opacity: 1; transform: translateY(0); } }
+        .fade-in { animation: fadeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(50px); } to { opacity: 1; transform: translateY(0); } }
         
         .tools-container {
-          background-color: var(--cosmic-bg);
+          background-color: #ffffff;
           min-height: 100vh;
         }
       `}</style>

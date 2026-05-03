@@ -179,8 +179,13 @@ function Header() {
                 </ul>
               </div>
             </li>
-            <li className="nav-item mt-2">
-              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header w-100" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
+            <li className="nav-item mt-4 px-2">
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta w-100" data-bs-dismiss="offcanvas">
+                <i className="fas fa-calendar-check me-2"></i> BOOK CONSULTATION
+              </a>
+              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta w-100 mt-3" data-bs-dismiss="offcanvas">
+                <i className="fas fa-graduation-cap me-2"></i> ENROLL LIVE COURSE
+              </Link>
             </li>
           </ul>
         </div>
@@ -463,6 +468,53 @@ function Header() {
           color: #fff !important;
           text-align: center;
           display: block;
+        }
+
+        .btn-mobile-cta {
+          padding: 16px 20px;
+          border-radius: 15px;
+          font-weight: 800;
+          font-size: 1rem;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          border: none;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-decoration: none !important;
+          position: relative;
+          overflow: hidden;
+        }
+
+        @keyframes shimmerEffect {
+          0% { background-position: -200% 0; }
+          100% { background-position: 200% 0; }
+        }
+
+        .btn-mobile-cta.primary-cta {
+          background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff8c00, #ff4b2b, #ff416c);
+          background-size: 200% auto;
+          color: #fff !important;
+          box-shadow: 0 10px 25px rgba(255, 75, 43, 0.4);
+          animation: shimmerEffect 4s linear infinite;
+        }
+
+        .btn-mobile-cta.secondary-cta {
+          background: #000;
+          color: #fff !important;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+          border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .btn-mobile-cta i {
+          font-size: 1.2rem;
+          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
+        }
+
+        .btn-mobile-cta:active {
+          transform: scale(0.95) translateY(2px);
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
         }
 
         /* Modal - Original Colors Maintained */

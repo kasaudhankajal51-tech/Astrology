@@ -191,14 +191,18 @@ function Home() {
             <div className="row g-4 align-items-center mt-4">
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="100">
-                  <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
-                  <h4 className="mt-3">Personal Horoscope</h4>
-                  <p className="mt-2">Learn astrology from experienced and trusted mentors.</p>
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
+                    <h4 className="">Personal Horoscope</h4>
+                  </div>
+                  <p className="mt-3">Learn astrology from experienced and trusted mentors for life clarity.</p>
                 </div>
-                <div className="service-card" data-aos="fade-up" data-aos-delay="200">
-                  <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
-                  <h4 className="mt-3">Relationships</h4>
-                  <p className="mt-2">Gain practical knowledge with real-life case studies.</p>
+                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="200">
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
+                    <h4 className="">Relationships</h4>
+                  </div>
+                  <p className="mt-3">Gain practical knowledge with real-life case studies and guidance.</p>
                 </div>
               </div>
               
@@ -211,14 +215,18 @@ function Home() {
               
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="300">
-                  <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
-                  <h4 className="mt-3">Career & Business</h4>
-                  <p className="mt-2">Understand career and financial predictions deeply.</p>
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
+                    <h4 className="">Career & Business</h4>
+                  </div>
+                  <p className="mt-3">Understand career and financial predictions deeply with experts.</p>
                 </div>
-                <div className="service-card" data-aos="fade-up" data-aos-delay="400">
-                  <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
-                  <h4 className="mt-3">Muhurat Timing</h4>
-                  <p className="mt-2">Find the most auspicious time for your endeavors.</p>
+                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="400">
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
+                    <h4 className="">Muhurat Timing</h4>
+                  </div>
+                  <p className="mt-3">Find the most auspicious time for your life's important endeavors.</p>
                 </div>
               </div>
             </div>
@@ -870,11 +878,48 @@ function Home() {
 
         .service-card {
           background: var(--cosmic-white);
-          padding: 45px 35px;
-          border-radius: 35px;
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--premium-shadow);
-          transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          padding: 25px 20px;
+          border-radius: 20px;
+          border: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: auto;
+          min-height: 140px;
+          margin-bottom: 10px;
+          position: relative;
+        }
+
+        @media (min-width: 768px) {
+          .service-card {
+            padding: 35px;
+            margin-bottom: 20px;
+            min-height: 160px;
+          }
+        }
+
+        .service-card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 0;
+          background: var(--cosmic-accent-pink);
+          transition: 0.3s;
+        }
+
+        .service-card:hover::after {
+          height: 100%;
+        }
+
+        @media (min-width: 992px) {
+          .service-card {
+            height: calc(50% - 12px);
+            margin-bottom: 0;
+          }
         }
 
         .service-card:hover {
@@ -883,28 +928,51 @@ function Home() {
           box-shadow: 0 25px 50px rgba(0,0,0,0.06);
         }
 
+        .service-card-header {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 10px;
+        }
+
         .icon-wrapper {
+          width: 55px;
+          height: 55px;
+          background: #fdf5f2;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border: 1px solid rgba(93, 64, 55, 0.1);
         }
 
         .icon-wrapper img {
-          width: 48px;
+          width: 35px;
+          height: 35px;
           object-fit: contain;
+          /* Forced Dark Brown Filter */
+          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%) !important;
           transition: 0.4s;
         }
 
         .service-card:hover .icon-wrapper img {
-          filter: brightness(0) invert(1);
+          transform: scale(1.1);
         }
 
         .service-card h4 {
-          font-size: 1.7rem;
+          font-size: clamp(1.2rem, 3vw, 1.6rem);
           font-weight: 800;
           color: #1a1a1a;
+          margin: 0;
         }
 
         .service-card p {
-          font-size: 1.15rem;
+          font-size: clamp(0.95rem, 2vw, 1.25rem);
           font-weight: 500;
+          color: var(--cosmic-text-muted);
+          line-height: 1.5;
+          margin-bottom: 0;
         }
 
         /* Testimonials Section - Professional */

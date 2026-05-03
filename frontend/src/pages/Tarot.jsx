@@ -77,7 +77,7 @@ function Tarot() {
         <div className="text-center mb-5">
           <h1 className="tarot-title">The Mystic Tarot</h1>
           <div className="title-separator mx-auto"></div>
-          <p className="tarot-subtitle">Connect with the ancient energies of the Oracle</p>
+          <p className="tarot-subtitle">Unveil the hidden truths of your journey. Seek divine clarity and let the ancient wisdom of the Tarot illuminate your path today.</p>
         </div>
 
         {error && <div className="alert alert-danger text-center mx-auto" style={{maxWidth: '500px', borderRadius: '12px'}}>{error}</div>}
@@ -86,18 +86,21 @@ function Tarot() {
         {stage === 'input' && (
           <div className="row justify-content-center mt-5">
             <div className="col-md-6 text-center">
-              <div className="ritual-input-box p-5">
-                <div className="tarot-icon-large mb-4">✧</div>
-                <h3 className="mb-3" style={{ color: '#1a1a2e', fontWeight: 700 }}>What seeks your heart?</h3>
+              <div className="ritual-input-box p-4 p-md-5">
+                <div className="tarot-icon-large mb-4">✨</div>
+                <h3 className="mb-4" style={{ fontFamily: 'Playfair Display', color: '#65250c', fontWeight: 800 }}>What seeks your heart?</h3>
                 <form onSubmit={startRitual}>
-                  <input 
-                    type="text" 
-                    className="mystic-input mb-4" 
-                    placeholder="Enter your question here..." 
-                    value={question}
-                    onChange={(e) => setQuestion(e.target.value)}
-                    autoFocus
-                  />
+                  <div className="mb-4">
+                    <label className="reading-label">Focus your intention</label>
+                    <input 
+                      type="text" 
+                      className="mystic-input" 
+                      placeholder="Enter your question here..." 
+                      value={question}
+                      onChange={(e) => setQuestion(e.target.value)}
+                      autoFocus
+                    />
+                  </div>
                   <button type="submit" className="mystic-btn w-100">
                     Focus &amp; Shuffle Deck
                   </button>
@@ -220,26 +223,29 @@ function Tarot() {
       </div>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
         :root {
-          --cosmic-accent: #ff6a00;
-          --cosmic-accent-orange: #ff8c00;
-          --cosmic-accent-pink: #e31b7a;
-          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
-          --cosmic-accent-soft: #ffe4f0;
-          --cosmic-text: #1a1a2e;
-          --cosmic-text-muted: #4a4a6a;
-          --glass-border: #e0c8b8;
-          --premium-shadow: 0 6px 20px rgba(0,0,0,0.08);
-          --cosmic-bg: #f8f9fc;
+          --cosmic-accent: #c6843f;
+          --cosmic-accent-dark: #9c5a1e;
+          --cosmic-accent-deep: #65250c;
+          --cosmic-gradient: linear-gradient(135deg, #c6843f, #9c5a1e, #65250c);
+          --cosmic-accent-soft: #ffefd6;
+          --cosmic-text: #65250c;
+          --cosmic-text-muted: #9c847b;
+          --glass-border: #f3e5d8;
+          --premium-shadow: 0 15px 35px rgba(198,132,63,0.08);
+          --cosmic-bg: #ffffff;
           --cosmic-white: #ffffff;
         }
 
         .tarot-ritual-container {
-          background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f2f8 100%);
+          background: #ffffff;
           min-height: 100vh;
           position: relative;
           overflow-x: hidden;
           padding: 60px 0 80px;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .mystical-bg-light {
@@ -251,106 +257,106 @@ function Tarot() {
           pointer-events: none;
           z-index: 0;
           background: 
-            radial-gradient(ellipse at 20% 30%, rgba(255,106,0,0.03) 0%, transparent 50%),
-            radial-gradient(ellipse at 80% 70%, rgba(227,27,122,0.02) 0%, transparent 50%);
+            radial-gradient(ellipse at 20% 30%, rgba(198,132,63,0.05) 0%, transparent 50%),
+            radial-gradient(ellipse at 80% 70%, rgba(101,37,12,0.03) 0%, transparent 50%);
         }
 
         .tarot-title {
           font-family: 'Playfair Display', serif;
-          font-weight: 800;
-          font-size: clamp(2rem, 5vw, 3.5rem);
-          color: #1a1a2e;
+          font-weight: 900;
+          font-size: clamp(3rem, 7vw, 4.8rem);
+          color: #65250c;
+          line-height: 1.1;
           margin-bottom: 0.5rem;
-          background: linear-gradient(135deg, #1a1a2e, #2d2d5e);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
         }
 
         .title-separator {
-          width: 60px;
-          height: 4px;
-          background: linear-gradient(135deg, #ff6a00, #e31b7a);
-          border-radius: 2px;
-          margin: 15px auto;
+          width: 80px;
+          height: 3px;
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
+          border-radius: 50px;
+          margin: 20px auto;
         }
 
         .tarot-subtitle {
-          color: #e31b7a;
-          font-size: 0.85rem;
-          text-transform: uppercase;
-          letter-spacing: 4px;
-          font-weight: 700;
-          margin-top: 10px;
+          color: #9c847b;
+          font-size: clamp(1.1rem, 2vw, 1.35rem);
+          line-height: 1.8;
+          max-width: 800px;
+          margin: 0 auto;
+          font-weight: 500;
         }
 
         .ritual-input-box {
-          background: var(--cosmic-white);
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 28px;
-          padding: 50px 40px !important;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          background: #fffdfa;
+          border: 1px solid #f3e5d8;
+          border-radius: 30px;
+          padding: 60px 45px !important;
+          box-shadow: 
+            0 25px 50px rgba(198,132,63,0.1),
+            inset 0 0 0 10px #fffdfa,
+            inset 0 0 0 11px #f3e5d8;
+          position: relative;
         }
 
         .tarot-icon-large {
-          font-size: 3.5rem;
-          background: linear-gradient(135deg, #ff6a00, #e31b7a);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          margin-bottom: 20px;
+          font-size: 4.5rem;
+          color: #c6843f;
+          margin-bottom: 25px;
+          filter: drop-shadow(0 8px 15px rgba(198,132,63,0.3));
         }
 
         .mystic-input {
           width: 100%;
-          background: #f8f9fc;
-          border: 1.5px solid #e0e0e8;
-          border-radius: 16px;
-          color: #1a1a2e;
-          font-size: 1rem;
-          padding: 16px 20px;
-          text-align: center;
+          background: #ffffff;
+          border: none;
+          border-bottom: 2px solid #f3e5d8;
+          border-radius: 0;
+          color: #65250c;
+          font-size: 1.2rem;
+          padding: 12px 0;
+          text-align: left;
           transition: all 0.3s ease;
+          font-weight: 600;
         }
 
         .mystic-input:focus {
           outline: none;
-          border-color: #ff6a00;
-          background: #ffffff;
-          box-shadow: 0 0 0 4px rgba(255,106,0,0.1);
-        }
-
-        .mystic-input::placeholder {
-          color: #aaa;
+          border-color: #c6843f;
+          background: transparent;
         }
 
         .mystic-btn {
-          background: linear-gradient(135deg, #ff6a00, #e31b7a);
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
           color: #fff;
           border: none;
-          padding: 16px;
+          padding: 18px;
           border-radius: 50px;
-          font-weight: 700;
-          letter-spacing: 1.5px;
+          font-weight: 800;
+          letter-spacing: 2px;
           text-transform: uppercase;
           font-size: 14px;
-          transition: all 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
           cursor: pointer;
+          box-shadow: 0 10px 25px rgba(198,132,63,0.2);
         }
 
         .mystic-btn:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 12px 30px rgba(227,27,122,0.4);
+          transform: translateY(-4px);
+          box-shadow: 0 15px 30px rgba(198,132,63,0.3);
         }
 
         .ritual-prompt {
-          color: #1a1a2e;
-          font-weight: 600;
-          font-size: 1.3rem;
-          letter-spacing: 1px;
+          color: #65250c;
+          font-weight: 800;
+          font-size: 1.5rem;
+          letter-spacing: 0.5px;
+          font-family: 'Playfair Display', serif;
         }
 
         .deck-fan-container {
           position: relative;
-          height: 420px;
+          height: 450px;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -359,70 +365,65 @@ function Tarot() {
 
         .ritual-card-back {
           position: absolute;
-          width: 140px;
-          height: 210px;
+          width: 145px;
+          height: 220px;
           background: #ffffff;
-          border: 2px solid #e0e0e8;
-          border-radius: 12px;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+          border: 1px solid #f3e5d8;
+          border-radius: 16px;
+          box-shadow: 0 10px 25px rgba(198,132,63,0.08);
           cursor: pointer;
-          transition: all 0.4s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+          transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
           will-change: transform;
           transform-origin: center center;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
         .ritual-card-back:hover {
-          border-color: #ff6a00;
-          box-shadow: 0 12px 28px rgba(255,106,0,0.2);
-          transform: translateY(-8px) rotate(0deg) scale(1.05) !important;
+          border-color: #c6843f;
+          box-shadow: 0 15px 35px rgba(198,132,63,0.2);
+          transform: translateY(-15px) rotate(0deg) scale(1.1) !important;
+          z-index: 200 !important;
         }
 
         .card-pattern {
-          position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          width: 60px;
-          height: 60px;
-          border: 2px solid #e31b7a;
-          border-radius: 50%;
-          opacity: 0.15;
+          width: 80%;
+          height: 80%;
+          border: 1px solid #ffefd6;
+          border-radius: 12px;
+          background: 
+            radial-gradient(circle at 50% 50%, #ffefd6 2px, transparent 2px),
+            repeating-conic-gradient(#fff 0deg 90deg, #faf7f4 90deg 180deg);
+          background-size: 100% 100%, 15px 15px;
+          opacity: 0.8;
         }
 
         .ritual-card-back::after {
-          content: '?';
+          content: '✨';
           position: absolute;
-          top: 50%;
-          left: 50%;
-          transform: translate(-50%, -50%);
-          font-size: 24px;
-          font-weight: 800;
-          color: #e31b7a;
-          opacity: 0.3;
+          font-size: 32px;
+          color: #c6843f;
+          opacity: 0.4;
         }
 
         .selected-card {
-          transition: all 0.6s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-        }
-
-        .static-back {
-          position: relative !important;
-          transform: none !important;
-          margin: 0 auto;
+          border-color: #c6843f !important;
+          box-shadow: 0 20px 45px rgba(198,132,63,0.3) !important;
         }
 
         /* Result Card Styling */
         .result-card-container {
-          width: 240px;
-          height: 360px;
-          perspective: 1000px;
+          width: 260px;
+          height: 400px;
+          perspective: 1500px;
         }
 
         .tarot-card-reveal {
           width: 100%;
           height: 100%;
           position: relative;
-          transition: transform 0.8s;
+          transition: transform 1s cubic-bezier(0.34, 1.56, 0.64, 1);
           transform-style: preserve-3d;
         }
 
@@ -435,7 +436,7 @@ function Tarot() {
           width: 100%;
           height: 100%;
           backface-visibility: hidden;
-          border-radius: 16px;
+          border-radius: 20px;
           overflow: hidden;
         }
 
@@ -445,201 +446,126 @@ function Tarot() {
 
         .tarot-card-back-side {
           background: #ffffff;
-          border: 3px solid #e31b7a;
-          border-radius: 16px;
+          border: 4px solid #c6843f;
+          border-radius: 20px;
           transform: rotateY(180deg);
-          box-shadow: 0 15px 40px rgba(227,27,122,0.15);
+          box-shadow: 0 25px 60px rgba(101,37,12,0.15);
           display: flex;
           align-items: center;
           justify-content: center;
           text-align: center;
-          padding: 20px;
-        }
-
-        .card-content {
-          text-align: center;
+          padding: 25px;
         }
 
         .card-symbol {
-          font-size: 48px;
-          margin-bottom: 15px;
+          font-size: 56px;
+          margin-bottom: 20px;
+          filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1));
         }
 
         .card-title {
-          font-size: 18px;
+          font-size: 22px;
           font-weight: 800;
-          color: #1a1a2e;
-          margin-bottom: 10px;
+          color: #65250c;
+          margin-bottom: 15px;
           font-family: 'Playfair Display', serif;
         }
 
         .card-badge {
           display: inline-block;
-          padding: 5px 15px;
-          border-radius: 30px;
-          font-size: 11px;
-          font-weight: 700;
+          padding: 6px 20px;
+          border-radius: 50px;
+          font-size: 12px;
+          font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 1px;
+          letter-spacing: 1.5px;
         }
 
         .bg-upright {
-          background: linear-gradient(135deg, rgba(40,167,69,0.15), rgba(40,167,69,0.05));
-          color: #28a745;
-          border: 1px solid rgba(40,167,69,0.3);
+          background: #ffefd6;
+          color: #c6843f;
+          border: 1px solid #f3e5d8;
         }
 
         .bg-reversed {
-          background: linear-gradient(135deg, rgba(220,53,69,0.15), rgba(220,53,69,0.05));
-          color: #dc3545;
-          border: 1px solid rgba(220,53,69,0.3);
+          background: #faf7f4;
+          color: #9c847b;
+          border: 1px solid #f3e5d8;
         }
 
         .reading-panel {
           background: #ffffff;
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 28px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          border: 1px solid #f3e5d8;
+          border-radius: 32px;
+          box-shadow: 0 20px 50px rgba(198,132,63,0.06);
           height: 100%;
         }
 
         .reading-heading {
           font-family: 'Playfair Display', serif;
-          color: #1a1a2e;
-          font-weight: 800;
-          font-size: 1.8rem;
-          border-bottom: 2px solid #f0f0f0;
-          padding-bottom: 15px;
+          color: #65250c;
+          font-weight: 900;
+          font-size: 2rem;
+          border-bottom: 1px solid #faf7f4;
+          padding-bottom: 20px;
         }
 
         .reading-label {
-          display: inline-block;
-          font-size: 11px;
+          display: block;
+          font-size: 14px;
           font-weight: 700;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          color: #e31b7a;
+          color: #65250c;
           margin-bottom: 12px;
+          text-align: left;
         }
 
         .reading-text {
-          color: #4a4a6a;
+          color: #4a372d;
           font-weight: 500;
-          line-height: 1.8;
-          font-size: 1rem;
+          line-height: 1.9;
+          font-size: 1.1rem;
         }
 
         .wisdom-block {
-          background: linear-gradient(135deg, #fff8f0, #ffffff);
-          border-left: 4px solid #e31b7a;
-          border-radius: 16px;
+          background: #faf7f4;
+          border-left: 5px solid #c6843f;
+          border-radius: 20px;
+          padding: 25px;
         }
 
         .wisdom-text {
-          color: #1a1a2e;
-          font-weight: 600;
+          color: #65250c;
+          font-weight: 700;
           font-style: italic;
-          line-height: 1.7;
-        }
-
-        .text-warning {
-          color: #ff6a00 !important;
+          line-height: 1.8;
         }
 
         .mystic-outline-btn {
-          background: transparent;
-          border: 2px solid #ff6a00;
-          color: #ff6a00;
-          padding: 12px 28px;
+          background: #ffefd6;
+          border: 1px solid #f3e5d8;
+          color: #9c5a1e;
+          padding: 14px 35px;
           border-radius: 50px;
-          font-weight: 700;
-          font-size: 13px;
-          letter-spacing: 1px;
+          font-weight: 800;
+          font-size: 14px;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
           transition: all 0.3s ease;
           cursor: pointer;
         }
 
         .mystic-outline-btn:hover {
-          background: #ff6a00;
+          background: #c6843f;
           color: #fff;
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(255,106,0,0.3);
+          transform: translateY(-3px);
+          box-shadow: 0 10px 20px rgba(198,132,63,0.25);
         }
 
-        /* Animations */
-        .fade-in {
-          animation: fadeIn 0.6s ease-out;
-        }
-
-        .fade-in-slow {
-          animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
-          .ritual-input-box {
-            padding: 30px 25px !important;
-          }
-          .deck-fan-container {
-            height: 350px;
-          }
-          .ritual-card-back {
-            width: 100px;
-            height: 150px;
-          }
-          .result-card-container {
-            width: 200px;
-            height: 300px;
-            margin-bottom: 30px;
-          }
-          .card-symbol {
-            font-size: 32px;
-          }
-          .reading-panel {
-            padding: 25px !important;
-          }
-          .reading-heading {
-            font-size: 1.4rem;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .ritual-card-back {
-            width: 80px;
-            height: 120px;
-          }
-          .card-pattern {
-            width: 35px;
-            height: 35px;
-          }
-          .ritual-card-back::after {
-            font-size: 16px;
-          }
-          .result-card-container {
-            width: 170px;
-            height: 255px;
-          }
-        }
-
-        .z-index-2 {
-          z-index: 2;
-        }
-
-        .container {
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 0 20px;
+          .tarot-title { font-size: 2.5rem; }
+          .deck-fan-container { height: 380px; }
+          .ritual-card-back { width: 110px; height: 170px; }
+          .result-card-container { width: 220px; height: 340px; }
         }
       `}</style>
     </section>

@@ -285,13 +285,15 @@ function HoroscopeTool({ onBack }) {
           {!selected ? (
             <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
               <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
-                <button className="btn-back-tool mb-4" onClick={onBack}>
-                  <i className="fas fa-chevron-left me-2"></i> Back to Tools
-                </button>
+                {onBack && (
+                  <button className="btn-back-tool mb-4" onClick={onBack}>
+                    <i className="fas fa-chevron-left me-2"></i> Back to Tools
+                  </button>
+                )}
                 <h1 className="display-4 fw-bold mb-3 hero-title">Daily Horoscope</h1>
                 <p className="hero-desc mb-5">
-                  Unlock the wisdom of the stars. Select your zodiac sign below to receive your personalized
-                  daily guidance and planetary insights for today.
+                  Reveal what the stars have in store for you. Choose your sign below to receive your personalized 
+                  cosmic guidance and planetary insights for today.
                 </p>
                 <div className="decor-icons">☀️ 🌙 ✨ 🌟</div>
               </div>
@@ -410,14 +412,17 @@ function HoroscopeTool({ onBack }) {
 
         .hero-title {
           font-family: 'Playfair Display', serif;
-          font-size: 36px;
+          font-size: clamp(2.8rem, 6vw, 4.8rem);
+          font-weight: 900;
           line-height: 1.1;
+          margin-bottom: 20px;
         }
 
         .hero-desc {
-          font-size: 16px;
-          line-height: 1.5;
-          opacity: 0.9;
+          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+          line-height: 1.7;
+          opacity: 0.95;
+          font-weight: 500;
         }
 
         .btn-back-tool {
@@ -487,16 +492,15 @@ function HoroscopeTool({ onBack }) {
           height: 46px;
         }
         .zodiac-card-name {
-          font-weight: 700;
+          font-weight: 800;
           color: #65250c;
-          font-size: 13px;
+          font-size: 15px;
+          margin-bottom: 2px;
         }
         .zodiac-card-dates {
-          font-size: 10px;
+          font-size: 11px;
           color: #9c847b;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
-          margin-top: 4px;
+          font-weight: 500;
         }
 
         /* Prediction Styles */

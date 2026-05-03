@@ -1,39 +1,6 @@
 import { useState } from 'react';
 import API_BASE from '../../utils/api.js';
 
-/* ── shared inline constants ── */
-const inp = {
-  width:'100%', display:'block',
-  background:'rgba(0,0,0,0.45)',
-  border:'1px solid rgba(255,255,255,0.13)',
-  color:'#fff', padding:'10px 14px',
-  borderRadius:8, fontSize:14,
-  outline:'none', boxSizing:'border-box',
-};
-const lbl = {
-  display:'block', fontSize:11, color:'#999',
-  textTransform:'uppercase', letterSpacing:'1px',
-  marginBottom:6, fontWeight:500,
-};
-const btn = {
-  display:'inline-flex', alignItems:'center', justifyContent:'center', gap:8,
-  background:'linear-gradient(135deg,#ff6a00,#ee0979)',
-  border:'none', color:'#fff', padding:'11px 24px',
-  borderRadius:8, fontWeight:600, fontSize:14,
-  cursor:'pointer', width:'100%',
-  boxShadow:'0 4px 14px rgba(255,106,0,0.3)',
-};
-const card = {
-  background:'rgba(255,255,255,0.05)',
-  border:'1px solid rgba(255,255,255,0.1)',
-  borderRadius:14, backdropFilter:'blur(10px)',
-};
-const infoRow = {
-  display:'flex', alignItems:'center', gap:10,
-  padding:'11px 14px', borderRadius:10,
-  background:'rgba(255,255,255,0.04)',
-  border:'1px solid rgba(255,255,255,0.07)',
-};
 
 const ICONS = {
   planet:'🪐', sign:'♑', stones:'💎', days:'📅', color:'🎨',
@@ -63,137 +30,258 @@ function NumerologyTool({ onBack }) {
   const fav = result?.favourable || {};
 
   return (
-    <div style={{ color:'#fff' }}>
-      {/* Back */}
-      <button onClick={onBack} style={{
-        background:'transparent', border:'1px solid rgba(255,106,0,0.4)',
-        color:'#ff6a00', padding:'7px 16px', borderRadius:6,
-        fontSize:13, cursor:'pointer', marginBottom:28,
-      }}>← Back to Tools</button>
+    <div className="numerology-tool-container animated fadeIn">
+      <div className="container-fluid p-0">
+        <div className="row g-0 min-vh-100">
 
-      {/* Heading */}
-      <div className="text-center mb-4">
-        <h2 className="t-heading">🔢 Numerology Calculator</h2>
-        <p style={{ color:'#aaa', fontSize:15 }}>Chaldean &amp; Vedic — radical, destiny &amp; name number analysis</p>
-      </div>
-
-      {/* Form */}
-      <div className="row justify-content-center mb-4">
-        <div className="col-lg-5 col-md-7">
-          <div style={{ ...card, padding:28 }}>
-            <form onSubmit={calculate}>
-              <div style={{ marginBottom:16 }}>
-                <label style={lbl}>Full Name</label>
-                <input style={inp} type="text" placeholder="e.g. John Doe"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+          {/* LEFT HERO PANEL */}
+          {!result ? (
+            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
+              <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
+                {onBack && (
+                  <button className="btn-back-tool mb-4" onClick={onBack}>
+                    <i className="fas fa-chevron-left me-2"></i> Back to Tools
+                  </button>
+                )}
+                <h1 className="display-4 fw-bold mb-3 hero-title">Numerology Calculator</h1>
+                <p className="hero-desc mb-5">
+                  Unlock the vibrational power of your numbers. Our Chaldean & Vedic system analyzes your Radical, Destiny, and Name numbers to guide your life path.
+                </p>
+                <div className="decor-icons">🔢 ✨ 🕉️ 🌟</div>
               </div>
-              <div style={{ marginBottom:22 }}>
-                <label style={lbl}>Date of Birth</label>
-                <div className="position-relative">
-                  <input style={inp} type="date" className="custom-date-input"
-                    value={formData.dob}
-                    onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required />
-                  <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
-                </div>
-              </div>
-              <button style={btn} type="submit" disabled={loading}>
-                {loading ? <><span className="spinner-border spinner-border-sm" />  Calculating…</> : 'Calculate My Numbers'}
-              </button>
-              {error && <p style={{ color:'#f87171', fontSize:13, textAlign:'center', marginTop:10 }}>{error}</p>}
-            </form>
-          </div>
-        </div>
-      </div>
-
-      {/* Results */}
-      {result && (
-        <div style={{ animation:'fadeUp 0.5s ease both' }}>
-          {/* 3 Core Numbers */}
-          <div className="row g-3 mb-4">
-            {[
-              { n: result.radical,    label:'Radical No.',  sub:'Birth day energy' },
-              { n: result.destiny,    label:'Destiny No.',  sub:'Life path vibration' },
-              { n: result.nameNumber, label:'Name No.',     sub:'Chaldean expression' },
-            ].map(({ n, label, sub }) => (
-              <div className="col-4" key={label}>
-                <div style={{ ...card, padding:'18px 12px', textAlign:'center' }}>
-                  <div style={{ fontSize:'clamp(34px,6vw,50px)', fontWeight:900, color:'#ff6a00', lineHeight:1, marginBottom:4 }}>{n}</div>
-                  <div style={{ fontSize:13, fontWeight:700, color:'#eee' }}>{label}</div>
-                  <div style={{ fontSize:11, color:'#666', marginTop:2 }}>{sub}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {/* Profile bar */}
-          <div style={{ ...card, padding:'14px 20px', display:'flex', alignItems:'center', gap:14, marginBottom:24, flexWrap:'wrap' }}>
-            <span style={{ fontSize:26 }}>🌟</span>
-            <div>
-              <div style={{ color:'#eee', fontSize:14 }}>Profile for <strong style={{ color:'#ff6a00' }}>{result.name}</strong></div>
-              <div style={{ color:'#666', fontSize:12 }}>DOB: {result.dob}</div>
             </div>
-            <div style={{ marginLeft:'auto', textAlign:'right' }}>
-              <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', letterSpacing:1 }}>Lucky Numbers</div>
-              <div style={{ fontSize:20, fontWeight:800, color:'#ffd700' }}>{fav.number}</div>
-            </div>
-          </div>
-
-          {/* Favourable */}
-          {fav.planet && (
-            <>
-              <div style={{ fontSize:15, fontWeight:700, color:'#ff6a00', borderLeft:'3px solid #ff6a00', paddingLeft:12, marginBottom:16 }}>
-                🪐 Auspicious Details — ruled by {fav.planet}
-              </div>
-              <div className="row g-3">
-                {[
-                  ['Planet',    ICONS.planet,    fav.planet],
-                  ['Sign',      ICONS.sign,      fav.sign],
-                  ['Stone',     ICONS.stones,    fav.stones],
-                  ['Lucky Days',ICONS.days,      fav.days],
-                  ['Colors',    ICONS.color,     fav.color],
-                  ['Deity',     ICONS.god,       fav.god],
-                  ['Fasting',   ICONS.fast,      fav.fast],
-                  ['Dates',     ICONS.dates,     fav.dates],
-                  ['Direction', ICONS.direction, fav.direction],
-                  ['Letters',   ICONS.alphabets, fav.alphabets],
-                  ['Numbers',   ICONS.number,    fav.number],
-                ].map(([label, icon, value]) => (
-                  <div className="col-6 col-md-4 col-lg-3" key={label}>
-                    <div style={infoRow}>
-                      <span style={{ fontSize:18, flexShrink:0 }}>{icon}</span>
-                      <div>
-                        <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', letterSpacing:'0.7px', marginBottom:2 }}>{label}</div>
-                        <div style={{ fontSize:13, fontWeight:700, color:'#fff' }}>{value}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-                {/* Mantra */}
-                <div className="col-12">
-                  <div style={{ background:'rgba(255,106,0,0.07)', border:'1px solid rgba(255,106,0,0.2)', borderRadius:12, padding:24, textAlign:'center' }}>
-                    <div style={{ fontSize:26 }}>🕉️</div>
-                    <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', letterSpacing:1, marginTop:4 }}>Sacred Mantra</div>
-                    <div style={{ fontSize:'clamp(18px,3vw,26px)', fontWeight:800, color:'#ffd700', letterSpacing:2, margin:'8px 0' }}>{fav.mantra}</div>
-                    <div style={{ fontSize:12, color:'#888' }}>Chant 108 times every {fav.fast} morning for blessings of {fav.god}</div>
-                  </div>
+          ) : (
+            <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white text-center">
+              <div className="mx-auto" style={{ maxWidth: '480px' }}>
+                <div className="selected-sign-icon mb-4">
+                  <div className="selected-svg-wrap" style={{ fontSize: '80px' }}>🔢</div>
                 </div>
+                <h1 className="display-4 fw-bold mb-2 hero-title">Number {result.radical}</h1>
+                <p className="hero-desc mb-5">Ruled by {fav.planet}. Your life's vibration is set.</p>
+                <button className="btn-change-sign" onClick={() => setResult(null)}>
+                  <i className="fas fa-sync-alt me-2"></i> Calculate New
+                </button>
               </div>
-            </>
+            </div>
           )}
+
+          {/* RIGHT CONTENT PANEL */}
+          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white-content">
+            {!result ? (
+              <div className="w-100" style={{ maxWidth: '500px' }}>
+                <div className="prediction-box animated fadeInUp p-4 p-md-5" style={{ borderRadius: '20px', border: '1px solid #f3e5d8', boxShadow: '0 20px 40px rgba(198,132,63,0.1)' }}>
+                  <h3 className="form-title text-center mb-4" style={{ fontFamily: 'Playfair Display', color: '#65250c', fontWeight: 800 }}>Vibrational Input</h3>
+                  <form onSubmit={calculate}>
+                    <div className="mb-4">
+                      <label className="custom-lbl">Full Name</label>
+                      <input className="custom-inp" type="text" placeholder="e.g. John Doe"
+                        value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
+                    </div>
+                    <div className="mb-5">
+                      <label className="custom-lbl">Date of Birth</label>
+                      <input className="custom-inp" type="date" value={formData.dob} onChange={(e) => setFormData({ ...formData, dob: e.target.value })} required />
+                    </div>
+                    <button className="btn-calculate-premium w-100" type="submit" disabled={loading}>
+                      {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Calculating…</> : 'Calculate My Numbers'}
+                    </button>
+                    {error && <p className="text-danger mt-3 text-center small">{error}</p>}
+                  </form>
+                </div>
+              </div>
+            ) : (
+              <div className="horoscope-report w-100" style={{ maxWidth: '720px' }}>
+                <div className="prediction-box animated fadeInUp">
+                  <div className="prediction-header mb-4 border-bottom pb-3">
+                    <span className="badge-cosmic">Numerology Report</span>
+                    <h2 className="prediction-h1 mt-2">{result.name}</h2>
+                  </div>
+
+                  <div className="prediction-body">
+                    {/* 3 Core Numbers */}
+                    <div className="row g-3 mb-5">
+                      {[
+                        { n: result.radical,    label:'Radical No.',  sub:'Birth Day' },
+                        { n: result.destiny,    label:'Destiny No.',  sub:'Life Path' },
+                        { n: result.nameNumber, label:'Name No.',     sub:'Chaldean' },
+                      ].map(({ n, label, sub }) => (
+                        <div className="col-4" key={label}>
+                          <div className="lucky-stat py-4">
+                            <div style={{ fontSize:'42px', fontWeight:900, color:'#9c5a1e', lineHeight:1 }}>{n}</div>
+                            <div className="stat-label mt-2">{label}</div>
+                            <div style={{ fontSize:'10px', color:'#9c847b' }}>{sub}</div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+
+                    {fav.planet && (
+                      <div className="auspicious-details">
+                        <h3 className="section-title mb-4"><i className="fas fa-star me-2"></i> Auspicious Details</h3>
+                        <div className="row g-3">
+                          {[
+                            ['Planet',    ICONS.planet,    fav.planet],
+                            ['Stone',     ICONS.stones,    fav.stones],
+                            ['Lucky Days',ICONS.days,      fav.days],
+                            ['Colors',    ICONS.color,     fav.color],
+                            ['Dates',     ICONS.dates,     fav.dates],
+                            ['Letters',   ICONS.alphabets, fav.alphabets],
+                          ].map(([label, icon, value]) => (
+                            <div className="col-6 col-md-4" key={label}>
+                              <div className="lucky-stat d-flex align-items-center gap-2 text-start py-2">
+                                <span style={{ fontSize: '18px' }}>{icon}</span>
+                                <div>
+                                  <div className="stat-label" style={{ marginBottom: '0' }}>{label}</div>
+                                  <div style={{ fontWeight: 700, color: '#65250c', fontSize: '13px' }}>{value}</div>
+                                </div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+
+                        {/* Mantra */}
+                        <div className="mt-5 p-4" style={{ background: '#ffefd6', borderRadius: '15px', border: '1px solid #f3e5d8', textAlign: 'center' }}>
+                          <div style={{ fontSize: '24px' }}>🕉️</div>
+                          <div className="stat-label">Sacred Mantra</div>
+                          <div style={{ fontSize: '20px', fontWeight: 800, color: '#65250c', letterSpacing: '1px', margin: '8px 0' }}>{fav.mantra}</div>
+                          <div style={{ fontSize: '11px', color: '#9c5a1e' }}>Chant 108 times every {fav.fast} morning for blessings.</div>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
         </div>
-      )}
+      </div>
+
       <style>{`
-        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-        .custom-date-input {
-          color-scheme: dark;
-          padding-right: 40px !important;
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        .numerology-tool-container {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          overflow-x: hidden;
         }
-        .custom-date-input::-webkit-calendar-picker-indicator {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          width: 100%; height: 100%;
-          opacity: 0; cursor: pointer; z-index: 2;
+
+        .bg-bronze-hero {
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
+        }
+
+        .bg-white-content {
+          background-color: #ffffff;
+        }
+
+        .hero-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(2.8rem, 6vw, 4.8rem);
+          font-weight: 900;
+          line-height: 1.1;
+          margin-bottom: 20px;
+        }
+
+        .hero-desc {
+          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+          line-height: 1.7;
+          opacity: 0.95;
+          font-weight: 500;
+        }
+
+        .btn-back-tool {
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.3);
+          color: #fff;
+          padding: 8px 24px;
+          border-radius: 4px;
+          font-size: 14px;
+          transition: 0.3s;
+          font-weight: 500;
+        }
+        .btn-back-tool:hover { background: rgba(255,255,255,0.25); }
+
+        .custom-lbl {
+          display: block;
+          font-size: 13px;
+          color: #65250c;
+          margin-bottom: 8px;
+          font-weight: 700;
+          text-align: left;
+        }
+
+        .custom-inp {
+          width: 100%;
+          border: none;
+          border-bottom: 2px solid #f3e5d8;
+          background: transparent;
+          padding: 10px 0;
+          font-size: 16px;
+          color: #65250c;
+          outline: none;
+          transition: 0.3s;
+          font-weight: 600;
+        }
+        .custom-inp:focus { border-color: #c6843f; }
+
+        .btn-calculate-premium {
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
+          border: none;
+          color: #fff;
+          padding: 14px 40px;
+          border-radius: 8px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          box-shadow: 0 10px 20px rgba(198,132,63,0.2);
+          transition: 0.3s;
+        }
+        .btn-calculate-premium:hover { transform: translateY(-2px); box-shadow: 0 15px 25px rgba(198,132,63,0.3); }
+
+        .prediction-h1 {
+          font-family: 'Playfair Display', serif;
+          font-size: 32px;
+          color: #65250c;
+        }
+
+        .badge-cosmic {
+          background: #ffefd6;
+          color: #9c5a1e;
+          padding: 6px 16px;
+          border-radius: 50px;
+          font-size: 12px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+        }
+
+        .section-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 20px;
+          color: #65250c;
+          font-weight: 700;
+        }
+
+        .lucky-stat {
+          padding: 15px;
+          background: #ffefd6;
+          border-radius: 12px;
+          text-align: center;
+        }
+        .stat-label { display: block; font-size: 10px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
+
+        .btn-change-sign {
+          background: #ffefd6;
+          border: none;
+          color: #9c5a1e;
+          padding: 12px 30px;
+          border-radius: 8px;
+          font-size: 14px;
+          font-weight: 700;
+          transition: 0.3s;
+        }
+        .btn-change-sign:hover { background: #f3e5d8; transform: translateY(-2px); }
+
+        @media (max-width: 991px) {
+          .hero-title { font-size: 28px; }
+          .prediction-h1 { font-size: 26px; }
         }
       `}</style>
     </div>

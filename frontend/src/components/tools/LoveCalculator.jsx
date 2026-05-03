@@ -2,49 +2,35 @@ import { useState } from 'react';
 import PlaceAutocomplete from './PlaceAutocomplete';
 import API_BASE from '../../utils/api.js';
 
-const inp = { width:'100%', display:'block', background:'rgba(0,0,0,0.45)', border:'1px solid rgba(255,255,255,0.13)', color:'#fff', padding:'10px 14px', borderRadius:8, fontSize:14, outline:'none', boxSizing:'border-box' };
-const lbl = { display:'block', fontSize:11, color:'#999', textTransform:'uppercase', letterSpacing:'1px', marginBottom:6, fontWeight:500 };
-const btn = { display:'inline-flex', alignItems:'center', justifyContent:'center', gap:8, background:'linear-gradient(135deg,#ff6a00,#ee0979)', border:'none', color:'#fff', padding:'11px 24px', borderRadius:8, fontWeight:600, fontSize:14, cursor:'pointer', boxShadow:'0 4px 14px rgba(255,106,0,0.3)' };
-const card = { background:'rgba(255,255,255,0.05)', border:'1px solid rgba(255,255,255,0.1)', borderRadius:14, backdropFilter:'blur(10px)' };
-const backBtn = { background:'transparent', border:'1px solid rgba(255,106,0,0.4)', color:'#ff6a00', padding:'7px 16px', borderRadius:6, fontSize:13, cursor:'pointer', marginBottom:28 };
-const infoRow = { display:'flex', alignItems:'center', gap:10, padding:'11px 14px', borderRadius:10, background:'rgba(255,255,255,0.04)', border:'1px solid rgba(255,255,255,0.07)' };
-
 const emptyPartner = () => ({ name:'', dob:'', tob:'12:00', place:'', lat:'', lon:'' });
 
 function PartnerCard({ label, data, onChange }) {
   return (
-    <div style={{ ...card, padding:24, height:'100%' }}>
-      <h5 style={{ color:'#ff6a00', fontWeight:700, marginBottom:20 }}>{label}</h5>
-      <div style={{ marginBottom:14 }}>
-        <label style={lbl}>Full Name</label>
-        <input style={inp} type="text" placeholder="Enter full name"
+    <div className="partner-card-premium h-100">
+      <h5 className="partner-label mb-4">{label}</h5>
+      <div className="mb-3">
+        <label className="custom-lbl">Full Name</label>
+        <input className="custom-inp" type="text" placeholder="Enter full name"
           value={data.name} onChange={(e) => onChange({ ...data, name:e.target.value })} required />
       </div>
-      <div className="row g-2" style={{ marginBottom:14 }}>
+      <div className="row g-2 mb-3">
         <div className="col-7">
-          <label style={lbl}>Date of Birth</label>
-          <div className="position-relative">
-            <input style={inp} type="date" className="custom-date-input" value={data.dob} onChange={(e) => onChange({ ...data, dob:e.target.value })} required />
-            <i className="fas fa-calendar-alt position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
-          </div>
+          <label className="custom-lbl">Date of Birth</label>
+          <input className="custom-inp" type="date" value={data.dob} onChange={(e) => onChange({ ...data, dob:e.target.value })} required />
         </div>
         <div className="col-5">
-          <label style={lbl}>Birth Time</label>
-          <div className="position-relative">
-            <input style={inp} type="time" className="custom-time-input" value={data.tob} onChange={(e) => onChange({ ...data, tob:e.target.value })} />
-            <i className="fas fa-clock position-absolute text-white" style={{ right: '15px', top: '50%', transform: 'translateY(-50%)', pointerEvents: 'none', opacity: 0.7 }}></i>
-          </div>
+          <label className="custom-lbl">Birth Time</label>
+          <input className="custom-inp" type="time" value={data.tob} onChange={(e) => onChange({ ...data, tob:e.target.value })} />
         </div>
       </div>
       <div>
-        <label style={lbl}>Birth Place</label>
+        <label className="custom-lbl">Birth Place</label>
         <PlaceAutocomplete
           value={data.place} placeholder="Search city or town…"
           onChange={(text) => onChange({ ...data, place:text, lat:'', lon:'' })}
           onSelect={({ lat, lon, label }) => onChange({ ...data, place:label, lat, lon })}
         />
-        {data.lat && <div style={{ fontSize:12, color:'#4ade80', marginTop:4 }}>✓ {data.place}</div>}
-        {!data.lat && data.place.length > 2 && <div style={{ fontSize:12, color:'#f59e0b', marginTop:4 }}>⚠ Select from dropdown</div>}
+        {data.lat && <div className="mt-1 small text-success">✓ Location verified</div>}
       </div>
     </div>
   );
@@ -79,81 +65,276 @@ function LoveCalculator({ onBack }) {
   };
 
   const score = result?.score || 0;
-  const scoreColor = score > 80 ? '#4ade80' : score > 60 ? '#ffd700' : '#ff6a00';
+  const scoreColor = score > 80 ? '#c6843f' : score > 60 ? '#9c5a1e' : '#65250c';
 
   return (
-    <div style={{ color:'#fff' }}>
-      <button style={backBtn} onClick={onBack}>← Back to Tools</button>
-      <div className="text-center mb-4">
-        <h2 className="t-heading">💞 Vedic Love Synastry</h2>
-        <p style={{ color:'#aaa', fontSize:15 }}>Ashtakoota matching based on Moon signs &amp; planetary alignments</p>
-      </div>
-
-      <form onSubmit={calculate}>
-        <div className="row g-4 justify-content-center mb-4">
-          <div className="col-md-5"><PartnerCard label="👤 Partner One" data={partnerA} onChange={setPartnerA} /></div>
-          <div className="col-md-1 d-flex align-items-center justify-content-center">
-            <span style={{ fontSize:32, filter:'drop-shadow(0 0 8px #ff6a00)', animation:'lovebeat 1.5s ease-in-out infinite' }}>💗</span>
-          </div>
-          <div className="col-md-5"><PartnerCard label="👤 Partner Two" data={partnerB} onChange={setPartnerB} /></div>
-        </div>
-        <div className="text-center">
-          <button style={{ ...btn, width:'auto', paddingLeft:40, paddingRight:40 }} type="submit" disabled={loading}>
-            {loading ? <><span className="spinner-border spinner-border-sm" />  Analyzing…</> : 'Check Destiny Score'}
-          </button>
-          {error && <p style={{ color:'#f87171', fontSize:13, textAlign:'center', marginTop:10 }}>{error}</p>}
-        </div>
-      </form>
-
-      {result && (
-        <div style={{ marginTop:40, animation:'fadeUp 0.5s ease both' }}>
-          <div className="row justify-content-center">
-            <div className="col-lg-7">
-              <div style={{ ...card, padding:'32px 28px', textAlign:'center' }}>
-                <div style={{ fontSize:'clamp(48px,8vw,72px)', fontWeight:900, color:scoreColor, lineHeight:1, marginBottom:8 }}>{score}%</div>
-                <div style={{ height:6, background:'rgba(255,255,255,0.08)', borderRadius:99, maxWidth:200, margin:'0 auto 8px' }}>
-                  <div style={{ width:`${score}%`, height:'100%', background:`linear-gradient(90deg,#ff6a00,${scoreColor})`, borderRadius:99, transition:'width 1.2s ease' }} />
-                </div>
-                <div style={{ fontSize:11, color:'#666', textTransform:'uppercase', letterSpacing:2, marginBottom:20 }}>Compatibility Score</div>
-                <h4 style={{ color:'#fff', fontWeight:800, marginBottom:4 }}>{result.partnerA?.name} &amp; {result.partnerB?.name}</h4>
-                <div style={{ color:'#ff6a00', marginBottom:12 }}>{result.partnerA?.sign} Moon ♥ {result.partnerB?.sign} Moon</div>
-                <p style={{ color:'#aaa', fontStyle:'italic', fontSize:14, marginBottom:24 }}>"{result.analysis}"</p>
-                <div className="row g-2">
-                  {result.traits?.map((t,i) => (
-                    <div key={i} className="col-md-4">
-                      <div style={infoRow}>
-                        <div>
-                          <div style={{ fontSize:10, color:'#777', textTransform:'uppercase', marginBottom:2 }}>{t.label}</div>
-                          <div style={{ fontWeight:700, color:'#fff', fontSize:13 }}>{t.value}</div>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+    <div className="love-tool-container animated fadeIn">
+      <div className="container-fluid p-0">
+        <div className="row g-0 min-vh-100">
+          
+          {/* LEFT PANEL */}
+          <div className="col-lg-5 d-flex flex-column justify-content-center p-4 p-md-5 bg-bronze-hero text-white">
+            <div className="hero-content mx-auto" style={{ maxWidth: '480px' }}>
+              {onBack && (
+                <button className="btn-back-tool mb-4" onClick={onBack}>
+                  <i className="fas fa-chevron-left me-2"></i> Back to Tools
+                </button>
+              )}
+              <h1 className="display-4 fw-bold mb-3 hero-title">Love Compatibility</h1>
+              <p className="hero-desc mb-5">
+                Explore the celestial bond between two souls. Our Vedic Synastry tool analyzes Moon signs and planetary alignments to reveal your destiny score.
+              </p>
+              <div className="decor-icons text-center" style={{ fontSize: '2.5rem' }}>💞 ✨ 💍 🌟</div>
             </div>
           </div>
+
+          {/* RIGHT PANEL */}
+          <div className="col-lg-7 d-flex align-items-center justify-content-center p-4 p-md-5 bg-white-content">
+            {!result ? (
+              <div className="w-100" style={{ maxWidth: '850px' }}>
+                <form onSubmit={calculate}>
+                  <div className="row g-4 mb-5">
+                    <div className="col-md-6">
+                      <PartnerCard label="👤 Partner One" data={partnerA} onChange={setPartnerA} />
+                    </div>
+                    <div className="col-md-6">
+                      <PartnerCard label="👤 Partner Two" data={partnerB} onChange={setPartnerB} />
+                    </div>
+                  </div>
+
+                  <div className="text-center">
+                    <button className="btn-calculate-premium" type="submit" disabled={loading}>
+                      {loading ? <><span className="spinner-border spinner-border-sm me-2" /> Consulting Stars…</> : 'Check Compatibility Score'}
+                    </button>
+                    {error && <p className="text-danger mt-3 small">{error}</p>}
+                  </div>
+                </form>
+              </div>
+            ) : (
+              <div className="w-100" style={{ maxWidth: '720px' }}>
+                <div className="prediction-box animated fadeInUp">
+                  <div className="prediction-header text-center mb-5">
+                    <span className="badge-cosmic">Destiny Match</span>
+                    <div className="score-display mt-4">
+                      <div className="score-circle-wrap mx-auto mb-3">
+                        <span className="score-number" style={{ color: scoreColor }}>{score}%</span>
+                      </div>
+                      <div className="custom-progress-bg mx-auto" style={{ height: '8px', maxWidth: '280px', background: '#ffefd6', borderRadius: '10px', overflow: 'hidden' }}>
+                        <div className="custom-progress-bar" style={{ width: `${score}%`, height: '100%', background: scoreColor, transition: 'width 1s ease-out' }}></div>
+                      </div>
+                    </div>
+                    <h2 className="prediction-h1 mt-4">{result.partnerA?.name} & {result.partnerB?.name}</h2>
+                    <div className="prediction-date-label">
+                       <i className="fas fa-heart me-2" style={{ color: '#c6843f' }}></i>
+                       {result.partnerA?.sign} Moon ♥ {result.partnerB?.sign} Moon
+                    </div>
+                  </div>
+
+                  <div className="prediction-body">
+                    <div className="prediction-section mb-5 p-4" style={{ background: '#faf7f4', borderRadius: '15px', border: '1px solid #f1e4d8' }}>
+                      <h3 className="section-title mb-3"><i className="fas fa-magic me-2"></i> Cosmic Interpretation</h3>
+                      <p className="prediction-text" style={{ fontStyle: 'italic', color: '#65250c', lineHeight: '1.7' }}>"{result.analysis}"</p>
+                    </div>
+
+                    <div className="row g-3">
+                      {result.traits?.map((t, i) => (
+                        <div key={i} className="col-6 col-md-4">
+                          <div className="lucky-stat h-100">
+                            <span className="stat-label">{t.label}</span>
+                            <span className="stat-value" style={{ fontSize: '15px' }}>{t.value}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="text-center mt-5">
+                    <button className="btn-change-sign" onClick={() => setResult(null)}>
+                      <i className="fas fa-sync-alt me-2"></i> Try with Someone Else
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      )}
+      </div>
+
       <style>{`
-        @keyframes lovebeat{0%,100%{transform:scale(1)}50%{transform:scale(1.2)}}
-        @keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-        .place-suggestions-dropdown{position:absolute;top:100%;left:0;right:0;background:#111827;border:1px solid rgba(255,106,0,0.3);border-radius:8px;list-style:none;margin:4px 0 0;padding:4px 0;z-index:9999;max-height:200px;overflow-y:auto;box-shadow:0 16px 32px rgba(0,0,0,0.6)}
-        .suggestion-item{padding:9px 14px;cursor:pointer;font-size:13px;color:#ddd;border-bottom:1px solid rgba(255,255,255,0.04);transition:background 0.15s}
-        .suggestion-item:hover{background:rgba(255,106,0,0.12)}
-        .suggestion-primary{font-weight:600}
-        .suggestion-secondary{color:#777;font-size:0.8em}
-        
-        .custom-date-input, .custom-time-input {
-          color-scheme: dark;
-          padding-right: 40px !important;
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
+        .love-tool-container {
+          font-family: 'Be Vietnam Pro', sans-serif;
+          overflow-x: hidden;
         }
-        .custom-date-input::-webkit-calendar-picker-indicator,
-        .custom-time-input::-webkit-calendar-picker-indicator {
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          width: 100%; height: 100%;
-          opacity: 0; cursor: pointer; z-index: 2;
+
+        .bg-bronze-hero {
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
+        }
+
+        .bg-white-content {
+          background-color: #ffffff;
+        }
+
+        .hero-title {
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(2.8rem, 6vw, 4.8rem);
+          font-weight: 900;
+          line-height: 1.1;
+          margin-bottom: 20px;
+        }
+
+        .hero-desc {
+          font-size: clamp(1.1rem, 1.8vw, 1.4rem);
+          line-height: 1.7;
+          opacity: 0.95;
+          font-weight: 500;
+        }
+
+        .btn-back-tool {
+          background: rgba(255,255,255,0.15);
+          border: 1px solid rgba(255,255,255,0.3);
+          color: #fff;
+          padding: 8px 24px;
+          border-radius: 4px;
+          font-size: 14px;
+          transition: 0.3s;
+          font-weight: 500;
+        }
+        .btn-back-tool:hover { background: rgba(255,255,255,0.25); }
+
+        .partner-card-premium {
+          background: #ffffff;
+          padding: 30px;
+          border-radius: 24px;
+          border: 1px solid #f3e5d8;
+          box-shadow: 0 15px 35px rgba(198,132,63,0.08);
+          transition: 0.3s;
+        }
+        .partner-card-premium:hover {
+          border-color: #c6843f;
+          transform: translateY(-5px);
+        }
+
+        .partner-label {
+          color: #65250c;
+          font-weight: 800;
+          font-family: 'Playfair Display', serif;
+          font-size: 20px;
+          border-bottom: 2px solid #ffefd6;
+          display: inline-block;
+        }
+
+        .custom-lbl {
+          display: block;
+          font-size: 13px;
+          color: #65250c;
+          margin-bottom: 8px;
+          font-weight: 700;
+          text-align: left;
+        }
+
+        .custom-inp {
+          width: 100%;
+          border: none;
+          border-bottom: 2px solid #f3e5d8;
+          background: transparent;
+          padding: 10px 0;
+          font-size: 16px;
+          color: #65250c;
+          outline: none;
+          transition: 0.3s;
+          font-weight: 600;
+        }
+        .custom-inp:focus { border-color: #c6843f; }
+
+        .btn-calculate-premium {
+          background: linear-gradient(to right, #c6843f, #9c5a1e);
+          border: none;
+          color: #fff;
+          padding: 16px 45px;
+          border-radius: 10px;
+          font-weight: 800;
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          box-shadow: 0 10px 25px rgba(198,132,63,0.25);
+          transition: 0.3s;
+          cursor: pointer;
+        }
+        .btn-calculate-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(198,132,63,0.35); }
+
+        .score-number {
+          font-size: 72px;
+          font-weight: 900;
+          line-height: 1;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .prediction-h1 {
+          font-family: 'Playfair Display', serif;
+          font-size: 36px;
+          color: #65250c;
+          font-weight: 800;
+        }
+
+        .badge-cosmic {
+          background: #ffefd6;
+          color: #9c5a1e;
+          padding: 8px 20px;
+          border-radius: 50px;
+          font-size: 13px;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+        }
+
+        .prediction-date-label {
+          color: #9c5a1e;
+          font-weight: 700;
+          font-size: 16px;
+          letter-spacing: 0.5px;
+        }
+
+        .section-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 22px;
+          color: #65250c;
+          font-weight: 800;
+        }
+
+        .prediction-text {
+          font-size: 17px;
+          line-height: 1.7;
+          color: #4a372d;
+        }
+
+        .lucky-stat {
+          padding: 18px;
+          background: #ffefd6;
+          border-radius: 15px;
+          text-align: center;
+          border: 1px solid #f3e5d8;
+        }
+        .stat-label { display: block; font-size: 10px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 6px; font-weight: 800; }
+        .stat-value { font-weight: 800; color: #65250c; font-size: 18px; }
+
+        .btn-change-sign {
+          background: #ffefd6;
+          border: 1px solid #f3e5d8;
+          color: #9c5a1e;
+          padding: 14px 35px;
+          border-radius: 10px;
+          font-size: 15px;
+          font-weight: 800;
+          transition: 0.3s;
+          cursor: pointer;
+        }
+        .btn-change-sign:hover { background: #f3e5d8; transform: translateY(-2px); }
+
+        @media (max-width: 991px) {
+          .hero-title { font-size: 28px; }
+          .prediction-h1 { font-size: 28px; }
+          .score-number { font-size: 56px; }
         }
       `}</style>
     </div>

@@ -403,4 +403,4 @@ function KundaliTool({ onBack }) {
   );
 }
 
-export default KundaliTool;
+export default KundaliTool;

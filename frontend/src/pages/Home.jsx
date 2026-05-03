@@ -968,10 +968,10 @@ function Home() {
         }
 
         .service-card p {
-          font-size: clamp(0.95rem, 2vw, 1.25rem);
+          font-size: clamp(1.15rem, 2vw, 1.35rem);
           font-weight: 500;
           color: var(--cosmic-text-muted);
-          line-height: 1.5;
+          line-height: 1.6;
           margin-bottom: 0;
         }
 

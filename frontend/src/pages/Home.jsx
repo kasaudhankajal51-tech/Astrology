@@ -518,13 +518,22 @@ function Home() {
         }
 
         .section-subtitle {
-          color: var(--cosmic-accent-pink);
-          font-size: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 4px;
-          font-weight: 800;
+          color: #000;
+          font-size: 1.4rem;
+          text-transform: none;
+          letter-spacing: 1px;
+          font-weight: 900;
+          font-style: italic;
           margin-bottom: 20px;
           display: block;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .section-desc {
+          color: #000 !important;
+          font-size: 1.2rem;
+          line-height: 1.8;
+          font-weight: 500;
         }
 
         .text-gradient {
@@ -558,10 +567,12 @@ function Home() {
           color: var(--cosmic-text);
           border: 1px solid var(--glass-border);
           border-radius: 50px;
-          padding: 14px 35px;
+          padding: 12px 35px;
           font-weight: 800;
+          font-size: 1.15rem;
           transition: 0.3s;
           box-shadow: var(--premium-shadow);
+          display: inline-block;
         }
 
         .mystic-btn-outline:hover {
@@ -1360,7 +1371,14 @@ function Home() {
           .small-circle { width: 150px; height: 150px; }
           .icon-block { width: 35px; height: 35px; }
           .action-btns { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
-          .mystic-btn-primary, .mystic-btn-outline { width: 100%; text-align: center; }
+          .mystic-btn-primary { width: 100%; text-align: center; }
+          .mystic-btn-outline { 
+            width: auto !important; 
+            padding: 10px 25px !important; 
+            font-size: 0.95rem !important;
+            margin: 0 auto;
+            display: inline-block;
+          }
           .experience-badge { width: 160px; padding: 15px; }
           .experience-badge h4 { font-size: 1.8rem; }
         }

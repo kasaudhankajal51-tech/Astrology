@@ -289,15 +289,15 @@ function About() {
         }
 
         .section-subtitle {
-          background: linear-gradient(135deg, #FF8C42, #FF6B35);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          text-transform: uppercase;
-          letter-spacing: 3px;
-          font-weight: 800;
-          font-size: 1.15rem;
+          color: #000;
+          text-transform: none;
+          letter-spacing: 1px;
+          font-weight: 900;
+          font-style: italic;
+          font-size: 1.4rem;
           margin-bottom: 15px;
           display: inline-block;
+          font-family: 'Playfair Display', serif !important;
         }
 
         .section-title {

@@ -181,7 +181,7 @@ function Home() {
         <section className="services-section w-100">
           <div className="container">
             <div className="text-center mb-5">
-              <h5 className="section-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
+              <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
               <h2 className="section-title mt-2" data-aos="fade-up">Guiding You Through Life</h2>
               <p className="mx-auto mt-3" style={{maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: '#2c3e50'}} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
@@ -529,6 +529,16 @@ function Home() {
           font-family: 'Playfair Display', serif;
         }
 
+        .expertise-subtitle {
+          color: var(--cosmic-accent-pink) !important;
+          font-size: clamp(1.4rem, 4vw, 2rem) !important;
+          font-weight: 800 !important;
+          letter-spacing: 3px !important;
+          text-transform: uppercase !important;
+          font-style: normal !important;
+          font-family: 'Inter', sans-serif !important;
+        }
+
         .section-desc {
           color: #000 !important;
           font-size: 1.2rem;
@@ -633,13 +643,15 @@ function Home() {
         }
 
         .spm-small {
-          color: var(--cosmic-accent-pink);
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 5px;
-          font-size: 1rem;
+          color: #000;
+          font-weight: 900;
+          font-style: italic;
+          text-transform: none;
+          letter-spacing: 1px;
+          font-size: 1.2rem;
           margin-bottom: 25px;
           display: block;
+          font-family: 'Playfair Display', serif;
         }
 
         /* Cosmic Orbit */

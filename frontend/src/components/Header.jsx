@@ -437,8 +437,11 @@ function Header() {
         
         .mobile-offcanvas .nav-link {
           color: var(--cosmic-text);
-          padding: 12px;
-          font-weight: 600;
+          padding: 18px 20px;
+          font-weight: 800;
+          font-size: 1.45rem;
+          letter-spacing: 1px;
+          border-bottom: 1px solid rgba(0,0,0,0.03);
         }
         
         .mobile-offcanvas .mobile-menu-toggle {
@@ -450,6 +453,10 @@ function Header() {
           align-items: center;
           justify-content: space-between;
           color: var(--cosmic-text);
+          font-size: 1.45rem;
+          font-weight: 800;
+          padding: 18px 20px;
+          border-bottom: 1px solid rgba(0,0,0,0.03);
         }
         
         .mobile-offcanvas .mobile-submenu {

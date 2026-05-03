@@ -181,7 +181,7 @@ function Home() {
         <section className="services-section w-100">
           <div className="container">
             <div className="text-center mb-5">
-              <h5 className="section-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
+              <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
               <h2 className="section-title mt-2" data-aos="fade-up">Guiding You Through Life</h2>
               <p className="mx-auto mt-3" style={{maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: '#2c3e50'}} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
@@ -191,14 +191,18 @@ function Home() {
             <div className="row g-4 align-items-center mt-4">
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="100">
-                  <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
-                  <h4 className="mt-3">Personal Horoscope</h4>
-                  <p className="mt-2">Learn astrology from experienced and trusted mentors.</p>
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
+                    <h4 className="">Personal Horoscope</h4>
+                  </div>
+                  <p className="mt-3">Learn astrology from experienced and trusted mentors for life clarity.</p>
                 </div>
-                <div className="service-card" data-aos="fade-up" data-aos-delay="200">
-                  <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
-                  <h4 className="mt-3">Relationships</h4>
-                  <p className="mt-2">Gain practical knowledge with real-life case studies.</p>
+                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="200">
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
+                    <h4 className="">Relationships</h4>
+                  </div>
+                  <p className="mt-3">Gain practical knowledge with real-life case studies and guidance.</p>
                 </div>
               </div>
               
@@ -211,14 +215,18 @@ function Home() {
               
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="300">
-                  <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
-                  <h4 className="mt-3">Career & Business</h4>
-                  <p className="mt-2">Understand career and financial predictions deeply.</p>
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
+                    <h4 className="">Career & Business</h4>
+                  </div>
+                  <p className="mt-3">Understand career and financial predictions deeply with experts.</p>
                 </div>
-                <div className="service-card" data-aos="fade-up" data-aos-delay="400">
-                  <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
-                  <h4 className="mt-3">Muhurat Timing</h4>
-                  <p className="mt-2">Find the most auspicious time for your endeavors.</p>
+                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="400">
+                  <div className="service-card-header">
+                    <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
+                    <h4 className="">Muhurat Timing</h4>
+                  </div>
+                  <p className="mt-3">Find the most auspicious time for your life's important endeavors.</p>
                 </div>
               </div>
             </div>
@@ -232,8 +240,8 @@ function Home() {
 <section className="testimonial-section">
   <div className="container">
     <div className="section-header text-center mb-5">
-      <span className="section-badge">
-        <span className="badge-icon">⭐</span> Real Stories
+      <span className="section-badge" data-aos="fade-up">
+        Real Stories
       </span>
       {/* Heading with gradient color on "Clients Say" only */}
       <h2 className="section-title mt-3">
@@ -410,6 +418,9 @@ function Home() {
     </div>
   </div>
 </section>
+
+
+
         {/* Popular Reports Section */}
         <section className="reports-section">
           <div className="container">
@@ -518,13 +529,32 @@ function Home() {
         }
 
         .section-subtitle {
-          color: var(--cosmic-accent-pink);
-          font-size: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 4px;
-          font-weight: 800;
+          color: #000;
+          font-size: 1.4rem;
+          text-transform: none;
+          letter-spacing: 1px;
+          font-weight: 900;
+          font-style: italic;
           margin-bottom: 20px;
           display: block;
+          font-family: 'Playfair Display', serif;
+        }
+
+        .expertise-subtitle {
+          color: var(--cosmic-accent-pink) !important;
+          font-size: clamp(1.4rem, 4vw, 2rem) !important;
+          font-weight: 800 !important;
+          letter-spacing: 3px !important;
+          text-transform: uppercase !important;
+          font-style: normal !important;
+          font-family: 'Inter', sans-serif !important;
+        }
+
+        .section-desc {
+          color: #000 !important;
+          font-size: 1.2rem;
+          line-height: 1.8;
+          font-weight: 500;
         }
 
         .text-gradient {
@@ -558,10 +588,12 @@ function Home() {
           color: var(--cosmic-text);
           border: 1px solid var(--glass-border);
           border-radius: 50px;
-          padding: 14px 35px;
+          padding: 12px 35px;
           font-weight: 800;
+          font-size: 1.15rem;
           transition: 0.3s;
           box-shadow: var(--premium-shadow);
+          display: inline-block;
         }
 
         .mystic-btn-outline:hover {
@@ -622,13 +654,15 @@ function Home() {
         }
 
         .spm-small {
-          color: var(--cosmic-accent-pink);
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 5px;
-          font-size: 1rem;
+          color: #000;
+          font-weight: 900;
+          font-style: italic;
+          text-transform: none;
+          letter-spacing: 1px;
+          font-size: 1.2rem;
           margin-bottom: 25px;
           display: block;
+          font-family: 'Playfair Display', serif;
         }
 
         /* Cosmic Orbit */
@@ -847,11 +881,48 @@ function Home() {
 
         .service-card {
           background: var(--cosmic-white);
-          padding: 45px 35px;
-          border-radius: 35px;
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--premium-shadow);
-          transition: 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          padding: 25px 20px;
+          border-radius: 20px;
+          border: 1px solid rgba(0,0,0,0.06);
+          box-shadow: 0 10px 30px rgba(0,0,0,0.04);
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          height: auto;
+          min-height: 140px;
+          margin-bottom: 10px;
+          position: relative;
+        }
+
+        @media (min-width: 768px) {
+          .service-card {
+            padding: 35px;
+            margin-bottom: 20px;
+            min-height: 160px;
+          }
+        }
+
+        .service-card::after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 4px;
+          height: 0;
+          background: var(--cosmic-accent-pink);
+          transition: 0.3s;
+        }
+
+        .service-card:hover::after {
+          height: 100%;
+        }
+
+        @media (min-width: 992px) {
+          .service-card {
+            height: calc(50% - 12px);
+            margin-bottom: 0;
+          }
         }
 
         .service-card:hover {
@@ -860,28 +931,51 @@ function Home() {
           box-shadow: 0 25px 50px rgba(0,0,0,0.06);
         }
 
+        .service-card-header {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+          margin-bottom: 10px;
+        }
+
         .icon-wrapper {
+          width: 55px;
+          height: 55px;
+          background: #fdf5f2;
+          border-radius: 14px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+          border: 1px solid rgba(93, 64, 55, 0.1);
         }
 
         .icon-wrapper img {
-          width: 48px;
+          width: 35px;
+          height: 35px;
           object-fit: contain;
+          /* Forced Dark Brown Filter */
+          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%) !important;
           transition: 0.4s;
         }
 
         .service-card:hover .icon-wrapper img {
-          filter: brightness(0) invert(1);
+          transform: scale(1.1);
         }
 
         .service-card h4 {
-          font-size: 1.7rem;
+          font-size: clamp(1.2rem, 3vw, 1.6rem);
           font-weight: 800;
           color: #1a1a1a;
+          margin: 0;
         }
 
         .service-card p {
-          font-size: 1.15rem;
+          font-size: clamp(1.15rem, 2vw, 1.35rem);
           font-weight: 500;
+          color: var(--cosmic-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0;
         }
 
         /* Testimonials Section - Professional */
@@ -896,12 +990,14 @@ function Home() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 6px 16px;
+          padding: 10px 25px;
           background: rgba(108,60,225,0.1);
           border-radius: 50px;
           color: #6C3CE1;
-          font-weight: 600;
-          font-size: 0.95rem;
+          font-weight: 800;
+          font-size: 1.2rem;
+          text-transform: uppercase;
+          letter-spacing: 2px;
         }
 
         .badge-icon {
@@ -1039,12 +1135,13 @@ function Home() {
         }
 
         .testimonial-text {
-          font-size: 1.1rem;
-          line-height: 1.6;
-          color: #4B5563;
+          font-size: 1.3rem;
+          line-height: 1.7;
+          color: #1a1a1a;
           margin-bottom: 20px;
           font-style: italic;
           min-height: 80px;
+          font-weight: 500;
         }
 
         .client-info {
@@ -1336,7 +1433,9 @@ function Home() {
           .section-title { font-size: 2.2rem; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
-          .testimonial-text { font-size: 0.85rem; min-height: 70px; }
+          .testimonial-text { font-size: 1.15rem; min-height: 80px; }
+          .section-badge { font-size: 1.1rem; padding: 8px 20px; }
+          .section-description { font-size: 1.3rem !important; max-width: 100%; color: #4B5563; }
           .nav-btn { width: 32px; height: 32px; }
           .left-btn { left: -10px; }
           .right-btn { right: -10px; }
@@ -1354,13 +1453,21 @@ function Home() {
           .video-container { height: 140px; }
           .testimonial-content { padding: 16px; }
           .client-avatar { width: 38px; height: 38px; }
-          .client-details h4 { font-size: 0.85rem; }
+          .client-details h4 { font-size: 1.1rem; }
+          .rating i { font-size: 0.9rem; }
           .cosmic-orbit-container { width: 240px; height: 240px; }
           .big-circle { width: 220px; height: 220px; }
           .small-circle { width: 150px; height: 150px; }
           .icon-block { width: 35px; height: 35px; }
           .action-btns { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
-          .mystic-btn-primary, .mystic-btn-outline { width: 100%; text-align: center; }
+          .mystic-btn-primary { width: 100%; text-align: center; }
+          .mystic-btn-outline { 
+            width: auto !important; 
+            padding: 10px 25px !important; 
+            font-size: 0.95rem !important;
+            margin: 0 auto;
+            display: inline-block;
+          }
           .experience-badge { width: 160px; padding: 15px; }
           .experience-badge h4 { font-size: 1.8rem; }
         }

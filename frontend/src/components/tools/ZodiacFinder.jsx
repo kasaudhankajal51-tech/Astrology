@@ -174,7 +174,7 @@ function ZodiacFinder({ onBack }) {
           color: #fff;
           padding: 8px 24px;
           border-radius: 4px;
-          font-size: 14px;
+          font-size: 16px;
           transition: 0.3s;
           font-weight: 500;
         }
@@ -182,7 +182,7 @@ function ZodiacFinder({ onBack }) {
 
         .custom-lbl {
           display: block;
-          font-size: 13px;
+          font-size: 15px;
           color: #65250c;
           margin-bottom: 8px;
           font-weight: 700;
@@ -195,7 +195,7 @@ function ZodiacFinder({ onBack }) {
           border-bottom: 2px solid #f3e5d8;
           background: transparent;
           padding: 10px 0;
-          font-size: 16px;
+          font-size: 18px;
           color: #65250c;
           outline: none;
           transition: 0.3s;
@@ -218,7 +218,7 @@ function ZodiacFinder({ onBack }) {
 
         .prediction-h1 {
           font-family: 'Playfair Display', serif;
-          font-size: 32px;
+          font-size: 38px;
           color: #65250c;
         }
 
@@ -227,7 +227,7 @@ function ZodiacFinder({ onBack }) {
           color: #9c5a1e;
           padding: 6px 16px;
           border-radius: 50px;
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -235,13 +235,13 @@ function ZodiacFinder({ onBack }) {
 
         .section-title {
           font-family: 'Playfair Display', serif;
-          font-size: 20px;
+          font-size: 24px;
           color: #65250c;
           font-weight: 700;
         }
 
         .prediction-text {
-          font-size: 15px;
+          font-size: 17px;
           line-height: 1.6;
           color: rgba(101, 37, 12, 0.85);
         }
@@ -252,8 +252,8 @@ function ZodiacFinder({ onBack }) {
           border-radius: 12px;
           text-align: center;
         }
-        .stat-label { display: block; font-size: 10px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
-        .stat-value { font-weight: 800; color: #65250c; font-size: 16px; }
+        .stat-label { display: block; font-size: 12px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
+        .stat-value { font-weight: 800; color: #65250c; font-size: 18px; }
 
         .btn-change-sign {
           background: #ffefd6;
@@ -261,7 +261,7 @@ function ZodiacFinder({ onBack }) {
           color: #9c5a1e;
           padding: 12px 30px;
           border-radius: 8px;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 700;
           transition: 0.3s;
         }

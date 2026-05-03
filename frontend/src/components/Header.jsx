@@ -219,7 +219,7 @@ function Header() {
           padding: 8px 5%;
           white-space: nowrap;
           z-index: 2;
-          font-size: clamp(11px, 2vw, 13px);
+          font-size: clamp(13px, 2.2vw, 15px);
           text-transform: uppercase;
           letter-spacing: 1px;
           flex-shrink: 0;
@@ -240,7 +240,7 @@ function Header() {
         
         .item {
           color: var(--cosmic-text);
-          font-size: clamp(11px, 2vw, 13px);
+          font-size: clamp(13px, 2.2vw, 15px);
           font-weight: 500;
         }
         
@@ -250,7 +250,7 @@ function Header() {
           padding: 2px 8px;
           margin-right: 8px;
           border-radius: 6px;
-          font-size: clamp(9px, 1.8vw, 11px);
+          font-size: clamp(11px, 2vw, 13px);
           text-transform: uppercase;
           font-weight: 800;
         }
@@ -295,7 +295,7 @@ function Header() {
             color: var(--cosmic-text) !important;
             font-weight: 700;
             padding: 10px clamp(8px, 1vw, 15px) !important;
-            font-size: clamp(11px, 1.2vw, 14px);
+            font-size: clamp(13px, 1.4vw, 17px);
             white-space: nowrap;
             transition: all 0.3s;
           }
@@ -311,7 +311,7 @@ function Header() {
             padding: clamp(8px, 1.2vw, 12px) clamp(16px, 2vw, 24px);
             border-radius: 50px;
             font-weight: 800;
-            font-size: clamp(10px, 1.1vw, 13px);
+            font-size: clamp(12px, 1.3vw, 16px);
             letter-spacing: 0.8px;
             white-space: nowrap;
             box-shadow: var(--premium-shadow);
@@ -533,7 +533,7 @@ function Header() {
         }
         
         .dropdown-item {
-          font-size: 14px;
+          font-size: 16px;
           transition: all 0.2s;
         }
         

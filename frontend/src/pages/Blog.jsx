@@ -162,6 +162,8 @@ function Blog() {
       </section>
 
       <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
+
         /* Hero Section */
         .blog-hero {
           position: relative;
@@ -181,13 +183,14 @@ function Blog() {
           text-transform: uppercase;
           letter-spacing: 4px;
           font-weight: 800;
-          font-size: 0.85rem;
+          font-size: 1rem;
           margin-bottom: 15px;
           display: inline-block;
         }
 
         .hero-title {
-          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(3.2rem, 7vw, 4.8rem);
           font-weight: 800;
           color: #1A1A2E;
           margin-bottom: 15px;
@@ -200,9 +203,10 @@ function Blog() {
         }
 
         .hero-subtitle {
-          font-size: 1.1rem;
+          font-size: 1.4rem;
           color: #4A5568;
           font-weight: 500;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         /* Blog Content */
@@ -212,9 +216,10 @@ function Blog() {
         }
 
         .result-count {
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           color: #4A5568;
           font-weight: 500;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         /* Blog Card */
@@ -265,13 +270,13 @@ function Blog() {
         }
 
         .date-chip .day {
-          font-size: 1.1rem;
+          font-size: 1.3rem;
           font-weight: 800;
           color: #FF6B35;
         }
 
         .date-chip .month {
-          font-size: 0.7rem;
+          font-size: 0.85rem;
           text-transform: uppercase;
           color: #6B7280;
         }
@@ -283,7 +288,7 @@ function Blog() {
         .category-badge {
           background: #FFF5EB;
           color: #FF8C42;
-          font-size: 0.7rem;
+          font-size: 0.85rem;
           font-weight: 700;
           padding: 5px 12px;
           border-radius: 30px;
@@ -291,10 +296,11 @@ function Blog() {
         }
 
         .blog-title {
-          font-size: 1.4rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 2.1rem;
           font-weight: 800;
           color: #1A1A2E;
-          line-height: 1.4;
+          line-height: 1.3;
           transition: color 0.3s;
         }
 
@@ -303,9 +309,10 @@ function Blog() {
         }
 
         .blog-meta {
-          font-size: 0.8rem;
+          font-size: 0.95rem;
           color: #6B7280;
           font-weight: 500;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .blog-meta i {
@@ -313,17 +320,18 @@ function Blog() {
         }
 
         .blog-excerpt {
-          font-size: 0.95rem;
+          font-size: 1.25rem;
           color: #4A5568;
-          line-height: 1.6;
+          line-height: 1.7;
           margin-bottom: 15px;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .read-more {
           color: #FF6B35;
           text-decoration: none;
           font-weight: 700;
-          font-size: 0.85rem;
+          font-size: 1rem;
           transition: all 0.3s;
           display: inline-flex;
           align-items: center;
@@ -344,7 +352,8 @@ function Blog() {
         }
 
         .sidebar-title {
-          font-size: 1.2rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.7rem;
           font-weight: 800;
           color: #1A1A2E;
           margin-bottom: 20px;
@@ -363,8 +372,9 @@ function Blog() {
           padding: 14px 50px 14px 18px;
           border: 2px solid #F0E6DC;
           border-radius: 50px;
-          font-size: 0.9rem;
+          font-size: 1.05rem;
           transition: all 0.3s;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .search-input:focus {
@@ -406,9 +416,11 @@ function Blog() {
           padding: 12px 0;
           color: #4A5568;
           text-decoration: none;
-          font-weight: 500;
+          font-size: 1.2rem;
+          font-weight: 600;
           border-bottom: 1px solid #F0E6DC;
           transition: all 0.3s;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .category-list li a:hover {
@@ -462,16 +474,18 @@ function Blog() {
         }
 
         .recent-title {
-          font-size: 0.9rem;
+          font-size: 1.3rem;
           font-weight: 700;
           color: #1A1A2E;
           margin-bottom: 5px;
           line-height: 1.4;
+          font-family: 'Playfair Display', serif;
         }
 
         .recent-date {
-          font-size: 0.7rem;
+          font-size: 0.85rem;
           color: #6B7280;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         /* Tags */
@@ -487,7 +501,7 @@ function Blog() {
           color: #FF8C42;
           text-decoration: none;
           border-radius: 30px;
-          font-size: 0.8rem;
+          font-size: 0.95rem;
           font-weight: 600;
           transition: all 0.3s;
         }

@@ -519,7 +519,7 @@ function Home() {
 
         .section-subtitle {
           color: var(--cosmic-accent-pink);
-          font-size: 0.85rem;
+          font-size: 1rem;
           text-transform: uppercase;
           letter-spacing: 4px;
           font-weight: 800;
@@ -544,7 +544,7 @@ function Home() {
           transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
           box-shadow: 0 10px 25px rgba(227, 27, 122, 0.3);
           text-transform: uppercase;
-          font-size: 0.85rem;
+          font-size: 1rem;
         }
 
         .mystic-btn-primary:hover {
@@ -614,7 +614,7 @@ function Home() {
         }
 
         .banner-desc {
-          font-size: 1.2rem;
+          font-size: 1.35rem;
           color: var(--cosmic-text-muted) !important;
           line-height: 1.8;
           max-width: 90%;
@@ -626,7 +626,7 @@ function Home() {
           font-weight: 800;
           text-transform: uppercase;
           letter-spacing: 5px;
-          font-size: 0.85rem;
+          font-size: 1rem;
           margin-bottom: 25px;
           display: block;
         }
@@ -806,7 +806,7 @@ function Home() {
           margin: 0; 
         }
         .experience-badge span { 
-          font-size: 0.75rem; 
+          font-size: 0.9rem; 
           font-weight: 800; 
           text-transform: uppercase; 
           letter-spacing: 1px; 
@@ -880,7 +880,7 @@ function Home() {
         }
 
         .service-card p {
-          font-size: 1rem;
+          font-size: 1.15rem;
           font-weight: 500;
         }
 
@@ -901,16 +901,16 @@ function Home() {
           border-radius: 50px;
           color: #6C3CE1;
           font-weight: 600;
-          font-size: 0.8rem;
+          font-size: 0.95rem;
         }
 
         .badge-icon {
-          font-size: 0.9rem;
+          font-size: 1.1rem;
         }
 
         .section-description {
           max-width: 500px;
-          font-size: 1rem;
+          font-size: 1.2rem;
           color: #6B7280;
         }
 
@@ -1039,7 +1039,7 @@ function Home() {
         }
 
         .testimonial-text {
-          font-size: 0.9rem;
+          font-size: 1.1rem;
           line-height: 1.6;
           color: #4B5563;
           margin-bottom: 20px;
@@ -1070,7 +1070,7 @@ function Home() {
         }
 
         .client-details h4 {
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: #1F2937;
           margin-bottom: 4px;
@@ -1202,7 +1202,7 @@ function Home() {
           background: #fff;
           color: #1e293b;
           padding: 7px 14px;
-          font-size: 0.8rem;
+          font-size: 1rem;
           font-weight: 800;
           border-radius: 50px;
           text-transform: uppercase;
@@ -1239,7 +1239,7 @@ function Home() {
         }
 
         .card-body-content p {
-          font-size: 1.05rem;
+          font-size: 1.2rem;
           line-height: 1.6;
           flex-grow: 1;
           color: var(--cosmic-text-muted);
@@ -1278,7 +1278,7 @@ function Home() {
           padding: 10px 22px;
           border-radius: 12px;
           font-weight: 700;
-          font-size: 0.95rem;
+          font-size: 1.1rem;
           transition: all 0.3s;
           border: none;
           cursor: pointer;

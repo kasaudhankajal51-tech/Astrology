@@ -4,14 +4,18 @@
 ================================================================ */
 
 /* ── Page ── */
-.t-page { padding: 60px 0; min-height: 80vh; color: #fff; }
+.t-page {
+  padding: 60px 0;
+  min-height: 80vh;
+  color: #fff;
+}
 
 /* ── Back button ── */
 .t-back {
   background: transparent !important;
-  border: 1px solid rgba(255,106,0,0.5) !important;
+  border: 1px solid rgba(255, 106, 0, 0.5) !important;
   color: #ff6a00 !important;
-  font-size: 14px;
+  font-size: 16px;
   cursor: pointer;
   margin-bottom: 28px;
   display: inline-flex;
@@ -22,7 +26,11 @@
   transition: opacity 0.2s, transform 0.2s;
   text-decoration: none !important;
 }
-.t-back:hover { opacity: 0.8; transform: translateX(-3px); }
+
+.t-back:hover {
+  opacity: 0.8;
+  transform: translateX(-3px);
+}
 
 /* ── Section headings ── */
 .t-heading {
@@ -35,30 +43,43 @@
   animation: tGradMove 4s linear infinite !important;
   margin-bottom: 8px !important;
 }
-@keyframes tGradMove { 0%{ background-position:0% } 100%{ background-position:200% } }
 
-.t-sub { color: #aaa !important; font-size: 15px !important; }
+@keyframes tGradMove {
+  0% {
+    background-position: 0%
+  }
+
+  100% {
+    background-position: 200%
+  }
+}
+
+.t-sub {
+  color: #aaa !important;
+  font-size: 18px !important;
+}
 
 /* ── Glass cards ── */
 .t-card {
-  background: rgba(255,255,255,0.05) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
   backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255,255,255,0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   border-radius: 14px !important;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s !important;
 }
+
 .t-card:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 35px rgba(255,106,0,0.15) !important;
-  border-color: rgba(255,106,0,0.3) !important;
+  box-shadow: 0 12px 35px rgba(255, 106, 0, 0.15) !important;
+  border-color: rgba(255, 106, 0, 0.3) !important;
 }
 
 /* ── Form labels ── */
 .t-label {
   display: block !important;
-  font-size: 12px !important;
+  font-size: 14px !important;
   color: #999 !important;
   text-transform: uppercase !important;
   letter-spacing: 1px !important;
@@ -70,25 +91,34 @@
 .t-input {
   width: 100% !important;
   display: block !important;
-  background: rgba(0,0,0,0.4) !important;
-  border: 1px solid rgba(255,255,255,0.12) !important;
+  background: rgba(0, 0, 0, 0.4) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   color: #fff !important;
   padding: 10px 14px !important;
   border-radius: 8px !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   outline: none !important;
   box-shadow: none !important;
   transition: border-color 0.2s !important;
   -webkit-appearance: none;
 }
+
 .t-input:focus {
   border-color: #ff6a00 !important;
-  box-shadow: 0 0 0 2px rgba(255,106,0,0.15) !important;
-  background: rgba(0,0,0,0.5) !important;
+  box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.15) !important;
+  background: rgba(0, 0, 0, 0.5) !important;
   color: #fff !important;
 }
-.t-input[type="date"]::-webkit-calendar-picker-indicator { filter: invert(0.6); cursor: pointer; }
-.t-input option { background: #111; color: #fff; }
+
+.t-input[type="date"]::-webkit-calendar-picker-indicator {
+  filter: invert(0.6);
+  cursor: pointer;
+}
+
+.t-input option {
+  background: #111;
+  color: #fff;
+}
 
 /* ── CTA button — override Bootstrap completely ── */
 .t-btn {
@@ -102,40 +132,70 @@
   padding: 11px 24px !important;
   border-radius: 8px !important;
   font-weight: 600 !important;
-  font-size: 14px !important;
+  font-size: 16px !important;
   cursor: pointer !important;
   transition: opacity 0.2s, transform 0.2s !important;
   text-align: center !important;
   letter-spacing: 0.3px !important;
-  box-shadow: 0 4px 15px rgba(255,106,0,0.3) !important;
+  box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3) !important;
 }
+
 .t-btn:hover:not(:disabled) {
   opacity: 0.88 !important;
   transform: translateY(-2px) !important;
   color: #fff !important;
 }
-.t-btn:disabled { opacity: 0.55 !important; cursor: not-allowed !important; }
-.t-btn:focus  { outline: none !important; box-shadow: none !important; }
+
+.t-btn:disabled {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+}
+
+.t-btn:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
 
 /* ── Outline button ── */
 .t-outline-btn {
   background: transparent !important;
-  border: 1px solid rgba(255,255,255,0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
   color: #ccc !important;
   padding: 7px 16px !important;
   border-radius: 8px !important;
-  font-size: 13px !important;
+  font-size: 15px !important;
   cursor: pointer !important;
   transition: border-color 0.2s, color 0.2s !important;
 }
-.t-outline-btn:hover { border-color: #ff6a00 !important; color: #ff6a00 !important; }
+
+.t-outline-btn:hover {
+  border-color: #ff6a00 !important;
+  color: #ff6a00 !important;
+}
 
 /* ── Error ── */
-.t-error { color: #f87171 !important; font-size: 13px; text-align: center; }
+.t-error {
+  color: #f87171 !important;
+  font-size: 15px;
+  text-align: center;
+}
 
 /* ── Results animation ── */
-.t-results { animation: tFadeUp 0.5s ease both; }
-@keyframes tFadeUp { from{ opacity:0; transform:translateY(16px); } to{ opacity:1; transform:translateY(0); } }
+.t-results {
+  animation: tFadeUp 0.5s ease both;
+}
+
+@keyframes tFadeUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 
 /* ── Info row ── */
 .t-info-row {
@@ -144,32 +204,73 @@
   gap: 12px !important;
   padding: 12px 14px !important;
   border-radius: 10px !important;
-  background: rgba(255,255,255,0.04) !important;
-  border: 1px solid rgba(255,255,255,0.07) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.07) !important;
   transition: background 0.2s !important;
 }
-.t-info-row:hover { background: rgba(255,106,0,0.07) !important; }
-.t-info-icon { font-size: 18px; width: 28px; text-align: center; flex-shrink: 0; }
-.t-info-label { font-size: 10px !important; color: #777 !important; text-transform: uppercase; letter-spacing: 0.8px; margin-bottom: 2px; }
-.t-info-value { font-size: 14px !important; font-weight: 700 !important; color: #fff !important; }
+
+.t-info-row:hover {
+  background: rgba(255, 106, 0, 0.07) !important;
+}
+
+.t-info-icon {
+  font-size: 18px;
+  width: 28px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.t-info-label {
+  font-size: 12px !important;
+  color: #777 !important;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 2px;
+}
+
+.t-info-value {
+  font-size: 17px !important;
+  font-weight: 700 !important;
+  color: #fff !important;
+}
 
 /* ── Number cards ── */
 .t-num-card {
-  background: rgba(255,255,255,0.04) !important;
-  border: 1px solid rgba(255,106,0,0.2) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 106, 0, 0.2) !important;
   border-radius: 12px !important;
   padding: 20px 12px !important;
   text-align: center !important;
   transition: transform 0.3s !important;
 }
-.t-num-card:hover { transform: translateY(-4px) !important; }
-.t-num-big { font-size: clamp(36px,6vw,52px) !important; font-weight: 900 !important; color: #ff6a00 !important; line-height: 1 !important; margin-bottom: 4px !important; }
-.t-num-label { font-size: 13px !important; font-weight: 700 !important; color: #eee !important; }
-.t-num-sub   { font-size: 11px !important; color: #666 !important; margin-top: 2px !important; }
+
+.t-num-card:hover {
+  transform: translateY(-4px) !important;
+}
+
+.t-num-big {
+  font-size: clamp(36px, 6vw, 52px) !important;
+  font-weight: 900 !important;
+  color: #ff6a00 !important;
+  line-height: 1 !important;
+  margin-bottom: 4px !important;
+}
+
+.t-num-label {
+  font-size: 15px !important;
+  font-weight: 700 !important;
+  color: #eee !important;
+}
+
+.t-num-sub {
+  font-size: 13px !important;
+  color: #666 !important;
+  margin-top: 2px !important;
+}
 
 /* ── Section title ── */
 .t-section-title {
-  font-size: 15px !important;
+  font-size: 18px !important;
   font-weight: 700 !important;
   color: #ff6a00 !important;
   border-left: 3px solid #ff6a00 !important;
@@ -179,31 +280,47 @@
 
 /* ── Sign cards (Horoscope) ── */
 .t-sign-card {
-  background: rgba(255,255,255,0.04) !important;
-  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(255, 255, 255, 0.04) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
   border-radius: 12px !important;
   padding: 14px 8px !important;
   text-align: center !important;
   cursor: pointer !important;
   transition: transform 0.25s, border-color 0.25s, background 0.25s !important;
 }
+
 .t-sign-card:hover {
   transform: translateY(-5px) !important;
   border-color: #ff6a00 !important;
-  background: rgba(255,106,0,0.08) !important;
+  background: rgba(255, 106, 0, 0.08) !important;
 }
-.t-sign-sym   { font-size: 26px; margin-bottom: 6px; }
-.t-sign-name  { font-size: 13px !important; font-weight: 600 !important; color: #fff !important; }
-.t-sign-dates { font-size: 10px !important; color: #666 !important; margin-top: 2px !important; }
+
+.t-sign-sym {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.t-sign-name {
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: #fff !important;
+}
+
+.t-sign-dates {
+  font-size: 12px !important;
+  color: #666 !important;
+  margin-top: 2px !important;
+}
 
 /* ── Mantra card ── */
 .t-mantra-card {
-  background: rgba(255,106,0,0.06) !important;
-  border: 1px solid rgba(255,106,0,0.2) !important;
+  background: rgba(255, 106, 0, 0.06) !important;
+  border: 1px solid rgba(255, 106, 0, 0.2) !important;
   border-radius: 12px !important;
   padding: 24px !important;
   text-align: center !important;
 }
+
 .t-mantra-text {
   font-size: clamp(18px, 3vw, 26px) !important;
   font-weight: 800 !important;
@@ -214,23 +331,44 @@
 
 /* ── Place autocomplete ── */
 .place-suggestions-dropdown {
-  position: absolute !important; top:100% !important; left:0 !important; right:0 !important;
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
   background: #111827 !important;
-  border: 1px solid rgba(255,106,0,0.3) !important;
+  border: 1px solid rgba(255, 106, 0, 0.3) !important;
   border-radius: 8px !important;
   list-style: none !important;
-  margin: 4px 0 0 !important; padding: 4px 0 !important;
+  margin: 4px 0 0 !important;
+  padding: 4px 0 !important;
   z-index: 9999 !important;
-  max-height: 200px !important; overflow-y: auto !important;
-  box-shadow: 0 16px 32px rgba(0,0,0,0.6) !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+  box-shadow: 0 16px 32px rgba(0, 0, 0, 0.6) !important;
 }
+
 .suggestion-item {
-  padding: 9px 14px !important; cursor: pointer !important;
-  font-size: 13px !important; color: #ddd !important;
-  border-bottom: 1px solid rgba(255,255,255,0.04) !important;
+  padding: 9px 14px !important;
+  cursor: pointer !important;
+  font-size: 15px !important;
+  color: #ddd !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04) !important;
   transition: background 0.15s !important;
 }
-.suggestion-item:last-child { border-bottom: none !important; }
-.suggestion-item:hover { background: rgba(255,106,0,0.12) !important; }
-.suggestion-primary { font-weight: 600 !important; }
-.suggestion-secondary { color: #777 !important; font-size: 0.8em !important; }
+
+.suggestion-item:last-child {
+  border-bottom: none !important;
+}
+
+.suggestion-item:hover {
+  background: rgba(255, 106, 0, 0.12) !important;
+}
+
+.suggestion-primary {
+  font-weight: 600 !important;
+}
+
+.suggestion-secondary {
+  color: #777 !important;
+  font-size: 0.8em !important;
+}

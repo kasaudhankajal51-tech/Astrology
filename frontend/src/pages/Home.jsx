@@ -240,8 +240,8 @@ function Home() {
 <section className="testimonial-section">
   <div className="container">
     <div className="section-header text-center mb-5">
-      <span className="section-badge">
-        <span className="badge-icon">⭐</span> Real Stories
+      <span className="section-badge" data-aos="fade-up">
+        Real Stories
       </span>
       {/* Heading with gradient color on "Clients Say" only */}
       <h2 className="section-title mt-3">
@@ -418,6 +418,9 @@ function Home() {
     </div>
   </div>
 </section>
+
+
+
         {/* Popular Reports Section */}
         <section className="reports-section">
           <div className="container">
@@ -987,12 +990,14 @@ function Home() {
           display: inline-flex;
           align-items: center;
           gap: 8px;
-          padding: 6px 16px;
+          padding: 10px 25px;
           background: rgba(108,60,225,0.1);
           border-radius: 50px;
           color: #6C3CE1;
-          font-weight: 600;
-          font-size: 0.95rem;
+          font-weight: 800;
+          font-size: 1.2rem;
+          text-transform: uppercase;
+          letter-spacing: 2px;
         }
 
         .badge-icon {
@@ -1130,12 +1135,13 @@ function Home() {
         }
 
         .testimonial-text {
-          font-size: 1.1rem;
-          line-height: 1.6;
-          color: #4B5563;
+          font-size: 1.3rem;
+          line-height: 1.7;
+          color: #1a1a1a;
           margin-bottom: 20px;
           font-style: italic;
           min-height: 80px;
+          font-weight: 500;
         }
 
         .client-info {
@@ -1427,7 +1433,9 @@ function Home() {
           .section-title { font-size: 2.2rem; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
-          .testimonial-text { font-size: 0.85rem; min-height: 70px; }
+          .testimonial-text { font-size: 1.15rem; min-height: 80px; }
+          .section-badge { font-size: 1.1rem; padding: 8px 20px; }
+          .section-description { font-size: 1.3rem !important; max-width: 100%; color: #4B5563; }
           .nav-btn { width: 32px; height: 32px; }
           .left-btn { left: -10px; }
           .right-btn { right: -10px; }
@@ -1445,7 +1453,8 @@ function Home() {
           .video-container { height: 140px; }
           .testimonial-content { padding: 16px; }
           .client-avatar { width: 38px; height: 38px; }
-          .client-details h4 { font-size: 0.85rem; }
+          .client-details h4 { font-size: 1.1rem; }
+          .rating i { font-size: 0.9rem; }
           .cosmic-orbit-container { width: 240px; height: 240px; }
           .big-circle { width: 220px; height: 220px; }
           .small-circle { width: 150px; height: 150px; }

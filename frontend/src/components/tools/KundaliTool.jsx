@@ -194,7 +194,7 @@ function KundaliTool({ onBack }) {
             padding: 10px 24px;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 14px;
+            font-size: 16px;
           }
 
           .results-header-title {
@@ -236,7 +236,7 @@ function KundaliTool({ onBack }) {
             font-family: 'Playfair Display', serif;
             color: #65250c;
             font-weight: 800;
-            font-size: 22px;
+            font-size: 26px;
           }
 
           .info-grid .grid-row {
@@ -250,15 +250,15 @@ function KundaliTool({ onBack }) {
           .info-grid .grid-row strong { color: #65250c; }
 
           .premium-table { width: 100%; border-collapse: collapse; }
-          .premium-table th { text-align: left; padding: 15px; color: #9c5a1e; font-weight: 700; background: #faf7f4; font-size: 13px; text-transform: uppercase; }
-          .premium-table td { padding: 15px; border-bottom: 1px solid #f3e5d8; color: #4a372d; font-size: 15px; }
+          .premium-table th { text-align: left; padding: 15px; color: #9c5a1e; font-weight: 700; background: #faf7f4; font-size: 15px; text-transform: uppercase; }
+          .premium-table td { padding: 15px; border-bottom: 1px solid #f3e5d8; color: #4a372d; font-size: 17px; }
           .text-bronze-accent { color: #c6843f; font-weight: 700; }
 
           .identity-box { background: #ffefd6; padding: 25px; border-radius: 20px; text-align: center; border: 1px solid #f3e5d8; }
-          .box-lbl { display: block; font-size: 11px; text-transform: uppercase; color: #9c5a1e; font-weight: 700; margin-bottom: 8px; }
-          .box-val { font-size: 22px; font-weight: 800; color: #65250c; }
+          .box-lbl { display: block; font-size: 13px; text-transform: uppercase; color: #9c5a1e; font-weight: 700; margin-bottom: 8px; }
+          .box-val { font-size: 26px; font-weight: 800; color: #65250c; }
 
-          .badge-cosmic-light { background: #ffefd6; color: #c6843f; padding: 8px 24px; border-radius: 50px; font-weight: 800; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+          .badge-cosmic-light { background: #ffefd6; color: #c6843f; padding: 8px 24px; border-radius: 50px; font-weight: 800; font-size: 14px; text-transform: uppercase; letter-spacing: 2px; }
         `}</style>
       </div>
     );
@@ -351,7 +351,7 @@ function KundaliTool({ onBack }) {
           color: #fff;
           padding: 8px 24px;
           border-radius: 4px;
-          font-size: 14px;
+          font-size: 16px;
           transition: 0.3s;
           font-weight: 500;
         }
@@ -361,7 +361,7 @@ function KundaliTool({ onBack }) {
 
         .custom-lbl { 
           display: block; 
-          font-size: 13px; 
+          font-size: 15px; 
           color: #65250c; 
           margin-bottom: 8px; 
           font-weight: 700; 
@@ -373,7 +373,7 @@ function KundaliTool({ onBack }) {
           border-bottom: 2px solid #f3e5d8; 
           background: transparent; 
           padding: 10px 0; 
-          font-size: 16px; 
+          font-size: 18px; 
           color: #65250c; 
           outline: none; 
           transition: 0.3s;
@@ -396,7 +396,7 @@ function KundaliTool({ onBack }) {
         .btn-calculate-premium:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(198,132,63,0.3); }
 
         .search-suggestions-box { position: absolute; background: white; border: 1px solid #f3e5d8; border-radius: 8px; z-index: 10; width: 100%; margin-top: 5px; box-shadow: 0 10px 20px rgba(0,0,0,0.1); max-height: 200px; overflow-y: auto; }
-        .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #faf7f4; font-size: 14px; color: #65250c; }
+        .suggestion-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #faf7f4; font-size: 16px; color: #65250c; }
         .suggestion-item:hover { background: #ffefd6; }
       `}</style>
     </div>

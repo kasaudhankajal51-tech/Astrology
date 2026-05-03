@@ -171,6 +171,7 @@ function About() {
           padding: 100px 0 80px;
           background: linear-gradient(135deg, #FFF8F0 0%, #FFF5EB 50%, #FFF8F0 100%);
           overflow: hidden;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         .hero-overlay {
@@ -191,6 +192,7 @@ function About() {
         }
 
         .stats-badge .number { 
+          font-family: 'Playfair Display', serif;
           font-size: 2.8rem; 
           font-weight: 900; 
           line-height: 1.1;
@@ -205,6 +207,7 @@ function About() {
         }
 
         .hero-title {
+          font-family: 'Playfair Display', serif;
           font-size: clamp(2.5rem, 5vw, 4rem);
           font-weight: 800;
           color: #1A1A2E;
@@ -212,7 +215,7 @@ function About() {
         }
 
         .hero-description {
-          font-size: 1.2rem;
+          font-size: 1.35rem;
           color: #4A5568;
           line-height: 1.7;
           font-weight: 500;
@@ -234,7 +237,7 @@ function About() {
           border-radius: 50px;
           border: none;
           font-weight: 800;
-          font-size: 1.1rem;
+          font-size: 1.2rem;
           letter-spacing: 0.5px;
           transition: all 0.3s ease;
           cursor: pointer;
@@ -292,21 +295,21 @@ function About() {
           text-transform: uppercase;
           letter-spacing: 3px;
           font-weight: 800;
-          font-size: 1rem;
+          font-size: 1.15rem;
           margin-bottom: 15px;
           display: inline-block;
         }
 
         .section-title {
-          font-family: 'Merriweather Sans', 'Playfair Display', serif;
-          font-size: clamp(1.8rem, 4vw, 3rem);
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(1.8rem, 4vw, 3.2rem);
           font-weight: 800;
           color: #1A1A2E;
           line-height: 1.3;
         }
 
         .about-text {
-          font-size: 1.05rem;
+          font-size: 1.2rem;
           color: #4A5568;
           line-height: 1.7;
           font-weight: 500;
@@ -316,7 +319,7 @@ function About() {
           background: linear-gradient(135deg, #FF8C42, #FF6B35);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
-          font-size: 1.1rem;
+          font-size: 1.25rem;
           font-weight: 800;
         }
 
@@ -326,7 +329,7 @@ function About() {
           border: 1px solid rgba(255, 107, 53, 0.3);
           border-radius: 40px;
           color: #FF6B35;
-          font-size: 0.9rem;
+          font-size: 1.05rem;
           font-weight: 700;
           transition: all 0.3s;
         }
@@ -354,7 +357,7 @@ function About() {
         }
 
         .video-caption {
-          font-size: 0.9rem;
+          font-size: 1.05rem;
           color: #6B7280;
           font-weight: 500;
         }
@@ -366,7 +369,7 @@ function About() {
         }
 
         .unique-subtitle {
-          font-size: 1.1rem;
+          font-size: 1.25rem;
           color: #6B7280;
           font-weight: 500;
         }
@@ -401,7 +404,7 @@ function About() {
         }
 
         .unique-card-text {
-          font-size: 1rem;
+          font-size: 1.2rem;
           color: #2D3748;
           line-height: 1.6;
           font-weight: 600;
@@ -414,7 +417,7 @@ function About() {
         }
 
         .aims-description {
-          font-size: 1.1rem;
+          font-size: 1.25rem;
           color: #4A5568;
           line-height: 1.7;
           font-weight: 500;
@@ -428,7 +431,7 @@ function About() {
         }
 
         .mission-text {
-          font-size: 1.15rem;
+          font-size: 1.3rem;
           color: #1A1A2E;
           font-style: italic;
           font-weight: 600;
@@ -450,7 +453,7 @@ function About() {
         }
 
         .aim-text {
-          font-size: 1rem;
+          font-size: 1.25rem;
           color: #2D3748;
           line-height: 1.6;
           font-weight: 500;
@@ -470,13 +473,14 @@ function About() {
         }
 
         .cta-title {
-          font-size: clamp(1.8rem, 4vw, 2.5rem);
+          font-family: 'Playfair Display', serif;
+          font-size: clamp(2.4rem, 6vw, 3.2rem);
           font-weight: 800;
           color: #1A1A2E;
         }
 
         .cta-description {
-          font-size: 1.1rem;
+          font-size: 1.4rem;
           color: #4A5568;
           font-weight: 500;
         }
@@ -486,7 +490,7 @@ function About() {
           color: white;
           border: none;
           padding: 16px 40px;
-          font-size: 1.1rem;
+          font-size: 1.25rem;
           font-weight: 700;
           border-radius: 50px;
           cursor: pointer;

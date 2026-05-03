@@ -431,7 +431,7 @@ function HoroscopeTool({ onBack }) {
           color: #fff;
           padding: 8px 24px;
           border-radius: 4px;
-          font-size: 14px;
+          font-size: 16px;
           transition: 0.3s;
           font-weight: 500;
         }
@@ -443,7 +443,7 @@ function HoroscopeTool({ onBack }) {
           color: #9c5a1e;
           padding: 12px 30px;
           border-radius: 4px;
-          font-size: 14px;
+          font-size: 16px;
           font-weight: 700;
           transition: 0.3s;
         }
@@ -494,11 +494,11 @@ function HoroscopeTool({ onBack }) {
         .zodiac-card-name {
           font-weight: 800;
           color: #65250c;
-          font-size: 15px;
+          font-size: 18px;
           margin-bottom: 2px;
         }
         .zodiac-card-dates {
-          font-size: 11px;
+          font-size: 13px;
           color: #9c847b;
           font-weight: 500;
         }
@@ -506,7 +506,7 @@ function HoroscopeTool({ onBack }) {
         /* Prediction Styles */
         .prediction-h1 {
           font-family: 'Playfair Display', serif;
-          font-size: 36px;
+          font-size: 42px;
           color: #65250c;
           margin: 0;
         }
@@ -515,7 +515,7 @@ function HoroscopeTool({ onBack }) {
           color: #9c5a1e;
           padding: 6px 16px;
           border-radius: 50px;
-          font-size: 12px;
+          font-size: 14px;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 1px;
@@ -523,29 +523,29 @@ function HoroscopeTool({ onBack }) {
         .prediction-date-label {
           color: #9c5a1e;
           font-weight: 600;
-          font-size: 14px;
+          font-size: 16px;
           margin-top: 8px;
         }
         .section-title {
           font-family: 'Playfair Display', serif;
-          font-size: 20px;
+          font-size: 24px;
           color: #65250c;
           font-weight: 700;
         }
         .section-title-sm {
           font-family: 'Playfair Display', serif;
-          font-size: 18px;
+          font-size: 22px;
           color: #65250c;
           font-weight: 700;
         }
         .prediction-text {
-          font-size: 16px;
+          font-size: 18px;
           line-height: 24px;
           color: rgba(101, 37, 12, 0.85);
           text-align: justify;
         }
         .prediction-text-sm {
-          font-size: 14px;
+          font-size: 16px;
           line-height: 1.6;
           color: rgba(101, 37, 12, 0.7);
         }
@@ -559,8 +559,8 @@ function HoroscopeTool({ onBack }) {
           background: #ffefd6;
           border-radius: 8px;
         }
-        .stat-label { display: block; font-size: 11px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
-        .stat-value { font-weight: 800; color: #65250c; font-size: 18px; }
+        .stat-label { display: block; font-size: 13px; color: #9c5a1e; text-transform: uppercase; margin-bottom: 5px; font-weight: 700; }
+        .stat-value { font-weight: 800; color: #65250c; font-size: 20px; }
 
         .text-bronze { color: #c6843f; }
         .font-heading { font-family: 'Playfair Display', serif; }

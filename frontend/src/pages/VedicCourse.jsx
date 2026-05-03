@@ -429,6 +429,7 @@ function VedicCourse() {
           background: linear-gradient(135deg, #f8f9fc 0%, #ffffff 50%, #f0f2f8 100%);
           min-height: 100vh;
           color: #1a1a2e;
+          font-family: 'Be Vietnam Pro', sans-serif;
         }
 
         /* Hero Section */
@@ -491,7 +492,8 @@ function VedicCourse() {
         }
 
         .hero-title-light {
-          font-size: 3.2rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 3.8rem;
           font-weight: 800;
           line-height: 1.2;
           margin-bottom: 20px;
@@ -514,7 +516,7 @@ function VedicCourse() {
         }
 
         .hero-desc-light {
-          font-size: 1.15rem;
+          font-size: 1.3rem;
           color: #4a4a6a;
           line-height: 1.7;
           margin-bottom: 30px;
@@ -556,7 +558,7 @@ function VedicCourse() {
 
         .h-num-light {
           display: block;
-          font-size: 1.3rem;
+          font-size: 1.5rem;
           font-weight: 800;
           color: #ff6a00;
           line-height: 1;
@@ -564,7 +566,7 @@ function VedicCourse() {
 
         .h-label-light {
           display: block;
-          font-size: 11px;
+          font-size: 12px;
           color: #6b6b8a;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -700,8 +702,9 @@ function VedicCourse() {
         }
 
         .section-title-center-light {
+          font-family: 'Playfair Display', serif;
           text-align: center;
-          font-size: 2.4rem;
+          font-size: 2.8rem;
           font-weight: 800;
           margin-bottom: 12px;
           color: #1a1a2e;
@@ -711,7 +714,7 @@ function VedicCourse() {
           text-align: center;
           color: #6b6b8a;
           margin-bottom: 50px;
-          font-size: 1rem;
+          font-size: 1.15rem;
         }
 
         .timeline-track-light {
@@ -797,14 +800,14 @@ function VedicCourse() {
         }
 
         .node-info-light h4 {
-          font-size: 14px;
+          font-size: 1.15rem;
           margin-bottom: 5px;
           color: #1a1a2e;
           font-weight: 700;
         }
 
         .node-info-light p {
-          font-size: 11px;
+          font-size: 0.95rem;
           color: #6b6b8a;
           margin: 0;
         }
@@ -830,7 +833,8 @@ function VedicCourse() {
         }
 
         .tc-card-light h3 {
-          font-size: 1.5rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 1.85rem;
           margin-bottom: 20px;
           color: #ff6a00;
         }
@@ -838,7 +842,7 @@ function VedicCourse() {
         .tc-card-light p {
           color: #4a4a6a;
           line-height: 1.8;
-          font-size: 15px;
+          font-size: 1.2rem;
         }
 
         /* Includes Section */
@@ -903,13 +907,13 @@ function VedicCourse() {
         }
 
         .include-card-light h4 {
-          font-size: 1.2rem;
+          font-size: 1.45rem;
           margin-bottom: 10px;
           color: #1a1a2e;
         }
 
         .include-card-light p {
-          font-size: 14px;
+          font-size: 1.1rem;
           color: #6b6b8a;
           margin-bottom: 15px;
           line-height: 1.5;
@@ -979,14 +983,15 @@ function VedicCourse() {
         }
 
         .instructor-info-light h2 {
-          font-size: 2.2rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 2.6rem;
           margin-bottom: 20px;
           color: #1a1a2e;
           font-weight: 800;
         }
 
         .ii-desc-light {
-          font-size: 1.05rem;
+          font-size: 1.2rem;
           color: #4a4a6a;
           line-height: 1.7;
           margin-bottom: 30px;
@@ -1072,7 +1077,7 @@ function VedicCourse() {
 
         .rb-header-light h5 {
           margin: 0 0 5px 0;
-          font-size: 16px;
+          font-size: 1.15rem;
           font-weight: 700;
           color: #1a1a2e;
         }
@@ -1085,7 +1090,7 @@ function VedicCourse() {
 
         .review-box-light > p {
           color: #4a4a6a;
-          font-size: 14px;
+          font-size: 1.1rem;
           line-height: 1.6;
           margin: 0;
           font-style: italic;
@@ -1104,7 +1109,7 @@ function VedicCourse() {
         .rb-total-light {
           display: block;
           color: #6b6b8a;
-          font-size: 14px;
+          font-size: 1rem;
         }
 
         /* FAQ Section */
@@ -1139,6 +1144,7 @@ function VedicCourse() {
           cursor: pointer;
           font-weight: 700;
           color: #1a1a2e;
+          font-size: 1.15rem;
         }
 
         .faq-q-light i {
@@ -1149,7 +1155,7 @@ function VedicCourse() {
         .faq-a-light {
           padding: 0 24px 20px;
           color: #4a4a6a;
-          font-size: 14px;
+          font-size: 1.1rem;
           line-height: 1.6;
         }
 
@@ -1177,7 +1183,8 @@ function VedicCourse() {
         }
 
         .cta-box-light h2 {
-          font-size: 2.2rem;
+          font-family: 'Playfair Display', serif;
+          font-size: 2.6rem;
           margin-bottom: 15px;
           color: #1a1a2e;
           font-weight: 800;
@@ -1185,7 +1192,7 @@ function VedicCourse() {
 
         .cta-box-light > p {
           color: #6b6b8a;
-          font-size: 1.1rem;
+          font-size: 1.25rem;
           margin-bottom: 35px;
         }
 
@@ -1231,7 +1238,7 @@ function VedicCourse() {
           color: #fff;
           border: none;
           padding: 16px 48px;
-          font-size: 1rem;
+          font-size: 1.15rem;
           font-weight: 700;
           border-radius: 50px;
           cursor: pointer;

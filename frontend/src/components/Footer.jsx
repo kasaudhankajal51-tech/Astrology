@@ -32,7 +32,7 @@ function Footer() {
 
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-root { background:#fffbf5; font-family:'Inter',sans-serif; position:relative; overflow:hidden; }
+        .fb-root { background:#fffbf5; font-family:'Inter',sans-serif; position:relative; overflow:hidden; margin-top: 80px; }
 
         .fb-top-bar {
           height:4px;

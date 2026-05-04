@@ -63,15 +63,23 @@ function Footer() {
           .fb-grid { grid-template-columns: 1fr; text-align: center; gap: 40px; }
           .fb-grid > * { grid-column: span 1 !important; display: flex; flex-direction: column; align-items: center; }
           .fb-logo { justify-content: center; }
-          .fb-desc { margin-left: auto; margin-right: auto; max-width: 280px; }
-          .fb-nl-wrap { margin: 0 auto; }
+          .fb-logo-name { font-size: 38px; }
+          .fb-desc { margin-left: auto; margin-right: auto; max-width: 320px; font-size: 1.55rem; }
+          .fb-nl-wrap { margin: 0 auto; max-width: 340px; }
+          .fb-nl-inp { font-size: 1.1rem; }
           .fb-socials { justify-content: center; }
+          .fb-head { font-size: 1.4rem; }
           .fb-head::after { margin-left: auto; margin-right: auto; }
           .fb-nav { align-items: center; }
-          .fb-nav li a { justify-content: center; }
+          .fb-nav li a { justify-content: center; font-size: 1.3rem; }
           .fb-clist { align-items: flex-start; width: fit-content; margin: 0 auto; }
           .fb-citem { flex-direction: row; align-items: center; text-align: left; gap: 15px; }
+          .fb-ctxt { font-size: 1.4rem; }
+          .fb-ctxt strong { font-size: 1.05rem; }
           .fb-badges { justify-content: center; }
+          .fb-badge { font-size: 1.1rem; }
+          .fb-copy { font-size: 1.15rem; }
+          .fb-legal a { font-size: 1.1rem; }
         }
 
         .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 20px; }

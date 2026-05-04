@@ -252,6 +252,32 @@ const AstrologyCourses = () => {
         .ftt { font-size: .75rem; font-weight: 500; color: #2d1506; font-family: 'Jost', sans-serif; }
         .fts { font-size: .68rem; color: #9a6040; font-family: 'Jost', sans-serif; }
         .svgd { position: absolute; opacity: .07; pointer-events: none; }
+
+        @media (max-width: 480px) {
+          .aw { padding: 3rem 1.8rem; }
+          .ah h2 { font-size: 2rem; margin-bottom: 0.8rem; }
+          .asub { font-size: 0.95rem; line-height: 1.5; }
+          .cg { gap: 1.8rem; }
+          .cc { border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.06); border: 1px solid #eee5d8; max-width: 310px; margin: 0 auto; }
+          .cb { padding: 1.6rem 1.25rem 1.25rem; text-align: left; }
+          .clvl { font-size: 0.7rem; margin-bottom: 0.4rem; justify-content: flex-start; }
+          .ctitle { font-size: 1.4rem; margin-bottom: 0.6rem; text-align: left; }
+          .cdesc { font-size: 0.92rem; line-height: 1.5; margin-bottom: 1.2rem; text-align: left; }
+          .price-hero { font-size: 1.6rem; margin: 0.2rem 0 1.2rem; text-align: left; }
+          .price-hero span { font-size: 0.9rem; }
+          .btnrow { grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }
+          .btn-read, .btn-buy { padding: 0.8rem 0.5rem; font-size: 0.88rem; font-weight: 600; width: 100%; }
+          .cinstr { justify-content: flex-start; margin-bottom: 1.2rem; }
+          .iavt { width: 40px; height: 40px; font-size: 12px; }
+          .iname { font-size: 0.95rem; }
+          .iexp { font-size: 0.75rem; }
+          .ico { left: 1.25rem; transform: none; width: 40px; height: 40px; font-size: 18px; bottom: -20px; }
+          .fb { grid-template-columns: 1fr 1fr; gap: 1.2rem; padding-top: 2rem; }
+          .fi { align-items: flex-start; text-align: left; }
+          .fic { width: 40px; height: 40px; font-size: 18px; }
+          .ftt { font-size: 0.85rem; }
+          .fts { font-size: 0.75rem; }
+        }
       `}</style>
 
       <section className="aw">

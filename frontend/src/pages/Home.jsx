@@ -1,7 +1,321 @@
-import { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+
+const AstrologyCourses = () => {
+  const features = [
+    { icon: "👥", title: "Learn from Experts", sub: "20+ Years of Experience" },
+    { icon: "▶", title: "Self-Paced Learning", sub: "Study Anytime, Anywhere" },
+    { icon: "🏅", title: "Certificate of Completion", sub: "Boost Your Credibility" },
+    { icon: "🎧", title: "Lifetime Support", sub: "We're Here for You" },
+  ];
+
+  const Card1SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg1" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#7a4020"/>
+          <stop offset="100%" stopColor="#2e1008"/>
+        </radialGradient>
+        <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#d4915a" stopOpacity=".4"/>
+          <stop offset="100%" stopColor="#2e1008" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg1)"/>
+      <ellipse cx="150" cy="80" rx="90" ry="70" fill="url(#glow1)"/>
+      <rect x="80" y="65" width="140" height="70" rx="3" fill="#c8884a" opacity=".9"/>
+      <rect x="147" y="62" width="6" height="76" rx="2" fill="#8b4a1a"/>
+      <rect x="83" y="68" width="62" height="64" rx="2" fill="#f5ddb8"/>
+      <rect x="155" y="68" width="62" height="64" rx="2" fill="#f0d4a8"/>
+      <line x1="90" y1="80" x2="138" y2="80" stroke="#c8a070" strokeWidth=".8"/>
+      <line x1="90" y1="87" x2="138" y2="87" stroke="#c8a070" strokeWidth=".8"/>
+      <line x1="90" y1="94" x2="138" y2="94" stroke="#c8a070" strokeWidth=".8"/>
+      <line x1="90" y1="101" x2="138" y2="101" stroke="#c8a070" strokeWidth=".8"/>
+      <line x1="90" y1="108" x2="138" y2="108" stroke="#c8a070" strokeWidth=".8"/>
+      <line x1="90" y1="115" x2="138" y2="115" stroke="#c8a070" strokeWidth=".8"/>
+      <circle cx="186" cy="100" r="22" fill="none" stroke="#9a6030" strokeWidth="1"/>
+      <circle cx="186" cy="100" r="15" fill="none" stroke="#9a6030" strokeWidth=".7"/>
+      <circle cx="186" cy="100" r="6" fill="#9a6030" opacity=".5"/>
+      <line x1="186" y1="78" x2="186" y2="122" stroke="#9a6030" strokeWidth=".6"/>
+      <line x1="164" y1="100" x2="208" y2="100" stroke="#9a6030" strokeWidth=".6"/>
+      <line x1="170" y1="84" x2="202" y2="116" stroke="#9a6030" strokeWidth=".5"/>
+      <line x1="202" y1="84" x2="170" y2="116" stroke="#9a6030" strokeWidth=".5"/>
+      <text x="186" y="76" textAnchor="middle" fill="#c8903a" fontSize="6">♈</text>
+      <text x="208" y="104" textAnchor="middle" fill="#c8903a" fontSize="6">♉</text>
+      <text x="186" y="126" textAnchor="middle" fill="#c8903a" fontSize="6">♊</text>
+      <text x="163" y="104" textAnchor="middle" fill="#c8903a" fontSize="6">♋</text>
+      <path d="M83,68 Q150,58 217,68" fill="none" stroke="#a06030" strokeWidth="1" opacity=".6"/>
+      <circle cx="50" cy="25" r="1.2" fill="#e8c080" opacity=".8"/>
+      <circle cx="260" cy="40" r="1" fill="#e8c080" opacity=".7"/>
+      <circle cx="30" cy="120" r=".8" fill="#e8c080" opacity=".6"/>
+      <circle cx="275" cy="130" r="1.2" fill="#e8c080" opacity=".8"/>
+      <circle cx="240" cy="20" r=".8" fill="#e8c080" opacity=".5"/>
+      <circle cx="70" cy="140" r="1" fill="#e8c080" opacity=".6"/>
+    </svg>
+  );
+
+  const Card2SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg2" cx="40%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#b09060"/>
+          <stop offset="100%" stopColor="#5a3a10"/>
+        </radialGradient>
+        <radialGradient id="glow2" cx="55%" cy="45%" r="50%">
+          <stop offset="0%" stopColor="#f0d890" stopOpacity=".3"/>
+          <stop offset="100%" stopColor="#5a3a10" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg2)"/>
+      <ellipse cx="170" cy="75" rx="100" ry="65" fill="url(#glow2)"/>
+      <rect x="75" y="20" width="120" height="120" fill="none" stroke="#f0d070" strokeWidth="1.2" opacity=".8"/>
+      <polygon points="135,20 195,80 135,140 75,80" fill="none" stroke="#f0d070" strokeWidth="1" opacity=".7"/>
+      <rect x="105" y="50" width="60" height="60" fill="rgba(240,210,100,.08)" stroke="#f0d070" strokeWidth=".8" opacity=".6"/>
+      <line x1="75" y1="20" x2="195" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
+      <line x1="195" y1="20" x2="75" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
+      <text x="135" y="38" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">1</text>
+      <text x="180" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">2</text>
+      <text x="188" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">3</text>
+      <text x="180" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">4</text>
+      <text x="135" y="130" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">7</text>
+      <text x="88" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">10</text>
+      <text x="82" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">11</text>
+      <text x="88" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">12</text>
+      <text x="135" y="76" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">☿ ♀</text>
+      <text x="135" y="90" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">♃ ♄</text>
+      <line x1="230" y1="40" x2="245" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+      <line x1="230" y1="40" x2="215" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+      <line x1="218" y1="90" x2="242" y2="90" stroke="#d4b060" strokeWidth="1.5" opacity=".7"/>
+      <circle cx="40" cy="30" r="1.2" fill="#f0e080" opacity=".7"/>
+      <circle cx="270" cy="50" r="1" fill="#f0e080" opacity=".6"/>
+      <circle cx="255" cy="130" r=".8" fill="#f0e080" opacity=".5"/>
+      <circle cx="25" cy="110" r="1" fill="#f0e080" opacity=".6"/>
+    </svg>
+  );
+
+  const Card3SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg3" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#1a1228"/>
+          <stop offset="100%" stopColor="#0a0814"/>
+        </radialGradient>
+        <radialGradient id="jupGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#c87830"/>
+          <stop offset="60%" stopColor="#a05820"/>
+          <stop offset="100%" stopColor="#6a3010"/>
+        </radialGradient>
+        <radialGradient id="jupAtm" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stopColor="#e8a850" stopOpacity=".5"/>
+          <stop offset="100%" stopColor="#c87830" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg3)"/>
+      <circle cx="20" cy="15" r=".8" fill="white" opacity=".8"/>
+      <circle cx="45" cy="8" r="1" fill="white" opacity=".6"/>
+      <circle cx="80" cy="20" r=".6" fill="white" opacity=".7"/>
+      <circle cx="10" cy="50" r=".8" fill="white" opacity=".5"/>
+      <circle cx="260" cy="12" r="1" fill="white" opacity=".8"/>
+      <circle cx="285" cy="35" r=".7" fill="white" opacity=".6"/>
+      <circle cx="270" cy="60" r=".9" fill="white" opacity=".7"/>
+      <circle cx="250" cy="140" r=".8" fill="white" opacity=".5"/>
+      <circle cx="30" cy="130" r=".7" fill="white" opacity=".6"/>
+      <circle cx="180" cy="145" r=".8" fill="white" opacity=".6"/>
+      <circle cx="130" cy="15" r=".5" fill="white" opacity=".7"/>
+      <circle cx="160" cy="10" r=".8" fill="white" opacity=".6"/>
+      <ellipse cx="155" cy="78" rx="75" ry="12" fill="none" stroke="#d4a050" strokeWidth="2.5" opacity=".35"/>
+      <ellipse cx="155" cy="78" rx="68" ry="10" fill="none" stroke="#e0b860" strokeWidth="1.2" opacity=".25"/>
+      <circle cx="155" cy="78" r="52" fill="url(#jupGlow)"/>
+      <circle cx="155" cy="78" r="52" fill="url(#jupAtm)"/>
+      <ellipse cx="155" cy="62" rx="51" ry="7" fill="#8a4818" opacity=".5"/>
+      <ellipse cx="155" cy="72" rx="52" ry="4" fill="#d09040" opacity=".35"/>
+      <ellipse cx="155" cy="82" rx="52" ry="6" fill="#7a3e14" opacity=".45"/>
+      <ellipse cx="155" cy="92" rx="51" ry="4" fill="#c88038" opacity=".3"/>
+      <ellipse cx="155" cy="100" rx="50" ry="5" fill="#8a4818" opacity=".4"/>
+      <ellipse cx="135" cy="86" rx="10" ry="7" fill="#a03818" opacity=".7"/>
+      <ellipse cx="140" cy="60" rx="18" ry="12" fill="white" opacity=".08"/>
+    </svg>
+  );
+
+  const Card4SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg4" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#8a6030"/>
+          <stop offset="100%" stopColor="#3a2010"/>
+        </radialGradient>
+        <radialGradient id="cmpGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#d4a850" stopOpacity=".4"/>
+          <stop offset="100%" stopColor="#8a6030" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg4)"/>
+      <ellipse cx="155" cy="80" rx="100" ry="70" fill="url(#cmpGlow)"/>
+      <circle cx="155" cy="80" r="56" fill="#c89850" opacity=".15"/>
+      <circle cx="155" cy="80" r="56" fill="none" stroke="#d4a840" strokeWidth="2" opacity=".7"/>
+      <circle cx="155" cy="80" r="50" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
+      <circle cx="155" cy="80" r="42" fill="#a07828" opacity=".2"/>
+      <circle cx="155" cy="80" r="42" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
+      <line x1="155" y1="24" x2="155" y2="32" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="155" y1="128" x2="155" y2="136" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="99" y1="80" x2="107" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="203" y1="80" x2="211" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="115" y1="40" x2="120" y2="47" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="190" y1="113" x2="195" y2="120" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="115" y1="120" x2="120" y2="113" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="190" y1="47" x2="195" y2="40" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <text x="155" y="22" textAnchor="middle" fill="#f0d060" fontSize="9" fontFamily="serif" fontWeight="bold">N</text>
+      <text x="155" y="146" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">S</text>
+      <text x="96" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">W</text>
+      <text x="214" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">E</text>
+      <polygon points="155,38 150,80 155,68 160,80" fill="#e84030" opacity=".9"/>
+      <polygon points="155,122 150,80 155,92 160,80" fill="#d0c890" opacity=".8"/>
+      <circle cx="155" cy="80" r="6" fill="#e8c050" opacity=".9"/>
+      <circle cx="155" cy="80" r="3.5" fill="#a07020"/>
+      <circle cx="30" cy="30" r="1.5" fill="#f0d060" opacity=".6"/>
+      <circle cx="55" cy="50" r="1.5" fill="#f0d060" opacity=".6"/>
+      <circle cx="45" cy="75" r="1.5" fill="#f0d060" opacity=".6"/>
+      <line x1="30" y1="30" x2="55" y2="50" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+      <line x1="55" y1="50" x2="45" y2="75" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+      <circle cx="260" cy="25" r="1.5" fill="#f0d060" opacity=".5"/>
+      <circle cx="278" cy="45" r="1.2" fill="#f0d060" opacity=".4"/>
+      <line x1="260" y1="25" x2="278" y2="45" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+    </svg>
+  );
+
+  const courses = [
+    {
+      id: 1, level: "Beginner Level", title: "Foundation in Astrology",
+      desc: "Start your journey. Learn the basics of planets, signs, houses and their impact on our lives.",
+      icon: "☸", price: "₹699", original: "₹4100", SVG: Card1SVG,
+    },
+    {
+      id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
+      desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
+      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG,
+    },
+    {
+      id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
+      desc: "Master the precision of KP system with practical techniques for accurate predictions.",
+      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true,
+    },
+    {
+      id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
+      desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
+      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG,
+    },
+  ];
+
+  return (
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;600&family=Jost:wght@300;400;500&display=swap');
+        .aw { background: #f5ebe0; padding: 3rem 2rem; font-family: 'Jost', sans-serif; position: relative; overflow: hidden; }
+        .aw::before { content: '✦'; position: absolute; top: 20px; left: 30px; font-size: 60px; opacity: .06; color: #4a2518; pointer-events: none; }
+        .aw::after { content: '☽'; position: absolute; bottom: 30px; right: 40px; font-size: 80px; opacity: .06; color: #4a2518; pointer-events: none; }
+        .ah { text-align: center; margin-bottom: 2.5rem; }
+        .ah h2 { font-family: 'Cinzel', serif; font-size: clamp(1.8rem,5vw,2.8rem); color: #2d1506; letter-spacing: .02em; margin: 0 0 .4rem; font-weight: 600; }
+        .atag { font-size: .72rem; letter-spacing: .15em; color: #7a4a2a; text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
+        .atag::before, .atag::after { content: '—'; opacity: .4; }
+        .asub { color: #6b4a32; font-size: .9rem; max-width: 460px; margin: 0 auto; line-height: 1.7; }
+        .dl { display: flex; align-items: center; gap: 10px; justify-content: center; margin: .4rem 0 .8rem; }
+        .dl::before, .dl::after { content: ''; flex: 1; max-width: 70px; height: .5px; background: #9a6040; }
+        .dd { width: 5px; height: 5px; background: #9a6040; border-radius: 50%; }
+        .cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
+        .cc { background: #fffaf5; border-radius: 18px; overflow: hidden; border: .5px solid #d4b896; display: flex; flex-direction: column; transition: transform .25s ease; cursor: pointer; }
+        .cc:hover { transform: translateY(-5px); }
+        .ci { width: 100%; height: 160px; display: block; position: relative; overflow: hidden; }
+        .ci svg { width: 100%; height: 100%; display: block; }
+        .badge-discount { position: absolute; top: 10px; left: 10px; background: #c8451a; color: #fff5ee; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; font-family: 'Jost', sans-serif; font-weight: 500; z-index: 3; }
+        .ico { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 42px; height: 42px; background: #fffaf5; border: 2px solid #d4b896; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; color: #5c3317; z-index: 2; font-family: 'Cinzel', serif; }
+        .cb { padding: 1.8rem 1.1rem 1.1rem; text-align: center; flex: 1; display: flex; flex-direction: column; }
+        .clvl { font-size: .62rem; letter-spacing: .18em; color: #9a6040; text-transform: uppercase; margin-bottom: .3rem; font-family: 'Jost', sans-serif; }
+        .ctitle { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #2d1506; margin: 0 0 .2rem; font-weight: 600; line-height: 1.3; }
+        .cdesc { font-size: .8rem; color: #6b4a32; line-height: 1.55; flex: 1; margin-bottom: .8rem; }
+        .price-hero { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #2d1506; font-weight: 600; margin: .2rem 0 .6rem; }
+        .price-hero span { font-size: .85rem; color: #9a6040; text-decoration: line-through; font-family: 'Jost', sans-serif; font-weight: 400; margin-left: 6px; }
+        .divr { height: .5px; background: #e8d5c0; margin: .5rem 0 .75rem; }
+        .cinstr { display: flex; align-items: center; gap: 8px; margin-bottom: .85rem; justify-content: center; }
+        .iavt { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #c8906a, #8b5232); border: 2px solid #d4b896; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-family: 'Cinzel', serif; flex-shrink: 0; }
+        .iname { font-size: .75rem; color: #2d1506; font-weight: 500; font-family: 'Jost', sans-serif; margin: 0; text-align: left; }
+        .iexp { font-size: .68rem; color: #9a6040; margin: 0; font-family: 'Jost', sans-serif; text-align: left; }
+        .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
+        .btn-read { background: transparent; color: #4a2518; border: 1.5px solid #c4a060; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
+        .btn-read:hover { background: #f0dfc8; }
+        .btn-buy { background: #4a2518; color: #f5ebe0; border: none; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
+        .btn-buy:hover { background: #6b3520; }
+        .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .9rem; border-top: .5px solid #d4b896; padding-top: 1.4rem; }
+        .fi { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
+        .fic { width: 38px; height: 38px; border-radius: 50%; background: rgba(74,37,24,.08); display: flex; align-items: center; justify-content: center; font-size: 15px; }
+        .ftt { font-size: .75rem; font-weight: 500; color: #2d1506; font-family: 'Jost', sans-serif; }
+        .fts { font-size: .68rem; color: #9a6040; font-family: 'Jost', sans-serif; }
+        .svgd { position: absolute; opacity: .07; pointer-events: none; }
+      `}</style>
+
+      <section className="aw">
+        <svg className="svgd" style={{top:0,right:0,width:150,height:150}} viewBox="0 0 160 160">
+          <circle cx="130" cy="30" r="50" fill="none" stroke="#4a2518" strokeWidth=".8"/>
+          <circle cx="130" cy="30" r="35" fill="none" stroke="#4a2518" strokeWidth=".5"/>
+          <line x1="130" y1="0" x2="130" y2="80" stroke="#4a2518" strokeWidth=".5"/>
+          <line x1="100" y1="30" x2="160" y2="30" stroke="#4a2518" strokeWidth=".5"/>
+        </svg>
+
+        <div className="ah">
+          <h2>Astrology Courses</h2>
+          <div className="dl"><div className="dd"/></div>
+          <div className="atag">Ancient Wisdom &nbsp;·&nbsp; Modern Learning &nbsp;·&nbsp; Meaningful Transformation</div>
+          <p className="asub">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
+        </div>
+
+        <div className="cg">
+          {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold }) => (
+            <div key={id} className="cc">
+              <div className="ci" style={{position:"relative"}}>
+                <SVG />
+                <span className="badge-discount">Mega DISCOUNT</span>
+                <div className="ico" style={isBold ? {fontSize:"13px",fontWeight:600} : {}}>
+                  {icon}
+                </div>
+              </div>
+              <div className="cb">
+                <p className="clvl">{level}</p>
+                <h3 className="ctitle">{title}</h3>
+                <p className="cdesc">{desc}</p>
+                <div className="price-hero">{price} <span>{original}</span></div>
+                <div className="divr"/>
+                <div className="cinstr">
+                  <div className="iavt">MS</div>
+                  <div>
+                    <p className="iname">Acharya Meera Sharma</p>
+                    <p className="iexp">20+ Years of Experience</p>
+                  </div>
+                </div>
+                <div className="btnrow">
+                  <button className="btn-read">Read More</button>
+                  <button className="btn-buy">Buy Now →</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="fb">
+          {features.map((f, i) => (
+            <div key={i} className="fi">
+              <div className="fic">{f.icon}</div>
+              <div className="ftt">{f.title}</div>
+              <div className="fts">{f.sub}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
+
 
 function Home() {
   const trackRef = useRef(null);
@@ -421,87 +735,8 @@ function Home() {
 
 
 
-        {/* Popular Reports Section */}
-        <section className="reports-section">
-          <div className="container">
-            <div className="text-center mb-5">
-              <h2 className="section-title">Most Popular Reports</h2>
-              <p className="text-muted mt-2">Trusted by 50,000+ seekers worldwide for clarity and life guidance.</p>
-            </div>
-            
-            <div className="row justify-content-center g-4">
-              {/* Report Card 1 */}
-              <div className="col-md-6 col-lg-4 d-flex">
-                <div className="premium-report-card w-100 theme-emerald">
-                  <div className="card-header-art">
-                    <span className="badge-discount">Mega DISCOUNT</span>
-                    <h3 className="report-title">Vedic Astrology</h3>
-                    <p className="report-price-hero">₹699 Only</p>
-                  </div>
-                  <div className="card-body-content">
-                    <h4>Vedic Astrology</h4>
-                    <p className="text-muted">Discover your true purpose, karmic path & hidden strengths.</p>
-                    <div className="card-footer-action">
-                      <div className="price-tag">₹699 <del>₹4100</del></div>
-                      <div className="action-btns">
-                        <button className="btn-read">Read</button>
-                        <button className="btn-buy">Buy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Report Card 2 */}
-              <div className="col-md-6 col-lg-4 d-flex">
-                <div className="premium-report-card w-100 theme-amethyst">
-                  <div className="card-header-art">
-                    <span className="badge-discount">Mega DISCOUNT</span>
-                    <h3 className="report-title">Numerology</h3>
-                    <p className="report-price-hero">₹999 Only</p>
-                  </div>
-                  <div className="card-body-content">
-                    <h4>Numerology Report</h4>
-                    <p className="text-muted">Navigate your career, health & finance with precise cosmic wisdom.</p>
-                    <div className="card-footer-action">
-                      <div className="price-tag">₹999 <del>₹5100</del></div>
-                      <div className="action-btns">
-                        <button className="btn-read">Read</button>
-                        <button className="btn-buy">Buy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              {/* Report Card 3 */}
-              <div className="col-md-6 col-lg-4 d-flex">
-                <div className="premium-report-card w-100 theme-ruby">
-                  <div className="card-header-art">
-                    <span className="badge-discount">Mega DISCOUNT</span>
-                    <h3 className="report-title">Face Reading</h3>
-                    <p className="report-price-hero">₹599 Only</p>
-                  </div>
-                  <div className="card-body-content">
-                    <h4>Face Reading</h4>
-                    <p className="text-muted">Understand your emotional patterns, compatibility & life timing.</p>
-                    <div className="card-footer-action">
-                      <div className="price-tag">₹599 <del>₹3100</del></div>
-                      <div className="action-btns">
-                        <button className="btn-read">Read</button>
-                        <button className="btn-buy">Buy</button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
-            <div className="text-center mt-5">
-              <button className="btn mystic-btn-primary px-5 py-3">Explore All Reports</button>
-            </div>
-          </div>
-        </section>
+        {/* Astrology Courses Section */}
+        <AstrologyCourses />
       </main>
 
       <ConsultationModal 
@@ -1250,160 +1485,7 @@ function Home() {
           transform: scale(1.2);
         }
 
-        /* Reports Section */
-        .reports-section {
-          padding: 120px 0;
-          background: #f8fafc;
-          border-top: 1px solid #f1f5f9;
-        }
 
-        .premium-report-card {
-          border-radius: 24px;
-          overflow: hidden;
-          background: #fff;
-          border: 1px solid #f1f5f9;
-          transition: all 0.5s cubic-bezier(0.19, 1, 0.22, 1);
-          box-shadow: 0 15px 40px rgba(0,0,0,0.03);
-          display: flex;
-          flex-direction: column;
-        }
-
-        .premium-report-card:hover {
-          transform: translateY(-12px);
-          border-color: var(--cosmic-accent);
-          box-shadow: 0 40px 80px rgba(0,0,0,0.08);
-        }
-
-        .card-header-art {
-          padding: 50px 25px 40px;
-          text-align: center;
-          position: relative;
-        }
-
-        .theme-emerald .card-header-art {
-          background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
-        }
-
-        .theme-amethyst .card-header-art {
-          background: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
-        }
-
-        .theme-ruby .card-header-art {
-          background: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
-        }
-
-        .badge-discount {
-          position: absolute;
-          top: 20px;
-          right: 20px;
-          background: #fff;
-          color: #1e293b;
-          padding: 7px 14px;
-          font-size: 1rem;
-          font-weight: 800;
-          border-radius: 50px;
-          text-transform: uppercase;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .report-title {
-          font-family: 'Merriweather Sans', serif;
-          font-weight: 800;
-          font-size: 2rem;
-          margin-bottom: 8px;
-          color: #1e293b;
-        }
-
-        .report-price-hero {
-          font-size: 1.6rem;
-          font-weight: 800;
-          margin: 0;
-          color: #334155;
-        }
-
-        .card-body-content {
-          padding: 35px 30px;
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .card-body-content h4 {
-          font-size: 1.4rem;
-          font-weight: 800;
-          margin-bottom: 15px;
-          color: var(--cosmic-text);
-        }
-
-        .card-body-content p {
-          font-size: 1.2rem;
-          line-height: 1.6;
-          flex-grow: 1;
-          color: var(--cosmic-text-muted);
-        }
-
-        .card-footer-action {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          margin-top: 25px;
-          padding-top: 25px;
-          border-top: 1px solid #f1f5f9;
-        }
-
-        .price-tag {
-          font-size: 1.5rem;
-          font-weight: 900;
-          color: var(--cosmic-text);
-          display: flex;
-          align-items: baseline;
-          gap: 10px;
-        }
-
-        .price-tag del {
-          font-size: 1rem;
-          color: #94a3b8;
-          font-weight: 500;
-        }
-
-        .action-btns {
-          display: flex;
-          gap: 12px;
-        }
-
-        .btn-read, .btn-buy {
-          padding: 10px 22px;
-          border-radius: 12px;
-          font-weight: 700;
-          font-size: 1.1rem;
-          transition: all 0.3s;
-          border: none;
-          cursor: pointer;
-        }
-
-        .btn-read {
-          background: #f8fafc;
-          border: 1px solid #e2e8f0;
-          color: var(--cosmic-text);
-        }
-
-        .btn-read:hover {
-          background: #e2e8f0;
-        }
-
-        .btn-buy {
-          background: var(--cosmic-text);
-          color: #fff;
-        }
-
-        .btn-buy:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 10px 20px rgba(0,0,0,0.15);
-        }
-
-        .theme-emerald .btn-buy { background: #10b981; }
-        .theme-amethyst .btn-buy { background: #8b5cf6; }
-        .theme-ruby .btn-buy { background: #ef4444; }
 
         /* Responsive Breakpoints */
         @media (max-width: 1200px) {
@@ -1429,7 +1511,7 @@ function Home() {
           .banner-section { padding-top: 100px; }
           .banner-title { font-size: 2.5rem; }
           .banner-desc { font-size: 1.1rem; }
-          .about-part-section, .services-section, .testimonial-section, .reports-section { padding: 80px 0; }
+          .about-part-section, .services-section, .testimonial-section { padding: 80px 0; }
           .section-title { font-size: 2.2rem; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }

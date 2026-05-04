@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 
 const ContactIcon = ({ children }) => (
   <div style={{
-    width: 38, height: 38, borderRadius: 10,
-    background: 'white',
-    border: '2px solid var(--cosmic-accent-pink)',
+    width: 36, height: 36, borderRadius: 8,
+    background: '#fff',
+    border: '1px solid var(--glass-border)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
   }}>
     {children}
@@ -16,85 +16,116 @@ function Footer() {
   return (
     <>
       <style>{`
-        @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@500;600;700&display=swap');
-
+        @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;600&family=Jost:wght@300;400;500;600&display=swap');
+        
         :root {
-          --cosmic-accent: #ff6a00;
-          --cosmic-accent-orange: #ff8c00;
+          --footer-bg: #fffbf5;
           --cosmic-accent-pink: #e31b7a;
-          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
-          --cosmic-accent-soft: #ffe4f0;
-          --cosmic-text: #1a1a1a;
-          --cosmic-text-muted: #4a4a4a;
-          --glass-border: #e0c8b8;
-          --premium-shadow: 0 6px 14px rgba(0,0,0,0.08);
+          --cosmic-accent-orange: #ff6a00;
+          --cosmic-text: #2d1506;
+          --cosmic-text-muted: #6b4a32;
+          --glass-border: #e8d5c0;
+          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00);
         }
 
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-root { background:#fffbf5; font-family:'Inter',sans-serif; position:relative; overflow:hidden; margin-top: 80px; }
+        .fb-root { 
+          background: var(--footer-bg); 
+          font-family: 'Jost', sans-serif; 
+          position: relative; 
+          overflow: hidden; 
+          margin-top: 60px;
+          border-top: 1px solid var(--glass-border);
+        }
 
         .fb-top-bar {
-          height:4px;
-          background:linear-gradient(90deg, var(--cosmic-accent-pink), var(--cosmic-accent), var(--cosmic-accent-orange), #ffbb00, var(--cosmic-accent-pink));
-          background-size:200% 100%;
-          animation:fb-shift 4s linear infinite;
+          height: 3px;
+          background: linear-gradient(90deg, #e31b7a, #ff6a00, #ffb347, #ff6a00, #e31b7a);
+          background-size: 200% 100%;
+          animation: fb-shift 6s linear infinite;
         }
 
         .fb-pattern {
-          position:absolute; inset:0; pointer-events:none; overflow:hidden; opacity:0.04;
+          position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.03;
         }
 
-        .fb-inner { position:relative; z-index:1; max-width:1280px; margin:0 auto; padding:64px 40px 48px; }
+        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 70px 30px 50px; }
 
-        .fb-grid { display:grid; grid-template-columns:1.9fr 1fr 1fr 1.4fr; gap:52px 40px; }
-        @media(max-width:900px){ .fb-grid { grid-template-columns:1fr 1fr; gap:42px 28px; } }
-        @media(max-width:520px){ .fb-grid { grid-template-columns:1fr; } }
+        .fb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 40px; }
+        @media(max-width: 1024px){ .fb-grid { grid-template-columns: 1.5fr 1fr 1fr; } .fb-grid > *:last-child { grid-column: span 3; } }
+        @media(max-width: 768px){ 
+          .fb-grid { grid-template-columns: 1fr 1fr; gap: 40px 20px; } 
+          .fb-grid > *:first-child, .fb-grid > *:last-child { grid-column: span 2; }
+          .fb-inner { padding: 50px 20px 40px; }
+        }
+        @media(max-width: 480px){ 
+          .fb-grid { grid-template-columns: 1fr; text-align: center; gap: 35px; }
+          .fb-grid > * { grid-column: span 1 !important; display: flex; flex-direction: column; align-items: center; }
+          .fb-logo { justify-content: center; }
+          .fb-desc { margin-left: auto; margin-right: auto; }
+          .fb-nl-wrap { margin: 0 auto; }
+          .fb-socials { justify-content: center; }
+          .fb-head::after { margin-left: auto; margin-right: auto; }
+          .fb-nav { align-items: center; }
+          .fb-nav li a { justify-content: center; }
+          .fb-clist { align-items: center; width: 100%; }
+          .fb-citem { flex-direction: column; align-items: center; text-align: center; }
+          .fb-badges { justify-content: center; }
+        }
 
-        .fb-logo { display:flex; align-items:center; gap:12px; text-decoration:none; margin-bottom:20px; }
-        .fb-logo-icon { width:52px; height:52px; border-radius:14px; background:var(--cosmic-gradient); display:flex; align-items:center; justify-content:center; box-shadow:var(--premium-shadow); flex-shrink:0; }
-        .fb-logo-name { font-family:'Playfair Display',serif; font-size:38px; font-weight:700; color:var(--cosmic-text); letter-spacing:0.5px; line-height:1.2; }
-        .fb-logo-name em { font-style:normal; background:var(--cosmic-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
+        .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 20px; }
+        .fb-logo-icon { width: 44px; height: 44px; border-radius: 10px; background: var(--cosmic-gradient); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+        .fb-logo-name { font-family: 'Cinzel', serif; font-size: 28px; font-weight: 700; color: var(--cosmic-text); letter-spacing: 0.5px; line-height: 1; }
+        .fb-logo-name em { font-style: normal; color: var(--cosmic-accent-pink); }
 
-        .fb-desc { font-size:18px; line-height:1.6; color:#3a2a22; max-width:300px; margin-bottom:28px; font-weight:500; }
+        .fb-desc { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; line-height: 1.6; color: var(--cosmic-text-muted); max-width: 320px; margin-bottom: 25px; font-weight: 500; }
 
-        .fb-nl-label { font-size:15px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase; color:var(--cosmic-accent-pink); margin-bottom:12px; }
-        .fb-nl-wrap { display:flex; border:2px solid var(--glass-border); border-radius:12px; overflow:hidden; background:#fff; transition:all 0.2s; }
-        .fb-nl-wrap:focus-within { border-color:var(--cosmic-accent-pink); box-shadow:var(--premium-shadow); }
-        .fb-nl-inp { flex:1; border:none; outline:none; padding:14px 16px; font-family:'Inter',sans-serif; font-size:17px; font-weight:500; color:var(--cosmic-text); background:transparent; }
-        .fb-nl-inp::placeholder { color:#c0a090; font-weight:400; }
-        .fb-nl-btn { background:var(--cosmic-gradient); border:none; padding:12px 20px; cursor:pointer; display:flex; align-items:center; transition:opacity 0.2s; border-radius:0 10px 10px 0; }
-        .fb-nl-btn:hover { opacity:0.9; }
+        .fb-nl-label { font-size: 0.8rem; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cosmic-accent-pink); margin-bottom: 12px; }
+        .fb-nl-wrap { display: flex; border: 1px solid var(--glass-border); border-radius: 8px; overflow: hidden; background: #fff; max-width: 300px; width: 100%; }
+        .fb-nl-inp { flex: 1; border: none; outline: none; padding: 10px 14px; font-family: 'Jost', sans-serif; font-size: 0.95rem; color: var(--cosmic-text); min-width: 0; }
+        .fb-nl-btn { background: var(--cosmic-gradient); border: none; padding: 0 16px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: opacity 0.2s; }
+        .fb-nl-btn:hover { opacity: 0.9; }
 
-        .fb-socials { display:flex; gap:12px; margin-top:28px; }
-        .fb-soc { width:44px; height:44px; border-radius:12px; border:2px solid var(--glass-border); background:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all 0.22s; color:var(--cosmic-accent-pink); text-decoration:none; }
-        .fb-soc:hover { background:var(--cosmic-gradient); color:#fff; border-color:transparent; transform:translateY(-3px); box-shadow:var(--premium-shadow); }
+        .fb-socials { display: flex; gap: 12px; margin-top: 25px; }
+        .fb-soc { width: 38px; height: 38px; border-radius: 50%; border: 1px solid var(--glass-border); background: #fff; display: flex; align-items: center; justify-content: center; transition: all 0.2s; color: var(--cosmic-accent-pink); text-decoration: none; }
+        .fb-soc:hover { background: var(--cosmic-accent-pink); color: #fff; transform: translateY(-3px); }
 
-        .fb-head { font-size:18px; font-weight:800; letter-spacing:1.5px; text-transform:uppercase; background:var(--cosmic-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:22px; }
-        .fb-head::after { content:''; display:block; width:40px; height:3px; background:var(--cosmic-gradient); margin-top:10px; border-radius:3px; }
+        .fb-head { font-family: 'Cinzel', serif; font-size: 1.1rem; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: var(--cosmic-text); margin-bottom: 20px; }
+        .fb-head::after { content: ''; display: block; width: 30px; height: 2px; background: var(--cosmic-accent-pink); margin-top: 8px; opacity: 0.6; }
 
-        .fb-nav { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:14px; }
-        .fb-nav li a { color:#3a2a22; text-decoration:none; font-size:18px; font-weight:600; display:flex; align-items:center; gap:10px; transition:all 0.2s; }
-        .fb-nav li a::before { content:''; width:8px; height:8px; border-radius:50%; background:var(--cosmic-accent-pink); flex-shrink:0; transition:transform 0.2s; }
-        .fb-nav li a:hover { color:var(--cosmic-accent-pink); transform:translateX(6px); }
-        .fb-nav li a:hover::before { transform:scale(1.2); background:var(--cosmic-accent-pink); }
+        .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+        .fb-nav li a { color: var(--cosmic-text-muted); text-decoration: none; font-size: 1.05rem; font-weight: 500; display: flex; align-items: center; gap: 10px; transition: color 0.2s; }
+        .fb-nav li a:hover { color: var(--cosmic-accent-pink); }
 
-        .fb-clist { list-style:none; padding:0; margin:0; display:flex; flex-direction:column; gap:18px; }
-        .fb-citem { display:flex; align-items:flex-start; gap:14px; }
-        .fb-ctxt { font-size:18px; font-weight:500; color:#3a2a22; line-height:1.5; }
-        .fb-ctxt strong { display:block; font-size:15px; font-weight:800; letter-spacing:1px; text-transform:uppercase; background:var(--cosmic-gradient); -webkit-background-clip:text; -webkit-text-fill-color:transparent; margin-bottom:4px; }
+        .fb-clist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 18px; }
+        .fb-citem { display: flex; align-items: center; gap: 14px; }
+        .fb-ctxt { font-size: 1.15rem; font-weight: 500; color: var(--cosmic-text-muted); line-height: 1.3; }
+        .fb-ctxt strong { display: block; font-family: 'Cinzel', serif; font-size: 0.85rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--cosmic-accent-pink); margin-bottom: 2px; }
 
-        .fb-badges { display:flex; gap:12px; margin-top:24px; flex-wrap:wrap; }
-        .fb-badge { display:flex; align-items:center; gap:8px; padding:8px 16px; border-radius:40px; border:2px solid var(--glass-border); background:#fff; font-size:15px; font-weight:700; color:var(--cosmic-accent-pink); }
+        .fb-badges { display: flex; gap: 10px; margin-top: 25px; flex-wrap: wrap; }
+        .fb-badge { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-radius: 40px; border: 1px solid var(--glass-border); background: #fff; font-size: 0.95rem; font-weight: 600; color: var(--cosmic-text-muted); }
+
+        .fb-bot-wrap { background: #1a1512; padding: 25px 20px; }
+        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
+        @media(max-width: 600px){ .fb-bot { justify-content: center; text-align: center; flex-direction: column; gap: 15px; } }
+        .fb-copy { font-size: 0.95rem; font-weight: 400; color: rgba(255,255,255,0.7); margin: 0; font-family: 'Jost', sans-serif; }
+        .fb-copy span { color: #fff; font-weight: 600; }
+        .fb-legal { display: flex; gap: 20px; align-items: center; }
+        @media(max-width: 480px){ .fb-legal { gap: 15px; flex-wrap: wrap; justify-content: center; } }
+        .fb-legal a { font-size: 0.9rem; font-weight: 500; color: rgba(255,255,255,0.6); text-decoration: none; transition: color 0.2s; }
+        .fb-legal a:hover { color: #fff; }
+        .fb-legal-dot { width: 4px; height: 4px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+
 
         .fb-wave { width:100%; overflow:hidden; line-height:0; margin-top:40px; }
 
         .fb-bot-wrap { background:var(--cosmic-gradient); padding:28px 40px; }
         .fb-bot { max-width:1280px; margin:0 auto; display:flex; align-items:center; justify-content:space-between; gap:20px; flex-wrap:wrap; }
-        .fb-copy { font-size:17px; font-weight:500; color:rgba(255,255,255,0.95); margin:0; font-family:'Inter',sans-serif; }
-        .fb-copy span { color:#fff; font-weight:800; }
-        .fb-legal { display:flex; gap:28px; align-items:center; }
-        .fb-legal a { font-size:16px; font-weight:600; color:rgba(255,255,255,0.9); text-decoration:none; transition:color 0.2s; }
+        .fb-copy { font-size: 19px; font-weight: 500; color: rgba(255,255,255,0.95); margin: 0; font-family: 'Jost', sans-serif; }
+        .fb-copy span { color: #fff; font-weight: 800; }
+        .fb-legal { display: flex; gap: 28px; align-items: center; }
+        .fb-legal a { font-size: 18px; font-weight: 600; color: rgba(255,255,255,0.9); text-decoration: none; transition: color 0.2s; }
         .fb-legal a:hover { color:#fff; text-decoration:underline; }
         .fb-legal-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,0.5); }
       `}</style>
@@ -105,11 +136,10 @@ function Footer() {
         <div className="fb-pattern" aria-hidden="true">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
-              <pattern id="fp" x="0" y="0" width="60" height="60" patternUnits="userSpaceOnUse">
-                <circle cx="10" cy="10" r="1.5" fill="#e31b7a" />
-                <path d="M30 5 L32 11 L38 11 L33 15 L35 21 L30 17 L25 21 L27 15 L22 11 L28 11Z" fill="#ff6a00" opacity="0.5" />
-                <circle cx="50" cy="45" r="1" fill="#e31b7a" />
-                <circle cx="5" cy="50" r="1.2" fill="#ffb347" opacity="0.6" />
+              <pattern id="fp" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
+                <circle cx="20" cy="20" r="1.5" fill="var(--cosmic-accent-pink)" opacity="0.15" />
+                <path d="M40 10 L42 16 L48 16 L43 20 L45 26 L40 22 L35 26 L37 20 L32 16 L38 16Z" fill="var(--cosmic-accent)" opacity="0.1" />
+                <circle cx="60" cy="55" r="1" fill="var(--cosmic-accent-pink)" opacity="0.1" />
               </pattern>
             </defs>
             <rect width="100%" height="100%" fill="url(#fp)" />
@@ -195,7 +225,7 @@ function Footer() {
               <ul className="fb-clist">
                 <li className="fb-citem">
                   <ContactIcon>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e31b7a" strokeWidth="1.8">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--cosmic-accent-pink)" strokeWidth="1.8">
                       <path d="M2 3h12l-6 5L2 3zM2 3v10h12V3" />
                     </svg>
                   </ContactIcon>
@@ -203,7 +233,7 @@ function Footer() {
                 </li>
                 <li className="fb-citem">
                   <ContactIcon>
-                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="#e31b7a" strokeWidth="1.8">
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="var(--cosmic-accent-pink)" strokeWidth="1.8">
                       <path d="M3 1h3l1.5 4-2 1.2a9 9 0 004.3 4.3L11 8.5l4 1.5v3C12 14 2 10 3 1z" />
                     </svg>
                   </ContactIcon>
@@ -221,13 +251,13 @@ function Footer() {
 
               <div className="fb-badges">
                 <span className="fb-badge">
-                  <svg width="12" height="12" viewBox="0 0 10 10" fill="#e31b7a">
+                  <svg width="12" height="12" viewBox="0 0 10 10" fill="var(--cosmic-accent-pink)">
                     <path d="M5 0L6.2 3.8H10L7 6.2 8.1 10 5 7.6 1.9 10 3 6.2 0 3.8H3.8L5 0Z" />
                   </svg>
                   Vedic Certified
                 </span>
                 <span className="fb-badge">
-                  <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="#e31b7a" strokeWidth="1.5">
+                  <svg width="12" height="12" viewBox="0 0 10 10" fill="none" stroke="var(--cosmic-accent-pink)" strokeWidth="1.5">
                     <circle cx="5" cy="5" r="4" />
                     <path d="M3 5l1.5 1.5L7 3.5" />
                   </svg>
@@ -238,24 +268,11 @@ function Footer() {
           </div>
         </div>
 
-        {/* Wave divider */}
-        <div className="fb-wave">
-          <svg viewBox="0 0 1200 50" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg" style={{ display: 'block', width: '100%', height: 50 }}>
-            <defs>
-              <linearGradient id="wg" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#e31b7a" />
-                <stop offset="50%" stopColor="#ff6a00" />
-                <stop offset="100%" stopColor="#e31b7a" />
-              </linearGradient>
-            </defs>
-            <path d="M0 30 C200 0 400 50 600 25 C800 0 1000 40 1200 20 L1200 50 L0 50 Z" fill="url(#wg)" />
-          </svg>
-        </div>
 
         {/* Bottom bar */}
         <div className="fb-bot-wrap">
           <div className="fb-bot">
-            <p className="fb-copy">© {new Date().getFullYear()} <span>Astro Ava</span>. All rights reserved. Crafted with cosmic care in India.</p>
+            <p className="fb-copy">© {new Date().getFullYear()} <span>Astro Ava</span>. All rights reserved.</p>
             <div className="fb-legal">
               <Link to="/privacy">Privacy Policy</Link>
               <div className="fb-legal-dot" />

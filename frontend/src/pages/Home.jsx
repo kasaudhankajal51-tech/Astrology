@@ -272,11 +272,11 @@ const AstrologyCourses = () => {
           .iname { font-size: 0.95rem; }
           .iexp { font-size: 0.75rem; }
           .ico { left: 1.25rem; transform: none; width: 40px; height: 40px; font-size: 18px; bottom: -20px; }
-          .fb { grid-template-columns: 1fr 1fr; gap: 1.2rem; padding-top: 2rem; }
-          .fi { align-items: flex-start; text-align: left; }
-          .fic { width: 40px; height: 40px; font-size: 18px; }
-          .ftt { font-size: 0.85rem; }
-          .fts { font-size: 0.75rem; }
+          .fb { grid-template-columns: 1fr 1fr; gap: 1.5rem; padding-top: 2.5rem; }
+          .fi { align-items: center; text-align: center; }
+          .fic { width: 44px; height: 44px; font-size: 18px; }
+          .ftt { font-size: 0.9rem; }
+          .fts { font-size: 0.8rem; }
         }
       `}</style>
 

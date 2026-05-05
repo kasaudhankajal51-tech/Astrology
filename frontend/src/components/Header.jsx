@@ -340,7 +340,10 @@ function Header() {
               <h5 className="modal-title fw-bold">✨ Book Consultation</h5>
               <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
-            <div className="modal-body p-4">
+            <div className="px-4 pt-3 pb-1 text-center">
+              <img src="/images/consultation_banner.png" alt="Consultation Booking" className="img-fluid rounded-3" style={{ maxHeight: '140px', width: '100%', objectFit: 'cover' }} />
+            </div>
+            <div className="modal-body p-4 pt-2">
               <form>
                 <div className="mb-3">
                   <label className="form-label fw-semibold small">Full Name</label>

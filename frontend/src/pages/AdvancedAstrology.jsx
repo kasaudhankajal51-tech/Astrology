@@ -745,26 +745,33 @@ function AdvancedAstrology() {
           .bottom-left { bottom: -5px; left: -5px; }
           
           .roadmap-container { 
-            flex-direction: column; 
-            align-items: flex-start; 
-            gap: 30px; 
-            padding-left: 30px;
-          }
-          .roadmap-item { 
-            width: 100%; 
-            text-align: left; 
-            display: flex; 
-            align-items: center; 
+            display: flex;
+            flex-direction: row;
+            flex-wrap: nowrap;
+            overflow-x: auto;
             gap: 20px;
+            padding: 20px 10px 40px;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Hide scrollbar for Firefox */
+          }
+          .roadmap-container::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome/Safari */
+
+          .roadmap-item { 
+            flex: 0 0 160px; /* Fixed width for each item */
+            text-align: center;
+            display: block;
           }
           .roadmap-line { 
-            width: 2px; 
-            height: 100%; 
-            left: 30px; 
-            top: 60px; 
+            position: absolute;
+            top: 30px;
+            left: 80px;
+            width: 100%;
+            height: 2px;
+            background: #e0e0e8;
+            z-index: -1;
           }
-          .roadmap-circle { margin: 0; flex-shrink: 0; }
-          .roadmap-text p { display: block; font-size: 14px; }
+          .roadmap-circle { margin: 0 auto 15px; flex-shrink: 0; }
+          .roadmap-text p { display: none; } /* Keep it clean on mobile */
           
           .instructor-v2 { text-align: center; }
           .instructor-visual-v2 img { width: 250px; height: 250px; }

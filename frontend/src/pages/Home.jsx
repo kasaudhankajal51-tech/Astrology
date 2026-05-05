@@ -258,9 +258,9 @@ const AstrologyCourses = () => {
           .cc { max-width: 100%; }
           .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
-          .ctitle { text-align: left; font-size: 1.25rem; }
-          .cdesc { text-align: left; font-size: 0.85rem; }
-          .price-hero { text-align: left; font-size: 1.4rem; }
+          .ctitle { text-align: left; font-size: 1.6rem; margin-bottom: 0.6rem; }
+          .cdesc { text-align: left; font-size: 1.15rem; line-height: 1.5; }
+          .price-hero { text-align: left; font-size: 1.8rem; }
           .cinstr { justify-content: flex-start; }
           .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
           .fb { 
@@ -272,7 +272,10 @@ const AstrologyCourses = () => {
           .ftt { font-size: 0.85rem; line-height: 1.2; font-weight: 700; }
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
-          .btnrow { grid-template-columns: 1fr; }
+          .btnrow { grid-template-columns: 1fr 1fr; gap: 8px; }
+          .btn-read, .btn-buy { font-size: 1.1rem; padding: 0.85rem 0.5rem; font-weight: 700; }
+          .iname { font-size: 1rem; }
+          .iexp { font-size: 0.9rem; }
           .zodiac-hero-graphic, 
           .cosmic-orbit-container { 
             display: none !important; 
@@ -437,47 +440,41 @@ function Home() {
 
   const bannerSlides = [
     {
-      badge: "Vedic Astrology & Spiritual Guidance",
-      title1: "A Deeper Understanding of",
-      title2: "Your Life Begins Here",
-      desc: "Refined Vedic insights designed to guide your decisions",
+      badge: "Ancient Wisdom · Modern Guidance",
+      title1: "Illuminate Your Path With",
+      title2: "Expert Vedic Astrology",
+      desc: "Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.",
       bgImage: "/images/bg-bannerpic.jpg",
       centerImg: "/images/middle-img.png",
-      themeRust: true
+      themeRust: false // Light Theme
+    },
+    {
+      badge: "Mystic Insights · Divine Truth",
+      title1: "Unlock The Secrets Of",
+      title2: "Your Celestial Destiny",
+      desc: "Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.",
+      bgImage: "/images/moon.jpg",
+      centerImg: "/images/mentor-ava.png",
+      themeRust: true // Dark Theme
+    },
+    {
+      badge: "Master Vedic Astrology",
+      title1: "Ancient Wisdom for",
+      title2: "A Modern Lifestyle",
+      desc: "Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.",
+      bgImage: "/images/premium_tarot.png",
+      centerImg: "/images/homu.png",
+      themeMustard: true // Mustard/Rust Theme
     },
     {
       badge: "Master Vedic Astrology",
       title1: "Align Your Life With",
       title2: "The Stars & Planets",
       desc: "Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.",
-      bgImage: "/images/moon.jpg",
-      centerImg: "/images/mentor-ava.png",
-      themeRust: true
-    },
-    {
-      badge: "Expert Tarot Reading",
-      title1: "Unveil Hidden Truths",
-      title2: "Through The Cards",
-      desc: "Connect with divine energies. Our expert tarot readers provide intuitive guidance to help you navigate life's biggest challenges.",
-      bgImage: "/images/premium_tarot.png",
-      centerImg: "/images/homu.png",
-      themeRust: true
-    },
-    {
-      badge: "Daily Horoscopes & Panchang",
-      title1: "Master Time,",
-      title2: "Not Just Muhurat",
-      desc: "A complete Panchang Jyotish mastery course to decode Muhurat and perfectly time your most important life events.",
-      bgImage: "/images/bhok.png",
-      centerImg: "/images/round.png"
-    },
-    {
-      badge: "Personal Consultations",
-      title1: "Experience True",
-      title2: "Astrological Precision",
-      desc: "Get personalized remedies, exact Muhurat timings, and complete life predictions from verified experts with 20+ years of experience.",
-      bgImage: "/images/service_img2.png",
-      centerImg: "/images/middle-img.png"
+      bgImage: "/images/bg-bannerpic.jpg",
+      centerImg: "/images/middle-img.png",
+      themeTan: true, // Replacing Indigo with Tan as per request
+      isPurpleZodiac: true // Specific graphic variant from image
     }
   ];
 
@@ -509,7 +506,7 @@ function Home() {
   return (
     <>
       {/* Banner Section */}
-      <section className={`banner-section w-100 ${bannerSlides[currentSlide].themeRust ? 'theme-rust' : ''}`}>
+      <section className={`banner-section w-100 ${bannerSlides[currentSlide].themeRust ? 'theme-rust' : ''} ${bannerSlides[currentSlide].themeMustard ? 'theme-mustard' : ''} ${bannerSlides[currentSlide].themeTan ? 'theme-tan' : ''}`}>
         <div className="img-main-banner" key={`bg-${currentSlide}`}>
           <div className="banner-overlay"></div>
           <img alt="cosmic background" src={bannerSlides[currentSlide].bgImage} className="animate__animated animate__fadeIn" style={{ animationDuration: '2s' }} />
@@ -579,8 +576,8 @@ function Home() {
                 </div>
               </div>
               <div className="col-lg-6 d-none d-lg-flex justify-content-center position-relative">
-                {bannerSlides[currentSlide].themeRust ? (
-                  <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key="rust-graphic">
+                {(bannerSlides[currentSlide].themeRust || bannerSlides[currentSlide].themeMustard || bannerSlides[currentSlide].themeTan) ? (
+                  <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key={`graphic-${currentSlide}`}>
                     <svg className="rotating-zodiac-mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                       <defs>
                         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -614,9 +611,20 @@ function Home() {
                           <line key={i} x1="200" y1="60" x2="200" y2="100" stroke="rgba(255,255,255,0.3)" strokeWidth="1" transform={`rotate(${i * 30} 200 200)`}/>
                         ))}
                         {['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'].map((sign, i) => (
-                          <text key={i} x="200" y="88" fill="rgba(255,255,255,0.9)" fontSize="24" textAnchor="middle" transform={`rotate(${i * 30 + 15} 200 200)`} style={{ fontFamily: 'sans-serif' }} filter="url(#glow)">
-                            {sign}
-                          </text>
+                          <g key={i} transform={`rotate(${i * 30 + 15} 200 200)`}>
+                            {bannerSlides[currentSlide].isPurpleZodiac ? (
+                              <>
+                                <rect x="185" y="65" width="30" height="30" rx="4" fill="rgba(147, 112, 219, 0.8)" transform="rotate(-15 200 80)"/>
+                                <text x="200" y="86" fill="#ffffff" fontSize="20" textAnchor="middle" transform="rotate(-15 200 80)" style={{ fontFamily: 'sans-serif' }}>
+                                  {sign}
+                                </text>
+                              </>
+                            ) : (
+                              <text x="200" y="88" fill="rgba(255,255,255,0.9)" fontSize="24" textAnchor="middle" style={{ fontFamily: 'sans-serif' }} filter="url(#glow)">
+                                {sign}
+                              </text>
+                            )}
+                          </g>
                         ))}
                       </g>
 
@@ -1377,9 +1385,10 @@ function Home() {
           display: none;
         }
 
-        /* Theme Rust Specifics */
+        /* Theme Rust (Dark) Specifics */
         .banner-section.theme-rust {
-          background: #975427 !important;
+          background: #1a0b02 !important; /* Deeper Dark */
+          background: radial-gradient(circle at 70% 30%, #3d1a08 0%, #1a0b02 100%) !important;
         }
         .banner-section.theme-rust::before { display: none; }
         .banner-section.theme-rust .banner-title,
@@ -1415,7 +1424,90 @@ function Home() {
         }
         .banner-section.theme-rust .c-dot.active {
           background: #ffffff;
-          box-shadow: 0 0 10px rgba(255,255,255,0.5);
+          box-shadow: 0 0 15px rgba(255,255,255,0.8);
+        }
+
+        .banner-section.theme-rust .banner-title {
+          text-shadow: 0 0 30px rgba(249, 195, 105, 0.2);
+        }
+
+        .banner-section.theme-rust .cosmic-badge {
+          border-color: rgba(249, 195, 105, 0.5);
+          box-shadow: 0 0 20px rgba(249, 195, 105, 0.1);
+        }
+
+        /* Theme Mustard (Traditional Rust) Specifics */
+        .banner-section.theme-mustard {
+          background: #975427 !important;
+          background: linear-gradient(135deg, #975427 0%, #723c18 100%) !important;
+        }
+        .banner-section.theme-mustard::before { display: none; }
+        .banner-section.theme-mustard .banner-title,
+        .banner-section.theme-mustard .banner-desc,
+        .banner-section.theme-mustard .banner-feature-list li {
+          color: #ffffff !important;
+        }
+        .banner-section.theme-mustard .cosmic-badge {
+          border-color: rgba(255,255,255,0.4);
+          color: #ffffff;
+          background: rgba(255,255,255,0.15);
+        }
+        .banner-section.theme-mustard .banner-btn-row .mystic-btn-primary {
+          background: #ffffff !important;
+          color: #975427 !important;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .banner-section.theme-mustard .mystic-btn-ghost {
+          color: #ffffff !important;
+          border: 1px solid rgba(255,255,255,0.6) !important;
+        }
+        .banner-section.theme-mustard .c-dot.active {
+          background: #ffffff;
+          box-shadow: 0 0 15px rgba(255,255,255,0.8);
+        }
+
+        /* Theme Tan (Warm Beige) Specifics */
+        .banner-section.theme-tan {
+          background: #dfc09e !important; /* The color provided in image */
+          background: radial-gradient(circle at 70% 30%, #ecd4b9 0%, #dfc09e 100%) !important;
+        }
+        .banner-section.theme-tan::before { display: none; }
+        .banner-section.theme-tan .banner-title,
+        .banner-section.theme-tan .banner-desc,
+        .banner-section.theme-tan .banner-feature-list li {
+          color: #3A1900 !important; /* Dark text for light background */
+        }
+        .banner-section.theme-tan .cosmic-badge {
+          border-color: #8B4A1E;
+          color: #8B4A1E;
+          background: rgba(139, 74, 30, 0.1);
+        }
+        .banner-section.theme-tan .banner-btn-row .mystic-btn-primary {
+          background: #8B4A1E !important;
+          color: #ffffff !important;
+          box-shadow: 0 5px 15px rgba(139, 74, 30, 0.3);
+        }
+        .banner-section.theme-tan .mystic-btn-ghost {
+          color: #3A1900 !important;
+          border: 1px solid rgba(139, 74, 30, 0.4) !important;
+        }
+        .banner-section.theme-tan .c-dot.active {
+          background: #8B4A1E;
+          box-shadow: 0 0 15px rgba(139, 74, 30, 0.5);
+        }
+
+        .banner-section.theme-tan .rotating-zodiac-mandala {
+          filter: drop-shadow(0 0 40px rgba(139, 74, 30, 0.2));
+        }
+
+        .banner-section.theme-tan .rotating-zodiac-mandala circle,
+        .banner-section.theme-tan .rotating-zodiac-mandala line,
+        .banner-section.theme-tan .rotating-zodiac-mandala path {
+          stroke: rgba(139, 74, 30, 0.4) !important;
+        }
+
+        .banner-section.theme-tan .rotating-zodiac-mandala text {
+          fill: rgba(139, 74, 30, 0.8) !important;
         }
 
         /* Zodiac Hero Graphic */
@@ -1429,12 +1521,13 @@ function Home() {
         }
         .rotating-zodiac-mandala {
           position: absolute;
-          width: 75%;
-          height: 75%;
-          opacity: 0.9;
+          width: 85%;
+          height: 85%;
+          opacity: 0.95;
           right: 5%;
           top: 50%;
           transform: translateY(-50%);
+          filter: drop-shadow(0 0 40px rgba(249, 195, 105, 0.15));
         }
         
         .spin-slow-left {
@@ -2008,8 +2101,8 @@ function Home() {
           .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 15px 20px; border-radius: 18px; bottom: -20px; }
           .experience-badge h4 { font-size: 1.8rem; }
-          .banner-btn-row { flex-direction: column; gap: 12px; }
-          .banner-btn-row .btn { width: 100%; max-width: 300px; }
+          .banner-btn-row { flex-direction: row; gap: 10px; justify-content: center; width: 100%; }
+          .banner-btn-row .btn { flex: 1; max-width: 180px; font-size: 0.9rem; padding: 12px 10px; }
           .img-box01 { height: 400px; }
         }
 

@@ -155,6 +155,33 @@ function Header() {
             font-size: 0.72rem;
             text-transform: uppercase;
             letter-spacing: 0.1px;
+            transition: color 0.3s ease;
+          }
+
+          /* Hover Dropdowns for Desktop */
+          .nav-item.dropdown:hover > .dropdown-menu {
+            display: block;
+            margin-top: 0;
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+          }
+
+          .dropdown-menu {
+            display: block;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(10px);
+            transition: all 0.3s ease;
+            margin-top: 0;
+          }
+
+          .dropdown-toggle::after {
+            transition: transform 0.3s ease;
+          }
+
+          .nav-item.dropdown:hover .dropdown-toggle::after {
+            transform: rotate(180deg);
           }
           
           .btn-consult-header {
@@ -339,8 +366,8 @@ function Header() {
                 <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
                 <li className="nav-item dropdown">
                   <div className="d-flex align-items-center">
-                    <Link className="nav-link" to="/consultations">CONSULTATIONS</Link>
-                    <a className="nav-link dropdown-toggle dropdown-toggle-split" href="#" data-bs-toggle="dropdown"></a>
+                    <Link className="nav-link pe-1" to="/consultations">CONSULTATIONS</Link>
+                    <span className="nav-link dropdown-toggle dropdown-toggle-split ps-0" style={{ cursor: 'pointer' }} data-bs-toggle="dropdown"></span>
                   </div>
                   <ul className="dropdown-menu border-0 shadow-sm">
                     <li><Link className="dropdown-item" to="/consultations">Personal Horoscope</Link></li>

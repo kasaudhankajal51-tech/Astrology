@@ -273,6 +273,10 @@ const AstrologyCourses = () => {
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
           .btnrow { grid-template-columns: 1fr; }
+          .zodiac-hero-graphic, 
+          .cosmic-orbit-container { 
+            display: none !important; 
+          }
           .animate__animated, 
           .spin-slow-left, 
           .spin-right, 
@@ -574,7 +578,7 @@ function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 d-flex justify-content-center position-relative">
+              <div className="col-lg-6 d-none d-lg-flex justify-content-center position-relative">
                 {bannerSlides[currentSlide].themeRust ? (
                   <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key="rust-graphic">
                     <svg className="rotating-zodiac-mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">

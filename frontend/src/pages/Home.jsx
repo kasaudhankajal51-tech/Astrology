@@ -402,6 +402,62 @@ function Home() {
 
   const handleCloseModal = () => setIsModalOpen(false);
 
+  // --- Unique 5-Slide Banner Carousel State & Data ---
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  const bannerSlides = [
+    {
+      badge: "Vedic Astrology & Spiritual Guidance",
+      title1: "A Deeper Understanding of",
+      title2: "Your Life Begins Here",
+      desc: "Refined Vedic insights designed to guide your decisions",
+      bgImage: "/images/bg-bannerpic.jpg",
+      centerImg: "/images/middle-img.png",
+      themeRust: true
+    },
+    {
+      badge: "Master Vedic Astrology",
+      title1: "Align Your Life With",
+      title2: "The Stars & Planets",
+      desc: "Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.",
+      bgImage: "/images/moon.jpg",
+      centerImg: "/images/mentor-ava.png",
+      themeRust: true
+    },
+    {
+      badge: "Expert Tarot Reading",
+      title1: "Unveil Hidden Truths",
+      title2: "Through The Cards",
+      desc: "Connect with divine energies. Our expert tarot readers provide intuitive guidance to help you navigate life's biggest challenges.",
+      bgImage: "/images/premium_tarot.png",
+      centerImg: "/images/homu.png",
+      themeRust: true
+    },
+    {
+      badge: "Daily Horoscopes & Panchang",
+      title1: "Master Time,",
+      title2: "Not Just Muhurat",
+      desc: "A complete Panchang Jyotish mastery course to decode Muhurat and perfectly time your most important life events.",
+      bgImage: "/images/bhok.png",
+      centerImg: "/images/round.png"
+    },
+    {
+      badge: "Personal Consultations",
+      title1: "Experience True",
+      title2: "Astrological Precision",
+      desc: "Get personalized remedies, exact Muhurat timings, and complete life predictions from verified experts with 20+ years of experience.",
+      bgImage: "/images/service_img2.png",
+      centerImg: "/images/middle-img.png"
+    }
+  ];
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
+    }, 5000);
+    return () => clearInterval(timer);
+  }, []);
+
   useEffect(() => {
     if (window.AOS) {
       window.AOS.refresh();
@@ -418,49 +474,61 @@ function Home() {
   return (
     <>
       {/* Banner Section */}
-      <section className="banner-section w-100">
-        <div className="img-main-banner">
+      <section className={`banner-section w-100 ${bannerSlides[currentSlide].themeRust ? 'theme-rust' : ''}`}>
+        <div className="img-main-banner" key={`bg-${currentSlide}`}>
           <div className="banner-overlay"></div>
-          <img alt="cosmic background" src="/images/bg-bannerpic.jpg" />
+          <img alt="cosmic background" src={bannerSlides[currentSlide].bgImage} className="animate__animated animate__fadeIn" style={{ animationDuration: '2s' }} />
         </div>
         <div className="container">
           <div className="banner-text-home">
             <div className="row align-items-center g-5">
-              <div className="col-lg-6 position-relative z-1">
+              <div className="col-lg-6 position-relative z-1" key={`text-${currentSlide}`}>
                 {/* Floating Ethereal Elements */}
                 <div className="ethereal-sparkle s-1">✦</div>
                 <div className="ethereal-sparkle s-2">✧</div>
                 
-                <div className="cosmic-badge" data-aos="fade-down" data-aos-delay="100">
+                <div className="cosmic-badge animate__animated animate__zoomIn" style={{ animationDelay: '0.1s' }}>
                   <span className="badge-glow"></span>
-                  <i className="fas fa-moon me-2"></i> Premium Astrological Guidance
+                  <i className="fas fa-moon me-2"></i> {bannerSlides[currentSlide].badge}
                 </div>
                 
-                <h1 className="banner-title my-4" data-aos="fade-up" data-aos-delay="200">
-                  Decode the Blueprint of<br/>
-                  <span className="text-gradient drop-glow">Your Cosmic Destiny</span>
+                <h1 className="banner-title my-4 animate__animated animate__fadeInLeft" style={{ animationDelay: '0.2s' }}>
+                  {bannerSlides[currentSlide].title1}<br/>
+                  <span className="text-gradient drop-glow">{bannerSlides[currentSlide].title2}</span>
                 </h1>
                 
-                <p className="banner-desc mb-4" data-aos="fade-up" data-aos-delay="300">
-                  Step into a realm of profound clarity. Our master astrologers decode your planetary alignments to reveal life-altering insights, empowering you to navigate career, love, and spiritual growth with absolute confidence.
+                <p className="banner-desc mb-4 animate__animated animate__fadeInUp" style={{ animationDelay: '0.3s' }}>
+                  {bannerSlides[currentSlide].desc}
                 </p>
 
-                <ul className="banner-feature-list" data-aos="fade-up" data-aos-delay="400">
-                  <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
-                  <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
-                  <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
-                </ul>
+                {bannerSlides[currentSlide].themeRust ? null : (
+                  <ul className="banner-feature-list" data-aos="fade-up" data-aos-delay="400">
+                    <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
+                    <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
+                    <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
+                  </ul>
+                )}
                 
-                <div className="banner-btn-row mt-5" data-aos="fade-up" data-aos-delay="500">
+                <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
                   <button onClick={handleOpenModal} className="btn mystic-btn-primary">
-                    Book Consultation <i className="fas fa-sparkles ms-2"></i>
+                    Book a Consultation {bannerSlides[currentSlide].themeRust ? null : <i className="fas fa-sparkles ms-2"></i>}
                   </button>
                   <button className="btn mystic-btn-ghost">
-                    Explore Courses
+                    {bannerSlides[currentSlide].themeRust ? "Explore Your Reports" : "Explore Courses"}
                   </button>
                 </div>
 
-                <div className="trust-indicator mt-5" data-aos="fade-up" data-aos-delay="600">
+                <div className="carousel-dots mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.6s' }}>
+                  {bannerSlides.map((_, idx) => (
+                    <span 
+                      key={idx} 
+                      className={`c-dot ${idx === currentSlide ? 'active' : ''}`}
+                      onClick={() => setCurrentSlide(idx)}
+                    ></span>
+                  ))}
+                </div>
+
+                <div className="trust-indicator mt-4 animate__animated animate__fadeInUp" style={{ animationDelay: '0.7s' }}>
                   <div className="trust-avatars">
                     <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" />
                     <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
@@ -475,25 +543,102 @@ function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 d-none d-lg-flex justify-content-center">
-                <div className="cosmic-orbit-container">
-                  <div className="big-circle">
-                    <div className="icon-block"><img alt="planet" src="/images/as6.png" /></div>
-                    <div className="icon-block"><img alt="stars" src="/images/as7.png" /></div>
-                    <div className="icon-block"><img alt="moon" src="/images/as8.png" /></div>
-                    <div className="icon-block"><img alt="sun" src="/images/as9.png" /></div>
-                    <div className="icon-block"><img alt="zodiac" src="/images/as10.png" /></div>
+              <div className="col-lg-6 d-none d-lg-flex justify-content-center position-relative">
+                {bannerSlides[currentSlide].themeRust ? (
+                  <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key="rust-graphic">
+                    <svg className="rotating-zodiac-mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                      <defs>
+                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                          <feGaussianBlur stdDeviation="3" result="blur" />
+                          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                      </defs>
+
+                      {/* Outer Constellation Ring (Spins Slowly Left) */}
+                      <g className="spin-slow-left" style={{ transformOrigin: '200px 200px' }}>
+                        <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="4 6"/>
+                        <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5"/>
+                        <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5"/>
+                        {[...Array(12)].map((_, i) => (
+                          <g key={i} transform={`rotate(${i * 30} 200 200)`}>
+                            <path d="M 200 12 L 215 35 L 190 50 L 205 60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5"/>
+                            <circle cx="200" cy="12" r="2" fill="#fff" filter="url(#glow)"/>
+                            <circle cx="215" cy="35" r="1" fill="#fff"/>
+                            <circle cx="190" cy="50" r="2.5" fill="#fff" filter="url(#glow)"/>
+                            <circle cx="205" cy="60" r="1.5" fill="#fff"/>
+                            <line x1="200" y1="10" x2="200" y2="20" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                          </g>
+                        ))}
+                      </g>
+
+                      {/* Middle Zodiac Ring (Spins Right) */}
+                      <g className="spin-right" style={{ transformOrigin: '200px 200px' }}>
+                        <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1"/>
+                        <circle cx="200" cy="200" r="100" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1"/>
+                        {[...Array(12)].map((_, i) => (
+                          <line key={i} x1="200" y1="60" x2="200" y2="100" stroke="rgba(255,255,255,0.3)" strokeWidth="1" transform={`rotate(${i * 30} 200 200)`}/>
+                        ))}
+                        {['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'].map((sign, i) => (
+                          <text key={i} x="200" y="88" fill="rgba(255,255,255,0.9)" fontSize="24" textAnchor="middle" transform={`rotate(${i * 30 + 15} 200 200)`} style={{ fontFamily: 'sans-serif' }} filter="url(#glow)">
+                            {sign}
+                          </text>
+                        ))}
+                      </g>
+
+                      {/* Inner Astrolabe Geometry (Spins Fast Left) */}
+                      <g className="spin-fast-left" style={{ transformOrigin: '200px 200px' }}>
+                        <circle cx="200" cy="200" r="90" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="2 4"/>
+                        <path d="M 200 110 L 263 263 L 110 165 L 290 165 L 137 263 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+                        <path d="M 200 290 L 137 137 L 290 235 L 110 235 L 263 137 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
+                        <circle cx="200" cy="200" r="50" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.5"/>
+                        {[...Array(8)].map((_, i) => (
+                           <circle key={`node-${i}`} cx="200" cy="150" r="3" fill="rgba(255,255,255,0.8)" transform={`rotate(${i * 45} 200 200)`} filter="url(#glow)" />
+                        ))}
+                      </g>
+                      
+                      {/* Center Static Sun/Moon/Focus Point */}
+                      <circle cx="200" cy="200" r="14" fill="rgba(255,255,255,0.95)" filter="url(#glow)"/>
+                      <circle cx="200" cy="200" r="30" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="0.5" strokeDasharray="3 3"/>
+                    </svg>
+                    {/* Image removed based on user request */}
+                    
+                    {currentSlide === 0 && (
+                      <>
+                        <div className="float-badge fb-1">
+                          <div className="fb-icon"><i className="fas fa-award"></i></div>
+                          <div className="fb-text"><span>53+ Years</span><br/>of Legacy</div>
+                        </div>
+                        <div className="float-badge fb-2">
+                          <div className="fb-icon"><i className="fas fa-users"></i></div>
+                          <div className="fb-text"><span>2 Lakhs +</span> Consultation<br/>Completed</div>
+                        </div>
+                        <div className="float-badge fb-3">
+                          <div className="fb-icon"><i className="fas fa-thumbs-up"></i></div>
+                          <div className="fb-text"><span>98% Positive</span><br/>Clients Feedback</div>
+                        </div>
+                      </>
+                    )}
+                    
                   </div>
-                  <div className="small-circle">
-                    <div className="icon-block"><img alt="app" src="/images/as1.png" /></div>
-                    <div className="icon-block"><img alt="constellation" src="/images/as2.png" /></div>
-                    <div className="icon-block"><img alt="galaxy" src="/images/as3.png" /></div>
+                ) : (
+                  <div className="cosmic-orbit-container animate__animated animate__fadeInRight" key="light-graphic">
+                    <div className="big-circle">
+                      <div className="icon-block"><img alt="planet" src="/images/as6.png" /></div>
+                      <div className="icon-block"><img alt="stars" src="/images/as7.png" /></div>
+                      <div className="icon-block"><img alt="moon" src="/images/as8.png" /></div>
+                      <div className="icon-block"><img alt="sun" src="/images/as9.png" /></div>
+                      <div className="icon-block"><img alt="zodiac" src="/images/as10.png" /></div>
+                    </div>
+                    <div className="small-circle">
+                      <div className="icon-block"><img alt="app" src="/images/as1.png" /></div>
+                      <div className="icon-block"><img alt="constellation" src="/images/as2.png" /></div>
+                      <div className="icon-block"><img alt="galaxy" src="/images/as3.png" /></div>
+                    </div>
+                    <div className="center-logo">
+                      <div className="glow-orb"></div>
+                    </div>
                   </div>
-                  <div className="center-logo">
-                    <div className="glow-orb"></div>
-                    <img alt="logo center" src="/images/middle-img.png" />
-                  </div>
-                </div>
+                )}
               </div>
             </div>
           </div>
@@ -897,30 +1042,19 @@ function Home() {
           display: flex;
           align-items: center;
           overflow: hidden;
-          background: var(--bg-color);
+          background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
+        }
+
+        .banner-section::before {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: repeating-conic-gradient(from 0deg, transparent 0deg 10deg, rgba(200, 131, 42, 0.03) 10deg 20deg);
+          z-index: 0;
         }
 
         .img-main-banner {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
-          z-index: -1;
-        }
-
-        .img-main-banner img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          opacity: 0.12;
-          filter: sepia(0.3) saturate(0.8);
-        }
-
-        .banner-overlay {
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at 70% 30%, rgba(200, 131, 42, 0.1), transparent 60%);
+          display: none;
         }
 
         .banner-title {
@@ -928,26 +1062,58 @@ function Home() {
           font-size: clamp(3rem, 7vw, 5.5rem);
           font-weight: 700;
           line-height: 1.1;
-          color: var(--text-heading);
+          color: #3A1900;
+        }
+
+        .banner-title .text-gradient {
+          background: linear-gradient(135deg, #B36B22, #D4903D);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .banner-desc {
           font-size: 1.2rem;
-          color: var(--text-content) !important;
+          color: #5C3D26 !important;
           line-height: 1.7;
           max-width: 90%;
-          font-weight: 400;
+          font-weight: 500;
           font-family: var(--font-sans);
+        }
+
+        .carousel-dots {
+          display: flex;
+          gap: 12px;
+          align-items: center;
+        }
+
+        .c-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          background: rgba(139, 74, 30, 0.2);
+          cursor: pointer;
+          transition: all 0.3s ease;
+          border: none;
+        }
+
+        .c-dot.active {
+          background: #5C2D12;
+          transform: scale(1.3);
+          box-shadow: 0 0 10px rgba(92, 45, 18, 0.3);
+        }
+
+        .c-dot:hover {
+          background: rgba(139, 74, 30, 0.5);
         }
 
         .cosmic-badge {
           display: inline-flex;
           align-items: center;
-          background: rgba(139, 74, 30, 0.08);
-          border: 1px solid var(--accent-color);
+          background: transparent;
+          border: 1px solid #C78235;
           padding: 8px 20px;
           border-radius: 50px;
-          color: var(--primary-color);
+          color: #8B4A1E;
           font-weight: 700;
           font-size: 0.9rem;
           text-transform: uppercase;
@@ -1007,7 +1173,7 @@ function Home() {
 
         .banner-feature-list li {
           font-size: 1.1rem;
-          color: var(--text-heading);
+          color: #3A1900;
           display: flex;
           align-items: center;
           gap: 10px;
@@ -1015,7 +1181,7 @@ function Home() {
         }
 
         .banner-feature-list i {
-          color: var(--accent-color);
+          color: #C78235;
           font-size: 1.2rem;
         }
 
@@ -1024,20 +1190,27 @@ function Home() {
           gap: 20px;
           align-items: center;
         }
+
+        .banner-btn-row .mystic-btn-primary {
+          background: #8B4A1E;
+          color: #ffffff !important;
+          border: none;
+          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.3);
+        }
+
         .mystic-btn-ghost {
           background: transparent;
-          color: var(--text-main);
+          color: #3A1900;
           font-weight: 700;
           padding: 12px 25px;
-          border: 1.5px solid var(--glass-border);
+          border: none;
           border-radius: 12px;
           transition: 0.3s;
           font-family: var(--font-sans);
         }
         .mystic-btn-ghost:hover {
-          background: rgba(139, 74, 30, 0.05);
-          border-color: var(--primary-color);
-          color: var(--primary-color);
+          background: rgba(139, 74, 30, 0.08);
+          color: #8B4A1E;
         }
 
         .trust-indicator {
@@ -1090,7 +1263,7 @@ function Home() {
 
         .trust-text span {
           font-size: 0.85rem;
-          color: var(--text-muted);
+          color: #8C6A4F;
           font-weight: 600;
         }
 
@@ -1109,7 +1282,7 @@ function Home() {
           width: 480px;
           height: 480px;
           border-radius: 50%;
-          border: 1px dashed #5C2D12;
+          border: 1px dashed #A67C52;
           animation: spinRight 40s linear infinite;
         }
 
@@ -1118,8 +1291,8 @@ function Home() {
           width: 320px;
           height: 320px;
           border-radius: 50%;
-          border: 1px dashed #5C2D12;
-          opacity: 0.6;
+          border: 1px dashed #A67C52;
+          opacity: 0.8;
           animation: spinLeft 25s linear infinite;
         }
 
@@ -1128,12 +1301,12 @@ function Home() {
           width: 65px;
           height: 65px;
           background: #5C2D12;
-          border: 1.5px solid var(--accent-color);
+          border: none;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: var(--premium-shadow);
+          box-shadow: 0 4px 10px rgba(92, 45, 18, 0.4);
           transition: all 0.4s;
         }
 
@@ -1145,8 +1318,7 @@ function Home() {
 
         .icon-block:hover {
           transform: scale(1.2) rotate(10deg);
-          border-color: var(--primary-color);
-          box-shadow: 0 15px 30px rgba(139, 74, 30, 0.2);
+          box-shadow: 0 15px 30px rgba(92, 45, 18, 0.6);
         }
 
         .icon-block:hover img {
@@ -1162,21 +1334,127 @@ function Home() {
 
         .center-logo img {
           width: 100%;
-          filter: drop-shadow(0 20px 40px rgba(139, 74, 30, 0.15));
+          filter: brightness(0) sepia(1) hue-rotate(-30deg) saturate(2) opacity(0.12);
           animation: etherealFloat 6s ease-in-out infinite;
         }
 
         .glow-orb {
+          display: none;
+        }
+
+        /* Theme Rust Specifics */
+        .banner-section.theme-rust {
+          background: #975427 !important;
+        }
+        .banner-section.theme-rust::before { display: none; }
+        .banner-section.theme-rust .banner-title,
+        .banner-section.theme-rust .banner-desc,
+        .banner-section.theme-rust .banner-feature-list li {
+          color: #ffffff !important;
+        }
+        .banner-section.theme-rust .banner-title .text-gradient {
+          background: none;
+          -webkit-text-fill-color: #ffffff;
+          color: #ffffff;
+        }
+        .banner-section.theme-rust .cosmic-badge {
+          border-color: rgba(255,255,255,0.3);
+          color: #ffffff;
+          background: rgba(255,255,255,0.1);
+        }
+        .banner-section.theme-rust .banner-btn-row .mystic-btn-primary {
+          background: linear-gradient(135deg, #F9C369, #D98925) !important;
+          color: #000000 !important;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .banner-section.theme-rust .mystic-btn-ghost {
+          color: #ffffff !important;
+          border: 1px solid rgba(255,255,255,0.5) !important;
+          background: transparent !important;
+        }
+        .banner-section.theme-rust .mystic-btn-ghost:hover {
+          background: rgba(255,255,255,0.1) !important;
+        }
+        .banner-section.theme-rust .c-dot {
+          background: rgba(255,255,255,0.3);
+        }
+        .banner-section.theme-rust .c-dot.active {
+          background: #ffffff;
+          box-shadow: 0 0 10px rgba(255,255,255,0.5);
+        }
+
+        /* Zodiac Hero Graphic */
+        .zodiac-hero-graphic {
+          position: relative;
+          width: 500px;
+          height: 500px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .rotating-zodiac-mandala {
           position: absolute;
-          width: 120%;
-          height: 120%;
-          background: radial-gradient(circle, var(--accent-color), transparent 70%);
-          border-radius: 50%;
-          filter: blur(50px);
-          opacity: 0.2;
-          top: -10%;
-          left: -10%;
-          animation: orbPulse 4s ease-in-out infinite alternate;
+          width: 75%;
+          height: 75%;
+          opacity: 0.9;
+          right: 5%;
+          top: 50%;
+          transform: translateY(-50%);
+        }
+        
+        .spin-slow-left {
+          animation: spinLeft 100s linear infinite;
+        }
+        .spin-right {
+          animation: spinRight 60s linear infinite;
+        }
+        .spin-fast-left {
+          animation: spinLeft 30s linear infinite;
+        }
+        
+        .hero-expert-portrait {
+          position: relative;
+          z-index: 5;
+          width: 105%;
+          object-fit: contain;
+          filter: drop-shadow(0 20px 30px rgba(0,0,0,0.3));
+          transform: translateY(20px);
+        }
+
+        .float-badge {
+          position: absolute;
+          background: rgba(255, 250, 240, 0.95);
+          backdrop-filter: blur(10px);
+          border: 1px solid #E2D1B8;
+          padding: 8px 15px;
+          border-radius: 8px;
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+          z-index: 10;
+          color: #3A1900;
+        }
+        .float-badge.fb-1 { bottom: 15%; left: -10%; animation: floatBadge 4s ease-in-out infinite alternate; }
+        .float-badge.fb-2 { top: 30%; right: -25%; animation: floatBadge 5s ease-in-out infinite alternate-reverse; }
+        .float-badge.fb-3 { bottom: 5%; right: -15%; animation: floatBadge 4.5s ease-in-out infinite alternate; }
+        
+        .fb-icon i {
+          font-size: 1.5rem;
+          color: #C78235;
+        }
+        .fb-text {
+          font-size: 0.8rem;
+          line-height: 1.2;
+          font-weight: 600;
+        }
+        .fb-text span {
+          font-size: 1rem;
+          font-weight: 800;
+        }
+        @keyframes floatBadge {
+          0% { transform: translateY(0px); }
+          100% { transform: translateY(-10px); }
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }

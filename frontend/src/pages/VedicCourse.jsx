@@ -742,33 +742,28 @@ function VedicCourse() {
           .bottom-left { bottom: -5px; left: -5px; }
           
           .roadmap-container { 
-            display: flex;
-            flex-direction: row;
-            flex-wrap: nowrap;
-            overflow-x: auto;
+            display: flex !important;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+            overflow-x: auto !important;
             gap: 20px;
             padding: 20px 10px 40px;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; /* Hide scrollbar for Firefox */
+            scrollbar-width: none; 
           }
-          .roadmap-container::-webkit-scrollbar { display: none; } /* Hide scrollbar for Chrome/Safari */
+          .roadmap-container::-webkit-scrollbar { display: none; }
 
           .roadmap-item { 
-            flex: 0 0 160px; /* Fixed width for each item */
+            flex: 0 0 140px !important;
             text-align: center;
             display: block;
           }
           .roadmap-line { 
-            position: absolute;
-            top: 30px;
-            left: 80px;
-            width: 100%;
-            height: 2px;
-            background: #e0e0e8;
-            z-index: -1;
+            display: none; /* Hide line on mobile for better horizontal flow */
           }
           .roadmap-circle { margin: 0 auto 15px; flex-shrink: 0; }
-          .roadmap-text p { display: none; } /* Keep it clean on mobile */
+          .roadmap-text h4 { font-size: 14px; }
+          .roadmap-text p { display: none; } 
           
           .instructor-v2 { text-align: center; }
           .instructor-visual-v2 img { width: 250px; height: 250px; }
@@ -780,10 +775,14 @@ function VedicCourse() {
           .display-3 { font-size: 1.8rem; }
           .stats-grid { grid-template-columns: 1fr; }
           .btn-v2-primary, .btn-v2-outline { width: 100%; }
-          .roadmap-container { padding-left: 15px; }
-          .roadmap-line { left: 15px; }
-          .roadmap-text h4 { font-size: 15px; }
-          .roadmap-text p { font-size: 12px; }
+          .roadmap-container { 
+            padding-left: 15px;
+            padding-right: 15px;
+            flex-direction: row !important;
+            flex-wrap: nowrap !important;
+          }
+          .roadmap-item { flex: 0 0 130px !important; }
+          .roadmap-text h4 { font-size: 13px; }
         }
       `}</style>
     </section>

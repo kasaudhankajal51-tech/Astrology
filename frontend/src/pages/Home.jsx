@@ -507,32 +507,32 @@ function Home() {
             <div className="row align-items-center g-5">
               <div className="col-lg-6">
                 <div className="img-box01 position-relative">
-                  <figure className="moon-img" data-aos="fade-right">
+                  <figure className="moon-img" data-aos="fade-right" data-aos-once="true">
                     <img alt="moon" src="/images/moon.jpg" />
                   </figure>
-                  <figure className="floating-element" data-aos="fade-left">
+                  <figure className="floating-element" data-aos="fade-left" data-aos-once="true" data-aos-delay="100">
                     <img alt="woman" src="/images/bg-bannerpic.jpg" />
                   </figure>
-                  <figure className="bottom-img" data-aos="fade-up">
+                  <figure className="bottom-img" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
                     <img alt="tarot" src="/images/premium_tarot.png" />
                   </figure>
-                  <div className="experience-badge text-center" data-aos="zoom-in">
+                  <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
                     <h4>16+</h4>
                     <span>Years Experience</span>
                   </div>
                 </div>
               </div>
               <div className="col-lg-6">
-                <h5 className="section-subtitle" data-aos="fade-down">About Astro Ava</h5>
-                <h2 className="section-title my-3" data-aos="fade-down">
+                <h5 className="section-subtitle about-subtitle" data-aos="fade-up" data-aos-once="true">About Astro Ava</h5>
+                <h2 className="section-title my-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="100">
                   Unlock a Brilliant Future with Astrology
                 </h2>
-                <p className="section-desc mt-3" data-aos="fade-up">
+                <p className="section-desc mt-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
                   Discover Your True Potential with Expert Astrology Guidance!
                   Step into a life full of clarity, confidence, and success. Our professional astrology
                   consultants help you unlock the secrets of your future with accurate, personalized insights.
                 </p>
-                <a href="#" className="btn mystic-btn-outline mt-4" data-aos="fade-down">Read More</a>
+                <a href="#" className="btn mystic-btn-outline mt-4" data-aos="fade-up" data-aos-once="true" data-aos-delay="300">Read More</a>
               </div>
             </div>
           </div>
@@ -959,16 +959,26 @@ function Home() {
 
         .badge-glow {
           position: absolute;
-          top: 0; left: -100%;
-          width: 50%; height: 100%;
-          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
-          animation: badgeShine 3s infinite;
+          top: -50%; left: -100%;
+          width: 50%; height: 200%;
+          background: linear-gradient(to right, transparent, rgba(255,255,255,0.6), transparent);
+          transform: rotate(30deg);
+          animation: badgeShine 3.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
         }
 
-        @keyframes badgeShine { 100% { left: 200%; } }
+        @keyframes badgeShine { 
+          0%, 20% { left: -100%; } 
+          80%, 100% { left: 200%; } 
+        }
 
         .drop-glow {
           filter: drop-shadow(0 0 15px rgba(200, 131, 42, 0.3));
+          animation: textPulse 4s ease-in-out infinite alternate;
+        }
+
+        @keyframes textPulse {
+          0% { filter: drop-shadow(0 0 10px rgba(200, 131, 42, 0.2)); }
+          100% { filter: drop-shadow(0 0 25px rgba(200, 131, 42, 0.6)); }
         }
 
         .ethereal-sparkle {
@@ -976,12 +986,15 @@ function Home() {
           color: var(--accent-color);
           font-size: 24px;
           opacity: 0.5;
-          animation: twinkle 4s ease-in-out infinite;
+          animation: mysticTwinkle 5s ease-in-out infinite;
         }
         .s-1 { top: -20px; left: 10%; }
-        .s-2 { bottom: 20%; right: -5%; font-size: 32px; animation-delay: 1s; }
+        .s-2 { bottom: 20%; right: -5%; font-size: 32px; animation-delay: 1.5s; }
 
-        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 0.8; transform: scale(1.2); } }
+        @keyframes mysticTwinkle { 
+          0%, 100% { opacity: 0.1; transform: scale(0.6) rotate(0deg); } 
+          50% { opacity: 0.9; transform: scale(1.3) rotate(45deg); filter: drop-shadow(0 0 10px var(--accent-color)); } 
+        }
 
         .banner-feature-list {
           list-style: none;
@@ -1150,7 +1163,7 @@ function Home() {
         .center-logo img {
           width: 100%;
           filter: drop-shadow(0 20px 40px rgba(139, 74, 30, 0.15));
-          animation: float 5s ease-in-out infinite;
+          animation: etherealFloat 6s ease-in-out infinite;
         }
 
         .glow-orb {
@@ -1163,13 +1176,33 @@ function Home() {
           opacity: 0.2;
           top: -10%;
           left: -10%;
+          animation: orbPulse 4s ease-in-out infinite alternate;
         }
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
-        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-15px); } }
+        
+        @keyframes etherealFloat { 
+          0%, 100% { transform: translateY(0) rotate(0deg); } 
+          50% { transform: translateY(-18px) rotate(2deg); filter: drop-shadow(0 30px 50px rgba(139, 74, 30, 0.3)); } 
+        }
+
+        @keyframes orbPulse {
+          0% { opacity: 0.15; transform: scale(0.9); }
+          100% { opacity: 0.4; transform: scale(1.1); filter: blur(40px); }
+        }
 
         /* About Section Staggered Layout */
+        .section-subtitle.about-subtitle {
+          color: var(--primary-color) !important;
+          font-weight: 700;
+          font-family: var(--font-sans);
+          letter-spacing: 1px;
+          text-transform: uppercase;
+          margin-bottom: 10px;
+          display: block;
+        }
+
         .img-box01 {
           position: relative;
           height: 550px;

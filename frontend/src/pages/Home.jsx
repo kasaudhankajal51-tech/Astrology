@@ -273,6 +273,10 @@ const AstrologyCourses = () => {
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
           .btnrow { grid-template-columns: 1fr; }
+          .zodiac-hero-graphic, 
+          .cosmic-orbit-container { 
+            display: none !important; 
+          }
           .animate__animated, 
           .spin-slow-left, 
           .spin-right, 

@@ -7,14 +7,14 @@
 .t-page {
   padding: 60px 0;
   min-height: 80vh;
-  color: #fff;
+  color: var(--text-content);
 }
 
 /* ── Back button ── */
 .t-back {
   background: transparent !important;
-  border: 1px solid rgba(255, 106, 0, 0.5) !important;
-  color: #ff6a00 !important;
+  border: 1px solid var(--accent-color) !important;
+  color: var(--primary-color) !important;
   font-size: 16px;
   cursor: pointer;
   margin-bottom: 28px;
@@ -34,13 +34,10 @@
 
 /* ── Section headings ── */
 .t-heading {
-  font-size: clamp(24px, 4vw, 38px) !important;
-  font-weight: 800 !important;
-  background: linear-gradient(90deg, #ff6a00, #ff0080, #6a00ff) !important;
-  background-size: 200% auto !important;
-  -webkit-background-clip: text !important;
-  -webkit-text-fill-color: transparent !important;
-  animation: tGradMove 4s linear infinite !important;
+  font-size: clamp(32px, 5vw, 42px) !important;
+  font-family: var(--font-serif) !important;
+  font-weight: 700 !important;
+  color: var(--text-heading) !important;
   margin-bottom: 8px !important;
 }
 
@@ -55,16 +52,17 @@
 }
 
 .t-sub {
-  color: #aaa !important;
+  color: var(--text-muted) !important;
+  font-family: var(--font-sans) !important;
   font-size: 18px !important;
+  font-weight: 500 !important;
 }
 
 /* ── Glass cards ── */
 .t-card {
-  background: rgba(255, 255, 255, 0.05) !important;
-  backdrop-filter: blur(10px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important;
-  border-radius: 14px !important;
+  background: var(--card-color) !important;
+  border: 1px solid var(--glass-border) !important;
+  border-radius: 20px !important;
   position: relative;
   overflow: hidden;
   transition: transform 0.3s, box-shadow 0.3s !important;
@@ -72,8 +70,8 @@
 
 .t-card:hover {
   transform: translateY(-4px) !important;
-  box-shadow: 0 12px 35px rgba(255, 106, 0, 0.15) !important;
-  border-color: rgba(255, 106, 0, 0.3) !important;
+  box-shadow: var(--premium-shadow) !important;
+  border-color: var(--accent-color) !important;
 }
 
 /* ── Form labels ── */
@@ -91,23 +89,22 @@
 .t-input {
   width: 100% !important;
   display: block !important;
-  background: rgba(0, 0, 0, 0.4) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
-  color: #fff !important;
-  padding: 10px 14px !important;
-  border-radius: 8px !important;
-  font-size: 16px !important;
+  background: #FFFFFF !important;
+  border: 1px solid var(--glass-border) !important;
+  color: var(--text-main) !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  font-size: 15px !important;
   outline: none !important;
   box-shadow: none !important;
-  transition: border-color 0.2s !important;
-  -webkit-appearance: none;
+  transition: all 0.2s !important;
 }
 
 .t-input:focus {
-  border-color: #ff6a00 !important;
-  box-shadow: 0 0 0 2px rgba(255, 106, 0, 0.15) !important;
-  background: rgba(0, 0, 0, 0.5) !important;
-  color: #fff !important;
+  border-color: var(--accent-color) !important;
+  box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15) !important;
+  background: #FFFFFF !important;
+  color: var(--text-main) !important;
 }
 
 .t-input[type="date"]::-webkit-calendar-picker-indicator {
@@ -126,18 +123,18 @@
   align-items: center !important;
   justify-content: center !important;
   gap: 8px !important;
-  background: linear-gradient(135deg, #ff6a00, #ee0979) !important;
+  background: var(--primary-color) !important;
   border: none !important;
   color: #fff !important;
-  padding: 11px 24px !important;
-  border-radius: 8px !important;
+  padding: 12px 28px !important;
+  border-radius: 12px !important;
   font-weight: 600 !important;
   font-size: 16px !important;
   cursor: pointer !important;
-  transition: opacity 0.2s, transform 0.2s !important;
+  transition: all 0.3s !important;
   text-align: center !important;
-  letter-spacing: 0.3px !important;
-  box-shadow: 0 4px 15px rgba(255, 106, 0, 0.3) !important;
+  letter-spacing: 0.5px !important;
+  box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2) !important;
 }
 
 .t-btn:hover:not(:disabled) {
@@ -169,8 +166,8 @@
 }
 
 .t-outline-btn:hover {
-  border-color: #ff6a00 !important;
-  color: #ff6a00 !important;
+  border-color: var(--primary-color) !important;
+  color: var(--primary-color) !important;
 }
 
 /* ── Error ── */
@@ -231,7 +228,7 @@
 .t-info-value {
   font-size: 17px !important;
   font-weight: 700 !important;
-  color: #fff !important;
+  color: var(--text-main) !important;
 }
 
 /* ── Number cards ── */
@@ -250,8 +247,8 @@
 
 .t-num-big {
   font-size: clamp(36px, 6vw, 52px) !important;
-  font-weight: 900 !important;
-  color: #ff6a00 !important;
+  font-weight: 800 !important;
+  color: var(--primary-color) !important;
   line-height: 1 !important;
   margin-bottom: 4px !important;
 }
@@ -259,7 +256,7 @@
 .t-num-label {
   font-size: 15px !important;
   font-weight: 700 !important;
-  color: #eee !important;
+  color: var(--text-main) !important;
 }
 
 .t-num-sub {
@@ -272,8 +269,8 @@
 .t-section-title {
   font-size: 18px !important;
   font-weight: 700 !important;
-  color: #ff6a00 !important;
-  border-left: 3px solid #ff6a00 !important;
+  color: var(--primary-color) !important;
+  border-left: 3px solid var(--primary-color) !important;
   padding-left: 12px !important;
   margin-bottom: 16px !important;
 }
@@ -303,7 +300,7 @@
 .t-sign-name {
   font-size: 15px !important;
   font-weight: 600 !important;
-  color: #fff !important;
+  color: var(--text-main) !important;
 }
 
 .t-sign-dates {
@@ -324,7 +321,7 @@
 .t-mantra-text {
   font-size: clamp(18px, 3vw, 26px) !important;
   font-weight: 800 !important;
-  color: #ffd700 !important;
+  color: var(--primary-color) !important;
   letter-spacing: 2px !important;
   margin: 8px 0 !important;
 }

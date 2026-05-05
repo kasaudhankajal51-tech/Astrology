@@ -3,72 +3,272 @@ import { Link } from 'react-router-dom';
 
 function Header() {
   useEffect(() => {
+    // AOS Init
     if (window.AOS) {
       window.AOS.init();
     }
+
+    // Report Bar Animation Logic
+    const handleReportAnimation = () => {
+      const content = document.getElementById('reportScrollContent');
+      if (!content) return;
+      
+      if (window.innerWidth >= 768) {
+        content.style.animation = 'scrollLeftSmooth 38s linear infinite';
+        if (content.children.length < 10 && !content.hasAttribute('data-cloned')) {
+          const originalHTML = content.innerHTML;
+          content.innerHTML = originalHTML + originalHTML;
+          content.setAttribute('data-cloned', 'true');
+        }
+      } else {
+        content.style.animation = 'none';
+      }
+    };
+
+    window.addEventListener('resize', handleReportAnimation);
+    handleReportAnimation();
+
+    return () => window.removeEventListener('resize', handleReportAnimation);
   }, []);
 
   return (
     <>
+      <style>{`
+        :root {
+          --primary-color: #8B4A2F;
+          --accent-color: #C8A27A;
+          --glass-border: rgba(0, 0, 0, 0.05);
+          --premium-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 12px rgba(0, 0, 0, 0.03);
+        }
+
+        /* Report Bar */
+        .report-bar {
+          display: flex;
+          align-items: center;
+          background: var(--bg-color);
+          padding: 6px 0;
+          overflow-x: hidden;
+          border-bottom: 1px solid var(--glass-border);
+          width: 100%;
+          position: relative;
+        }
+        
+        .report-bar .label {
+          background: var(--primary-color);
+          color: #fff;
+          font-weight: 700;
+          padding: 6px 4%;
+          white-space: nowrap;
+          z-index: 3;
+          font-size: clamp(11px, 3vw, 14px);
+          text-transform: uppercase;
+          letter-spacing: 0.5px;
+          flex-shrink: 0;
+          font-family: var(--font-sans);
+          box-shadow: 2px 0 8px rgba(0,0,0,0.02);
+        }
+        
+        .scroll-wrapper {
+          overflow-x: auto;
+          flex: 1;
+          width: 100%;
+          scrollbar-width: none; /* Firefox */
+          -ms-overflow-style: none; /* IE/Edge */
+          -webkit-overflow-scrolling: touch;
+        }
+        
+        .scroll-wrapper::-webkit-scrollbar {
+          display: none; /* Chrome, Safari, Opera */
+        }
+        
+        .scroll-content {
+          display: inline-flex;
+          gap: clamp(20px, 4vw, 48px);
+          white-space: nowrap;
+          padding: 0 16px 0 8px;
+          align-items: center;
+        }
+        
+        .item {
+          color: var(--text-content);
+          font-size: clamp(11px, 3vw, 14px);
+          font-weight: 500;
+          font-family: var(--font-sans);
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+        }
+        
+        .new {
+          background: var(--accent-color);
+          color: #fff;
+          padding: 2px 10px;
+          border-radius: 30px;
+          font-size: clamp(9px, 2vw, 11px);
+          text-transform: uppercase;
+          font-weight: 800;
+          line-height: 1.3;
+        }
+
+        @keyframes scrollLeftSmooth {
+          0% { transform: translateX(0); }
+          100% { transform: translateX(-48%); }
+        }
+
+        /* Navbar */
+        header {
+          background: var(--bg-color) !important;
+          border-bottom: 1px solid var(--glass-border);
+          position: sticky;
+          top: 0;
+          z-index: 1020;
+          width: 100%;
+        }
+
+        .logo-icon-wrapper {
+          width: 42px;
+          height: 42px;
+          background: var(--primary-color);
+          color: #fff;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 4px 10px rgba(139, 74, 47, 0.2);
+          transition: transform 0.3s ease;
+        }
+
+        .logo-icon-wrapper:hover {
+          transform: rotate(15deg) scale(1.05);
+        }
+
+        @media (min-width: 992px) {
+          .navbar-nav .nav-link {
+            color: var(--text-main) !important;
+            font-weight: 600;
+            padding: 12px 6px !important;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1px;
+          }
+          
+          .btn-consult-header {
+            background: var(--primary-color);
+            color: #fff !important;
+            padding: 10px 20px;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.8rem;
+            box-shadow: 0 6px 14px rgba(139, 74, 47, 0.2);
+            transition: all 0.25s ease;
+            white-space: nowrap;
+          }
+        }
+
+        @media (min-width: 1100px) {
+          .navbar-nav .nav-link {
+            padding: 12px 10px !important;
+            font-size: 0.8rem;
+          }
+          .btn-consult-header {
+            padding: 10px 22px;
+            font-size: 0.85rem;
+          }
+        }
+
+        @media (min-width: 1300px) {
+          .navbar-nav .nav-link {
+            padding: 12px 15px !important;
+            font-size: 0.85rem;
+          }
+          .btn-consult-header {
+            padding: 11px 28px;
+            font-size: 0.9rem;
+          }
+        }
+
+        .mobile-offcanvas {
+          background: var(--bg-color);
+          width: 85% !important;
+          max-width: 360px;
+        }
+
+        .mobile-offcanvas .nav-link {
+          color: var(--text-main);
+          font-weight: 600;
+          padding: 14px 20px;
+          border-bottom: 1px solid var(--glass-border);
+        }
+
+        .btn-mobile-cta {
+          border-radius: 60px !important;
+          font-weight: 700;
+          padding: 14px 0;
+          text-align: center;
+        }
+        
+        .btn-mobile-cta.primary-cta {
+          background: #2C2C2C;
+          color: #fff !important;
+        }
+        
+        .btn-mobile-cta.secondary-cta {
+          color: var(--primary-color) !important;
+          border: 1.6px solid var(--primary-color);
+        }
+      `}</style>
+
       <section className="report-bar">
-        <div className="label" style={{ color: '#000' }}>Popular Reports</div>
-        <div className="scroll-wrapper">
-          <div className="scroll-content">
+        <div className="label">Popular Reports</div>
+        <div className="scroll-wrapper" id="reportScrollWrapper">
+          <div className="scroll-content" id="reportScrollContent">
             <span className="item"><b className="new">New</b> 2026 Financial Horoscope Based on Your Birth Chart</span>
             <span className="item"><b className="new">New</b> 2026 Career Horoscope Based on Your Birth Chart</span>
             <span className="item"><b className="new">New</b> 2026 Marriage Horoscope Based on Your Birth Chart</span>
-            <span className="item"><b className="new">New</b> 2026 Financial Horoscope Based on Your Birth Chart</span>
+            <span className="item"><b className="new">New</b> 2026 Wealth Horoscope Based on Your Birth Chart</span>
             <span className="item"><b className="new">New</b> 2026 Career Horoscope Based on Your Birth Chart</span>
-            <span className="item"><b className="new">New</b> 2026 Marriage Horoscope Based on Your Birth Chart</span>
+            <span className="item"><b className="new">New</b> 2026 Love Horoscope Based on Your Birth Chart</span>
           </div>
         </div>
       </section>
 
-      <header className="w-100 font-xl mb-0" style={{ background: 'var(--cosmic-bg)' }}>
+      <header className="w-100 font-xl mb-0">
         <nav className="navbar navbar-expand-lg navbar-light py-0">
-          <div className="container-fluid px-2 px-md-3 px-lg-4">
-            <Link className="navbar-brand d-flex align-items-center p-0" to="/">
-              <img alt="logo" src="/images/logo.png" className="logo-crop" />
-              <div className="fb-logo-name ms-2">Astro<em>Ava</em></div>
+          <div className="container-fluid px-2 px-md-3 px-lg-4 d-flex align-items-center">
+            <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }}>
+              <div className="logo-icon-wrapper me-2">
+                <svg width="24" height="24" viewBox="0 0 22 22" fill="none">
+                  <path d="M11 2L13.5 8.5H20L14.5 12.5L16.5 19L11 15L5.5 19L7.5 12.5L2 8.5H8.5L11 2Z" fill="currentColor" />
+                </svg>
+              </div>
+              <div className="fb-logo-name" style={{ fontSize: 'clamp(16px, 1.8vw, 22px)', fontWeight: '700', color: 'var(--text-heading)' }}>
+                Astro<em style={{ fontStyle: 'normal', color: 'var(--primary-color)' }}>Ava</em>
+              </div>
             </Link>
              
-            <button
-              className="navbar-toggler"
-              type="button"
-              data-bs-toggle="offcanvas"
-              data-bs-target="#mobile-menu"
-              aria-controls="mobile-menu"
-              aria-label="Toggle navigation"
-            >
+            <button className="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu">
               <span><i className="fas fa-bars"></i></span>
             </button>
-            <div className="collapse navbar-collapse" id="navbarSupportedContent">
+
+            <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li className="nav-item">
-                  <Link className="nav-link" to="/">HOME</Link>
-                </li>
+                <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
                 <li className="nav-item dropdown">
                   <div className="d-flex align-items-center">
                     <Link className="nav-link" to="/consultations">CONSULTATIONS</Link>
                     <a className="nav-link dropdown-toggle dropdown-toggle-split" href="#" data-bs-toggle="dropdown"></a>
                   </div>
-                  <ul className="dropdown-menu dropdown-menu1">
+                  <ul className="dropdown-menu">
                     <li><Link className="dropdown-item" to="/consultations">Personal Horoscope</Link></li>
                     <li><Link className="dropdown-item" to="/consultations">Marriage/Relationship</Link></li>
-                    <li><a className="dropdown-item" href="#">Career & Bussiness</a></li>
+                    <li><a className="dropdown-item" href="#">Career & Business</a></li>
                     <li><a className="dropdown-item" href="#">Muhurat</a></li>
                     <li><a className="dropdown-item" href="#">Health Astrology</a></li>
                   </ul>
                 </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/about">ABOUT</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/blog">BLOG</Link>
-                </li>
-                <li className="nav-item">
-                  <Link className="nav-link" to="/astrologer">ASTROLOGERS</Link>
-                </li>
+                <li className="nav-item"><Link className="nav-link" to="/about">ABOUT</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/blog">BLOG</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/astrologer">ASTROLOGERS</Link></li>
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">COURSES</a>
                   <ul className="dropdown-menu">
@@ -79,13 +279,13 @@ function Header() {
                   </ul>
                 </li>
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/" role="button" data-bs-toggle="dropdown" id="astroDropdown">ASTRO SHOP / STORE</a>
-                  <ul className="dropdown-menu dropdown-menu1">
-                    <li><a className="dropdown-item" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/">Gemstones</a></li>
-                    <li><a className="dropdown-item" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/">Rudraksha</a></li>
-                    <li><a className="dropdown-item" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/">Yantras</a></li>
-                    <li><a className="dropdown-item" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/">Puja Kits</a></li>
-                    <li><a className="dropdown-item" href="https://test-1111111111111111111111111111111111711111111111133095.myshopify.com/">Bracelets</a></li>
+                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ASTRO SHOP</a>
+                  <ul className="dropdown-menu">
+                    <li><a className="dropdown-item" href="#">Gemstones</a></li>
+                    <li><a className="dropdown-item" href="#">Rudraksha</a></li>
+                    <li><a className="dropdown-item" href="#">Yantras</a></li>
+                    <li><a className="dropdown-item" href="#">Puja Kits</a></li>
+                    <li><a className="dropdown-item" href="#">Bracelets</a></li>
                   </ul>
                 </li>
                 <li className="nav-item dropdown">
@@ -99,559 +299,67 @@ function Header() {
                 </li>
               </ul>
             </div>
-            <div className="d-none d-lg-block">
-              <div className="right-menui">
-                <ul>
-                  <li>
-                    <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header">BOOK CONSULTATION</a>
-                  </li>
-                </ul>
-              </div>
+
+            <div className="d-none d-lg-block ms-auto" style={{ flexShrink: 0 }}>
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header">BOOK CONSULTATION</a>
             </div>
           </div>
         </nav>
       </header>
 
-      <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu" aria-labelledby="mobile-menu-label">
+      <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header">
-          <h5 className="offcanvas-title" id="mobile-menu-label">Menu</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <h5 className="offcanvas-title">AstroAva</h5>
+          <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body">
           <ul className="navbar-nav">
+            <li className="nav-item"><Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link></li>
             <li className="nav-item">
-              <Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-consultations">
-                CONSULTATIONS
-              </button>
-              <div className="collapse mobile-submenu" id="mobile-consultations">
-                <ul className="navbar-nav">
-                  <li><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link></li>
-                  <li><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Career & Business</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Muhurat</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Health Astrology</a></li>
-                </ul>
+              <button className="nav-link w-100 border-0 bg-transparent text-start" data-bs-toggle="collapse" data-bs-target="#mobile-consultations">CONSULTATIONS</button>
+              <div className="collapse px-3" id="mobile-consultations">
+                <Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link>
+                <Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link>
               </div>
             </li>
             <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
-            <li className="nav-item">
-              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-courses">
-                COURSES
-              </button>
-              <div className="collapse mobile-submenu" id="mobile-courses">
-                <ul className="navbar-nav">
-                  <li><Link className="nav-link" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link></li>
-                  <li><Link className="nav-link" to="/advanced-astrology" data-bs-dismiss="offcanvas">Advanced Astrology</Link></li>
-                  <li><Link className="nav-link" to="/predictive-astrology" data-bs-dismiss="offcanvas">Predictive Astrology</Link></li>
-                  <li><Link className="nav-link" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link></li>
-                </ul>
-              </div>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-astro-shop">
-                ASTRO SHOP / STORE
-              </button>
-              <div className="collapse mobile-submenu" id="mobile-astro-shop">
-                <ul className="navbar-nav">
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Gemstones</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Rudraksha</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Yantras</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Puja Kits</a></li>
-                  <li><a className="nav-link" href="#" data-bs-dismiss="offcanvas">Bracelets</a></li>
-                </ul>
-              </div>
-            </li>
-            <li className="nav-item">
-              <button className="nav-link mobile-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#mobile-free-tools">
-                FREE TOOLS
-              </button>
-              <div className="collapse mobile-submenu" id="mobile-free-tools">
-                <ul className="navbar-nav">
-                  <li><Link className="nav-link" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link></li>
-                  <li><Link className="nav-link" to="/numerology" data-bs-dismiss="offcanvas">Numerology</Link></li>
-                  <li><Link className="nav-link" to="/tarot" data-bs-dismiss="offcanvas">Tarot Reading</Link></li>
-                  <li><Link className="nav-link" to="/love" data-bs-dismiss="offcanvas">Love Calculator</Link></li>
-                </ul>
-              </div>
-            </li>
-            <li className="nav-item mt-4 px-2">
-              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta w-100" data-bs-dismiss="offcanvas">
-                <i className="fas fa-calendar-check me-2"></i> BOOK CONSULTATION
-              </a>
-              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta w-100 mt-3" data-bs-dismiss="offcanvas">
-                <i className="fas fa-graduation-cap me-2"></i> ENROLL LIVE COURSE
-              </Link>
+            <li className="nav-item mt-4 d-grid gap-2">
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
+              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">ENROLL LIVE COURSE</Link>
             </li>
           </ul>
         </div>
       </div>
 
-      <style>{`
-        :root {
-          --cosmic-accent: #ff6a00;
-          --cosmic-accent-orange: #ff8c00;
-          --cosmic-accent-pink: #e31b7a;
-          --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
-          --cosmic-accent-soft: #ffe4f0;
-          --cosmic-text: #1a1a1a;
-          --cosmic-text-muted: #4a4a4a;
-          --glass-border: #e0c8b8;
-          --premium-shadow: 0 6px 14px rgba(0,0,0,0.08);
-          --cosmic-bg: #fffbf5;
-          --cosmic-white: #ffffff;
-        }
-
-        /* REPORT BAR - Fully Responsive */
-        .report-bar {
-          display: flex;
-          align-items: center;
-          background: var(--cosmic-bg);
-          padding: 8px 0;
-          overflow-x: hidden;
-          border-bottom: 1px solid var(--glass-border);
-          width: 100%;
-        }
-        
-        .report-bar .label {
-          background: var(--cosmic-gradient);
-          color: #fff;
-          font-weight: bold;
-          padding: 8px 5%;
-          white-space: nowrap;
-          z-index: 2;
-          font-size: clamp(13px, 2.2vw, 15px);
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          flex-shrink: 0;
-        }
-        
-        .scroll-wrapper {
-          overflow-x: hidden;
-          flex: 1;
-          width: 100%;
-        }
-        
-        .scroll-content {
-          display: inline-flex;
-          gap: clamp(20px, 3vw, 40px);
-          white-space: nowrap;
-          animation: scrollLeft 25s linear infinite;
-        }
-        
-        .item {
-          color: var(--cosmic-text);
-          font-size: clamp(13px, 2.2vw, 15px);
-          font-weight: 500;
-        }
-        
-        .new {
-          background: var(--cosmic-gradient);
-          color: #fff;
-          padding: 2px 8px;
-          margin-right: 8px;
-          border-radius: 6px;
-          font-size: clamp(11px, 2vw, 13px);
-          text-transform: uppercase;
-          font-weight: 800;
-        }
-        
-        @keyframes scrollLeft {
-          from { transform: translateX(0); }
-          to { transform: translateX(-50%); }
-        }
-
-        /* NAVBAR - Fully Responsive with container-fluid */
-        .container-fluid {
-          width: 100%;
-          max-width: 100%;
-          margin: 0 auto;
-        }
-        
-        /* Logo Crop Logic - Shows only icon, hides embedded white text */
-        .logo-crop {
-          height: clamp(40px, 5vw, 60px);
-          width: clamp(40px, 5vw, 60px); /* Square crop to isolate icon */
-          object-fit: cover;
-          object-position: left;
-          transition: all 0.3s ease;
-        }
-        
-        .fb-logo-name {
-          font-weight: 800;
-          font-size: clamp(20px, 4vw, 38px);
-          color: var(--cosmic-text);
-          letter-spacing: -0.5px;
-          white-space: nowrap;
-        }
-        
-        .fb-logo-name em {
-          font-style: italic;
-          color: var(--cosmic-accent-pink);
-        }
-
-        /* Desktop Navigation - Responsive */
-        @media (min-width: 992px) {
-          .navbar .nav-link {
-            color: var(--cosmic-text) !important;
-            font-weight: 700;
-            padding: 10px clamp(8px, 1vw, 15px) !important;
-            font-size: clamp(13px, 1.4vw, 17px);
-            white-space: nowrap;
-            transition: all 0.3s;
-          }
-          
-          .navbar .nav-link:hover {
-            color: var(--cosmic-accent-pink) !important;
-          }
-          
-          .btn-consult-header {
-            background: var(--cosmic-gradient);
-            color: #fff !important;
-            border: none;
-            padding: clamp(8px, 1.2vw, 12px) clamp(16px, 2vw, 24px);
-            border-radius: 50px;
-            font-weight: 800;
-            font-size: clamp(12px, 1.3vw, 16px);
-            letter-spacing: 0.8px;
-            white-space: nowrap;
-            box-shadow: var(--premium-shadow);
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-decoration: none;
-          }
-          
-          .btn-consult-header:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(227, 27, 122, 0.3);
-          }
-          
-          /* Critical Fix: Ensure button never overflows */
-          .right-menui ul {
-            margin: 0;
-            padding: 0;
-            list-style: none;
-          }
-          
-          .navbar-collapse {
-            flex: 1;
-          }
-          
-          .navbar-nav {
-            flex-wrap: wrap;
-          }
-        }
-        
-        /* Tablet and Medium Screens (992px - 1400px) */
-        @media (min-width: 992px) and (max-width: 1400px) {
-          .container-fluid {
-            padding-left: 15px !important;
-            padding-right: 15px !important;
-          }
-          
-          .navbar .nav-link {
-            font-size: 11px !important;
-            padding-left: 6px !important;
-            padding-right: 6px !important;
-          }
-          
-          .btn-consult-header {
-            font-size: 10px !important;
-            padding: 8px 12px !important;
-          }
-          
-          .fb-logo-name {
-            font-size: 22px !important;
-          }
-          
-          .logo-crop {
-            height: 45px !important;
-          }
-        }
-        
-        /* Large Desktop (1400px+) */
-        @media (min-width: 1400px) {
-          .container-fluid {
-            padding-left: 40px;
-            padding-right: 40px;
-          }
-        }
-        
-        /* Extra Large Desktop */
-        @media (min-width: 1800px) {
-          .container-fluid {
-            padding-left: 60px;
-            padding-right: 60px;
-          }
-        }
-
-        /* Mobile Styles */
-        @media (max-width: 991px) {
-          .navbar-brand {
-            margin-right: 0;
-          }
-          
-          .logo-crop {
-            height: 40px;
-          }
-          
-          .fb-logo-name {
-            font-size: 20px;
-          }
-          
-          .navbar-toggler {
-            color: var(--cosmic-text) !important;
-            border-color: var(--glass-border) !important;
-          }
-        }
-
-        /* Mobile Offcanvas - Percentage Width */
-        .mobile-offcanvas {
-          background: var(--cosmic-white);
-          color: var(--cosmic-text);
-          width: 70% !important;
-          max-width: 400px;
-          min-width: 260px;
-          box-shadow: -10px 0 30px rgba(0,0,0,0.05);
-        }
-        
-        @media (max-width: 576px) {
-          .mobile-offcanvas {
-            width: 80% !important;
-          }
-        }
-        
-        .mobile-offcanvas .offcanvas-header {
-          border-bottom: 1px solid #f1f5f9;
-          padding: 16px;
-        }
-        
-        .mobile-offcanvas .offcanvas-title {
-          font-weight: 700;
-          color: var(--cosmic-text);
-        }
-        
-        .mobile-offcanvas .nav-link {
-          color: var(--cosmic-text);
-          padding: 18px 20px;
-          font-weight: 800;
-          font-size: 1.45rem;
-          letter-spacing: 1px;
-          border-bottom: 1px solid rgba(0,0,0,0.03);
-        }
-        
-        .mobile-offcanvas .mobile-menu-toggle {
-          width: 100%;
-          text-align: left;
-          background: transparent;
-          border: 0;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          color: var(--cosmic-text);
-          font-size: 1.45rem;
-          font-weight: 800;
-          padding: 18px 20px;
-          border-bottom: 1px solid rgba(0,0,0,0.03);
-        }
-        
-        .mobile-offcanvas .mobile-submenu {
-          padding-left: 15px;
-          border-left: 1px solid #f1f5f9;
-        }
-        
-        .mobile-offcanvas .mobile-submenu .nav-link {
-          font-weight: 500;
-          opacity: 0.8;
-          padding: 10px 12px;
-        }
-        
-        .mobile-offcanvas .btn-consult-header {
-          background: var(--cosmic-gradient);
-          color: #fff !important;
-          text-align: center;
-          display: block;
-        }
-
-        .btn-mobile-cta {
-          padding: 16px 20px;
-          border-radius: 15px;
-          font-weight: 800;
-          font-size: 1rem;
-          text-transform: uppercase;
-          letter-spacing: 1.5px;
-          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-          border: none;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none !important;
-          position: relative;
-          overflow: hidden;
-        }
-
-        @keyframes shimmerEffect {
-          0% { background-position: -200% 0; }
-          100% { background-position: 200% 0; }
-        }
-
-        .btn-mobile-cta.primary-cta {
-          background: linear-gradient(90deg, #ff416c, #ff4b2b, #ff8c00, #ff4b2b, #ff416c);
-          background-size: 200% auto;
-          color: #fff !important;
-          box-shadow: 0 10px 25px rgba(255, 75, 43, 0.4);
-          animation: shimmerEffect 4s linear infinite;
-        }
-
-        .btn-mobile-cta.secondary-cta {
-          background: #000;
-          color: #fff !important;
-          box-shadow: 0 10px 25px rgba(0,0,0,0.2);
-          border: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .btn-mobile-cta i {
-          font-size: 1.2rem;
-          filter: drop-shadow(0 2px 4px rgba(0,0,0,0.2));
-        }
-
-        .btn-mobile-cta:active {
-          transform: scale(0.95) translateY(2px);
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* Modal - Original Colors Maintained */
-        .modal-content {
-          background: var(--cosmic-white) !important;
-          border: none !important;
-          border-radius: 24px !important;
-          box-shadow: 0 25px 60px rgba(0,0,0,0.1) !important;
-        }
-        
-        .modal-header {
-          border-bottom: 1px solid #f1f5f9 !important;
-          padding: 20px 25px !important;
-        }
-        
-        .modal-title {
-          font-weight: 800 !important;
-          color: var(--cosmic-text) !important;
-          font-family: 'Merriweather Sans', serif;
-          color: #ff6a00 !important;
-        }
-        
-        .modal-body {
-          padding: 25px !important;
-        }
-        
-        .consultation-banner-wrapper {
-          position: relative;
-          border-radius: 15px;
-          overflow: hidden;
-          margin-bottom: 20px;
-        }
-        
-        .consultation-banner-wrapper img {
-          width: 100%;
-          height: auto;
-          object-fit: cover;
-        }
-        
-        .banner-overlay {
-          position: absolute;
-          bottom: 0;
-          left: 0;
-          right: 0;
-          padding: 20px;
-          background: linear-gradient(to top, rgba(255,255,255,0.95), transparent);
-        }
-        
-        .btn-primary {
-          background: var(--cosmic-gradient);
-          border: none;
-          font-weight: 800;
-          padding: 12px;
-          border-radius: 50px;
-          color: white;
-        }
-        
-        .btn-primary:hover {
-          background: var(--cosmic-gradient);
-          opacity: 0.9;
-        }
-        
-        /* Dropdown Styles - Original */
-        .dropdown-menu {
-          border-radius: 16px;
-          border: 1px solid rgba(0,0,0,0.05);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-        
-        .dropdown-item {
-          font-size: 16px;
-          transition: all 0.2s;
-        }
-        
-        .dropdown-item:hover {
-          background: linear-gradient(135deg, #fff0f5, #fff5eb);
-          color: var(--cosmic-accent-pink);
-        }
-
-        /* Utility */
-        .w-100 {
-          width: 100% !important;
-        }
-      `}</style>
-
-      {/* Book Consultation Modal */}
       <div className="modal fade" id="registerModal" tabIndex="-1" aria-hidden="true">
         <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content">
-            <div className="modal-header">
-              <h5 className="modal-title">Book Consultation</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '24px' }}>
+            <div className="modal-header border-0 pb-0">
+              <h5 className="modal-title fw-bold">✨ Book Consultation</h5>
+              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
             </div>
             <div className="modal-body p-4">
-              <div className="consultation-banner-wrapper mb-4">
-                <img src="/images/consultation_banner.png" alt="Consultation" />
-                <div className="banner-overlay">
-                  <h4>Expert Private Consultation</h4>
-                  <p>Gain deep insights and solutions from our master astrologers.</p>
-                </div>
-              </div>
               <form>
                 <div className="mb-3">
-                  <label className="form-label">Full Name</label>
-                  <input type="text" className="form-control" placeholder="Enter your name" />
+                  <label className="form-label fw-semibold small">Full Name</label>
+                  <input type="text" className="form-control rounded-3" placeholder="Enter your name" required />
                 </div>
                 <div className="mb-3">
-                  <label className="form-label">Email Address</label>
-                  <input type="email" className="form-control" placeholder="Enter your email" />
+                  <label className="form-label fw-semibold small">Email Address</label>
+                  <input type="email" className="form-control rounded-3" placeholder="Enter your email" required />
                 </div>
-                <div className="mb-3">
-                  <label className="form-label">Phone Number</label>
-                  <input type="tel" className="form-control" placeholder="Enter your phone" />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label">Consultation Type</label>
-                  <select className="form-select">
-                    <option>Select consultation type</option>
+                <div className="mb-4">
+                  <label className="form-label fw-semibold small">Consultation Type</label>
+                  <select className="form-select rounded-3">
+                    <option>Select type</option>
                     <option>Personal Horoscope</option>
                     <option>Marriage/Relationship</option>
                     <option>Career & Business</option>
-                    <option>Muhurat Timing</option>
-                    <option>Health Astrology</option>
                   </select>
                 </div>
-                <div className="mb-4">
-                  <label className="form-label">Your Message</label>
-                  <textarea className="form-control" rows="3" placeholder="Describe your concern briefly..."></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary w-100 py-3">CONFIRM BOOKING</button>
+                <button type="submit" className="btn btn-primary w-100 py-3 rounded-pill fw-bold" style={{ background: 'var(--primary-color)' }}>CONFIRM BOOKING</button>
               </form>
             </div>
           </div>

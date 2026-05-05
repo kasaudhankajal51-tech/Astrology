@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet"/>
     <link href="/css/all.min.css" rel="stylesheet">
     <link href="/css/style.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -22,131 +22,144 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
     <style>
       :root {
-        --cosmic-accent: #ff6a00;
-        --cosmic-accent-orange: #ff8c00;
-        --cosmic-accent-pink: #e31b7a;
-        --cosmic-gradient: linear-gradient(135deg, #e31b7a, #ff6a00, #ffb347);
-        --cosmic-accent-soft: #ffe4f0;
-        --cosmic-text: #1a1a1a;
-        --cosmic-text-muted: #4a4a4a;
-        --glass-border: #e0c8b8;
-        --premium-shadow: 0 10px 25px rgba(0,0,0,0.08);
-        --cosmic-bg: #fffbf5;
-        --cosmic-white: #ffffff;
+        --primary-color: #8B4A2F;
+        --bg-color: #F5EDE4;
+        --card-color: #FFF8F2;
+        --accent-color: #C8A27A;
+        --text-main: #000000;
+        --text-muted: #332B24;
+        --text-heading: #2A150C;
+        --text-card-heading: #1A120D;
+        --text-content: #111111;
+        --glass-border: #E5D5C8;
+        --premium-shadow: 0 12px 30px rgba(90, 46, 27, 0.08);
+        
+        --font-serif: 'Playfair Display', serif;
+        --font-sans: 'Poppins', 'Inter', sans-serif;
       }
       
       body {
-        background-color: var(--cosmic-bg) !important;
-        color: var(--cosmic-text) !important;
-        font-family: 'Inter', sans-serif;
-        font-size: 1.1rem;
+        background-color: var(--bg-color) !important;
+        color: var(--text-content) !important;
+        font-family: var(--font-sans);
+        font-size: 15px;
+        line-height: 1.6;
         overflow-x: hidden;
       }
       
-      input[type="date"], input[type="time"] {
-        color-scheme: light;
+      h1 {
+        font-family: var(--font-serif) !important;
+        font-size: clamp(42px, 5vw, 48px) !important;
+        font-weight: 700 !important;
+        color: var(--text-heading) !important;
+        line-height: 1.2;
+        margin-bottom: 1.5rem;
       }
-      
-      /* Global Sleek Form Controls Override */
-      .form-control, .form-select, .form-control-custom {
-        background-color: var(--cosmic-white) !important;
-        border: 1px solid var(--glass-border) !important;
-        color: var(--cosmic-text) !important;
-        border-radius: 14px !important;
-        padding: 12px 18px !important;
-        transition: all 0.3s ease !important;
-        font-family: 'Inter', sans-serif;
-        font-size: 1.05rem !important;
+
+      h2, .section-title {
+        font-family: var(--font-serif) !important;
+        font-size: clamp(32px, 4vw, 38px) !important;
+        font-weight: 600 !important;
+        color: var(--text-heading) !important;
       }
-      
-      .form-control:focus, .form-select:focus, .form-control-custom:focus {
-        background-color: var(--cosmic-white) !important;
-        border-color: var(--cosmic-accent-pink) !important;
-        box-shadow: 0 0 0 4px var(--cosmic-accent-soft) !important;
-        outline: none !important;
+
+      h3, .card-title {
+        font-family: var(--font-serif) !important;
+        font-size: 24px !important;
+        font-weight: 600 !important;
+        color: var(--text-card-heading) !important;
       }
-      
-      .form-control::placeholder {
-        color: #94a3b8 !important;
-        opacity: 0.7;
+
+      .section-subtitle, .sub-heading {
+        font-family: var(--font-sans) !important;
+        font-size: 18px !important;
+        font-weight: 500 !important;
+        color: var(--text-muted) !important;
+        text-transform: none !important;
+        letter-spacing: 0.5px !important;
+        font-style: normal !important;
       }
-  
-      .form-label {
-        font-weight: 700;
-        letter-spacing: 0.5px;
-        color: var(--cosmic-text-muted);
-        text-transform: uppercase;
-        font-size: 0.85rem;
-        margin-bottom: 8px;
-        display: block;
+
+      p {
+        font-family: var(--font-sans) !important;
+        font-size: 15px !important;
+        font-weight: 400 !important;
+        color: var(--text-content) !important;
       }
   
       /* Global Card / Glass Panel */
-      .card, .glass-panel, .sidebar-widget {
-        background: var(--cosmic-white) !important;
+      .card, .glass-panel, .sidebar-widget, .t-card {
+        background: var(--card-color) !important;
         border: 1px solid var(--glass-border) !important;
-        border-radius: 24px !important;
+        border-radius: 20px !important;
         box-shadow: var(--premium-shadow) !important;
+        transition: transform 0.3s ease, box-shadow 0.3s ease !important;
       }
   
       .card-header {
-        background: var(--cosmic-white) !important;
+        background: transparent !important;
         border-bottom: 1px solid var(--glass-border) !important;
       }
       
-      .card-title, h1, h2, h3, h4, h5, h6 {
-        font-family: 'Playfair Display', serif !important;
-        color: var(--cosmic-text);
-        font-weight: 700;
-      }
-  
       /* Buttons */
-      .btn-primary, .btn-dark, .btn-submit, .mystic-btn-primary, .cta-reg-btn {
-        background: var(--cosmic-gradient) !important;
+      .btn-primary, .btn-dark, .btn-submit, .mystic-btn-primary, .cta-reg-btn, .t-btn {
+        background: var(--primary-color) !important;
         border: none !important;
-        color: white !important;
-        border-radius: 50px !important;
-        padding: 14px 36px !important;
-        font-weight: 800 !important;
-        text-transform: uppercase !important;
-        letter-spacing: 1px !important;
-        box-shadow: 0 6px 15px rgba(227, 27, 122, 0.25) !important;
-        transition: all 0.3s !important;
-        font-family: 'Inter', sans-serif;
-        font-size: 1rem;
+        color: #FFFFFF !important;
+        border-radius: 12px !important;
+        padding: 14px 32px !important;
+        font-weight: 600 !important;
+        font-family: var(--font-sans) !important;
+        font-size: 16px !important;
+        text-transform: none !important;
+        letter-spacing: 0.5px !important;
+        box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2) !important;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
       }
   
-      .btn-primary:hover, .btn-dark:hover, .btn-submit:hover, .mystic-btn-primary:hover, .cta-reg-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 10px 25px rgba(227, 27, 122, 0.4) !important;
-        color: white !important;
+      .btn-primary:hover, .btn-dark:hover, .btn-submit:hover, .mystic-btn-primary:hover, .cta-reg-btn:hover, .t-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(139, 74, 47, 0.3) !important;
+        background-color: #723c26 !important;
+        color: #FFFFFF !important;
       }
   
+      .form-control, .form-select, .t-input {
+        background-color: #FFFFFF !important;
+        border: 1px solid var(--glass-border) !important;
+        color: var(--text-main) !important;
+        border-radius: 12px !important;
+        padding: 12px 16px !important;
+        font-family: var(--font-sans) !important;
+        font-size: 15px !important;
+      }
+
+      .form-control:focus, .t-input:focus {
+        border-color: var(--accent-color) !important;
+        box-shadow: 0 0 0 4px rgba(200, 162, 122, 0.15) !important;
+      }
+
       .text-gradient {
-        background: var(--cosmic-gradient);
+        background: linear-gradient(135deg, #8B4A2F, #C8A27A);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
-  
-      .section-title {
-        font-family: 'Playfair Display', serif;
-        font-size: clamp(2.5rem, 6vw, 4rem);
+
+      /* Global Button Styles */
+      .btn-primary, .btn-consult-header, .btn-mobile-cta.primary-cta {
+        background-color: var(--primary-color);
+        color: #FFFFFF;
+        border: none;
         font-weight: 700;
-        color: var(--cosmic-text);
-      }
-  
-      .section-subtitle {
-        color: #000;
-        text-transform: none;
-        letter-spacing: 1px;
-        font-weight: 900;
-        font-style: italic;
-        font-size: 1.4rem;
-        display: block;
-        font-family: 'Playfair Display', serif !important;
+        transition: all 0.3s ease;
       }
 
+      .btn-primary:hover, .btn-consult-header:hover {
+        background-color: #000000;
+        transform: translateY(-2px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      }
     </style>
   </head>
   <body>

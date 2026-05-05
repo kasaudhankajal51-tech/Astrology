@@ -46,7 +46,6 @@ function HeroSection({ onJoinNow }) {
               <div className="mentor-header">
                 <img src="/images/mentor-ava.png" alt="Mentor" className="mentor-pic-small" />
                 <div className="mentor-title-box">
-                  <h3>Astro Ava</h3>
                   <p>Expert in Vedic astrology and other disciplines of astrology, recognized as India's leading voice in astrology.</p>
                 </div>
               </div>

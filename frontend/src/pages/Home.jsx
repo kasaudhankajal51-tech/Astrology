@@ -426,20 +426,53 @@ function Home() {
         <div className="container">
           <div className="banner-text-home">
             <div className="row align-items-center g-5">
-              <div className="col-lg-6">
-                <span className="spm-small" data-aos="fade-up">The Complete Guide To Astrology</span>
-                <h1 className="banner-title my-3" data-aos="fade-down">
-                  Let the Stars Shape<br/>
-                  <span className="text-gradient">Your Journey</span>
+              <div className="col-lg-6 position-relative z-1">
+                {/* Floating Ethereal Elements */}
+                <div className="ethereal-sparkle s-1">✦</div>
+                <div className="ethereal-sparkle s-2">✧</div>
+                
+                <div className="cosmic-badge" data-aos="fade-down" data-aos-delay="100">
+                  <span className="badge-glow"></span>
+                  <i className="fas fa-moon me-2"></i> Premium Astrological Guidance
+                </div>
+                
+                <h1 className="banner-title my-4" data-aos="fade-up" data-aos-delay="200">
+                  Decode the Blueprint of<br/>
+                  <span className="text-gradient drop-glow">Your Cosmic Destiny</span>
                 </h1>
-                <p className="banner-desc mb-5" data-aos="fade-up">
-                  Discover the cosmic narrative written in the stars. Learn astrology
-                  online and gain the skills to understand planetary influences,
-                  houses, and signs. Predict outcomes, guide life journeys, and explore the
-                  mysteries of yourself and others.
+                
+                <p className="banner-desc mb-4" data-aos="fade-up" data-aos-delay="300">
+                  Step into a realm of profound clarity. Our master astrologers decode your planetary alignments to reveal life-altering insights, empowering you to navigate career, love, and spiritual growth with absolute confidence.
                 </p>
-                <div data-aos="fade-up">
-                  <button onClick={handleOpenModal} className="btn mystic-btn-primary">ENROLL NOW <i className="fas fa-arrow-right ms-2"></i></button>
+
+                <ul className="banner-feature-list" data-aos="fade-up" data-aos-delay="400">
+                  <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
+                  <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
+                  <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
+                </ul>
+                
+                <div className="banner-btn-row mt-5" data-aos="fade-up" data-aos-delay="500">
+                  <button onClick={handleOpenModal} className="btn mystic-btn-primary">
+                    Book Consultation <i className="fas fa-sparkles ms-2"></i>
+                  </button>
+                  <button className="btn mystic-btn-ghost">
+                    Explore Courses
+                  </button>
+                </div>
+
+                <div className="trust-indicator mt-5" data-aos="fade-up" data-aos-delay="600">
+                  <div className="trust-avatars">
+                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" />
+                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
+                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="user" />
+                    <div className="avatar-plus">+10k</div>
+                  </div>
+                  <div className="trust-text">
+                    <div className="stars">
+                      <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
+                    </div>
+                    <span>Trusted by seekers globally</span>
+                  </div>
                 </div>
               </div>
               <div className="col-lg-6 d-none d-lg-flex justify-content-center">
@@ -907,16 +940,145 @@ function Home() {
           font-family: var(--font-sans);
         }
 
-        .spm-small {
+        .cosmic-badge {
+          display: inline-flex;
+          align-items: center;
+          background: rgba(139, 74, 30, 0.08);
+          border: 1px solid var(--accent-color);
+          padding: 8px 20px;
+          border-radius: 50px;
+          color: var(--primary-color);
+          font-weight: 700;
+          font-size: 0.9rem;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          position: relative;
+          overflow: hidden;
+          margin-bottom: 20px;
+        }
+
+        .badge-glow {
+          position: absolute;
+          top: 0; left: -100%;
+          width: 50%; height: 100%;
+          background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+          animation: badgeShine 3s infinite;
+        }
+
+        @keyframes badgeShine { 100% { left: 200%; } }
+
+        .drop-glow {
+          filter: drop-shadow(0 0 15px rgba(200, 131, 42, 0.3));
+        }
+
+        .ethereal-sparkle {
+          position: absolute;
+          color: var(--accent-color);
+          font-size: 24px;
+          opacity: 0.5;
+          animation: twinkle 4s ease-in-out infinite;
+        }
+        .s-1 { top: -20px; left: 10%; }
+        .s-2 { bottom: 20%; right: -5%; font-size: 32px; animation-delay: 1s; }
+
+        @keyframes twinkle { 0%, 100% { opacity: 0.2; transform: scale(0.8); } 50% { opacity: 0.8; transform: scale(1.2); } }
+
+        .banner-feature-list {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .banner-feature-list li {
+          font-size: 1.1rem;
+          color: var(--text-heading);
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          font-weight: 600;
+        }
+
+        .banner-feature-list i {
+          color: var(--accent-color);
+          font-size: 1.2rem;
+        }
+
+        .banner-btn-row {
+          display: flex;
+          gap: 20px;
+          align-items: center;
+        }
+        .mystic-btn-ghost {
+          background: transparent;
+          color: var(--text-main);
+          font-weight: 700;
+          padding: 12px 25px;
+          border: 1.5px solid var(--glass-border);
+          border-radius: 12px;
+          transition: 0.3s;
+          font-family: var(--font-sans);
+        }
+        .mystic-btn-ghost:hover {
+          background: rgba(139, 74, 30, 0.05);
+          border-color: var(--primary-color);
+          color: var(--primary-color);
+        }
+
+        .trust-indicator {
+          display: flex;
+          align-items: center;
+          gap: 15px;
+        }
+
+        .trust-avatars {
+          display: flex;
+          align-items: center;
+        }
+
+        .trust-avatars img {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          border: 2px solid #fff;
+          margin-left: -12px;
+          box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .trust-avatars img:first-child { margin-left: 0; }
+
+        .avatar-plus {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: var(--bg-color);
+          border: 2px solid var(--accent-color);
+          margin-left: -12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          font-size: 0.8rem;
+          font-weight: 700;
+          color: var(--primary-color);
+          z-index: 1;
+        }
+
+        .trust-text {
+          display: flex;
+          flex-direction: column;
+          gap: 2px;
+        }
+
+        .trust-text .stars i {
+          color: #F59E0B;
+          font-size: 0.8rem;
+        }
+
+        .trust-text span {
+          font-size: 0.85rem;
           color: var(--text-muted);
           font-weight: 600;
-          font-style: normal;
-          text-transform: uppercase;
-          letter-spacing: 2px;
-          font-size: 1rem;
-          margin-bottom: 20px;
-          display: block;
-          font-family: var(--font-sans);
         }
 
         /* Cosmic Orbit */
@@ -934,7 +1096,7 @@ function Home() {
           width: 480px;
           height: 480px;
           border-radius: 50%;
-          border: 1px dashed var(--glass-border);
+          border: 1px dashed #5C2D12;
           animation: spinRight 40s linear infinite;
         }
 
@@ -943,8 +1105,8 @@ function Home() {
           width: 320px;
           height: 320px;
           border-radius: 50%;
-          border: 1px dashed var(--accent-color);
-          opacity: 0.3;
+          border: 1px dashed #5C2D12;
+          opacity: 0.6;
           animation: spinLeft 25s linear infinite;
         }
 
@@ -952,8 +1114,8 @@ function Home() {
           position: absolute;
           width: 65px;
           height: 65px;
-          background: #FFFFFF;
-          border: 1.5px solid var(--glass-border);
+          background: #5C2D12;
+          border: 1.5px solid var(--accent-color);
           border-radius: 50%;
           display: flex;
           align-items: center;
@@ -964,8 +1126,8 @@ function Home() {
 
         .icon-block img {
           width: 50%;
-          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%);
-          opacity: 0.7;
+          filter: brightness(0) invert(1);
+          opacity: 0.9;
         }
 
         .icon-block:hover {

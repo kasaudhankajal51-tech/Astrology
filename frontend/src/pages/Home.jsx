@@ -189,22 +189,22 @@ const AstrologyCourses = () => {
     {
       id: 1, level: "Beginner Level", title: "Foundation in Astrology",
       desc: "Start your journey. Learn the basics of planets, signs, houses and their impact on our lives.",
-      icon: "☸", price: "₹699", original: "₹4100", SVG: Card1SVG,
+      icon: "☸", price: "₹699", original: "₹4100", SVG: Card1SVG, link: "/vedic-course"
     },
     {
       id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
       desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
-      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG,
+      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/vedic-course"
     },
     {
       id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
       desc: "Master the precision of KP system with practical techniques for accurate predictions.",
-      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true,
+      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/advanced-astrology"
     },
     {
       id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
       desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
-      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG,
+      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/predictive-astrology"
     },
   ];
 
@@ -253,19 +253,20 @@ const AstrologyCourses = () => {
         .svgd { position: absolute; opacity: .07; pointer-events: none; }
 
         @media (max-width: 480px) {
-          .aw { padding: 3rem 1.5rem; }
-          .ah h2 { font-size: 2.2rem; }
+          .aw { padding: 3rem 1rem; }
+          .ah h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
           .cc { max-width: 100%; }
-          .cb { text-align: left; }
+          .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
-          .ctitle { text-align: left; }
-          .cdesc { text-align: left; }
-          .price-hero { text-align: left; }
+          .ctitle { text-align: left; font-size: 1.25rem; }
+          .cdesc { text-align: left; font-size: 0.85rem; }
+          .price-hero { text-align: left; font-size: 1.4rem; }
           .cinstr { justify-content: flex-start; }
-          .ico { left: 1.5rem; transform: none; }
-          .ftt { font-size: 1.1rem; }
-          .fts { font-size: 0.95rem; }
-          .fic { width: 55px; height: 55px; font-size: 22px; }
+          .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
+          .ftt { font-size: 1.05rem; }
+          .fts { font-size: 0.9rem; }
+          .fic { width: 50px; height: 50px; font-size: 20px; }
+          .btnrow { grid-template-columns: 1fr; }
         }
       `}</style>
 
@@ -285,8 +286,8 @@ const AstrologyCourses = () => {
         </div>
 
         <div className="cg">
-          {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold }) => (
-            <div key={id} className="cc">
+          {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold, link }) => (
+            <div key={id} className="cc" onClick={() => navigate(link)}>
               <div className="ci" style={{position:"relative"}}>
                 <SVG />
                 <span className="badge-discount">Mega DISCOUNT</span>
@@ -302,14 +303,14 @@ const AstrologyCourses = () => {
                 <div className="divr"/>
                 <div className="cinstr">
                   <div className="iavt">MS</div>
-                  <div>
+                  <div style={{ textAlign: 'left' }}>
                     <p className="iname">Acharya Meera Sharma</p>
                     <p className="iexp">20+ Years of Experience</p>
                   </div>
                 </div>
                 <div className="btnrow">
-                  <button className="btn-read">Read More</button>
-                  <button className="btn-buy">Buy Now →</button>
+                  <button className="btn-read" onClick={(e) => { e.stopPropagation(); navigate(link); }}>Read More</button>
+                  <button className="btn-buy" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Buy Now →</button>
                 </div>
               </div>
             </div>
@@ -1436,8 +1437,8 @@ function Home() {
           color: #3A1900;
         }
         .float-badge.fb-1 { bottom: 15%; left: -10%; animation: floatBadge 4s ease-in-out infinite alternate; }
-        .float-badge.fb-2 { top: 30%; right: -25%; animation: floatBadge 5s ease-in-out infinite alternate-reverse; }
-        .float-badge.fb-3 { bottom: 5%; right: -15%; animation: floatBadge 4.5s ease-in-out infinite alternate; }
+        .float-badge.fb-2 { top: 30%; right: -20%; animation: floatBadge 5s ease-in-out infinite alternate-reverse; }
+        .float-badge.fb-3 { bottom: 5%; right: -10%; animation: floatBadge 4.5s ease-in-out infinite alternate; }
         
         .fb-icon i {
           font-size: 1.5rem;
@@ -1919,69 +1920,78 @@ function Home() {
 
         /* Responsive Breakpoints */
         @media (max-width: 1200px) {
-          .banner-title { font-size: 3.5rem; }
-          .cosmic-orbit-container { width: 400px; height: 400px; }
+          .banner-title { font-size: clamp(3rem, 6vw, 4rem); }
+          .cosmic-orbit-container, .zodiac-hero-graphic { width: 400px; height: 400px; }
           .big-circle { width: 380px; height: 380px; }
           .small-circle { width: 250px; height: 250px; }
+          .rotating-zodiac-mandala { width: 85%; height: 85%; }
         }
 
         @media (max-width: 991px) {
           .banner-section { text-align: center; padding: 120px 0 80px; }
           .banner-desc { margin: 0 auto 30px; }
-          .img-box01 { margin-bottom: 80px; }
+          .img-box01 { margin-bottom: 80px; height: 450px; }
           .experience-badge { left: 50%; transform: translateX(-50%); bottom: -30px; }
-          .cosmic-orbit-container { width: 350px; height: 350px; margin: 40px auto 0; }
+          .cosmic-orbit-container, .zodiac-hero-graphic { width: 350px; height: 350px; margin: 40px auto 0; }
           .big-circle { width: 320px; height: 320px; }
           .small-circle { width: 220px; height: 220px; }
           .icon-block { width: 45px; height: 45px; }
-          .section-title { font-size: 2.8rem; }
+          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem); }
+          .rotating-zodiac-mandala { width: 90%; height: 90%; right: 0; }
+          .float-badge { display: none; }
+          .banner-btn-row { justify-content: center; }
         }
 
         @media (max-width: 767px) {
-          .banner-section { padding-top: 100px; }
-          .banner-title { font-size: 2.5rem; }
-          .banner-desc { font-size: 1.1rem; }
-          .about-part-section, .services-section, .testimonial-section { padding: 80px 0; }
-          .section-title { font-size: 2.2rem; }
+          .banner-section { padding-top: 100px; min-height: auto; }
+          .banner-title { font-size: clamp(2rem, 8vw, 2.5rem); }
+          .banner-desc { font-size: 1.05rem; }
+          .about-part-section, .services-section, .testimonial-section { padding: 60px 0; }
+          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem); }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
-          .testimonial-text { font-size: 1.15rem; min-height: 80px; }
-          .section-badge { font-size: 1rem; padding: 8px 20px; }
-          .section-description { font-size: 1.1rem !important; max-width: 100%; }
+          .testimonial-text { font-size: 1rem; min-height: 80px; }
+          .section-badge { font-size: 0.9rem; padding: 8px 18px; }
+          .section-description { font-size: 1rem !important; max-width: 100%; }
           .nav-btn { width: 32px; height: 32px; }
-          .left-btn { left: -10px; }
-          .right-btn { right: -10px; }
-          .cosmic-orbit-container { width: 280px; height: 280px; }
+          .left-btn { left: 5px; }
+          .right-btn { right: 5px; }
+          .cosmic-orbit-container, .zodiac-hero-graphic { width: 280px; height: 280px; }
           .big-circle { width: 260px; height: 260px; }
           .small-circle { width: 180px; height: 180px; }
           .icon-block { width: 40px; height: 40px; }
-          .experience-badge { padding: 20px 25px; border-radius: 18px; }
-          .experience-badge h4 { font-size: 2rem; }
+          .experience-badge { padding: 15px 20px; border-radius: 18px; bottom: -20px; }
+          .experience-badge h4 { font-size: 1.8rem; }
+          .banner-btn-row { flex-direction: column; gap: 12px; }
+          .banner-btn-row .btn { width: 100%; max-width: 300px; }
+          .img-box01 { height: 400px; }
         }
 
         @media (max-width: 576px) {
-          .banner-title { font-size: 2.2rem; }
-          .testimonial-card { flex: 0 0 260px; }
+          .banner-title { font-size: clamp(1.8rem, 10vw, 2.2rem); }
+          .testimonial-card { flex: 0 0 250px; }
           .video-container { height: 140px; }
           .testimonial-content { padding: 16px; }
           .client-avatar { width: 38px; height: 38px; }
-          .client-details h4 { font-size: 1.1rem; }
-          .rating i { font-size: 0.9rem; }
-          .cosmic-orbit-container { width: 240px; height: 240px; }
-          .big-circle { width: 220px; height: 220px; }
-          .small-circle { width: 150px; height: 150px; }
-          .icon-block { width: 35px; height: 35px; }
-          .action-btns { flex-direction: column; width: 100%; max-width: 300px; margin: 0 auto; }
-          .mystic-btn-primary { width: 100%; text-align: center; }
+          .client-details h4 { font-size: 1rem; }
+          .rating i { font-size: 0.8rem; }
+          .cosmic-orbit-container, .zodiac-hero-graphic { width: 220px; height: 220px; }
+          .big-circle { width: 200px; height: 200px; }
+          .small-circle { width: 140px; height: 140px; }
+          .icon-block { width: 32px; height: 32px; }
+          .mystic-btn-primary { width: 100%; text-align: center; padding: 14px 30px; font-size: 0.95rem; }
           .mystic-btn-outline { 
             width: auto !important; 
             padding: 10px 25px !important; 
-            font-size: 0.95rem !important;
+            font-size: 0.9rem !important;
             margin: 0 auto;
             display: inline-block;
           }
-          .experience-badge { width: 160px; padding: 15px; }
-          .experience-badge h4 { font-size: 1.8rem; }
+          .experience-badge { width: 140px; padding: 12px; }
+          .experience-badge h4 { font-size: 1.6rem; }
+          .moon-img { height: 160px; }
+          .floating-element { top: 80px; height: 280px; }
+          .bottom-img { height: 200px; }
         }
       `}</style>
     </>

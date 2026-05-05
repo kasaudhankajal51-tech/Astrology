@@ -430,12 +430,13 @@ function VedicCourse() {
           min-height: 100vh;
           color: #1a1a2e;
           font-family: 'Be Vietnam Pro', sans-serif;
+          overflow-x: hidden;
         }
 
         /* Hero Section */
         .hero-fullwidth-light {
           position: relative;
-          padding: 80px 0 60px;
+          padding: 60px 0 40px;
           overflow: hidden;
           background: linear-gradient(135deg, #ffffff 0%, #f8f4e8 100%);
         }
@@ -450,12 +451,13 @@ function VedicCourse() {
           width: fit-content;
           margin: 0 auto 25px;
           align-items: center;
+          justify-content: center;
           gap: 10px;
           background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
           border: 1px solid rgba(255,106,0,0.3);
           padding: 10px 24px;
           border-radius: 50px;
-          font-size: 13px;
+          font-size: clamp(11px, 2vw, 13px);
           font-weight: 600;
           color: #e31b7a;
           backdrop-filter: blur(10px);
@@ -480,7 +482,7 @@ function VedicCourse() {
         }
 
         .hero-infographic-light img {
-          height: 140px;
+          height: clamp(80px, 15vw, 140px);
           width: auto;
           filter: drop-shadow(0 0 20px rgba(255,106,0,0.3));
           animation: float-slow-light 4s ease-in-out infinite;
@@ -493,7 +495,7 @@ function VedicCourse() {
 
         .hero-title-light {
           font-family: 'Playfair Display', serif;
-          font-size: 3.8rem;
+          font-size: clamp(2.2rem, 6vw, 3.8rem);
           font-weight: 800;
           line-height: 1.2;
           margin-bottom: 20px;
@@ -516,11 +518,13 @@ function VedicCourse() {
         }
 
         .hero-desc-light {
-          font-size: 1.3rem;
+          font-size: clamp(1rem, 3vw, 1.3rem);
           color: #4a4a6a;
           line-height: 1.7;
           margin-bottom: 30px;
           max-width: 650px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .hero-highlights-light {
@@ -528,6 +532,9 @@ function VedicCourse() {
           grid-template-columns: repeat(2, 1fr);
           gap: 15px;
           margin-bottom: 30px;
+          max-width: 600px;
+          margin-left: auto;
+          margin-right: auto;
         }
 
         .h-item-light {
@@ -537,7 +544,7 @@ function VedicCourse() {
           padding: 12px 18px;
           display: flex;
           align-items: center;
-          gap: 15px;
+          gap: 12px;
           transition: all 0.3s ease;
           box-shadow: 0 2px 8px rgba(0,0,0,0.04);
         }
@@ -549,7 +556,7 @@ function VedicCourse() {
         }
 
         .h-icon-light {
-          font-size: 28px;
+          font-size: clamp(20px, 4vw, 28px);
         }
 
         .h-text-wrap-light {
@@ -558,7 +565,7 @@ function VedicCourse() {
 
         .h-num-light {
           display: block;
-          font-size: 1.5rem;
+          font-size: clamp(1.2rem, 3vw, 1.5rem);
           font-weight: 800;
           color: #ff6a00;
           line-height: 1;
@@ -566,7 +573,7 @@ function VedicCourse() {
 
         .h-label-light {
           display: block;
-          font-size: 12px;
+          font-size: 11px;
           color: #6b6b8a;
           text-transform: uppercase;
           letter-spacing: 0.5px;
@@ -575,7 +582,8 @@ function VedicCourse() {
         .hero-cta-row-light {
           display: flex;
           align-items: center;
-          gap: 25px;
+          justify-content: center;
+          gap: 20px;
           flex-wrap: wrap;
         }
 
@@ -584,11 +592,13 @@ function VedicCourse() {
           background-size: 200% 200%;
           color: #fff;
           border: none;
-          padding: 16px 40px;
+          padding: 14px 35px;
           border-radius: 50px;
           cursor: pointer;
           transition: all 0.3s ease;
           box-shadow: 0 10px 25px rgba(227,27,122,0.3);
+          width: 100%;
+          max-width: 320px;
         }
 
         .btn-primary-light:hover {
@@ -599,13 +609,13 @@ function VedicCourse() {
 
         .btn-primary-light span {
           display: block;
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           font-weight: 800;
         }
 
         .btn-primary-light small {
           display: block;
-          font-size: 12px;
+          font-size: 11px;
           opacity: 0.85;
           text-decoration: line-through;
         }
@@ -613,19 +623,20 @@ function VedicCourse() {
         .price-guarantee-light {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 10px;
           color: #4a4a6a;
         }
 
         .price-guarantee-light i {
-          font-size: 28px;
+          font-size: 24px;
           color: #28a745;
         }
 
         .price-guarantee-light span {
-          font-size: 12px;
+          font-size: 11px;
           line-height: 1.3;
           font-weight: 500;
+          text-align: left;
         }
 
         .hero-visual-center-light {
@@ -637,24 +648,21 @@ function VedicCourse() {
 
         .main-image-wrapper-light {
           position: relative;
-          border-radius: 24px;
+          border-radius: 20px;
           overflow: hidden;
-          box-shadow: 0 20px 50px rgba(0,0,0,0.15);
+          box-shadow: 0 20px 50px rgba(0,0,0,0.1);
         }
 
         .main-image-wrapper-light img {
           width: 100%;
-          height: 380px;
+          height: clamp(250px, 40vw, 380px);
           object-fit: cover;
         }
 
         .play-overlay-light {
           position: absolute;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background: rgba(0,0,0,0.3);
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(0,0,0,0.2);
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -663,48 +671,40 @@ function VedicCourse() {
           transition: all 0.3s ease;
         }
 
-        .play-overlay-light:hover {
-          background: rgba(0,0,0,0.2);
-        }
-
         .play-circle-light {
-          width: 70px;
-          height: 70px;
+          width: 60px;
+          height: 60px;
           background: linear-gradient(135deg, #ff6a00, #e31b7a);
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-bottom: 15px;
+          margin-bottom: 12px;
           transition: all 0.3s ease;
         }
 
-        .play-circle-light:hover {
-          transform: scale(1.1);
-        }
-
         .play-circle-light i {
-          font-size: 24px;
+          font-size: 20px;
           margin-left: 4px;
           color: white;
         }
 
         .play-overlay-light span {
-          font-size: 14px;
+          font-size: 13px;
           font-weight: 600;
           color: white;
         }
 
         /* Timeline Section */
         .timeline-section-light {
-          padding: 80px 0;
+          padding: 60px 0;
           background: #ffffff;
         }
 
         .section-title-center-light {
           font-family: 'Playfair Display', serif;
           text-align: center;
-          font-size: 2.8rem;
+          font-size: clamp(1.8rem, 5vw, 2.8rem);
           font-weight: 800;
           margin-bottom: 12px;
           color: #1a1a2e;
@@ -713,15 +713,15 @@ function VedicCourse() {
         .section-sub-light {
           text-align: center;
           color: #6b6b8a;
-          margin-bottom: 50px;
-          font-size: 1.15rem;
+          margin-bottom: 40px;
+          font-size: clamp(1rem, 2.5vw, 1.15rem);
         }
 
         .timeline-track-light {
           display: flex;
-          justify-content: space-between;
-          gap: 20px;
-          margin-bottom: 40px;
+          justify-content: center;
+          gap: clamp(10px, 3vw, 20px);
+          margin-bottom: 30px;
           position: relative;
           flex-wrap: wrap;
         }
@@ -729,39 +729,31 @@ function VedicCourse() {
         .timeline-track-light::before {
           content: '';
           position: absolute;
-          top: 28px;
-          left: 0;
-          right: 0;
+          top: 25px; left: 0; right: 0;
           height: 2px;
-          background: linear-gradient(90deg, #ff6a00, #e31b7a, #ff8c00);
+          background: linear-gradient(90deg, #ff6a00, #e31b7a);
           z-index: 0;
         }
 
-        @media (max-width: 768px) {
-          .timeline-track-light::before {
-            display: none;
-          }
-        }
-
         .timeline-node-light {
-          flex: 1;
+          flex: 0 1 auto;
           text-align: center;
           cursor: pointer;
           position: relative;
           z-index: 1;
-          min-width: 100px;
+          width: clamp(80px, 15vw, 120px);
         }
 
         .node-circle-light {
-          width: 56px;
-          height: 56px;
+          width: 50px;
+          height: 50px;
           background: #ffffff;
           border: 2px solid #e0e0e8;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          margin: 0 auto 15px;
+          margin: 0 auto 10px;
           position: relative;
           transition: all 0.3s ease;
         }
@@ -770,163 +762,67 @@ function VedicCourse() {
         .timeline-node-light:hover .node-circle-light {
           background: linear-gradient(135deg, #ff6a00, #e31b7a);
           border-color: transparent;
-          transform: scale(1.1);
-        }
-
-        .timeline-node-light.active .node-icon-light,
-        .timeline-node-light:hover .node-icon-light {
-          filter: brightness(0) invert(1);
-        }
-
-        .node-icon-light {
-          font-size: 24px;
-          transition: all 0.3s ease;
-        }
-
-        .node-ring-light {
-          position: absolute;
-          top: -5px;
-          left: -5px;
-          right: -5px;
-          bottom: -5px;
-          border: 2px solid #ff6a00;
-          border-radius: 50%;
-          animation: ring-pulse-light 2s infinite;
-        }
-
-        @keyframes ring-pulse-light {
-          0% { transform: scale(1); opacity: 1; }
-          100% { transform: scale(1.4); opacity: 0; }
         }
 
         .node-info-light h4 {
-          font-size: 1.15rem;
-          margin-bottom: 5px;
-          color: #1a1a2e;
+          font-size: clamp(10px, 2vw, 14px);
           font-weight: 700;
+          margin-bottom: 0;
         }
 
         .node-info-light p {
-          font-size: 0.95rem;
-          color: #6b6b8a;
-          margin: 0;
+          display: none;
         }
 
         .timeline-content-light {
+          background: #f8f9fc;
+          padding: 30px;
+          border-radius: 20px;
+          border: 1px solid rgba(0,0,0,0.05);
           max-width: 800px;
           margin: 0 auto;
         }
 
-        .tc-card-light {
-          background: linear-gradient(135deg, #f8f9fc, #ffffff);
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 24px;
-          padding: 40px;
-          text-align: center;
-          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
-        }
-
-        .tc-icon-light {
-          font-size: 50px;
-          display: block;
-          margin-bottom: 20px;
-        }
-
         .tc-card-light h3 {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.85rem;
-          margin-bottom: 20px;
+          font-size: 1.5rem;
+          font-weight: 800;
+          margin-bottom: 15px;
           color: #ff6a00;
         }
 
-        .tc-card-light p {
-          color: #4a4a6a;
-          line-height: 1.8;
-          font-size: 1.2rem;
-        }
-
-        /* Includes Section */
+        /* Includes Grid */
         .includes-section-light {
-          padding: 80px 0;
-          background: #f8f9fc;
+          padding: 60px 0;
+          background: #fdfdfd;
         }
 
         .includes-grid-light {
           display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 25px;
-        }
-
-        @media (max-width: 991px) {
-          .includes-grid-light {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 576px) {
-          .includes-grid-light {
-            grid-template-columns: 1fr;
-          }
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          gap: 20px;
+          margin-top: 30px;
         }
 
         .include-card-light {
           background: #ffffff;
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 20px;
           padding: 30px;
-          text-align: center;
+          border-radius: 20px;
+          border: 1px solid rgba(0,0,0,0.06);
           transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+          position: relative;
+          overflow: hidden;
         }
 
         .include-card-light:hover {
           transform: translateY(-5px);
-          border-color: rgba(255,106,0,0.3);
-          box-shadow: 0 20px 35px rgba(0,0,0,0.1);
-        }
-
-        .include-card-light.premium {
-          background: linear-gradient(135deg, #fff8f0, #ffffff);
-          border-color: rgba(255,106,0,0.2);
+          border-color: #ff6a00;
+          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
 
         .ic-icon-light {
-          width: 60px;
-          height: 60px;
-          background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
-          border-radius: 18px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto 20px;
-        }
-
-        .ic-icon-light i {
-          font-size: 26px;
+          font-size: 32px;
           color: #ff6a00;
-        }
-
-        .include-card-light h4 {
-          font-size: 1.45rem;
-          margin-bottom: 10px;
-          color: #1a1a2e;
-        }
-
-        .include-card-light p {
-          font-size: 1.1rem;
-          color: #6b6b8a;
           margin-bottom: 15px;
-          line-height: 1.5;
-        }
-
-        .ic-badge-light {
-          display: inline-block;
-          background: linear-gradient(135deg, rgba(255,106,0,0.15), rgba(227,27,122,0.1));
-          color: #e31b7a;
-          padding: 6px 16px;
-          border-radius: 30px;
-          font-size: 12px;
-          font-weight: 700;
         }
 
         /* Instructor Section */
@@ -937,542 +833,138 @@ function VedicCourse() {
 
         .instructor-image-light {
           position: relative;
+          border-radius: 24px;
+          overflow: hidden;
+          margin-bottom: 30px;
         }
 
         .instructor-image-light img {
           width: 100%;
-          max-width: 350px;
-          border-radius: 24px;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+          height: 450px;
+          object-fit: cover;
         }
 
         .exp-badge-light {
           position: absolute;
-          bottom: 20px;
-          right: 20px;
-          background: linear-gradient(135deg, #ff6a00, #e31b7a);
-          color: #fff;
-          padding: 10px 24px;
-          border-radius: 40px;
+          bottom: 20px; right: 20px;
+          background: #ff6a00;
+          color: white;
+          padding: 8px 20px;
+          border-radius: 50px;
           font-weight: 700;
           font-size: 14px;
-          box-shadow: 0 8px 20px rgba(227,27,122,0.3);
         }
 
-        .instructor-info-light {
-          padding-left: 40px;
-        }
-
+        /* Responsive Overrides */
         @media (max-width: 991px) {
-          .instructor-info-light {
-            padding-left: 0;
-            margin-top: 40px;
-            text-align: center;
-          }
-        }
-
-        .ii-label-light {
-          display: inline-block;
-          background: linear-gradient(135deg, rgba(255,106,0,0.1), rgba(227,27,122,0.08));
-          color: #e31b7a;
-          padding: 8px 24px;
-          border-radius: 30px;
-          font-size: 13px;
-          font-weight: 700;
-          margin-bottom: 20px;
-        }
-
-        .instructor-info-light h2 {
-          font-family: 'Playfair Display', serif;
-          font-size: 2.6rem;
-          margin-bottom: 20px;
-          color: #1a1a2e;
-          font-weight: 800;
-        }
-
-        .ii-desc-light {
-          font-size: 1.2rem;
-          color: #4a4a6a;
-          line-height: 1.7;
-          margin-bottom: 30px;
-        }
-
-        .ii-stats-light {
-          display: flex;
-          gap: 40px;
-          flex-wrap: wrap;
-        }
-
-        @media (max-width: 991px) {
-          .ii-stats-light {
-            justify-content: center;
-          }
-        }
-
-        .ii-stats-light div {
-          text-align: center;
-        }
-
-        .ii-stats-light strong {
-          display: block;
-          font-size: 2rem;
-          color: #ff6a00;
-          font-weight: 800;
-        }
-
-        .ii-stats-light span {
-          font-size: 13px;
-          color: #6b6b8a;
-          font-weight: 500;
-        }
-
-        /* Reviews Section */
-        .reviews-section-light {
-          padding: 80px 0;
-          background: linear-gradient(135deg, #f8f9fc, #ffffff);
-        }
-
-        .reviews-carousel-light {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 25px;
-          margin-bottom: 40px;
-        }
-
-        @media (max-width: 991px) {
-          .reviews-carousel-light {
-            grid-template-columns: 1fr;
-          }
-        }
-
-        .review-box-light {
-          background: #ffffff;
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 20px;
-          padding: 25px;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(0,0,0,0.04);
-        }
-
-        .review-box-light:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 30px rgba(0,0,0,0.08);
-          border-color: rgba(255,106,0,0.2);
-        }
-
-        .rb-header-light {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          margin-bottom: 18px;
-        }
-
-        .rb-header-light img {
-          width: 52px;
-          height: 52px;
-          border-radius: 50%;
-          object-fit: cover;
-          border: 2px solid #ff6a00;
-        }
-
-        .rb-header-light h5 {
-          margin: 0 0 5px 0;
-          font-size: 1.15rem;
-          font-weight: 700;
-          color: #1a1a2e;
-        }
-
-        .rb-stars-light {
-          color: #ffc107;
-          font-size: 13px;
-          letter-spacing: 2px;
-        }
-
-        .review-box-light > p {
-          color: #4a4a6a;
-          font-size: 1.1rem;
-          line-height: 1.6;
-          margin: 0;
-          font-style: italic;
-        }
-
-        .rating-big-light {
-          text-align: center;
-        }
-
-        .rb-num-light {
-          font-size: 4rem;
-          font-weight: 800;
-          color: #ff6a00;
-        }
-
-        .rb-total-light {
-          display: block;
-          color: #6b6b8a;
-          font-size: 1rem;
-        }
-
-        /* FAQ Section */
-        .faq-section-light {
-          padding: 60px 0;
-          background: #ffffff;
-        }
-
-        .faq-list-light {
-          max-width: 800px;
-          margin: 0 auto;
-        }
-
-        .faq-item-light {
-          background: #f8f9fc;
-          border: 1px solid rgba(0,0,0,0.06);
-          border-radius: 16px;
-          margin-bottom: 16px;
-          overflow: hidden;
-          transition: all 0.3s ease;
-        }
-
-        .faq-item-light:hover {
-          border-color: rgba(255,106,0,0.3);
-        }
-
-        .faq-q-light {
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          padding: 18px 24px;
-          cursor: pointer;
-          font-weight: 700;
-          color: #1a1a2e;
-          font-size: 1.15rem;
-        }
-
-        .faq-q-light i {
-          color: #ff6a00;
-          transition: transform 0.3s ease;
-        }
-
-        .faq-a-light {
-          padding: 0 24px 20px;
-          color: #4a4a6a;
-          font-size: 1.1rem;
-          line-height: 1.6;
-        }
-
-        /* Final CTA */
-        .final-cta-light {
-          padding: 80px 0;
-          background: linear-gradient(135deg, #f8f9fc, #f0f2f8);
-        }
-
-        .cta-box-light {
-          background: linear-gradient(135deg, #ffffff, #faf8ff);
-          border: 1px solid rgba(255,106,0,0.15);
-          border-radius: 32px;
-          padding: 50px;
-          text-align: center;
-          max-width: 900px;
-          margin: 0 auto;
-          box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+          .hero-fullwidth-light { padding: 40px 0; }
+          .hero-title-light { text-align: center; }
+          .hero-desc-light { text-align: center; }
+          .hero-highlights-light { grid-template-columns: 1fr 1fr; }
+          .instructor-image-light img { height: 350px; }
         }
 
         @media (max-width: 768px) {
-          .cta-box-light {
-            padding: 35px 25px;
-          }
+          .hero-highlights-light { grid-template-columns: 1fr; max-width: 300px; }
+          .timeline-track-light::before { display: none; }
+          .timeline-node-light { width: 33.33%; margin-bottom: 20px; }
+          .timeline-content-light { padding: 20px; }
+          .tc-card-light h3 { font-size: 1.25rem; }
+          .final-cta-light .cta-box-light { padding: 40px 20px; }
         }
 
-        .cta-box-light h2 {
-          font-family: 'Playfair Display', serif;
-          font-size: 2.6rem;
-          margin-bottom: 15px;
-          color: #1a1a2e;
-          font-weight: 800;
+        @media (max-width: 576px) {
+          .hero-title-light { font-size: 2rem; }
+          .timeline-node-light { width: 50%; }
+          .includes-grid-light { grid-template-columns: 1fr; }
+          .btn-primary-light { padding: 12px 25px; }
+          .btn-primary-light span { font-size: 1rem; }
         }
 
-        .cta-box-light > p {
-          color: #6b6b8a;
-          font-size: 1.25rem;
-          margin-bottom: 35px;
-        }
-
-        .cta-price-row-light {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 30px;
-          margin-bottom: 30px;
-          flex-wrap: wrap;
-        }
-
-        .cp-left-light {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          flex-wrap: wrap;
-        }
-
-        .cp-current-light {
-          font-size: 3rem;
-          font-weight: 800;
-          color: #ff6a00;
-        }
-
-        .cp-old-light {
-          font-size: 1.3rem;
-          color: #aaa;
-          text-decoration: line-through;
-        }
-
-        .cp-save-light {
-          background: linear-gradient(135deg, rgba(40,167,69,0.15), rgba(40,167,69,0.08));
-          color: #28a745;
-          padding: 6px 16px;
-          border-radius: 30px;
-          font-size: 13px;
-          font-weight: 700;
-        }
-
-        .cp-btn-light {
-          background: linear-gradient(135deg, #ff6a00, #e31b7a);
-          color: #fff;
-          border: none;
-          padding: 16px 48px;
-          font-size: 1.15rem;
-          font-weight: 700;
-          border-radius: 50px;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 8px 20px rgba(227,27,122,0.3);
-        }
-
-        .cp-btn-light:hover {
-          transform: translateY(-3px);
-          box-shadow: 0 15px 35px rgba(227,27,122,0.4);
-        }
-
-        .cta-trust-light {
-          display: flex;
-          justify-content: center;
-          gap: 30px;
-          flex-wrap: wrap;
-        }
-
-        .cta-trust-light span {
-          display: flex;
-          align-items: center;
-          gap: 8px;
-          color: #6b6b8a;
-          font-size: 13px;
-        }
-
-        .cta-trust-light i {
-          color: #28a745;
-        }
-
-        /* Modal - Light Theme */
+        /* Modal Styles */
         .modal-overlay-light {
           position: fixed;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
+          top: 0; left: 0; right: 0; bottom: 0;
           background: rgba(0,0,0,0.6);
-          backdrop-filter: blur(8px);
           display: flex;
           align-items: center;
           justify-content: center;
-          z-index: 1000;
-          padding: 20px;
+          z-index: 2000;
+          padding: 15px;
         }
 
         .modal-content-light {
-          background: #ffffff;
-          border-radius: 28px;
+          background: white;
           width: 100%;
-          max-width: 480px;
+          max-width: 500px;
+          border-radius: 24px;
+          overflow: hidden;
+          animation: modalSlideUp 0.4s ease;
           max-height: 90vh;
           overflow-y: auto;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.2);
+        }
+
+        @keyframes modalSlideUp {
+          from { transform: translateY(30px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
         }
 
         .modal-header-light {
+          padding: 20px 25px;
+          border-bottom: 1px solid #f0f0f5;
           display: flex;
           justify-content: space-between;
           align-items: center;
-          padding: 24px 28px;
-          border-bottom: 1px solid rgba(0,0,0,0.08);
-        }
-
-        .modal-header-light h4 {
-          color: #ff6a00;
-          margin: 0;
-          font-size: 1.4rem;
-          font-weight: 800;
-        }
-
-        .close-btn-light {
-          background: #f0f0f0;
-          border: none;
-          color: #666;
-          font-size: 20px;
-          cursor: pointer;
-          width: 36px;
-          height: 36px;
-          border-radius: 50%;
-          transition: all 0.3s ease;
-        }
-
-        .close-btn-light:hover {
-          background: rgba(255,106,0,0.15);
-          color: #ff6a00;
+          background: #fcfcfe;
         }
 
         .modal-body-light {
-          padding: 28px;
+          padding: 25px;
         }
 
         .form-group-light {
-          margin-bottom: 20px;
-        }
-
-        .form-group-light label {
-          color: #1a1a2e;
-          display: block;
-          margin-bottom: 8px;
-          font-size: 13px;
-          font-weight: 600;
+          margin-bottom: 15px;
         }
 
         .form-control-light {
           width: 100%;
           padding: 12px 16px;
-          border: 1px solid rgba(0,0,0,0.1);
-          border-radius: 14px;
-          background: #f8f9fc;
-          color: #1a1a2e;
+          border: 1.5px solid #e0e0f0;
+          border-radius: 12px;
           font-size: 14px;
-          transition: all 0.3s ease;
+          transition: all 0.3s;
         }
 
         .form-control-light:focus {
-          outline: none;
           border-color: #ff6a00;
-          background: #ffffff;
-          box-shadow: 0 0 0 3px rgba(255,106,0,0.1);
-        }
-
-        select.form-control-light option {
-          background: #ffffff;
-          color: #1a1a2e;
+          outline: none;
+          box-shadow: 0 0 0 4px rgba(255,106,0,0.1);
         }
 
         .modal-footer-light {
+          padding: 20px 25px;
+          border-top: 1px solid #f0f0f5;
           display: flex;
           gap: 15px;
-          padding: 0 28px 28px;
-        }
-
-        .btn-secondary-light {
-          flex: 1;
-          padding: 14px;
-          border-radius: 14px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 14px;
-          background: #f0f0f0;
-          border: none;
-          color: #666;
-        }
-
-        .btn-secondary-light:hover {
-          background: #e0e0e0;
         }
 
         .btn-payment-light {
-          flex: 1;
-          padding: 14px;
-          border-radius: 14px;
-          font-weight: 700;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          font-size: 14px;
-          background: linear-gradient(135deg, #28a745, #34ce57);
+          background: #1a1a2e;
+          color: white;
           border: none;
-          color: #fff;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
+          padding: 12px 25px;
+          border-radius: 12px;
+          font-weight: 700;
+          flex: 1;
         }
 
-        .btn-payment-light:hover {
-          opacity: 0.9;
-          transform: translateY(-2px);
-        }
-
-        .fee-info-light {
-          background: linear-gradient(135deg, rgba(255,106,0,0.08), rgba(227,27,122,0.05));
-          border: 1px solid rgba(255,106,0,0.15);
-          padding: 18px;
-          border-radius: 16px;
-          text-align: center;
-          margin-top: 25px;
-        }
-
-        .fee-amount-light {
-          color: #ff6a00;
-          font-size: 28px;
-          font-weight: 800;
-        }
-
-        .text-muted-light {
-          color: #6b6b8a;
-          font-size: 12px;
-        }
-
-        /* Responsive Styles */
-        @media (max-width: 991px) {
-          .hero-title-light {
-            font-size: 2.4rem;
-          }
-          .hero-highlights-light {
-            grid-template-columns: repeat(2, 1fr);
-          }
-        }
-
-        @media (max-width: 768px) {
-          .hero-title-light {
-            font-size: 1.8rem;
-          }
-          .hero-highlights-light {
-            grid-template-columns: 1fr;
-          }
-          .btn-primary-light {
-            padding: 12px 30px;
-          }
-          .timeline-node-light {
-            flex: 0 0 calc(50% - 10px);
-          }
-          .tc-card-light {
-            padding: 25px;
-          }
-          .cp-current-light {
-            font-size: 2.2rem;
-          }
-        }
-
-        @media (max-width: 576px) {
-          .hero-title-light {
-            font-size: 1.5rem;
-          }
-          .hero-infographic-light img {
-            height: 100px;
-          }
-          .section-title-center-light {
-            font-size: 1.8rem;
-          }
+        .btn-secondary-light {
+          background: #f0f0f5;
+          color: #4a4a6a;
+          border: none;
+          padding: 12px 20px;
+          border-radius: 12px;
+          font-weight: 600;
         }
       `}</style>
     </section>

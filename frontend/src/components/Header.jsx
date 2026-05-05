@@ -200,10 +200,11 @@ function Header() {
 
         .mobile-offcanvas .nav-link {
           color: var(--text-main);
-          font-weight: 600;
-          padding: 14px 20px;
+          font-weight: 700;
+          padding: 16px 24px;
           border-bottom: 1px solid var(--glass-border);
-          font-size: 0.95rem;
+          font-size: 1.1rem;
+          letter-spacing: 0.2px;
         }
 
         .mobile-offcanvas .dropdown-item {
@@ -214,21 +215,36 @@ function Header() {
         }
 
         .btn-mobile-cta {
-          border-radius: 60px !important;
-          font-weight: 700;
-          padding: 12px 0;
+          border-radius: 15px !important;
+          font-weight: 800;
+          padding: 16px 0;
           text-align: center;
-          font-size: 0.9rem;
+          font-size: 1rem;
+          text-transform: uppercase;
+          letter-spacing: 0.8px;
+          transition: all 0.3s ease;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 12px;
+          border: none;
         }
         
         .btn-mobile-cta.primary-cta {
-          background: var(--primary-color);
+          background: linear-gradient(135deg, var(--primary-color), #2A0F02);
           color: #fff !important;
+          box-shadow: 0 8px 20px rgba(42, 15, 2, 0.3);
         }
         
         .btn-mobile-cta.secondary-cta {
+          background: #fff;
           color: var(--primary-color) !important;
-          border: 1.6px solid var(--primary-color);
+          border: 2px solid var(--primary-color) !important;
+          box-shadow: 0 6px 15px rgba(139, 74, 30, 0.12);
+        }
+
+        .btn-mobile-cta:active {
+          transform: scale(0.98);
         }
 
         .navbar-toggler {
@@ -397,8 +413,12 @@ function Header() {
             <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
             
             <li className="nav-item p-4 d-grid gap-3">
-              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
-              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">ENROLL LIVE COURSE</Link>
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">
+                <i className="fas fa-calendar-check"></i> BOOK CONSULTATION
+              </a>
+              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
+                <i className="fas fa-graduation-cap"></i> ENROLL LIVE COURSE
+              </Link>
             </li>
           </ul>
         </div>

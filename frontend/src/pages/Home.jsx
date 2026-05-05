@@ -262,15 +262,16 @@ const AstrologyCourses = () => {
           .cdesc { text-align: left; font-size: 0.85rem; }
           .price-hero { text-align: left; font-size: 1.4rem; }
           .cinstr { justify-content: flex-start; }
+          .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
           .fb { 
             grid-template-columns: 1fr 1fr; 
-            gap: 1rem; 
+            gap: 1.5rem 1rem; 
             padding-top: 1.5rem;
           }
           .fi { gap: 4px; }
-          .ftt { font-size: 0.9rem; }
-          .fts { font-size: 0.75rem; }
-          .fic { width: 44px; height: 44px; font-size: 18px; }
+          .ftt { font-size: 0.85rem; line-height: 1.2; font-weight: 700; }
+          .fts { font-size: 0.7rem; line-height: 1.2; }
+          .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
           .btnrow { grid-template-columns: 1fr; }
         }
       `}</style>

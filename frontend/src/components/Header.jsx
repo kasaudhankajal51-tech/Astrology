@@ -188,123 +188,33 @@ function Header() {
         }
 
         .mobile-offcanvas {
-          background: #FFFFFF !important;
+          background: var(--bg-color);
           width: 85% !important;
-          max-width: 340px;
-          border-left: 1px solid var(--glass-border);
-          box-shadow: -10px 0 30px rgba(139, 74, 30, 0.05);
-        }
-
-        .mobile-offcanvas .offcanvas-header {
-          padding: 24px 20px;
-          border-bottom: 1px solid rgba(139, 74, 30, 0.08);
-          background: linear-gradient(to bottom, #FFFDF8, #FFFFFF);
-        }
-
-        .mobile-offcanvas .offcanvas-title {
-          font-family: var(--font-serif);
-          font-weight: 800;
-          color: var(--text-heading);
-          font-size: 1.4rem;
-        }
-
-        .mobile-offcanvas .offcanvas-body {
-          padding: 0;
-        }
-
-        .mobile-offcanvas .nav-item {
-          border-bottom: 1px solid rgba(139, 74, 30, 0.04);
+          max-width: 360px;
         }
 
         .mobile-offcanvas .nav-link {
-          color: #3A1900 !important;
+          color: var(--text-main);
           font-weight: 600;
-          padding: 18px 24px;
-          font-size: 0.95rem;
-          letter-spacing: 0.2px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          transition: all 0.2s ease;
-          background: transparent;
-          border: none;
-        }
-
-        .mobile-offcanvas .nav-link:active, .mobile-offcanvas .nav-link:hover {
-          background: rgba(139, 74, 30, 0.03);
-          color: var(--primary-color) !important;
-        }
-
-        .mobile-offcanvas .nav-link i {
-          font-size: 0.8rem;
-          opacity: 0.5;
-          transition: transform 0.3s ease;
-        }
-
-        .mobile-offcanvas .nav-link:not(.collapsed) i {
-          transform: rotate(180deg);
-          color: var(--primary-color);
-        }
-
-        .mobile-submenu {
-          background: #FFFDF8;
-          padding: 0 0 10px 0;
-        }
-
-        .mobile-submenu .nav-link {
-          padding: 14px 24px 14px 44px;
-          font-size: 0.9rem;
-          font-weight: 500;
-          color: #5C3D26 !important;
-          border-bottom: none;
-          opacity: 0.85;
-        }
-
-        .mobile-footer-cta {
-          padding: 30px 24px;
-          background: #FFFFFF;
-          margin-top: auto;
+          padding: 14px 20px;
+          border-bottom: 1px solid var(--glass-border);
         }
 
         .btn-mobile-cta {
-          border-radius: 12px !important;
+          border-radius: 60px !important;
           font-weight: 700;
-          padding: 16px 0;
-          font-size: 0.95rem;
+          padding: 14px 0;
           text-align: center;
-          width: 100%;
-          transition: all 0.3s ease;
-          margin-bottom: 12px;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
         }
         
         .btn-mobile-cta.primary-cta {
-          background: var(--primary-color);
+          background: #2C2C2C;
           color: #fff !important;
-          border: none;
-          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.2);
         }
         
         .btn-mobile-cta.secondary-cta {
-          color: #8B4A1E !important;
-          background: #FFF4E8;
-          border: 1px solid rgba(139, 74, 30, 0.2);
-        }
-
-        .mobile-social-row {
-          display: flex;
-          justify-content: center;
-          gap: 20px;
-          margin-top: 20px;
-          padding-top: 20px;
-          border-top: 1px solid rgba(139, 74, 30, 0.1);
-        }
-
-        .mobile-social-row a {
-          color: var(--primary-color);
-          font-size: 1.2rem;
-          opacity: 0.7;
+          color: var(--primary-color) !important;
+          border: 1.6px solid var(--primary-color);
         }
       `}</style>
 
@@ -400,88 +310,26 @@ function Header() {
       <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header">
           <h5 className="offcanvas-title">AstroAva</h5>
-          <button type="button" className="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+          <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
-        <div className="offcanvas-body d-flex flex-column">
+        <div className="offcanvas-body">
           <ul className="navbar-nav">
+            <li className="nav-item"><Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link></li>
             <li className="nav-item">
-              <Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link>
-            </li>
-            
-            <li className="nav-item">
-              <button className="nav-link w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#m-consult">
-                CONSULTATIONS <i className="fas fa-chevron-down"></i>
-              </button>
-              <div className="collapse mobile-submenu" id="m-consult">
+              <button className="nav-link w-100 border-0 bg-transparent text-start" data-bs-toggle="collapse" data-bs-target="#mobile-consultations">CONSULTATIONS</button>
+              <div className="collapse px-3" id="mobile-consultations">
                 <Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link>
                 <Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Career & Business</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Muhurat</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Health Astrology</a>
               </div>
             </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link>
-            </li>
-
-            <li className="nav-item">
-              <Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link>
-            </li>
-
-            <li className="nav-item">
-              <button className="nav-link w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#m-courses">
-                COURSES <i className="fas fa-chevron-down"></i>
-              </button>
-              <div className="collapse mobile-submenu" id="m-courses">
-                <Link className="nav-link" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link>
-                <Link className="nav-link" to="/advanced-astrology" data-bs-dismiss="offcanvas">Advanced Astrology</Link>
-                <Link className="nav-link" to="/predictive-astrology" data-bs-dismiss="offcanvas">Predictive Astrology</Link>
-                <Link className="nav-link" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link>
-              </div>
-            </li>
-
-            <li className="nav-item">
-              <button className="nav-link w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#m-shop">
-                ASTRO SHOP <i className="fas fa-chevron-down"></i>
-              </button>
-              <div className="collapse mobile-submenu" id="m-shop">
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Gemstones</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Rudraksha</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Yantras</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Puja Kits</a>
-                <a className="nav-link" href="#" data-bs-dismiss="offcanvas">Bracelets</a>
-              </div>
-            </li>
-
-            <li className="nav-item">
-              <button className="nav-link w-100 collapsed" data-bs-toggle="collapse" data-bs-target="#m-tools">
-                FREE TOOLS <i className="fas fa-chevron-down"></i>
-              </button>
-              <div className="collapse mobile-submenu" id="m-tools">
-                <Link className="nav-link" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link>
-                <Link className="nav-link" to="/numerology" data-bs-dismiss="offcanvas">Numerology</Link>
-                <Link className="nav-link" to="/tarot" data-bs-dismiss="offcanvas">Tarot Reading</Link>
-                <Link className="nav-link" to="/love" data-bs-dismiss="offcanvas">Love Calculator</Link>
-              </div>
+            <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
+            <li className="nav-item mt-4 d-grid gap-2">
+              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
+              <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">ENROLL LIVE COURSE</Link>
             </li>
           </ul>
-
-          <div className="mobile-footer-cta">
-            <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">BOOK CONSULTATION</a>
-            <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">ENROLL LIVE COURSE</Link>
-            
-            <div className="mobile-social-row">
-              <a href="#"><i className="fab fa-instagram"></i></a>
-              <a href="#"><i className="fab fa-facebook-f"></i></a>
-              <a href="#"><i className="fab fa-youtube"></i></a>
-              <a href="#"><i className="fab fa-whatsapp"></i></a>
-            </div>
-          </div>
         </div>
       </div>
 

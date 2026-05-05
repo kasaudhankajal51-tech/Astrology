@@ -465,12 +465,16 @@ function AdvancedAstrology() {
         .image-stack {
           position: relative;
           padding: 20px;
+          perspective: 1000px;
         }
 
         .img-main {
           width: 100%;
+          height: clamp(350px, 45vw, 550px);
+          object-fit: cover;
           border-radius: 30px;
-          box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+          box-shadow: 0 30px 60px rgba(139, 74, 30, 0.15);
+          border: 4px solid white;
         }
 
         .floating-badge {
@@ -489,8 +493,8 @@ function AdvancedAstrology() {
           font-weight: 600;
         }
 
-        .top-right { top: -20px; right: -10px; }
-        .bottom-left { bottom: -20px; left: -10px; animation-delay: 2s; }
+        .top-right { top: -10px; right: -20px; }
+        .bottom-left { bottom: -10px; left: -20px; animation-delay: 2s; }
 
         @keyframes float {
           0%, 100% { transform: translateY(0); }

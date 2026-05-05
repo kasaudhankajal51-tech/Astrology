@@ -1,17 +1,17 @@
 :root {
-  --brand-purple: #3B2261;
-  --brand-coral: #EE6662;
-  --brand-coral-dark: #D9534F;
-  --bg-light: #F8FAFC;
-  --text-dark: #1E293B;
-  --text-muted: #64748B;
-  --gradient-coral: linear-gradient(135deg, #EE6662 0%, #D9534F 100%);
+  --brand-purple: #8B4A1E;
+  --brand-coral: #C8832A;
+  --brand-coral-dark: #723c18;
+  --bg-light: #FDF6EE;
+  --text-dark: #2A0F02;
+  --text-muted: #9B6640;
+  --gradient-coral: linear-gradient(135deg, #8B4A1E 0%, #C8832A 100%);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(59, 34, 97, 0.4);
+  background: rgba(42, 15, 2, 0.4);
   backdrop-filter: blur(10px);
   z-index: 100001;
   display: flex;
@@ -44,7 +44,7 @@
   position: absolute;
   top: 15px;
   right: 15px;
-  background: #3B2261;
+  background: #8B4A1E;
   width: 36px;
   height: 36px;
   border-radius: 50%;
@@ -120,7 +120,7 @@
 .modal-form .secure-text { text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 20px; font-weight: 600; }
 
 .cta-reg-btn {
-  background: var(--gradient-coral);
+  background: #2A0F02;
   color: #fff;
   border: none;
   padding: 18px 30px;
@@ -129,7 +129,7 @@
   font-size: 1.1rem;
   cursor: pointer;
   transition: all 0.3s ease;
-  box-shadow: 0 10px 20px rgba(238, 102, 98, 0.2);
+  box-shadow: 0 10px 20px rgba(200, 131, 42, 0.2);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -139,7 +139,7 @@
 
 .cta-reg-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px rgba(238, 102, 98, 0.4);
+  box-shadow: 0 15px 30px rgba(200, 131, 42, 0.4);
 }
 
 .cta-reg-btn:disabled {

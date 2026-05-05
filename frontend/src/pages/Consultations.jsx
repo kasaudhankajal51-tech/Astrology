@@ -448,14 +448,15 @@ function Consultations() {
         }
 
         .btn-action.secondary {
-          background: #f1f5f9;
-          color: var(--cosmic-text);
+          background: #FDF6EE;
+          color: #2A0F02;
+          border: 1px solid #2A0F02;
         }
 
         .btn-action.primary {
-          background: var(--cosmic-gradient);
+          background: #2A0F02;
           color: #fff;
-          box-shadow: 0 10px 20px rgba(227, 27, 122, 0.2);
+          box-shadow: 0 10px 20px rgba(42, 15, 2, 0.15);
         }
 
         .btn-action:hover {

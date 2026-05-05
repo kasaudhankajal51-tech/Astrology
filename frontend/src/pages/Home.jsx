@@ -273,6 +273,13 @@ const AstrologyCourses = () => {
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
           .btnrow { grid-template-columns: 1fr; }
+          .animate__animated { 
+            animation: none !important; 
+            transition: none !important; 
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+          }
         }
       `}</style>
 

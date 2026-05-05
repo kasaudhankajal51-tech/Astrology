@@ -93,7 +93,7 @@ function Footer() {
         .fb-bot-wrap { background: var(--primary-color); padding: 30px 20px; margin-top: 20px; }
         .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
         @media(max-width: 600px){ .fb-bot { justify-content: center; text-align: center; flex-direction: column; gap: 15px; } }
-        .fb-copy { font-size: 15px; font-weight: 400; color: rgba(255,255,255,0.9); margin: 0; font-family: var(--font-sans); }
+        .fb-copy { font-size: 15px; font-weight: 400; color: #ffffff !important; margin: 0; font-family: var(--font-sans); }
         .fb-copy span { color: #fff; font-weight: 700; }
         .fb-legal { display: flex; gap: 25px; align-items: center; }
         @media(max-width: 480px){ .fb-legal { gap: 15px; flex-wrap: wrap; justify-content: center; } }

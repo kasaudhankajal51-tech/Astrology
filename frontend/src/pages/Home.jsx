@@ -1235,11 +1235,11 @@ function Home() {
         }
 
         .experience-badge {
-          background: #FFFFFF;
+          background: #2A0F02;
           padding: 20px 30px;
           border-radius: 30px;
-          border: 1px solid var(--glass-border);
-          box-shadow: 0 15px 35px rgba(139, 74, 30, 0.1);
+          border: 1px solid var(--accent-color);
+          box-shadow: 0 15px 35px rgba(200, 131, 42, 0.2);
           position: absolute;
           bottom: -20px;
           right: 20px;
@@ -1249,7 +1249,7 @@ function Home() {
         .experience-badge h4 { 
           font-size: 2.8rem; 
           font-weight: 700; 
-          color: var(--primary-color);
+          color: var(--accent-color);
           margin: 0; 
           font-family: var(--font-serif);
         }
@@ -1258,7 +1258,7 @@ function Home() {
           font-weight: 600; 
           text-transform: uppercase; 
           letter-spacing: 1px; 
-          color: var(--text-muted); 
+          color: #FDF6EE; 
           font-family: var(--font-sans);
         }
 
@@ -1273,7 +1273,7 @@ function Home() {
           padding: 25px 20px;
           border-radius: 20px;
           border: 1px solid var(--glass-border);
-          box-shadow: var(--premium-shadow);
+          box-shadow: 0 8px 25px rgba(139, 74, 30, 0.05);
           transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
           display: flex;
           flex-direction: column;
@@ -1282,6 +1282,7 @@ function Home() {
           min-height: 140px;
           margin-bottom: 10px;
           position: relative;
+          overflow: hidden;
         }
 
         .service-card::after {
@@ -1291,8 +1292,8 @@ function Home() {
           left: 0;
           width: 4px;
           height: 0;
-          background: var(--primary-color);
-          transition: 0.3s;
+          background: linear-gradient(to bottom, var(--accent-color), var(--primary-color));
+          transition: 0.4s ease;
         }
 
         .service-card:hover::after {
@@ -1300,9 +1301,9 @@ function Home() {
         }
 
         .service-card:hover {
-          transform: translateY(-12px);
+          transform: translateY(-8px);
           border-color: var(--accent-color);
-          box-shadow: 0 25px 50px rgba(139, 74, 30, 0.1);
+          box-shadow: 0 20px 40px rgba(200, 131, 42, 0.15);
         }
 
         .service-card-header {
@@ -1315,21 +1316,31 @@ function Home() {
         .icon-wrapper {
           width: 55px;
           height: 55px;
-          background: rgba(200, 131, 42, 0.1);
+          background: linear-gradient(135deg, rgba(200, 131, 42, 0.15), rgba(139, 74, 30, 0.05));
           border-radius: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
           flex-shrink: 0;
           border: 1px solid var(--glass-border);
+          transition: 0.4s ease;
+        }
+
+        .service-card:hover .icon-wrapper {
+          background: var(--primary-color);
+          border-color: var(--primary-color);
         }
 
         .icon-wrapper img {
           width: 35px;
           height: 35px;
           object-fit: contain;
-          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%) !important;
+          filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%);
           transition: 0.4s;
+        }
+
+        .service-card:hover .icon-wrapper img {
+          filter: brightness(0) invert(1) !important;
         }
 
         .service-card h4 {
@@ -1404,14 +1415,16 @@ function Home() {
           background: var(--card-color);
           border-radius: 20px;
           overflow: hidden;
-          box-shadow: var(--premium-shadow);
+          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.08);
           border: 1px solid var(--glass-border);
           position: relative;
+          transition: 0.4s ease;
         }
 
         .testimonial-card:hover .card-inner {
-          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.12);
+          box-shadow: 0 25px 45px rgba(200, 131, 42, 0.15);
           border-color: var(--accent-color);
+          transform: translateY(-5px);
         }
 
         .quote-icon {

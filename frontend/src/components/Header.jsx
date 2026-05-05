@@ -205,13 +205,33 @@ function Header() {
           border-bottom: 1px solid var(--glass-border);
           font-size: 1.1rem;
           letter-spacing: 0.2px;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+
+        .mob-drop-trigger {
+          width: 50px;
+          height: 50px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          cursor: pointer;
+          transition: transform 0.3s ease;
+          border-left: 1px solid var(--glass-border);
+        }
+
+        .mob-drop-trigger[aria-expanded="true"] i {
+          transform: rotate(180deg);
+          color: var(--primary-color) !important;
         }
 
         .mobile-offcanvas .dropdown-item {
-          padding: 12px 30px;
-          font-size: 0.9rem;
+          padding: 14px 40px;
+          font-size: 0.95rem;
           color: var(--text-content);
-          border-bottom: 1px solid rgba(200, 131, 42, 0.08);
+          border-bottom: 1px solid rgba(200, 131, 42, 0.05);
+          font-weight: 500;
         }
 
         .btn-mobile-cta {
@@ -370,9 +390,11 @@ function Header() {
             <li className="nav-item"><Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link></li>
             
             <li className="nav-item">
-              <div className="d-flex justify-content-between align-items-center pe-3 border-bottom">
+              <div className="d-flex justify-content-between align-items-center border-bottom">
                 <Link className="nav-link border-0 w-100" to="/consultations" data-bs-dismiss="offcanvas">CONSULTATIONS</Link>
-                <i className="fas fa-chevron-down small text-muted" data-bs-toggle="collapse" data-bs-target="#mob-consult-collapse"></i>
+                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-consult-collapse">
+                  <i className="fas fa-chevron-down small text-muted"></i>
+                </div>
               </div>
               <div className="collapse bg-light" id="mob-consult-collapse">
                 <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link>
@@ -385,9 +407,11 @@ function Header() {
             <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
             
             <li className="nav-item">
-              <div className="d-flex justify-content-between align-items-center pe-3 border-bottom">
+              <div className="d-flex justify-content-between align-items-center border-bottom">
                 <span className="nav-link border-0 w-100">COURSES</span>
-                <i className="fas fa-chevron-down small text-muted" data-bs-toggle="collapse" data-bs-target="#mob-courses-collapse"></i>
+                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-courses-collapse">
+                  <i className="fas fa-chevron-down small text-muted"></i>
+                </div>
               </div>
               <div className="collapse bg-light" id="mob-courses-collapse">
                 <Link className="dropdown-item d-block" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link>
@@ -398,9 +422,11 @@ function Header() {
             </li>
 
             <li className="nav-item">
-              <div className="d-flex justify-content-between align-items-center pe-3 border-bottom">
+              <div className="d-flex justify-content-between align-items-center border-bottom">
                 <Link className="nav-link border-0 w-100" to="/free-tools" data-bs-dismiss="offcanvas">FREE TOOLS</Link>
-                <i className="fas fa-chevron-down small text-muted" data-bs-toggle="collapse" data-bs-target="#mob-tools-collapse"></i>
+                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-tools-collapse">
+                  <i className="fas fa-chevron-down small text-muted"></i>
+                </div>
               </div>
               <div className="collapse bg-light" id="mob-tools-collapse">
                 <Link className="dropdown-item d-block" to="/free-tools" data-bs-dismiss="offcanvas">All Free Tools</Link>

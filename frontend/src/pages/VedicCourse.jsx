@@ -724,17 +724,59 @@ function VedicCourse() {
         }
 
         /* Responsive Fixes */
+        @media (max-width: 991px) {
+          .display-3 { font-size: 2.8rem; }
+          .hero-v2 { padding-top: 60px; }
+          .image-stack { padding: 10px; }
+          .instructor-visual-v2 img { width: 320px; height: 320px; }
+        }
+
         @media (max-width: 768px) {
           .display-3 { font-size: 2.2rem; }
-          .hero-v2 { padding-top: 40px; }
-          .instructor-visual-v2 img { width: 280px; height: 280px; }
-          .roadmap-item { width: 33.33%; flex: none; }
-          .roadmap-line { display: none; }
-          .roadmap-container { justify-content: center; }
+          .hero-v2 { padding-top: 40px; text-align: center; }
+          .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+          .stat-pill { padding: 8px 12px; }
+          .img-main { height: 300px; border-radius: 20px; }
+          .floating-badge { padding: 10px 15px; font-size: 12px; }
+          .top-right { top: -5px; right: -5px; }
+          .bottom-left { bottom: -5px; left: -5px; }
+          
+          .roadmap-container { 
+            flex-direction: column; 
+            align-items: flex-start; 
+            gap: 30px; 
+            padding-left: 30px;
+          }
+          .roadmap-item { 
+            width: 100%; 
+            text-align: left; 
+            display: flex; 
+            align-items: center; 
+            gap: 20px;
+          }
+          .roadmap-line { 
+            width: 2px; 
+            height: 100%; 
+            left: 30px; 
+            top: 60px; 
+          }
+          .roadmap-circle { margin: 0; flex-shrink: 0; }
+          .roadmap-text p { display: block; font-size: 14px; }
+          
+          .instructor-v2 { text-align: center; }
+          .instructor-visual-v2 img { width: 250px; height: 250px; }
+          
+          .cta-glass-box { padding: 30px 20px; border-radius: 30px; }
         }
 
         @media (max-width: 480px) {
-          .roadmap-item { width: 50%; }
+          .display-3 { font-size: 1.8rem; }
+          .stats-grid { grid-template-columns: 1fr; }
+          .btn-v2-primary, .btn-v2-outline { width: 100%; }
+          .roadmap-container { padding-left: 15px; }
+          .roadmap-line { left: 15px; }
+          .roadmap-text h4 { font-size: 15px; }
+          .roadmap-text p { font-size: 12px; }
         }
       `}</style>
     </section>

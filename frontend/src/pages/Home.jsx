@@ -273,12 +273,24 @@ const AstrologyCourses = () => {
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
           .btnrow { grid-template-columns: 1fr; }
-          .animate__animated { 
+          .animate__animated, 
+          .spin-slow-left, 
+          .spin-right, 
+          .spin-fast-left, 
+          .img-anim,
+          .center-overlay,
+          .float-badge { 
             animation: none !important; 
             transition: none !important; 
             opacity: 1 !important;
             visibility: visible !important;
             transform: none !important;
+          }
+          .experience-badge { animation: none !important; }
+          [data-aos^="fade"], [data-aos^="zoom"], [data-aos^="flip"] {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
           }
         }
       `}</style>

@@ -262,10 +262,15 @@ const AstrologyCourses = () => {
           .cdesc { text-align: left; font-size: 0.85rem; }
           .price-hero { text-align: left; font-size: 1.4rem; }
           .cinstr { justify-content: flex-start; }
-          .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
-          .ftt { font-size: 1.05rem; }
-          .fts { font-size: 0.9rem; }
-          .fic { width: 50px; height: 50px; font-size: 20px; }
+          .fb { 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1rem; 
+            padding-top: 1.5rem;
+          }
+          .fi { gap: 4px; }
+          .ftt { font-size: 0.9rem; }
+          .fts { font-size: 0.75rem; }
+          .fic { width: 44px; height: 44px; font-size: 18px; }
           .btnrow { grid-template-columns: 1fr; }
         }
       `}</style>
@@ -461,7 +466,12 @@ function Home() {
 
   useEffect(() => {
     if (window.AOS) {
-      window.AOS.refresh();
+      window.AOS.init({
+        duration: 1000,
+        once: true,
+        offset: 50, // Trigger earlier on mobile
+        disable: false // Ensure it's not disabled on any device
+      });
     }
   }, []);
 
@@ -544,7 +554,7 @@ function Home() {
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 d-none d-lg-flex justify-content-center position-relative">
+              <div className="col-lg-6 d-flex justify-content-center position-relative">
                 {bannerSlides[currentSlide].themeRust ? (
                   <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key="rust-graphic">
                     <svg className="rotating-zodiac-mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
@@ -714,7 +724,7 @@ function Home() {
                 </div>
               </div>
               
-              <div className="col-lg-4 d-none d-lg-block text-center" data-aos="zoom-in">
+              <div className="col-lg-4 text-center" data-aos="zoom-in">
                 <div className="service-center-img position-relative">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid" /></div>
                   <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
@@ -1937,9 +1947,21 @@ function Home() {
           .small-circle { width: 220px; height: 220px; }
           .icon-block { width: 45px; height: 45px; }
           .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem); }
-          .rotating-zodiac-mandala { width: 90%; height: 90%; right: 0; }
-          .float-badge { display: none; }
           .banner-btn-row { justify-content: center; }
+          .zodiac-hero-graphic { 
+            display: block !important; 
+            width: 280px; 
+            height: 280px; 
+            margin: 20px auto; 
+            position: relative;
+            right: auto;
+            top: auto;
+            transform: none;
+          }
+          .rotating-zodiac-mandala {
+            width: 100% !important;
+            height: 100% !important;
+          }
         }
 
         @media (max-width: 767px) {

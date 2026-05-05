@@ -35,10 +35,10 @@ function Header() {
     <>
       <style>{`
         :root {
-          --primary-color: #8B4A2F;
-          --accent-color: #C8A27A;
-          --glass-border: rgba(0, 0, 0, 0.05);
-          --premium-shadow: 0 15px 35px rgba(0, 0, 0, 0.05), 0 5px 12px rgba(0, 0, 0, 0.03);
+          --primary-color: #8B4A1E;
+          --accent-color: #C8832A;
+          --glass-border: rgba(200, 131, 42, 0.18);
+          --premium-shadow: 0 4px 24px rgba(139, 74, 30, 0.08);
         }
 
         /* Report Bar */

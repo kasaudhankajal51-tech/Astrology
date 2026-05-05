@@ -59,7 +59,7 @@ function Footer() {
         }
 
         .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 25px; }
-        .fb-logo-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--primary-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2); }
+        .fb-logo-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--primary-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(139, 74, 30, 0.2); }
         .fb-logo-name { font-family: var(--font-serif); font-size: 30px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.5px; line-height: 1; }
         .fb-logo-name em { font-style: normal; color: var(--primary-color); }
 
@@ -69,11 +69,11 @@ function Footer() {
         .fb-nl-wrap { display: flex; border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; background: #fff; max-width: 320px; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
         .fb-nl-inp { flex: 1; border: none; outline: none; padding: 14px 18px; font-family: var(--font-sans); font-size: 15px; color: var(--text-main); min-width: 0; }
         .fb-nl-btn { background: var(--primary-color); border: none; padding: 0 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        .fb-nl-btn:hover { background: #723c26; }
+        .fb-nl-btn:hover { background: #723c18; }
 
         .fb-socials { display: flex; gap: 15px; margin-top: 30px; }
         .fb-soc { width: 42px; height: 42px; border-radius: 50%; border: 1px solid var(--glass-border); background: #fff; display: flex; align-items: center; justify-content: center; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); color: var(--primary-color); text-decoration: none; box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
-        .fb-soc:hover { background: var(--primary-color); color: #fff; transform: translateY(-4px); box-shadow: 0 10px 20px rgba(139, 74, 47, 0.2); }
+        .fb-soc:hover { background: var(--primary-color); color: #fff; transform: translateY(-4px); box-shadow: 0 10px 20px rgba(139, 74, 30, 0.2); }
 
         .fb-head { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--text-heading); margin-bottom: 25px; }
         .fb-head::after { content: ''; display: block; width: 35px; height: 3px; background: var(--accent-color); margin-top: 10px; border-radius: 2px; }

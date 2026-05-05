@@ -22,20 +22,28 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
     <style>
       :root {
-        --primary-color: #8B4A2F;
-        --bg-color: #F5EDE4;
-        --card-color: #FFF8F2;
-        --accent-color: #C8A27A;
-        --text-main: #000000;
-        --text-muted: #332B24;
-        --text-heading: #2A150C;
-        --text-card-heading: #1A120D;
-        --text-content: #111111;
-        --glass-border: #E5D5C8;
-        --premium-shadow: 0 12px 30px rgba(90, 46, 27, 0.08);
-        
-        --font-serif: 'Playfair Display', serif;
-        --font-sans: 'Poppins', 'Inter', sans-serif;
+        /* ── Base ── */
+        --bg-color:            #FDF6EE;
+        --card-color:          #FFFBF5;
+
+        /* ── Brand Colors ── */
+        --primary-color:       #8B4A1E;
+        --accent-color:        #C8832A;
+
+        /* ── Text ── */
+        --text-heading:        #2A0F02;
+        --text-card-heading:   #3D1A08;
+        --text-main:           #3D1A08;
+        --text-content:        #5C2D12;
+        --text-muted:          #9B6640;
+
+        /* ── Borders & Shadows ── */
+        --glass-border:        rgba(200, 131, 42, 0.18);
+        --premium-shadow:      0 4px 24px rgba(139, 74, 30, 0.08);
+
+        /* ── Typography ── */
+        --font-sans:           'Inter', 'Segoe UI', sans-serif;
+        --font-serif:          'Playfair Display', 'Georgia', serif;
       }
       
       body {
@@ -140,15 +148,14 @@
       }
 
       .text-gradient {
-        background: linear-gradient(135deg, #8B4A2F, #C8A27A);
+        background: linear-gradient(135deg, var(--primary-color), var(--accent-color));
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         background-clip: text;
       }
 
-      /* Global Button Styles */
       .btn-primary, .btn-consult-header, .btn-mobile-cta.primary-cta {
-        background-color: var(--primary-color);
+        background-color: #2A0F02;
         color: #FFFFFF;
         border: none;
         font-weight: 700;

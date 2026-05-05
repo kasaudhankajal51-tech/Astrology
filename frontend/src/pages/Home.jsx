@@ -258,9 +258,9 @@ const AstrologyCourses = () => {
           .cc { max-width: 100%; }
           .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
-          .ctitle { text-align: left; font-size: 1.25rem; }
-          .cdesc { text-align: left; font-size: 0.85rem; }
-          .price-hero { text-align: left; font-size: 1.4rem; }
+          .ctitle { text-align: left; font-size: 1.6rem; margin-bottom: 0.6rem; }
+          .cdesc { text-align: left; font-size: 1.15rem; line-height: 1.5; }
+          .price-hero { text-align: left; font-size: 1.8rem; }
           .cinstr { justify-content: flex-start; }
           .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
           .fb { 
@@ -272,7 +272,10 @@ const AstrologyCourses = () => {
           .ftt { font-size: 0.85rem; line-height: 1.2; font-weight: 700; }
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
-          .btnrow { grid-template-columns: 1fr; }
+          .btnrow { grid-template-columns: 1fr 1fr; gap: 8px; }
+          .btn-read, .btn-buy { font-size: 1.1rem; padding: 0.85rem 0.5rem; font-weight: 700; }
+          .iname { font-size: 1rem; }
+          .iexp { font-size: 0.9rem; }
           .zodiac-hero-graphic, 
           .cosmic-orbit-container { 
             display: none !important; 
@@ -2098,8 +2101,8 @@ function Home() {
           .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 15px 20px; border-radius: 18px; bottom: -20px; }
           .experience-badge h4 { font-size: 1.8rem; }
-          .banner-btn-row { flex-direction: column; gap: 12px; }
-          .banner-btn-row .btn { width: 100%; max-width: 300px; }
+          .banner-btn-row { flex-direction: row; gap: 10px; justify-content: center; width: 100%; }
+          .banner-btn-row .btn { flex: 1; max-width: 180px; font-size: 0.9rem; padding: 12px 10px; }
           .img-box01 { height: 400px; }
         }
 

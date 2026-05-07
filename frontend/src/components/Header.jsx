@@ -387,13 +387,13 @@ function Header() {
                   </ul>
                 </li>
                 <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ASTRO SHOP</a>
+                  <Link className="nav-link dropdown-toggle" to="/astro-shop" role="button" data-bs-toggle="dropdown">ASTRO SHOP</Link>
                   <ul className="dropdown-menu border-0 shadow-sm">
-                    <li><a className="dropdown-item" href="#">Gemstones</a></li>
-                    <li><a className="dropdown-item" href="#">Rudraksha</a></li>
-                    <li><a className="dropdown-item" href="#">Yantras</a></li>
-                    <li><a className="dropdown-item" href="#">Puja Kits</a></li>
-                    <li><a className="dropdown-item" href="#">Bracelets</a></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/gemstones">Gemstones</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/rudraksha">Rudraksha</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/yantras">Yantras</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/puja-kits">Puja Kits</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/bracelets">Bracelets</Link></li>
                   </ul>
                 </li>
                 <li className="nav-item"><Link className="nav-link" to="/astrologer">ASTROLOGERS</Link></li>
@@ -464,10 +464,11 @@ function Header() {
                 </div>
               </div>
               <div className="collapse bg-light" id="mob-shop-collapse">
-                <a className="dropdown-item d-block" href="#" data-bs-dismiss="offcanvas">Gemstones</a>
-                <a className="dropdown-item d-block" href="#" data-bs-dismiss="offcanvas">Rudraksha</a>
-                <a className="dropdown-item d-block" href="#" data-bs-dismiss="offcanvas">Yantras</a>
-                <a className="dropdown-item d-block" href="#" data-bs-dismiss="offcanvas">Puja Kits</a>
+                <Link className="dropdown-item d-block" to="/astro-shop/gemstones" data-bs-dismiss="offcanvas">Gemstones</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/rudraksha" data-bs-dismiss="offcanvas">Rudraksha</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/yantras" data-bs-dismiss="offcanvas">Yantras</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/puja-kits" data-bs-dismiss="offcanvas">Puja Kits</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/bracelets" data-bs-dismiss="offcanvas">Bracelets</Link>
               </div>
             </li>
 

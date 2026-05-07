@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 
 const AstroShop = () => {
   const categories = [
-    { name: 'Premium Gemstones', icon: '💎', count: '120+ Items', color: '#8B4A1E' },
-    { name: 'Sacred Rudraksha', icon: '📿', count: '45+ Items', color: '#C8832A' },
-    { name: 'Vedic Yantras', icon: '📐', count: '30+ Items', color: '#5C2D12' },
-    { name: 'Puja Essentials', icon: '🕯️', count: '85+ Items', color: '#8B4A1E' },
+    { name: 'Premium Gemstones', icon: '💎', count: '120+ Items', color: '#8B4A1E', path: 'gemstones' },
+    { name: 'Sacred Rudraksha', icon: '📿', count: '45+ Items', color: '#C8832A', path: 'rudraksha' },
+    { name: 'Vedic Yantras', icon: '📐', count: '30+ Items', color: '#5C2D12', path: 'yantras' },
+    { name: 'Puja Essentials', icon: '🕯️', count: '85+ Items', color: '#8B4A1E', path: 'puja-kits' },
   ];
 
   const featuredProducts = [
@@ -49,6 +49,10 @@ const AstroShop = () => {
           position: relative;
           z-index: 10;
         }
+        .category-link {
+          text-decoration: none;
+          color: inherit;
+        }
         .category-card {
           background: #fff;
           padding: 30px;
@@ -57,10 +61,12 @@ const AstroShop = () => {
           text-align: center;
           transition: all 0.3s ease;
           border: 1px solid rgba(200, 131, 42, 0.1);
+          height: 100%;
         }
         .category-card:hover {
           transform: translateY(-10px);
           border-color: var(--accent-color);
+          box-shadow: 0 15px 40px rgba(139, 74, 30, 0.2);
         }
         .category-icon {
           font-size: 40px;
@@ -138,11 +144,13 @@ const AstroShop = () => {
       <div className="container pb-5">
         <div className="category-grid">
           {categories.map((cat, i) => (
-            <div key={i} className="category-card">
-              <span className="category-icon">{cat.icon}</span>
-              <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem' }}>{cat.name}</h3>
-              <p style={{ color: '#8C6A4F', fontSize: '0.9rem' }}>{cat.count}</p>
-            </div>
+            <Link key={i} to={`/astro-shop/${cat.path}`} className="category-link">
+              <div className="category-card">
+                <span className="category-icon">{cat.icon}</span>
+                <h3 style={{ fontFamily: 'var(--font-serif)', fontSize: '1.4rem' }}>{cat.name}</h3>
+                <p style={{ color: '#8C6A4F', fontSize: '0.9rem' }}>{cat.count}</p>
+              </div>
+            </Link>
           ))}
         </div>
 

@@ -690,7 +690,7 @@ function Home() {
 
       {/* About Section */}
       <main className="w-100 body-main">
-        <section className="about-part-section w-100">
+        <section className="about-part-section w-100 py-5 mt-5 mt-lg-5 pt-lg-5">
           <div className="container">
             <div className="row align-items-center g-5">
               <div className="col-lg-6">
@@ -1682,7 +1682,7 @@ function Home() {
           position: absolute;
           bottom: -20px;
           right: 20px;
-          z-index: 10;
+          z-index: 500;
         }
 
         .experience-badge h4 { 
@@ -2099,7 +2099,7 @@ function Home() {
           .big-circle { width: 260px; height: 260px; }
           .small-circle { width: 180px; height: 180px; }
           .icon-block { width: 40px; height: 40px; }
-          .experience-badge { padding: 15px 20px; border-radius: 18px; bottom: -20px; }
+          .experience-badge { padding: 12px 18px; border-radius: 15px; bottom: -20px; z-index: 100; }
           .experience-badge h4 { font-size: 1.8rem; }
           .banner-btn-row { flex-direction: row; gap: 10px; justify-content: center; width: 100%; }
           .banner-btn-row .btn { flex: 1; max-width: 180px; font-size: 0.9rem; padding: 12px 10px; }

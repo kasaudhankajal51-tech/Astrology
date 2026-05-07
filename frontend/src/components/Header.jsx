@@ -60,7 +60,7 @@ function Header() {
           padding: 6px 4%;
           white-space: nowrap;
           z-index: 3;
-          font-size: clamp(10px, 2.5vw, 13px);
+          font-size: clamp(14px, 2.8vw, 18px);
           text-transform: uppercase;
           letter-spacing: 0.5px;
           flex-shrink: 0;
@@ -91,7 +91,7 @@ function Header() {
         
         .item {
           color: var(--text-content);
-          font-size: clamp(10px, 2.5vw, 13px);
+          font-size: clamp(14px, 2.8vw, 18px);
           font-weight: 500;
           font-family: var(--font-sans);
           display: inline-flex;
@@ -150,11 +150,11 @@ function Header() {
         @media (min-width: 992px) {
           .navbar-nav .nav-link {
             color: var(--text-main) !important;
-            font-weight: 600;
+            font-weight: 700;
             padding: 12px 6px !important;
-            font-size: 0.72rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
-            letter-spacing: 0.1px;
+            letter-spacing: 0.2px;
             transition: color 0.3s ease;
           }
 
@@ -187,10 +187,10 @@ function Header() {
           .btn-consult-header {
             background: var(--primary-color);
             color: #fff !important;
-            padding: 10px 18px;
+            padding: 12px 22px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 1rem;
             box-shadow: 0 6px 14px rgba(139, 74, 47, 0.2);
             transition: all 0.25s ease;
             white-space: nowrap;
@@ -200,22 +200,22 @@ function Header() {
         @media (min-width: 1100px) {
           .navbar-nav .nav-link {
             padding: 12px 10px !important;
-            font-size: 0.78rem;
+            font-size: 1.05rem;
           }
           .btn-consult-header {
-            padding: 10px 22px;
-            font-size: 0.82rem;
+            padding: 12px 25px;
+            font-size: 1.1rem;
           }
         }
 
         @media (min-width: 1300px) {
           .navbar-nav .nav-link {
             padding: 12px 15px !important;
-            font-size: 0.85rem;
+            font-size: 1.15rem;
           }
           .btn-consult-header {
-            padding: 11px 28px;
-            font-size: 0.9rem;
+            padding: 14px 32px;
+            font-size: 1.2rem;
           }
         }
 
@@ -228,9 +228,9 @@ function Header() {
         .mobile-offcanvas .nav-link {
           color: var(--text-main);
           font-weight: 800;
-          padding: 18px 25px;
+          padding: 22px 25px;
           border-bottom: 1px solid var(--glass-border);
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           letter-spacing: 0.3px;
           display: flex;
           align-items: center;
@@ -259,8 +259,8 @@ function Header() {
         }
 
         .mobile-offcanvas .dropdown-item {
-          padding: 15px 45px;
-          font-size: 1.1rem;
+          padding: 18px 45px;
+          font-size: 1.3rem;
           color: var(--text-content);
           border-bottom: 1px solid rgba(200, 131, 42, 0.08);
           font-weight: 600;

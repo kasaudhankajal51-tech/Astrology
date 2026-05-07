@@ -200,7 +200,7 @@ const AstroShop = () => {
           text-transform: uppercase;
           letter-spacing: 3px;
           font-weight: 800;
-          font-size: 0.9rem;
+          font-size: 1.1rem;
           margin-bottom: 10px;
         }
 
@@ -228,11 +228,11 @@ const AstroShop = () => {
         .trust-col:last-child { border-right: none; }
 
         .trust-col i {
-          font-size: 1.8rem;
+          font-size: 2.2rem;
           color: #8B4A1E;
         }
-        .trust-col h6 { margin: 0; font-weight: 700; font-size: 0.95rem; }
-        .trust-col small { color: #6c757d; font-size: 0.75rem; }
+        .trust-col h6 { margin: 0; font-weight: 700; font-size: 1.2rem; }
+        .trust-col small { color: #6c757d; font-size: 0.95rem; }
 
         .section-head { margin-bottom: 40px; }
         .h-line { width: 60px; height: 3px; background: #C8832A; margin: 15px auto; }
@@ -290,15 +290,15 @@ const AstroShop = () => {
           display: inline-block;
           background: rgba(255,255,255,0.2);
           backdrop-filter: blur(5px);
-          padding: 4px 12px;
+          padding: 6px 16px;
           border-radius: 50px;
-          font-size: 0.75rem;
+          font-size: 1rem;
           font-weight: 700;
           margin-bottom: 15px;
         }
 
-        .cat-content h3 { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.6rem; margin-bottom: 5px; }
-        .cat-content p { font-size: 0.9rem; opacity: 0.9; margin-bottom: 20px; }
+        .cat-content h3 { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 2rem; margin-bottom: 5px; }
+        .cat-content p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 20px; }
 
         .explore-link { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -333,9 +333,9 @@ const AstroShop = () => {
           left: 15px;
           background: #2A0F02;
           color: #fff;
-          padding: 4px 12px;
+          padding: 6px 15px;
           border-radius: 50px;
-          font-size: 0.7rem;
+          font-size: 0.95rem;
           font-weight: 700;
           text-transform: uppercase;
         }
@@ -368,20 +368,20 @@ const AstroShop = () => {
         .icon-btn:hover { background: #8B4A1E; color: #fff; }
 
         .prod-info-v2 { padding: 20px; }
-        .rating-row { color: #F59E0B; font-size: 0.7rem; margin-bottom: 8px; }
-        .prod-name-v2 { font-weight: 700; font-size: 1.1rem; margin-bottom: 15px; height: 2.8rem; overflow: hidden; }
+        .rating-row { color: #F59E0B; font-size: 0.9rem; margin-bottom: 8px; }
+        .prod-name-v2 { font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; height: 3.2rem; overflow: hidden; }
         
         .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-v2 { font-weight: 800; color: #8B4A1E; font-size: 1.2rem; }
+        .price-v2 { font-weight: 800; color: #8B4A1E; font-size: 1.5rem; }
         
         .btn-buy-v2 {
           background: transparent;
           border: 1.5px solid #2A0F02;
           color: #2A0F02;
-          padding: 6px 15px;
+          padding: 8px 20px;
           border-radius: 8px;
           font-weight: 700;
-          font-size: 0.8rem;
+          font-size: 1.1rem;
           transition: 0.3s;
         }
         .btn-buy-v2:hover { background: #2A0F02; color: #fff; }

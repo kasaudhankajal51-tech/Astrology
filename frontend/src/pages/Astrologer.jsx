@@ -232,7 +232,7 @@ function Astrologer() {
           padding: 8px 20px;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 0.8rem;
+          font-size: 1rem;
           text-transform: uppercase;
           letter-spacing: 2px;
           margin-bottom: 25px;
@@ -285,7 +285,7 @@ function Astrologer() {
           padding: 4px 12px;
           border-radius: 50px;
           font-weight: 800;
-          font-size: 0.85rem;
+          font-size: 1.1rem;
           color: #8B4A1E;
           box-shadow: 0 4px 10px rgba(0,0,0,0.05);
           border: 1px solid rgba(200, 131, 42, 0.1);
@@ -320,15 +320,15 @@ function Astrologer() {
 
         .card-body-v2 { padding: 0 25px 30px; }
 
-        .astro-name { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.4rem; margin-bottom: 5px; }
-        .astro-role { color: #8B4A1E; font-weight: 600; font-size: 0.9rem; margin-bottom: 15px; }
+        .astro-name { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.8rem; margin-bottom: 5px; }
+        .astro-role { color: #8B4A1E; font-weight: 600; font-size: 1.2rem; margin-bottom: 15px; }
 
         .exp-pill {
           display: inline-flex;
           background: #FDF6EE;
           padding: 6px 15px;
           border-radius: 50px;
-          font-size: 0.8rem;
+          font-size: 1.1rem;
           font-weight: 700;
           color: #8B4A1E;
           border: 1px solid rgba(200, 131, 42, 0.1);
@@ -336,25 +336,25 @@ function Astrologer() {
 
         .spec-tag {
           display: inline-block;
-          font-size: 0.7rem;
+          font-size: 0.95rem;
           background: #f8f9fa;
-          padding: 3px 10px;
+          padding: 5px 12px;
           border-radius: 4px;
-          margin: 2px;
+          margin: 3px;
           color: #6c757d;
           font-weight: 600;
         }
 
         .astro-bio-v2 {
-          font-size: 0.9rem;
+          font-size: 1.2rem;
           color: #5C2D12;
-          line-height: 1.5;
+          line-height: 1.6;
           margin-bottom: 20px;
           font-style: italic;
-          opacity: 0.8;
+          opacity: 0.9;
         }
 
-        .lang-info { font-size: 0.8rem; font-weight: 600; color: #9B6640; }
+        .lang-info { font-size: 1.1rem; font-weight: 600; color: #9B6640; }
 
         .btn-group-v2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
@@ -363,7 +363,7 @@ function Astrologer() {
           padding: 12px;
           border-radius: 12px;
           font-weight: 700;
-          font-size: 0.9rem;
+          font-size: 1.2rem;
           transition: all 0.3s;
         }
 

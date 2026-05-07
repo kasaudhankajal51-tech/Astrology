@@ -90,12 +90,14 @@ const ShopCategory = () => {
           font-size: clamp(2.5rem, 6vw, 4rem);
           font-weight: 700;
           margin-bottom: 15px;
+          color: #fff;
         }
         .cat-desc {
           max-width: 600px;
           margin: 0 auto;
           font-size: 1.1rem;
           opacity: 0.9;
+          color: #fff;
         }
         .product-grid {
           display: grid;

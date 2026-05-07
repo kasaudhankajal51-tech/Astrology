@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function CertificationCourses() {
   const [showModal, setShowModal] = useState(false);
@@ -9,6 +10,19 @@ function CertificationCourses() {
     city: '',
     experience: 'beginner'
   });
+
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [hash]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +35,7 @@ function CertificationCourses() {
   };
 
   const handlePayment = () => {
-    alert('Redirecting to secure payment gateway...\nProgram Fee: ₹2,499');
+    alert('Redirecting to secure payment gateway...\nProgram Fee: ₹1499');
   };
 
   const highlights = [
@@ -89,7 +103,7 @@ function CertificationCourses() {
 
                 <div className="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
                   <button className="btn-v2-primary" onClick={() => setShowModal(true)}>
-                    Enroll Now for ₹2,499
+                    Enroll Now for ₹1499
                   </button>
                   <button className="btn-v2-outline" onClick={() => setShowModal(true)}>
                     <i className="fas fa-play me-2"></i> Watch Program Preview
@@ -256,21 +270,21 @@ function CertificationCourses() {
       </div>
 
       {/* Final CTA */}
-      <div className="final-cta-v2 py-5 text-center">
+      <section className="final-cta-v2 py-5 text-center" id="enroll">
         <div className="container">
           <div className="cta-glass-box p-5 rounded-5 shadow-lg" data-aos="flip-up">
             <h2 className="display-5 fw-bold mb-3">Launch Your Professional Career</h2>
             <p className="fs-5 mb-4 opacity-75">Reserve your seat in the next certification batch</p>
             <div className="price-tag mb-5">
-              <span className="text-muted text-decoration-line-through fs-4 me-2">₹9,999</span>
-              <span className="display-4 fw-bold text-gradient">₹2,499</span>
+              <span className="text-muted text-decoration-line-through fs-4 me-2">₹7000</span>
+              <span className="display-4 fw-bold text-gradient">₹1499</span>
             </div>
             <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>
               Enroll in Certification
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* FAQ */}
       <div className="faq-v2 py-5 bg-light">
@@ -321,7 +335,7 @@ function CertificationCourses() {
                 </select>
               </div>
               <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
-                Proceed to Payment (₹2,499)
+                Proceed to Payment (₹1499)
               </button>
             </form>
           </div>

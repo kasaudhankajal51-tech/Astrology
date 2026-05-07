@@ -365,6 +365,15 @@ function Header() {
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
                 <li className="nav-item dropdown">
+                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">COURSES</a>
+                  <ul className="dropdown-menu border-0 shadow-sm">
+                    <li><Link className="dropdown-item" to="/vedic-course">Vedic Astrology Course</Link></li>
+                    <li><Link className="dropdown-item" to="/advanced-astrology">Advanced Astrology</Link></li>
+                    <li><Link className="dropdown-item" to="/predictive-astrology">Predictive Astrology</Link></li>
+                    <li><Link className="dropdown-item" to="/certification-courses">Certification Courses</Link></li>
+                  </ul>
+                </li>
+                <li className="nav-item dropdown">
                   <div className="d-flex align-items-center">
                     <Link className="nav-link pe-1" to="/consultations">CONSULTATIONS</Link>
                     <span className="nav-link dropdown-toggle dropdown-toggle-split ps-0" style={{ cursor: 'pointer' }} data-bs-toggle="dropdown"></span>
@@ -377,28 +386,17 @@ function Header() {
                     <li><a className="dropdown-item" href="#">Health Astrology</a></li>
                   </ul>
                 </li>
-                <li className="nav-item"><Link className="nav-link" to="/about">ABOUT</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/blog">BLOG</Link></li>
+                <li className="nav-item dropdown">
+                  <Link className="nav-link dropdown-toggle" to="/astro-shop" role="button" data-bs-toggle="dropdown">ASTRO SHOP</Link>
+                  <ul className="dropdown-menu border-0 shadow-sm">
+                    <li><Link className="dropdown-item" to="/astro-shop/gemstones">Gemstones</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/rudraksha">Rudraksha</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/yantras">Yantras</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/puja-kits">Puja Kits</Link></li>
+                    <li><Link className="dropdown-item" to="/astro-shop/bracelets">Bracelets</Link></li>
+                  </ul>
+                </li>
                 <li className="nav-item"><Link className="nav-link" to="/astrologer">ASTROLOGERS</Link></li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">COURSES</a>
-                  <ul className="dropdown-menu border-0 shadow-sm">
-                    <li><Link className="dropdown-item" to="/vedic-course">Vedic Astrology Course</Link></li>
-                    <li><Link className="dropdown-item" to="/advanced-astrology">Advanced Astrology</Link></li>
-                    <li><Link className="dropdown-item" to="/predictive-astrology">Predictive Astrology</Link></li>
-                    <li><Link className="dropdown-item" to="/certification-courses">Certification Courses</Link></li>
-                  </ul>
-                </li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">ASTRO SHOP</a>
-                  <ul className="dropdown-menu border-0 shadow-sm">
-                    <li><a className="dropdown-item" href="#">Gemstones</a></li>
-                    <li><a className="dropdown-item" href="#">Rudraksha</a></li>
-                    <li><a className="dropdown-item" href="#">Yantras</a></li>
-                    <li><a className="dropdown-item" href="#">Puja Kits</a></li>
-                    <li><a className="dropdown-item" href="#">Bracelets</a></li>
-                  </ul>
-                </li>
                 <li className="nav-item dropdown">
                   <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">FREE TOOLS</a>
                   <ul className="dropdown-menu border-0 shadow-sm">
@@ -408,6 +406,8 @@ function Header() {
                     <li><Link className="dropdown-item" to="/love">Love Calculator</Link></li>
                   </ul>
                 </li>
+                <li className="nav-item"><Link className="nav-link" to="/about">ABOUT</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/blog">BLOG</Link></li>
               </ul>
             </div>
 
@@ -429,23 +429,6 @@ function Header() {
             
             <li className="nav-item">
               <div className="d-flex justify-content-between align-items-center border-bottom">
-                <Link className="nav-link border-0 w-100" to="/consultations" data-bs-dismiss="offcanvas">CONSULTATIONS</Link>
-                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-consult-collapse">
-                  <i className="fas fa-chevron-down small text-muted"></i>
-                </div>
-              </div>
-              <div className="collapse bg-light" id="mob-consult-collapse">
-                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link>
-                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link>
-                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Career & Business</Link>
-              </div>
-            </li>
-
-            <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
-            
-            <li className="nav-item">
-              <div className="d-flex justify-content-between align-items-center border-bottom">
                 <span className="nav-link border-0 w-100">COURSES</span>
                 <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-courses-collapse">
                   <i className="fas fa-chevron-down small text-muted"></i>
@@ -458,6 +441,38 @@ function Header() {
                 <Link className="dropdown-item d-block" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link>
               </div>
             </li>
+
+            <li className="nav-item">
+              <div className="d-flex justify-content-between align-items-center border-bottom">
+                <Link className="nav-link border-0 w-100" to="/consultations" data-bs-dismiss="offcanvas">CONSULTATIONS</Link>
+                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-consult-collapse">
+                  <i className="fas fa-chevron-down small text-muted"></i>
+                </div>
+              </div>
+              <div className="collapse bg-light" id="mob-consult-collapse">
+                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Personal Horoscope</Link>
+                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Marriage/Relationship</Link>
+                <Link className="dropdown-item d-block" to="/consultations" data-bs-dismiss="offcanvas">Career & Business</Link>
+              </div>
+            </li>
+
+            <li className="nav-item">
+              <div className="d-flex justify-content-between align-items-center border-bottom">
+                <span className="nav-link border-0 w-100">ASTRO SHOP</span>
+                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-shop-collapse">
+                  <i className="fas fa-chevron-down small text-muted"></i>
+                </div>
+              </div>
+              <div className="collapse bg-light" id="mob-shop-collapse">
+                <Link className="dropdown-item d-block" to="/astro-shop/gemstones" data-bs-dismiss="offcanvas">Gemstones</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/rudraksha" data-bs-dismiss="offcanvas">Rudraksha</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/yantras" data-bs-dismiss="offcanvas">Yantras</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/puja-kits" data-bs-dismiss="offcanvas">Puja Kits</Link>
+                <Link className="dropdown-item d-block" to="/astro-shop/bracelets" data-bs-dismiss="offcanvas">Bracelets</Link>
+              </div>
+            </li>
+
+            <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
 
             <li className="nav-item">
               <div className="d-flex justify-content-between align-items-center border-bottom">
@@ -474,7 +489,8 @@ function Header() {
               </div>
             </li>
 
-            <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
             
             <li className="nav-item p-4 d-grid gap-3">
               <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">

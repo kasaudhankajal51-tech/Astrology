@@ -24,6 +24,8 @@ import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailed from './pages/PaymentFailed';
 import AdminLeads from './pages/AdminLeads';
+import AstroShop from './pages/AstroShop';
+import ShopCategory from './pages/ShopCategory';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
           <Route path="numerology" element={<Numerology />} />
           <Route path="tarot" element={<Tarot />} />
           <Route path="love" element={<Love />} />
+          <Route path="astro-shop" element={<AstroShop />} />
+          <Route path="astro-shop/:category" element={<ShopCategory />} />
         </Route>
         
         {/* Standalone Landing Pages & Admin (No Header/Footer) */}

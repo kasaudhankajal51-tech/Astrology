@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function VedicCourse() {
   const [showModal, setShowModal] = useState(false);
@@ -9,6 +10,19 @@ function VedicCourse() {
     city: '',
     experience: 'beginner'
   });
+
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [hash]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -257,13 +271,13 @@ function VedicCourse() {
       </div>
 
       {/* Final CTA */}
-      <div className="final-cta-v2 py-5 text-center">
+      <div className="final-cta-v2 py-5 text-center" id="enroll">
         <div className="container">
           <div className="cta-glass-box p-5 rounded-5 shadow-lg" data-aos="flip-up">
             <h2 className="display-5 fw-bold mb-3">Begin Your Vedic Mastery</h2>
             <p className="fs-5 mb-4 opacity-75">Secure your spot in the upcoming batch at a special price</p>
             <div className="price-tag mb-5">
-              <span className="text-muted text-decoration-line-through fs-4 me-2">₹2,999</span>
+              <span className="text-muted text-decoration-line-through fs-4 me-2">₹4100</span>
               <span className="display-4 fw-bold text-gradient">₹699</span>
             </div>
             <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>

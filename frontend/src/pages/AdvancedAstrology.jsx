@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function AdvancedAstrology() {
   const [showModal, setShowModal] = useState(false);
@@ -9,6 +10,19 @@ function AdvancedAstrology() {
     city: '',
     experience: 'intermediate'
   });
+
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (hash) {
+      const element = document.getElementById(hash.replace('#', ''));
+      if (element) {
+        setTimeout(() => {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }, 100);
+      }
+    }
+  }, [hash]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -21,7 +35,7 @@ function AdvancedAstrology() {
   };
 
   const handlePayment = () => {
-    alert('Redirecting to secure payment gateway...\nCourse Fee: ₹1,299');
+    alert('Redirecting to secure payment gateway...\nCourse Fee: ₹999');
   };
 
   const highlights = [
@@ -89,7 +103,7 @@ function AdvancedAstrology() {
 
                 <div className="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
                   <button className="btn-v2-primary" onClick={() => setShowModal(true)}>
-                    Enroll Now for ₹1,299
+                    Enroll Now for ₹999
                   </button>
                   <button className="btn-v2-outline" onClick={() => setShowModal(true)}>
                     <i className="fas fa-play me-2"></i> Watch Preview
@@ -256,14 +270,14 @@ function AdvancedAstrology() {
       </div>
 
       {/* Final CTA */}
-      <div className="final-cta-v2 py-5 text-center">
+      <div className="final-cta-v2 py-5 text-center" id="enroll">
         <div className="container">
           <div className="cta-glass-box p-5 rounded-5 shadow-lg" data-aos="flip-up">
             <h2 className="display-5 fw-bold mb-3">Achieve Professional Mastery</h2>
             <p className="fs-5 mb-4 opacity-75">Limited seats available for the advanced batch</p>
             <div className="price-tag mb-5">
-              <span className="text-muted text-decoration-line-through fs-4 me-2">₹4,999</span>
-              <span className="display-4 fw-bold text-gradient">₹1,299</span>
+              <span className="text-muted text-decoration-line-through fs-4 me-2">₹5100</span>
+              <span className="display-4 fw-bold text-gradient">₹999</span>
             </div>
             <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>
               Secure Your Spot
@@ -321,7 +335,7 @@ function AdvancedAstrology() {
                 </select>
               </div>
               <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
-                Proceed to Payment (₹1,299)
+                Proceed to Payment (₹999)
               </button>
             </form>
           </div>

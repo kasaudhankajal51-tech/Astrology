@@ -194,17 +194,17 @@ const AstrologyCourses = () => {
     {
       id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
       desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
-      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/vedic-course"
+      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/advanced-astrology"
     },
     {
       id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
       desc: "Master the precision of KP system with practical techniques for accurate predictions.",
-      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/advanced-astrology"
+      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/predictive-astrology"
     },
     {
       id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
       desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
-      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/predictive-astrology"
+      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/certification-courses"
     },
   ];
 
@@ -241,10 +241,10 @@ const AstrologyCourses = () => {
         .iname { font-size: .85rem; color: var(--text-main); font-weight: 600; font-family: var(--font-sans); margin: 0; text-align: left; }
         .iexp { font-size: .75rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
         .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; }
-        .btn-read:hover { background: rgba(200, 131, 42, 0.1); }
-        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; }
-        .btn-buy:hover { background: #723c18; transform: translateY(-2px); }
+        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-read:hover { background: rgba(200, 131, 42, 0.1); color: var(--primary-color); }
+        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-buy:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
         .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; }
         .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
         .fic { width: 70px; height: 70px; border-radius: 50%; background: rgba(139, 74, 30, 0.08); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary-color); }
@@ -341,8 +341,8 @@ const AstrologyCourses = () => {
                   </div>
                 </div>
                 <div className="btnrow">
-                  <button className="btn-read" onClick={(e) => { e.stopPropagation(); navigate(link); }}>Read More</button>
-                  <button className="btn-buy" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Buy Now →</button>
+                  <Link to={link} className="btn-read" onClick={(e) => e.stopPropagation()}>Read More</Link>
+                  <Link to={link + '#enroll'} className="btn-buy" onClick={(e) => e.stopPropagation()}>Buy Now →</Link>
                 </div>
               </div>
             </div>
@@ -481,7 +481,7 @@ function Home() {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
-    }, 5000);
+    }, 6000);
     return () => clearInterval(timer);
   }, []);
 
@@ -500,6 +500,19 @@ function Home() {
     if (trackRef.current) {
       const scrollAmount = window.innerWidth < 768 ? 250 : 350;
       trackRef.current.scrollBy({ left: direction === 'left' ? -scrollAmount : scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const handleVideoClick = (e) => {
+    const video = e.currentTarget.querySelector('video');
+    if (video) {
+      if (video.paused) {
+        video.play();
+        e.currentTarget.classList.add('playing');
+      } else {
+        video.pause();
+        e.currentTarget.classList.remove('playing');
+      }
     }
   };
 
@@ -542,12 +555,15 @@ function Home() {
                 )}
                 
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
-                  <button onClick={handleOpenModal} className="btn mystic-btn-primary">
-                    Book a Consultation {bannerSlides[currentSlide].themeRust ? null : <i className="fas fa-sparkles ms-2"></i>}
+                  <Link to="/certification-courses" className="btn mystic-btn-primary focus-70">
+                    Enroll in Live Course <i className="fas fa-graduation-cap ms-2"></i>
+                  </Link>
+                  <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
+                    Book Consultation <i className="fas fa-calendar-check ms-1"></i>
                   </button>
-                  <button className="btn mystic-btn-ghost">
-                    {bannerSlides[currentSlide].themeRust ? "Explore Your Reports" : "Explore Courses"}
-                  </button>
+                  <Link to="/astro-shop" className="btn mystic-btn-ghost focus-10">
+                    Astro Shop <i className="fas fa-shopping-bag ms-1"></i>
+                  </Link>
                 </div>
 
                 <div className="carousel-dots mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.6s' }}>
@@ -795,10 +811,10 @@ function Home() {
       </span>
       {/* Heading with gradient color on "Clients Say" only */}
       <h2 className="section-title mt-3">
-        What Our <span className="text-gradient">Clients Say</span>
+        What Our <span className="text-gradient">Students Say</span>
       </h2>
       <p className="section-description mx-auto mt-3">
-        Trusted by thousands of satisfied clients worldwide
+        Trusted by thousands of satisfied students across globe
       </p>
     </div>
     
@@ -814,7 +830,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -850,7 +866,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -885,7 +901,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -920,7 +936,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -1230,30 +1246,64 @@ function Home() {
 
         .banner-btn-row {
           display: flex;
-          gap: 20px;
+          gap: 15px;
           align-items: center;
+          flex-wrap: wrap;
         }
 
-        .banner-btn-row .mystic-btn-primary {
-          background: #8B4A1E;
+        .focus-70 {
+          flex: 0 0 auto;
+          min-width: 220px;
+          font-size: 1.15rem !important;
+          padding: 18px 35px !important;
+          background: #2A0F02 !important;
           color: #ffffff !important;
-          border: none;
-          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.3);
+          box-shadow: 0 10px 30px rgba(42, 15, 2, 0.25) !important;
+          border: none !important;
         }
 
-        .mystic-btn-ghost {
-          background: transparent;
-          color: #3A1900;
-          font-weight: 700;
-          padding: 12px 25px;
-          border: none;
-          border-radius: 12px;
-          transition: 0.3s;
-          font-family: var(--font-sans);
+        .focus-20 {
+          flex: 0 0 auto;
+          font-size: 1rem !important;
+          padding: 14px 28px !important;
+          background: transparent !important;
+          border: 1.5px solid #2A0F02 !important;
+          color: #2A0F02 !important;
         }
-        .mystic-btn-ghost:hover {
-          background: rgba(139, 74, 30, 0.08);
-          color: #8B4A1E;
+
+        .focus-10 {
+          flex: 0 0 auto;
+          font-size: 0.95rem !important;
+          padding: 12px 24px !important;
+          color: #2A0F02 !important;
+          opacity: 0.9;
+          background: rgba(42, 15, 2, 0.04) !important;
+          border: 1px solid rgba(42, 15, 2, 0.15) !important;
+          border-radius: 12px;
+          transition: all 0.3s ease;
+        }
+
+        .focus-10:hover {
+          opacity: 1;
+          background: rgba(42, 15, 2, 0.08) !important;
+          border-color: rgba(42, 15, 2, 0.3) !important;
+        }
+
+        @media (max-width: 768px) {
+          .banner-btn-row {
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+            margin-top: 2rem !important;
+          }
+          .focus-70, .focus-20, .focus-10 {
+            width: 100%;
+            text-align: center;
+            justify-content: center;
+          }
+          .focus-10 {
+            background: rgba(139, 74, 30, 0.03) !important;
+          }
         }
 
         .trust-indicator {
@@ -1406,18 +1456,23 @@ function Home() {
           color: #ffffff;
           background: rgba(255,255,255,0.1);
         }
-        .banner-section.theme-rust .banner-btn-row .mystic-btn-primary {
-          background: linear-gradient(135deg, #F9C369, #D98925) !important;
-          color: #000000 !important;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        .banner-section.theme-rust .focus-70 {
+          background: #ffffff !important;
+          color: #1a0b02 !important;
+          box-shadow: 0 10px 30px rgba(255, 255, 255, 0.15) !important;
         }
-        .banner-section.theme-rust .mystic-btn-ghost {
+        .banner-section.theme-rust .focus-20 {
           color: #ffffff !important;
-          border: 1px solid rgba(255,255,255,0.5) !important;
-          background: transparent !important;
+          border-color: rgba(255,255,255,0.6) !important;
         }
-        .banner-section.theme-rust .mystic-btn-ghost:hover {
-          background: rgba(255,255,255,0.1) !important;
+        .banner-section.theme-rust .focus-10 {
+          color: #ffffff !important;
+          border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          background: rgba(255, 255, 255, 0.05) !important;
+        }
+        .banner-section.theme-rust .focus-10:hover {
+          background: rgba(255, 255, 255, 0.12) !important;
+          border-color: rgba(255, 255, 255, 0.5) !important;
         }
         .banner-section.theme-rust .c-dot {
           background: rgba(255,255,255,0.3);
@@ -1452,18 +1507,23 @@ function Home() {
           color: #ffffff;
           background: rgba(255,255,255,0.15);
         }
-        .banner-section.theme-mustard .banner-btn-row .mystic-btn-primary {
+        .banner-section.theme-mustard .focus-70 {
           background: #ffffff !important;
           color: #975427 !important;
-          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2) !important;
         }
-        .banner-section.theme-mustard .mystic-btn-ghost {
+        .banner-section.theme-mustard .focus-20 {
           color: #ffffff !important;
-          border: 1px solid rgba(255,255,255,0.6) !important;
+          border-color: rgba(255,255,255,0.6) !important;
+        }
+        .banner-section.theme-mustard .focus-10 {
+          color: #ffffff !important;
+          border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          background: rgba(255, 255, 255, 0.05) !important;
         }
         .banner-section.theme-mustard .c-dot.active {
           background: #ffffff;
-          box-shadow: 0 0 15px rgba(255,255,255,0.8);
+          box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
         }
 
         /* Theme Tan (Warm Beige) Specifics */
@@ -1482,14 +1542,19 @@ function Home() {
           color: #8B4A1E;
           background: rgba(139, 74, 30, 0.1);
         }
-        .banner-section.theme-tan .banner-btn-row .mystic-btn-primary {
-          background: #8B4A1E !important;
+        .banner-section.theme-tan .focus-70 {
+          background: #3A1900 !important;
           color: #ffffff !important;
-          box-shadow: 0 5px 15px rgba(139, 74, 30, 0.3);
+          box-shadow: 0 10px 30px rgba(58, 25, 0, 0.25) !important;
         }
-        .banner-section.theme-tan .mystic-btn-ghost {
+        .banner-section.theme-tan .focus-20 {
           color: #3A1900 !important;
-          border: 1px solid rgba(139, 74, 30, 0.4) !important;
+          border-color: rgba(58, 25, 0, 0.4) !important;
+        }
+        .banner-section.theme-tan .focus-10 {
+          color: #3A1900 !important;
+          border: 1px solid rgba(58, 25, 0, 0.2) !important;
+          background: rgba(58, 25, 0, 0.03) !important;
         }
         .banner-section.theme-tan .c-dot.active {
           background: #8B4A1E;
@@ -1908,6 +1973,14 @@ function Home() {
 
         .video-container:hover .play-btn-overlay {
           opacity: 1;
+        }
+
+        .video-container.playing .play-btn-overlay {
+          opacity: 0;
+        }
+
+        .video-container.playing:hover .play-btn-overlay {
+          opacity: 0.5;
         }
 
         .play-circle {

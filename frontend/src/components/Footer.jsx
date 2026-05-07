@@ -207,7 +207,7 @@ function Footer() {
             <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
               <h5 className="fb-head">Explore</h5>
               <ul className="fb-nav">
-                {[['About Us', '/about'], ['Free Tools', '/freetools'], ['Blog', '/blog'], ['Astro Store', '/store'], ['Contact', '/contact']].map(([label, to]) => (
+                {[['About Us', '/about'], ['Free Tools', '/free-tools'], ['Blog', '/blog'], ['Astro Store', '/astro-shop'], ['Contact', '/contact']].map(([label, to]) => (
                   <li key={label}><Link to={to}>{label}</Link></li>
                 ))}
               </ul>

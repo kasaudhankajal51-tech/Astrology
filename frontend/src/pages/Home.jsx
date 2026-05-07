@@ -503,6 +503,19 @@ function Home() {
     }
   };
 
+  const handleVideoClick = (e) => {
+    const video = e.currentTarget.querySelector('video');
+    if (video) {
+      if (video.paused) {
+        video.play();
+        e.currentTarget.classList.add('playing');
+      } else {
+        video.pause();
+        e.currentTarget.classList.remove('playing');
+      }
+    }
+  };
+
   return (
     <>
       {/* Banner Section */}
@@ -817,7 +830,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -853,7 +866,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -888,7 +901,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -923,7 +936,7 @@ function Home() {
         <div className="testimonial-card">
           <div className="card-inner">
             <div className="quote-icon">“</div>
-            <div className="video-container">
+            <div className="video-container" onClick={handleVideoClick}>
               <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
               <div className="play-btn-overlay">
                 <div className="play-circle">
@@ -1960,6 +1973,14 @@ function Home() {
 
         .video-container:hover .play-btn-overlay {
           opacity: 1;
+        }
+
+        .video-container.playing .play-btn-overlay {
+          opacity: 0;
+        }
+
+        .video-container.playing:hover .play-btn-overlay {
+          opacity: 0.5;
         }
 
         .play-circle {

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 function Astrologer() {
   useEffect(() => {
@@ -154,10 +155,10 @@ function Astrologer() {
                   </div>
 
                   <div className="btn-group-v2">
-                    <button className="btn-chat">
+                    <button className="btn-chat" onClick={() => toast.success(`Starting chat with ${astro.name}...`)}>
                       <i className="fas fa-comment-dots me-2"></i> Chat
                     </button>
-                    <button className="btn-call">
+                    <button className="btn-call" onClick={() => toast.success(`Calling ${astro.name}...`)}>
                       <i className="fas fa-phone-alt me-2"></i> Call
                     </button>
                   </div>

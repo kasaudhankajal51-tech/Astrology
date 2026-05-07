@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 const ShopCategory = () => {
   const { category } = useParams();
@@ -9,7 +10,7 @@ const ShopCategory = () => {
     gemstones: {
       title: 'Premium Gemstones',
       desc: 'Authentic and certified gemstones for planetary balance and prosperity.',
-      banner: 'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=1200',
+      banner: '/images/shop-gemstones.png',
       products: [
         { id: 1, name: 'Natural Blue Sapphire (Neelam)', price: '₹12,500', rating: 5, image: 'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=400' },
         { id: 2, name: 'Panna (Emerald) - Zambian', price: '₹8,400', rating: 4, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=400' },
@@ -20,7 +21,7 @@ const ShopCategory = () => {
     rudraksha: {
       title: 'Sacred Rudraksha',
       desc: 'Divine beads from the Himalayas for protection and spiritual growth.',
-      banner: 'https://images.unsplash.com/photo-1605000797439-75a150088f44?auto=format&fit=crop&q=80&w=1200',
+      banner: '/images/shop-rudraksha.png',
       products: [
         { id: 1, name: '5 Mukhi Rudraksha Mala', price: '₹450', rating: 5, image: 'https://images.unsplash.com/photo-1605000797439-75a150088f44?auto=format&fit=crop&q=80&w=400' },
         { id: 2, name: '7 Mukhi Rudraksha Bead', price: '₹2,500', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
@@ -31,7 +32,7 @@ const ShopCategory = () => {
     yantras: {
       title: 'Vedic Yantras',
       desc: 'Sacred geometrical diagrams for attracting positive cosmic energy.',
-      banner: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=1200',
+      banner: '/images/shop-yantras.png',
       products: [
         { id: 1, name: 'Shree Yantra - 24k Gold Plated', price: '₹3,999', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
         { id: 2, name: 'Kuber Yantra for Wealth', price: '₹1,500', rating: 4, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
@@ -42,7 +43,7 @@ const ShopCategory = () => {
     'puja-kits': {
       title: 'Premium Puja Kits',
       desc: 'Complete ceremonial sets for rituals, festivals, and spiritual practices.',
-      banner: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=1200',
+      banner: '/images/shop-puja.png',
       products: [
         { id: 1, name: 'Diwali Maha Puja Kit', price: '₹4,500', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
         { id: 2, name: 'Navratri Durga Puja Set', price: '₹3,200', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
@@ -189,7 +190,7 @@ const ShopCategory = () => {
                   <p className="product-price m-0">{prod.price}</p>
                   <span className="text-success small fw-bold">In Stock</span>
                 </div>
-                <button className="btn-add">Add to cart</button>
+                <button className="btn-add" onClick={() => toast.success(`${prod.name} added to cart!`)}>Add to cart</button>
               </div>
             </div>
           ))}

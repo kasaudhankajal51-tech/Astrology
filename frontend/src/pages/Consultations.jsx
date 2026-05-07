@@ -248,6 +248,18 @@ function Consultations() {
       <style jsx>{`
         @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700&display=swap');
 
+        :root {
+          --cosmic-bg: #FDF6EE;
+          --cosmic-text: #2A0F02;
+          --cosmic-text-muted: #5C3D26;
+          --cosmic-white: #ffffff;
+          --cosmic-accent-pink: #8B4A1E;
+          --cosmic-accent-soft: rgba(139, 74, 30, 0.1);
+          --cosmic-gradient: linear-gradient(135deg, #8B4A1E, #C8832A);
+          --glass-border: rgba(139, 74, 30, 0.2);
+          --premium-shadow: 0 10px 30px rgba(139, 74, 30, 0.1);
+        }
+
         .consultation-page {
           padding: 160px 0 120px;
           background: var(--cosmic-bg);

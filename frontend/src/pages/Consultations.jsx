@@ -608,7 +608,15 @@ function Consultations() {
         @media (max-width: 767px) {
           .consult-grid { grid-template-columns: 1fr; }
           .section-title { font-size: 2.5rem; }
-          .card-actions { grid-template-columns: 1fr; }
+          .card-actions { 
+            grid-template-columns: 1fr 1fr; 
+            gap: 8px;
+          }
+          .card-actions .mystic-btn-outline, 
+          .card-actions .mystic-btn-primary {
+            padding: 10px 8px;
+            font-size: 0.8rem;
+          }
           .mystic-popup-content-box { border-radius: 30px; }
           .popup-heading { font-size: 1.8rem; }
         }

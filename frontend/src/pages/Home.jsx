@@ -218,7 +218,7 @@ const AstrologyCourses = () => {
         .ah h2 { font-family: var(--font-serif); font-size: clamp(1.8rem,5vw,2.8rem); color: var(--text-heading); letter-spacing: .02em; margin: 0 0 .4rem; font-weight: 700; }
         .atag { font-size: .75rem; letter-spacing: .15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
         .atag::before, .atag::after { content: '—'; opacity: .4; }
-        .asub { color: var(--text-content); font-size: .95rem; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+        .asub { color: var(--text-content); font-size: 1.15rem; max-width: 600px; margin: 0 auto; line-height: 1.7; }
         .dl { display: flex; align-items: center; gap: 10px; justify-content: center; margin: .4rem 0 .8rem; }
         .dl::before, .dl::after { content: ''; flex: 1; max-width: 70px; height: .5px; background: var(--accent-color); }
         .dd { width: 5px; height: 5px; background: var(--accent-color); border-radius: 50%; }
@@ -231,19 +231,19 @@ const AstrologyCourses = () => {
         .ico { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--card-color); border: 2px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary-color); z-index: 2; font-family: var(--font-serif); }
         .cb { padding: 2rem 1.25rem 1.25rem; text-align: center; flex: 1; display: flex; flex-direction: column; }
         .clvl { font-size: .65rem; letter-spacing: .18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .4rem; font-family: var(--font-sans); font-weight: 600; }
-        .ctitle { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-card-heading); margin: 0 0 .4rem; font-weight: 600; line-height: 1.3; }
-        .cdesc { font-size: .9rem; color: var(--text-content); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
-        .price-hero { font-family: var(--font-serif); font-size: 1.6rem; color: var(--text-heading); font-weight: 700; margin: .2rem 0 .8rem; }
+        .ctitle { font-family: var(--font-serif); font-size: 1.8rem; color: var(--text-card-heading); margin: 0 0 .4rem; font-weight: 700; line-height: 1.3; }
+        .cdesc { font-size: 1.2rem; color: var(--text-content); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+        .price-hero { font-family: var(--font-serif); font-size: 2rem; color: var(--text-heading); font-weight: 700; margin: .2rem 0 .8rem; }
         .price-hero span { font-size: .9rem; color: var(--text-muted); text-decoration: line-through; font-family: var(--font-sans); font-weight: 400; margin-left: 8px; }
         .divr { height: 1px; background: var(--glass-border); margin: .5rem 0 1rem; }
         .cinstr { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; justify-content: center; }
         .iavt { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color); border: 2px solid var(--accent-color); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-family: var(--font-serif); flex-shrink: 0; }
-        .iname { font-size: .85rem; color: var(--text-main); font-weight: 600; font-family: var(--font-sans); margin: 0; text-align: left; }
-        .iexp { font-size: .75rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
+        .iname { font-size: 1.1rem; color: var(--text-main); font-weight: 700; font-family: var(--font-sans); margin: 0; text-align: left; }
+        .iexp { font-size: 0.95rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
         .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: 1.1rem; font-family: var(--font-sans); font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
         .btn-read:hover { background: rgba(200, 131, 42, 0.1); color: var(--primary-color); }
-        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: 1.1rem; font-family: var(--font-sans); font-weight: 700; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
         .btn-buy:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
         .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; }
         .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }

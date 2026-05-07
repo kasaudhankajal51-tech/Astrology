@@ -300,7 +300,7 @@ function Consultations() {
         .header-desc {
           max-width: 700px;
           color: var(--cosmic-text-muted);
-          font-size: 1.3rem;
+          font-size: 1.5rem;
           line-height: 1.7;
           font-weight: 500;
           font-family: 'Be Vietnam Pro', sans-serif;
@@ -317,7 +317,7 @@ function Consultations() {
         /* Category Header */
         .category-name {
           font-family: 'Playfair Display', serif;
-          font-size: 2.8rem;
+          font-size: 3.2rem;
           color: var(--cosmic-text);
           font-weight: 800;
         }
@@ -423,7 +423,7 @@ function Consultations() {
 
         .card-info h4 {
           font-family: 'Playfair Display', serif;
-          font-size: 2.1rem;
+          font-size: 2.5rem;
           font-weight: 800;
           color: var(--cosmic-text);
           margin-bottom: 15px;
@@ -431,7 +431,7 @@ function Consultations() {
 
         .card-preview-text {
           color: var(--cosmic-text-muted);
-          font-size: 1.25rem;
+          font-size: 1.5rem;
           line-height: 1.6;
           margin-bottom: 25px;
           flex-grow: 1;
@@ -448,7 +448,7 @@ function Consultations() {
           padding: 12px;
           border-radius: 15px;
           font-weight: 800;
-          font-size: 0.95rem;
+          font-size: 1.2rem;
           text-transform: uppercase;
           letter-spacing: 1px;
           transition: 0.4s;
@@ -547,14 +547,14 @@ function Consultations() {
 
         .popup-heading {
           font-family: 'Playfair Display', serif;
-          font-size: 2.8rem;
+          font-size: 3.2rem;
           font-weight: 800;
           color: var(--cosmic-text);
         }
 
         .popup-description-wrapper p {
           color: var(--cosmic-text-muted);
-          font-size: 1.4rem;
+          font-size: 1.7rem;
           line-height: 1.8;
           font-weight: 500;
           font-family: 'Be Vietnam Pro', sans-serif;
@@ -581,7 +581,7 @@ function Consultations() {
           color: #fff;
           border: none;
           font-weight: 800;
-          font-size: 1.15rem;
+          font-size: 1.4rem;
           text-transform: uppercase;
           letter-spacing: 2px;
           box-shadow: 0 15px 30px rgba(227, 27, 122, 0.3);

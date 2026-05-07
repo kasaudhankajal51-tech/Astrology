@@ -26,6 +26,7 @@ import PaymentFailed from './pages/PaymentFailed';
 import AdminLeads from './pages/AdminLeads';
 import AstroShop from './pages/AstroShop';
 import ShopCategory from './pages/ShopCategory';
+import ConsultationDetail from './pages/ConsultationDetail';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -37,6 +38,7 @@ function App() {
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
           <Route path="consultations" element={<Consultations />} />
+          <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
           <Route path="contact" element={<Contact />} />

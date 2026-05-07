@@ -798,10 +798,10 @@ function Home() {
       </span>
       {/* Heading with gradient color on "Clients Say" only */}
       <h2 className="section-title mt-3">
-        What Our <span className="text-gradient">Clients Say</span>
+        What Our <span className="text-gradient">Students Say</span>
       </h2>
       <p className="section-description mx-auto mt-3">
-        Trusted by thousands of satisfied clients worldwide
+        Trusted by thousands of satisfied students across globe
       </p>
     </div>
     

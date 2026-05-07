@@ -194,17 +194,17 @@ const AstrologyCourses = () => {
     {
       id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
       desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
-      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/vedic-course"
+      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/advanced-astrology"
     },
     {
       id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
       desc: "Master the precision of KP system with practical techniques for accurate predictions.",
-      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/advanced-astrology"
+      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/predictive-astrology"
     },
     {
       id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
       desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
-      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/predictive-astrology"
+      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/certification-courses"
     },
   ];
 
@@ -241,10 +241,10 @@ const AstrologyCourses = () => {
         .iname { font-size: .85rem; color: var(--text-main); font-weight: 600; font-family: var(--font-sans); margin: 0; text-align: left; }
         .iexp { font-size: .75rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
         .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; }
-        .btn-read:hover { background: rgba(200, 131, 42, 0.1); }
-        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; }
-        .btn-buy:hover { background: #723c18; transform: translateY(-2px); }
+        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-read:hover { background: rgba(200, 131, 42, 0.1); color: var(--primary-color); }
+        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-buy:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
         .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; }
         .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
         .fic { width: 70px; height: 70px; border-radius: 50%; background: rgba(139, 74, 30, 0.08); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary-color); }
@@ -341,8 +341,8 @@ const AstrologyCourses = () => {
                   </div>
                 </div>
                 <div className="btnrow">
-                  <button className="btn-read" onClick={(e) => { e.stopPropagation(); navigate(link); }}>Read More</button>
-                  <button className="btn-buy" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Buy Now →</button>
+                  <Link to={link} className="btn-read" onClick={(e) => e.stopPropagation()}>Read More</Link>
+                  <Link to={link + '#enroll'} className="btn-buy" onClick={(e) => e.stopPropagation()}>Buy Now →</Link>
                 </div>
               </div>
             </div>

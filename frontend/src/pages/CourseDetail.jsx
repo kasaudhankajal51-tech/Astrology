@@ -155,15 +155,16 @@ function CourseDetail() {
         }
 
         .main-content {
-          margin-top: -80px;
+          margin-top: -60px;
           position: relative;
           z-index: 10;
+          padding-bottom: 20px;
         }
 
         .content-card {
           background: #FFF;
           border-radius: 35px;
-          padding: 60px;
+          padding: 50px 45px;
           box-shadow: 0 30px 70px rgba(139, 74, 30, 0.08);
           border: 1px solid rgba(139, 74, 30, 0.05);
           transition: all 0.4s ease;
@@ -242,17 +243,20 @@ function CourseDetail() {
 
         .enroll-sidebar {
           position: sticky;
-          top: 120px;
+          top: 130px;
+          z-index: 5;
+          margin-bottom: 30px;
+          margin-left: 15px;
         }
 
         .enroll-card {
           background: linear-gradient(135deg, #2A0F02 0%, #1a0a01 100%);
           color: #FFF;
-          padding: 50px 40px;
+          padding: 40px 30px;
           border-radius: 40px;
           text-align: center;
           box-shadow: 0 30px 60px rgba(42, 15, 2, 0.25);
-          border: 1px solid rgba(200, 131, 42, 0.1);
+          border: 1px solid rgba(200, 131, 42, 0.15);
           position: relative;
           overflow: hidden;
         }
@@ -274,7 +278,7 @@ function CourseDetail() {
         }
 
         .enroll-price {
-          font-size: 2.8rem;
+          font-size: 2.4rem;
           font-weight: 800;
           margin-bottom: 12px;
           color: #C8832A;
@@ -390,15 +394,52 @@ function CourseDetail() {
 
         .mobile-cta {
           position: fixed;
-          bottom: 20px;
-          left: 20px;
-          right: 20px;
-          background: #2A0F02;
-          padding: 15px;
-          border-radius: 20px;
-          box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+          bottom: 15px;
+          left: 15px;
+          right: 15px;
+          background: rgba(42, 15, 2, 0.95);
+          backdrop-filter: blur(15px);
+          padding: 14px 22px;
+          border-radius: 28px;
+          box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           z-index: 1000;
           display: flex;
+          align-items: center;
+          border: 1px solid rgba(200, 131, 42, 0.3);
+          animation: mobileSlideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        @keyframes mobileSlideUp {
+          from { transform: translateY(100px); opacity: 0; }
+          to { transform: translateY(0); opacity: 1; }
+        }
+
+        .mobile-cta p.small {
+          color: #C8832A !important;
+          font-size: 0.65rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          margin-bottom: 0;
+        }
+
+        .mobile-cta .btn-enquire {
+          background: linear-gradient(135deg, #C8832A 0%, #8B4A1E 100%);
+          color: #FFF;
+          border: none;
+          padding: 12px 28px;
+          border-radius: 16px;
+          font-weight: 800;
+          font-size: 0.95rem;
+          box-shadow: 0 8px 20px rgba(200, 131, 42, 0.3);
+          text-transform: uppercase;
+          animation: ctaPulse 2s infinite;
+        }
+
+        @keyframes ctaPulse {
+          0% { box-shadow: 0 0 0 0 rgba(200, 131, 42, 0.4); }
+          70% { box-shadow: 0 0 0 15px rgba(200, 131, 42, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(200, 131, 42, 0); }
         }
 
         .back-to-top {
@@ -416,10 +457,10 @@ function CourseDetail() {
           justify-content: center;
           font-size: 1.2rem;
           cursor: pointer;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-          z-index: 1000;
+          box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+          z-index: 2000;
           transition: all 0.3s ease;
-          opacity: 0.8;
+          opacity: 0.9;
         }
 
         .back-to-top:hover {
@@ -552,13 +593,76 @@ function CourseDetail() {
           transform: translateY(-2px);
         }
 
+        @media (max-width: 1200px) {
+          .content-card {
+            padding: 40px 30px;
+          }
+          .enroll-card {
+            padding: 35px 20px;
+          }
+          .section-title {
+            font-size: 1.8rem;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .detail-hero {
+            padding: 100px 0 80px;
+            text-align: center;
+          }
+          .hero-meta {
+            justify-content: center;
+            gap: 10px;
+          }
+          .hero-meta-item {
+            padding: 8px 15px;
+            font-size: 0.85rem;
+            background: rgba(255, 255, 255, 0.05);
+          }
+          .main-content {
+            margin-top: -40px;
+          }
+          .section-title {
+            font-size: 1.7rem;
+            text-align: center;
+            margin-bottom: 25px;
+          }
+          .section-title::after {
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+          }
+          .description-text {
+            font-size: 1.1rem;
+            padding-left: 0;
+            border-left: none;
+            text-align: center;
+            line-height: 1.7;
+          }
+          .topic-item {
+            padding: 15px 20px;
+            justify-content: center;
+          }
+        }
+
         @media (max-width: 992px) {
+          .main-content {
+            margin-top: -30px;
+          }
           .enroll-sidebar {
             position: static;
             margin-top: 40px;
+            margin-left: 0;
           }
           .content-card {
             padding: 30px;
+            border-radius: 25px;
+          }
+          .back-to-top {
+            right: 15px;
+            bottom: 90px;
+            width: 45px;
+            height: 45px;
           }
         }
       `}</style>
@@ -705,12 +809,12 @@ function CourseDetail() {
 
       {/* Mobile Sticky CTA */}
       <div className="mobile-cta d-lg-none">
-        <div className="d-flex align-items-center justify-content-between w-100 px-4">
+        <div className="d-flex align-items-center justify-content-between w-100">
           <div>
-            <p className="mb-0 small">Upcoming Batch</p>
+            <p className="small">Upcoming Batch</p>
             <p className="mb-0 fw-bold text-white">Join Today</p>
           </div>
-          <button className="btn btn-warning px-4 py-2 fw-bold" onClick={() => setShowInquiryModal(true)}>
+          <button className="btn-enquire" onClick={() => setShowInquiryModal(true)}>
             ENQUIRE
           </button>
         </div>

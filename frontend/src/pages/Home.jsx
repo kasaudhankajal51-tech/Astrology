@@ -61,7 +61,13 @@ function Home() {
 
     return (
       <section className="consultation-home-section py-5" style={{background: '#fff'}}>
-        <div className="container">
+        <div className="container position-relative" style={{zIndex: 1}}>
+          <div className="star-dust">
+            <span className="star" style={{top: '10%', left: '5%'}}>✦</span>
+            <span className="star" style={{top: '20%', right: '10%', animationDelay: '2s'}}>✧</span>
+            <span className="star" style={{bottom: '15%', left: '15%', animationDelay: '4s'}}>✦</span>
+            <span className="star" style={{bottom: '30%', right: '5%', animationDelay: '1s'}}>✧</span>
+          </div>
           <div className="text-center mb-5" data-aos="fade-up">
             <h5 className="section-subtitle" style={{letterSpacing: '5px', fontWeight: 800}}>ACADEMIC EXCELLENCE</h5>
             <h2 className="section-title">Professional Certification Courses</h2>
@@ -733,7 +739,11 @@ function Home() {
 
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">
-          <div className="container">
+          <div className="container position-relative" style={{zIndex: 1}}>
+            <div className="star-dust">
+              <span className="star" style={{top: '5%', right: '15%', animationDelay: '3s'}}>✦</span>
+              <span className="star" style={{bottom: '10%', left: '10%', animationDelay: '5s'}}>✧</span>
+            </div>
             <div className="text-center mb-5" data-aos="fade-up">
               <div className="cosmic-divider mb-3">
                 <span>✦</span>
@@ -2516,6 +2526,85 @@ function Home() {
           z-index: 5;
           box-shadow: 0 5px 15px rgba(0,0,0,0.2);
           border: 1px solid rgba(255,255,255,0.1);
+          animation: ribbonPulse 2s infinite;
+        }
+
+        /* Advanced Animations */
+        @keyframes ribbonPulse {
+          0% { transform: rotate(-45deg) scale(1); }
+          50% { transform: rotate(-45deg) scale(1.05); background: #8B4A1E; }
+          100% { transform: rotate(-45deg) scale(1); }
+        }
+
+        @keyframes starDust {
+          0% { transform: translateY(0) rotate(0deg); opacity: 0.1; }
+          50% { transform: translateY(-20px) rotate(180deg); opacity: 0.3; }
+          100% { transform: translateY(0) rotate(360deg); opacity: 0.1; }
+        }
+
+        .star-dust {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          top: 0;
+          left: 0;
+          pointer-events: none;
+          z-index: 0;
+        }
+
+        .star {
+          position: absolute;
+          color: #C8832A;
+          font-size: 10px;
+          animation: starDust 10s infinite linear;
+        }
+
+        .consult-card-v2 .consult-img-v2 img {
+          transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .consult-card-v2:hover .consult-img-v2 img {
+          transform: scale(1.1) rotate(1deg);
+        }
+
+        .btn-book-elite {
+          position: relative;
+          overflow: hidden;
+        }
+
+        .btn-book-elite::after {
+          content: '';
+          position: absolute;
+          top: -50%;
+          left: -60%;
+          width: 20%;
+          height: 200%;
+          background: rgba(255, 255, 255, 0.2);
+          transform: rotate(30deg);
+          transition: 0s;
+        }
+
+        .btn-book-elite:hover::after {
+          left: 120%;
+          transition: 0.6s;
+        }
+
+        .verified-badge {
+          animation: slideInLeft 0.5s ease-out both;
+        }
+
+        @keyframes slideInLeft {
+          from { transform: translateX(20px); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+
+        .cosmic-divider .line {
+          animation: lineExpand 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes lineExpand {
+          0% { width: 40px; opacity: 0.5; }
+          100% { width: 100px; opacity: 1; }
         }
       `}</style>
     </>

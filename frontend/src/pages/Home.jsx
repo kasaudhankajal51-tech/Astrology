@@ -258,10 +258,10 @@ function Home() {
           .price-hero { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #2d1506; font-weight: 600; margin: .2rem 0 .6rem; }
           .price-hero span { font-size: .85rem; color: #9a6040; text-decoration: line-through; font-family: 'Jost', sans-serif; font-weight: 400; margin-left: 6px; }
           .divr { height: .5px; background: #e8d5c0; margin: .5rem 0 .75rem; }
-          .cinstr { display: flex; align-items: center; gap: 8px; margin-bottom: .85rem; justify-content: center; }
-          .iavt { width: 32px; height: 32px; border-radius: 50%; background: linear-gradient(135deg, #c8906a, #8b5232); border: 2px solid #d4b896; display: flex; align-items: center; justify-content: center; font-size: 11px; color: #fff; font-family: 'Cinzel', serif; flex-shrink: 0; }
-          .iname { font-size: .75rem; color: #2d1506; font-weight: 500; font-family: 'Jost', sans-serif; margin: 0; text-align: left; }
-          .iexp { font-size: .68rem; color: #9a6040; margin: 0; font-family: 'Jost', sans-serif; text-align: left; }
+          .cinstr { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; justify-content: center; }
+          .iavt { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #c8906a, #8b5232); border: 2px solid #d4b896; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-family: 'Cinzel', serif; flex-shrink: 0; }
+          .iname { font-size: 0.95rem; color: #2d1506; font-weight: 600; font-family: 'Jost', sans-serif; margin: 0; text-align: left; }
+          .iexp { font-size: 0.8rem; color: #9a6040; margin: 0; font-family: 'Jost', sans-serif; text-align: left; font-weight: 500; }
           .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
           .btn-read { background: transparent; color: #4a2518; border: 1.5px solid #c4a060; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
           .btn-read:hover { background: #f0dfc8; }

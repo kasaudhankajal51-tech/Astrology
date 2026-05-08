@@ -987,6 +987,9 @@ function Home() {
 
 
 
+        {/* Astrology Courses Section */}
+        <AstrologyCourses />
+
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">
           <div className="container">
@@ -1101,8 +1104,6 @@ function Home() {
           </div>
         </section>
 
-        {/* Astrology Courses Section */}
-        <AstrologyCourses />
       </main>
 
       <ConsultationModal 

@@ -555,7 +555,7 @@ function Home() {
                 )}
                 
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
-                  <Link to="/certification-courses" className="btn mystic-btn-primary focus-70">
+                  <Link to="/courses" className="btn mystic-btn-primary focus-70">
                     Enroll in Live Course <i className="fas fa-graduation-cap ms-2"></i>
                   </Link>
                   <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
@@ -1116,6 +1116,10 @@ function Home() {
       />
 
       <style jsx>{`
+        html {
+          scroll-behavior: smooth;
+        }
+
         body {
           background-color: var(--bg-color);
           color: var(--text-content);

@@ -71,14 +71,14 @@
   padding: 40px;
   color: #fff;
 }
-.modal-image-side h4 { font-size: 2.2rem; font-weight: 900; margin-bottom: 20px; line-height: 1.1; }
+.modal-image-side h4 { font-size: 2.5rem; font-weight: 900; margin-bottom: 20px; line-height: 1.1; font-family: var(--font-serif); }
 .modal-image-side p { 
-  font-size: 1.2rem; 
+  font-size: 1.35rem; 
   color: #ffffff !important; 
   opacity: 1 !important;
   margin-bottom: 25px; 
   font-weight: 500; 
-  line-height: 1.5; 
+  line-height: 1.6; 
   display: block !important;
   visibility: visible !important;
 }
@@ -87,23 +87,23 @@
 .modal-points i { color: var(--brand-coral); font-size: 1.2rem; }
 
 .modal-form-side { padding: 40px; background: #fff; display: flex; flex-direction: column; justify-content: center; }
-.form-header-mini h3 { font-size: 2rem; font-weight: 900; color: var(--brand-purple); margin-bottom: 10px; }
-.form-header-mini p { color: var(--brand-coral); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
+.form-header-mini h3 { font-size: 2.4rem; font-weight: 900; color: var(--brand-purple); margin-bottom: 10px; font-family: var(--font-serif); }
+.form-header-mini p { color: var(--brand-coral); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1.5px; font-size: 1.1rem; }
 
 .modal-form .form-group { margin-bottom: 15px; }
-.modal-form label { font-size: 0.85rem; font-weight: 700; color: var(--text-dark); margin-bottom: 8px; display: block; text-transform: uppercase; }
+.modal-form label { font-size: 1rem; font-weight: 700; color: var(--text-dark); margin-bottom: 10px; display: block; text-transform: uppercase; letter-spacing: 0.5px; }
 .modal-form input, 
 .modal-form select, 
 .modal-form textarea { 
   width: 100%; 
-  padding: 15px 20px; 
-  border-radius: 12px; 
+  padding: 18px 24px; 
+  border-radius: 14px; 
   border: 1.5px solid #e2e8f0; 
   background: #f8fafc; 
   color: #1e293b; 
-  font-size: 1rem;
+  font-size: 1.1rem;
   transition: 0.3s;
-  font-family: inherit;
+  font-family: var(--font-sans);
 }
 
 .modal-form input:focus, 

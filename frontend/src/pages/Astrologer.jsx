@@ -197,7 +197,7 @@ function Astrologer() {
         .astrologers-page {
           background-color: #FDF6EE;
           min-height: 100vh;
-          font-family: 'Inter', sans-serif;
+          font-family: var(--font-sans);
           color: #2A0F02;
           overflow-x: hidden;
         }
@@ -229,10 +229,10 @@ function Astrologer() {
           align-items: center;
           background: #2A0F02;
           color: #fff;
-          padding: 8px 20px;
+          padding: 10px 24px;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 1rem;
+          font-size: 1.1rem;
           text-transform: uppercase;
           letter-spacing: 2px;
           margin-bottom: 25px;
@@ -320,8 +320,8 @@ function Astrologer() {
 
         .card-body-v2 { padding: 0 25px 30px; }
 
-        .astro-name { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 1.8rem; margin-bottom: 5px; }
-        .astro-role { color: #8B4A1E; font-weight: 600; font-size: 1.2rem; margin-bottom: 15px; }
+        .astro-name { font-family: var(--font-serif); font-weight: 800; font-size: 2rem; margin-bottom: 5px; }
+        .astro-role { color: #8B4A1E; font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
 
         .exp-pill {
           display: inline-flex;
@@ -346,12 +346,12 @@ function Astrologer() {
         }
 
         .astro-bio-v2 {
-          font-size: 1.2rem;
+          font-size: 1.3rem;
           color: #5C2D12;
-          line-height: 1.6;
+          line-height: 1.7;
           margin-bottom: 20px;
           font-style: italic;
-          opacity: 0.9;
+          opacity: 0.95;
         }
 
         .lang-info { font-size: 1.1rem; font-weight: 600; color: #9B6640; }

@@ -63,9 +63,9 @@ function Home() {
       <section className="consultation-home-section py-5" style={{background: '#fff'}}>
         <div className="container">
           <div className="text-center mb-5" data-aos="fade-up">
-            <h5 className="section-subtitle">🌟 Master Ancient Wisdom 🌟</h5>
-            <h2 className="section-title">Astrology Courses</h2>
-            <p className="asub mx-auto mt-3">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
+            <h5 className="section-subtitle" style={{letterSpacing: '5px', fontWeight: 800}}>ACADEMIC EXCELLENCE</h5>
+            <h2 className="section-title">Professional Certification Courses</h2>
+            <p className="asub mx-auto mt-3" style={{maxWidth: '750px', fontSize: '1.2rem', opacity: 0.8}}>Comprehensive training programs designed to transform your understanding of the cosmos into professional expertise.</p>
           </div>
 
           <div className="row g-4">
@@ -74,21 +74,23 @@ function Home() {
                 <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
                   <div className="consult-img-v2">
                     <img src={item.img} alt={item.title} />
-                    <div className="expert-badge">{item.level}</div>
-                    <div className="price-tag-v2">{item.price}</div>
+                    <div className="verified-badge">
+                      <i className="fas fa-graduation-cap me-1"></i> Certified Program
+                    </div>
                     <div className="consult-duration">
                       <span style={{textDecoration: 'line-through', opacity: 0.6, marginRight: '5px'}}>{item.original}</span>
                     </div>
                   </div>
                   <div className="consult-content-v2">
-                    <div className="consult-icon-v2">
-                      <span>{item.icon}</span>
+                    <div className="card-top-info mb-3 d-flex justify-content-between align-items-center">
+                      <span className="premium-label">{item.level}</span>
+                      <span className="professional-price">{item.price}</span>
                     </div>
                     <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
-                    <div className="consult-btn-group">
-                      <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                      <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
+                    <p className="mb-4">{item.desc}</p>
+                    <div className="consult-btn-group mt-auto">
+                      <Link to={item.link} className="btn-view-elite" onClick={(e) => e.stopPropagation()}>Curriculum</Link>
+                      <button className="btn-book-elite" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
                     </div>
                   </div>
                 </div>
@@ -733,9 +735,14 @@ function Home() {
         <section className="consultation-home-section py-5">
           <div className="container">
             <div className="text-center mb-5" data-aos="fade-up">
-              <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
+              <div className="cosmic-divider mb-3">
+                <span>✦</span>
+                <div className="line"></div>
+                <span>✦</span>
+              </div>
+              <h5 className="section-subtitle" style={{letterSpacing: '5px', fontWeight: 800}}>ELITE ADVISORY</h5>
               <h2 className="section-title">Expert Consultations</h2>
-              <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path.</p>
+              <p className="asub mx-auto mt-3" style={{maxWidth: '750px', fontSize: '1.2rem', opacity: 0.8}}>Strategic guidance from world-renowned master astrologers to navigate your life's most complex challenges with precision and wisdom.</p>
             </div>
             
             <div className="row g-4">
@@ -779,28 +786,32 @@ function Home() {
                   icon: 'heart',
                   price: '₹3400',
                   badge: 'RELATIONSHIP EXPERT',
+                  popular: true,
                   link: '/consultations/relationship'
                 }
               ].map((item, idx) => (
-                <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 100}>
+                <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 150}>
                   <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
                     <div className="consult-img-v2">
                       <img src={item.img} alt={item.title} />
-                      {item.badge && <div className="expert-badge">{item.badge}</div>}
-                      {item.price && <div className="price-tag-v2">{item.price}</div>}
+                      {item.popular && <div className="popular-ribbon">Highly Recommended</div>}
+                      <div className="verified-badge">
+                        <i className="fas fa-check-circle me-1"></i> Verified Master
+                      </div>
                       <div className="consult-duration">
                         <i className="far fa-clock me-1"></i> {item.duration}
                       </div>
                     </div>
                     <div className="consult-content-v2">
-                      <div className="consult-icon-v2">
-                        <i className={`fas fa-${item.icon}`}></i>
+                      <div className="card-top-info mb-3 d-flex justify-content-between align-items-center">
+                        <span className="premium-label">{item.badge}</span>
+                        <span className="professional-price">{item.price}</span>
                       </div>
                       <h3>{item.title}</h3>
-                      <p>{item.desc}</p>
-                      <div className="consult-btn-group">
-                        <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Book Now</button>
+                      <p className="mb-4">{item.desc}</p>
+                      <div className="consult-btn-group mt-auto">
+                        <Link to={item.link} className="btn-view-elite" onClick={(e) => e.stopPropagation()}>View Profile</Link>
+                        <button className="btn-book-elite" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Reserve Now</button>
                       </div>
                     </div>
                   </div>
@@ -814,19 +825,21 @@ function Home() {
                 <div className="col-lg-10">
                   <div className="features-glass-card">
                     <h4 className="mb-4"><i className="fas fa-star me-2 text-warning"></i> Premium Consultation Features</h4>
-                    <div className="row g-3">
+                    <div className="row g-4">
                       {[
-                        'Private & Confidential Sessions',
-                        'Zoom & Phone Consultation Available',
-                        'Personalized Guidance & Remedies',
-                        'Spiritual & Practical Solutions',
-                        'Accurate Analysis & Predictions',
-                        'Prior Booking Required'
+                        { icon: 'shield-alt', text: 'Private & Confidential Sessions' },
+                        { icon: 'video', text: 'Zoom & Phone Call Available' },
+                        { icon: 'magic', text: 'Personalized Vedic Remedies' },
+                        { icon: 'gem', text: 'Spiritual & Practical Solutions' },
+                        { icon: 'chart-line', text: 'Accurate Life Predictions' },
+                        { icon: 'calendar-check', text: 'Prior Booking Mandatory' }
                       ].map((feature, i) => (
                         <div key={i} className="col-md-4 col-sm-6">
-                          <div className="feature-item">
-                            <i className="fas fa-check-circle me-2 text-success"></i>
-                            {feature}
+                          <div className="feature-item" style={{gap: '12px'}}>
+                            <div className="feature-icon-mini">
+                              <i className={`fas fa-${feature.icon}`}></i>
+                            </div>
+                            <span>{feature.text}</span>
                           </div>
                         </div>
                       ))}
@@ -1509,6 +1522,12 @@ function Home() {
           100% { transform: translateY(-10px); }
         }
 
+        @keyframes badgeShine {
+          0% { box-shadow: 0 0 0 0 rgba(194, 24, 91, 0.4); }
+          70% { box-shadow: 0 0 0 10px rgba(194, 24, 91, 0); }
+          100% { box-shadow: 0 0 0 0 rgba(194, 24, 91, 0); }
+        }
+
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
         
@@ -2068,6 +2087,28 @@ function Home() {
         /* Consultation Cards Styling */
         .consultation-home-section {
           background: #FFFBF5;
+          position: relative;
+          overflow: hidden;
+          background: radial-gradient(circle at 10% 10%, rgba(200, 131, 42, 0.05) 0%, transparent 40%),
+                      radial-gradient(circle at 90% 90%, rgba(139, 74, 30, 0.05) 0%, transparent 40%);
+        }
+
+        .consultation-home-section::before {
+          content: '✧';
+          position: absolute;
+          top: 10%; left: 5%;
+          font-size: 2rem;
+          color: rgba(200, 131, 42, 0.2);
+          animation: spinRight 20s linear infinite;
+        }
+
+        .consultation-home-section::after {
+          content: '✦';
+          position: absolute;
+          bottom: 15%; right: 8%;
+          font-size: 1.5rem;
+          color: rgba(139, 74, 30, 0.2);
+          animation: spinLeft 15s linear infinite;
         }
 
         .consult-card {
@@ -2174,81 +2215,100 @@ function Home() {
         /* Consultation V2 Cards */
         .consult-card-v2 {
           background: #FFF;
-          border-radius: 20px;
+          border-radius: 24px;
           overflow: hidden;
-          box-shadow: 0 15px 35px rgba(139, 74, 30, 0.06);
+          box-shadow: 0 12px 30px rgba(139, 74, 30, 0.06);
           border: 1px solid rgba(139, 74, 30, 0.08);
           height: 100%;
           display: flex;
           flex-direction: column;
-          transition: all 0.3s ease;
+          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          position: relative;
         }
 
         .consult-card-v2:hover {
-          transform: translateY(-8px);
-          box-shadow: 0 25px 50px rgba(139, 74, 30, 0.1);
+          transform: translateY(-12px) scale(1.02);
+          box-shadow: 0 30px 60px rgba(139, 74, 30, 0.15);
+          border-color: #C8832A;
         }
 
         .consult-img-v2 {
           position: relative;
-          height: 180px;
+          height: 190px;
+          overflow: hidden;
         }
 
         .consult-img-v2 img {
           width: 100%;
           height: 100%;
           object-fit: cover;
+          transition: transform 0.8s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+
+        .consult-card-v2:hover .consult-img-v2 img {
+          transform: scale(1.15);
         }
 
         .consult-duration {
           position: absolute;
           bottom: 15px;
           right: 15px;
-          background: rgba(42, 15, 2, 0.85);
-          backdrop-filter: blur(5px);
+          background: rgba(42, 15, 2, 0.75);
+          backdrop-filter: blur(8px);
           color: #FFF;
-          padding: 5px 12px;
+          padding: 6px 14px;
           border-radius: 50px;
-          font-size: 0.75rem;
-          font-weight: 600;
+          font-size: 0.7rem;
+          font-weight: 800;
           letter-spacing: 0.5px;
+          border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .consult-content-v2 {
-          padding: 25px 20px;
+          padding: 30px 24px;
           flex: 1;
           display: flex;
           flex-direction: column;
+          background: linear-gradient(to bottom, #ffffff 0%, #fffdfa 100%);
         }
 
         .consult-icon-v2 {
-          width: 44px;
-          height: 44px;
-          background: #FDF6EE;
-          border-radius: 12px;
+          width: 48px;
+          height: 48px;
+          background: #2A0F02;
+          color: #C8832A;
+          border-radius: 14px;
           display: flex;
           align-items: center;
           justify-content: center;
-          color: #C8832A;
-          font-size: 1.2rem;
-          margin-bottom: 15px;
-          border: 1px solid rgba(200, 131, 42, 0.2);
+          font-size: 1.3rem;
+          margin-bottom: 18px;
+          box-shadow: 0 8px 20px rgba(42, 15, 2, 0.15);
+          transition: all 0.3s ease;
+        }
+
+        .consult-card-v2:hover .consult-icon-v2 {
+          transform: rotate(-10deg) scale(1.1);
+          background: #C8832A;
+          color: #2A0F02;
         }
 
         .consult-content-v2 h3 {
           font-family: var(--font-serif);
-          font-size: 1.4rem;
-          font-weight: 700;
+          font-size: 1.5rem;
+          font-weight: 800;
           color: #2A0F02;
-          margin-bottom: 10px;
+          margin-bottom: 12px;
+          letter-spacing: -0.5px;
         }
 
         .consult-content-v2 p {
-          font-size: 0.95rem;
-          color: #4A3022;
-          line-height: 1.6;
-          margin-bottom: 25px;
+          font-size: 1rem;
+          color: #5C3D26;
+          line-height: 1.7;
+          margin-bottom: 30px;
           flex: 1;
+          font-family: var(--font-sans);
           display: -webkit-box;
           -webkit-line-clamp: 3;
           -webkit-box-orient: vertical;
@@ -2256,18 +2316,18 @@ function Home() {
         }
 
         .consult-btn-group {
-          display: flex;
-          gap: 10px;
+          display: grid;
+          grid-template-columns: 1fr 1.2fr;
+          gap: 12px;
         }
 
         .btn-view {
-          flex: 1;
           background: transparent;
           color: #8B4A1E;
-          border: 1.5px solid #8B4A1E;
-          padding: 8px 5px;
-          border-radius: 10px;
-          font-size: 0.85rem;
+          border: 1.5px solid rgba(139, 74, 30, 0.3);
+          padding: 10px 5px;
+          border-radius: 12px;
+          font-size: 0.9rem;
           font-weight: 700;
           text-decoration: none;
           text-align: center;
@@ -2275,55 +2335,110 @@ function Home() {
         }
 
         .btn-view:hover {
-          background: rgba(139, 74, 30, 0.05);
-          color: #2A0F02;
+          background: #2A0F02;
+          color: #ffffff;
+          border-color: #2A0F02;
         }
 
         .btn-book {
-          flex: 1;
           background: #2A0F02;
           color: #FFF;
           border: none;
-          padding: 8px 5px;
-          border-radius: 10px;
-          font-size: 0.85rem;
-          font-weight: 700;
+          padding: 10px 5px;
+          border-radius: 12px;
+          font-size: 0.9rem;
+          font-weight: 800;
           transition: all 0.3s ease;
+          box-shadow: 0 4px 12px rgba(42, 15, 2, 0.1);
         }
 
         .btn-book:hover {
-          background: #8B4A1E;
+          background: #C8832A;
+          color: #2A0F02;
           transform: translateY(-2px);
+          box-shadow: 0 10px 20px rgba(200, 131, 42, 0.2);
         }
 
-        .expert-badge {
+        .verified-badge {
           position: absolute;
           top: 15px;
           right: 15px;
-          background: #C2185B;
-          color: #FFF;
-          padding: 6px 15px;
-          border-radius: 50px;
+          background: rgba(255, 255, 255, 0.95);
+          color: #2A0F02;
+          padding: 5px 12px;
+          border-radius: 6px;
           font-size: 0.7rem;
           font-weight: 800;
           text-transform: uppercase;
-          letter-spacing: 1px;
-          box-shadow: 0 4px 12px rgba(194, 24, 91, 0.3);
+          letter-spacing: 0.5px;
+          box-shadow: 0 4px 12px rgba(0,0,0,0.1);
           z-index: 2;
+          display: flex;
+          align-items: center;
         }
 
-        .price-tag-v2 {
-          position: absolute;
-          bottom: 15px;
-          left: 15px;
-          background: #FFF;
-          color: #2A0F02;
-          padding: 6px 18px;
-          border-radius: 50px;
-          font-size: 0.95rem;
+        .verified-badge i {
+          color: #059669; /* Emerald Green */
+        }
+
+        .premium-label {
+          font-size: 0.65rem;
           font-weight: 800;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-          z-index: 2;
+          color: #8B4A1E;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          padding: 4px 8px;
+          background: rgba(139, 74, 30, 0.08);
+          border-radius: 4px;
+        }
+
+        .professional-price {
+          font-size: 1.1rem;
+          font-weight: 900;
+          color: #2A0F02;
+          font-family: var(--font-serif);
+        }
+
+        .btn-view-elite {
+          flex: 1;
+          background: transparent;
+          color: #2A0F02;
+          border: 1.5px solid #2A0F02;
+          padding: 12px 5px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          text-decoration: none;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+
+        .btn-view-elite:hover {
+          background: #FDF6EE;
+          transform: translateY(-2px);
+        }
+
+        .btn-book-elite {
+          flex: 1.2;
+          background: #2A0F02;
+          color: #FFF;
+          border: none;
+          padding: 12px 5px;
+          border-radius: 8px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          transition: all 0.3s ease;
+          box-shadow: 0 5px 15px rgba(42, 15, 2, 0.15);
+        }
+
+        .btn-book-elite:hover {
+          background: #4A1E0B;
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(42, 15, 2, 0.25);
         }
 
         /* Features Section */
@@ -2348,16 +2463,59 @@ function Home() {
         .feature-item {
           display: flex;
           align-items: center;
-          font-size: 0.95rem;
+          font-size: 1rem;
           color: #4A3022;
           font-weight: 600;
-          padding: 8px 0;
-          transition: transform 0.2s ease;
+          padding: 10px 0;
+          transition: all 0.3s ease;
         }
 
         .feature-item:hover {
-          transform: translateX(5px);
+          transform: translateX(8px);
           color: #C8832A;
+        }
+
+        .feature-icon-mini {
+          width: 34px;
+          height: 34px;
+          background: #2A0F02;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #C8832A;
+          font-size: 0.9rem;
+          box-shadow: 0 4px 10px rgba(42, 15, 2, 0.1);
+        }
+
+        .cosmic-divider {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 15px;
+          color: #C8832A;
+        }
+
+        .cosmic-divider .line {
+          width: 60px;
+          height: 1.5px;
+          background: linear-gradient(to right, transparent, #C8832A, transparent);
+        }
+
+        .popular-ribbon {
+          position: absolute;
+          top: 15px;
+          left: -35px;
+          background: #2A0F02;
+          color: #ffffff;
+          padding: 5px 40px;
+          font-size: 0.65rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          transform: rotate(-45deg);
+          z-index: 5;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+          border: 1px solid rgba(255,255,255,0.1);
         }
       `}</style>
     </>

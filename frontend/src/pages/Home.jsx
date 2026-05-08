@@ -267,11 +267,11 @@ function Home() {
           .btn-read:hover { background: #f0dfc8; }
           .btn-buy { background: #4a2518; color: #f5ebe0; border: none; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
           .btn-buy:hover { background: #6b3520; }
-          .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: .9rem; border-top: .5px solid #d4b896; padding-top: 1.4rem; }
-          .fi { display: flex; flex-direction: column; align-items: center; gap: 5px; text-align: center; }
-          .fic { width: 38px; height: 38px; border-radius: 50%; background: rgba(74,37,24,.08); display: flex; align-items: center; justify-content: center; font-size: 15px; }
-          .ftt { font-size: .75rem; font-weight: 500; color: #2d1506; font-family: 'Jost', sans-serif; }
-          .fts { font-size: .68rem; color: #9a6040; font-family: 'Jost', sans-serif; }
+          .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1.2rem; border-top: .5px solid #d4b896; padding-top: 1.8rem; margin-top: 1rem; }
+          .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+          .fic { width: 50px; height: 50px; border-radius: 50%; background: rgba(74,37,24,.08); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 5px; }
+          .ftt { font-size: 1.15rem; font-weight: 700; color: #2d1506; font-family: 'Jost', sans-serif; }
+          .fts { font-size: 0.95rem; color: #9a6040; font-family: 'Jost', sans-serif; opacity: 0.8; }
           .svgd { position: absolute; opacity: .07; pointer-events: none; }
         `}</style>
 

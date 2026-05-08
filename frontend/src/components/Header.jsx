@@ -364,15 +364,7 @@ function Header() {
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
-                <li className="nav-item dropdown">
-                  <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">COURSES</a>
-                  <ul className="dropdown-menu border-0 shadow-sm">
-                    <li><Link className="dropdown-item" to="/vedic-course">Vedic Astrology Course</Link></li>
-                    <li><Link className="dropdown-item" to="/advanced-astrology">Advanced Astrology</Link></li>
-                    <li><Link className="dropdown-item" to="/predictive-astrology">Predictive Astrology</Link></li>
-                    <li><Link className="dropdown-item" to="/certification-courses">Certification Courses</Link></li>
-                  </ul>
-                </li>
+                <li className="nav-item"><Link className="nav-link" to="/courses">COURSES</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/consultations">CONSULTATIONS</Link></li>
                 <li className="nav-item dropdown">
                   <Link className="nav-link dropdown-toggle" to="/astro-shop" role="button" data-bs-toggle="dropdown">ASTRO SHOP</Link>
@@ -415,20 +407,7 @@ function Header() {
           <ul className="navbar-nav">
             <li className="nav-item"><Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link></li>
             
-            <li className="nav-item">
-              <div className="d-flex justify-content-between align-items-center border-bottom">
-                <span className="nav-link border-0 w-100">COURSES</span>
-                <div className="mob-drop-trigger" data-bs-toggle="collapse" data-bs-target="#mob-courses-collapse">
-                  <i className="fas fa-chevron-down small text-muted"></i>
-                </div>
-              </div>
-              <div className="collapse bg-light" id="mob-courses-collapse">
-                <Link className="dropdown-item d-block" to="/vedic-course" data-bs-dismiss="offcanvas">Vedic Astrology Course</Link>
-                <Link className="dropdown-item d-block" to="/advanced-astrology" data-bs-dismiss="offcanvas">Advanced Astrology</Link>
-                <Link className="dropdown-item d-block" to="/predictive-astrology" data-bs-dismiss="offcanvas">Predictive Astrology</Link>
-                <Link className="dropdown-item d-block" to="/certification-courses" data-bs-dismiss="offcanvas">Certification Courses</Link>
-              </div>
-            </li>
+            <li className="nav-item"><Link className="nav-link" to="/courses" data-bs-dismiss="offcanvas">COURSES</Link></li>
 
             <li className="nav-item"><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>
 

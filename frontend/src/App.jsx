@@ -27,6 +27,8 @@ import AdminLeads from './pages/AdminLeads';
 import AstroShop from './pages/AstroShop';
 import ShopCategory from './pages/ShopCategory';
 import ConsultationDetail from './pages/ConsultationDetail';
+import Courses from './pages/Courses';
+import CourseDetail from './pages/CourseDetail';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -50,6 +52,8 @@ function App() {
           <Route path="advanced-astrology" element={<AdvancedAstrology />} />
           <Route path="predictive-astrology" element={<PredictiveAstrology />} />
           <Route path="certification-courses" element={<CertificationCourses />} />
+          <Route path="courses" element={<Courses />} />
+          <Route path="courses/:courseId" element={<CourseDetail />} />
           <Route path="free-tools" element={<FreeTools />} />
           <Route path="numerology" element={<Numerology />} />
           <Route path="tarot" element={<Tarot />} />

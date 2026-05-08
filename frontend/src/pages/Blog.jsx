@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 
 function Blog() {
   useEffect(() => {
@@ -6,6 +6,9 @@ function Blog() {
       window.AOS.refresh();
     }
   }, []);
+
+  const [searchQuery, setSearchQuery] = React.useState('');
+  const [selectedCategory, setSelectedCategory] = React.useState('All');
 
   const posts = [
     { id: 1, title: 'Unlocking Your Wealth: 2026 Financial Horoscope', date: '25 May 2026', image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800', category: 'Financial', excerpt: 'Discover how planetary alignments in 2026 will impact your financial growth and investment opportunities.' },
@@ -15,6 +18,13 @@ function Blog() {
     { id: 5, title: 'Auspicious Muhurats for New Beginnings', date: '05 May 2026', image: 'https://images.unsplash.com/photo-1515940175183-6798529cb860?auto=format&fit=crop&q=80&w=800', category: 'Muhurat', excerpt: 'Finding the right time to start a business or sign contracts based on lunar cycles.' },
     { id: 6, title: 'Health & Wellness: The Zodiac Way', date: '01 May 2026', image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800', category: 'Health', excerpt: 'Align your wellness routine with your sun sign for maximum vitality and mental peace.' },
   ];
+
+  const filteredPosts = posts.filter(post => {
+    const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                         post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesCategory = selectedCategory === 'All' || post.category.toLowerCase().includes(selectedCategory.toLowerCase());
+    return matchesSearch && matchesCategory;
+  });
 
   const categories = [
     { name: 'Financial Astrology', count: 12 },
@@ -49,46 +59,86 @@ function Blog() {
       {/* Blog Content */}
       <section className="blog-content-section py-5">
         <div className="container">
-          <div className="row g-5">
-            {/* Left - Blog Posts */}
-            <div className="col-lg-8">
-              <div className="d-flex justify-content-between align-items-center mb-4" data-aos="fade-up">
-                <h5 className="result-count m-0">📖 Showing <span className="fw-bold">1-6</span> of <span className="fw-bold">24</span> articles</h5>
+            {/* Search Bar & Stats Section */}
+            <div className="row justify-content-center mb-5" data-aos="fade-up">
+              <div className="col-lg-10">
+                <div className="premium-search-card p-4">
+                  <div className="text-center mb-4">
+                    <h5 className="sidebar-title m-0" style={{border: 'none', fontSize: '1.6rem'}}>🔍 Search Astro Knowledge</h5>
+                  </div>
+                  <div className="search-box mb-3" style={{maxWidth: '800px', margin: '0 auto'}}>
+                    <input 
+                      type="text" 
+                      className="search-input py-3" 
+                      placeholder="Search for articles, planetary movements, or remedies..." 
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                    />
+                    {searchQuery ? (
+                      <button className="search-btn" onClick={() => setSearchQuery('')}><i className="fas fa-times"></i></button>
+                    ) : (
+                      <button className="search-btn"><i className="fas fa-search"></i></button>
+                    )}
+                  </div>
+                  <div className="trending-tags text-center mt-3">
+                    <span className="me-2 text-muted small fw-bold">TRENDING:</span>
+                    {['Financial', 'Relationship', 'Career', 'Health'].map((tag, i) => (
+                      <span key={i} className="badge-trending me-2" onClick={() => setSearchQuery(tag)}>{tag}</span>
+                    ))}
+                  </div>
+                </div>
               </div>
+            </div>
+
+            <div className="row g-5">
+              {/* Left - Blog Posts */}
+              <div className="col-lg-8">
+                <div className="d-flex justify-content-between align-items-center mb-4" data-aos="fade-up">
+                  <h5 className="result-count m-0">📖 Showing <span className="fw-bold">{filteredPosts.length}</span> articles</h5>
+                </div>
 
               <div className="blog-list">
-                {posts.map((post, idx) => (
-                  <div className="blog-card mb-4" key={post.id} data-aos="fade-up" data-aos-delay={idx * 100}>
-                    <div className="row g-0">
-                      <div className="col-md-4">
-                        <div className="blog-img-wrapper">
-                          <img src={post.image} alt={post.title} />
-                          <div className="date-chip">
-                            <span className="day">{post.date.split(' ')[0]}</span>
-                            <span className="month">{post.date.split(' ')[1]}</span>
+                {filteredPosts.length > 0 ? (
+                  filteredPosts.map((post, idx) => (
+                    <div className="blog-card mb-4" key={post.id} data-aos="fade-up" data-aos-delay={idx * 100}>
+                      <div className="row g-0">
+                        <div className="col-md-4">
+                          <div className="blog-img-wrapper">
+                            <img src={post.image} alt={post.title} />
+                            <div className="date-chip">
+                              <span className="day">{post.date.split(' ')[0]}</span>
+                              <span className="month">{post.date.split(' ')[1]}</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="col-md-8">
-                        <div className="blog-body p-4">
-                          <span className="category-badge mb-2 d-inline-block">
-                            📍 {post.category}
-                          </span>
-                          <h3 className="blog-title mb-2">{post.title}</h3>
-                          <div className="blog-meta mb-3">
-                            <span><i className="far fa-calendar-alt me-1"></i> {post.date}</span>
-                            <span className="ms-3"><i className="far fa-user me-1"></i> Astro Expert</span>
-                            <span className="ms-3"><i className="far fa-comment me-1"></i> 12 Comments</span>
+                        <div className="col-md-8">
+                          <div className="blog-body p-4">
+                            <span className="category-badge mb-2 d-inline-block">
+                              📍 {post.category}
+                            </span>
+                            <h3 className="blog-title mb-2">{post.title}</h3>
+                            <div className="blog-meta mb-3">
+                              <span><i className="far fa-calendar-alt me-1"></i> {post.date}</span>
+                              <span className="ms-3"><i className="far fa-user me-1"></i> Astro Expert</span>
+                              <span className="ms-3"><i className="far fa-comment me-1"></i> 12 Comments</span>
+                            </div>
+                            <p className="blog-excerpt">{post.excerpt}</p>
+                            <a href="#" className="read-more">Continue Reading →</a>
                           </div>
-                          <p className="blog-excerpt">{post.excerpt}</p>
-                          <a href="#" className="read-more">Continue Reading →</a>
                         </div>
                       </div>
                     </div>
+                  ))
+                ) : (
+                  <div className="no-results-blog text-center py-5" data-aos="zoom-in">
+                    <i className="fas fa-search-minus mb-3" style={{fontSize: '4rem', color: '#FF8C42', opacity: 0.5}}></i>
+                    <h3>No articles found for "{searchQuery}"</h3>
+                    <p className="text-muted">Try searching with different keywords or browse our categories.</p>
+                    <button className="btn mystic-btn-outline mt-3" onClick={() => setSearchQuery('')}>Clear Search</button>
                   </div>
-                ))}
+                )}
               </div>
-
+              
               {/* Pagination */}
               <nav className="mt-5" data-aos="fade-up">
                 <ul className="pagination justify-content-center">
@@ -104,14 +154,7 @@ function Blog() {
             {/* Right Sidebar */}
             <div className="col-lg-4">
               <aside className="blog-sidebar">
-                {/* Search */}
-                <div className="sidebar-card mb-4" data-aos="fade-left">
-                  <h4 className="sidebar-title">🔍 Search</h4>
-                  <div className="search-box">
-                    <input type="text" className="search-input" placeholder="Search articles..." />
-                    <button className="search-btn"><i className="fas fa-search"></i></button>
-                  </div>
-                </div>
+
 
                 {/* Categories */}
                 <div className="sidebar-card mb-4" data-aos="fade-left" data-aos-delay="100">
@@ -400,6 +443,40 @@ function Blog() {
 
         .search-btn:hover {
           background: #FF6B35;
+        }
+
+        .premium-search-card {
+          background: #FFFFFF;
+          border-radius: 30px;
+          border: 1.5px solid #F0E6DC;
+          box-shadow: 0 15px 40px rgba(255, 140, 66, 0.08);
+          transition: all 0.3s ease;
+        }
+
+        .premium-search-card:hover {
+          border-color: #FF8C42;
+          box-shadow: 0 20px 50px rgba(255, 140, 66, 0.12);
+        }
+
+        .top-search-wrapper {
+          position: relative;
+          z-index: 10;
+        }
+
+        .badge-trending {
+          background: rgba(255, 140, 66, 0.08);
+          color: #FF8C42;
+          padding: 4px 12px;
+          border-radius: 50px;
+          font-size: 0.75rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: all 0.3s;
+        }
+
+        .badge-trending:hover {
+          background: #FF8C42;
+          color: #FFF;
         }
 
         /* Category List */

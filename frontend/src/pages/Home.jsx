@@ -999,44 +999,44 @@ function Home() {
             <div className="row g-4">
               {[
                 { 
-                  title: 'Marriage', 
-                  img: '/images/consultations/love.png', 
-                  desc: 'Get detailed prediction about marriage timing, love vs arranged marriage, delay in marriage, relationships and more.',
-                  duration: '30-40 min',
-                  icon: 'ring',
-                  price: '₹2700',
-                  badge: 'RELATIONSHIP EXPERT',
-                  link: '/consultations/marriage'
+                  title: 'Tarot Card Reading', 
+                  img: '/images/tarot_thumbnail.png', 
+                  desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
+                  duration: '45 Minutes',
+                  icon: 'magic',
+                  price: '₹5400',
+                  badge: 'INTUITION EXPERT',
+                  link: '/consultations/tarot'
                 },
                 { 
-                  title: 'Career & Wealth', 
+                  title: 'Career Consultation', 
                   img: '/images/consultations/career.png', 
-                  desc: 'Know about your profession, business growth, promotion timings, financial stability and wealth accumulation.',
-                  duration: '30-40 min',
+                  desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
+                  duration: '30-40 Min',
                   icon: 'briefcase',
-                  price: '₹2100',
+                  price: '₹3600',
                   badge: 'CAREER EXPERT',
                   link: '/consultations/career'
                 },
                 { 
-                  title: 'Health & Wellness', 
+                  title: 'Divorce Consultation', 
                   img: '/images/consultations/health.png', 
-                  desc: 'Understand planetary impacts on your physical and mental health. Remedies for vitality and healing.',
-                  duration: '20-30 min',
-                  icon: 'heartbeat',
-                  price: '₹1500',
-                  badge: 'WELLNESS EXPERT',
-                  link: '/consultations/health'
+                  desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
+                  duration: '30-40 Min',
+                  icon: 'heart-broken',
+                  price: '₹3400',
+                  badge: 'RECOVERY EXPERT',
+                  link: '/consultations/divorce'
                 },
                 { 
-                  title: 'Vastu Shastra', 
-                  img: '/images/consultations/vastu.png', 
-                  desc: 'Comprehensive Vastu analysis of your home or office to remove negative energy and invite prosperity.',
-                  duration: '45-60 min',
-                  icon: 'home',
-                  price: '₹5100',
-                  badge: 'VASTU EXPERT',
-                  link: '/consultations/vastu'
+                  title: 'Affair & Relationship', 
+                  img: '/images/consultations/love.png', 
+                  desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
+                  duration: '30-40 Min',
+                  icon: 'heart',
+                  price: '₹3400',
+                  badge: 'RELATIONSHIP EXPERT',
+                  link: '/consultations/relationship'
                 }
               ].map((item, idx) => (
                 <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 100}>
@@ -1063,6 +1063,34 @@ function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+
+            {/* Consultation Features Section */}
+            <div className="consultation-features mt-5 pt-4" data-aos="fade-up">
+              <div className="row justify-content-center">
+                <div className="col-lg-10">
+                  <div className="features-glass-card">
+                    <h4 className="mb-4"><i className="fas fa-star me-2 text-warning"></i> Premium Consultation Features</h4>
+                    <div className="row g-3">
+                      {[
+                        'Private & Confidential Sessions',
+                        'Zoom & Phone Consultation Available',
+                        'Personalized Guidance & Remedies',
+                        'Spiritual & Practical Solutions',
+                        'Accurate Analysis & Predictions',
+                        'Prior Booking Required'
+                      ].map((feature, i) => (
+                        <div key={i} className="col-md-4 col-sm-6">
+                          <div className="feature-item">
+                            <i className="fas fa-check-circle me-2 text-success"></i>
+                            {feature}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
             
             <div className="text-center mt-5" data-aos="fade-up">
@@ -2551,6 +2579,40 @@ function Home() {
           font-weight: 800;
           box-shadow: 0 4px 15px rgba(0,0,0,0.15);
           z-index: 2;
+        }
+
+        /* Features Section */
+        .features-glass-card {
+          background: rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(200, 131, 42, 0.1);
+          border-radius: 20px;
+          padding: 30px;
+          box-shadow: 0 10px 40px rgba(139, 74, 30, 0.05);
+        }
+
+        .features-glass-card h4 {
+          font-family: var(--font-serif);
+          color: #2A0F02;
+          font-weight: 700;
+          font-size: 1.3rem;
+          border-bottom: 1px solid rgba(200, 131, 42, 0.1);
+          padding-bottom: 15px;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.95rem;
+          color: #4A3022;
+          font-weight: 600;
+          padding: 8px 0;
+          transition: transform 0.2s ease;
+        }
+
+        .feature-item:hover {
+          transform: translateX(5px);
+          color: #C8832A;
         }
       `}</style>
     </>

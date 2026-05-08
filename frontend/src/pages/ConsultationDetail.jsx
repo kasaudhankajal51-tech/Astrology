@@ -18,6 +18,15 @@ function ConsultationDetail() {
   // Data mapping (Same as Consultations.jsx)
   const allServices = [
     {
+      id: 'tarot',
+      title: "Tarot Card Reading",
+      desc: "Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions. In this session, cards are read intuitively to give accurate answers and practical guidance.",
+      price: "₹5400",
+      duration: "45 min",
+      img: "/images/tarot_thumbnail.png",
+      category: "Tarot Sessions"
+    },
+    {
       id: 'zoom-session',
       title: "45-minute Zoom Call Session",
       desc: "Tarot reading helps you understand the current energies around you and gives clear guidance regarding love, career, relationships, marriage, finances, and life decisions. In this session, cards are read intuitively to give accurate answers and practical guidance. This video session is ideal if you want quick clarity about a situation or decision with a face-to-face connection.",
@@ -51,6 +60,24 @@ function ConsultationDetail() {
       price: "₹2700",
       duration: "30-40 min",
       img: "/images/consult_marriage.png",
+      category: "Vedic Astrology"
+    },
+    {
+      id: 'divorce',
+      title: "Divorce Consultation",
+      desc: "Understand separation possibilities, legal stress, emotional healing, and future relationship stability. We analyze your birth chart to provide clarity during difficult transitions.",
+      price: "₹3400",
+      duration: "30-40 min",
+      img: "/images/consultations/health.png",
+      category: "Vedic Astrology"
+    },
+    {
+      id: 'relationship',
+      title: "Affair & Relationship",
+      desc: "Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities. Get deep insights into your emotional connections.",
+      price: "₹3400",
+      duration: "30-40 min",
+      img: "/images/consultations/love.png",
       category: "Vedic Astrology"
     },
     {

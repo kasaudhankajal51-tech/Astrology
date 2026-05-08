@@ -987,6 +987,120 @@ function Home() {
 
 
 
+        {/* Expert Consultations Section */}
+        <section className="consultation-home-section py-5">
+          <div className="container">
+            <div className="text-center mb-5" data-aos="fade-up">
+              <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
+              <h2 className="section-title">Expert Consultations</h2>
+              <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path.</p>
+            </div>
+            
+            <div className="row g-4">
+              {[
+                { 
+                  title: 'Tarot Card Reading', 
+                  img: '/images/tarot_thumbnail.png', 
+                  desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
+                  duration: '45 Minutes',
+                  icon: 'magic',
+                  price: '₹5400',
+                  badge: 'INTUITION EXPERT',
+                  link: '/consultations/tarot'
+                },
+                { 
+                  title: 'Career Consultation', 
+                  img: '/images/consultations/career.png', 
+                  desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
+                  duration: '30-40 Min',
+                  icon: 'briefcase',
+                  price: '₹3600',
+                  badge: 'CAREER EXPERT',
+                  link: '/consultations/career'
+                },
+                { 
+                  title: 'Divorce Consultation', 
+                  img: '/images/consultations/health.png', 
+                  desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
+                  duration: '30-40 Min',
+                  icon: 'heart-broken',
+                  price: '₹3400',
+                  badge: 'RECOVERY EXPERT',
+                  link: '/consultations/divorce'
+                },
+                { 
+                  title: 'Affair & Relationship', 
+                  img: '/images/consultations/love.png', 
+                  desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
+                  duration: '30-40 Min',
+                  icon: 'heart',
+                  price: '₹3400',
+                  badge: 'RELATIONSHIP EXPERT',
+                  link: '/consultations/relationship'
+                }
+              ].map((item, idx) => (
+                <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 100}>
+                  <div className="consult-card-v2">
+                    <div className="consult-img-v2">
+                      <img src={item.img} alt={item.title} />
+                      {item.badge && <div className="expert-badge">{item.badge}</div>}
+                      {item.price && <div className="price-tag-v2">{item.price}</div>}
+                      <div className="consult-duration">
+                        <i className="far fa-clock me-1"></i> {item.duration}
+                      </div>
+                    </div>
+                    <div className="consult-content-v2">
+                      <div className="consult-icon-v2">
+                        <i className={`fas fa-${item.icon}`}></i>
+                      </div>
+                      <h3>{item.title}</h3>
+                      <p>{item.desc}</p>
+                      <div className="consult-btn-group">
+                        <Link to={item.link} className="btn-view">View Page</Link>
+                        <button className="btn-book" onClick={handleOpenModal}>Book Now</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Consultation Features Section */}
+            <div className="consultation-features mt-5 pt-4" data-aos="fade-up">
+              <div className="row justify-content-center">
+                <div className="col-lg-10">
+                  <div className="features-glass-card">
+                    <h4 className="mb-4"><i className="fas fa-star me-2 text-warning"></i> Premium Consultation Features</h4>
+                    <div className="row g-3">
+                      {[
+                        'Private & Confidential Sessions',
+                        'Zoom & Phone Consultation Available',
+                        'Personalized Guidance & Remedies',
+                        'Spiritual & Practical Solutions',
+                        'Accurate Analysis & Predictions',
+                        'Prior Booking Required'
+                      ].map((feature, i) => (
+                        <div key={i} className="col-md-4 col-sm-6">
+                          <div className="feature-item">
+                            <i className="fas fa-check-circle me-2 text-success"></i>
+                            {feature}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div className="text-center mt-5" data-aos="fade-up">
+              <Link to="/consultations" className="btn mystic-btn-outline px-5">
+                View All Consultations
+              </Link>
+            </div>
+          </div>
+        </section>
+
         {/* Astrology Courses Section */}
         <AstrologyCourses />
       </main>
@@ -2204,6 +2318,301 @@ function Home() {
           .moon-img { height: 160px; }
           .floating-element { top: 80px; height: 280px; }
           .bottom-img { height: 200px; }
+        }
+
+        /* Consultation Cards Styling */
+        .consultation-home-section {
+          background: #FFFBF5;
+        }
+
+        .consult-card {
+          background: #FFF;
+          border-radius: 25px;
+          overflow: hidden;
+          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.05);
+          border: 1px solid rgba(139, 74, 30, 0.05);
+          height: 100%;
+          transition: all 0.4s ease;
+        }
+
+        .consult-card:hover {
+          transform: translateY(-10px);
+          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.12);
+          border-color: var(--accent-color);
+        }
+
+        .consult-img-wrapper {
+          position: relative;
+          height: 200px;
+          overflow: hidden;
+        }
+
+        .consult-img-wrapper img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+          transition: transform 0.6s ease;
+        }
+
+        .consult-card:hover .consult-img-wrapper img {
+          transform: scale(1.1);
+        }
+
+        .consult-overlay {
+          position: absolute;
+          top: 0; left: 0; right: 0; bottom: 0;
+          background: rgba(42, 15, 2, 0.4);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          transition: all 0.3s ease;
+          backdrop-filter: blur(2px);
+        }
+
+        .consult-card:hover .consult-overlay {
+          opacity: 1;
+        }
+
+        .book-now-btn {
+          background: #C8832A;
+          color: #FFF;
+          border: none;
+          padding: 10px 25px;
+          border-radius: 50px;
+          font-weight: 700;
+          transform: translateY(20px);
+          transition: all 0.4s ease;
+        }
+
+        .consult-card:hover .book-now-btn {
+          transform: translateY(0);
+        }
+
+        .consult-body {
+          padding: 30px 20px;
+          text-align: center;
+          position: relative;
+        }
+
+        .consult-icon {
+          width: 50px;
+          height: 50px;
+          background: #FDF6EE;
+          border-radius: 50%;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #C8832A;
+          margin: -55px auto 15px;
+          position: relative;
+          z-index: 2;
+          box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+          border: 2px solid #FFF;
+        }
+
+        .consult-body h4 {
+          font-family: var(--font-serif);
+          font-size: 1.25rem;
+          margin-bottom: 12px;
+          color: #2A0F02;
+          font-weight: 700;
+        }
+
+        .consult-body p {
+          font-size: 0.95rem;
+          color: #666;
+          line-height: 1.5;
+          margin: 0;
+        }
+
+        /* Consultation V2 Cards */
+        .consult-card-v2 {
+          background: #FFF;
+          border-radius: 20px;
+          overflow: hidden;
+          box-shadow: 0 15px 35px rgba(139, 74, 30, 0.06);
+          border: 1px solid rgba(139, 74, 30, 0.08);
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          transition: all 0.3s ease;
+        }
+
+        .consult-card-v2:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 25px 50px rgba(139, 74, 30, 0.1);
+        }
+
+        .consult-img-v2 {
+          position: relative;
+          height: 180px;
+        }
+
+        .consult-img-v2 img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+
+        .consult-duration {
+          position: absolute;
+          bottom: 15px;
+          right: 15px;
+          background: rgba(42, 15, 2, 0.85);
+          backdrop-filter: blur(5px);
+          color: #FFF;
+          padding: 5px 12px;
+          border-radius: 50px;
+          font-size: 0.75rem;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+        }
+
+        .consult-content-v2 {
+          padding: 25px 20px;
+          flex: 1;
+          display: flex;
+          flex-direction: column;
+        }
+
+        .consult-icon-v2 {
+          width: 44px;
+          height: 44px;
+          background: #FDF6EE;
+          border-radius: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          color: #C8832A;
+          font-size: 1.2rem;
+          margin-bottom: 15px;
+          border: 1px solid rgba(200, 131, 42, 0.2);
+        }
+
+        .consult-content-v2 h3 {
+          font-family: var(--font-serif);
+          font-size: 1.4rem;
+          font-weight: 700;
+          color: #2A0F02;
+          margin-bottom: 10px;
+        }
+
+        .consult-content-v2 p {
+          font-size: 0.95rem;
+          color: #4A3022;
+          line-height: 1.6;
+          margin-bottom: 25px;
+          flex: 1;
+          display: -webkit-box;
+          -webkit-line-clamp: 3;
+          -webkit-box-orient: vertical;
+          overflow: hidden;
+        }
+
+        .consult-btn-group {
+          display: flex;
+          gap: 10px;
+        }
+
+        .btn-view {
+          flex: 1;
+          background: transparent;
+          color: #8B4A1E;
+          border: 1.5px solid #8B4A1E;
+          padding: 8px 5px;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          text-decoration: none;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+
+        .btn-view:hover {
+          background: rgba(139, 74, 30, 0.05);
+          color: #2A0F02;
+        }
+
+        .btn-book {
+          flex: 1;
+          background: #2A0F02;
+          color: #FFF;
+          border: none;
+          padding: 8px 5px;
+          border-radius: 10px;
+          font-size: 0.85rem;
+          font-weight: 700;
+          transition: all 0.3s ease;
+        }
+
+        .btn-book:hover {
+          background: #8B4A1E;
+          transform: translateY(-2px);
+        }
+
+        .expert-badge {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: #C2185B;
+          color: #FFF;
+          padding: 6px 15px;
+          border-radius: 50px;
+          font-size: 0.7rem;
+          font-weight: 800;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          box-shadow: 0 4px 12px rgba(194, 24, 91, 0.3);
+          z-index: 2;
+        }
+
+        .price-tag-v2 {
+          position: absolute;
+          bottom: 15px;
+          left: 15px;
+          background: #FFF;
+          color: #2A0F02;
+          padding: 6px 18px;
+          border-radius: 50px;
+          font-size: 0.95rem;
+          font-weight: 800;
+          box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+          z-index: 2;
+        }
+
+        /* Features Section */
+        .features-glass-card {
+          background: rgba(255, 255, 255, 0.6);
+          backdrop-filter: blur(10px);
+          border: 1px solid rgba(200, 131, 42, 0.1);
+          border-radius: 20px;
+          padding: 30px;
+          box-shadow: 0 10px 40px rgba(139, 74, 30, 0.05);
+        }
+
+        .features-glass-card h4 {
+          font-family: var(--font-serif);
+          color: #2A0F02;
+          font-weight: 700;
+          font-size: 1.3rem;
+          border-bottom: 1px solid rgba(200, 131, 42, 0.1);
+          padding-bottom: 15px;
+        }
+
+        .feature-item {
+          display: flex;
+          align-items: center;
+          font-size: 0.95rem;
+          color: #4A3022;
+          font-weight: 600;
+          padding: 8px 0;
+          transition: transform 0.2s ease;
+        }
+
+        .feature-item:hover {
+          transform: translateX(5px);
+          color: #C8832A;
         }
       `}</style>
     </>

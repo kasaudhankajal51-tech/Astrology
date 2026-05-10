@@ -242,11 +242,9 @@ const AstrologyCourses = ({ onEnroll }) => {
         .iavt { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color); border: 2px solid var(--accent-color); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-family: var(--font-serif); flex-shrink: 0; }
         .iname { font-size: .85rem; color: var(--text-main); font-weight: 600; font-family: var(--font-sans); margin: 0; text-align: left; }
         .iexp { font-size: .75rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
-        .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
-        .btn-read:hover { background: rgba(200, 131, 42, 0.1); color: var(--primary-color); }
-        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
-        .btn-buy:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
+        .btnrow { display: flex; justify-content: center; width: 100%; }
+        .btn-read { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .85rem 2rem; font-size: .95rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; width: 100%; }
+        .btn-read:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
         .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; }
         .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
         .fic { width: 70px; height: 70px; border-radius: 50%; background: rgba(139, 74, 30, 0.08); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary-color); }
@@ -274,8 +272,8 @@ const AstrologyCourses = ({ onEnroll }) => {
           .ftt { font-size: 0.85rem; line-height: 1.2; font-weight: 700; }
           .fts { font-size: 0.7rem; line-height: 1.2; }
           .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
-          .btnrow { grid-template-columns: 1fr 1fr; gap: 8px; }
-          .btn-read, .btn-buy { font-size: 1.1rem; padding: 0.85rem 0.5rem; font-weight: 700; }
+          .btnrow { display: flex; width: 100%; }
+          .btn-read { font-size: 1.1rem; padding: 0.85rem 0.5rem; font-weight: 700; width: 100%; }
           .iname { font-size: 1rem; }
           .iexp { font-size: 0.9rem; }
           .zodiac-hero-graphic, 
@@ -343,8 +341,13 @@ const AstrologyCourses = ({ onEnroll }) => {
                   </div>
                 </div>
                 <div className="btnrow">
-                  <Link to={link} className="btn-read" onClick={(e) => e.stopPropagation()}>Read More</Link>
-                  <button className="btn-buy" onClick={(e) => { e.stopPropagation(); onEnroll(); }}>Enroll Now</button>
+                  <Link 
+                    to="/courses" 
+                    className="btn-read" 
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    Learn More
+                  </Link>
                 </div>
               </div>
             </div>

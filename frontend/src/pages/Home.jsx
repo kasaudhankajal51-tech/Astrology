@@ -4,7 +4,369 @@ import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 
 
+const AstrologyCourses = ({ onEnroll }) => {
+  const navigate = useNavigate();
+  const features = [
+    { icon: "👥", title: "Learn from Experts", sub: "20+ Years of Experience" },
+    { icon: "▶", title: "Self-Paced Learning", sub: "Study Anytime, Anywhere" },
+    { icon: "🏅", title: "Certificate of Completion", sub: "Boost Your Credibility" },
+    { icon: "🎧", title: "Lifetime Support", sub: "We're Here for You" },
+  ];
+
+  const Card1SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg1" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#8B4A1E"/>
+          <stop offset="100%" stopColor="#2A0F02"/>
+        </radialGradient>
+        <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4"/>
+          <stop offset="100%" stopColor="#2A0F02" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg1)"/>
+      <ellipse cx="150" cy="80" rx="90" ry="70" fill="url(#glow1)"/>
+      <rect x="80" y="65" width="140" height="70" rx="3" fill="#C8832A" opacity=".9"/>
+      <rect x="147" y="62" width="6" height="76" rx="2" fill="#5C2D12"/>
+      <rect x="83" y="68" width="62" height="64" rx="2" fill="#FDF6EE"/>
+      <rect x="155" y="68" width="62" height="64" rx="2" fill="#FFFBF5"/>
+      <line x1="90" y1="80" x2="138" y2="80" stroke="#C8832A" strokeWidth=".8"/>
+      <line x1="90" y1="87" x2="138" y2="87" stroke="#C8832A" strokeWidth=".8"/>
+      <line x1="90" y1="94" x2="138" y2="94" stroke="#C8832A" strokeWidth=".8"/>
+      <line x1="90" y1="101" x2="138" y2="101" stroke="#C8832A" strokeWidth=".8"/>
+      <line x1="90" y1="108" x2="138" y2="108" stroke="#C8832A" strokeWidth=".8"/>
+      <line x1="90" y1="115" x2="138" y2="115" stroke="#C8832A" strokeWidth=".8"/>
+      <circle cx="186" cy="100" r="22" fill="none" stroke="#5C2D12" strokeWidth="1"/>
+      <circle cx="186" cy="100" r="15" fill="none" stroke="#5C2D12" strokeWidth=".7"/>
+      <circle cx="186" cy="100" r="6" fill="#5C2D12" opacity=".5"/>
+      <line x1="186" y1="78" x2="186" y2="122" stroke="#5C2D12" strokeWidth=".6"/>
+      <line x1="164" y1="100" x2="208" y2="100" stroke="#5C2D12" strokeWidth=".6"/>
+      <line x1="170" y1="84" x2="202" y2="116" stroke="#5C2D12" strokeWidth=".5"/>
+      <line x1="202" y1="84" x2="170" y2="116" stroke="#5C2D12" strokeWidth=".5"/>
+      <text x="186" y="76" textAnchor="middle" fill="#C8832A" fontSize="6">♈</text>
+      <text x="208" y="104" textAnchor="middle" fill="#C8832A" fontSize="6">♉</text>
+      <text x="186" y="126" textAnchor="middle" fill="#C8832A" fontSize="6">♊</text>
+      <text x="163" y="104" textAnchor="middle" fill="#C8832A" fontSize="6">♋</text>
+      <path d="M83,68 Q150,58 217,68" fill="none" stroke="#8B4A1E" strokeWidth="1" opacity=".6"/>
+      <circle cx="50" cy="25" r="1.2" fill="#C8832A" opacity=".8"/>
+      <circle cx="260" cy="40" r="1" fill="#C8832A" opacity=".7"/>
+      <circle cx="30" cy="120" r=".8" fill="#C8832A" opacity=".6"/>
+      <circle cx="275" cy="130" r="1.2" fill="#C8832A" opacity=".8"/>
+      <circle cx="240" cy="20" r=".8" fill="#C8832A" opacity=".5"/>
+      <circle cx="70" cy="140" r="1" fill="#C8832A" opacity=".6"/>
+    </svg>
+  );
+
+  const Card2SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg2" cx="40%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#C8832A"/>
+          <stop offset="100%" stopColor="#8B4A1E"/>
+        </radialGradient>
+        <radialGradient id="glow2" cx="55%" cy="45%" r="50%">
+          <stop offset="0%" stopColor="#FDF6EE" stopOpacity=".3"/>
+          <stop offset="100%" stopColor="#8B4A1E" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg2)"/>
+      <ellipse cx="170" cy="75" rx="100" ry="65" fill="url(#glow2)"/>
+      <rect x="75" y="20" width="120" height="120" fill="none" stroke="#f0d070" strokeWidth="1.2" opacity=".8"/>
+      <polygon points="135,20 195,80 135,140 75,80" fill="none" stroke="#f0d070" strokeWidth="1" opacity=".7"/>
+      <rect x="105" y="50" width="60" height="60" fill="rgba(240,210,100,.08)" stroke="#f0d070" strokeWidth=".8" opacity=".6"/>
+      <line x1="75" y1="20" x2="195" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
+      <line x1="195" y1="20" x2="75" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
+      <text x="135" y="38" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">1</text>
+      <text x="180" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">2</text>
+      <text x="188" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">3</text>
+      <text x="180" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">4</text>
+      <text x="135" y="130" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">7</text>
+      <text x="88" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">10</text>
+      <text x="82" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">11</text>
+      <text x="88" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">12</text>
+      <text x="135" y="76" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">☿ ♀</text>
+      <text x="135" y="90" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">♃ ♄</text>
+      <line x1="230" y1="40" x2="245" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+      <line x1="230" y1="40" x2="215" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
+      <line x1="218" y1="90" x2="242" y2="90" stroke="#d4b060" strokeWidth="1.5" opacity=".7"/>
+      <circle cx="40" cy="30" r="1.2" fill="#f0e080" opacity=".7"/>
+      <circle cx="270" cy="50" r="1" fill="#f0e080" opacity=".6"/>
+      <circle cx="255" cy="130" r=".8" fill="#f0e080" opacity=".5"/>
+      <circle cx="25" cy="110" r="1" fill="#f0e080" opacity=".6"/>
+    </svg>
+  );
+
+  const Card3SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg3" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#3D1A08"/>
+          <stop offset="100%" stopColor="#2A0F02"/>
+        </radialGradient>
+        <radialGradient id="jupGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#C8832A"/>
+          <stop offset="60%" stopColor="#8B4A1E"/>
+          <stop offset="100%" stopColor="#5C2D12"/>
+        </radialGradient>
+        <radialGradient id="jupAtm" cx="40%" cy="35%" r="60%">
+          <stop offset="0%" stopColor="#EBC9A3" stopOpacity=".5"/>
+          <stop offset="100%" stopColor="#C8832A" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg3)"/>
+      <circle cx="20" cy="15" r=".8" fill="white" opacity=".8"/>
+      <circle cx="45" cy="8" r="1" fill="white" opacity=".6"/>
+      <circle cx="80" cy="20" r=".6" fill="white" opacity=".7"/>
+      <circle cx="10" cy="50" r=".8" fill="white" opacity=".5"/>
+      <circle cx="260" cy="12" r="1" fill="white" opacity=".8"/>
+      <circle cx="285" cy="35" r=".7" fill="white" opacity=".6"/>
+      <circle cx="270" cy="60" r=".9" fill="white" opacity=".7"/>
+      <circle cx="250" cy="140" r=".8" fill="white" opacity=".5"/>
+      <circle cx="30" cy="130" r=".7" fill="white" opacity=".6"/>
+      <circle cx="180" cy="145" r=".8" fill="white" opacity=".6"/>
+      <circle cx="130" cy="15" r=".5" fill="white" opacity=".7"/>
+      <circle cx="160" cy="10" r=".8" fill="white" opacity=".6"/>
+      <ellipse cx="155" cy="78" rx="75" ry="12" fill="none" stroke="#d4a050" strokeWidth="2.5" opacity=".35"/>
+      <ellipse cx="155" cy="78" rx="68" ry="10" fill="none" stroke="#e0b860" strokeWidth="1.2" opacity=".25"/>
+      <circle cx="155" cy="78" r="52" fill="url(#jupGlow)"/>
+      <circle cx="155" cy="78" r="52" fill="url(#jupAtm)"/>
+      <ellipse cx="155" cy="62" rx="51" ry="7" fill="#8a4818" opacity=".5"/>
+      <ellipse cx="155" cy="72" rx="52" ry="4" fill="#d09040" opacity=".35"/>
+      <ellipse cx="155" cy="82" rx="52" ry="6" fill="#7a3e14" opacity=".45"/>
+      <ellipse cx="155" cy="92" rx="51" ry="4" fill="#c88038" opacity=".3"/>
+      <ellipse cx="155" cy="100" rx="50" ry="5" fill="#8a4818" opacity=".4"/>
+      <ellipse cx="135" cy="86" rx="10" ry="7" fill="#a03818" opacity=".7"/>
+      <ellipse cx="140" cy="60" rx="18" ry="12" fill="white" opacity=".08"/>
+    </svg>
+  );
+
+  const Card4SVG = () => (
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+      <defs>
+        <radialGradient id="bg4" cx="50%" cy="50%" r="70%">
+          <stop offset="0%" stopColor="#8B4A1E"/>
+          <stop offset="100%" stopColor="#5C2D12"/>
+        </radialGradient>
+        <radialGradient id="cmpGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4"/>
+          <stop offset="100%" stopColor="#8B4A1E" opacity="0"/>
+        </radialGradient>
+      </defs>
+      <rect width="300" height="160" fill="url(#bg4)"/>
+      <ellipse cx="155" cy="80" rx="100" ry="70" fill="url(#cmpGlow)"/>
+      <circle cx="155" cy="80" r="56" fill="#c89850" opacity=".15"/>
+      <circle cx="155" cy="80" r="56" fill="none" stroke="#d4a840" strokeWidth="2" opacity=".7"/>
+      <circle cx="155" cy="80" r="50" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
+      <circle cx="155" cy="80" r="42" fill="#a07828" opacity=".2"/>
+      <circle cx="155" cy="80" r="42" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
+      <line x1="155" y1="24" x2="155" y2="32" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="155" y1="128" x2="155" y2="136" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="99" y1="80" x2="107" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="203" y1="80" x2="211" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
+      <line x1="115" y1="40" x2="120" y2="47" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="190" y1="113" x2="195" y2="120" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="115" y1="120" x2="120" y2="113" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <line x1="190" y1="47" x2="195" y2="40" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <text x="155" y="22" textAnchor="middle" fill="#f0d060" fontSize="9" fontFamily="serif" fontWeight="bold">N</text>
+      <text x="155" y="146" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">S</text>
+      <text x="96" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">W</text>
+      <text x="214" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">E</text>
+      <polygon points="155,38 150,80 155,68 160,80" fill="#e84030" opacity=".9"/>
+      <polygon points="155,122 150,80 155,92 160,80" fill="#d0c890" opacity=".8"/>
+      <circle cx="155" cy="80" r="6" fill="#e8c050" opacity=".9"/>
+      <circle cx="155" cy="80" r="3.5" fill="#a07020"/>
+      <circle cx="30" cy="30" r="1.5" fill="#f0d060" opacity=".6"/>
+      <circle cx="55" cy="50" r="1.5" fill="#f0d060" opacity=".6"/>
+      <circle cx="45" cy="75" r="1.5" fill="#f0d060" opacity=".6"/>
+      <line x1="30" y1="30" x2="55" y2="50" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+      <line x1="55" y1="50" x2="45" y2="75" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+      <circle cx="260" cy="25" r="1.5" fill="#f0d060" opacity=".5"/>
+      <circle cx="278" cy="45" r="1.2" fill="#f0d060" opacity=".4"/>
+      <line x1="260" y1="25" x2="278" y2="45" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+    </svg>
+  );
+
+  const courses = [
+    {
+      id: 1, level: "Beginner Level", title: "Foundation in Astrology",
+      desc: "Start your journey. Learn the basics of planets, signs, houses and their impact on our lives.",
+      icon: "☸", price: "₹699", original: "₹4100", SVG: Card1SVG, link: "/vedic-course"
+    },
+    {
+      id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
+      desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
+      icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG, link: "/advanced-astrology"
+    },
+    {
+      id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
+      desc: "Master the precision of KP system with practical techniques for accurate predictions.",
+      icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true, link: "/predictive-astrology"
+    },
+    {
+      id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
+      desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
+      icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG, link: "/certification-courses"
+    },
+  ];
+
+  return (
+    <>
+      <style>{`
+        .aw { background: var(--bg-color); padding: 3rem 2rem; font-family: var(--font-sans); position: relative; overflow: hidden; }
+        .aw::before { content: '✦'; position: absolute; top: 20px; left: 30px; font-size: 60px; opacity: .06; color: var(--primary-color); pointer-events: none; }
+        .aw::after { content: '☽'; position: absolute; bottom: 30px; right: 40px; font-size: 80px; opacity: .06; color: var(--primary-color); pointer-events: none; }
+        .ah { text-align: center; margin-bottom: 2.5rem; }
+        .ah h2 { font-family: var(--font-serif); font-size: clamp(1.8rem,5vw,2.8rem); color: var(--text-heading); letter-spacing: .02em; margin: 0 0 .4rem; font-weight: 700; }
+        .atag { font-size: .75rem; letter-spacing: .15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
+        .atag::before, .atag::after { content: '—'; opacity: .4; }
+        .asub { color: var(--text-content); font-size: .95rem; max-width: 500px; margin: 0 auto; line-height: 1.7; }
+        .dl { display: flex; align-items: center; gap: 10px; justify-content: center; margin: .4rem 0 .8rem; }
+        .dl::before, .dl::after { content: ''; flex: 1; max-width: 70px; height: .5px; background: var(--accent-color); }
+        .dd { width: 5px; height: 5px; background: var(--accent-color); border-radius: 50%; }
+        .cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+        .cc { background: var(--card-color); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); display: flex; flex-direction: column; transition: transform .3s ease; cursor: pointer; box-shadow: var(--premium-shadow); }
+        .cc:hover { transform: translateY(-8px); }
+        .ci { width: 100%; height: 160px; display: block; position: relative; overflow: hidden; }
+        .ci svg { width: 100%; height: 100%; display: block; }
+        .badge-discount { position: absolute; top: 10px; left: 10px; background: var(--primary-color); color: #fff; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; font-family: var(--font-sans); font-weight: 600; z-index: 3; }
+        .ico { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--card-color); border: 2px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary-color); z-index: 2; font-family: var(--font-serif); }
+        .cb { padding: 2rem 1.25rem 1.25rem; text-align: center; flex: 1; display: flex; flex-direction: column; }
+        .clvl { font-size: .65rem; letter-spacing: .18em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .4rem; font-family: var(--font-sans); font-weight: 600; }
+        .ctitle { font-family: var(--font-serif); font-size: 1.4rem; color: var(--text-card-heading); margin: 0 0 .4rem; font-weight: 600; line-height: 1.3; }
+        .cdesc { font-size: .9rem; color: var(--text-content); line-height: 1.6; flex: 1; margin-bottom: 1rem; }
+        .price-hero { font-family: var(--font-serif); font-size: 1.6rem; color: var(--text-heading); font-weight: 700; margin: .2rem 0 .8rem; }
+        .price-hero span { font-size: .9rem; color: var(--text-muted); text-decoration: line-through; font-family: var(--font-sans); font-weight: 400; margin-left: 8px; }
+        .divr { height: 1px; background: var(--glass-border); margin: .5rem 0 1rem; }
+        .cinstr { display: flex; align-items: center; gap: 10px; margin-bottom: 1rem; justify-content: center; }
+        .iavt { width: 36px; height: 36px; border-radius: 50%; background: var(--primary-color); border: 2px solid var(--accent-color); display: flex; align-items: center; justify-content: center; font-size: 12px; color: #fff; font-family: var(--font-serif); flex-shrink: 0; }
+        .iname { font-size: .85rem; color: var(--text-main); font-weight: 600; font-family: var(--font-sans); margin: 0; text-align: left; }
+        .iexp { font-size: .75rem; color: var(--text-muted); margin: 0; font-family: var(--font-sans); text-align: left; }
+        .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+        .btn-read { background: transparent; color: var(--primary-color); border: 1.5px solid var(--accent-color); border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-read:hover { background: rgba(200, 131, 42, 0.1); color: var(--primary-color); }
+        .btn-buy { background: #2A0F02; color: #fff; border: none; border-radius: 10px; padding: .65rem .5rem; font-size: .85rem; font-family: var(--font-sans); font-weight: 600; cursor: pointer; transition: all .2s; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+        .btn-buy:hover { background: #723c18; transform: translateY(-2px); color: #fff; }
+        .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 1.5rem; border-top: 1px solid var(--glass-border); padding-top: 2rem; }
+        .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
+        .fic { width: 70px; height: 70px; border-radius: 50%; background: rgba(139, 74, 30, 0.08); display: flex; align-items: center; justify-content: center; font-size: 28px; color: var(--primary-color); }
+        .ftt { font-size: 1.4rem; font-weight: 700; color: var(--text-main); font-family: var(--font-sans); }
+        .fts { font-size: 1.15rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: 500; }
+        .svgd { position: absolute; opacity: .07; pointer-events: none; }
+
+        @media (max-width: 480px) {
+          .aw { padding: 3rem 1rem; }
+          .ah h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+          .cc { max-width: 100%; }
+          .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
+          .clvl { justify-content: flex-start; }
+          .ctitle { text-align: left; font-size: 1.6rem; margin-bottom: 0.6rem; }
+          .cdesc { text-align: left; font-size: 1.15rem; line-height: 1.5; }
+          .price-hero { text-align: left; font-size: 1.8rem; }
+          .cinstr { justify-content: flex-start; }
+          .ico { left: 1.5rem; transform: none; width: 36px; height: 36px; font-size: 14px; bottom: -18px; }
+          .fb { 
+            grid-template-columns: 1fr 1fr; 
+            gap: 1.5rem 1rem; 
+            padding-top: 1.5rem;
+          }
+          .fi { gap: 4px; }
+          .ftt { font-size: 0.85rem; line-height: 1.2; font-weight: 700; }
+          .fts { font-size: 0.7rem; line-height: 1.2; }
+          .fic { width: 42px; height: 42px; font-size: 18px; margin-bottom: 5px; }
+          .btnrow { grid-template-columns: 1fr 1fr; gap: 8px; }
+          .btn-read, .btn-buy { font-size: 1.1rem; padding: 0.85rem 0.5rem; font-weight: 700; }
+          .iname { font-size: 1rem; }
+          .iexp { font-size: 0.9rem; }
+          .zodiac-hero-graphic, 
+          .cosmic-orbit-container { 
+            display: none !important; 
+          }
+          .animate__animated, 
+          .spin-slow-left, 
+          .spin-right, 
+          .spin-fast-left, 
+          .img-anim,
+          .center-overlay,
+          .float-badge { 
+            animation: none !important; 
+            transition: none !important; 
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: none !important;
+          }
+          .experience-badge { animation: none !important; }
+          [data-aos^="fade"], [data-aos^="zoom"], [data-aos^="flip"] {
+            opacity: 1 !important;
+            transform: none !important;
+            transition: none !important;
+          }
+        }
+      `}</style>
+
+      <section className="aw">
+        <svg className="svgd" style={{top:0,right:0,width:150,height:150}} viewBox="0 0 160 160">
+          <circle cx="130" cy="30" r="50" fill="none" stroke="#4a2508" strokeWidth=".8"/>
+          <circle cx="130" cy="30" r="35" fill="none" stroke="#4a2508" strokeWidth=".5"/>
+          <line x1="130" y1="0" x2="130" y2="80" stroke="#4a2508" strokeWidth=".5"/>
+          <line x1="100" y1="30" x2="160" y2="30" stroke="#4a2508" strokeWidth=".5"/>
+        </svg>
+
+        <div className="ah">
+          <h2>Astrology Courses</h2>
+          <div className="dl"><div className="dd"/></div>
+          <div className="atag">Ancient Wisdom &nbsp;·&nbsp; Modern Learning &nbsp;·&nbsp; Meaningful Transformation</div>
+          <p className="asub">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
+        </div>
+
+        <div className="cg">
+          {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold, link }) => (
+            <div key={id} className="cc" onClick={() => navigate(link)}>
+              <div className="ci" style={{position:"relative"}}>
+                <SVG />
+                <span className="badge-discount">Mega DISCOUNT</span>
+                <div className="ico" style={isBold ? {fontSize:"13px",fontWeight:600} : {}}>
+                  {icon}
+                </div>
+              </div>
+              <div className="cb">
+                <p className="clvl">{level}</p>
+                <h3 className="ctitle">{title}</h3>
+                <p className="cdesc">{desc}</p>
+                <div className="price-hero">{price} <span>{original}</span></div>
+                <div className="divr"/>
+                <div className="cinstr">
+                  <div className="iavt">MS</div>
+                  <div style={{ textAlign: 'left' }}>
+                    <p className="iname">Acharya Meera Sharma</p>
+                    <p className="iexp">20+ Years of Experience</p>
+                  </div>
+                </div>
+                <div className="btnrow">
+                  <Link to={link} className="btn-read" onClick={(e) => e.stopPropagation()}>Read More</Link>
+                  <button className="btn-buy" onClick={(e) => { e.stopPropagation(); onEnroll(); }}>Enroll Now</button>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="fb">
+          {features.map((f, i) => (
+            <div key={i} className="fi">
+              <div className="fic">{f.icon}</div>
+              <div className="ftt">{f.title}</div>
+              <div className="fts">{f.sub}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    </>
+  );
+};
+
 function Home() {
+
   const trackRef = useRef(null);
   const [formData, setFormData] = useState({ 
     name: '', 
@@ -24,101 +386,8 @@ function Home() {
 
   const handleCloseModal = () => setIsModalOpen(false);
 
-  const AstrologyCourses = () => {
-    const features = [
-      { icon: "👥", title: "Learn from Experts", sub: "20+ Years of Experience" },
-      { icon: "▶", title: "Self-Paced Learning", sub: "Study Anytime, Anywhere" },
-      { icon: "🏅", title: "Certificate of Completion", sub: "Boost Your Credibility" },
-      { icon: "🎧", title: "Lifetime Support", sub: "We're Here for You" },
-    ];
 
-    const courses = [
-      {
-        id: 1, level: "Beginner Level", title: "Foundation in Astrology",
-        desc: "Start your journey. Learn the basics of planets, signs, houses and their impact on our lives.",
-        icon: "☸", price: "₹699", original: "₹4100", link: "/vedic-course",
-        img: "/images/bg-bannerpic.jpg"
-      },
-      {
-        id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
-        desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
-        icon: "☽", price: "₹999", original: "₹5100", link: "/advanced-astrology",
-        img: "/images/moon.jpg"
-      },
-      {
-        id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
-        desc: "Master the precision of KP system with practical techniques for accurate predictions.",
-        icon: "24", price: "₹1299", original: "₹6500", link: "/predictive-astrology",
-        img: "/images/premium_tarot.png"
-      },
-      {
-        id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
-        desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
-        icon: "✦", price: "₹1499", original: "₹7000", link: "/certification-courses",
-        img: "/images/bg-bannerpic.jpg"
-      },
-    ];
 
-    return (
-      <section className="consultation-home-section py-5" style={{background: '#fff'}}>
-        <div className="container">
-          <div className="text-center mb-5" data-aos="fade-up">
-            <h5 className="section-subtitle">🌟 Master Ancient Wisdom 🌟</h5>
-            <h2 className="section-title">Astrology Courses</h2>
-            <p className="asub mx-auto mt-3">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
-          </div>
-
-          <div className="row g-4">
-            {courses.map((item, idx) => (
-              <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 100}>
-                <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
-                  <div className="consult-img-v2">
-                    <img src={item.img} alt={item.title} />
-                    <div className="expert-badge">{item.level}</div>
-                    <div className="price-tag-v2">{item.price}</div>
-                  </div>
-                  <div className="consult-content-v2">
-                    <div className="consult-icon-v2">
-                      <span>{item.icon}</span>
-                    </div>
-                    <h3>{item.title}</h3>
-                    <p>{item.desc}</p>
-                    <div className="consult-btn-group">
-                      <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                      <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          <div className="consultation-features mt-5 pt-4" data-aos="fade-up">
-            <div className="row justify-content-center">
-              <div className="col-lg-10">
-                <div className="features-glass-card">
-                  <h4 className="mb-4"><i className="fas fa-certificate me-2 text-warning"></i> Course Benefits</h4>
-                  <div className="row g-3">
-                    {features.map((f, i) => (
-                      <div key={i} className="col-md-3 col-sm-6">
-                        <div className="feature-item">
-                          <i className="fas fa-check-circle me-2 text-success"></i>
-                          <div>
-                            <div style={{fontWeight: 700}}>{f.title}</div>
-                            <div style={{fontSize: '0.8rem', opacity: 0.7}}>{f.sub}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    );
-  };
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
@@ -725,7 +994,7 @@ function Home() {
 
 
         {/* Astrology Courses Section */}
-        <AstrologyCourses />
+        <AstrologyCourses onEnroll={handleOpenModal} />
 
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">

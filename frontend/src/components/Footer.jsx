@@ -274,28 +274,56 @@ function Footer() {
         .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; }
         .fb-legal a { color: #8B4A1E; text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        /* Floating Buttons */
-        .chat-btn-desktop {
-          position: fixed; bottom: 30px; right: 30px;
-          width: 60px; height: 60px; background: #0084FF;
-          border-radius: 50%; display: flex; align-items: center; justify-content: center;
-          color: white; font-size: 24px; box-shadow: 0 8px 25px rgba(0, 132, 255, 0.4);
-          z-index: 999; cursor: pointer; transition: 0.3s;
-        }
-        .chat-btn-phone { display: none; }
 
         @media(max-width: 767px) {
           /* Hide desktop sections */
           .fb-inner, .fb-desktop-trust, .chat-btn-desktop { display: none !important; }
 
-          /* Phone section: left-aligned, matches reference image */
+          /* Phone section wrapper */
           .fb-phone-section {
             display: flex;
             flex-direction: column;
             align-items: flex-start;
-            padding: 28px 20px 10px;
+            padding: 32px 20px 16px;
             gap: 24px;
             background: #FDF6EE;
+          }
+
+          /* Logo (reuse desktop classes — ensure they work on mobile) */
+          .fb-logo { margin-bottom: 0; }
+          .fb-logo-name { font-size: 24px; }
+
+          /* Description */
+          .phone-desc { font-size: 14px; line-height: 1.7; color: #5C3D26; margin: 0; }
+
+          /* Horizontal rule */
+          .phone-hr { width: 100%; height: 1px; background: rgba(139,74,30,0.15); margin: 4px 0; }
+
+          /* Nav 2-column grid */
+          .phone-nav-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; width: 100%; }
+          .phone-nav-head {
+            font-size: 15px; font-weight: 700; color: #2A0F02;
+            margin-bottom: 14px; position: relative; padding-bottom: 10px;
+          }
+          .phone-nav-head::after {
+            content: ''; position: absolute; bottom: 0; left: 0;
+            width: 28px; height: 3px; background: #8B4A1E; border-radius: 2px;
+          }
+          .phone-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+          .phone-nav-list li a { color: #5C3D26; text-decoration: none; font-size: 14px; font-weight: 500; }
+
+          /* Newsletter */
+          .phone-newsletter { width: 100%; }
+          .phone-email-row { display: flex; margin-top: 14px; }
+          .phone-email-input {
+            flex: 1; padding: 10px 14px; font-size: 14px;
+            border: 1px solid #D4B896; border-radius: 8px 0 0 8px;
+            background: white; outline: none; color: #333;
+          }
+          .phone-join-btn {
+            padding: 10px 20px; background: #2A0F02; color: white;
+            border: none; border-radius: 0 8px 8px 0; font-size: 14px;
+            font-weight: 600; cursor: pointer;
           }
 
           /* Follow Us On block */
@@ -317,13 +345,6 @@ function Footer() {
           .fb-legal { display: flex; flex-wrap: wrap; justify-content: center; }
           .fb-legal a { margin: 0 8px; }
 
-          .chat-btn-phone {
-            display: flex; position: fixed; bottom: 28px; right: 22px;
-            width: 62px; height: 62px; background: #EF8251; border: 2.5px solid white;
-            border-radius: 50%; align-items: center; justify-content: center;
-            box-shadow: 0 8px 22px rgba(239,130,81,0.45);
-            z-index: 1000; cursor: pointer;
-          }
         }
       `}</style>
 
@@ -427,8 +448,56 @@ function Footer() {
           </div>
         </div>
 
-        {/* --- PHONE SECTION — matches reference image exactly --- */}
+        {/* === PHONE SECTION — full footer for mobile === */}
         <div className="fb-phone-section">
+
+          {/* Logo */}
+          <Link to="/" className="fb-logo">
+            <div className="fb-logo-icon">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
+              </svg>
+            </div>
+            <div className="fb-logo-name">Astro<em>Ava</em></div>
+          </Link>
+
+          {/* Description */}
+          <p className="phone-desc">Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.</p>
+
+          {/* Divider */}
+          <div className="phone-hr" />
+
+          {/* Nav columns — 2 col grid */}
+          <div className="phone-nav-grid">
+            <div>
+              <div className="phone-nav-head">Consultations</div>
+              <ul className="phone-nav-list">
+                <li><Link to="#">Horoscope</Link></li>
+                <li><Link to="#">Marriage</Link></li>
+                <li><Link to="#">Career</Link></li>
+              </ul>
+            </div>
+            <div>
+              <div className="phone-nav-head">Explore</div>
+              <ul className="phone-nav-list">
+                <li><Link to="/courses">Courses</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/about">About Us</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          {/* Newsletter */}
+          <div className="phone-newsletter">
+            <div className="phone-nav-head">Newsletter</div>
+            <div className="phone-email-row">
+              <input type="email" placeholder="Email" className="phone-email-input" />
+              <button className="phone-join-btn">Join</button>
+            </div>
+          </div>
+
+          {/* Divider */}
+          <div className="phone-hr" />
 
           {/* Follow Us On */}
           <div className="phone-follow-block">
@@ -483,15 +552,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Floating Buttons */}
-        <div className="chat-btn-desktop">
-          <i className="far fa-comment-dots"></i>
-        </div>
-        <div className="chat-btn-phone">
-           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
       </footer>
     </>
   );

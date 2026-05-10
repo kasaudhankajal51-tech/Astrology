@@ -23,12 +23,13 @@ import Webinar from './pages/Webinar';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailed from './pages/PaymentFailed';
-import AdminLeads from './pages/AdminLeads';
+import AdminDashboard from './pages/AdminDashboard';
 import AstroShop from './pages/AstroShop';
 import ShopCategory from './pages/ShopCategory';
 import ConsultationDetail from './pages/ConsultationDetail';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
+import Careers from './pages/Careers';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -60,6 +61,7 @@ function App() {
           <Route path="love" element={<Love />} />
           <Route path="astro-shop" element={<AstroShop />} />
           <Route path="astro-shop/:category" element={<ShopCategory />} />
+          <Route path="careers" element={<Careers />} />
         </Route>
         
         {/* Standalone Landing Pages & Admin (No Header/Footer) */}
@@ -68,7 +70,7 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-failed" element={<PaymentFailed />} />
-        <Route path="/admin/leads" element={<AdminLeads />} />
+        <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
   );

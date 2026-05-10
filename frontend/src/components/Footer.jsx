@@ -379,6 +379,8 @@ function Footer() {
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/admin">Admin</Link></li>
               </ul>
             </div>
             <div>
@@ -483,6 +485,8 @@ function Footer() {
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/admin">Admin</Link></li>
               </ul>
             </div>
           </div>

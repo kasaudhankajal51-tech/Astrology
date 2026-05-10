@@ -5,13 +5,10 @@ function AdminLeads() {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filters, setFilters] = useState({ startDate: '', endDate: '', type: '' });
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [password, setPassword] = useState('');
 
-  const ADMIN_PASS = 'admin123'; // In production, this should be handled via a proper auth system
+  const ADMIN_PASS = 'admin123';
 
   const fetchLeads = async () => {
-    if (!isAuthenticated) return;
     setIsLoading(true);
     try {
       const query = new URLSearchParams(filters).toString();
@@ -34,20 +31,8 @@ function AdminLeads() {
   };
 
   useEffect(() => {
-    if (isAuthenticated) {
-      fetchLeads();
-    }
-  }, [filters, isAuthenticated]);
-
-  const handleLogin = (e) => {
-    e.preventDefault();
-    if (password === ADMIN_PASS) {
-      setIsAuthenticated(true);
-      toast.success('Admin access granted');
-    } else {
-      toast.error('Invalid Password');
-    }
-  };
+    fetchLeads();
+  }, [filters]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -56,42 +41,19 @@ function AdminLeads() {
   const handleExport = () => {
     const query = new URLSearchParams(filters).toString();
     const exportUrl = `http://localhost:5000/api/leads/export?${query}&x-admin-secret=${ADMIN_PASS}`;
-    // Note: Since we are using headers for auth, a simple window.open might not work for export unless we pass it as a query param or handle it differently.
-    // For now, I'll update the backend to also check query param for export if header is missing.
     window.open(exportUrl, '_blank');
   };
 
-  if (!isAuthenticated) {
-    return (
-      <div className="admin-login-page d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: '#070913' }}>
-        <div className="login-card p-5 text-center" style={{ background: '#0b1220', border: '1px solid #ff6a00', borderRadius: '30px', maxWidth: '400px', width: '90%' }}>
-          <i className="fas fa-user-shield mb-4" style={{ fontSize: '4rem', color: '#ff6a00' }}></i>
-          <h2 className="mb-4 text-white">Admin Portal</h2>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4">
-              <input 
-                type="password" 
-                className="form-control bg-dark text-white border-secondary" 
-                placeholder="Enter Admin Password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100 py-3" style={{ background: 'linear-gradient(135deg, #ff6a00, #ff0080)', border: 'none', borderRadius: '50px', fontWeight: '700' }}>
-              Access Dashboard
-            </button>
-          </form>
-        </div>
-      </div>
-    );
-  }
-
   return (
-    <div className="container py-5" style={{ minHeight: '100vh', color: '#fff' }}>
+    <div className="admin-leads">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2>Admin: Lead Management</h2>
-        <button className="btn btn-sm btn-outline-danger" onClick={() => setIsAuthenticated(false)}>Logout</button>
+        <h3>Lead Management</h3>
+        <div className="btn-group">
+          <button className={`btn btn-sm ${filters.type === '' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: ''})}>All</button>
+          <button className={`btn btn-sm ${filters.type === 'Course' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Course'})}>Courses</button>
+          <button className={`btn btn-sm ${filters.type === 'Consultation' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Consultation'})}>Consulting</button>
+          <button className={`btn btn-sm ${filters.type === 'Webinar' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Webinar'})}>Webinars</button>
+        </div>
       </div>
       
       <div className="card mb-4" style={{ background: '#1a1a2e', border: '1px solid #ff6a00' }}>
@@ -103,14 +65,6 @@ function AdminLeads() {
           <div className="form-group mb-0">
             <label className="text-muted small">End Date</label>
             <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} className="form-control bg-dark text-white border-secondary" />
-          </div>
-          <div className="form-group mb-0">
-            <label className="text-muted small">Type</label>
-            <select name="type" value={filters.type} onChange={handleFilterChange} className="form-control bg-dark text-white border-secondary">
-              <option value="">All Types</option>
-              <option value="Webinar">Webinar</option>
-              <option value="Course">Course</option>
-            </select>
           </div>
           <div className="ms-auto">
             <button onClick={handleExport} className="btn btn-success me-2">
@@ -148,8 +102,16 @@ function AdminLeads() {
                   <td>{lead.name}</td>
                   <td>{lead.email}</td>
                   <td>{lead.phone}</td>
-                  <td><span className={`badge ${lead.type === 'Webinar' ? 'bg-info' : 'bg-primary'}`}>{lead.type}</span></td>
-                  <td>{lead.courseName || '-'}</td>
+                  <td>
+                    <span className={`badge ${
+                      lead.type === 'Webinar' ? 'bg-info' : 
+                      lead.type === 'Course' ? 'bg-primary' : 
+                      lead.type === 'Consultation' ? 'bg-success' : 'bg-secondary'
+                    }`}>
+                      {lead.type}
+                    </span>
+                  </td>
+                  <td>{lead.courseName || lead.consultationType || '-'}</td>
                   <td>
                     <span className={`badge ${lead.paymentStatus === 'Completed' ? 'bg-success' : lead.paymentStatus === 'Failed' ? 'bg-danger' : 'bg-warning'}`}>
                       {lead.paymentStatus}

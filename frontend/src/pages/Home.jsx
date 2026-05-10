@@ -32,307 +32,91 @@ function Home() {
       { icon: "🎧", title: "Lifetime Support", sub: "We're Here for You" },
     ];
 
-    const Card1SVG = () => (
-      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
-        <defs>
-          <radialGradient id="bg1" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#7a4020"/>
-            <stop offset="100%" stopColor="#2e1008"/>
-          </radialGradient>
-          <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#d4915a" stopOpacity=".4"/>
-            <stop offset="100%" stopColor="#2e1008" stopOpacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="300" height="160" fill="url(#bg1)"/>
-        <ellipse cx="150" cy="80" rx="90" ry="70" fill="url(#glow1)"/>
-        <rect x="80" y="65" width="140" height="70" rx="3" fill="#c8884a" opacity=".9"/>
-        <rect x="147" y="62" width="6" height="76" rx="2" fill="#8b4a1a"/>
-        <rect x="83" y="68" width="62" height="64" rx="2" fill="#f5ddb8"/>
-        <rect x="155" y="68" width="62" height="64" rx="2" fill="#f0d4a8"/>
-        <line x1="90" y1="80" x2="138" y2="80" stroke="#c8a070" strokeWidth=".8"/>
-        <line x1="90" y1="87" x2="138" y2="87" stroke="#c8a070" strokeWidth=".8"/>
-        <line x1="90" y1="94" x2="138" y2="94" stroke="#c8a070" strokeWidth=".8"/>
-        <line x1="90" y1="101" x2="138" y2="101" stroke="#c8a070" strokeWidth=".8"/>
-        <line x1="90" y1="108" x2="138" y2="108" stroke="#c8a070" strokeWidth=".8"/>
-        <line x1="90" y1="115" x2="138" y2="115" stroke="#c8a070" strokeWidth=".8"/>
-        <circle cx="186" cy="100" r="22" fill="none" stroke="#9a6030" strokeWidth="1"/>
-        <circle cx="186" cy="100" r="15" fill="none" stroke="#9a6030" strokeWidth=".7"/>
-        <circle cx="186" cy="100" r="6" fill="#9a6030" opacity=".5"/>
-        <line x1="186" y1="78" x2="186" y2="122" stroke="#9a6030" strokeWidth=".6"/>
-        <line x1="164" y1="100" x2="208" y2="100" stroke="#9a6030" strokeWidth=".6"/>
-        <line x1="170" y1="84" x2="202" y2="116" stroke="#9a6030" strokeWidth=".5"/>
-        <line x1="202" y1="84" x2="170" y2="116" stroke="#9a6030" strokeWidth=".5"/>
-        <text x="186" y="76" textAnchor="middle" fill="#c8903a" fontSize="6">♈</text>
-        <text x="208" y="104" textAnchor="middle" fill="#c8903a" fontSize="6">♉</text>
-        <text x="186" y="126" textAnchor="middle" fill="#c8903a" fontSize="6">♊</text>
-        <text x="163" y="104" textAnchor="middle" fill="#c8903a" fontSize="6">♋</text>
-        <path d="M83,68 Q150,58 217,68" fill="none" stroke="#a06030" strokeWidth="1" opacity=".6"/>
-        <circle cx="50" cy="25" r="1.2" fill="#e8c080" opacity=".8"/>
-        <circle cx="260" cy="40" r="1" fill="#e8c080" opacity=".7"/>
-        <circle cx="30" cy="120" r=".8" fill="#e8c080" opacity=".6"/>
-        <circle cx="275" cy="130" r="1.2" fill="#e8c080" opacity=".8"/>
-        <circle cx="240" cy="20" r=".8" fill="#e8c080" opacity=".5"/>
-        <circle cx="70" cy="140" r="1" fill="#e8c080" opacity=".6"/>
-      </svg>
-    );
-
-    const Card2SVG = () => (
-      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
-        <defs>
-          <radialGradient id="bg2" cx="40%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#b09060"/>
-            <stop offset="100%" stopColor="#5a3a10"/>
-          </radialGradient>
-          <radialGradient id="glow2" cx="55%" cy="45%" r="50%">
-            <stop offset="0%" stopColor="#f0d890" stopOpacity=".3"/>
-            <stop offset="100%" stopColor="#5a3a10" stopOpacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="300" height="160" fill="url(#bg2)"/>
-        <ellipse cx="170" cy="75" rx="100" ry="65" fill="url(#glow2)"/>
-        <rect x="75" y="20" width="120" height="120" fill="none" stroke="#f0d070" strokeWidth="1.2" opacity=".8"/>
-        <polygon points="135,20 195,80 135,140 75,80" fill="none" stroke="#f0d070" strokeWidth="1" opacity=".7"/>
-        <rect x="105" y="50" width="60" height="60" fill="rgba(240,210,100,.08)" stroke="#f0d070" strokeWidth=".8" opacity=".6"/>
-        <line x1="75" y1="20" x2="195" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
-        <line x1="195" y1="20" x2="75" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
-        <text x="135" y="38" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">1</text>
-        <text x="180" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">2</text>
-        <text x="188" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">3</text>
-        <text x="180" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">4</text>
-        <text x="135" y="130" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">7</text>
-        <text x="88" y="112" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">10</text>
-        <text x="82" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">11</text>
-        <text x="88" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">12</text>
-        <text x="135" y="76" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">☿ ♀</text>
-        <text x="135" y="90" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">♃ ♄</text>
-        <line x1="230" y1="40" x2="245" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
-        <line x1="230" y1="40" x2="215" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
-        <line x1="218" y1="90" x2="242" y2="90" stroke="#d4b060" strokeWidth="1.5" opacity=".7"/>
-        <circle cx="40" cy="30" r="1.2" fill="#f0e080" opacity=".7"/>
-        <circle cx="270" cy="50" r="1" fill="#f0e080" opacity=".6"/>
-        <circle cx="255" cy="130" r=".8" fill="#f0e080" opacity=".5"/>
-        <circle cx="25" cy="110" r="1" fill="#f0e080" opacity=".6"/>
-      </svg>
-    );
-
-    const Card3SVG = () => (
-      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
-        <defs>
-          <radialGradient id="bg3" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#1a1228"/>
-            <stop offset="100%" stopColor="#0a0814"/>
-          </radialGradient>
-          <radialGradient id="jupGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#c87830"/>
-            <stop offset="60%" stopColor="#a05820"/>
-            <stop offset="100%" stopColor="#6a3010"/>
-          </radialGradient>
-          <radialGradient id="jupAtm" cx="40%" cy="35%" r="60%">
-            <stop offset="0%" stopColor="#e8a850" stopOpacity=".5"/>
-            <stop offset="100%" stopColor="#c87830" stopOpacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="300" height="160" fill="url(#bg3)"/>
-        <circle cx="20" cy="15" r=".8" fill="white" opacity=".8"/>
-        <circle cx="45" cy="8" r="1" fill="white" opacity=".6"/>
-        <circle cx="80" cy="20" r=".6" fill="white" opacity=".7"/>
-        <circle cx="10" cy="50" r=".8" fill="white" opacity=".5"/>
-        <circle cx="260" cy="12" r="1" fill="white" opacity=".8"/>
-        <circle cx="285" cy="35" r=".7" fill="white" opacity=".6"/>
-        <circle cx="270" cy="60" r=".9" fill="white" opacity=".7"/>
-        <circle cx="250" cy="140" r=".8" fill="white" opacity=".5"/>
-        <circle cx="30" cy="130" r=".7" fill="white" opacity=".6"/>
-        <circle cx="180" cy="145" r=".8" fill="white" opacity=".6"/>
-        <circle cx="130" cy="15" r=".5" fill="white" opacity=".7"/>
-        <circle cx="160" cy="10" r=".8" fill="white" opacity=".6"/>
-        <ellipse cx="155" cy="78" rx="75" ry="12" fill="none" stroke="#d4a050" strokeWidth="2.5" opacity=".35"/>
-        <ellipse cx="155" cy="78" rx="68" ry="10" fill="none" stroke="#e0b860" strokeWidth="1.2" opacity=".25"/>
-        <circle cx="155" cy="78" r="52" fill="url(#jupGlow)"/>
-        <circle cx="155" cy="78" r="52" fill="url(#jupAtm)"/>
-        <ellipse cx="155" cy="62" rx="51" ry="7" fill="#8a4818" opacity=".5"/>
-        <ellipse cx="155" cy="72" rx="52" ry="4" fill="#d09040" opacity=".35"/>
-        <ellipse cx="155" cy="82" rx="52" ry="6" fill="#7a3e14" opacity=".45"/>
-        <ellipse cx="155" cy="92" rx="51" ry="4" fill="#c88038" opacity=".3"/>
-        <ellipse cx="155" cy="100" rx="50" ry="5" fill="#8a4818" opacity=".4"/>
-        <ellipse cx="135" cy="86" rx="10" ry="7" fill="#a03818" opacity=".7"/>
-        <ellipse cx="140" cy="60" rx="18" ry="12" fill="white" opacity=".08"/>
-      </svg>
-    );
-
-    const Card4SVG = () => (
-      <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
-        <defs>
-          <radialGradient id="bg4" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#8a6030"/>
-            <stop offset="100%" stopColor="#3a2010"/>
-          </radialGradient>
-          <radialGradient id="cmpGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#d4a850" stopOpacity=".4"/>
-            <stop offset="100%" stopColor="#8a6030" stopOpacity="0"/>
-          </radialGradient>
-        </defs>
-        <rect width="300" height="160" fill="url(#bg4)"/>
-        <ellipse cx="155" cy="80" rx="100" ry="70" fill="url(#cmpGlow)"/>
-        <circle cx="155" cy="80" r="56" fill="#c89850" opacity=".15"/>
-        <circle cx="155" cy="80" r="56" fill="none" stroke="#d4a840" strokeWidth="2" opacity=".7"/>
-        <circle cx="155" cy="80" r="50" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
-        <circle cx="155" cy="80" r="42" fill="#a07828" opacity=".2"/>
-        <circle cx="155" cy="80" r="42" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
-        <line x1="155" y1="24" x2="155" y2="32" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-        <line x1="155" y1="128" x2="155" y2="136" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-        <line x1="99" y1="80" x2="107" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-        <line x1="203" y1="80" x2="211" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-        <line x1="115" y1="40" x2="120" y2="47" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-        <line x1="190" y1="113" x2="195" y2="120" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-        <line x1="115" y1="120" x2="120" y2="113" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-        <line x1="190" y1="47" x2="195" y2="40" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-        <text x="155" y="22" textAnchor="middle" fill="#f0d060" fontSize="9" fontFamily="serif" fontWeight="bold">N</text>
-        <text x="155" y="146" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">S</text>
-        <text x="96" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">W</text>
-        <text x="214" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">E</text>
-        <polygon points="155,38 150,80 155,68 160,80" fill="#e84030" opacity=".9"/>
-        <polygon points="155,122 150,80 155,92 160,80" fill="#d0c890" opacity=".8"/>
-        <circle cx="155" cy="80" r="6" fill="#e8c050" opacity=".9"/>
-        <circle cx="155" cy="80" r="3.5" fill="#a07020"/>
-        <circle cx="30" cy="30" r="1.5" fill="#f0d060" opacity=".6"/>
-        <circle cx="55" cy="50" r="1.5" fill="#f0d060" opacity=".6"/>
-        <circle cx="45" cy="75" r="1.5" fill="#f0d060" opacity=".6"/>
-        <line x1="30" y1="30" x2="55" y2="50" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
-        <line x1="55" y1="50" x2="45" y2="75" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
-        <circle cx="260" cy="25" r="1.5" fill="#f0d060" opacity=".5"/>
-        <circle cx="278" cy="45" r="1.2" fill="#f0d060" opacity=".4"/>
-        <line x1="260" y1="25" x2="278" y2="45" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
-      </svg>
-    );
-
     const courses = [
       {
         id: 1, level: "Beginner Level", title: "Foundation in Astrology",
         desc: "Start your journey. Learn the basics of planets, signs, houses and their impact on our lives.",
-        icon: "☸", price: "₹699", original: "₹4100", SVG: Card1SVG,
+        icon: "☸", price: "₹699", original: "₹4100", link: "/vedic-course",
+        img: "/images/bg-bannerpic.jpg"
       },
       {
         id: 2, level: "Intermediate Level", title: "Vedic Astrology Deep Dive",
         desc: "Deepen your understanding of planetary dasha, yogas, and divisional charts in Vedic astrology.",
-        icon: "☽", price: "₹999", original: "₹5100", SVG: Card2SVG,
+        icon: "☽", price: "₹999", original: "₹5100", link: "/advanced-astrology",
+        img: "/images/moon.jpg"
       },
       {
         id: 3, level: "Advanced Level", title: "KP Astrology Mastery",
         desc: "Master the precision of KP system with practical techniques for accurate predictions.",
-        icon: "24", price: "₹1299", original: "₹6500", SVG: Card3SVG, isBold: true,
+        icon: "24", price: "₹1299", original: "₹6500", link: "/predictive-astrology",
+        img: "/images/premium_tarot.png"
       },
       {
         id: 4, level: "Practitioner Level", title: "Astrology for Guidance & Counseling",
         desc: "Learn how to guide, empower and bring positive change in others' lives using astrology.",
-        icon: "✦", price: "₹1499", original: "₹7000", SVG: Card4SVG,
+        icon: "✦", price: "₹1499", original: "₹7000", link: "/certification-courses",
+        img: "/images/bg-bannerpic.jpg"
       },
     ];
 
     return (
-      <>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;600&family=Cinzel:wght@400;600&family=Jost:wght@300;400;500&display=swap');
-          .aw { background: #f5ebe0; padding: 3rem 2rem; font-family: 'Jost', sans-serif; position: relative; overflow: hidden; }
-          .aw::before { content: '✦'; position: absolute; top: 20px; left: 30px; font-size: 60px; opacity: .06; color: #4a2518; pointer-events: none; }
-          .aw::after { content: '☽'; position: absolute; bottom: 30px; right: 40px; font-size: 80px; opacity: .06; color: #4a2518; pointer-events: none; }
-          .ah { text-align: center; margin-bottom: 2.5rem; }
-          .ah h2 { font-family: 'Cinzel', serif; font-size: clamp(1.8rem,5vw,2.8rem); color: #2d1506; letter-spacing: .02em; margin: 0 0 .4rem; font-weight: 600; }
-          .atag { font-size: .72rem; letter-spacing: .15em; color: #7a4a2a; text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
-          .atag::before, .atag::after { content: '—'; opacity: .4; }
-          .asub { color: #6b4a32; font-size: .9rem; max-width: 460px; margin: 0 auto; line-height: 1.7; }
-          .dl { display: flex; align-items: center; gap: 10px; justify-content: center; margin: .4rem 0 .8rem; }
-          .dl::before, .dl::after { content: ''; flex: 1; max-width: 70px; height: .5px; background: #9a6040; }
-          .dd { width: 5px; height: 5px; background: #9a6040; border-radius: 50%; }
-          .cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.2rem; margin-bottom: 2rem; }
-          .cc { background: #fffaf5; border-radius: 18px; overflow: hidden; border: .5px solid #d4b896; display: flex; flex-direction: column; transition: transform .25s ease; cursor: pointer; }
-          .cc:hover { transform: translateY(-5px); }
-          .ci { width: 100%; height: 160px; display: block; position: relative; overflow: hidden; }
-          .ci svg { width: 100%; height: 100%; display: block; }
-          .badge-discount { position: absolute; top: 10px; left: 10px; background: #c8451a; color: #fff5ee; font-size: .6rem; letter-spacing: .1em; text-transform: uppercase; padding: 3px 9px; border-radius: 20px; font-family: 'Jost', sans-serif; font-weight: 500; z-index: 3; }
-          .ico { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 42px; height: 42px; background: #fffaf5; border: 2px solid #d4b896; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 17px; color: #5c3317; z-index: 2; font-family: 'Cinzel', serif; }
-          .cb { padding: 1.8rem 1.1rem 1.1rem; text-align: center; flex: 1; display: flex; flex-direction: column; }
-          .clvl { font-size: .62rem; letter-spacing: .18em; color: #9a6040; text-transform: uppercase; margin-bottom: .3rem; font-family: 'Jost', sans-serif; }
-          .ctitle { font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; color: #2d1506; margin: 0 0 .2rem; font-weight: 600; line-height: 1.3; }
-          .cdesc { font-size: .8rem; color: #6b4a32; line-height: 1.55; flex: 1; margin-bottom: .8rem; }
-          .price-hero { font-family: 'Cinzel', serif; font-size: 1.4rem; color: #2d1506; font-weight: 600; margin: .2rem 0 .6rem; }
-          .price-hero span { font-size: .85rem; color: #9a6040; text-decoration: line-through; font-family: 'Jost', sans-serif; font-weight: 400; margin-left: 6px; }
-          .divr { height: .5px; background: #e8d5c0; margin: .5rem 0 .75rem; }
-          .cinstr { display: flex; align-items: center; gap: 12px; margin-bottom: 1rem; justify-content: center; }
-          .iavt { width: 42px; height: 42px; border-radius: 50%; background: linear-gradient(135deg, #c8906a, #8b5232); border: 2px solid #d4b896; display: flex; align-items: center; justify-content: center; font-size: 14px; color: #fff; font-family: 'Cinzel', serif; flex-shrink: 0; }
-          .iname { font-size: 0.95rem; color: #2d1506; font-weight: 600; font-family: 'Jost', sans-serif; margin: 0; text-align: left; }
-          .iexp { font-size: 0.8rem; color: #9a6040; margin: 0; font-family: 'Jost', sans-serif; text-align: left; font-weight: 500; }
-          .btnrow { display: grid; grid-template-columns: 1fr 1fr; gap: 7px; }
-          .btn-read { background: transparent; color: #4a2518; border: 1.5px solid #c4a060; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
-          .btn-read:hover { background: #f0dfc8; }
-          .btn-buy { background: #4a2518; color: #f5ebe0; border: none; border-radius: 8px; padding: .55rem .5rem; font-size: .78rem; font-family: 'Jost', sans-serif; cursor: pointer; transition: background .2s; }
-          .btn-buy:hover { background: #6b3520; }
-          .fb { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 1.2rem; border-top: .5px solid #d4b896; padding-top: 1.8rem; margin-top: 1rem; }
-          .fi { display: flex; flex-direction: column; align-items: center; gap: 8px; text-align: center; }
-          .fic { width: 50px; height: 50px; border-radius: 50%; background: rgba(74,37,24,.08); display: flex; align-items: center; justify-content: center; font-size: 22px; margin-bottom: 5px; }
-          .ftt { font-size: 1.15rem; font-weight: 700; color: #2d1506; font-family: 'Jost', sans-serif; }
-          .fts { font-size: 0.95rem; color: #9a6040; font-family: 'Jost', sans-serif; opacity: 0.8; }
-          .svgd { position: absolute; opacity: .07; pointer-events: none; }
-        `}</style>
-
-        <section className="aw">
-          <svg className="svgd" style={{top:0,right:0,width:150,height:150}} viewBox="0 0 160 160">
-            <circle cx="130" cy="30" r="50" fill="none" stroke="#4a2518" strokeWidth=".8"/>
-            <circle cx="130" cy="30" r="35" fill="none" stroke="#4a2518" strokeWidth=".5"/>
-            <line x1="130" y1="0" x2="130" y2="80" stroke="#4a2518" strokeWidth=".5"/>
-            <line x1="100" y1="30" x2="160" y2="30" stroke="#4a2518" strokeWidth=".5"/>
-          </svg>
-
-          <div className="ah">
-            <h2>Astrology Courses</h2>
-            <div className="dl"><div className="dd"/></div>
-            <div className="atag">Ancient Wisdom &nbsp;·&nbsp; Modern Learning &nbsp;·&nbsp; Meaningful Transformation</div>
-            <p className="asub">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
+      <section className="consultation-home-section py-5" style={{background: '#fff'}}>
+        <div className="container">
+          <div className="text-center mb-5" data-aos="fade-up">
+            <h5 className="section-subtitle">🌟 Master Ancient Wisdom 🌟</h5>
+            <h2 className="section-title">Astrology Courses</h2>
+            <p className="asub mx-auto mt-3">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
           </div>
 
-          <div className="cg">
-            {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold }) => (
-              <div key={id} className="cc" onClick={() => navigate('/courses')}>
-                <div className="ci" style={{position:"relative"}}>
-                  <SVG />
-                  <span className="badge-discount">Mega DISCOUNT</span>
-                  <div className="ico" style={isBold ? {fontSize:"13px",fontWeight:600} : {}}>
-                    {icon}
+          <div className="row g-4">
+            {courses.map((item, idx) => (
+              <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 100}>
+                <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
+                  <div className="consult-img-v2">
+                    <img src={item.img} alt={item.title} />
+                    <div className="expert-badge">{item.level}</div>
+                    <div className="price-tag-v2">{item.price}</div>
                   </div>
-                </div>
-                <div className="cb">
-                  <p className="clvl">{level}</p>
-                  <h3 className="ctitle">{title}</h3>
-                  <p className="cdesc">{desc}</p>
-                  <div className="price-hero">{price} <span>{original}</span></div>
-                  <div className="divr"/>
-                  <div className="cinstr">
-                    <div className="iavt">MS</div>
-                    <div>
-                      <p className="iname">Acharya Meera Sharma</p>
-                      <p className="iexp">20+ Years of Experience</p>
+                  <div className="consult-content-v2">
+                    <div className="consult-icon-v2">
+                      <span>{item.icon}</span>
+                    </div>
+                    <h3>{item.title}</h3>
+                    <p>{item.desc}</p>
+                    <div className="consult-btn-group">
+                      <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
+                      <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
                     </div>
                   </div>
-                  <div className="btnrow">
-                    <button className="btn-read" onClick={(e) => { e.stopPropagation(); navigate('/courses'); }}>Read More</button>
-                    <button className="btn-buy" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Buy Now →</button>
-                  </div>
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="fb">
-            {features.map((f, i) => (
-              <div key={i} className="fi">
-                <div className="fic">{f.icon}</div>
-                <div className="ftt">{f.title}</div>
-                <div className="fts">{f.sub}</div>
+          <div className="consultation-features mt-5 pt-4" data-aos="fade-up">
+            <div className="row justify-content-center">
+              <div className="col-lg-10">
+                <div className="features-glass-card">
+                  <h4 className="mb-4"><i className="fas fa-certificate me-2 text-warning"></i> Course Benefits</h4>
+                  <div className="row g-3">
+                    {features.map((f, i) => (
+                      <div key={i} className="col-md-3 col-sm-6">
+                        <div className="feature-item">
+                          <i className="fas fa-check-circle me-2 text-success"></i>
+                          <div>
+                            <div style={{fontWeight: 700}}>{f.title}</div>
+                            <div style={{fontSize: '0.8rem', opacity: 0.7}}>{f.sub}</div>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
               </div>
-            ))}
+            </div>
           </div>
-        </section>
-      </>
+        </div>
+      </section>
     );
   };
   const handleChange = (e) => {
@@ -459,6 +243,7 @@ function Home() {
     const video = e.currentTarget.querySelector('video');
     if (video) {
       if (video.paused) {
+        video.muted = false; // Unmute when playing
         video.play();
         e.currentTarget.classList.add('playing');
       } else {
@@ -942,34 +727,24 @@ function Home() {
         {/* Astrology Courses Section */}
         <AstrologyCourses />
 
-        <section className="consultation-elite-section py-5">
-          <div className="elite-bg-ornaments">
-            <div className="ornament-left" style={{top: '20%'}}></div>
-            <div className="ornament-right" style={{bottom: '10%'}}></div>
-          </div>
-          
-          <div className="container position-relative">
+        {/* Expert Consultations Section */}
+        <section className="consultation-home-section py-5">
+          <div className="container">
             <div className="text-center mb-5" data-aos="fade-up">
-              <h2 className="elite-section-title">Expert Consultations</h2>
-              <div className="elite-subtitle-wrapper">
-                <span className="star-icon">✦</span>
-                <span className="subtitle-text">Professional Guidance. Personalized Insights. Divine Clarity.</span>
-                <span className="star-icon">✦</span>
-              </div>
-              <p className="elite-asub mx-auto mt-4">
-                Book a personalized session with our master astrologers to illuminate<br/>
-                your life path and find clarity in your most important life decisions.
-              </p>
+              <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
+              <h2 className="section-title">Expert Consultations</h2>
+              <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
             </div>
             
             <div className="row g-4">
+              {/* Consultation Cards Mapping */}
               {[
                 { 
                   title: 'Tarot Card Reading', 
                   img: '/images/tarot_thumbnail.png', 
                   desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
                   duration: '45 Minutes',
-                  icon: '✨',
+                  icon: 'magic',
                   price: '₹5400',
                   badge: 'INTUITION EXPERT',
                   link: '/consultations/tarot'
@@ -979,7 +754,7 @@ function Home() {
                   img: '/images/consultations/career.png', 
                   desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
                   duration: '30-40 Min',
-                  icon: '💼',
+                  icon: 'briefcase',
                   price: '₹3600',
                   badge: 'CAREER EXPERT',
                   link: '/consultations/career'
@@ -989,7 +764,7 @@ function Home() {
                   img: '/images/consultations/health.png', 
                   desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
                   duration: '30-40 Min',
-                  icon: '💔',
+                  icon: 'heart-broken',
                   price: '₹3400',
                   badge: 'RECOVERY EXPERT',
                   link: '/consultations/divorce'
@@ -999,7 +774,7 @@ function Home() {
                   img: '/images/consultations/love.png', 
                   desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
                   duration: '30-40 Min',
-                  icon: '❤️',
+                  icon: 'heart',
                   price: '₹3400',
                   badge: 'RELATIONSHIP EXPERT',
                   popular: true,
@@ -1007,29 +782,21 @@ function Home() {
                 }
               ].map((item, idx) => (
                 <div key={idx} className="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay={idx * 150}>
-                  <div className="course-card-elite" onClick={() => navigate(item.link)}>
-                    <div className="card-image-box">
+                  <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
+                    <div className="consult-img-v2">
                       <img src={item.img} alt={item.title} />
-                      <div className="icon-overlay">
-                        <div className="floating-icon">{item.icon}</div>
-                      </div>
-                      <div className="verified-badge-elite">
-                        <i className="fas fa-check-circle me-1"></i> Verified Master
-                      </div>
+                      {item.badge && <div className="expert-badge">{item.badge}</div>}
+                      {item.price && <div className="price-tag-v2">{item.price}</div>}
                     </div>
-                    <div className="card-content-box text-center">
-                      <h3 className="course-title">{item.title}</h3>
-                      <div className="course-level">{item.badge}</div>
-                      <p className="course-desc">{item.desc}</p>
-                      
-                      <div className="price-row-elite mb-4">
-                        <span className="price-label">Consultation Fee:</span>
-                        <span className="price-value ms-2">{item.price}</span>
+                    <div className="consult-content-v2">
+                      <div className="consult-icon-v2">
+                        <i className={`fas fa-${item.icon}`}></i>
                       </div>
-                      
+                      <h3>{item.title}</h3>
+                      <p>{item.desc}</p>
                       <div className="consult-btn-group">
-                        <Link to={item.link} className="btn-view-elite-v2" onClick={(e) => e.stopPropagation()}>View Profile</Link>
-                        <button className="btn-book-elite-v2" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Book Now</button>
+                        <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
+                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Book Now</button>
                       </div>
                     </div>
                   </div>
@@ -2823,319 +2590,6 @@ function Home() {
         @keyframes lineExpand {
           0% { width: 40px; opacity: 0.5; }
           100% { width: 100px; opacity: 1; }
-        }
-        /* Elite Courses UI */
-        .courses-elite-section {
-          background: #FDF6EE;
-          padding: 80px 0;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .elite-bg-ornaments .ornament-left,
-        .elite-bg-ornaments .ornament-right {
-          position: absolute;
-          width: 300px;
-          height: 300px;
-          opacity: 0.05;
-          pointer-events: none;
-        }
-
-        .ornament-left {
-          top: 50px;
-          left: -100px;
-          background: url('https://www.transparenttextures.com/patterns/stardust.png'), radial-gradient(circle, #8B4A1E, transparent);
-          border-radius: 50%;
-        }
-
-        .ornament-right {
-          bottom: 50px;
-          right: -100px;
-          background: url('https://www.transparenttextures.com/patterns/zodiac-signs.png');
-          background-size: contain;
-        }
-
-        .elite-section-title {
-          font-family: var(--font-serif);
-          font-size: clamp(2.5rem, 5vw, 4rem);
-          font-weight: 800;
-          color: #2A0F02;
-          margin-bottom: 10px;
-        }
-
-        .elite-subtitle-wrapper {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 15px;
-          color: #8B4A1E;
-          font-weight: 600;
-          letter-spacing: 1px;
-          font-size: 0.9rem;
-        }
-
-        .elite-asub {
-          font-size: 1.1rem;
-          color: #5C3D26;
-          max-width: 800px;
-          line-height: 1.6;
-        }
-
-        .course-card-elite {
-          background: #fff;
-          border-radius: 30px;
-          overflow: hidden;
-          box-shadow: 0 15px 40px rgba(42, 15, 2, 0.06);
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-          cursor: pointer;
-          height: 100%;
-          border: 1px solid rgba(139, 74, 30, 0.05);
-        }
-
-        .course-card-elite:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 30px 60px rgba(42, 15, 2, 0.12);
-        }
-
-        .card-image-box {
-          position: relative;
-          height: 180px;
-          overflow: hidden;
-        }
-
-        .card-image-box img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s ease;
-        }
-
-        .course-card-elite:hover .card-image-box img {
-          transform: scale(1.1);
-        }
-
-        .icon-overlay {
-          position: absolute;
-          bottom: -25px;
-          left: 50%;
-          transform: translateX(-50%);
-          z-index: 10;
-        }
-
-        .floating-icon {
-          width: 50px;
-          height: 50px;
-          background: #2A0F02;
-          color: #C8832A;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.5rem;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.3);
-          border: 2px solid #FDF6EE;
-        }
-
-        .card-content-box {
-          padding: 40px 25px 30px;
-        }
-
-        .course-title {
-          font-family: var(--font-serif);
-          font-size: 1.4rem;
-          font-weight: 800;
-          color: #2A0F02;
-          margin-bottom: 8px;
-        }
-
-        .course-level {
-          font-size: 0.75rem;
-          font-weight: 800;
-          color: #8B4A1E;
-          text-transform: uppercase;
-          letter-spacing: 1.5px;
-          margin-bottom: 15px;
-        }
-
-        .course-desc {
-          font-size: 0.95rem;
-          color: #5C3D26;
-          line-height: 1.6;
-          margin-bottom: 25px;
-          height: 4.8rem;
-          overflow: hidden;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-        }
-
-        .instructor-row {
-          padding-top: 20px;
-          border-top: 1px solid rgba(139, 74, 30, 0.08);
-        }
-
-        .instructor-img {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          overflow: hidden;
-          border: 2px solid #C8832A;
-        }
-
-        .instructor-img img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-        }
-
-        .instructor-info .name {
-          font-size: 0.85rem;
-          font-weight: 700;
-          color: #2A0F02;
-        }
-
-        .instructor-info .experience {
-          font-size: 0.7rem;
-          color: #8B4A1E;
-          font-weight: 600;
-        }
-
-        .btn-explore-elite {
-          display: inline-block;
-          background: #2A0F02;
-          color: #fff;
-          padding: 10px 25px;
-          border-radius: 10px;
-          font-weight: 700;
-          font-size: 0.9rem;
-          text-decoration: none;
-          transition: all 0.3s ease;
-          width: 100%;
-        }
-
-        .btn-explore-elite:hover {
-          background: #8B4A1E;
-          color: #fff;
-          transform: translateY(-2px);
-        }
-
-        .feature-bar-elite {
-          background: #FFFBF7;
-          border-radius: 20px;
-          border: 1px solid rgba(200, 131, 42, 0.1);
-          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.05);
-        }
-
-        .feature-item-elite {
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          padding: 10px;
-        }
-
-        .feature-icon-circle {
-          width: 45px;
-          height: 45px;
-          background: rgba(200, 131, 42, 0.08);
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: #8B4A1E;
-          font-size: 1.2rem;
-        }
-
-        .feature-text .title {
-          font-size: 0.95rem;
-          font-weight: 700;
-          color: #2A0F02;
-        }
-
-        .feature-text .sub {
-          font-size: 0.8rem;
-          color: #8B4A1E;
-          opacity: 0.8;
-        }
-
-        .border-end-elite {
-          border-right: 1px solid rgba(200, 131, 42, 0.1);
-        }
-
-        .consultation-elite-section {
-          background: #fff;
-          padding: 80px 0;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .verified-badge-elite {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          background: rgba(255, 255, 255, 0.9);
-          backdrop-filter: blur(5px);
-          color: #2A0F02;
-          padding: 4px 10px;
-          border-radius: 6px;
-          font-size: 0.7rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          z-index: 10;
-        }
-
-        .verified-badge-elite i {
-          color: #059669;
-        }
-
-        .price-row-elite {
-          background: #FDF6EE;
-          padding: 8px 15px;
-          border-radius: 12px;
-          display: inline-block;
-        }
-
-        .price-label {
-          font-size: 0.8rem;
-          color: #5C3D26;
-          font-weight: 600;
-        }
-
-        .price-value {
-          font-size: 1.1rem;
-          font-weight: 800;
-          color: #2A0F02;
-        }
-
-        .btn-view-elite-v2 {
-          background: transparent;
-          color: #8B4A1E;
-          border: 1.5px solid rgba(139, 74, 30, 0.3);
-          padding: 10px 5px;
-          border-radius: 10px;
-          font-size: 0.85rem;
-          font-weight: 700;
-          text-decoration: none;
-          text-align: center;
-          transition: 0.3s;
-        }
-
-        .btn-book-elite-v2 {
-          background: #2A0F02;
-          color: #fff;
-          border: none;
-          padding: 10px 5px;
-          border-radius: 10px;
-          font-size: 0.85rem;
-          font-weight: 800;
-          transition: 0.3s;
-        }
-
-        .btn-view-elite-v2:hover { background: #2A0F02; color: #fff; }
-        .btn-book-elite-v2:hover { background: #8B4A1E; transform: translateY(-2px); }
-
-        @media (max-width: 991px) {
-          .border-end-elite { border-right: none; border-bottom: 1px solid rgba(200, 131, 42, 0.1); padding-bottom: 15px; }
-          .feature-bar-elite .row > div:last-child { border-bottom: none; }
         }
       `}</style>
     </>

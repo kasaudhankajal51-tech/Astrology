@@ -274,15 +274,6 @@ function Footer() {
         .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; }
         .fb-legal a { color: #8B4A1E; text-decoration: none; margin-left: 20px; font-weight: 500; }
 
-        /* Floating Buttons */
-        .chat-btn-desktop {
-          position: fixed; bottom: 30px; right: 30px;
-          width: 60px; height: 60px; background: #0084FF;
-          border-radius: 50%; display: flex; align-items: center; justify-content: center;
-          color: white; font-size: 24px; box-shadow: 0 8px 25px rgba(0, 132, 255, 0.4);
-          z-index: 999; cursor: pointer; transition: 0.3s;
-        }
-        .chat-btn-phone { display: none; }
 
         @media(max-width: 767px) {
           /* Hide desktop sections */
@@ -354,13 +345,6 @@ function Footer() {
           .fb-legal { display: flex; flex-wrap: wrap; justify-content: center; }
           .fb-legal a { margin: 0 8px; }
 
-          .chat-btn-phone {
-            display: flex; position: fixed; bottom: 28px; right: 22px;
-            width: 62px; height: 62px; background: #EF8251; border: 2.5px solid white;
-            border-radius: 50%; align-items: center; justify-content: center;
-            box-shadow: 0 8px 22px rgba(239,130,81,0.45);
-            z-index: 1000; cursor: pointer;
-          }
         }
       `}</style>
 
@@ -568,15 +552,6 @@ function Footer() {
           </div>
         </div>
 
-        {/* Floating Buttons */}
-        <div className="chat-btn-desktop">
-          <i className="far fa-comment-dots"></i>
-        </div>
-        <div className="chat-btn-phone">
-           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </div>
       </footer>
     </>
   );

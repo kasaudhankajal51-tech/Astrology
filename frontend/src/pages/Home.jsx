@@ -61,17 +61,11 @@ function Home() {
 
     return (
       <section className="consultation-home-section py-5" style={{background: '#fff'}}>
-        <div className="container position-relative" style={{zIndex: 1}}>
-          <div className="star-dust">
-            <span className="star" style={{top: '10%', left: '5%'}}>✦</span>
-            <span className="star" style={{top: '20%', right: '10%', animationDelay: '2s'}}>✧</span>
-            <span className="star" style={{bottom: '15%', left: '15%', animationDelay: '4s'}}>✦</span>
-            <span className="star" style={{bottom: '30%', right: '5%', animationDelay: '1s'}}>✧</span>
-          </div>
+        <div className="container">
           <div className="text-center mb-5" data-aos="fade-up">
-            <h5 className="section-subtitle" style={{letterSpacing: '5px', fontWeight: 800}}>ACADEMIC EXCELLENCE</h5>
-            <h2 className="section-title">Professional Certification Courses</h2>
-            <p className="asub mx-auto mt-3" style={{maxWidth: '750px', fontSize: '1.2rem', opacity: 0.8}}>Comprehensive training programs designed to transform your understanding of the cosmos into professional expertise.</p>
+            <h5 className="section-subtitle">🌟 Master Ancient Wisdom 🌟</h5>
+            <h2 className="section-title">Astrology Courses</h2>
+            <p className="asub mx-auto mt-3">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
           </div>
 
           <div className="row g-4">
@@ -80,23 +74,18 @@ function Home() {
                 <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
                   <div className="consult-img-v2">
                     <img src={item.img} alt={item.title} />
-                    <div className="verified-badge">
-                      <i className="fas fa-graduation-cap me-1"></i> Certified Program
-                    </div>
-                    <div className="consult-duration">
-                      <span style={{textDecoration: 'line-through', opacity: 0.6, marginRight: '5px'}}>{item.original}</span>
-                    </div>
+                    <div className="expert-badge">{item.level}</div>
+                    <div className="price-tag-v2">{item.price}</div>
                   </div>
                   <div className="consult-content-v2">
-                    <div className="card-top-info mb-3 d-flex justify-content-between align-items-center">
-                      <span className="premium-label">{item.level}</span>
-                      <span className="professional-price">{item.price}</span>
+                    <div className="consult-icon-v2">
+                      <span>{item.icon}</span>
                     </div>
                     <h3>{item.title}</h3>
-                    <p className="mb-4">{item.desc}</p>
-                    <div className="consult-btn-group mt-auto">
-                      <Link to={item.link} className="btn-view-elite" onClick={(e) => e.stopPropagation()}>Curriculum</Link>
-                      <button className="btn-book-elite" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
+                    <p>{item.desc}</p>
+                    <div className="consult-btn-group">
+                      <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
+                      <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Enroll Now</button>
                     </div>
                   </div>
                 </div>
@@ -254,6 +243,7 @@ function Home() {
     const video = e.currentTarget.querySelector('video');
     if (video) {
       if (video.paused) {
+        video.muted = false; // Unmute when playing
         video.play();
         e.currentTarget.classList.add('playing');
       } else {
@@ -739,20 +729,11 @@ function Home() {
 
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">
-          <div className="container position-relative" style={{zIndex: 1}}>
-            <div className="star-dust">
-              <span className="star" style={{top: '5%', right: '15%', animationDelay: '3s'}}>✦</span>
-              <span className="star" style={{bottom: '10%', left: '10%', animationDelay: '5s'}}>✧</span>
-            </div>
+          <div className="container">
             <div className="text-center mb-5" data-aos="fade-up">
-              <div className="cosmic-divider mb-3">
-                <span>✦</span>
-                <div className="line"></div>
-                <span>✦</span>
-              </div>
-              <h5 className="section-subtitle" style={{letterSpacing: '5px', fontWeight: 800}}>ELITE ADVISORY</h5>
+              <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
               <h2 className="section-title">Expert Consultations</h2>
-              <p className="asub mx-auto mt-3" style={{maxWidth: '750px', fontSize: '1.2rem', opacity: 0.8}}>Strategic guidance from world-renowned master astrologers to navigate your life's most complex challenges with precision and wisdom.</p>
+              <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
             </div>
             
             <div className="row g-4">
@@ -804,24 +785,18 @@ function Home() {
                   <div className="consult-card-v2" onClick={() => navigate(item.link)} style={{ cursor: 'pointer' }}>
                     <div className="consult-img-v2">
                       <img src={item.img} alt={item.title} />
-                      {item.popular && <div className="popular-ribbon">Highly Recommended</div>}
-                      <div className="verified-badge">
-                        <i className="fas fa-check-circle me-1"></i> Verified Master
-                      </div>
-                      <div className="consult-duration">
-                        <i className="far fa-clock me-1"></i> {item.duration}
-                      </div>
+                      {item.badge && <div className="expert-badge">{item.badge}</div>}
+                      {item.price && <div className="price-tag-v2">{item.price}</div>}
                     </div>
                     <div className="consult-content-v2">
-                      <div className="card-top-info mb-3 d-flex justify-content-between align-items-center">
-                        <span className="premium-label">{item.badge}</span>
-                        <span className="professional-price">{item.price}</span>
+                      <div className="consult-icon-v2">
+                        <i className={`fas fa-${item.icon}`}></i>
                       </div>
                       <h3>{item.title}</h3>
-                      <p className="mb-4">{item.desc}</p>
-                      <div className="consult-btn-group mt-auto">
-                        <Link to={item.link} className="btn-view-elite" onClick={(e) => e.stopPropagation()}>View Profile</Link>
-                        <button className="btn-book-elite" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Reserve Now</button>
+                      <p>{item.desc}</p>
+                      <div className="consult-btn-group">
+                        <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
+                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Book Now</button>
                       </div>
                     </div>
                   </div>
@@ -829,36 +804,6 @@ function Home() {
               ))}
             </div>
 
-            {/* Consultation Features Section */}
-            <div className="consultation-features mt-5 pt-4" data-aos="fade-up">
-              <div className="row justify-content-center">
-                <div className="col-lg-10">
-                  <div className="features-glass-card">
-                    <h4 className="mb-4"><i className="fas fa-star me-2 text-warning"></i> Premium Consultation Features</h4>
-                    <div className="row g-4">
-                      {[
-                        { icon: 'shield-alt', text: 'Private & Confidential Sessions' },
-                        { icon: 'video', text: 'Zoom & Phone Call Available' },
-                        { icon: 'magic', text: 'Personalized Vedic Remedies' },
-                        { icon: 'gem', text: 'Spiritual & Practical Solutions' },
-                        { icon: 'chart-line', text: 'Accurate Life Predictions' },
-                        { icon: 'calendar-check', text: 'Prior Booking Mandatory' }
-                      ].map((feature, i) => (
-                        <div key={i} className="col-md-4 col-sm-6">
-                          <div className="feature-item" style={{gap: '12px'}}>
-                            <div className="feature-icon-mini">
-                              <i className={`fas fa-${feature.icon}`}></i>
-                            </div>
-                            <span>{feature.text}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            
             <div className="text-center mt-5" data-aos="fade-up">
               <Link to="/consultations" className="btn mystic-btn-outline px-5">
                 View All Consultations
@@ -2367,6 +2312,46 @@ function Home() {
           color: #2A0F02;
           transform: translateY(-2px);
           box-shadow: 0 10px 20px rgba(200, 131, 42, 0.2);
+        }
+
+        .expert-badge {
+          position: absolute;
+          top: 15px;
+          right: 15px;
+          background: #C2185B;
+          color: #FFF;
+          padding: 6px 16px;
+          border-radius: 50px;
+          font-size: 0.65rem;
+          font-weight: 900;
+          text-transform: uppercase;
+          letter-spacing: 1.5px;
+          box-shadow: 0 4px 15px rgba(194, 24, 91, 0.4);
+          z-index: 2;
+          border: 1px solid rgba(255, 255, 255, 0.2);
+          animation: badgeShine 3s infinite;
+        }
+
+        .price-tag-v2 {
+          position: absolute;
+          bottom: 15px;
+          left: 15px;
+          background: #ffffff;
+          color: #2A0F02;
+          padding: 8px 20px;
+          border-radius: 50px;
+          font-size: 1.05rem;
+          font-weight: 900;
+          box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+          z-index: 2;
+          border: 1px solid rgba(42, 15, 2, 0.05);
+          transition: all 0.3s ease;
+        }
+
+        .consult-card-v2:hover .price-tag-v2 {
+          background: #2A0F02;
+          color: #ffffff;
+          transform: scale(1.05);
         }
 
         .verified-badge {

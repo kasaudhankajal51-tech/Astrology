@@ -1,85 +1,178 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const ContactIcon = ({ children }) => (
-  <div style={{
-    width: 36, height: 36, borderRadius: 10,
-    background: '#fff',
-    border: '1px solid var(--glass-border)',
-    display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-    boxShadow: '0 2px 6px rgba(0,0,0,0.03)'
-  }}>
-    {children}
-  </div>
-);
+// --- Pure SVG Components for Payment Methods ---
 
-// SVG icons for payment methods
-const PayPalIcon = () => (
-  <svg viewBox="0 0 60 20" width="60" height="20" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="16" fontFamily="Arial" fontWeight="bold" fontSize="14" fill="#003087">Pay</text>
-    <text x="22" y="16" fontFamily="Arial" fontWeight="bold" fontSize="14" fill="#009cde">Pal</text>
+/* VISA — clean italic bold text, exact brand colours */
+const VisaSVG = () => (
+  <svg viewBox="0 0 80 28" height="22" xmlns="http://www.w3.org/2000/svg">
+    <text
+      x="4" y="22"
+      fontFamily="'Times New Roman', Georgia, serif"
+      fontWeight="700"
+      fontStyle="italic"
+      fontSize="24"
+      fill="#1A1F71"
+      letterSpacing="1"
+    >VISA</text>
   </svg>
 );
 
-const VisaIcon = () => (
-  <svg viewBox="0 0 50 16" width="50" height="16" xmlns="http://www.w3.org/2000/svg">
-    <text x="0" y="14" fontFamily="Arial" fontWeight="900" fontSize="16" fill="#1a1f71" letterSpacing="-1">VISA</text>
+/* MASTERCARD — two overlapping circles + "Mastercard" label */
+const MastercardSVG = () => (
+  <svg viewBox="0 0 90 44" height="30" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="18" r="16" fill="#EB001B"/>
+    <circle cx="52" cy="18" r="16" fill="#F79E1B"/>
+    {/* overlap blend */}
+    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#FF5F00"/>
+    <text x="45" y="40" fontFamily="Arial" fontWeight="600" fontSize="9" fill="#555" textAnchor="middle">Mastercard</text>
+  </svg>
+);
+
+/* MAESTRO — red + blue circles + "maestro" label */
+const MaestroSVG = () => (
+  <svg viewBox="0 0 90 44" height="30" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="28" cy="18" r="16" fill="#EB001B"/>
+    <circle cx="52" cy="18" r="16" fill="#00A2E1"/>
+    {/* overlap blend */}
+    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#7B4EA0" opacity="0.85"/>
+    <text x="45" y="40" fontFamily="Arial" fontWeight="600" fontSize="9" fill="#555" textAnchor="middle">maestro</text>
+  </svg>
+);
+
+const RuPaySVG = () => (
+  <svg viewBox="0 0 100 32" height="18" xmlns="http://www.w3.org/2000/svg">
+    <path d="M15 5l-5 22h6l5-22h-6z" fill="#F26522"/>
+    <path d="M30 5h-8l-2 9h6c4 0 6 2 6 5s-2 5-6 5h-4l-2 7h6l2-9h2c6 0 9-3 9-7.5S34.5 5 30 5z" fill="#283593"/>
+    <text x="45" y="24" fontFamily="Arial" fontWeight="bold" fontSize="18" fill="#1A237E" fontStyle="italic">RuPay</text>
+  </svg>
+);
+
+const UPISVG = () => (
+  <svg viewBox="0 0 100 32" height="18" xmlns="http://www.w3.org/2000/svg">
+    <path d="M10 4h4l-3 10-3-10z" fill="#FF9933"/>
+    <text x="25" y="24" fontFamily="Arial" fontWeight="900" fontSize="20" fill="#2D2D2D">UPI</text>
+  </svg>
+);
+
+const AmexSVG = () => (
+  <svg viewBox="0 0 100 40" height="20" xmlns="http://www.w3.org/2000/svg">
+    <rect width="100" height="40" rx="2" fill="#016FD0"/>
+    <text x="50" y="26" fontFamily="Arial" fontWeight="bold" fontSize="16" fill="white" textAnchor="middle">AMEX</text>
+  </svg>
+);
+
+/* ---- NEW SVGs ---- */
+const BhimUpiSVG = () => (
+  <svg viewBox="0 0 110 36" height="22" xmlns="http://www.w3.org/2000/svg">
+    {/* BHIM triangle logo */}
+    <polygon points="6,30 14,10 22,30" fill="#00B0EF"/>
+    <polygon points="10,30 18,14 26,30" fill="#F7941D" opacity="0.85"/>
+    {/* BHIM text */}
+    <text x="30" y="24" fontFamily="Arial" fontWeight="900" fontSize="13" fill="#00B0EF">BHIM</text>
+    {/* UPI text */}
+    <text x="72" y="24" fontFamily="Arial" fontWeight="900" fontSize="13" fill="#F7941D">UPI</text>
+  </svg>
+);
+
+const GPaySVG = () => (
+  <svg viewBox="0 0 80 28" height="22" xmlns="http://www.w3.org/2000/svg">
+    <text x="0" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#5F6368">G</text>
+    <text x="10" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#4285F4">o</text>
+    <text x="20" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#EA4335">o</text>
+    <text x="30" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#FBBC05">g</text>
+    <text x="40" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#34A853">l</text>
+    <text x="47" y="22" fontFamily="Arial" fontWeight="500" fontSize="12" fill="#EA4335">e</text>
+    <text x="0" y="38" fontFamily="Arial" fontWeight="700" fontSize="13" fill="#5F6368">Pay</text>
+  </svg>
+);
+
+const GPayPillSVG = () => (
+  <svg viewBox="0 0 90 32" height="22" xmlns="http://www.w3.org/2000/svg">
+    {/* Coloured G */}
+    <text x="2" y="24" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="20" fill="#4285F4">G</text>
+    <text x="16" y="24" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="20" fill="#EA4335">o</text>
+    <text x="29" y="24" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="20" fill="#FBBC05">o</text>
+    <text x="42" y="24" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="20" fill="#34A853">g</text>
+    <text x="55" y="24" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="20" fill="#EA4335">le</text>
+    <text x="2" y="42" fontFamily="'Google Sans',Arial" fontWeight="700" fontSize="18" fill="#5F6368">Pay</text>
+  </svg>
+);
+
+/* Google Pay compact */
+const GooglePaySVG = () => (
+  <svg viewBox="0 0 72 26" height="20" xmlns="http://www.w3.org/2000/svg">
+    <text x="1" y="19" fontFamily="Arial" fontWeight="700" fontSize="15" fill="#4285F4">G</text>
+    <text x="12" y="19" fontFamily="Arial" fontWeight="500" fontSize="14" fill="#5F6368">Pay</text>
+  </svg>
+);
+
+const NetBankingSVG = () => (
+  <svg viewBox="0 0 100 32" height="18" xmlns="http://www.w3.org/2000/svg">
+    <text x="2" y="14" fontFamily="Arial" fontWeight="700" fontSize="11" fill="#1A1F71">NET</text>
+    <text x="2" y="28" fontFamily="Arial" fontWeight="700" fontSize="11" fill="#1A1F71">Banking</text>
+  </svg>
+);
+
+const EMISVG = () => (
+  <svg viewBox="0 0 60 32" height="18" xmlns="http://www.w3.org/2000/svg">
+    <text x="4" y="23" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#2D2D2D">EMI</text>
   </svg>
 );
 
 function Footer() {
-  const socials = [
-    {
-      label: 'Facebook',
-      color: '#1877F2',
-      href: '#',
+  const currentYear = new Date().getFullYear();
+
+  const socialLinks = [
+    { 
+      name: 'Facebook', 
       icon: (
-        <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor">
-          <path d="M7.5 1C4 1 1 4 1 7.5C1 10.7 3.3 13.3 6.4 13.9V9.3H4.9V7.5H6.4V6.2C6.4 4.7 7.3 3.9 8.7 3.9C9.3 3.9 10 4 10 4V5.5H9.3C8.5 5.5 8.3 6 8.3 6.5V7.5H10L9.7 9.3H8.3V13.9C11.4 13.3 13.7 10.7 13.7 7.5C13.7 4 10.7 1 7.5 1Z" />
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
         </svg>
-      )
+      ), 
+      color: '#0084FF', 
+      link: '#' 
     },
-    {
-      label: 'X / Twitter',
-      color: '#000',
-      href: '#',
+    { 
+      name: 'Instagram', 
       icon: (
-        <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor">
-          <path d="M1.5 1.5L5.9 7.4L1.5 12.5H2.8L6.5 8.2L9.5 12.5H12.5L7.8 6.3L11.9 1.5H10.6L7.2 5.5L4.5 1.5H1.5Z" />
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.777 6.977 6.977 1.28.058 1.688.072 4.947.072 3.259 0 3.667-.014 4.947-.072 4.354-.2 6.773-2.618 6.977-6.977.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.2-4.354-2.618-6.773-6.977-6.977C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
         </svg>
-      )
+      ), 
+      color: '#E1306C', 
+      link: '#' 
     },
-    {
-      label: 'Instagram',
-      color: '#E1306C',
-      href: '#',
+    { 
+      name: 'X', 
       icon: (
-        <svg width="18" height="18" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5">
-          <rect x="1.5" y="1.5" width="11" height="11" rx="3" />
-          <circle cx="7" cy="7" r="2.5" />
-          <circle cx="10.2" cy="3.8" r="0.6" fill="currentColor" stroke="none" />
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
         </svg>
-      )
+      ), 
+      color: '#000000', 
+      link: '#' 
     },
-    {
-      label: 'LinkedIn',
-      color: '#0A66C2',
-      href: '#',
+    { 
+      name: 'YouTube', 
       icon: (
-        <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor">
-          <path d="M2 2.5A1.5 1.5 0 103.5 1 1.5 1.5 0 002 2.5zM2.2 5H4.8V13H2.2V5zM5.5 5H8v1.1C8.5 5.4 9.4 4.9 10.5 4.9 12 4.9 13 5.9 13 7.7V13h-2.6V8.2c0-.9-.5-1.4-1.2-1.4S8 7.3 8 8.2V13H5.5V5z" />
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
         </svg>
-      )
+      ), 
+      color: '#FF0000', 
+      link: '#' 
     },
-    {
-      label: 'YouTube',
-      color: '#FF0000',
-      href: '#',
+    { 
+      name: 'LinkedIn', 
       icon: (
-        <svg width="18" height="18" viewBox="0 0 14 14" fill="currentColor">
-          <path d="M12.2 3.6C12 2.8 11.4 2.2 10.6 2C9.2 1.7 7 1.7 7 1.7S4.8 1.7 3.4 2C2.6 2.2 2 2.8 1.8 3.6C1.5 5 1.5 7 1.5 7S1.5 9 1.8 10.4C2 11.2 2.6 11.8 3.4 12C4.8 12.3 7 12.3 7 12.3S9.2 12.3 10.6 12C11.4 11.8 12 11.2 12.2 10.4C12.5 9 12.5 7 12.5 7S12.5 5 12.2 3.6ZM5.8 9.2V4.8L9.2 7L5.8 9.2Z" />
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
+          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
         </svg>
-      )
+      ), 
+      color: '#0077B5', 
+      link: '#' 
     },
   ];
 
@@ -87,424 +180,317 @@ function Footer() {
     <>
       <style>{`
         .fb-root { 
-          background: var(--bg-color); 
-          font-family: var(--font-sans); 
+          background: #FDF6EE; 
+          font-family: 'Jost', sans-serif; 
           position: relative; 
           overflow: hidden; 
           margin-top: 80px;
-          border-top: 1px solid var(--glass-border);
+          border-top: 1px solid rgba(139, 74, 30, 0.1);
         }
 
         .fb-top-bar {
-          height: 5px;
-          background: linear-gradient(90deg, var(--primary-color), var(--accent-color), var(--primary-color));
+          height: 4px;
+          background: linear-gradient(90deg, #2A0F02, #8B4A1E, #2A0F02);
           background-size: 200% 100%;
           animation: fb-shift 6s linear infinite;
         }
-        
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-pattern {
-          position: absolute; inset: 0; pointer-events: none; overflow: hidden; opacity: 0.04;
-        }
-
-        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 80px 30px 60px; }
-
+        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 60px 30px 40px; }
+        
+        /* Desktop Grid */
         .fb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; }
-        @media(max-width: 1024px){ .fb-grid { grid-template-columns: 1.5fr 1fr 1fr; } .fb-grid > *:last-child { grid-column: span 3; } }
-        @media(max-width: 768px){ 
-          .fb-grid { grid-template-columns: 1fr 1fr; gap: 40px 20px; } 
-          .fb-grid > *:first-child, .fb-grid > *:last-child { grid-column: span 2; }
-          .fb-inner { padding: 60px 20px 40px; }
-        }
-        @media(max-width: 480px){ 
-          .fb-grid { grid-template-columns: 1fr; text-align: center; gap: 48px; }
-          .fb-grid > * { 
-            grid-column: span 1 !important; 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            width: 100%;
-          }
-          .fb-logo { justify-content: center; width: 100%; }
-          .fb-logo-name { font-size: 32px; }
-          .fb-desc { margin-left: auto; margin-right: auto; max-width: 340px; margin-bottom: 25px; }
-          .fb-nl-wrap { margin: 0 auto; max-width: 320px; }
-          .fb-socials { justify-content: center; width: 100%; margin-top: 25px; }
-          .fb-nav { align-items: center; }
-          .fb-nav li a { justify-content: center; }
-          .fb-clist { align-items: stretch; width: 100%; max-width: 320px; margin: 0 auto; }
-          .fb-citem { 
-            flex-direction: row; 
-            align-items: center; 
-            text-align: left; 
-            gap: 15px; 
-            background: rgba(255,255,255,0.4);
-            padding: 12px 15px;
-            border-radius: 12px;
-            width: 100%;
-          }
-          .fb-ctxt { padding-top: 0; flex: 1; }
-          .fb-ctxt strong { margin-bottom: 2px; }
-          .fb-head::after { margin: 10px auto 0; }
-        }
-
+        
         .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 25px; }
-        .fb-logo-icon { width: 48px; height: 48px; border-radius: 14px; background: var(--primary-color); display: flex; align-items: center; justify-content: center; flex-shrink: 0; box-shadow: 0 4px 12px rgba(139, 74, 30, 0.2); }
-        .fb-logo-name { font-family: var(--font-serif); font-size: 30px; font-weight: 700; color: var(--text-heading); letter-spacing: -0.5px; line-height: 1; }
-        .fb-logo-name em { font-style: normal; color: var(--primary-color); }
+        .fb-logo-icon { width: 45px; height: 45px; border-radius: 12px; background: #2A0F02; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2); }
+        .fb-logo-name { font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: #2A0F02; letter-spacing: -0.5px; }
+        .fb-logo-name em { font-style: normal; color: #8B4A1E; }
 
-        .fb-desc { font-family: var(--font-sans); font-size: 15px; line-height: 1.7; color: var(--text-content); max-width: 320px; margin-bottom: 30px; font-weight: 400; }
-
-        .fb-nl-label { font-size: 14px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--primary-color); margin-bottom: 15px; font-family: var(--font-sans); }
-        .fb-nl-wrap { display: flex; border: 1px solid var(--glass-border); border-radius: 12px; overflow: hidden; background: #fff; max-width: 320px; width: 100%; box-shadow: 0 2px 10px rgba(0,0,0,0.02); }
-        .fb-nl-inp { flex: 1; border: none; outline: none; padding: 14px 18px; font-family: var(--font-sans); font-size: 15px; color: var(--text-main); min-width: 0; }
-        .fb-nl-btn { background: var(--primary-color); border: none; padding: 0 20px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
-        .fb-nl-btn:hover { background: #723c18; }
-
-        /* ---- SOCIAL PILLS (new unique style) ---- */
-        .fb-socials { display: flex; gap: 10px; margin-top: 30px; flex-wrap: wrap; }
-        .fb-soc {
-          display: flex; align-items: center; gap: 7px;
-          padding: 7px 14px 7px 10px;
-          border-radius: 50px;
-          border: 1.5px solid var(--glass-border);
-          background: #fff;
-          font-size: 13px; font-weight: 600; font-family: var(--font-sans);
-          color: var(--text-content);
-          text-decoration: none;
-          transition: all 0.25s cubic-bezier(0.4,0,0.2,1);
-          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-          white-space: nowrap;
-        }
-        .fb-soc-dot {
-          width: 28px; height: 28px; border-radius: 50%;
-          display: flex; align-items: center; justify-content: center;
-          flex-shrink: 0;
-          transition: background 0.25s;
-        }
-        .fb-soc:hover {
-          transform: translateY(-3px);
-          border-color: transparent;
-          box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-          color: #fff;
-        }
-        .fb-soc:hover .fb-soc-dot { background: rgba(255,255,255,0.2) !important; }
-        .fb-soc[data-net="fb"]:hover  { background: #1877F2; }
-        .fb-soc[data-net="tw"]:hover  { background: #000; }
-        .fb-soc[data-net="ig"]:hover  { background: linear-gradient(135deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888); }
-        .fb-soc[data-net="li"]:hover  { background: #0A66C2; }
-        .fb-soc[data-net="yt"]:hover  { background: #FF0000; }
-
-        .fb-head { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--text-heading); margin-bottom: 25px; }
-        .fb-head::after { content: ''; display: block; width: 35px; height: 3px; background: var(--accent-color); margin-top: 10px; border-radius: 2px; }
+        .fb-desc { font-size: 15px; line-height: 1.7; color: #5C3D26; max-width: 320px; margin-bottom: 30px; }
+        .fb-head { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: #2A0F02; margin-bottom: 25px; }
+        .fb-head::after { content: ''; display: block; width: 30px; height: 3px; background: #8B4A1E; margin-top: 10px; border-radius: 2px; }
 
         .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
-        .fb-nav li a { color: var(--text-content); text-decoration: none; font-size: 15px; font-weight: 500; display: flex; align-items: center; gap: 10px; transition: all 0.2s; font-family: var(--font-sans); }
-        .fb-nav li a:hover { color: var(--primary-color); transform: translateX(5px); }
+        .fb-nav li a { color: #5C3D26; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
+        .fb-nav li a:hover { color: #8B4A1E; transform: translateX(5px); display: inline-block; }
 
-        .fb-clist { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 24px; }
-        .fb-citem { display: flex; align-items: flex-start; gap: 16px; }
-        .fb-ctxt { font-size: 15px; font-weight: 500; color: var(--text-content); line-height: 1.5; padding-top: 2px; font-family: var(--font-sans); }
-        .fb-ctxt strong { display: block; font-family: var(--font-sans); font-size: 12px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: var(--primary-color); margin-bottom: 5px; line-height: 1; }
-
-        .fb-connect-link { display: flex !important; align-items: center; gap: 12px; color: var(--text-content) !important; text-decoration: none; font-size: 15px; font-weight: 500; font-family: var(--font-sans); transition: all 0.2s ease; }
-        .fb-connect-link:hover { color: var(--primary-color) !important; transform: translateX(5px) !important; }
-        .fb-connect-icon { width: 32px; height: 32px; border-radius: 9px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: transform 0.2s; }
-        .fb-connect-link:hover .fb-connect-icon { transform: scale(1.1); }
-
-        .fb-badges { display: flex; gap: 12px; margin-top: 30px; flex-wrap: wrap; }
-        .fb-badge { display: flex; align-items: center; gap: 10px; padding: 10px 18px; border-radius: 50px; border: 1px solid var(--glass-border); background: #fff; font-size: 14px; font-weight: 600; color: var(--text-muted); font-family: var(--font-sans); box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
-
-        /* ---- TRUST SECTION ---- */
-        .fb-trust-wrap {
-          position: relative; z-index: 1;
-          max-width: 1200px; margin: 0 auto 0;
-          padding: 0 30px 50px;
-        }
-        .fb-trust-box {
-          border: 1.5px solid var(--glass-border);
-          border-radius: 18px;
-          background: #fff;
-          padding: 20px 28px;
+        /* ─── Desktop Trust Section ─── */
+        .fb-desktop-trust {
+          max-width: 1200px;
+          margin: 0 auto;
+          padding: 28px 30px 44px;
           display: flex;
           align-items: center;
-          gap: 20px;
-          flex-wrap: wrap;
-          box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-        }
-        .fb-trust-title {
-          font-family: var(--font-sans);
-          font-size: 12px;
-          font-weight: 700;
-          letter-spacing: 2px;
-          text-transform: uppercase;
-          color: var(--text-muted);
-          white-space: nowrap;
-          padding-right: 20px;
-          border-right: 1.5px solid var(--glass-border);
-          display: flex; align-items: center; gap: 8px;
-        }
-        .fb-trust-title svg { flex-shrink: 0; }
-        .fb-trust-items {
-          display: flex; align-items: center; gap: 14px; flex-wrap: wrap; flex: 1;
-        }
-        .fb-trust-item {
-          display: flex; align-items: center; justify-content: center;
-          padding: 8px 14px;
-          border-radius: 10px;
-          border: 1px solid #eee;
-          background: #fafafa;
-          transition: box-shadow 0.2s, transform 0.2s;
-          min-width: 64px; height: 42px;
-        }
-        .fb-trust-item:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); transform: translateY(-2px); }
-        .fb-trust-divider { width: 1px; height: 32px; background: var(--glass-border); flex-shrink: 0; }
-        .fb-trust-secure-badges { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .fb-trust-secure-badge {
-          display: flex; align-items: center; gap: 7px;
-          font-size: 12px; font-weight: 600; font-family: var(--font-sans);
-          color: #555; padding: 7px 12px; border-radius: 8px;
-          border: 1px solid #eee; background: #fafafa;
-        }
-        @media(max-width: 768px){
-          .fb-trust-wrap { padding: 0 20px 40px; }
-          .fb-trust-box { padding: 16px 18px; gap: 14px; }
-          .fb-trust-title { border-right: none; padding-right: 0; border-bottom: 1.5px solid var(--glass-border); padding-bottom: 12px; width: 100%; }
-          .fb-trust-divider { display: none; }
+          justify-content: space-between;
+          gap: 40px;
+          border-bottom: 1px solid #EAEAEA;
         }
 
-        .fb-bot-wrap { background: var(--primary-color); padding: 30px 20px; }
-        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; }
-        @media(max-width: 600px){ .fb-bot { justify-content: center; text-align: center; flex-direction: column; gap: 15px; } }
-        .fb-copy { font-size: 15px; font-weight: 400; color: #ffffff !important; margin: 0; font-family: var(--font-sans); }
-        .fb-copy span { color: #fff; font-weight: 700; }
-        .fb-legal { display: flex; gap: 25px; align-items: center; }
-        @media(max-width: 480px){ .fb-legal { gap: 15px; flex-wrap: wrap; justify-content: center; } }
-        .fb-legal a { font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.85); text-decoration: none; transition: color 0.2s; font-family: var(--font-sans); }
-        .fb-legal a:hover { color: #fff; text-decoration: underline; }
-        .fb-legal-dot { width: 5px; height: 5px; border-radius: 50%; background: rgba(255,255,255,0.3); }
+        .desktop-social { display: flex; flex-direction: column; gap: 14px; }
+        .desktop-payment { display: flex; flex-direction: column; align-items: flex-end; gap: 14px; }
+        .trust-label { font-size: 15px; font-weight: 600; color: #555; letter-spacing: 0.1px; }
+
+        .social-pill-row { display: flex; gap: 10px; }
+        .soc-circle {
+          width: 40px; height: 40px; border-radius: 50%;
+          display: flex; align-items: center; justify-content: center;
+          color: white; text-decoration: none;
+          transition: transform 0.25s, box-shadow 0.25s;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+        }
+        .soc-circle:hover { transform: translateY(-3px); box-shadow: 0 6px 16px rgba(0,0,0,0.18); }
+
+        /* Payment pills row */
+        .payment-pill-row {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+          justify-content: flex-end;
+        }
+        .pay-pill {
+          background: white;
+          border: 1px solid #E8E8E8;
+          border-radius: 6px;
+          padding: 5px 12px;
+          height: 44px;
+          min-width: 64px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+          transition: box-shadow 0.2s, transform 0.2s;
+        }
+        .pay-pill:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.1); transform: translateY(-1px); }
+
+        /* NET Banking pill needs a bit more width due to two lines */
+        .pay-pill-netbanking { min-width: 70px; }
+        .pay-pill-emi { min-width: 50px; }
+
+        /* Phone Layout — hidden on desktop */
+        .fb-phone-section { display: none; }
+
+        .fb-bot-wrap { background: #FDF6EE; padding: 25px 20px; border-top: 1px solid rgba(0,0,0,0.03); }
+        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; }
+        .fb-legal a { color: #8B4A1E; text-decoration: none; margin-left: 20px; font-weight: 500; }
+
+        /* Floating Buttons */
+        .chat-btn-desktop {
+          position: fixed; bottom: 30px; right: 30px;
+          width: 60px; height: 60px; background: #0084FF;
+          border-radius: 50%; display: flex; align-items: center; justify-content: center;
+          color: white; font-size: 24px; box-shadow: 0 8px 25px rgba(0, 132, 255, 0.4);
+          z-index: 999; cursor: pointer; transition: 0.3s;
+        }
+        .chat-btn-phone { display: none; }
+
+        @media(max-width: 767px) {
+          /* Hide desktop sections */
+          .fb-inner, .fb-desktop-trust, .chat-btn-desktop { display: none !important; }
+
+          /* Phone section: left-aligned, matches reference image */
+          .fb-phone-section {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            padding: 28px 20px 10px;
+            gap: 24px;
+            background: #FDF6EE;
+          }
+
+          /* Follow Us On block */
+          .phone-follow-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+          .phone-section-label { font-size: 15px; font-weight: 600; color: #222; }
+          .phone-soc-row { display: flex; gap: 10px; flex-wrap: wrap; }
+          .phone-soc-row .soc-circle { width: 42px; height: 42px; box-shadow: 0 2px 8px rgba(0,0,0,0.12); }
+
+          /* Payment block */
+          .phone-pay-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
+          .phone-pay-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+          .phone-pay-grid .pay-pill {
+            height: 40px; min-width: 58px; padding: 4px 10px;
+            background: white; border: 1px solid #E8E8E8;
+            border-radius: 6px; box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+          }
+
+          .fb-bot { flex-direction: column; gap: 12px; text-align: center; }
+          .fb-legal { display: flex; flex-wrap: wrap; justify-content: center; }
+          .fb-legal a { margin: 0 8px; }
+
+          .chat-btn-phone {
+            display: flex; position: fixed; bottom: 28px; right: 22px;
+            width: 62px; height: 62px; background: #EF8251; border: 2.5px solid white;
+            border-radius: 50%; align-items: center; justify-content: center;
+            box-shadow: 0 8px 22px rgba(239,130,81,0.45);
+            z-index: 1000; cursor: pointer;
+          }
+        }
       `}</style>
 
-      <footer className="fb-root w-100">
+      <footer className="fb-root">
         <div className="fb-top-bar" />
 
-        <div className="fb-pattern" aria-hidden="true">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
-            <defs>
-              <pattern id="fp" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse">
-                <circle cx="20" cy="20" r="1.5" fill="var(--primary-color)" opacity="0.12" />
-                <path d="M40 10 L42 16 L48 16 L43 20 L45 26 L40 22 L35 26 L37 20 L32 16 L38 16Z" fill="var(--accent-color)" opacity="0.08" />
-                <circle cx="60" cy="55" r="1" fill="var(--primary-color)" opacity="0.1" />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#fp)" />
-          </svg>
-        </div>
-
+        {/* --- DESKTOP INNER CONTENT --- */}
         <div className="fb-inner">
           <div className="fb-grid">
-
-            {/* Brand */}
-            <div data-aos="fade-up" data-aos-duration="600">
+            <div>
               <Link to="/" className="fb-logo">
                 <div className="fb-logo-icon">
-                  <svg width="28" height="28" viewBox="0 0 22 22" fill="none">
-                    <path d="M11 2L13.5 8.5H20L14.5 12.5L16.5 19L11 15L5.5 19L7.5 12.5L2 8.5H8.5L11 2Z" fill="white" />
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
                   </svg>
                 </div>
                 <div className="fb-logo-name">Astro<em>Ava</em></div>
               </Link>
-              <p className="fb-desc">
-                Discover the cosmic narrative written in the stars. Let Astro Ava guide your path through planetary influences and celestial wisdom with expert Vedic insights.
-              </p>
-
-              <div className="fb-nl-label">Stay Aligned</div>
-              <div className="fb-nl-wrap">
-                <input className="fb-nl-inp" type="email" placeholder="your@email.com" />
-                <button className="fb-nl-btn" aria-label="Subscribe">
-                  <svg width="18" height="18" viewBox="0 0 16 16" fill="none">
-                    <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </button>
-              </div>
-
+              <p className="fb-desc">Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.</p>
             </div>
-
-            {/* Consultations */}
-            <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="100">
+            <div>
               <h5 className="fb-head">Consultations</h5>
               <ul className="fb-nav">
-                {['Personal Horoscope', 'Marriage & Relationships', 'Career & Business', 'Muhurat Timing', 'Health Astrology'].map(item => (
-                  <li key={item}><Link to="#">{item}</Link></li>
-                ))}
+                <li><Link to="#">Horoscope</Link></li>
+                <li><Link to="#">Marriage</Link></li>
+                <li><Link to="#">Career</Link></li>
               </ul>
             </div>
-
-            {/* Explore */}
-            <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="200">
+            <div>
               <h5 className="fb-head">Explore</h5>
               <ul className="fb-nav">
-                {[['About Us', '/about'], ['Free Tools', '/free-tools'], ['Blog', '/blog'], ['Astro Store', '/astro-shop'], ['Contact', '/contact']].map(([label, to]) => (
-                  <li key={label}><Link to={to}>{label}</Link></li>
-                ))}
+                <li><Link to="/courses">Courses</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/about">About Us</Link></li>
               </ul>
             </div>
-
-            {/* Connect */}
-            <div data-aos="fade-up" data-aos-duration="600" data-aos-delay="300">
-              <h5 className="fb-head">Connect</h5>
-              <ul className="fb-nav">
-                <li>
-                  <a href="#" className="fb-connect-link" data-net="fb">
-                    <span className="fb-connect-icon" style={{background:'#E8F0FE'}}>
-                      <svg width="16" height="16" viewBox="0 0 14 14" fill="#1877F2"><path d="M7.5 1C4 1 1 4 1 7.5C1 10.7 3.3 13.3 6.4 13.9V9.3H4.9V7.5H6.4V6.2C6.4 4.7 7.3 3.9 8.7 3.9C9.3 3.9 10 4 10 4V5.5H9.3C8.5 5.5 8.3 6 8.3 6.5V7.5H10L9.7 9.3H8.3V13.9C11.4 13.3 13.7 10.7 13.7 7.5C13.7 4 10.7 1 7.5 1Z"/></svg>
-                    </span>
-                    Facebook
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="fb-connect-link" data-net="tw">
-                    <span className="fb-connect-icon" style={{background:'#f0f0f0'}}>
-                      <svg width="16" height="16" viewBox="0 0 14 14" fill="#000"><path d="M1.5 1.5L5.9 7.4L1.5 12.5H2.8L6.5 8.2L9.5 12.5H12.5L7.8 6.3L11.9 1.5H10.6L7.2 5.5L4.5 1.5H1.5Z"/></svg>
-                    </span>
-                    Twitter
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="fb-connect-link" data-net="ig">
-                    <span className="fb-connect-icon" style={{background:'#FDE8F0'}}>
-                      <svg width="16" height="16" viewBox="0 0 14 14" fill="none" stroke="#E1306C" strokeWidth="1.5"><rect x="1.5" y="1.5" width="11" height="11" rx="3"/><circle cx="7" cy="7" r="2.5"/><circle cx="10.2" cy="3.8" r="0.6" fill="#E1306C" stroke="none"/></svg>
-                    </span>
-                    Instagram
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="fb-connect-link" data-net="li">
-                    <span className="fb-connect-icon" style={{background:'#E8F3FB'}}>
-                      <svg width="16" height="16" viewBox="0 0 14 14" fill="#0A66C2"><path d="M2 2.5A1.5 1.5 0 103.5 1 1.5 1.5 0 002 2.5zM2.2 5H4.8V13H2.2V5zM5.5 5H8v1.1C8.5 5.4 9.4 4.9 10.5 4.9 12 4.9 13 5.9 13 7.7V13h-2.6V8.2c0-.9-.5-1.4-1.2-1.4S8 7.3 8 8.2V13H5.5V5z"/></svg>
-                    </span>
-                    LinkedIn
-                  </a>
-                </li>
-                <li>
-                  <a href="#" className="fb-connect-link" data-net="yt">
-                    <span className="fb-connect-icon" style={{background:'#FFEBEB'}}>
-                      <svg width="16" height="16" viewBox="0 0 14 14" fill="#FF0000"><path d="M12.2 3.6C12 2.8 11.4 2.2 10.6 2C9.2 1.7 7 1.7 7 1.7S4.8 1.7 3.4 2C2.6 2.2 2 2.8 1.8 3.6C1.5 5 1.5 7 1.5 7S1.5 9 1.8 10.4C2 11.2 2.6 11.8 3.4 12C4.8 12.3 7 12.3 7 12.3S9.2 12.3 10.6 12C11.4 11.8 12 11.2 12.2 10.4C12.5 9 12.5 7 12.5 7S12.5 5 12.2 3.6ZM5.8 9.2V4.8L9.2 7L5.8 9.2Z"/></svg>
-                    </span>
-                    YouTube
-                  </a>
-                </li>
-              </ul>
+            <div>
+              <h5 className="fb-head">Newsletter</h5>
+              <div className="d-flex mt-3">
+                <input type="email" className="form-control" placeholder="Email" style={{borderRadius: '8px 0 0 8px', border: '1px solid #D4B896'}} />
+                <button className="btn" style={{background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0'}}>Join</button>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* ---- TRUST / SAFE CHECKOUT BAR ---- */}
-        <div className="fb-trust-wrap">
-          <div className="fb-trust-box" data-aos="fade-up" data-aos-duration="500">
-            <div className="fb-trust-title">
-              <svg width="18" height="18" viewBox="0 0 20 20" fill="none">
-                <path d="M10 2L3 5v5c0 4.4 3 8.5 7 9.5C14 18.5 17 14.4 17 10V5L10 2z" fill="#22c55e" opacity="0.15" stroke="#22c55e" strokeWidth="1.5"/>
-                <path d="M7 10l2 2 4-4" stroke="#22c55e" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
-              </svg>
-              Guaranteed<br/>Safe Checkout
+        {/* --- DESKTOP TRUST SECTION (updated to match reference image) --- */}
+        <div className="fb-desktop-trust">
+          {/* Left: Follow Us On */}
+          <div className="desktop-social">
+            <div className="trust-label">Follow Us On</div>
+            <div className="social-pill-row">
+              {socialLinks.map(s => (
+                <a key={s.name} href={s.link} className="soc-circle" style={{background: s.color}} title={s.name}>{s.icon}</a>
+              ))}
             </div>
+          </div>
 
-            <div className="fb-trust-items">
-              {/* PayPal */}
-              <div className="fb-trust-item" title="PayPal">
-                <svg viewBox="0 0 80 24" width="72" height="24" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="19" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#003087">Pay</text>
-                  <text x="30" y="19" fontFamily="Arial" fontWeight="900" fontSize="18" fill="#009cde">Pal</text>
-                </svg>
-              </div>
-
-              {/* Stripe */}
-              <div className="fb-trust-item" title="Stripe">
-                <svg viewBox="0 0 60 24" width="60" height="24" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="18" fontFamily="Arial" fontWeight="bold" fontSize="16" fill="#635BFF">stripe</text>
-                </svg>
-              </div>
-
-              <div className="fb-trust-divider" />
-
+          {/* Right: Payment Methods — matching the reference screenshot */}
+          <div className="desktop-payment">
+            <div className="trust-label">We Accept Secure Payment</div>
+            <div className="payment-pill-row">
               {/* Visa */}
-              <div className="fb-trust-item" title="Visa" style={{minWidth:52}}>
-                <svg viewBox="0 0 60 20" width="56" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="17" fontFamily="Arial" fontWeight="900" fontSize="19" fill="#1a1f71" letterSpacing="-1">VISA</text>
-                </svg>
-              </div>
+              <div className="pay-pill"><VisaSVG /></div>
 
               {/* Mastercard */}
-              <div className="fb-trust-item" title="Mastercard" style={{minWidth:46}}>
-                <svg viewBox="0 0 46 30" width="46" height="30" xmlns="http://www.w3.org/2000/svg">
-                  <circle cx="17" cy="15" r="12" fill="#EB001B"/>
-                  <circle cx="29" cy="15" r="12" fill="#F79E1B"/>
-                  <path d="M23 6.3a12 12 0 010 17.4A12 12 0 0123 6.3z" fill="#FF5F00"/>
-                </svg>
-              </div>
+              <div className="pay-pill"><MastercardSVG /></div>
+
+              {/* Maestro */}
+              <div className="pay-pill"><MaestroSVG /></div>
 
               {/* Amex */}
-              <div className="fb-trust-item" title="American Express" style={{background:'#2E77BC', borderColor:'#2E77BC', minWidth:52}}>
-                <svg viewBox="0 0 68 20" width="60" height="18" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="15" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff" letterSpacing="0.5">AMERICAN</text>
-                  <text x="0" y="26" fontFamily="Arial" fontWeight="bold" fontSize="11" fill="#fff" letterSpacing="0.5">EXPRESS</text>
+              <div className="pay-pill" style={{background: '#016FD0'}}><AmexSVG /></div>
+
+              {/* BHIM UPI */}
+              <div className="pay-pill"><BhimUpiSVG /></div>
+
+              {/* Google Pay */}
+              <div className="pay-pill" style={{minWidth: '72px'}}>
+                <svg viewBox="0 0 90 30" height="22" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="22" fontFamily="Arial" fontWeight="700" fontSize="17" fill="#4285F4">G</text>
+                  <text x="15" y="22" fontFamily="Arial" fontWeight="400" fontSize="16" fill="#5F6368">Pay</text>
                 </svg>
               </div>
 
-              {/* Discover */}
-              <div className="fb-trust-item" title="Discover" style={{minWidth:72}}>
-                <svg viewBox="0 0 90 22" width="80" height="20" xmlns="http://www.w3.org/2000/svg">
-                  <text x="0" y="17" fontFamily="Arial" fontWeight="bold" fontSize="15" fill="#231F20">DISC</text>
-                  <ellipse cx="61" cy="11" rx="11" ry="11" fill="#F76F20"/>
-                  <text x="72" y="17" fontFamily="Arial" fontWeight="bold" fontSize="15" fill="#231F20">VER</text>
+              {/* NET Banking */}
+              <div className="pay-pill pay-pill-netbanking">
+                <svg viewBox="0 0 80 32" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="13" fontFamily="Arial" fontWeight="700" fontSize="12" fill="#1A1F71">NET</text>
+                  <text x="2" y="28" fontFamily="Arial" fontWeight="600" fontSize="11" fill="#1A1F71">Banking</text>
                 </svg>
               </div>
 
-              <div className="fb-trust-divider" />
-
-              {/* Security badges */}
-              <div className="fb-trust-secure-badges">
-                <div className="fb-trust-secure-badge" title="AES-256 Encrypted">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <rect x="3" y="7" width="10" height="8" rx="2" fill="#22c55e" opacity="0.2" stroke="#22c55e" strokeWidth="1.4"/>
-                    <path d="M5.5 7V5a2.5 2.5 0 015 0v2" stroke="#22c55e" strokeWidth="1.4" strokeLinecap="round"/>
-                    <circle cx="8" cy="11" r="1.2" fill="#22c55e"/>
-                  </svg>
-                  AES‑256
-                </div>
-                <div className="fb-trust-secure-badge" title="McAfee Secure">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 1L2 4v5c0 3.5 2.5 6.8 6 7.8 3.5-1 6-4.3 6-7.8V4L8 1z" fill="#C00" opacity="0.15" stroke="#C00" strokeWidth="1.3"/>
-                    <text x="4.5" y="11" fontFamily="Arial" fontWeight="900" fontSize="7" fill="#C00">M</text>
-                  </svg>
-                  McAfee
-                </div>
-                <div className="fb-trust-secure-badge" title="Norton Secured">
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none">
-                    <path d="M8 1L2 4v5c0 3.5 2.5 6.8 6 7.8 3.5-1 6-4.3 6-7.8V4L8 1z" fill="#FFC107" opacity="0.2" stroke="#FFC107" strokeWidth="1.3"/>
-                    <path d="M5 8.5l2 2 4-4" stroke="#FFC107" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                  Norton
-                </div>
+              {/* EMI */}
+              <div className="pay-pill pay-pill-emi">
+                <svg viewBox="0 0 52 26" height="18" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="20" fontFamily="Arial" fontWeight="900" fontSize="17" fill="#2D2D2D">EMI</text>
+                </svg>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="fb-bot-wrap">
-          <div className="fb-bot">
-            <p className="fb-copy">© {new Date().getFullYear()}. All rights reserved.</p>
-            <div className="fb-legal">
-              <Link to="/privacy">Privacy Policy</Link>
-              <div className="fb-legal-dot" />
-              <Link to="/terms">Terms of Service</Link>
-              <div className="fb-legal-dot" />
-              <Link to="/refund">Refund Policy</Link>
+        {/* --- PHONE SECTION — matches reference image exactly --- */}
+        <div className="fb-phone-section">
+
+          {/* Follow Us On */}
+          <div className="phone-follow-block">
+            <div className="phone-section-label">Follow Us On</div>
+            <div className="phone-soc-row">
+              {socialLinks.map(s => (
+                <a key={s.name} href={s.link} className="soc-circle" style={{background: s.color}} title={s.name}>{s.icon}</a>
+              ))}
             </div>
           </div>
+
+          {/* We Accept Secure Payment */}
+          <div className="phone-pay-block">
+            <div className="phone-section-label">We Accept Secure Payment</div>
+            <div className="phone-pay-grid">
+              <div className="pay-pill"><VisaSVG /></div>
+              <div className="pay-pill"><MastercardSVG /></div>
+              <div className="pay-pill"><MaestroSVG /></div>
+              <div className="pay-pill" style={{background:'#016FD0'}}><AmexSVG /></div>
+              <div className="pay-pill"><BhimUpiSVG /></div>
+              <div className="pay-pill" style={{minWidth:'68px'}}>
+                <svg viewBox="0 0 90 30" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="22" fontFamily="Arial" fontWeight="700" fontSize="17" fill="#4285F4">G</text>
+                  <text x="15" y="22" fontFamily="Arial" fontWeight="400" fontSize="16" fill="#5F6368">Pay</text>
+                </svg>
+              </div>
+              <div className="pay-pill" style={{minWidth:'66px'}}>
+                <svg viewBox="0 0 80 32" height="20" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="13" fontFamily="Arial" fontWeight="700" fontSize="12" fill="#1A1F71">NET</text>
+                  <text x="2" y="28" fontFamily="Arial" fontWeight="600" fontSize="11" fill="#1A1F71">Banking</text>
+                </svg>
+              </div>
+              <div className="pay-pill" style={{minWidth:'52px'}}>
+                <svg viewBox="0 0 52 26" height="18" xmlns="http://www.w3.org/2000/svg">
+                  <text x="2" y="20" fontFamily="Arial" fontWeight="900" fontSize="17" fill="#2D2D2D">EMI</text>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        {/* Bottom Legal Bar */}
+        <div className="fb-bot-wrap">
+          <div className="fb-bot">
+            <p className="mb-0">Secure &amp; Confidential Astrology Consultations</p>
+            <div className="fb-legal">
+              <Link to="/privacy">Privacy</Link>
+              <Link to="/terms">Terms</Link>
+              <Link to="/refund">Refund</Link>
+            </div>
+          </div>
+        </div>
+
+        {/* Floating Buttons */}
+        <div className="chat-btn-desktop">
+          <i className="far fa-comment-dots"></i>
+        </div>
+        <div className="chat-btn-phone">
+           <svg width="34" height="34" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M21 15C21 15.5304 20.7893 16.0391 20.4142 16.4142C20.0391 16.7893 19.5304 17 19 17H7L3 21V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H19C19.5304 3 20.0391 3.21071 20.4142 3.58579C20.7893 3.96086 21 4.46957 21 5V15Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
         </div>
       </footer>
     </>

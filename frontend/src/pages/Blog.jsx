@@ -1,25 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
+import toast from 'react-hot-toast';
 
 function Blog() {
+  const [blogs, setBlogs] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState('All');
+
   useEffect(() => {
     if (window.AOS) {
       window.AOS.refresh();
     }
+    fetchBlogs();
   }, []);
 
-  const [searchQuery, setSearchQuery] = React.useState('');
-  const [selectedCategory, setSelectedCategory] = React.useState('All');
+  const fetchBlogs = async () => {
+    setIsLoading(true);
+    try {
+      const res = await fetch('http://localhost:5000/api/blogs');
+      const data = await res.json();
+      if (data.success) {
+        setBlogs(data.blogs);
+      } else {
+        toast.error(data.message || 'Failed to fetch blogs');
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error('Network error while fetching blogs');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  const posts = [
-    { id: 1, title: 'Unlocking Your Wealth: 2026 Financial Horoscope', date: '25 May 2026', image: 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&q=80&w=800', category: 'Financial', excerpt: 'Discover how planetary alignments in 2026 will impact your financial growth and investment opportunities.' },
-    { id: 2, title: 'The Secret of Compatibility in Marriage', date: '22 May 2026', image: 'https://images.unsplash.com/photo-1516589091380-5d8e87df6999?auto=format&fit=crop&q=80&w=800', category: 'Relationship', excerpt: 'Understand the role of Venus and Mars in determining long-term compatibility and marital bliss.' },
-    { id: 3, title: 'Career Shifts: Navigating Retrogrades', date: '15 May 2026', image: 'https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=800', category: 'Career', excerpt: 'How to maintain professional stability during Mercury and Saturn retrogrades this year.' },
-    { id: 4, title: 'Personal Growth Through Solar Eclipses', date: '10 May 2026', image: 'https://images.unsplash.com/photo-1532983330958-4b32bc9bb07d?auto=format&fit=crop&q=80&w=800', category: 'Personal', excerpt: 'Solar eclipses are powerful times for transformation. Learn how to harness this cosmic energy.' },
-    { id: 5, title: 'Auspicious Muhurats for New Beginnings', date: '05 May 2026', image: 'https://images.unsplash.com/photo-1515940175183-6798529cb860?auto=format&fit=crop&q=80&w=800', category: 'Muhurat', excerpt: 'Finding the right time to start a business or sign contracts based on lunar cycles.' },
-    { id: 6, title: 'Health & Wellness: The Zodiac Way', date: '01 May 2026', image: 'https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&q=80&w=800', category: 'Health', excerpt: 'Align your wellness routine with your sun sign for maximum vitality and mental peace.' },
-  ];
-
-  const filteredPosts = posts.filter(post => {
+  const filteredPosts = blogs.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
                          post.excerpt.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || post.category.toLowerCase().includes(selectedCategory.toLowerCase());
@@ -27,18 +40,19 @@ function Blog() {
   });
 
   const categories = [
-    { name: 'Financial Astrology', count: 12 },
-    { name: 'Relationship Advice', count: 8 },
-    { name: 'Career Guidance', count: 15 },
-    { name: 'Predictive Astrology', count: 20 },
-    { name: 'Vedic Wisdom', count: 10 }
+    { name: 'Vedic Astrology', count: blogs.filter(b => b.category === 'Vedic Astrology').length },
+    { name: 'Numerology', count: blogs.filter(b => b.category === 'Numerology').length },
+    { name: 'Tarot Reading', count: blogs.filter(b => b.category === 'Tarot Reading').length },
+    { name: 'Palmistry', count: blogs.filter(b => b.category === 'Palmistry').length },
+    { name: 'Vastu Shastra', count: blogs.filter(b => b.category === 'Vastu Shastra').length },
+    { name: 'Zodiac Insights', count: blogs.filter(b => b.category === 'Zodiac Insights').length },
+    { name: 'Relationship Advice', count: blogs.filter(b => b.category === 'Relationship Advice').length },
+    { name: 'Career Guidance', count: blogs.filter(b => b.category === 'Career Guidance').length },
+    { name: 'Spiritual Healing', count: blogs.filter(b => b.category === 'Spiritual Healing').length },
+    { name: 'Festivals & Muhurat', count: blogs.filter(b => b.category === 'Festivals & Muhurat').length }
   ];
 
-  const recentPosts = [
-    { title: 'Mercury Retrograde 2026', date: '16 Jan, 2026', image: 'https://images.unsplash.com/photo-1614732414444-af9613f3d1a3?auto=format&fit=crop&q=80&w=200' },
-    { title: 'Marriage Yoga Analysis', date: '12 Jan, 2026', image: 'https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&q=80&w=200' },
-    { title: 'Saturn Transit Impact', date: '05 Jan, 2026', image: 'https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?auto=format&fit=crop&q=80&w=200' },
-  ];
+  const recentPosts = blogs.slice(0, 3);
 
   const tags = ['Zodiac', 'Future', 'Horoscope', 'Planets', 'Vedic', 'Remedies'];
 
@@ -98,16 +112,21 @@ function Blog() {
                 </div>
 
               <div className="blog-list">
-                {filteredPosts.length > 0 ? (
+                {isLoading ? (
+                  <div className="text-center py-5">
+                    <div className="spinner-border text-primary" role="status"></div>
+                    <p className="mt-3">Gazing at the stars for articles...</p>
+                  </div>
+                ) : filteredPosts.length > 0 ? (
                   filteredPosts.map((post, idx) => (
-                    <div className="blog-card mb-4" key={post.id} data-aos="fade-up" data-aos-delay={idx * 100}>
+                    <div className="blog-card mb-4" key={post._id} data-aos="fade-up" data-aos-delay={idx * 100}>
                       <div className="row g-0">
                         <div className="col-md-4">
                           <div className="blog-img-wrapper">
-                            <img src={post.image} alt={post.title} />
+                            <img src={post.image || 'https://via.placeholder.com/400x250'} alt={post.title} />
                             <div className="date-chip">
-                              <span className="day">{post.date.split(' ')[0]}</span>
-                              <span className="month">{post.date.split(' ')[1]}</span>
+                              <span className="day">{new Date(post.createdAt).getDate()}</span>
+                              <span className="month">{new Date(post.createdAt).toLocaleString('default', { month: 'short' })}</span>
                             </div>
                           </div>
                         </div>
@@ -118,12 +137,11 @@ function Blog() {
                             </span>
                             <h3 className="blog-title mb-2">{post.title}</h3>
                             <div className="blog-meta mb-3">
-                              <span><i className="far fa-calendar-alt me-1"></i> {post.date}</span>
+                              <span><i className="far fa-calendar-alt me-1"></i> {new Date(post.createdAt).toLocaleDateString()}</span>
                               <span className="ms-3"><i className="far fa-user me-1"></i> Astro Expert</span>
-                              <span className="ms-3"><i className="far fa-comment me-1"></i> 12 Comments</span>
                             </div>
                             <p className="blog-excerpt">{post.excerpt}</p>
-                            <a href="#" className="read-more">Continue Reading →</a>
+                            <a href={`/blog/${post.slug}`} className="read-more">Continue Reading →</a>
                           </div>
                         </div>
                       </div>

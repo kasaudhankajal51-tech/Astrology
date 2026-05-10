@@ -89,88 +89,157 @@ function AdminBlogs() {
   };
 
   return (
-    <div>
+    <div className="animate__animated animate__fadeIn">
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3>Blog Management</h3>
+        <div>
+          <h3 className="fw-bold mb-1">Content Management</h3>
+          <p className="text-muted small">Manage your platform's articles and news</p>
+        </div>
         <button 
-          className="btn btn-primary" 
-          style={{ background: '#ff6a00', border: 'none' }}
+          className="btn-premium px-4" 
           onClick={() => { setIsEditing(!isEditing); if(!isEditing) setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Astrology', image: '', tags: '', isPublished: false }); }}
         >
-          {isEditing ? 'Cancel' : 'Add New Blog'}
+          {isEditing ? (
+            <><i className="fas fa-times"></i> Cancel Edit</>
+          ) : (
+            <><i className="fas fa-plus"></i> Write New Article</>
+          )}
         </button>
       </div>
 
       {isEditing && (
-        <div className="card mb-4" style={{ background: '#1a1a2e', border: '1px solid #ff6a00' }}>
-          <div className="card-body">
+        <div className="admin-card blog-editor-card mb-5">
+          <div className="admin-card-header">
+            <h5 className="mb-0 fw-bold">{currentBlog._id ? 'Edit Article' : 'Compose New Article'}</h5>
+          </div>
+          <div className="admin-card-body">
             <form onSubmit={handleSubmit}>
-              <div className="row">
-                <div className="col-md-6 mb-3">
-                  <label className="small text-muted">Title</label>
-                  <input type="text" className="form-control bg-dark text-white border-secondary" value={currentBlog.title} onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} required />
+              <div className="row g-4">
+                <div className="col-md-6">
+                  <label className="small fw-bold text-muted mb-2">ARTICLE TITLE</label>
+                  <input type="text" className="form-control admin-input" value={currentBlog.title} onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} required placeholder="Enter a catchy title..." />
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="small text-muted">Slug</label>
-                  <input type="text" className="form-control bg-dark text-white border-secondary" value={currentBlog.slug} onChange={e => setCurrentBlog({...currentBlog, slug: e.target.value})} required />
+                <div className="col-md-6">
+                  <label className="small fw-bold text-muted mb-2">URL SLUG</label>
+                  <input type="text" className="form-control admin-input" value={currentBlog.slug} onChange={e => setCurrentBlog({...currentBlog, slug: e.target.value})} required placeholder="e.g. astrology-trends-2024" />
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="small text-muted">Category</label>
-                  <input type="text" className="form-control bg-dark text-white border-secondary" value={currentBlog.category} onChange={e => setCurrentBlog({...currentBlog, category: e.target.value})} required />
+                <div className="col-md-6">
+                  <label className="small fw-bold text-muted mb-2">CATEGORY</label>
+                  <select className="form-select admin-input" value={currentBlog.category} onChange={e => setCurrentBlog({...currentBlog, category: e.target.value})}>
+                    <option value="Vedic Astrology">Vedic Astrology</option>
+                    <option value="Numerology">Numerology</option>
+                    <option value="Tarot Reading">Tarot Reading</option>
+                    <option value="Palmistry">Palmistry</option>
+                    <option value="Vastu Shastra">Vastu Shastra</option>
+                    <option value="Zodiac Insights">Zodiac Insights</option>
+                    <option value="Relationship Advice">Relationship Advice</option>
+                    <option value="Career Guidance">Career Guidance</option>
+                    <option value="Spiritual Healing">Spiritual Healing</option>
+                    <option value="Festivals & Muhurat">Festivals & Muhurat</option>
+                  </select>
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="small text-muted">Image URL</label>
-                  <input type="text" className="form-control bg-dark text-white border-secondary" value={currentBlog.image} onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} />
+                <div className="col-md-6">
+                  <label className="small fw-bold text-muted mb-2">FEATURED IMAGE URL</label>
+                  <input type="text" className="form-control admin-input" value={currentBlog.image} onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} placeholder="https://..." />
                 </div>
-                <div className="col-12 mb-3">
-                  <label className="small text-muted">Excerpt</label>
-                  <textarea className="form-control bg-dark text-white border-secondary" rows="2" value={currentBlog.excerpt} onChange={e => setCurrentBlog({...currentBlog, excerpt: e.target.value})}></textarea>
+                <div className="col-12">
+                  <label className="small fw-bold text-muted mb-2">EXCERPT (Short Summary)</label>
+                  <textarea className="form-control admin-input" rows="2" value={currentBlog.excerpt} onChange={e => setCurrentBlog({...currentBlog, excerpt: e.target.value})} placeholder="Write a brief summary..."></textarea>
                 </div>
-                <div className="col-12 mb-3">
-                  <label className="small text-muted">Content (HTML allowed)</label>
-                  <textarea className="form-control bg-dark text-white border-secondary" rows="10" value={currentBlog.content} onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} required></textarea>
+                <div className="col-12">
+                  <label className="small fw-bold text-muted mb-2">MAIN CONTENT</label>
+                  <textarea className="form-control admin-input" rows="12" value={currentBlog.content} onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} required placeholder="Start writing your cosmic wisdom here..."></textarea>
                 </div>
-                <div className="col-md-6 mb-3">
-                  <label className="small text-muted">Tags (comma separated)</label>
-                  <input type="text" className="form-control bg-dark text-white border-secondary" value={currentBlog.tags} onChange={e => setCurrentBlog({...currentBlog, tags: e.target.value})} />
+                <div className="col-md-12">
+                  <label className="small fw-bold text-muted mb-2">TAGS (Type or select from below)</label>
+                  <input type="text" className="form-control admin-input mb-2" value={currentBlog.tags} onChange={e => setCurrentBlog({...currentBlog, tags: e.target.value})} placeholder="zodiac, stars, planets" />
+                  <div className="d-flex flex-wrap gap-2">
+                    {['Horoscope', 'Planets', 'Remedies', 'Future', 'Zodiac', 'Meditation', 'Karma', 'Spirituality', 'Success', 'Predictions'].map(tag => (
+                      <span 
+                        key={tag} 
+                        className="badge-trending" 
+                        style={{ cursor: 'pointer', background: currentBlog.tags.includes(tag) ? '#ff6a00' : 'rgba(255,106,0,0.1)', color: currentBlog.tags.includes(tag) ? 'white' : '#ff6a00' }}
+                        onClick={() => {
+                          const currentTags = currentBlog.tags ? currentBlog.tags.split(',').map(t => t.trim()) : [];
+                          if (currentTags.includes(tag)) {
+                            setCurrentBlog({...currentBlog, tags: currentTags.filter(t => t !== tag).join(', ')});
+                          } else {
+                            setCurrentBlog({...currentBlog, tags: [...currentTags, tag].filter(t => t).join(', ')});
+                          }
+                        }}
+                      >
+                        + {tag}
+                      </span>
+                    ))}
+                  </div>
                 </div>
-                <div className="col-md-6 mb-3 d-flex align-items-center">
-                  <div className="form-check">
-                    <input type="checkbox" className="form-check-input" checked={currentBlog.isPublished} onChange={e => setCurrentBlog({...currentBlog, isPublished: e.target.checked})} id="isPublished" />
-                    <label className="form-check-label ms-2" htmlFor="isPublished">Publish immediately</label>
+                <div className="col-md-4 d-flex align-items-end">
+                  <div className="form-check form-switch mb-2">
+                    <input className="form-check-input" type="checkbox" role="switch" id="isPublished" checked={currentBlog.isPublished} onChange={e => setCurrentBlog({...currentBlog, isPublished: e.target.checked})} />
+                    <label className="form-check-label fw-bold small ms-2" htmlFor="isPublished">VISIBLE TO PUBLIC</label>
                   </div>
                 </div>
               </div>
-              <button type="submit" className="btn btn-success w-100 py-2">Save Blog</button>
+              <div className="mt-5 pt-3 border-top d-flex gap-3">
+                <button type="submit" className="btn-premium px-5 py-3 shadow">
+                  <i className="fas fa-save me-2"></i> {currentBlog._id ? 'Update Article' : 'Publish Article'}
+                </button>
+                <button type="button" className="btn btn-premium-outline px-4" onClick={() => setIsEditing(false)}>Save to Drafts</button>
+              </div>
             </form>
           </div>
         </div>
       )}
 
-      <div className="table-responsive">
-        <table className="table table-dark table-hover">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Category</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {blogs.map(blog => (
-              <tr key={blog._id}>
-                <td>{blog.title}</td>
-                <td>{blog.category}</td>
-                <td><span className={`badge ${blog.isPublished ? 'bg-success' : 'bg-warning'}`}>{blog.isPublished ? 'Published' : 'Draft'}</span></td>
-                <td>
-                  <button className="btn btn-sm btn-outline-info me-2" onClick={() => handleEdit(blog)}>Edit</button>
-                  <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(blog._id)}>Delete</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      <div className="admin-card">
+        <div className="admin-card-header">
+          <h5 className="mb-0 fw-bold">Live Content Catalog</h5>
+          <span className="badge-premium badge-course">{blogs.length} Articles</span>
+        </div>
+        <div className="admin-card-body">
+          <div className="table-responsive">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Cover / Title</th>
+                  <th>Topic</th>
+                  <th>Visibility</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr><td colSpan="4" className="text-center py-5"><div className="spinner-border text-primary"></div></td></tr>
+                ) : (
+                  blogs.map(blog => (
+                    <tr key={blog._id}>
+                      <td style={{ minWidth: '300px' }}>
+                        <div className="d-flex align-items-center gap-3">
+                          <img src={blog.image || 'https://via.placeholder.com/60'} alt="cover" className="rounded shadow-sm" style={{ width: '60px', height: '45px', objectFit: 'cover' }} />
+                          <div className="fw-bold text-dark">{blog.title}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <span className="badge-premium badge-webinar">{blog.category}</span>
+                      </td>
+                      <td>
+                        <span className={`badge-premium ${blog.isPublished ? 'badge-completed' : 'badge-pending'}`}>
+                          {blog.isPublished ? 'PUBLISHED' : 'DRAFT'}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="d-flex gap-2">
+                          <button className="btn btn-sm btn-premium-outline" onClick={() => handleEdit(blog)} title="Edit"><i className="fas fa-edit"></i></button>
+                          <button className="btn btn-sm btn-outline-danger border-light" onClick={() => handleDelete(blog._id)} title="Delete"><i className="fas fa-trash-alt"></i></button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

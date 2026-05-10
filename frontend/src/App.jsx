@@ -30,6 +30,7 @@ import ConsultationDetail from './pages/ConsultationDetail';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import Careers from './pages/Careers';
+import BlogDetail from './pages/BlogDetail';
 import { Toaster } from 'react-hot-toast';
 
 function App() {
@@ -44,6 +45,7 @@ function App() {
           <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="blog/:slug" element={<BlogDetail />} />
           <Route path="contact" element={<Contact />} />
           <Route path="privacy" element={<PrivacyPolicy />} />
           <Route path="terms" element={<Terms />} />

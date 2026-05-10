@@ -13,9 +13,7 @@ function AdminLeads() {
     try {
       const query = new URLSearchParams(filters).toString();
       const res = await fetch(`http://localhost:5000/api/leads?${query}`, {
-        headers: {
-          'x-admin-secret': ADMIN_PASS
-        }
+        headers: { 'x-admin-secret': ADMIN_PASS }
       });
       const data = await res.json();
       if (data.success) {
@@ -45,83 +43,122 @@ function AdminLeads() {
   };
 
   return (
-    <div className="admin-leads">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h3>Lead Management</h3>
-        <div className="btn-group">
-          <button className={`btn btn-sm ${filters.type === '' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: ''})}>All</button>
-          <button className={`btn btn-sm ${filters.type === 'Course' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Course'})}>Courses</button>
-          <button className={`btn btn-sm ${filters.type === 'Consultation' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Consultation'})}>Consulting</button>
-          <button className={`btn btn-sm ${filters.type === 'Webinar' ? 'btn-primary' : 'btn-outline-primary'}`} onClick={() => setFilters({...filters, type: 'Webinar'})}>Webinars</button>
+    <div className="admin-leads-section animate__animated animate__fadeIn">
+      <div className="row g-4 mb-4">
+        {/* Quick Stats Summary */}
+        <div className="col-md-3">
+          <div className="admin-card p-4 text-center">
+            <p className="text-muted small fw-bold mb-1">TOTAL LEADS</p>
+            <h3 className="fw-bold mb-0">{leads.length}</h3>
+          </div>
         </div>
-      </div>
-      
-      <div className="card mb-4" style={{ background: '#1a1a2e', border: '1px solid #ff6a00' }}>
-        <div className="card-body d-flex flex-wrap gap-3 align-items-end">
-          <div className="form-group mb-0">
-            <label className="text-muted small">Start Date</label>
-            <input type="date" name="startDate" value={filters.startDate} onChange={handleFilterChange} className="form-control bg-dark text-white border-secondary" />
+        <div className="col-md-3">
+          <div className="admin-card p-4 text-center">
+            <p className="text-muted small fw-bold mb-1">COMPLETED</p>
+            <h3 className="fw-bold mb-0 text-success">{leads.filter(l => l.paymentStatus === 'Completed').length}</h3>
           </div>
-          <div className="form-group mb-0">
-            <label className="text-muted small">End Date</label>
-            <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} className="form-control bg-dark text-white border-secondary" />
+        </div>
+        <div className="col-md-3">
+          <div className="admin-card p-4 text-center">
+            <p className="text-muted small fw-bold mb-1">COURSES</p>
+            <h3 className="fw-bold mb-0 text-primary">{leads.filter(l => l.type === 'Course').length}</h3>
           </div>
-          <div className="ms-auto">
-            <button onClick={handleExport} className="btn btn-success me-2">
-              <i className="fas fa-file-excel me-2"></i> Export
-            </button>
-            <button onClick={fetchLeads} className="btn btn-primary" style={{ background: '#ff6a00', border: 'none' }}>
-              <i className="fas fa-sync-alt"></i>
-            </button>
+        </div>
+        <div className="col-md-3">
+          <div className="admin-card p-4 text-center">
+            <p className="text-muted small fw-bold mb-1">CONSULTATIONS</p>
+            <h3 className="fw-bold mb-0 text-info">{leads.filter(l => l.type === 'Consultation').length}</h3>
           </div>
         </div>
       </div>
 
-      <div className="table-responsive">
-        <table className="table table-dark table-hover table-bordered" style={{ borderColor: '#333' }}>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Name</th>
-              <th>Email</th>
-              <th>Phone</th>
-              <th>Type</th>
-              <th>Item</th>
-              <th>Status</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr><td colSpan="7" className="text-center">Loading...</td></tr>
-            ) : leads.length === 0 ? (
-              <tr><td colSpan="7" className="text-center text-muted">No leads found.</td></tr>
-            ) : (
-              leads.map(lead => (
-                <tr key={lead._id}>
-                  <td>{new Date(lead.createdAt).toLocaleDateString()}</td>
-                  <td>{lead.name}</td>
-                  <td>{lead.email}</td>
-                  <td>{lead.phone}</td>
-                  <td>
-                    <span className={`badge ${
-                      lead.type === 'Webinar' ? 'bg-info' : 
-                      lead.type === 'Course' ? 'bg-primary' : 
-                      lead.type === 'Consultation' ? 'bg-success' : 'bg-secondary'
-                    }`}>
-                      {lead.type}
-                    </span>
-                  </td>
-                  <td>{lead.courseName || lead.consultationType || '-'}</td>
-                  <td>
-                    <span className={`badge ${lead.paymentStatus === 'Completed' ? 'bg-success' : lead.paymentStatus === 'Failed' ? 'bg-danger' : 'bg-warning'}`}>
-                      {lead.paymentStatus}
-                    </span>
-                  </td>
+      <div className="admin-card">
+        <div className="admin-card-header">
+          <div className="d-flex align-items-center gap-3">
+            <div className="btn-group shadow-sm" style={{ borderRadius: '12px', overflow: 'hidden' }}>
+              <button className={`btn btn-sm px-3 ${filters.type === '' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: ''})}>Global</button>
+              <button className={`btn btn-sm px-3 ${filters.type === 'Course' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Course'})}>Courses</button>
+              <button className={`btn btn-sm px-3 ${filters.type === 'Consultation' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Consultation'})}>Consulting</button>
+              <button className={`btn btn-sm px-3 ${filters.type === 'Webinar' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Webinar'})}>Webinars</button>
+            </div>
+          </div>
+          <div className="d-flex gap-2">
+            <button onClick={handleExport} className="btn btn-premium-outline btn-sm">
+              <i className="fas fa-download me-2"></i> Export Data
+            </button>
+            <button onClick={fetchLeads} className="btn btn-premium btn-sm">
+              <i className="fas fa-sync-alt"></i>
+            </button>
+          </div>
+        </div>
+        
+        <div className="admin-card-body">
+          <div className="row g-3 mb-4">
+            <div className="col-md-4">
+              <label className="text-muted small mb-1 fw-bold">STARTING FROM</label>
+              <input type="date" name="startDate" value={filters.startDate} onChange={handleFilterChange} className="form-control admin-input" />
+            </div>
+            <div className="col-md-4">
+              <label className="text-muted small mb-1 fw-bold">ENDING AT</label>
+              <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} className="form-control admin-input" />
+            </div>
+          </div>
+
+          <div className="table-responsive">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th>Time / Date</th>
+                  <th>Client Identity</th>
+                  <th>Contact Details</th>
+                  <th>Category</th>
+                  <th>Interest Item</th>
+                  <th>Payment Status</th>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              </thead>
+              <tbody>
+                {isLoading ? (
+                  <tr><td colSpan="6" className="text-center py-5"><div className="spinner-border text-primary" role="status"></div></td></tr>
+                ) : leads.length === 0 ? (
+                  <tr><td colSpan="6" className="text-center py-5 text-muted">No data points matching these filters were found.</td></tr>
+                ) : (
+                  leads.map(lead => (
+                    <tr key={lead._id}>
+                      <td>
+                        <div className="fw-bold text-dark">{new Date(lead.createdAt).toLocaleDateString()}</div>
+                        <small className="text-muted">{new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
+                      </td>
+                      <td>
+                        <div className="fw-bold">{lead.name}</div>
+                      </td>
+                      <td>
+                        <div className="small text-dark"><i className="fas fa-envelope text-muted me-2"></i>{lead.email}</div>
+                        <div className="small text-dark"><i className="fas fa-phone text-muted me-2"></i>{lead.phone}</div>
+                      </td>
+                      <td>
+                        <span className={`badge-premium ${
+                          lead.type === 'Webinar' ? 'badge-webinar' : 
+                          lead.type === 'Course' ? 'badge-course' : 
+                          lead.type === 'Consultation' ? 'badge-consultation' : 'bg-light text-dark'
+                        }`}>
+                          {lead.type}
+                        </span>
+                      </td>
+                      <td>
+                        <div className="fw-bold small text-truncate" style={{ maxWidth: '150px' }}>{lead.courseName || lead.consultationType || 'N/A'}</div>
+                      </td>
+                      <td>
+                        <span className={`badge-premium ${lead.paymentStatus === 'Completed' ? 'badge-completed' : lead.paymentStatus === 'Failed' ? 'bg-danger-subtle text-danger' : 'badge-pending'}`}>
+                          {lead.paymentStatus}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
       </div>
     </div>
   );

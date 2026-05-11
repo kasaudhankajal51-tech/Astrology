@@ -1,28 +1,64 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import AdminLeads from './AdminLeads';
 import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
 import './Admin.css';
 
 function AdminDashboard() {
-  const [activeTab, setActiveTab] = useState('leads');
-  const [leadFilter, setLeadFilter] = useState(''); // Global, Course, Consultation, Webinar
+  const [activeTab, setActiveTab] = useState('dashboard');
+  const [leadFilter, setLeadFilter] = useState('');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginError, setLoginError] = useState('');
+  const [stats, setStats] = useState({
+    totalLeads: { value: '0', delta: '0%' },
+    activeBlogs: { value: '0', delta: '0%' },
+    expertNetwork: { value: '0', delta: '0%' },
+    platformTraffic: { value: '0', delta: '0%' }
+  });
+
+  const fetchStats = async () => {
+    try {
+      const res = await fetch('http://localhost:5000/api/admin/stats', {
+        headers: { 'x-admin-secret': 'admin123' } // Match middleware requirement
+      });
+      const data = await res.json();
+      if (data.success) {
+        setStats(data.stats);
+      }
+    } catch (err) {
+      console.error('Failed to fetch stats:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      fetchStats();
+    }
+  }, [isAuthenticated]);
+
+  // Auto-login check (simulated)
+  useEffect(() => {
+    const token = localStorage.getItem('adminToken');
+    if (token) {
+      setIsAuthenticated(true);
+    }
+  }, []);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setLoginError('');
     
     try {
       const response = await fetch('/api/auth/login', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
@@ -30,260 +66,316 @@ function AdminDashboard() {
 
       if (data.success) {
         setIsAuthenticated(true);
-        localStorage.setItem('adminToken', data.token); // Store token for sessions
+        localStorage.setItem('adminToken', data.token);
       } else {
-        alert(data.message || 'Invalid Credentials');
+        setLoginError(data.message || 'Invalid Credentials');
       }
     } catch (error) {
       console.error('Login Error:', error);
-      alert('Connection failed. Please try again.');
+      setLoginError('Connection failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
   };
 
+  const handleLogout = () => {
+    localStorage.removeItem('adminToken');
+    setIsAuthenticated(false);
+  };
+
   if (!isAuthenticated) {
     return (
-      <div className="admin-login-page-v2 d-flex align-items-center justify-content-center">
-        <div className="login-card-master shadow-2xl">
+      <div className="login-root">
+        <div className="login-bg-glow"></div>
+        <div className="login-card">
           {/* Left Side - Form */}
-          <div className="login-side-left bg-white p-4 p-lg-5">
-            <div className="login-form-content">
-              <div className="mb-5">
-                <div className="d-flex align-items-center gap-2 mb-3">
-                  <div className="login-brand-dot"></div>
-                  <h4 className="fw-bold mb-0 tracking-tighter" style={{ color: '#1e293b' }}>AstroAva <span className="text-primary">Admin</span></h4>
-                </div>
-                <h2 className="fw-bold text-dark h3">Welcome back</h2>
-                <p className="text-muted small">Please enter your details to sign in.</p>
-              </div>
-
-              <form onSubmit={handleLogin}>
-                <div className="mb-4">
-                  <label className="form-label small fw-semibold text-dark">Email Address</label>
-                  <div className="input-group-modern">
-                    <i className="fas fa-envelope"></i>
-                    <input 
-                      type="email" 
-                      className="form-control" 
-                      placeholder="admin@astroava.com"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      autoFocus
-                      required
-                    />
-                  </div>
-                </div>
-
-                <div className="mb-4">
-                  <label className="form-label small fw-semibold text-dark">Password</label>
-                  <div className="input-group-modern">
-                    <i className="fas fa-lock"></i>
-                    <input 
-                      type={showPassword ? "text" : "password"} 
-                      className="form-control" 
-                      placeholder="••••••••"
-                      value={password}
-                      onChange={(e) => setPassword(e.target.value)}
-                      required
-                    />
-                    <button 
-                      type="button" 
-                      className="password-toggle-btn"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
-                    </button>
-                  </div>
-                </div>
-
-                <div className="d-flex justify-content-between align-items-center mb-4">
-                  <div className="form-check">
-                    <input className="form-check-input" type="checkbox" id="rememberMe" />
-                    <label className="form-check-label small text-muted" htmlFor="rememberMe">Remember me</label>
-                  </div>
-                  <a href="#" className="small text-primary text-decoration-none fw-semibold">Forgot password?</a>
-                </div>
-
-                <button 
-                  type="submit" 
-                  className={`btn btn-premium-login w-100 py-3 mb-3 d-flex align-items-center justify-content-center gap-2 ${isLoading ? 'disabled' : ''}`}
-                  disabled={isLoading}
-                >
-                  {isLoading ? (
-                    <>
-                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                      <span>Authenticating...</span>
-                    </>
-                  ) : (
-                    'Sign in'
-                  )}
-                </button>
-              </form>
+          <div className="login-left">
+            <div className="login-brand">
+              <div className="login-brand-orb">A</div>
+              <div className="login-brand-name">AstroAva <em>Pro</em></div>
             </div>
 
-            <div className="login-footer-mini mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
-              <span className="text-muted extra-small">© 2026 AstroAva</span>
-              <div className="d-flex gap-3">
-                <a href="#" className="text-muted extra-small text-decoration-none">Privacy</a>
-                <a href="#" className="text-muted extra-small text-decoration-none">Terms</a>
+            <div className="login-headline">
+              <h1>Welcome Back</h1>
+              <p>Sign in to your administrative dashboard</p>
+            </div>
+
+            <form className="login-form" onSubmit={handleLogin}>
+              <div className="lf-group">
+                <label>Email Address</label>
+                <div className="lf-input-wrap">
+                  <i className="fas fa-envelope"></i>
+                  <input 
+                    type="email" 
+                    placeholder="admin@astroava.com"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    autoFocus
+                  />
+                </div>
+              </div>
+
+              <div className="lf-group">
+                <label>Password</label>
+                <div className="lf-input-wrap">
+                  <i className="fas fa-lock"></i>
+                  <input 
+                    type={showPassword ? "text" : "password"} 
+                    placeholder="••••••••"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                  />
+                  <button 
+                    type="button" 
+                    className="lf-eye"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                  </button>
+                </div>
+              </div>
+
+              {loginError && (
+                <div className="lf-error">
+                  <i className="fas fa-exclamation-circle"></i>
+                  <span>{loginError}</span>
+                </div>
+              )}
+
+              <div className="lf-row">
+                <label className="lf-check">
+                  <input type="checkbox" />
+                  <span>Remember me</span>
+                </label>
+                <a href="#" className="lf-forgot">Forgot password?</a>
+              </div>
+
+              <button 
+                type="submit" 
+                className={`lf-btn ${isLoading ? 'lf-btn--loading' : ''}`}
+                disabled={isLoading}
+              >
+                {isLoading ? <div className="lf-spinner"></div> : 'Sign In'}
+              </button>
+            </form>
+
+            <div className="login-footer">
+              <span>&copy; 2026 AstroAva</span>
+              <div>
+                <a href="#">Privacy</a>
+                <a href="#">Terms</a>
               </div>
             </div>
           </div>
 
-          {/* Right Side - Image */}
-          <div className="login-side-right d-none d-md-block">
-            <img 
-              src="/astroava_login.png" 
-              alt="AstroAva Unique Branding" 
-              className="login-full-img"
-            />
+          {/* Right Side - Visual */}
+          <div className="login-right">
+            <div className="login-right-inner">
+              <div className="lr-orb lr-orb--1"></div>
+              <div className="lr-orb lr-orb--2"></div>
+              <div className="lr-quote">
+                <i className="fas fa-star lr-star"></i>
+                <p>"The cosmos is within us. We are made of star-stuff."</p>
+                <span>— Carl Sagan</span>
+              </div>
+              <img 
+                src="/astroava_login.png" 
+                alt="Visual" 
+                className="lr-img"
+              />
+            </div>
           </div>
         </div>
       </div>
     );
   }
 
+  const SidebarItem = ({ id, icon, label, filter = '' }) => {
+    const isActive = activeTab === id && leadFilter === filter;
+    return (
+      <button 
+        className={`sb-item ${isActive ? 'sb-item--active' : ''}`}
+        onClick={() => { setActiveTab(id); setLeadFilter(filter); }}
+      >
+        <i className={`fas ${icon}`}></i>
+        <span>{label}</span>
+        {isActive && <div className="sb-active-bar"></div>}
+      </button>
+    );
+  };
+
   return (
-    <div className="admin-app-wrapper">
-      {/* Sidebar - Premium Navigation */}
-      <aside className="admin-sidebar-modern">
-        <div className="sidebar-header">
-          <div className="sidebar-logo">
-            <div className="logo-icon-glow"></div>
-            <span className="logo-text">AstroAva <span className="text-accent">Pro</span></span>
+    <div className={`app-shell ${sidebarCollapsed ? 'sidebar--collapsed' : ''} ${mobileMenuOpen ? 'sidebar--mobile-open' : ''}`}>
+      {/* Sidebar Overlay for Mobile */}
+      <div className="sidebar-overlay" onClick={() => setMobileMenuOpen(false)}></div>
+
+      {/* Sidebar */}
+      <aside className="sidebar">
+        <div className="sb-head">
+          <div className="sb-logo">
+            <div className="sb-logo-orb">A</div>
+            <div className="sb-logo-text">AstroAva <em>Pro</em></div>
           </div>
+          <button className="sb-toggle" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
+            <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
+          </button>
         </div>
 
-        <nav className="sidebar-menu">
-          <div className="menu-group">
-            <span className="group-title">MANAGEMENT</span>
-            
-            <div className="menu-item-nested">
-              <button 
-                className={`menu-link ${activeTab === 'leads' && leadFilter === '' ? 'active' : ''}`}
-                onClick={() => { setActiveTab('leads'); setLeadFilter(''); }}
-              >
-                <i className="fas fa-layer-group"></i>
-                <span>Global Leads</span>
-                {activeTab === 'leads' && leadFilter === '' && <div className="active-indicator"></div>}
-              </button>
-              
-              <div className="nested-links">
-                <button 
-                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Course' ? 'active' : ''}`}
-                  onClick={() => { setActiveTab('leads'); setLeadFilter('Course'); }}
-                >
-                  <i className="fas fa-graduation-cap"></i>
-                  <span>Courses</span>
-                </button>
-                <button 
-                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Consultation' ? 'active' : ''}`}
-                  onClick={() => { setActiveTab('leads'); setLeadFilter('Consultation'); }}
-                >
-                  <i className="fas fa-user-md"></i>
-                  <span>Consulting</span>
-                </button>
-                <button 
-                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Webinar' ? 'active' : ''}`}
-                  onClick={() => { setActiveTab('leads'); setLeadFilter('Webinar'); }}
-                >
-                  <i className="fas fa-video"></i>
-                  <span>Webinars</span>
-                </button>
-              </div>
-            </div>
-
-            <button 
-              className={`menu-link ${activeTab === 'blogs' ? 'active' : ''}`}
-              onClick={() => setActiveTab('blogs')}
-            >
-              <i className="fas fa-newspaper"></i>
-              <span>Blog Portal</span>
-              {activeTab === 'blogs' && <div className="active-indicator"></div>}
-            </button>
-            <button 
-              className={`menu-link ${activeTab === 'jobs' ? 'active' : ''}`}
-              onClick={() => setActiveTab('jobs')}
-            >
-              <i className="fas fa-briefcase"></i>
-              <span>Recruitment</span>
-              {activeTab === 'jobs' && <div className="active-indicator"></div>}
-            </button>
+        <nav className="sb-nav" onClick={() => setMobileMenuOpen(false)}>
+          <div className="sb-group">
+            <span className="sb-section-label">Main</span>
+            <SidebarItem id="dashboard" icon="fa-th-large" label="Dashboard" />
           </div>
 
-          <div className="menu-group mt-4">
-            <span className="group-title">SYSTEM</span>
-            <button className="menu-link">
-              <i className="fas fa-cog"></i>
-              <span>Settings</span>
-            </button>
-            <button className="menu-link">
-              <i className="fas fa-shield-alt"></i>
-              <span>Security</span>
-            </button>
+          <div className="sb-group">
+            <span className="sb-section-label">Global Leads</span>
+            <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Courses" />
+            <SidebarItem id="leads" filter="Consultation" icon="fa-user-md" label="Consulting" />
+            <SidebarItem id="leads" filter="Webinar" icon="fa-video" label="Webinars" />
+          </div>
+
+          <div className="sb-group">
+            <span className="sb-section-label">Management</span>
+            <SidebarItem id="blogs" icon="fa-newspaper" label="Blog Portal" />
+            <SidebarItem id="jobs" icon="fa-briefcase" label="Recruiter" />
+          </div>
+
+          <div className="sb-group">
+            <span className="sb-section-label">System</span>
+            <SidebarItem id="settings" icon="fa-cog" label="Settings" />
           </div>
         </nav>
 
-        <div className="sidebar-profile">
-          <div className="profile-card">
-            <div className="profile-img">
-              <i className="fas fa-user-tie"></i>
-            </div>
-            <div className="profile-meta">
-              <span className="user-name">Administrator</span>
-              <span className="user-role">Super Admin</span>
+        <div className="sb-foot">
+          <div className="sb-profile">
+            <div className="sb-profile-avatar">AD</div>
+            <div className="sb-profile-meta">
+              <span className="sb-profile-name">Administrator</span>
+              <span className="sb-profile-role">Super Admin</span>
             </div>
           </div>
-          <button 
-            className="btn-logout-minimal"
-            onClick={() => setIsAuthenticated(false)}
-          >
+          <button className="sb-logout" title="Logout" onClick={handleLogout}>
             <i className="fas fa-power-off"></i>
-            <span>Log Out</span>
           </button>
         </div>
       </aside>
 
-      {/* Main Content Area */}
-      <div className="admin-main-view">
-        <header className="admin-glass-header">
-          <div className="header-content">
-            <div className="header-info">
-              <h1 className="header-title">
-                {activeTab === 'leads' && 'Global Analytics'}
+      {/* Main Area */}
+      <div className="main-area">
+        <header className="topbar">
+          <div className="topbar-left d-flex align-items-center">
+            <button className="mobile-nav-toggle" onClick={() => setMobileMenuOpen(true)}>
+              <i className="fas fa-bars"></i>
+            </button>
+            <div>
+              <div className="topbar-title">
+                {activeTab === 'dashboard' && 'Admin Overview'}
+                {activeTab === 'leads' && `${leadFilter} Analytics`}
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Expert Network'}
-              </h1>
-              <div className="header-breadcrumb">
+                {activeTab === 'settings' && 'Platform Settings'}
+              </div>
+              <div className="topbar-breadcrumb">
                 <span>Admin</span>
                 <i className="fas fa-chevron-right"></i>
                 <span className="current">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</span>
               </div>
             </div>
+          </div>
 
-            <div className="header-tools">
-              <div className="tool-box d-none d-md-flex">
-                <div className="search-pill">
-                  <i className="fas fa-search"></i>
-                  <input type="text" placeholder="Global search..." />
-                </div>
-              </div>
-              <div className="header-divider"></div>
-              <div className="header-badges">
-                <button className="badge-btn"><i className="far fa-bell"></i><span className="dot"></span></button>
-                <button className="badge-btn"><i className="far fa-comment-alt"></i></button>
-              </div>
+          <div className="topbar-right">
+            <div className="search-bar">
+              <i className="fas fa-search"></i>
+              <input type="text" placeholder="Global search..." />
             </div>
+            <button className="topbar-icon-btn">
+              <i className="far fa-bell"></i>
+              <div className="notif-dot"></div>
+            </button>
+            <button className="topbar-icon-btn">
+              <i className="far fa-comment-alt"></i>
+            </button>
           </div>
         </header>
 
-        <main className="admin-view-scroll">
-          <div className="view-container">
-            {activeTab === 'leads' && <AdminLeads activeFilter={leadFilter} />}
-            {activeTab === 'blogs' && <AdminBlogs />}
-            {activeTab === 'jobs' && <AdminJobs />}
-          </div>
+        <main className="page-content">
+          {activeTab === 'dashboard' && (
+            <div className="dash-home">
+              <div className="dash-greeting">
+                <h2>Welcome back, Chief!</h2>
+                <p>Here's what's happening with your astrology platform today.</p>
+              </div>
+
+              <div className="stat-grid">
+                <div className="stat-card stat-card--violet">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--violet"><i className="fas fa-users"></i></div>
+                    <div className="sc-delta">{stats.totalLeads.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.totalLeads.value}</div>
+                  <div className="sc-label">Total Leads</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+                <div className="stat-card stat-card--cyan">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--cyan"><i className="fas fa-newspaper"></i></div>
+                    <div className="sc-delta">{stats.activeBlogs.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.activeBlogs.value}</div>
+                  <div className="sc-label">Active Blogs</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+                <div className="stat-card stat-card--amber">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--amber"><i className="fas fa-briefcase"></i></div>
+                    <div className="sc-delta">{stats.expertNetwork.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.expertNetwork.value}</div>
+                  <div className="sc-label">Expert Network</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+                <div className="stat-card stat-card--rose">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--rose"><i className="fas fa-chart-line"></i></div>
+                    <div className="sc-delta">{stats.platformTraffic.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.platformTraffic.value}</div>
+                  <div className="sc-label">Platform Traffic</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+              </div>
+              
+              <div className="mt-4">
+                <div className="d-flex align-items-center justify-content-between mb-3">
+                  <h3 className="dash-section-title">Recent Activity</h3>
+                  <button className="btn btn-sm btn-link text-decoration-none">View All</button>
+                </div>
+                <div className="leads-table-wrap">
+                  <AdminLeads activeFilter={''} />
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'leads' && (
+            <div className="leads-view">
+              <div className="leads-table-wrap">
+                <AdminLeads activeFilter={leadFilter} />
+              </div>
+            </div>
+          )}
+
+          {activeTab === 'blogs' && <AdminBlogs />}
+          {activeTab === 'jobs' && <AdminJobs />}
+          {activeTab === 'settings' && (
+            <div className="empty-state">
+              <i className="fas fa-cog fa-4x"></i>
+              <h3>Platform Settings</h3>
+              <p>Configure your site preferences and security settings here.</p>
+            </div>
+          )}
         </main>
       </div>
     </div>

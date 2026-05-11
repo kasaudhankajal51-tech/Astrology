@@ -47,120 +47,125 @@ function AdminLeads({ activeFilter }) {
   };
 
   return (
-    <div className="admin-leads-section animate__animated animate__fadeIn">
-      <div className="row g-4 mb-4">
-        {/* Quick Stats Summary */}
-        <div className="col-md-3">
-          <div className="admin-card p-4 text-center">
-            <p className="text-muted small fw-bold mb-1">TOTAL LEADS</p>
-            <h3 className="fw-bold mb-0">{leads.length}</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="admin-card p-4 text-center">
-            <p className="text-muted small fw-bold mb-1">COMPLETED</p>
-            <h3 className="fw-bold mb-0 text-success">{leads.filter(l => l.paymentStatus === 'Completed').length}</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="admin-card p-4 text-center">
-            <p className="text-muted small fw-bold mb-1">COURSES</p>
-            <h3 className="fw-bold mb-0 text-primary">{leads.filter(l => l.type === 'Course').length}</h3>
-          </div>
-        </div>
-        <div className="col-md-3">
-          <div className="admin-card p-4 text-center">
-            <p className="text-muted small fw-bold mb-1">CONSULTATIONS</p>
-            <h3 className="fw-bold mb-0 text-info">{leads.filter(l => l.type === 'Consultation').length}</h3>
-          </div>
-        </div>
-      </div>
-
-      <div className="admin-card">
-        <div className="admin-card-header">
-          <div className="d-flex align-items-center gap-2">
-            <div className="status-indicator-pill">
-              <span className="dot"></span>
-              <span>{activeFilter === '' ? 'Global' : activeFilter} View</span>
+    <div className="admin-leads-content">
+      {/* Filters Area */}
+      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-4">
+        <div className="d-flex flex-wrap gap-3 align-items-center">
+          <div className="lf-group mb-0">
+            <div className="lf-input-wrap">
+              <i className="fas fa-calendar-alt"></i>
+              <input 
+                type="date" 
+                name="startDate" 
+                value={filters.startDate} 
+                onChange={handleFilterChange} 
+                className="bg-white border text-dark"
+                style={{ paddingLeft: '35px', height: '40px', fontSize: '13px' }}
+              />
             </div>
           </div>
-          <div className="d-flex gap-2">
-            <button onClick={handleExport} className="btn btn-premium-outline btn-sm">
-              <i className="fas fa-download me-2"></i> Export Data
-            </button>
-            <button onClick={fetchLeads} className="btn btn-premium btn-sm">
-              <i className="fas fa-sync-alt"></i>
-            </button>
+          <span className="text-muted small">to</span>
+          <div className="lf-group mb-0">
+            <div className="lf-input-wrap">
+              <i className="fas fa-calendar-alt"></i>
+              <input 
+                type="date" 
+                name="endDate" 
+                value={filters.endDate} 
+                onChange={handleFilterChange} 
+                className="bg-white border text-dark"
+                style={{ paddingLeft: '35px', height: '40px', fontSize: '13px' }}
+              />
+            </div>
           </div>
         </div>
         
-        <div className="admin-card-body">
-          <div className="row g-3 mb-4">
-            <div className="col-md-4">
-              <label className="text-muted small mb-1 fw-bold">STARTING FROM</label>
-              <input type="date" name="startDate" value={filters.startDate} onChange={handleFilterChange} className="form-control admin-input" />
-            </div>
-            <div className="col-md-4">
-              <label className="text-muted small mb-1 fw-bold">ENDING AT</label>
-              <input type="date" name="endDate" value={filters.endDate} onChange={handleFilterChange} className="form-control admin-input" />
-            </div>
-          </div>
-
-          <div className="table-responsive">
-            <table className="admin-table">
-              <thead>
-                <tr>
-                  <th>Time / Date</th>
-                  <th>Client Identity</th>
-                  <th>Contact Details</th>
-                  <th>Category</th>
-                  <th>Interest Item</th>
-                  <th>Payment Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr><td colSpan="6" className="text-center py-5"><div className="spinner-border text-primary" role="status"></div></td></tr>
-                ) : leads.length === 0 ? (
-                  <tr><td colSpan="6" className="text-center py-5 text-muted">No data points matching these filters were found.</td></tr>
-                ) : (
-                  leads.map(lead => (
-                    <tr key={lead._id}>
-                      <td>
-                        <div className="fw-bold text-dark">{new Date(lead.createdAt).toLocaleDateString()}</div>
-                        <small className="text-muted">{new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</small>
-                      </td>
-                      <td>
-                        <div className="fw-bold">{lead.name}</div>
-                      </td>
-                      <td>
-                        <div className="small text-dark"><i className="fas fa-envelope text-muted me-2"></i>{lead.email}</div>
-                        <div className="small text-dark"><i className="fas fa-phone text-muted me-2"></i>{lead.phone}</div>
-                      </td>
-                      <td>
-                        <span className={`badge-premium ${
-                          lead.type === 'Webinar' ? 'badge-webinar' : 
-                          lead.type === 'Course' ? 'badge-course' : 
-                          lead.type === 'Consultation' ? 'badge-consultation' : 'bg-light text-dark'
-                        }`}>
-                          {lead.type}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="fw-bold small text-truncate" style={{ maxWidth: '150px' }}>{lead.courseName || lead.consultationType || 'N/A'}</div>
-                      </td>
-                      <td>
-                        <span className={`badge-premium ${lead.paymentStatus === 'Completed' ? 'badge-completed' : lead.paymentStatus === 'Failed' ? 'bg-danger-subtle text-danger' : 'badge-pending'}`}>
-                          {lead.paymentStatus}
-                        </span>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+        <div className="d-flex gap-2 w-100 w-md-auto justify-content-end">
+          <button onClick={handleExport} className="lf-btn py-2 px-3 m-0" style={{ boxShadow: 'none', fontSize: '12px' }}>
+            <i className="fas fa-download me-2"></i> Export
+          </button>
+          <button onClick={fetchLeads} className="topbar-icon-btn">
+            <i className="fas fa-sync-alt"></i>
+          </button>
         </div>
+      </div>
+
+      {/* Main Table */}
+      <div className="leads-table-wrap">
+        <table className="leads-table">
+          <thead>
+            <tr>
+              <th>Date / Time</th>
+              <th>Client Identity</th>
+              <th>Contact</th>
+              <th>Category</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            {isLoading ? (
+              <tr>
+                <td colSpan="6">
+                  <div className="dash-loading">
+                    <div className="dash-spin"></div>
+                    <span>Fetching data...</span>
+                  </div>
+                </td>
+              </tr>
+            ) : leads.length === 0 ? (
+              <tr>
+                <td colSpan="6">
+                  <div className="table-empty">
+                    <i className="fas fa-folder-open fa-2x mb-2 d-block opacity-25"></i>
+                    No leads found for this selection.
+                  </div>
+                </td>
+              </tr>
+            ) : (
+              leads.map(lead => (
+                <tr key={lead._id}>
+                  <td>
+                    <div className="td-value">{new Date(lead.createdAt).toLocaleDateString()}</div>
+                    <div className="td-muted">{new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                  </td>
+                  <td>
+                    <div className="lead-name-cell">
+                      <div className="lead-avatar">{lead.name.charAt(0)}</div>
+                      <div className="td-value">{lead.name}</div>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="td-value">{lead.email}</div>
+                    <div className="td-muted">{lead.phone}</div>
+                  </td>
+                  <td>
+                    <span className={`tag ${
+                      lead.type === 'Course' ? 'tag--violet' : 
+                      lead.type === 'Consultation' ? 'tag--cyan' : 'tag--amber'
+                    }`}>
+                      {lead.type}
+                    </span>
+                    <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '120px' }}>
+                      {lead.courseName || lead.consultationType || 'General'}
+                    </div>
+                  </td>
+                  <td>
+                    <div className="status-pill">
+                      <div className={`dot ${lead.paymentStatus === 'Completed' ? 'dot--green' : lead.paymentStatus === 'Failed' ? 'dot--rose' : 'dot--amber'}`}></div>
+                      <span>{lead.paymentStatus}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <button className="topbar-icon-btn btn-sm" style={{ width: '30px', height: '30px' }}>
+                      <i className="fas fa-ellipsis-v"></i>
+                    </button>
+                  </td>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
       </div>
     </div>
   );

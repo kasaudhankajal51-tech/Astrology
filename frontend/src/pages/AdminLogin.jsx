@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 import './Admin.css';
 
 function AdminLogin() {
@@ -33,13 +35,18 @@ function AdminLogin() {
 
       if (data.success) {
         localStorage.setItem('adminToken', data.token);
+        toast.success('Welcome back, Admin!');
         navigate('/admin');
       } else {
-        setLoginError(data.message || 'Invalid Credentials');
+        const errorMsg = data.message || 'Invalid Credentials';
+        setLoginError(errorMsg);
+        toast.error(errorMsg);
       }
     } catch (error) {
       console.error('Login Error:', error);
-      setLoginError('Connection failed. Please try again.');
+      const connError = 'Connection failed. Please try again.';
+      setLoginError(connError);
+      toast.error(connError);
     } finally {
       setIsLoading(false);
     }
@@ -48,12 +55,25 @@ function AdminLogin() {
   return (
     <div className="login-root">
       <div className="login-bg-glow"></div>
-      <div className="login-card">
+      
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        className="login-card"
+      >
         {/* Left Side - Form */}
         <div className="login-left">
           <div className="login-brand">
-            <div className="login-brand-orb">A</div>
-            <div className="login-brand-name">AstroAva <em>Pro</em></div>
+            <motion.div 
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
+              className="login-brand-orb"
+            >
+              A
+            </motion.div>
+            <div className="login-brand-name">AstroAva <em>Adminimga</em></div>
           </div>
 
           <div className="login-headline">
@@ -98,12 +118,19 @@ function AdminLogin() {
               </div>
             </div>
 
-            {loginError && (
-              <div className="lf-error">
-                <i className="fas fa-exclamation-circle"></i>
-                <span>{loginError}</span>
-              </div>
-            )}
+            <AnimatePresence>
+              {loginError && (
+                <motion.div 
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: 'auto' }}
+                  exit={{ opacity: 0, height: 0 }}
+                  className="lf-error"
+                >
+                  <i className="fas fa-exclamation-circle"></i>
+                  <span>{loginError}</span>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="lf-row">
               <label className="lf-check">
@@ -125,7 +152,7 @@ function AdminLogin() {
           <div className="login-footer">
             <span>&copy; 2026 AstroAva</span>
             <div>
-              <a href="#">Privacy</a>
+              <a href="#">Privacy Policy</a>
               <a href="#">Terms</a>
             </div>
           </div>
@@ -136,19 +163,21 @@ function AdminLogin() {
           <div className="login-right-inner">
             <div className="lr-orb lr-orb--1"></div>
             <div className="lr-orb lr-orb--2"></div>
-            <div className="lr-quote">
-              <i className="fas fa-star lr-star"></i>
-              <p>"The cosmos is within us. We are made of star-stuff."</p>
-              <span>— Carl Sagan</span>
-            </div>
-            <img 
-              src="/astroava_login.png" 
-              alt="Visual" 
-              className="lr-img"
-            />
+            
+            <motion.div
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.4 }}
+              className="lr-img-container"
+            >
+              <img 
+                src="/astroava_login.png" 
+                alt="Visual" 
+                className="lr-img"
+              />
+            </motion.div>
           </div>
         </div>
-      </div>
+      </motion.div>
     </div>
   );
 }

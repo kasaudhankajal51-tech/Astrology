@@ -94,8 +94,8 @@ body {
 .login-card {
   display: flex;
   width: 100%;
-  max-width: 900px;
-  min-height: 580px;
+  max-width: 1100px;
+  min-height: 640px;
   border-radius: var(--r-xl);
   overflow: hidden;
   box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.06);
@@ -109,7 +109,7 @@ body {
 
 /* Left side - form */
 .login-left {
-  flex: 1;
+  flex: 4;
   background: #ffffff;
   border-right: 1px solid #eee;
   padding: 48px 44px;
@@ -140,14 +140,18 @@ body {
 
 .login-brand-name {
   font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
 }
 
 .login-brand-name em {
   font-style: normal;
   color: var(--violet);
+  background: linear-gradient(135deg, var(--violet), var(--cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 .login-headline {
@@ -156,16 +160,18 @@ body {
 
 .login-headline h1 {
   font-family: var(--font-display);
-  font-size: 28px;
-  font-weight: 700;
-  color: #fff;
-  line-height: 1.2;
-  margin-bottom: 8px;
+  font-size: 32px;
+  font-weight: 800;
+  color: var(--text-primary);
+  line-height: 1.1;
+  margin-bottom: 12px;
+  letter-spacing: -0.03em;
 }
 
 .login-headline p {
-  font-size: 14px;
-  color: rgba(255,255,255,0.45);
+  font-size: 15px;
+  color: var(--text-secondary);
+  font-weight: 400;
 }
 
 /* Form */
@@ -175,10 +181,10 @@ body {
 
 .lf-group label {
   font-size: 12px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.5);
+  font-weight: 600;
+  color: var(--text-secondary);
   text-transform: uppercase;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
 }
 
 .lf-input-wrap {
@@ -220,14 +226,14 @@ body {
   right: 12px;
   background: none;
   border: none;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-muted);
   cursor: pointer;
   padding: 4px;
-  font-size: 13px;
-  transition: color var(--t);
+  font-size: 14px;
+  transition: color var(--t), transform var(--t);
 }
 
-.lf-eye:hover { color: rgba(255,255,255,0.7); }
+.lf-eye:hover { color: var(--violet); transform: scale(1.1); }
 
 .lf-row {
   display: flex;
@@ -240,9 +246,10 @@ body {
   align-items: center;
   gap: 8px;
   font-size: 13px;
-  color: rgba(255,255,255,0.4);
+  color: var(--text-secondary);
   cursor: pointer;
   user-select: none;
+  font-weight: 500;
 }
 
 .lf-check input[type="checkbox"] {
@@ -319,18 +326,19 @@ body {
 
 .login-footer span,
 .login-footer a {
-  font-size: 11px;
-  color: rgba(255,255,255,0.25);
+  font-size: 12px;
+  color: var(--text-muted);
   text-decoration: none;
+  font-weight: 500;
+  transition: color var(--t);
 }
 
-.login-footer div { display: flex; gap: 16px; }
-.login-footer a:hover { color: rgba(255,255,255,0.5); }
+.login-footer div { display: flex; gap: 20px; }
+.login-footer a:hover { color: var(--violet); }
 
 /* Right side - visual */
 .login-right {
-  width: 340px;
-  flex-shrink: 0;
+  flex: 6;
   background: linear-gradient(145deg, #0f172a, #000000);
   position: relative;
   overflow: hidden;
@@ -346,7 +354,7 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 0;
   position: relative;
 }
 
@@ -372,43 +380,22 @@ body {
   left: -30px;
 }
 
-.lr-star {
-  font-size: 18px;
-  color: var(--amber);
-  margin-bottom: 16px;
-  display: block;
-}
-
-.lr-quote {
-  text-align: center;
+.lr-img-container {
+  width: 100%;
+  height: 100%;
+  padding: 0;
   position: relative;
   z-index: 1;
-  margin-bottom: 32px;
-}
-
-.lr-quote p {
-  font-family: var(--font-display);
-  font-size: 18px;
-  font-weight: 600;
-  color: #fff;
-  line-height: 1.5;
-  margin-bottom: 10px;
-}
-
-.lr-quote span {
-  font-size: 12px;
-  color: rgba(255,255,255,0.35);
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
+  perspective: 1000px;
 }
 
 .lr-img {
-  max-width: 80%;
-  border-radius: var(--r-lg);
+  width: 100%;
+  height: 100%;
+  border-radius: 0;
   object-fit: cover;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+  box-shadow: none;
+  border: none;
 }
 
 .admin-loading {

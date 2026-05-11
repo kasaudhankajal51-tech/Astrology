@@ -6,6 +6,7 @@ import './Admin.css';
 
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
+  const [leadFilter, setLeadFilter] = useState(''); // Global, Course, Consultation, Webinar
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -144,77 +145,146 @@ function AdminDashboard() {
   }
 
   return (
-    <div className="admin-dashboard-container">
-      <div className="container-fluid p-0">
-        <div className="row g-0">
-          {/* Sidebar */}
-          <div className="col-lg-2">
-            <aside className="admin-sidebar">
-              <div className="admin-logo-box text-center">
-                <span className="admin-logo-text">AstroAva Admin</span>
-              </div>
-              
-              <nav className="flex-grow-1">
-                <button 
-                  className={`admin-nav-link ${activeTab === 'leads' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('leads')}
-                >
-                  <i className="fas fa-chart-line"></i> Analytics & Leads
-                </button>
-                <button 
-                  className={`admin-nav-link ${activeTab === 'blogs' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('blogs')}
-                >
-                  <i className="fas fa-pen-nib"></i> Blog Portal
-                </button>
-                <button 
-                  className={`admin-nav-link ${activeTab === 'jobs' ? 'active' : ''}`}
-                  onClick={() => setActiveTab('jobs')}
-                >
-                  <i className="fas fa-user-tie"></i> Expert Hiring
-                </button>
-              </nav>
-
-              <div className="mt-auto pt-4 border-top border-light">
-                <button 
-                  className="admin-nav-link text-danger w-100 border-0 bg-transparent"
-                  onClick={() => setIsAuthenticated(false)}
-                >
-                  <i className="fas fa-power-off"></i> Secure Logout
-                </button>
-              </div>
-            </aside>
-          </div>
-
-          {/* Main Content Area */}
-          <div className="col-lg-10">
-            <header className="p-4 bg-white border-bottom border-light d-flex justify-content-between align-items-center sticky-top">
-              <div>
-                <h4 className="fw-bold mb-0">
-                  {activeTab === 'leads' && 'Global Leads Dashboard'}
-                  {activeTab === 'blogs' && 'Content Management System'}
-                  {activeTab === 'jobs' && 'Expert Recruitment'}
-                </h4>
-                <p className="text-muted small mb-0">Overview of your astrology platform performance</p>
-              </div>
-              <div className="d-flex align-items-center gap-3">
-                <div className="text-end d-none d-md-block">
-                  <span className="d-block fw-bold small">System Admin</span>
-                  <span className="badge bg-success-subtle text-success small" style={{ fontSize: '10px' }}>ONLINE</span>
-                </div>
-                <div className="rounded-circle bg-light d-flex align-items-center justify-content-center shadow-sm" style={{ width: '45px', height: '45px', border: '2px solid #fff' }}>
-                  <i className="fas fa-user text-muted"></i>
-                </div>
-              </div>
-            </header>
-
-            <main className="admin-content-area">
-              {activeTab === 'leads' && <AdminLeads />}
-              {activeTab === 'blogs' && <AdminBlogs />}
-              {activeTab === 'jobs' && <AdminJobs />}
-            </main>
+    <div className="admin-app-wrapper">
+      {/* Sidebar - Premium Navigation */}
+      <aside className="admin-sidebar-modern">
+        <div className="sidebar-header">
+          <div className="sidebar-logo">
+            <div className="logo-icon-glow"></div>
+            <span className="logo-text">AstroAva <span className="text-accent">Pro</span></span>
           </div>
         </div>
+
+        <nav className="sidebar-menu">
+          <div className="menu-group">
+            <span className="group-title">MANAGEMENT</span>
+            
+            <div className="menu-item-nested">
+              <button 
+                className={`menu-link ${activeTab === 'leads' && leadFilter === '' ? 'active' : ''}`}
+                onClick={() => { setActiveTab('leads'); setLeadFilter(''); }}
+              >
+                <i className="fas fa-layer-group"></i>
+                <span>Global Leads</span>
+                {activeTab === 'leads' && leadFilter === '' && <div className="active-indicator"></div>}
+              </button>
+              
+              <div className="nested-links">
+                <button 
+                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Course' ? 'active' : ''}`}
+                  onClick={() => { setActiveTab('leads'); setLeadFilter('Course'); }}
+                >
+                  <i className="fas fa-graduation-cap"></i>
+                  <span>Courses</span>
+                </button>
+                <button 
+                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Consultation' ? 'active' : ''}`}
+                  onClick={() => { setActiveTab('leads'); setLeadFilter('Consultation'); }}
+                >
+                  <i className="fas fa-user-md"></i>
+                  <span>Consulting</span>
+                </button>
+                <button 
+                  className={`nested-link ${activeTab === 'leads' && leadFilter === 'Webinar' ? 'active' : ''}`}
+                  onClick={() => { setActiveTab('leads'); setLeadFilter('Webinar'); }}
+                >
+                  <i className="fas fa-video"></i>
+                  <span>Webinars</span>
+                </button>
+              </div>
+            </div>
+
+            <button 
+              className={`menu-link ${activeTab === 'blogs' ? 'active' : ''}`}
+              onClick={() => setActiveTab('blogs')}
+            >
+              <i className="fas fa-newspaper"></i>
+              <span>Blog Portal</span>
+              {activeTab === 'blogs' && <div className="active-indicator"></div>}
+            </button>
+            <button 
+              className={`menu-link ${activeTab === 'jobs' ? 'active' : ''}`}
+              onClick={() => setActiveTab('jobs')}
+            >
+              <i className="fas fa-briefcase"></i>
+              <span>Recruitment</span>
+              {activeTab === 'jobs' && <div className="active-indicator"></div>}
+            </button>
+          </div>
+
+          <div className="menu-group mt-4">
+            <span className="group-title">SYSTEM</span>
+            <button className="menu-link">
+              <i className="fas fa-cog"></i>
+              <span>Settings</span>
+            </button>
+            <button className="menu-link">
+              <i className="fas fa-shield-alt"></i>
+              <span>Security</span>
+            </button>
+          </div>
+        </nav>
+
+        <div className="sidebar-profile">
+          <div className="profile-card">
+            <div className="profile-img">
+              <i className="fas fa-user-tie"></i>
+            </div>
+            <div className="profile-meta">
+              <span className="user-name">Administrator</span>
+              <span className="user-role">Super Admin</span>
+            </div>
+          </div>
+          <button 
+            className="btn-logout-minimal"
+            onClick={() => setIsAuthenticated(false)}
+          >
+            <i className="fas fa-power-off"></i>
+            <span>Log Out</span>
+          </button>
+        </div>
+      </aside>
+
+      {/* Main Content Area */}
+      <div className="admin-main-view">
+        <header className="admin-glass-header">
+          <div className="header-content">
+            <div className="header-info">
+              <h1 className="header-title">
+                {activeTab === 'leads' && 'Global Analytics'}
+                {activeTab === 'blogs' && 'Content Studio'}
+                {activeTab === 'jobs' && 'Expert Network'}
+              </h1>
+              <div className="header-breadcrumb">
+                <span>Admin</span>
+                <i className="fas fa-chevron-right"></i>
+                <span className="current">{activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}</span>
+              </div>
+            </div>
+
+            <div className="header-tools">
+              <div className="tool-box d-none d-md-flex">
+                <div className="search-pill">
+                  <i className="fas fa-search"></i>
+                  <input type="text" placeholder="Global search..." />
+                </div>
+              </div>
+              <div className="header-divider"></div>
+              <div className="header-badges">
+                <button className="badge-btn"><i className="far fa-bell"></i><span className="dot"></span></button>
+                <button className="badge-btn"><i className="far fa-comment-alt"></i></button>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        <main className="admin-view-scroll">
+          <div className="view-container">
+            {activeTab === 'leads' && <AdminLeads activeFilter={leadFilter} />}
+            {activeTab === 'blogs' && <AdminBlogs />}
+            {activeTab === 'jobs' && <AdminJobs />}
+          </div>
+        </main>
       </div>
     </div>
   );

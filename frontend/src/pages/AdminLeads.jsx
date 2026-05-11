@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 
-function AdminLeads() {
+function AdminLeads({ activeFilter }) {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
-  const [filters, setFilters] = useState({ startDate: '', endDate: '', type: '' });
+  const [filters, setFilters] = useState({ startDate: '', endDate: '', type: activeFilter || '' });
 
   const ADMIN_PASS = 'admin123';
 
@@ -27,6 +27,10 @@ function AdminLeads() {
       setIsLoading(false);
     }
   };
+
+  useEffect(() => {
+    setFilters(prev => ({ ...prev, type: activeFilter || '' }));
+  }, [activeFilter]);
 
   useEffect(() => {
     fetchLeads();
@@ -74,12 +78,10 @@ function AdminLeads() {
 
       <div className="admin-card">
         <div className="admin-card-header">
-          <div className="d-flex align-items-center gap-3">
-            <div className="btn-group shadow-sm" style={{ borderRadius: '12px', overflow: 'hidden' }}>
-              <button className={`btn btn-sm px-3 ${filters.type === '' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: ''})}>Global</button>
-              <button className={`btn btn-sm px-3 ${filters.type === 'Course' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Course'})}>Courses</button>
-              <button className={`btn btn-sm px-3 ${filters.type === 'Consultation' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Consultation'})}>Consulting</button>
-              <button className={`btn btn-sm px-3 ${filters.type === 'Webinar' ? 'btn-primary' : 'btn-white'}`} onClick={() => setFilters({...filters, type: 'Webinar'})}>Webinars</button>
+          <div className="d-flex align-items-center gap-2">
+            <div className="status-indicator-pill">
+              <span className="dot"></span>
+              <span>{activeFilter === '' ? 'Global' : activeFilter} View</span>
             </div>
           </div>
           <div className="d-flex gap-2">

@@ -7,44 +7,137 @@ import './Admin.css';
 function AdminDashboard() {
   const [activeTab, setActiveTab] = useState('leads');
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const ADMIN_PASS = 'admin123';
-
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (password === ADMIN_PASS) {
-      setIsAuthenticated(true);
-    } else {
-      alert('Invalid Password');
+    setIsLoading(true);
+    
+    try {
+      const response = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        setIsAuthenticated(true);
+        localStorage.setItem('adminToken', data.token); // Store token for sessions
+      } else {
+        alert(data.message || 'Invalid Credentials');
+      }
+    } catch (error) {
+      console.error('Login Error:', error);
+      alert('Connection failed. Please try again.');
+    } finally {
+      setIsLoading(false);
     }
   };
 
   if (!isAuthenticated) {
     return (
-      <div className="admin-login-page d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', background: 'linear-gradient(135deg, #fdfcfb 0%, #e2d1c3 100%)' }}>
-        <div className="login-card p-5 text-center glass-login" style={{ borderRadius: '40px', maxWidth: '450px', width: '90%' }}>
-          <div className="mb-4 d-inline-block p-4" style={{ background: 'rgba(255,106,0,0.1)', borderRadius: '30px' }}>
-            <i className="fas fa-shield-alt" style={{ fontSize: '3rem', color: '#ff6a00' }}></i>
-          </div>
-          <h2 className="mb-2 fw-bold text-dark">Welcome Back</h2>
-          <p className="text-muted mb-4">Please enter your credentials to access the cosmic dashboard.</p>
-          <form onSubmit={handleLogin}>
-            <div className="mb-4 text-start">
-              <label className="small fw-bold text-muted mb-2 ms-1">ADMIN PASSWORD</label>
-              <input 
-                type="password" 
-                className="form-control admin-input py-3" 
-                placeholder="••••••••"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                autoFocus
-              />
+      <div className="admin-login-page-v2 d-flex align-items-center justify-content-center">
+        <div className="login-card-master shadow-2xl">
+          {/* Left Side - Form */}
+          <div className="login-side-left bg-white p-4 p-lg-5">
+            <div className="login-form-content">
+              <div className="mb-5">
+                <div className="d-flex align-items-center gap-2 mb-3">
+                  <div className="login-brand-dot"></div>
+                  <h4 className="fw-bold mb-0 tracking-tighter" style={{ color: '#1e293b' }}>AstroAva <span className="text-primary">Admin</span></h4>
+                </div>
+                <h2 className="fw-bold text-dark h3">Welcome back</h2>
+                <p className="text-muted small">Please enter your details to sign in.</p>
+              </div>
+
+              <form onSubmit={handleLogin}>
+                <div className="mb-4">
+                  <label className="form-label small fw-semibold text-dark">Email Address</label>
+                  <div className="input-group-modern">
+                    <i className="fas fa-envelope"></i>
+                    <input 
+                      type="email" 
+                      className="form-control" 
+                      placeholder="admin@astroava.com"
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      autoFocus
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div className="mb-4">
+                  <label className="form-label small fw-semibold text-dark">Password</label>
+                  <div className="input-group-modern">
+                    <i className="fas fa-lock"></i>
+                    <input 
+                      type={showPassword ? "text" : "password"} 
+                      className="form-control" 
+                      placeholder="••••••••"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      required
+                    />
+                    <button 
+                      type="button" 
+                      className="password-toggle-btn"
+                      onClick={() => setShowPassword(!showPassword)}
+                    >
+                      <i className={`fas ${showPassword ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="d-flex justify-content-between align-items-center mb-4">
+                  <div className="form-check">
+                    <input className="form-check-input" type="checkbox" id="rememberMe" />
+                    <label className="form-check-label small text-muted" htmlFor="rememberMe">Remember me</label>
+                  </div>
+                  <a href="#" className="small text-primary text-decoration-none fw-semibold">Forgot password?</a>
+                </div>
+
+                <button 
+                  type="submit" 
+                  className={`btn btn-premium-login w-100 py-3 mb-3 d-flex align-items-center justify-content-center gap-2 ${isLoading ? 'disabled' : ''}`}
+                  disabled={isLoading}
+                >
+                  {isLoading ? (
+                    <>
+                      <span className="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                      <span>Authenticating...</span>
+                    </>
+                  ) : (
+                    'Sign in'
+                  )}
+                </button>
+              </form>
             </div>
-            <button type="submit" className="btn-premium w-100 py-3 shadow-sm">
-              Unlock Dashboard <i className="fas fa-arrow-right ms-2"></i>
-            </button>
-          </form>
+
+            <div className="login-footer-mini mt-auto pt-3 border-top d-flex justify-content-between align-items-center">
+              <span className="text-muted extra-small">© 2026 AstroAva</span>
+              <div className="d-flex gap-3">
+                <a href="#" className="text-muted extra-small text-decoration-none">Privacy</a>
+                <a href="#" className="text-muted extra-small text-decoration-none">Terms</a>
+              </div>
+            </div>
+          </div>
+
+          {/* Right Side - Image */}
+          <div className="login-side-right d-none d-md-block">
+            <img 
+              src="/astroava_login.png" 
+              alt="AstroAva Unique Branding" 
+              className="login-full-img"
+            />
+          </div>
         </div>
       </div>
     );
@@ -58,7 +151,7 @@ function AdminDashboard() {
           <div className="col-lg-2">
             <aside className="admin-sidebar">
               <div className="admin-logo-box text-center">
-                <span className="admin-logo-text">Cosmic Admin</span>
+                <span className="admin-logo-text">AstroAva Admin</span>
               </div>
               
               <nav className="flex-grow-1">

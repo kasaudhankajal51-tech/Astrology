@@ -10,6 +10,7 @@ import loveRoutes from './routes/loveRoutes.js';
 import leadRoutes from './routes/leadRoutes.js';
 import blogRoutes from './routes/blogRoutes.js';
 import jobRoutes from './routes/jobRoutes.js';
+import authRoutes from './routes/authRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -77,6 +78,7 @@ app.use('/api/love', loveRoutes);
 app.use('/api/leads', leadRoutes);
 app.use('/api/blogs', blogRoutes);
 app.use('/api/jobs', jobRoutes);
+app.use('/api/auth', authRoutes);
 
 
 

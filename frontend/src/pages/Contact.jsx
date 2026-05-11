@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { useSettings } from '../context/SettingsContext';
 
 function Contact() {
+  const { settings } = useSettings();
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
 
   const handleSubmit = (e) => {
@@ -17,9 +19,9 @@ function Contact() {
           {/* Left Side */}
           <div className="contact-left">
             <h2>Contact Us</h2>
-            <p><i className="fas fa-building"></i> Lorem ipsum dolor sit amet consectetur, adipisicing elit. Animi, vitae.</p>
-            <p><i className="fas fa-phone"></i> +91 8418903966, +91 8529637412</p>
-            <p><i className="fas fa-envelope"></i> mail@dsastro.com</p>
+            <p><i className="fas fa-building"></i> {settings?.address || 'Varanasi, Uttar Pradesh, India'}</p>
+            <p><i className="fas fa-phone"></i> {settings?.contactPhone || '+91 98765 43210'}</p>
+            <p><i className="fas fa-envelope"></i> {settings?.contactEmail || 'support@astroava.com'}</p>
             <img src="/images/logo.png" alt="logo" className="contact-logo" />
           </div>
 

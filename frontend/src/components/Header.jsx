@@ -1,7 +1,9 @@
 import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 function Header() {
+  const { settings } = useSettings();
   useEffect(() => {
     // AOS Init
     if (window.AOS) {
@@ -353,7 +355,7 @@ function Header() {
                 </svg>
               </div>
               <div className="fb-logo-name" style={{ fontSize: 'clamp(18px, 2vw, 24px)', fontWeight: '700', color: 'var(--text-heading)', fontFamily: 'var(--font-serif)' }}>
-                Astro<em style={{ fontStyle: 'normal', color: 'var(--primary-color)' }}>Ava</em>
+                {settings?.siteName?.split('Astro')[0] || 'Astro'}<em style={{ fontStyle: 'normal', color: 'var(--primary-color)' }}>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em>
               </div>
             </Link>
              
@@ -400,7 +402,7 @@ function Header() {
 
       <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header border-bottom">
-          <h5 className="offcanvas-title fw-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>AstroAva</h5>
+          <h5 className="offcanvas-title fw-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>{settings?.siteName || 'AstroAva'}</h5>
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body p-0">

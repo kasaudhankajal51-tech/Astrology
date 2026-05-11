@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import AdminLeads from './AdminLeads';
 import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
+import AdminSettings from './AdminSettings';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -414,13 +415,7 @@ function AdminDashboard() {
 
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
-          {activeTab === 'settings' && (
-            <div className="empty-state">
-              <i className="fas fa-cog fa-4x"></i>
-              <h3>Platform Settings</h3>
-              <p>Configure your site preferences and security settings here.</p>
-            </div>
-          )}
+          {activeTab === 'settings' && <AdminSettings />}
         </main>
       </div>
     </div>

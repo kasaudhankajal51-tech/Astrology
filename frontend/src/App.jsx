@@ -32,10 +32,12 @@ import CourseDetail from './pages/CourseDetail';
 import Careers from './pages/Careers';
 import BlogDetail from './pages/BlogDetail';
 import { Toaster } from 'react-hot-toast';
+import { SettingsProvider } from './context/SettingsContext';
 
 function App() {
   return (
-    <BrowserRouter>
+    <SettingsProvider>
+      <BrowserRouter>
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       <Routes>
@@ -75,6 +77,7 @@ function App() {
         <Route path="/admin" element={<AdminDashboard />} />
       </Routes>
     </BrowserRouter>
+    </SettingsProvider>
   );
 }
 

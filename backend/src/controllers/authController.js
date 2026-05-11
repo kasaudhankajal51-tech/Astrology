@@ -3,7 +3,7 @@ export const login = async (req, res) => {
 
   // Simple hardcoded check for now, can be expanded to DB later
   const ADMIN_EMAIL = process.env.ADMIN_EMAIL || 'admin@astroava.com';
-  const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'admin123';
+  const ADMIN_PASS = process.env.ADMIN_PASSWORD || 'AstroAva@2026!';
 
   if (email === ADMIN_EMAIL && password === ADMIN_PASS) {
     return res.status(200).json({

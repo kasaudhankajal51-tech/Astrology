@@ -274,7 +274,7 @@ function AdminDashboard() {
                 {activeTab === 'dashboard' && 'Admin Overview'}
                 {activeTab === 'leads' && `${leadFilter} Analytics`}
                 {activeTab === 'blogs' && 'Content Studio'}
-                {activeTab === 'jobs' && 'Expert Network'}
+                {activeTab === 'jobs' && 'Team Hiring'}
                 {activeTab === 'settings' && 'Platform Settings'}
               </div>
               <div className="topbar-breadcrumb">
@@ -333,7 +333,7 @@ function AdminDashboard() {
                     <div className="sc-delta">{stats.expertNetwork.delta}</div>
                   </div>
                   <div className="sc-value">{stats.expertNetwork.value}</div>
-                  <div className="sc-label">Expert Network</div>
+                  <div className="sc-label">Team Hiring</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
                 <div className="stat-card stat-card--rose">

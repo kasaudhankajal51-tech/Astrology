@@ -439,20 +439,8 @@ body {
 
 .sidebar--collapsed .sidebar { width: var(--sb-width-collapsed); }
 
-/* Subtle star-field effect on sidebar */
-.sidebar::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background-image:
-    radial-gradient(1px 1px at 20% 20%, rgba(255,255,255,0.15) 0%, transparent 100%),
-    radial-gradient(1px 1px at 60% 50%, rgba(255,255,255,0.1) 0%, transparent 100%),
-    radial-gradient(1px 1px at 80% 80%, rgba(255,255,255,0.12) 0%, transparent 100%),
-    radial-gradient(1px 1px at 40% 70%, rgba(255,255,255,0.08) 0%, transparent 100%),
-    radial-gradient(1px 1px at 15% 60%, rgba(255,255,255,0.1) 0%, transparent 100%),
-    radial-gradient(1px 1px at 90% 30%, rgba(255,255,255,0.12) 0%, transparent 100%);
-  pointer-events: none;
-}
+/* No star-field for light sidebar */
+.sidebar::before { display: none; }
 
 /* Glow accent line on right edge */
 .sidebar::after {
@@ -500,7 +488,7 @@ body {
   font-family: var(--font-display);
   font-size: 15px;
   font-weight: 700;
-  color: #fff;
+  color: var(--text-primary);
   white-space: nowrap;
 }
 
@@ -514,7 +502,7 @@ body {
   height: 24px;
   border-radius: 6px;
   border: 1px solid var(--sb-border);
-  background: rgba(255,255,255,0.04);
+  background: var(--sb-surface);
   color: var(--sb-text);
   font-size: 9px;
   cursor: pointer;
@@ -525,7 +513,7 @@ body {
   transition: background var(--t), color var(--t);
 }
 
-.sb-toggle:hover { background: rgba(255,255,255,0.1); color: #fff; }
+.sb-toggle:hover { background: var(--border); color: var(--text-primary); }
 
 .sb-nav {
   flex: 1;
@@ -543,7 +531,7 @@ body {
   display: block;
   font-size: 10px;
   font-weight: 500;
-  color: rgba(255,255,255,0.25);
+  color: var(--text-muted);
   letter-spacing: 0.1em;
   padding: 12px 10px 6px;
   text-transform: uppercase;
@@ -579,14 +567,14 @@ body {
 }
 
 .sb-item:hover {
-  background: rgba(255,255,255,0.06);
-  color: rgba(255,255,255,0.85);
+  background: var(--sb-surface);
+  color: var(--text-primary);
 }
 
 .sb-item--active {
-  background: rgba(59, 130, 246, 0.15) !important;
-  color: #fff !important;
-  font-weight: 500;
+  background: rgba(59, 130, 246, 0.08) !important;
+  color: var(--sb-accent) !important;
+  font-weight: 600;
 }
 
 .sb-item--active i { color: var(--violet); }
@@ -609,7 +597,7 @@ body {
   display: flex;
   align-items: center;
   gap: 10px;
-  background: rgba(0,0,0,0.2);
+  background: var(--sb-surface);
 }
 
 .sb-profile {
@@ -644,7 +632,7 @@ body {
 .sb-profile-name {
   font-size: 13px;
   font-weight: 500;
-  color: rgba(255,255,255,0.85);
+  color: var(--text-primary);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -652,7 +640,7 @@ body {
 
 .sb-profile-role {
   font-size: 11px;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-muted);
   white-space: nowrap;
 }
 
@@ -663,7 +651,7 @@ body {
   border-radius: var(--r-sm);
   border: 1px solid var(--sb-border);
   background: none;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-muted);
   font-size: 12px;
   cursor: pointer;
   display: flex;

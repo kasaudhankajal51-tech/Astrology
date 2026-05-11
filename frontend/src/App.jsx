@@ -31,6 +31,7 @@ import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
 import Careers from './pages/Careers';
 import BlogDetail from './pages/BlogDetail';
+import AdminLogin from './pages/AdminLogin';
 import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
 
@@ -75,6 +76,7 @@ function App() {
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-failed" element={<PaymentFailed />} />
         <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </BrowserRouter>
     </SettingsProvider>

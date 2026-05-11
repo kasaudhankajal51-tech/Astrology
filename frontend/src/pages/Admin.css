@@ -191,28 +191,28 @@ body {
   position: absolute;
   left: 14px;
   font-size: 13px;
-  color: rgba(255,255,255,0.3);
+  color: var(--text-muted);
   pointer-events: none;
 }
 
 .lf-input-wrap input {
   width: 100%;
   padding: 12px 14px 12px 40px;
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: var(--r-sm);
-  color: #fff;
+  color: var(--text-primary);
   font-family: var(--font-body);
   font-size: 14px;
   outline: none;
   transition: border-color var(--t), background var(--t);
 }
 
-.lf-input-wrap input::placeholder { color: rgba(255,255,255,0.25); }
+.lf-input-wrap input::placeholder { color: var(--text-muted); }
 
 .lf-input-wrap input:focus {
-  border-color: var(--violet);
-  background: rgba(124,106,247,0.08);
+  border-color: var(--sb-accent);
+  background: var(--surface);
 }
 
 .lf-eye {

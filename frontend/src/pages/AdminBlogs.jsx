@@ -175,16 +175,60 @@ function AdminBlogs() {
                       className="be-thumb mb-3"
                     />
                     <div className="lf-group mb-4">
-                      <label className="be-label">Featured Image URL</label>
-                      <div className="lf-input-wrap">
-                        <i className="fas fa-image"></i>
-                        <input 
-                          type="text" 
-                          className="be-input" 
-                          value={currentBlog.image} 
-                          onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} 
-                          placeholder="Paste image link here..." 
-                        />
+                      <label className="be-label">Featured Image Source</label>
+                      
+                      {/* Option 1: URL */}
+                      <div className="mb-3">
+                        <span className="text-muted small d-block mb-2">Option A: Paste Image URL</span>
+                        <div className="position-relative">
+                          <i className="fas fa-link text-muted" style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', fontSize: '13px' }}></i>
+                          <input 
+                            type="text" 
+                            className="be-input" 
+                            style={{ paddingLeft: '42px' }}
+                            value={currentBlog.image?.startsWith('data:') ? '' : currentBlog.image || ''} 
+                            onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} 
+                            placeholder="Paste image URL here..." 
+                          />
+                        </div>
+                      </div>
+
+                      {/* Option 2: Upload */}
+                      <div>
+                        <span className="text-muted small d-block mb-2">Option B: Select from Device</span>
+                        <div className="d-grid">
+                          <label className="lf-btn py-2 px-3 m-0 text-center cursor-pointer" style={{ fontSize: '12.5px', background: 'rgba(59, 130, 246, 0.05)', color: 'var(--sb-accent)', border: '1px dashed var(--sb-accent)' }}>
+                            <i className="fas fa-upload me-2"></i> Choose Local File
+                            <input 
+                              type="file" 
+                              hidden 
+                              accept="image/*"
+                              onChange={(e) => {
+                                const file = e.target.files[0];
+                                if (file) {
+                                  const reader = new FileReader();
+                                  reader.onloadend = () => {
+                                    setCurrentBlog({...currentBlog, image: reader.result});
+                                    toast.success('Local file selected');
+                                  };
+                                  reader.readAsDataURL(file);
+                                }
+                              }}
+                            />
+                          </label>
+                        </div>
+                        {currentBlog.image && currentBlog.image.startsWith('data:') && (
+                          <div className="mt-2 text-center">
+                            <span className="text-success small"><i className="fas fa-check-circle me-1"></i> Local file ready</span>
+                            <button 
+                              type="button" 
+                              className="btn btn-link btn-sm text-danger d-block mx-auto"
+                              onClick={() => setCurrentBlog({...currentBlog, image: ''})}
+                            >
+                              Remove file
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
 
@@ -337,7 +381,7 @@ function AdminBlogs() {
                           src={blog.image || 'https://via.placeholder.com/60'} 
                           alt="thumb" 
                           className="rounded" 
-                          style={{ width: '50px', height: '35px', objectFit: 'cover', border: '1px solid #eee' }} 
+                          style={{ width: '50px', height: '35px', objectFit: 'cover', border: '1px solid var(--border)' }} 
                         />
                         <div>
                           <div className="td-value text-truncate" style={{ maxWidth: '250px' }}>{blog.title}</div>

@@ -9,6 +9,7 @@ const leadSchema = new mongoose.Schema({
   consultationType: { type: String },
   message: { type: String },
   paymentStatus: { type: String, enum: ['Pending', 'Completed', 'Failed'], default: 'Pending' },
+  status: { type: String, enum: ['Pending', 'In Progress', 'Completed', 'Rejected'], default: 'Pending' },
   transactionId: { type: String },
 }, { timestamps: true });
 

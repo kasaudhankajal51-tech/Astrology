@@ -1385,3 +1385,45 @@ body {
   accent-color: var(--violet);
 }
 
+/* Lead Actions Dropdown */
+.action-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  min-width: 160px;
+  z-index: 1000;
+  padding: 8px 0;
+  margin-top: 5px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  padding: 10px 16px;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background var(--t);
+  text-align: left;
+}
+
+.dropdown-item:hover {
+  background: var(--main-bg);
+}
+
+.dropdown-divider {
+  height: 1px;
+  background: var(--border);
+  margin: 6px 0;
+}
+
+.dropdown-label {
+  letter-spacing: 0.5px;
+}

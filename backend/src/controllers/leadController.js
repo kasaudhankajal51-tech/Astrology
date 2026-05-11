@@ -258,3 +258,36 @@ export const exportLeads = asyncHandler(async (req, res) => {
   await workbook.xlsx.write(res);
   res.end();
 });
+
+// @desc    Update lead status (Admin)
+// @route   PUT /api/leads/:id/status
+export const updateLeadStatus = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  
+  const lead = await Lead.findByIdAndUpdate(
+    req.params.id, 
+    { status: status }, 
+    { new: true, runValidators: true }
+  );
+
+  if (!lead) {
+    res.status(404);
+    throw new Error('Lead not found');
+  }
+
+  res.json({ success: true, message: 'Status updated successfully', lead });
+});
+
+// @desc    Delete lead (Admin)
+// @route   DELETE /api/leads/:id
+export const deleteLead = asyncHandler(async (req, res) => {
+  const lead = await Lead.findById(req.params.id);
+
+  if (!lead) {
+    res.status(404);
+    throw new Error('Lead not found');
+  }
+
+  await lead.deleteOne();
+  res.json({ success: true, message: 'Lead removed' });
+});

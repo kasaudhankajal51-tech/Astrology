@@ -6,7 +6,7 @@ function AdminBlogs() {
   const [isLoading, setIsLoading] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [currentBlog, setCurrentBlog] = useState({
-    title: '', slug: '', content: '', excerpt: '', category: 'Astrology', image: '', tags: '', isPublished: false
+    title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false
   });
 
   const ADMIN_PASS = 'admin123';
@@ -51,15 +51,15 @@ function AdminBlogs() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success(currentBlog._id ? 'Blog Updated' : 'Blog Created');
+        toast.success(currentBlog._id ? 'Article Updated' : 'Article Published');
         setIsEditing(false);
-        setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Astrology', image: '', tags: '', isPublished: false });
+        setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false });
         fetchBlogs();
       } else {
         toast.error(data.message);
       }
     } catch (err) {
-      toast.error('Error saving blog');
+      toast.error('Error saving article');
     }
   };
 
@@ -69,10 +69,11 @@ function AdminBlogs() {
       tags: blog.tags.join(', ')
     });
     setIsEditing(true);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure?')) return;
+    if (!window.confirm('This action cannot be undone. Delete this article?')) return;
     try {
       const res = await fetch(`http://localhost:5000/api/blogs/${id}`, {
         method: 'DELETE',
@@ -80,7 +81,7 @@ function AdminBlogs() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Blog deleted');
+        toast.success('Article removed');
         fetchBlogs();
       }
     } catch (err) {
@@ -88,159 +89,272 @@ function AdminBlogs() {
     }
   };
 
+  const toggleTag = (tag) => {
+    const currentTags = currentBlog.tags ? currentBlog.tags.split(',').map(t => t.trim()) : [];
+    if (currentTags.includes(tag)) {
+      setCurrentBlog({...currentBlog, tags: currentTags.filter(t => t !== tag).join(', ')});
+    } else {
+      setCurrentBlog({...currentBlog, tags: [...currentTags, tag].filter(t => t).join(', ')});
+    }
+  };
+
   return (
-    <div className="animate__animated animate__fadeIn">
-      <div className="d-flex justify-content-between align-items-center mb-4">
+    <div className="admin-blogs-container">
+      {/* Header */}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-4">
         <div>
-          <h3 className="fw-bold mb-1">Content Management</h3>
-          <p className="text-muted small">Manage your platform's articles and news</p>
+          <h2 className="topbar-title fs-4 mb-1">Content Studio</h2>
+          <p className="text-muted small mb-0">Craft and manage cosmic wisdom for your audience</p>
         </div>
         <button 
-          className="btn-premium px-4" 
-          onClick={() => { setIsEditing(!isEditing); if(!isEditing) setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Astrology', image: '', tags: '', isPublished: false }); }}
+          className="lf-btn py-2 px-4 m-0" 
+          onClick={() => { setIsEditing(!isEditing); if(!isEditing) setCurrentBlog({ title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false }); }}
         >
           {isEditing ? (
-            <><i className="fas fa-times"></i> Cancel Edit</>
+            <><i className="fas fa-arrow-left me-2"></i> Back to Catalog</>
           ) : (
-            <><i className="fas fa-plus"></i> Write New Article</>
+            <><i className="fas fa-plus-circle me-2"></i> Create New Article</>
           )}
         </button>
       </div>
 
-      {isEditing && (
-        <div className="admin-card blog-editor-card mb-5">
-          <div className="admin-card-header">
-            <h5 className="mb-0 fw-bold">{currentBlog._id ? 'Edit Article' : 'Compose New Article'}</h5>
+      {isEditing ? (
+        <div className="blog-editor-card animate__animated animate__fadeIn">
+          <div className="be-header">
+            <div className="d-flex align-items-center gap-3">
+              <div className="sb-logo-orb" style={{ width: '40px', height: '40px' }}>
+                <i className="fas fa-pen-nib"></i>
+              </div>
+              <div>
+                <h5 className="mb-0 fw-bold">{currentBlog._id ? 'Edit Masterpiece' : 'Compose New Article'}</h5>
+                <span className="text-muted small">Drafting in {currentBlog.category}</span>
+              </div>
+            </div>
+            <div className="d-flex align-items-center gap-3">
+              <label className="be-switch">
+                <input 
+                  type="checkbox" 
+                  checked={currentBlog.isPublished} 
+                  onChange={e => setCurrentBlog({...currentBlog, isPublished: e.target.checked})} 
+                />
+                <span className="fw-bold small">{currentBlog.isPublished ? 'Published' : 'Draft'}</span>
+              </label>
+            </div>
           </div>
-          <div className="admin-card-body">
+          
+          <div className="be-body">
             <form onSubmit={handleSubmit}>
               <div className="row g-4">
-                <div className="col-md-6">
-                  <label className="small fw-bold text-muted mb-2">ARTICLE TITLE</label>
-                  <input type="text" className="form-control admin-input" value={currentBlog.title} onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} required placeholder="Enter a catchy title..." />
-                </div>
-                <div className="col-md-6">
-                  <label className="small fw-bold text-muted mb-2">URL SLUG</label>
-                  <input type="text" className="form-control admin-input" value={currentBlog.slug} onChange={e => setCurrentBlog({...currentBlog, slug: e.target.value})} required placeholder="e.g. astrology-trends-2024" />
-                </div>
-                <div className="col-md-6">
-                  <label className="small fw-bold text-muted mb-2">CATEGORY</label>
-                  <select className="form-select admin-input" value={currentBlog.category} onChange={e => setCurrentBlog({...currentBlog, category: e.target.value})}>
-                    <option value="Vedic Astrology">Vedic Astrology</option>
-                    <option value="Numerology">Numerology</option>
-                    <option value="Tarot Reading">Tarot Reading</option>
-                    <option value="Palmistry">Palmistry</option>
-                    <option value="Vastu Shastra">Vastu Shastra</option>
-                    <option value="Zodiac Insights">Zodiac Insights</option>
-                    <option value="Relationship Advice">Relationship Advice</option>
-                    <option value="Career Guidance">Career Guidance</option>
-                    <option value="Spiritual Healing">Spiritual Healing</option>
-                    <option value="Festivals & Muhurat">Festivals & Muhurat</option>
-                  </select>
-                </div>
-                <div className="col-md-6">
-                  <label className="small fw-bold text-muted mb-2">FEATURED IMAGE URL</label>
-                  <input type="text" className="form-control admin-input" value={currentBlog.image} onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} placeholder="https://..." />
-                </div>
-                <div className="col-12">
-                  <label className="small fw-bold text-muted mb-2">EXCERPT (Short Summary)</label>
-                  <textarea className="form-control admin-input" rows="2" value={currentBlog.excerpt} onChange={e => setCurrentBlog({...currentBlog, excerpt: e.target.value})} placeholder="Write a brief summary..."></textarea>
-                </div>
-                <div className="col-12">
-                  <label className="small fw-bold text-muted mb-2">MAIN CONTENT</label>
-                  <textarea className="form-control admin-input" rows="12" value={currentBlog.content} onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} required placeholder="Start writing your cosmic wisdom here..."></textarea>
-                </div>
-                <div className="col-md-12">
-                  <label className="small fw-bold text-muted mb-2">TAGS (Type or select from below)</label>
-                  <input type="text" className="form-control admin-input mb-2" value={currentBlog.tags} onChange={e => setCurrentBlog({...currentBlog, tags: e.target.value})} placeholder="zodiac, stars, planets" />
-                  <div className="d-flex flex-wrap gap-2">
-                    {['Horoscope', 'Planets', 'Remedies', 'Future', 'Zodiac', 'Meditation', 'Karma', 'Spirituality', 'Success', 'Predictions'].map(tag => (
-                      <span 
-                        key={tag} 
-                        className="badge-trending" 
-                        style={{ cursor: 'pointer', background: currentBlog.tags.includes(tag) ? '#ff6a00' : 'rgba(255,106,0,0.1)', color: currentBlog.tags.includes(tag) ? 'white' : '#ff6a00' }}
-                        onClick={() => {
-                          const currentTags = currentBlog.tags ? currentBlog.tags.split(',').map(t => t.trim()) : [];
-                          if (currentTags.includes(tag)) {
-                            setCurrentBlog({...currentBlog, tags: currentTags.filter(t => t !== tag).join(', ')});
-                          } else {
-                            setCurrentBlog({...currentBlog, tags: [...currentTags, tag].filter(t => t).join(', ')});
-                          }
-                        }}
-                      >
-                        + {tag}
-                      </span>
-                    ))}
+                {/* Visual Preview Side */}
+                <div className="col-lg-4 order-lg-2">
+                  <div className="sticky-top" style={{ top: '20px', zIndex: 5 }}>
+                    <label className="be-label">Cover Preview</label>
+                    <img 
+                      src={currentBlog.image || 'https://images.unsplash.com/photo-1532968961962-8a0cb3a2d4f5?auto=format&fit=crop&q=80&w=800'} 
+                      alt="preview" 
+                      className="be-thumb mb-3"
+                    />
+                    <div className="lf-group mb-4">
+                      <label className="be-label">Featured Image URL</label>
+                      <div className="lf-input-wrap">
+                        <i className="fas fa-image"></i>
+                        <input 
+                          type="text" 
+                          className="be-input" 
+                          value={currentBlog.image} 
+                          onChange={e => setCurrentBlog({...currentBlog, image: e.target.value})} 
+                          placeholder="Paste image link here..." 
+                        />
+                      </div>
+                    </div>
+
+                    <label className="be-label">Popular Tags</label>
+                    <div className="d-flex flex-wrap gap-2">
+                      {['Horoscope', 'Planets', 'Remedies', 'Zodiac', 'Spirituality', 'Predictions', 'Success', 'Karma'].map(tag => (
+                        <span 
+                          key={tag} 
+                          className={`be-tag-chip ${currentBlog.tags.includes(tag) ? 'be-tag-chip--active' : ''}`}
+                          onClick={() => toggleTag(tag)}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-                <div className="col-md-4 d-flex align-items-end">
-                  <div className="form-check form-switch mb-2">
-                    <input className="form-check-input" type="checkbox" role="switch" id="isPublished" checked={currentBlog.isPublished} onChange={e => setCurrentBlog({...currentBlog, isPublished: e.target.checked})} />
-                    <label className="form-check-label fw-bold small ms-2" htmlFor="isPublished">VISIBLE TO PUBLIC</label>
+
+                {/* Editor Side */}
+                <div className="col-lg-8 order-lg-1">
+                  <div className="row g-4">
+                    <div className="col-md-12">
+                      <label className="be-label">Article Title</label>
+                      <input 
+                        type="text" 
+                        className="be-input fs-5 fw-bold" 
+                        value={currentBlog.title} 
+                        onChange={e => setCurrentBlog({...currentBlog, title: e.target.value})} 
+                        required 
+                        placeholder="The Secret of 12th House..." 
+                      />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="be-label">URL Slug</label>
+                      <input 
+                        type="text" 
+                        className="be-input" 
+                        value={currentBlog.slug} 
+                        onChange={e => setCurrentBlog({...currentBlog, slug: e.target.value})} 
+                        required 
+                        placeholder="secret-of-12th-house" 
+                      />
+                    </div>
+
+                    <div className="col-md-6">
+                      <label className="be-label">Category</label>
+                      <select 
+                        className="be-input be-select" 
+                        value={currentBlog.category} 
+                        onChange={e => setCurrentBlog({...currentBlog, category: e.target.value})}
+                      >
+                        <option value="Vedic Astrology">Vedic Astrology</option>
+                        <option value="Numerology">Numerology</option>
+                        <option value="Tarot Reading">Tarot Reading</option>
+                        <option value="Zodiac Insights">Zodiac Insights</option>
+                        <option value="Relationship Advice">Relationship Advice</option>
+                        <option value="Spiritual Healing">Spiritual Healing</option>
+                        <option value="Festivals & Muhurat">Festivals & Muhurat</option>
+                      </select>
+                    </div>
+
+                    <div className="col-12">
+                      <label className="be-label">Excerpt (Short Summary)</label>
+                      <textarea 
+                        className="be-input" 
+                        rows="3" 
+                        value={currentBlog.excerpt} 
+                        onChange={e => setCurrentBlog({...currentBlog, excerpt: e.target.value})} 
+                        placeholder="A magnetic hook for your readers..."
+                      ></textarea>
+                    </div>
+
+                    <div className="col-12">
+                      <label className="be-label">Main Content (Markdown Supported)</label>
+                      <textarea 
+                        className="be-input" 
+                        rows="15" 
+                        value={currentBlog.content} 
+                        onChange={e => setCurrentBlog({...currentBlog, content: e.target.value})} 
+                        required 
+                        placeholder="Deep dive into the cosmos..."
+                        style={{ lineHeight: '1.6', fontSize: '15px' }}
+                      ></textarea>
+                    </div>
+                    
+                    <div className="col-12">
+                      <label className="be-label">All Tags (Comma separated)</label>
+                      <input 
+                        type="text" 
+                        className="be-input" 
+                        value={currentBlog.tags} 
+                        onChange={e => setCurrentBlog({...currentBlog, tags: e.target.value})} 
+                        placeholder="stars, planets, moon, remedies" 
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="mt-5 pt-3 border-top d-flex gap-3">
-                <button type="submit" className="btn-premium px-5 py-3 shadow">
-                  <i className="fas fa-save me-2"></i> {currentBlog._id ? 'Update Article' : 'Publish Article'}
-                </button>
-                <button type="button" className="btn btn-premium-outline px-4" onClick={() => setIsEditing(false)}>Save to Drafts</button>
+
+              <div className="mt-5 pt-4 border-top d-flex justify-content-between align-items-center">
+                <span className="text-muted small">Last autosaved: Just now</span>
+                <div className="d-flex gap-3">
+                  <button type="button" className="btn btn-link text-decoration-none text-muted" onClick={() => setIsEditing(false)}>Cancel</button>
+                  <button type="submit" className="lf-btn py-3 px-5 m-0">
+                    <i className="fas fa-paper-plane me-2"></i> {currentBlog._id ? 'Update Content' : 'Publish Article'}
+                  </button>
+                </div>
               </div>
             </form>
           </div>
         </div>
-      )}
-
-      <div className="admin-card">
-        <div className="admin-card-header">
-          <h5 className="mb-0 fw-bold">Live Content Catalog</h5>
-          <span className="badge-premium badge-course">{blogs.length} Articles</span>
-        </div>
-        <div className="admin-card-body">
-          <div className="table-responsive">
-            <table className="admin-table">
-              <thead>
+      ) : (
+        <div className="leads-table-wrap animate__animated animate__fadeIn">
+          <table className="leads-table">
+            <thead>
+              <tr>
+                <th>Article / Thumbnail</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Last Modified</th>
+                <th className="text-end">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {isLoading ? (
                 <tr>
-                  <th>Cover / Title</th>
-                  <th>Topic</th>
-                  <th>Visibility</th>
-                  <th>Actions</th>
+                  <td colSpan="5">
+                    <div className="dash-loading">
+                      <div className="dash-spin"></div>
+                      <span>Loading catalog...</span>
+                    </div>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {isLoading ? (
-                  <tr><td colSpan="4" className="text-center py-5"><div className="spinner-border text-primary"></div></td></tr>
-                ) : (
-                  blogs.map(blog => (
-                    <tr key={blog._id}>
-                      <td style={{ minWidth: '300px' }}>
-                        <div className="d-flex align-items-center gap-3">
-                          <img src={blog.image || 'https://via.placeholder.com/60'} alt="cover" className="rounded shadow-sm" style={{ width: '60px', height: '45px', objectFit: 'cover' }} />
-                          <div className="fw-bold text-dark">{blog.title}</div>
+              ) : blogs.length === 0 ? (
+                <tr>
+                  <td colSpan="5">
+                    <div className="table-empty">
+                      <i className="fas fa-feather fa-2x mb-3 d-block opacity-25"></i>
+                      No articles found. Start writing!
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                blogs.map(blog => (
+                  <tr key={blog._id}>
+                    <td>
+                      <div className="lead-name-cell">
+                        <img 
+                          src={blog.image || 'https://via.placeholder.com/60'} 
+                          alt="thumb" 
+                          className="rounded" 
+                          style={{ width: '50px', height: '35px', objectFit: 'cover', border: '1px solid #eee' }} 
+                        />
+                        <div>
+                          <div className="td-value text-truncate" style={{ maxWidth: '250px' }}>{blog.title}</div>
+                          <div className="td-muted small">/{blog.slug}</div>
                         </div>
-                      </td>
-                      <td>
-                        <span className="badge-premium badge-webinar">{blog.category}</span>
-                      </td>
-                      <td>
-                        <span className={`badge-premium ${blog.isPublished ? 'badge-completed' : 'badge-pending'}`}>
-                          {blog.isPublished ? 'PUBLISHED' : 'DRAFT'}
-                        </span>
-                      </td>
-                      <td>
-                        <div className="d-flex gap-2">
-                          <button className="btn btn-sm btn-premium-outline" onClick={() => handleEdit(blog)} title="Edit"><i className="fas fa-edit"></i></button>
-                          <button className="btn btn-sm btn-outline-danger border-light" onClick={() => handleDelete(blog._id)} title="Delete"><i className="fas fa-trash-alt"></i></button>
-                        </div>
-                      </td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
-          </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span className="tag tag--cyan">{blog.category}</span>
+                    </td>
+                    <td>
+                      <div className="status-pill">
+                        <div className={`dot ${blog.isPublished ? 'dot--green' : 'dot--amber'}`}></div>
+                        <span>{blog.isPublished ? 'Published' : 'Draft'}</span>
+                      </div>
+                    </td>
+                    <td>
+                      <div className="td-value">{new Date(blog.updatedAt).toLocaleDateString()}</div>
+                      <div className="td-muted">{new Date(blog.updatedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    </td>
+                    <td>
+                      <div className="d-flex justify-content-end gap-2">
+                        <button className="topbar-icon-btn btn-sm" onClick={() => handleEdit(blog)} title="Edit">
+                          <i className="fas fa-edit"></i>
+                        </button>
+                        <button className="topbar-icon-btn btn-sm text-danger" onClick={() => handleDelete(blog._id)} title="Delete">
+                          <i className="fas fa-trash-alt"></i>
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
         </div>
-      </div>
+      )}
     </div>
   );
 }

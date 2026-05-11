@@ -1101,7 +1101,7 @@ function Home() {
         </section>
 
         {/* Latest Blogs Section */}
-        {blogs.length > 0 && (
+        {/* {blogs.length > 0 && (
           <section className="home-blog-section py-5" style={{ background: '#fff' }}>
             <div className="container py-4">
               <div className="text-center mb-5">
@@ -1130,7 +1130,7 @@ function Home() {
               </div>
             </div>
           </section>
-        )}
+        )} */}
 
       </main>
 

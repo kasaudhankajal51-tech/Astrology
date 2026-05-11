@@ -310,7 +310,7 @@ function AdminDashboard() {
           {activeTab === 'dashboard' && (
             <div className="dash-home">
               <div className="dash-greeting mb-4">
-                <h2>AstroAva Admin Studio</h2>
+                <h2>Welcome AstroAva Admin</h2>
                 <p>Real-time analytics and management for your cosmic ecosystem.</p>
               </div>
 

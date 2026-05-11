@@ -121,7 +121,7 @@ function AdminLeads({ activeFilter }) {
       <div className="d-flex flex-column gap-3 mb-4">
         <div className="d-flex flex-column flex-xl-row justify-content-between gap-3">
           {/* Search Bar */}
-          <div className="search-bar flex-grow-1" style={{ maxWidth: '400px', background: '#fff' }}>
+          <div className="search-bar flex-grow-1" style={{ maxWidth: '400px', background: 'var(--surface)' }}>
             <i className="fas fa-search"></i>
             <input 
               type="text" 
@@ -172,7 +172,7 @@ function AdminLeads({ activeFilter }) {
         </div>
       </div>
 
-      <div className="leads-table-wrap card border-0 shadow-sm" style={{ minHeight: '400px' }}>
+      <div className="leads-table-wrap border-0 shadow-sm" style={{ minHeight: '400px', background: 'var(--surface)' }}>
         <table className="leads-table w-100">
           <thead>
             <tr>
@@ -259,7 +259,7 @@ function AdminLeads({ activeFilter }) {
                           className="action-dropdown shadow-lg animate__animated animate__fadeIn"
                           style={{ position: 'absolute', top: '100%', right: '0', zIndex: '99999', display: 'block' }}
                         >
-                          <div className="dropdown-label text-start px-3 py-2 text-muted small fw-bold" style={{ borderBottom: '1px solid #eee', marginBottom: '5px' }}>
+                          <div className="dropdown-label text-start px-3 py-2 text-muted small fw-bold" style={{ borderBottom: '1px solid var(--border)', marginBottom: '5px' }}>
                             Update Status
                           </div>
                           <button 

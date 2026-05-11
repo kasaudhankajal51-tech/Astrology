@@ -19,7 +19,10 @@ function AdminDashboard() {
     totalLeads: { value: '0', delta: '0%' },
     activeBlogs: { value: '0', delta: '0%' },
     expertNetwork: { value: '0', delta: '0%' },
-    platformTraffic: { value: '0', delta: '0%' }
+    globalReach: { value: '0', delta: '0%' },
+    courseLeads: { value: '0', delta: '0%' },
+    consultingLeads: { value: '0', delta: '0%' },
+    webinarLeads: { value: '0', delta: '0%' }
   });
 
   const fetchStats = async () => {
@@ -303,46 +306,86 @@ function AdminDashboard() {
         <main className="page-content">
           {activeTab === 'dashboard' && (
             <div className="dash-home">
-              <div className="dash-greeting">
-                <h2>Welcome back, Chief!</h2>
-                <p>Here's what's happening with your astrology platform today.</p>
+              <div className="dash-greeting mb-4">
+                <h2>AstroAva Admin Studio</h2>
+                <p>Real-time analytics and management for your cosmic ecosystem.</p>
               </div>
 
-              <div className="stat-grid">
+              <div className="stat-grid mb-4">
+                {/* Course Leads */}
                 <div className="stat-card stat-card--violet">
                   <div className="sc-top">
-                    <div className="sc-icon sc-icon--violet"><i className="fas fa-users"></i></div>
+                    <div className="sc-icon sc-icon--violet"><i className="fas fa-graduation-cap"></i></div>
+                    <div className="sc-delta">{stats.courseLeads.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.courseLeads.value}</div>
+                  <div className="sc-label">Course Leads</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+
+                {/* Consulting Leads */}
+                <div className="stat-card stat-card--cyan">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--cyan"><i className="fas fa-user-md"></i></div>
+                    <div className="sc-delta">{stats.consultingLeads.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.consultingLeads.value}</div>
+                  <div className="sc-label">Consulting Leads</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+
+                {/* Webinar Leads */}
+                <div className="stat-card stat-card--amber">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--amber"><i className="fas fa-video"></i></div>
+                    <div className="sc-delta">{stats.webinarLeads.delta}</div>
+                  </div>
+                  <div className="sc-value">{stats.webinarLeads.value}</div>
+                  <div className="sc-label">Webinar Leads</div>
+                  <div className="sc-bar"><div className="sc-bar-fill"></div></div>
+                </div>
+
+                {/* Total Leads */}
+                <div className="stat-card stat-card--indigo">
+                  <div className="sc-top">
+                    <div className="sc-icon sc-icon--indigo"><i className="fas fa-users"></i></div>
                     <div className="sc-delta">{stats.totalLeads.delta}</div>
                   </div>
                   <div className="sc-value">{stats.totalLeads.value}</div>
                   <div className="sc-label">Total Leads</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
-                <div className="stat-card stat-card--cyan">
+
+                {/* Global Reach */}
+                <div className="stat-card stat-card--emerald">
                   <div className="sc-top">
-                    <div className="sc-icon sc-icon--cyan"><i className="fas fa-newspaper"></i></div>
-                    <div className="sc-delta">{stats.activeBlogs.delta}</div>
+                    <div className="sc-icon sc-icon--emerald"><i className="fas fa-chart-line"></i></div>
+                    <div className="sc-delta">{stats.globalReach.delta}</div>
                   </div>
-                  <div className="sc-value">{stats.activeBlogs.value}</div>
-                  <div className="sc-label">Active Blogs</div>
+                  <div className="sc-value">{stats.globalReach.value}</div>
+                  <div className="sc-label">Global Reach</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
-                <div className="stat-card stat-card--amber">
+
+                {/* Team Hiring */}
+                <div className="stat-card stat-card--blue">
                   <div className="sc-top">
-                    <div className="sc-icon sc-icon--amber"><i className="fas fa-briefcase"></i></div>
+                    <div className="sc-icon sc-icon--blue"><i className="fas fa-briefcase"></i></div>
                     <div className="sc-delta">{stats.expertNetwork.delta}</div>
                   </div>
                   <div className="sc-value">{stats.expertNetwork.value}</div>
                   <div className="sc-label">Team Hiring</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
+
+                {/* Active Blogs */}
                 <div className="stat-card stat-card--rose">
                   <div className="sc-top">
-                    <div className="sc-icon sc-icon--rose"><i className="fas fa-chart-line"></i></div>
-                    <div className="sc-delta">{stats.platformTraffic.delta}</div>
+                    <div className="sc-icon sc-icon--rose"><i className="fas fa-newspaper"></i></div>
+                    <div className="sc-delta">{stats.activeBlogs.delta}</div>
                   </div>
-                  <div className="sc-value">{stats.platformTraffic.value}</div>
-                  <div className="sc-label">Platform Traffic</div>
+                  <div className="sc-value">{stats.activeBlogs.value}</div>
+                  <div className="sc-label">Active Articles</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
               </div>

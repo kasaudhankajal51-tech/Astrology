@@ -859,18 +859,21 @@ body {
 .stat-card--cyan::before   { background: var(--cyan); }
 .stat-card--amber::before  { background: var(--amber); }
 .stat-card--rose::before   { background: var(--rose); }
+.stat-card--indigo::before { background: #6366f1; }
+.stat-card--emerald::before { background: #10b981; }
+.stat-card--blue::before { background: #3b82f6; }
 
 .sc-top {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .sc-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: var(--r-sm);
+  width: 38px;
+  height: 38px;
+  border-radius: var(--r-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -880,7 +883,10 @@ body {
 .sc-icon--violet { background: var(--violet-soft); color: var(--violet); }
 .sc-icon--cyan   { background: var(--cyan-soft);   color: var(--cyan); }
 .sc-icon--amber  { background: var(--amber-soft);  color: var(--amber); }
-.sc-icon--rose   { background: var(--rose-soft);   color: var(--rose); }
+.sc-icon--rose   { background: #fff1f2; color: var(--rose); }
+.sc-icon--indigo { background: #eef2ff; color: #6366f1; }
+.sc-icon--emerald { background: #ecfdf5; color: #10b981; }
+.sc-icon--blue { background: #eff6ff; color: #3b82f6; }
 
 .sc-delta {
   font-size: 11px;

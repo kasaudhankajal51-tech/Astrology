@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useSettings } from '../context/SettingsContext';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -121,8 +122,10 @@ const EMISVG = () => (
 );
 
 function Footer() {
+  const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
 
+  // Map social links from settings
   const socialLinks = [
     { 
       name: 'Facebook', 
@@ -132,7 +135,7 @@ function Footer() {
         </svg>
       ), 
       color: '#0084FF', 
-      link: '#' 
+      link: settings?.facebookUrl || '#' 
     },
     { 
       name: 'Instagram', 
@@ -142,7 +145,7 @@ function Footer() {
         </svg>
       ), 
       color: '#E1306C', 
-      link: '#' 
+      link: settings?.instagramUrl || '#' 
     },
     { 
       name: 'X', 
@@ -152,7 +155,7 @@ function Footer() {
         </svg>
       ), 
       color: '#000000', 
-      link: '#' 
+      link: settings?.twitterUrl || '#' 
     },
     { 
       name: 'YouTube', 
@@ -162,17 +165,15 @@ function Footer() {
         </svg>
       ), 
       color: '#FF0000', 
-      link: '#' 
+      link: settings?.youtubeUrl || '#' 
     },
     { 
-      name: 'LinkedIn', 
+      name: 'WhatsApp', 
       icon: (
-        <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-          <path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-        </svg>
+        <i className="fab fa-whatsapp" style={{fontSize: '20px'}}></i>
       ), 
-      color: '#0077B5', 
-      link: '#' 
+      color: '#25D366', 
+      link: settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : '#' 
     },
   ];
 
@@ -361,9 +362,9 @@ function Footer() {
                     <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
                   </svg>
                 </div>
-                <div className="fb-logo-name">Astro<em>Ava</em></div>
+                <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
               </Link>
-              <p className="fb-desc">Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.</p>
+              <p className="fb-desc">{settings?.siteDescription || 'Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.'}</p>
             </div>
             <div>
               <h5 className="fb-head">Consultations</h5>
@@ -379,6 +380,8 @@ function Footer() {
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/admin">Admin</Link></li>
               </ul>
             </div>
             <div>
@@ -458,11 +461,11 @@ function Footer() {
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
               </svg>
             </div>
-            <div className="fb-logo-name">Astro<em>Ava</em></div>
+            <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
           </Link>
 
           {/* Description */}
-          <p className="phone-desc">Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.</p>
+          <p className="phone-desc">{settings?.siteDescription || 'Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.'}</p>
 
           {/* Divider */}
           <div className="phone-hr" />
@@ -483,6 +486,8 @@ function Footer() {
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/admin">Admin</Link></li>
               </ul>
             </div>
           </div>

@@ -363,6 +363,7 @@ const AstrologyCourses = ({ onEnroll }) => {
             </div>
           ))}
         </div>
+
       </section>
     </>
   );
@@ -394,6 +395,21 @@ function Home() {
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const [blogs, setBlogs] = useState([]);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const res = await fetch('http://localhost:5000/api/blogs');
+        const data = await res.json();
+        if (data.success) setBlogs(data.blogs.slice(0, 3));
+      } catch (err) {
+        console.error('Error fetching blogs for home');
+      }
+    };
+    fetchBlogs();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -1083,6 +1099,38 @@ function Home() {
             </div>
           </div>
         </section>
+
+        {/* Latest Blogs Section */}
+        {/* {blogs.length > 0 && (
+          <section className="home-blog-section py-5" style={{ background: '#fff' }}>
+            <div className="container py-4">
+              <div className="text-center mb-5">
+                <h5 className="section-subtitle" data-aos="fade-up">✨ News & Insights ✨</h5>
+                <h2 className="section-title mt-2" data-aos="fade-up">Latest from our Blog</h2>
+              </div>
+              <div className="row g-4">
+                {blogs.map((blog, idx) => (
+                  <div className="col-md-4" key={blog._id} data-aos="fade-up" data-aos-delay={idx * 100}>
+                    <div className="card h-100 border-0 shadow-sm" style={{ borderRadius: '20px', overflow: 'hidden' }}>
+                      <div style={{ height: '200px', overflow: 'hidden' }}>
+                        <img src={blog.image || 'https://via.placeholder.com/400x250'} className="card-img-top" alt={blog.title} style={{ height: '100%', objectFit: 'cover' }} />
+                      </div>
+                      <div className="card-body p-4">
+                        <span className="badge bg-light text-primary mb-2">{blog.category}</span>
+                        <h5 className="card-title fw-bold" style={{ fontFamily: 'var(--font-serif)', fontSize: '1.25rem' }}>{blog.title}</h5>
+                        <p className="card-text text-muted small mb-4">{blog.excerpt.substring(0, 100)}...</p>
+                        <Link to={`/blog/${blog.slug}`} className="btn-read" style={{ width: 'auto', display: 'inline-block', padding: '8px 20px', fontSize: '0.9rem' }}>Read Article</Link>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+              <div className="text-center mt-5">
+                <Link to="/blog" className="btn mystic-btn-outline px-5">View All Articles</Link>
+              </div>
+            </div>
+          </section>
+        )} */}
 
       </main>
 

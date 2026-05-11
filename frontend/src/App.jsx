@@ -23,17 +23,22 @@ import Webinar from './pages/Webinar';
 import Payment from './pages/Payment';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailed from './pages/PaymentFailed';
-import AdminLeads from './pages/AdminLeads';
+import AdminDashboard from './pages/AdminDashboard';
 import AstroShop from './pages/AstroShop';
 import ShopCategory from './pages/ShopCategory';
 import ConsultationDetail from './pages/ConsultationDetail';
 import Courses from './pages/Courses';
 import CourseDetail from './pages/CourseDetail';
+import Careers from './pages/Careers';
+import BlogDetail from './pages/BlogDetail';
+import AdminLogin from './pages/AdminLogin';
 import { Toaster } from 'react-hot-toast';
+import { SettingsProvider } from './context/SettingsContext';
 
 function App() {
   return (
-    <BrowserRouter>
+    <SettingsProvider>
+      <BrowserRouter>
       <ScrollToTop />
       <Toaster position="top-center" reverseOrder={false} />
       <Routes>
@@ -43,6 +48,7 @@ function App() {
           <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
+          <Route path="blog/:slug" element={<BlogDetail />} />
           <Route path="contact" element={<Contact />} />
           <Route path="privacy" element={<PrivacyPolicy />} />
           <Route path="terms" element={<Terms />} />
@@ -60,6 +66,7 @@ function App() {
           <Route path="love" element={<Love />} />
           <Route path="astro-shop" element={<AstroShop />} />
           <Route path="astro-shop/:category" element={<ShopCategory />} />
+          <Route path="careers" element={<Careers />} />
         </Route>
         
         {/* Standalone Landing Pages & Admin (No Header/Footer) */}
@@ -68,9 +75,11 @@ function App() {
         <Route path="/payment" element={<Payment />} />
         <Route path="/payment-success" element={<PaymentSuccess />} />
         <Route path="/payment-failed" element={<PaymentFailed />} />
-        <Route path="/admin/leads" element={<AdminLeads />} />
+        <Route path="/admin" element={<AdminDashboard />} />
+        <Route path="/admin/login" element={<AdminLogin />} />
       </Routes>
     </BrowserRouter>
+    </SettingsProvider>
   );
 }
 

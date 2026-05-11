@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 function AdminLeads({ activeFilter }) {
   const [leads, setLeads] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ startDate: '', endDate: '', type: activeFilter || '' });
 
   const ADMIN_PASS = 'admin123';
@@ -28,13 +29,21 @@ function AdminLeads({ activeFilter }) {
     }
   };
 
+  const filteredLeads = leads.filter(lead => 
+    lead.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    lead.phone.includes(searchTerm) ||
+    (lead.courseName && lead.courseName.toLowerCase().includes(searchTerm.toLowerCase())) ||
+    (lead.consultationType && lead.consultationType.toLowerCase().includes(searchTerm.toLowerCase()))
+  );
+
   useEffect(() => {
     setFilters(prev => ({ ...prev, type: activeFilter || '' }));
   }, [activeFilter]);
 
   useEffect(() => {
     fetchLeads();
-  }, [filters]);
+  }, [activeFilter, filters.startDate, filters.endDate]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });
@@ -46,47 +55,66 @@ function AdminLeads({ activeFilter }) {
     window.open(exportUrl, '_blank');
   };
 
+  const handleRefresh = () => {
+    setFilters({ startDate: '', endDate: '', type: activeFilter || '' });
+    setSearchTerm('');
+    fetchLeads();
+  };
+
   return (
     <div className="admin-leads-content">
-      {/* Filters Area */}
-      <div className="d-flex flex-column flex-md-row align-items-start align-items-md-center justify-content-between gap-3 mb-4">
-        <div className="d-flex flex-wrap gap-3 align-items-center">
-          <div className="lf-group mb-0">
-            <div className="lf-input-wrap">
-              <i className="fas fa-calendar-alt"></i>
-              <input 
-                type="date" 
-                name="startDate" 
-                value={filters.startDate} 
-                onChange={handleFilterChange} 
-                className="bg-white border text-dark"
-                style={{ paddingLeft: '35px', height: '40px', fontSize: '13px' }}
-              />
+      {/* Search & Filters Row */}
+      <div className="d-flex flex-column gap-3 mb-4">
+        <div className="d-flex flex-column flex-xl-row justify-content-between gap-3">
+          {/* Search Bar */}
+          <div className="search-bar flex-grow-1" style={{ maxWidth: '400px', background: '#fff' }}>
+            <i className="fas fa-search"></i>
+            <input 
+              type="text" 
+              placeholder="Search by name, email, or phone..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ width: '100%' }}
+            />
+          </div>
+
+          <div className="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
+            <div className="lf-group mb-0" style={{ minWidth: '130px', flex: 1 }}>
+              <div className="lf-input-wrap">
+                <i className="fas fa-calendar-alt"></i>
+                <input 
+                  type="date" 
+                  name="startDate" 
+                  value={filters.startDate} 
+                  onChange={handleFilterChange} 
+                  className="bg-white border text-dark"
+                  style={{ paddingLeft: '32px', height: '42px', fontSize: '12px' }}
+                />
+              </div>
+            </div>
+            <span className="text-muted small px-1 d-none d-sm-inline">to</span>
+            <div className="lf-group mb-0" style={{ minWidth: '130px', flex: 1 }}>
+              <div className="lf-input-wrap">
+                <i className="fas fa-calendar-alt"></i>
+                <input 
+                  type="date" 
+                  name="endDate" 
+                  value={filters.endDate} 
+                  onChange={handleFilterChange} 
+                  className="bg-white border text-dark"
+                  style={{ paddingLeft: '32px', height: '42px', fontSize: '12px' }}
+                />
+              </div>
+            </div>
+            <div className="d-flex gap-2 ms-sm-2">
+              <button onClick={handleExport} className="topbar-icon-btn" title="Export CSV" style={{ height: '42px', width: '42px' }}>
+                <i className="fas fa-file-export"></i>
+              </button>
+              <button onClick={handleRefresh} className="topbar-icon-btn" title="Reset & Refresh" style={{ height: '42px', width: '42px' }}>
+                <i className="fas fa-sync-alt"></i>
+              </button>
             </div>
           </div>
-          <span className="text-muted small">to</span>
-          <div className="lf-group mb-0">
-            <div className="lf-input-wrap">
-              <i className="fas fa-calendar-alt"></i>
-              <input 
-                type="date" 
-                name="endDate" 
-                value={filters.endDate} 
-                onChange={handleFilterChange} 
-                className="bg-white border text-dark"
-                style={{ paddingLeft: '35px', height: '40px', fontSize: '13px' }}
-              />
-            </div>
-          </div>
-        </div>
-        
-        <div className="d-flex gap-2 w-100 w-md-auto justify-content-end">
-          <button onClick={handleExport} className="lf-btn py-2 px-3 m-0" style={{ boxShadow: 'none', fontSize: '12px' }}>
-            <i className="fas fa-download me-2"></i> Export
-          </button>
-          <button onClick={fetchLeads} className="topbar-icon-btn">
-            <i className="fas fa-sync-alt"></i>
-          </button>
         </div>
       </div>
 
@@ -113,17 +141,17 @@ function AdminLeads({ activeFilter }) {
                   </div>
                 </td>
               </tr>
-            ) : leads.length === 0 ? (
+            ) : filteredLeads.length === 0 ? (
               <tr>
                 <td colSpan="6">
                   <div className="table-empty">
                     <i className="fas fa-folder-open fa-2x mb-2 d-block opacity-25"></i>
-                    No leads found for this selection.
+                    No leads found for "{searchTerm}".
                   </div>
                 </td>
               </tr>
             ) : (
-              leads.map(lead => (
+              filteredLeads.map(lead => (
                 <tr key={lead._id}>
                   <td>
                     <div className="td-value">{new Date(lead.createdAt).toLocaleDateString()}</div>

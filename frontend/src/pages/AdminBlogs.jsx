@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 function AdminBlogs() {
   const [blogs, setBlogs] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [currentBlog, setCurrentBlog] = useState({
     title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false
@@ -25,6 +26,12 @@ function AdminBlogs() {
       setIsLoading(false);
     }
   };
+
+  const filteredBlogs = blogs.filter(blog => 
+    blog.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    blog.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    (blog.tags && blog.tags.some(t => t.toLowerCase().includes(searchTerm.toLowerCase())))
+  );
 
   useEffect(() => {
     fetchBlogs();
@@ -117,6 +124,19 @@ function AdminBlogs() {
           )}
         </button>
       </div>
+
+      {!isEditing && (
+        <div className="search-bar mb-4" style={{ maxWidth: '400px', background: '#fff' }}>
+          <i className="fas fa-search"></i>
+          <input 
+            type="text" 
+            placeholder="Search articles by title, category, or tags..." 
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            style={{ width: '100%' }}
+          />
+        </div>
+      )}
 
       {isEditing ? (
         <div className="blog-editor-card animate__animated animate__fadeIn">
@@ -299,17 +319,17 @@ function AdminBlogs() {
                     </div>
                   </td>
                 </tr>
-              ) : blogs.length === 0 ? (
+              ) : filteredBlogs.length === 0 ? (
                 <tr>
                   <td colSpan="5">
                     <div className="table-empty">
                       <i className="fas fa-feather fa-2x mb-3 d-block opacity-25"></i>
-                      No articles found. Start writing!
+                      {searchTerm ? `No articles match "${searchTerm}"` : 'No articles found. Start writing!'}
                     </div>
                   </td>
                 </tr>
               ) : (
-                blogs.map(blog => (
+                filteredBlogs.map(blog => (
                   <tr key={blog._id}>
                     <td>
                       <div className="lead-name-cell">

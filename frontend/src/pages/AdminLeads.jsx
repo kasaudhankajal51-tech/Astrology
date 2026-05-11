@@ -9,10 +9,10 @@ function AdminLeads({ activeFilter }) {
 
   const ADMIN_PASS = 'admin123';
 
-  const fetchLeads = async () => {
+  const fetchLeads = async (currentFilters = filters) => {
     setIsLoading(true);
     try {
-      const query = new URLSearchParams(filters).toString();
+      const query = new URLSearchParams(currentFilters).toString();
       const res = await fetch(`http://localhost:5000/api/leads?${query}`, {
         headers: { 'x-admin-secret': ADMIN_PASS }
       });
@@ -38,12 +38,23 @@ function AdminLeads({ activeFilter }) {
   );
 
   useEffect(() => {
-    setFilters(prev => ({ ...prev, type: activeFilter || '' }));
+    // Sync filters and trigger immediate fetch
+    setFilters(prev => {
+      const newFilters = { ...prev, type: activeFilter || '' };
+      fetchLeads(newFilters); // Fetch with fresh filters immediately
+      return newFilters;
+    });
+
+    const interval = setInterval(() => fetchLeads(filters), 60000);
+    return () => clearInterval(interval);
   }, [activeFilter]);
 
+  // Handle date filter changes separately
   useEffect(() => {
-    fetchLeads();
-  }, [activeFilter, filters.startDate, filters.endDate]);
+    if (filters.startDate || filters.endDate) {
+      fetchLeads(filters);
+    }
+  }, [filters.startDate, filters.endDate]);
 
   const handleFilterChange = (e) => {
     setFilters({ ...filters, [e.target.name]: e.target.value });

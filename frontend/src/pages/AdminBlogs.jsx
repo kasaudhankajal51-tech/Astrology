@@ -10,13 +10,14 @@ function AdminBlogs() {
     title: '', slug: '', content: '', excerpt: '', category: 'Vedic Astrology', image: '', tags: '', isPublished: false
   });
 
-  const ADMIN_PASS = 'admin123';
-
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/blogs/admin', {
-        headers: { 'x-admin-secret': ADMIN_PASS }
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('/api/blogs/admin', {
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) setBlogs(data.blogs);
@@ -41,15 +42,15 @@ function AdminBlogs() {
     e.preventDefault();
     const method = currentBlog._id ? 'PUT' : 'POST';
     const url = currentBlog._id 
-      ? `http://localhost:5000/api/blogs/${currentBlog._id}` 
-      : 'http://localhost:5000/api/blogs';
-
+      ? `/api/blogs/${currentBlog._id}` 
+      : '/api/blogs';
     try {
+      const token = localStorage.getItem('adminToken');
       const res = await fetch(url, {
         method,
         headers: { 
           'Content-Type': 'application/json',
-          'x-admin-secret': ADMIN_PASS 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           ...currentBlog,
@@ -82,9 +83,12 @@ function AdminBlogs() {
   const handleDelete = async (id) => {
     if (!window.confirm('This action cannot be undone. Delete this article?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/blogs/${id}`, {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/blogs/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-secret': ADMIN_PASS }
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {

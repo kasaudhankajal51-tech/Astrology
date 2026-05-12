@@ -5,13 +5,14 @@ function AdminJobs() {
   const [applications, setApplications] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const ADMIN_PASS = 'admin123';
-
   const fetchApplications = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/jobs', {
-        headers: { 'x-admin-secret': ADMIN_PASS }
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('/api/jobs', {
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) setApplications(data.applications);
@@ -28,11 +29,12 @@ function AdminJobs() {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/jobs/${id}`, {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/jobs/${id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
-          'x-admin-secret': ADMIN_PASS 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ status })
       });

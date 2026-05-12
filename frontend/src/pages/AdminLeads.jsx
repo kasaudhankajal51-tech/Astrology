@@ -7,14 +7,15 @@ function AdminLeads({ activeFilter }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [filters, setFilters] = useState({ startDate: '', endDate: '', type: activeFilter || '' });
 
-  const ADMIN_PASS = 'admin123';
-
   const fetchLeads = async (currentFilters = filters) => {
     setIsLoading(true);
     try {
+      const token = localStorage.getItem('adminToken');
       const query = new URLSearchParams(currentFilters).toString();
-      const res = await fetch(`http://localhost:5000/api/leads?${query}&_t=${Date.now()}`, {
-        headers: { 'x-admin-secret': ADMIN_PASS }
+      const res = await fetch(`/api/leads?${query}&_t=${Date.now()}`, {
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {
@@ -61,18 +62,20 @@ function AdminLeads({ activeFilter }) {
   };
 
   const handleExport = () => {
+    const token = localStorage.getItem('adminToken');
     const query = new URLSearchParams(filters).toString();
-    const exportUrl = `http://localhost:5000/api/leads/export?${query}&x-admin-secret=${ADMIN_PASS}`;
+    const exportUrl = `/api/leads/export?${query}&token=${token}`;
     window.open(exportUrl, '_blank');
   };
 
   const handleStatusChange = async (id, newStatus) => {
     try {
-      const res = await fetch(`http://localhost:5000/api/leads/${id}/status`, {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/leads/${id}/status`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
-          'x-admin-secret': ADMIN_PASS 
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({ status: newStatus })
       });
@@ -93,9 +96,12 @@ function AdminLeads({ activeFilter }) {
   const handleDeleteLead = async (id) => {
     if (!window.confirm('Are you sure you want to delete this lead?')) return;
     try {
-      const res = await fetch(`http://localhost:5000/api/leads/${id}`, {
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch(`/api/leads/${id}`, {
         method: 'DELETE',
-        headers: { 'x-admin-secret': ADMIN_PASS }
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {

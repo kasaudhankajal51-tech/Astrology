@@ -26,8 +26,11 @@ function AdminDashboard() {
 
   const fetchStats = async () => {
     try {
-      const res = await fetch('http://localhost:5000/api/admin/stats', {
-        headers: { 'x-admin-secret': 'admin123' } // Match middleware requirement
+      const token = localStorage.getItem('adminToken');
+      const res = await fetch('/api/admin/stats', {
+        headers: { 
+          'Authorization': `Bearer ${token}`
+        }
       });
       const data = await res.json();
       if (data.success) {
@@ -96,8 +99,8 @@ function AdminDashboard() {
       <aside className="sidebar">
         <div className="sb-head">
           <div className="sb-logo">
-            <div className="sb-logo-orb">A</div>
-            <div className="sb-logo-text">AstroAva <em>Pro</em></div>
+            <div className="sb-logo-orb">{stats?.siteName?.charAt(0) || 'A'}</div>
+            <div className="sb-logo-text">{stats?.siteName || 'AstroAva'} <em>Pro</em></div>
           </div>
           <button className="sb-toggle" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
             <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>

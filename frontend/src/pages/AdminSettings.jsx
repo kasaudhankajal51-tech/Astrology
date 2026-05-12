@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { toast } from 'react-hot-toast';
 
 function AdminSettings() {
   const [activeTab, setActiveTab] = useState('general');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState({ type: '', text: '' });
   const [settings, setSettings] = useState({
     siteName: '',
     siteTitle: '',
@@ -31,7 +32,7 @@ function AdminSettings() {
       }
     } catch (err) {
       console.error('Failed to fetch settings:', err);
-      setMessage({ type: 'error', text: 'Failed to load settings.' });
+      toast.error('Failed to load platform configuration.');
     } finally {
       setLoading(false);
     }
@@ -52,7 +53,6 @@ function AdminSettings() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
-    setMessage({ type: '', text: '' });
 
     try {
       const token = localStorage.getItem('adminToken');
@@ -60,20 +60,18 @@ function AdminSettings() {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-          'x-admin-secret': 'admin123' // Maintain backward compatibility if middleware uses it
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify(settings)
       });
       const data = await res.json();
       if (data.success) {
-        setMessage({ type: 'success', text: 'Settings updated successfully!' });
-        setTimeout(() => setMessage({ type: '', text: '' }), 3000);
+        toast.success('Configuration saved successfully!');
       } else {
-        setMessage({ type: 'error', text: data.message || 'Update failed.' });
+        toast.error(data.message || 'Failed to update settings.');
       }
     } catch (err) {
-      setMessage({ type: 'error', text: 'Connection error.' });
+      toast.error('Connection error. Please try again.');
     } finally {
       setSaving(false);
     }
@@ -82,8 +80,12 @@ function AdminSettings() {
   if (loading) {
     return (
       <div className="settings-loading">
-        <div className="spinner"></div>
-        <p>Loading platform configuration...</p>
+        <motion.div 
+          animate={{ rotate: 360 }}
+          transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+          className="spinner"
+        ></motion.div>
+        <p>Syncing with cosmic configuration...</p>
       </div>
     );
   }
@@ -95,217 +97,281 @@ function AdminSettings() {
     >
       <i className={`fas ${icon}`}></i>
       <span>{label}</span>
+      {activeTab === id && (
+        <motion.div 
+          layoutId="activeTab"
+          className="active-tab-indicator"
+        />
+      )}
     </button>
   );
 
   return (
-    <div className="settings-container">
+    <motion.div 
+      initial={{ opacity: 0, y: 10 }}
+      animate={{ opacity: 1, y: 0 }}
+      className="settings-container"
+    >
       <div className="settings-header">
         <div className="sh-info">
           <h1>Platform Configuration</h1>
-          <p>Global settings for AstroAva ecosystem</p>
-        </div>
-        <div className="sh-actions">
-          {message.text && (
-            <div className={`settings-alert alert-${message.type}`}>
-              <i className={`fas ${message.type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle'}`}></i>
-              {message.text}
-            </div>
-          )}
+          <p>Global parameters for the AstroAva ecosystem</p>
         </div>
       </div>
 
       <div className="settings-card">
         <aside className="settings-sidebar">
+          <div className="sidebar-group-label">Core Settings</div>
           <TabButton id="general" label="General Info" icon="fa-info-circle" />
           <TabButton id="social" label="Social Media" icon="fa-share-alt" />
+          
+          <div className="sidebar-group-label mt-4">Advanced</div>
           <TabButton id="integrations" label="Integrations" icon="fa-plug" />
-          <TabButton id="security" label="Security" icon="fa-shield-alt" />
+          <TabButton id="security" label="Security & Access" icon="fa-shield-alt" />
         </aside>
 
         <main className="settings-main">
           <form onSubmit={handleSubmit}>
-            {activeTab === 'general' && (
-              <div className="settings-section">
-                <h3 className="section-title">Site Identity</h3>
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Site Name</label>
-                    <input 
-                      name="siteName" 
-                      value={settings.siteName} 
-                      onChange={handleChange}
-                      placeholder="e.g. AstroAva"
-                    />
+            <AnimatePresence mode="wait">
+              {activeTab === 'general' && (
+                <motion.div 
+                  key="general"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <h3 className="section-title">Site Identity</h3>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Platform Name</label>
+                      <input 
+                        name="siteName" 
+                        value={settings.siteName} 
+                        onChange={handleChange}
+                        placeholder="e.g. AstroAva"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label>SEO Title (Browser Tab)</label>
+                      <input 
+                        name="siteTitle" 
+                        value={settings.siteTitle} 
+                        onChange={handleChange}
+                        placeholder="AstroAva - Best Astrology Services"
+                      />
+                    </div>
+                    <div className="form-group full-width">
+                      <label>Meta Description (SEO)</label>
+                      <textarea 
+                        name="siteDescription" 
+                        value={settings.siteDescription} 
+                        onChange={handleChange}
+                        rows="3"
+                        placeholder="Describe your platform for search engines..."
+                      ></textarea>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label>Site Title (SEO)</label>
-                    <input 
-                      name="siteTitle" 
-                      value={settings.siteTitle} 
-                      onChange={handleChange}
-                      placeholder="Browser tab title"
-                    />
-                  </div>
-                  <div className="form-group full-width">
-                    <label>Meta Description</label>
-                    <textarea 
-                      name="siteDescription" 
-                      value={settings.siteDescription} 
-                      onChange={handleChange}
-                      rows="3"
-                    ></textarea>
-                  </div>
-                </div>
 
-                <h3 className="section-title mt-4">Contact Information</h3>
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Support Email</label>
-                    <input 
-                      name="contactEmail" 
-                      type="email"
-                      value={settings.contactEmail} 
-                      onChange={handleChange}
-                    />
+                  <h3 className="section-title mt-5">Support & Business</h3>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Official Support Email</label>
+                      <div className="input-with-icon">
+                        <i className="fas fa-envelope"></i>
+                        <input 
+                          name="contactEmail" 
+                          type="email"
+                          value={settings.contactEmail} 
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group">
+                      <label>Support Hotline</label>
+                      <div className="input-with-icon">
+                        <i className="fas fa-phone"></i>
+                        <input 
+                          name="contactPhone" 
+                          value={settings.contactPhone} 
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
+                    <div className="form-group full-width">
+                      <label>Business Address</label>
+                      <div className="input-with-icon">
+                        <i className="fas fa-map-marker-alt"></i>
+                        <input 
+                          name="address" 
+                          value={settings.address} 
+                          onChange={handleChange}
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label>Support Phone</label>
-                    <input 
-                      name="contactPhone" 
-                      value={settings.contactPhone} 
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group full-width">
-                    <label>Business Address</label>
-                    <input 
-                      name="address" 
-                      value={settings.address} 
-                      onChange={handleChange}
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
 
-            {activeTab === 'social' && (
-              <div className="settings-section">
-                <h3 className="section-title">Social Prescence</h3>
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label><i className="fab fa-facebook"></i> Facebook URL</label>
-                    <input 
-                      name="facebookUrl" 
-                      value={settings.facebookUrl} 
-                      onChange={handleChange}
-                      placeholder="https://facebook.com/..."
-                    />
+              {activeTab === 'social' && (
+                <motion.div 
+                  key="social"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <h3 className="section-title">Social Ecosystem</h3>
+                  <p className="section-desc">Manage links displayed in the footer and contact sections.</p>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label><i className="fab fa-facebook text-primary"></i> Facebook Page</label>
+                      <input 
+                        name="facebookUrl" 
+                        value={settings.facebookUrl} 
+                        onChange={handleChange}
+                        placeholder="https://facebook.com/astroava"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label><i className="fab fa-instagram text-danger"></i> Instagram Profile</label>
+                      <input 
+                        name="instagramUrl" 
+                        value={settings.instagramUrl} 
+                        onChange={handleChange}
+                        placeholder="https://instagram.com/astroava"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label><i className="fab fa-youtube text-danger"></i> YouTube Channel</label>
+                      <input 
+                        name="youtubeUrl" 
+                        value={settings.youtubeUrl} 
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label><i className="fab fa-whatsapp text-success"></i> WhatsApp Business</label>
+                      <input 
+                        name="whatsappNumber" 
+                        value={settings.whatsappNumber} 
+                        onChange={handleChange}
+                        placeholder="+91 XXXXX XXXXX"
+                      />
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label><i className="fab fa-instagram"></i> Instagram URL</label>
-                    <input 
-                      name="instagramUrl" 
-                      value={settings.instagramUrl} 
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label><i className="fab fa-youtube"></i> YouTube Channel</label>
-                    <input 
-                      name="youtubeUrl" 
-                      value={settings.youtubeUrl} 
-                      onChange={handleChange}
-                    />
-                  </div>
-                  <div className="form-group">
-                    <label><i className="fab fa-whatsapp"></i> WhatsApp Number</label>
-                    <input 
-                      name="whatsappNumber" 
-                      value={settings.whatsappNumber} 
-                      onChange={handleChange}
-                      placeholder="+91..."
-                    />
-                  </div>
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
 
-            {activeTab === 'integrations' && (
-              <div className="settings-section">
-                <h3 className="section-title">Third-party Keys</h3>
-                <p className="section-desc">Configure your payment gateways and analytics tracking.</p>
-                <div className="form-grid">
-                  <div className="form-group">
-                    <label>Razorpay Key ID</label>
-                    <input 
-                      name="razorpayKeyId" 
-                      value={settings.razorpayKeyId} 
-                      onChange={handleChange}
-                      type="password"
-                    />
-                    <small>Sensitive info is masked for security.</small>
+              {activeTab === 'integrations' && (
+                <motion.div 
+                  key="integrations"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <h3 className="section-title">External Gateways</h3>
+                  <p className="section-desc">Manage API keys and tracking IDs for platform services.</p>
+                  <div className="form-grid">
+                    <div className="form-group">
+                      <label>Razorpay Key ID</label>
+                      <div className="input-with-icon">
+                        <i className="fas fa-key"></i>
+                        <input 
+                          name="razorpayKeyId" 
+                          value={settings.razorpayKeyId} 
+                          onChange={handleChange}
+                          type="password"
+                        />
+                      </div>
+                      <small>Used for processing consultations and course payments.</small>
+                    </div>
+                    <div className="form-group">
+                      <label>Google Analytics (G-ID)</label>
+                      <div className="input-with-icon">
+                        <i className="fas fa-chart-line"></i>
+                        <input 
+                          name="googleAnalyticsId" 
+                          value={settings.googleAnalyticsId} 
+                          onChange={handleChange}
+                          placeholder="G-XXXXXXXXXX"
+                        />
+                      </div>
+                    </div>
                   </div>
-                  <div className="form-group">
-                    <label>Google Analytics (G-ID)</label>
-                    <input 
-                      name="googleAnalyticsId" 
-                      value={settings.googleAnalyticsId} 
-                      onChange={handleChange}
-                      placeholder="G-XXXXXXXXXX"
-                    />
-                  </div>
-                </div>
 
-                <div className="maintenance-toggle mt-4">
-                  <div className="mt-info">
-                    <h4>Maintenance Mode</h4>
-                    <p>Show a maintenance page to all users except admins.</p>
+                  <div className="maintenance-box mt-5">
+                    <div className="mt-info">
+                      <h4>Maintenance Mode</h4>
+                      <p>Restrict public access while performing updates.</p>
+                    </div>
+                    <label className="switch-premium">
+                      <input 
+                        type="checkbox" 
+                        name="maintenanceMode"
+                        checked={settings.maintenanceMode}
+                        onChange={handleChange}
+                      />
+                      <span className="slider-premium"></span>
+                    </label>
                   </div>
-                  <label className="switch">
-                    <input 
-                      type="checkbox" 
-                      name="maintenanceMode"
-                      checked={settings.maintenanceMode}
-                      onChange={handleChange}
-                    />
-                    <span className="slider round"></span>
-                  </label>
-                </div>
-              </div>
-            )}
+                </motion.div>
+              )}
 
-            {activeTab === 'security' && (
-              <div className="settings-section">
-                <h3 className="section-title">Admin Access</h3>
-                <div className="alert-info">
-                  <i className="fas fa-info-circle"></i>
-                  <span>Passwords and administrative roles are managed under the user security module.</span>
-                </div>
-                <button type="button" className="btn btn-outline-danger mt-4">
-                  Reset Master Keys
-                </button>
-              </div>
-            )}
+              {activeTab === 'security' && (
+                <motion.div 
+                  key="security"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <h3 className="section-title">Administrative Security</h3>
+                  <div className="security-info-card">
+                    <div className="sic-icon"><i className="fas fa-shield-alt"></i></div>
+                    <div className="sic-text">
+                      <h5>Access Control Info</h5>
+                      <p>Passwords and multi-user roles are managed in the Core Identity module. Ensure your JWT_SECRET is rotated every 90 days for maximum security.</p>
+                    </div>
+                  </div>
+                  
+                  <div className="d-grid mt-4">
+                    <button type="button" className="lf-btn py-3 px-4 bg-light text-dark border w-auto m-0">
+                      <i className="fas fa-history me-2"></i> View Audit Logs
+                    </button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
 
             <div className="settings-footer">
               <button 
                 type="submit" 
-                className={`save-btn ${saving ? 'loading' : ''}`}
+                className={`save-btn-premium ${saving ? 'loading' : ''}`}
                 disabled={saving}
               >
                 {saving ? (
                   <>
-                    <div className="btn-spinner"></div>
-                    Saving...
+                    <motion.div 
+                      animate={{ rotate: 360 }}
+                      transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                      className="btn-spinner"
+                    />
+                    Committing Changes...
                   </>
-                ) : 'Save Changes'}
+                ) : (
+                  <>
+                    <i className="fas fa-save"></i>
+                    Deploy Settings
+                  </>
+                )}
               </button>
             </div>
           </form>
         </main>
       </div>
-    </div>
+    </motion.div>
   );
 }
 

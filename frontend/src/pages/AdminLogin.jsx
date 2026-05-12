@@ -73,7 +73,7 @@ function AdminLogin() {
             >
               A
             </motion.div>
-            <div className="login-brand-name">AstroAva <em>Adminimga</em></div>
+            <div className="login-brand-name">AstroAva <em>Admin</em></div>
           </div>
 
           <div className="login-headline">

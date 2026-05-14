@@ -798,6 +798,24 @@ body {
   scrollbar-color: var(--border) transparent;
 }
 
+/* Helpers for Astrology Leads */
+.birth-info-mini {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.td-value.small {
+  font-size: 13px !important;
+  font-weight: 600;
+}
+
+.td-muted.x-small {
+  font-size: 11px !important;
+  color: var(--text-muted);
+}
+
+
 /* ============================================================
    DASHBOARD HOME
    ============================================================ */

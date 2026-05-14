@@ -187,6 +187,7 @@ function AdminLeads({ activeFilter }) {
               <th>Client Identity</th>
               <th>Contact</th>
               <th>Category</th>
+              <th>Birth Details</th>
               <th>Status</th>
               <th className="text-end px-4">Action</th>
             </tr>
@@ -242,6 +243,16 @@ function AdminLeads({ activeFilter }) {
                     <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '120px' }}>
                       {lead.courseName || lead.consultationType || 'General'}
                     </div>
+                  </td>
+                  <td>
+                    {lead.type === 'Consultation' ? (
+                      <div className="birth-info-mini">
+                        <div className="td-value small">{lead.dob || 'N/A'}</div>
+                        <div className="td-muted x-small">{lead.tob || ''} | {lead.pob || ''}</div>
+                      </div>
+                    ) : (
+                      <div className="td-muted small">-</div>
+                    )}
                   </td>
                   <td>
                     <div className="status-pill">

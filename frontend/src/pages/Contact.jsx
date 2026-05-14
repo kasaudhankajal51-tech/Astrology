@@ -1,14 +1,35 @@
 import { useState } from 'react';
+import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
 import { useSettings } from '../context/SettingsContext';
 
 function Contact() {
   const { settings } = useSettings();
   const [formData, setFormData] = useState({ name: '', email: '', phone: '', message: '' });
 
-  const handleSubmit = (e) => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Message sent! We will contact you soon.');
-    setFormData({ name: '', email: '', phone: '', message: '' });
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ...formData, type: 'Contact' })
+      });
+      const data = await response.json();
+      if (data.success) {
+        toast.success('Message sent! We will contact you soon.');
+        setFormData({ name: '', email: '', phone: '', message: '' });
+      } else {
+        toast.error(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      toast.error('Network Error: ' + error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (

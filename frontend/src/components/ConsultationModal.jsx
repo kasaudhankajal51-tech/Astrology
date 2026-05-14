@@ -23,22 +23,43 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
             </div>
             <div className="modal-form-side">
               <div className="form-header-mini">
+                <img src="/images/premium_tarot.png" alt="Consultation" className="modal-banner-img mb-3" style={{ width: '100%', height: '120px', objectFit: 'cover', borderRadius: '15px' }} />
                 <h3>Consultation Details</h3>
                 <p>Please provide your birth details for accurate analysis</p>
               </div>
               <form onSubmit={handleSubmit} className="modal-form">
                 <div className="form-group mb-3">
                   <label>Full Name</label>
-                  <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Enter your name" />
+                  <input type="text" name="name" value={formData.name} onChange={handleChange} required placeholder="Your Full Name" />
                 </div>
-                <div className="form-group mb-3">
-                  <label>Email Address</label>
-                  <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Enter your email" />
-                </div>
+
                 <div className="form-group mb-3">
                   <label>Phone Number</label>
-                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Enter your phone" />
+                  <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 Digit Phone Number" />
                 </div>
+
+                <div className="form-group mb-3">
+                  <label>Email Address</label>
+                  <input type="email" name="email" value={formData.email} onChange={handleChange} required placeholder="Your Email Address" />
+                </div>
+
+                <div className="birth-details-grid mb-3">
+                  <div className="row">
+                    <div className="col-md-4 mb-3 mb-md-0">
+                      <label>Date of Birth</label>
+                      <input type="date" name="dob" value={formData.dob || ''} onChange={handleChange} required />
+                    </div>
+                    <div className="col-md-4 mb-3 mb-md-0">
+                      <label>Time of Birth</label>
+                      <input type="time" name="tob" value={formData.tob || ''} onChange={handleChange} required />
+                    </div>
+                    <div className="col-md-4">
+                      <label>Place of Birth</label>
+                      <input type="text" name="pob" value={formData.pob || ''} onChange={handleChange} required placeholder="City, State" />
+                    </div>
+                  </div>
+                </div>
+
                 <div className="form-group mb-3">
                   <label>Consultation Type</label>
                   <select name="consultationType" value={formData.consultationType} onChange={handleChange} required className="form-select-custom">
@@ -50,14 +71,15 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                     <option value="Other">Other Concerns</option>
                   </select>
                 </div>
+
                 <div className="form-group mb-4">
-                  <label>Your Message</label>
-                  <textarea name="message" value={formData.message} onChange={handleChange} required placeholder="Describe your concern briefly..." rows="3"></textarea>
+                  <label>Your Message (Optional)</label>
+                  <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Describe your concern briefly..." rows="2"></textarea>
                 </div>
                 <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
-                  {isSubmitting ? 'Booking...' : 'Book Consultation Now'}
+                  {isSubmitting ? 'Booking...' : 'Confirm Consultation Booking'}
                 </button>
-                <p className="secure-text"><i className="fas fa-lock me-2"></i> Your data is safe & private</p>
+                <p className="secure-text"><i className="fas fa-lock me-2"></i> Private & Encrypted Consultation</p>
               </form>
             </div>
           </div>

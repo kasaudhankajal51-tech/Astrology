@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function BlogDetail() {
   const { slug } = useParams();
@@ -10,7 +12,7 @@ function BlogDetail() {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const res = await fetch(`http://localhost:5000/api/blogs/${slug}`);
+        const res = await fetch(`${API_BASE}/api/blogs/${slug}`);
         const data = await res.json();
         if (data.success) {
           setBlog(data.blog);

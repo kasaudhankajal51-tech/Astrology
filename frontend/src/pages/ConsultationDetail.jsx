@@ -2,6 +2,8 @@ import { useParams, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+import API_BASE from '../utils/api';
+
 
 function ConsultationDetail() {
   const { serviceId } = useParams();
@@ -161,7 +163,7 @@ function ConsultationDetail() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const response = await fetch('http://localhost:5000/api/leads', {
+      const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, type: 'Consultation', courseName: service.title })

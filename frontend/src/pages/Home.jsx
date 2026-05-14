@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+import API_BASE from '../utils/api';
+
 
 
 const AstrologyCourses = ({ onEnroll }) => {
@@ -401,7 +403,7 @@ function Home() {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const res = await fetch('http://localhost:5000/api/blogs');
+        const res = await fetch(`${API_BASE}/api/blogs`);
         const data = await res.json();
         if (data.success) setBlogs(data.blogs.slice(0, 3));
       } catch (err) {
@@ -437,7 +439,7 @@ function Home() {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, type: 'Consultation', courseName: 'Professional Consultation' }),

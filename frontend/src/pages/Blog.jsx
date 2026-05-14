@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function Blog() {
   const [blogs, setBlogs] = useState([]);
@@ -17,7 +19,7 @@ function Blog() {
   const fetchBlogs = async () => {
     setIsLoading(true);
     try {
-      const res = await fetch('http://localhost:5000/api/blogs');
+      const res = await fetch(`${API_BASE}/api/blogs`);
       const data = await res.json();
       if (data.success) {
         setBlogs(data.blogs);

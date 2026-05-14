@@ -12,7 +12,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const expertNetworkCount = await JobApplication.countDocuments();
   
   // Specific Category Counts
-  const courseLeads = await Lead.countDocuments({ type: 'Course' });
+  const courseLeads = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] } });
   const consultingLeads = await Lead.countDocuments({ type: 'Consultation' });
   const webinarLeads = await Lead.countDocuments({ type: 'Webinar' });
   const contactLeads = await Lead.countDocuments({ type: 'Contact' });
@@ -25,7 +25,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const recentBlogs = await Blog.countDocuments({ updatedAt: { $gte: lastMonth } });
   const recentJobs = await JobApplication.countDocuments({ createdAt: { $gte: lastMonth } });
   
-  const recentCourses = await Lead.countDocuments({ type: 'Course', createdAt: { $gte: lastMonth } });
+  const recentCourses = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] }, createdAt: { $gte: lastMonth } });
   const recentConsulting = await Lead.countDocuments({ type: 'Consultation', createdAt: { $gte: lastMonth } });
   const recentWebinars = await Lead.countDocuments({ type: 'Webinar', createdAt: { $gte: lastMonth } });
   const recentContacts = await Lead.countDocuments({ type: 'Contact', createdAt: { $gte: lastMonth } });

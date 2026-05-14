@@ -1,9 +1,58 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import ConsultationModal from './ConsultationModal';
+import SuccessModal from './SuccessModal';
+import API_BASE from '../utils/api';
+import toast from 'react-hot-toast';
 
 function Header() {
   const { settings } = useSettings();
+  const [isConsultModalOpen, setIsConsultModalOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    consultationType: 'General Consultation',
+    dob: '',
+    tob: '',
+    pob: '',
+    message: ''
+  });
+
+  const handleConsultChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleConsultSubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const response = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          ...formData, 
+          type: 'Consultation', 
+          courseName: formData.consultationType 
+        })
+      });
+      const data = await response.json();
+      if (data.success) {
+        setIsConsultModalOpen(false);
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '', consultationType: 'General Consultation', dob: '', tob: '', pob: '', message: '' });
+      } else {
+        toast.error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      toast.error('Network Error');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
   useEffect(() => {
     // AOS Init
     if (window.AOS) {
@@ -394,7 +443,7 @@ function Header() {
             </div>
 
             <div className="d-none d-lg-block ms-auto" style={{ flexShrink: 0 }}>
-              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-consult-header">BOOK CONSULTATION</a>
+              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0">BOOK CONSULTATION</button>
             </div>
           </div>
         </nav>
@@ -450,9 +499,9 @@ function Header() {
             <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
             
             <li className="nav-item p-4 d-grid gap-3">
-              <a data-bs-toggle="modal" href="#registerModal" className="btn btn-mobile-cta primary-cta" data-bs-dismiss="offcanvas">
+              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-mobile-cta primary-cta">
                 <i className="fas fa-calendar-check"></i> BOOK CONSULTATION
-              </a>
+              </button>
               <Link to="/certification-courses" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
                 <i className="fas fa-graduation-cap"></i> ENROLL LIVE COURSE
               </Link>
@@ -461,41 +510,21 @@ function Header() {
         </div>
       </div>
 
-      <div className="modal fade" id="registerModal" tabIndex="-1" aria-hidden="true">
-        <div className="modal-dialog modal-dialog-centered">
-          <div className="modal-content border-0 shadow-lg" style={{ borderRadius: '24px' }}>
-            <div className="modal-header border-0 pb-0">
-              <h5 className="modal-title fw-bold">✨ Book Consultation</h5>
-              <button type="button" className="btn-close" data-bs-dismiss="modal"></button>
-            </div>
-            <div className="px-4 pt-3 pb-1 text-center">
-              <img src="/images/consultation_banner.png" alt="Consultation Booking" className="img-fluid rounded-3" style={{ maxHeight: '140px', width: '100%', objectFit: 'cover' }} />
-            </div>
-            <div className="modal-body p-4 pt-2">
-              <form>
-                <div className="mb-3">
-                  <label className="form-label fw-semibold small">Full Name</label>
-                  <input type="text" className="form-control rounded-3" placeholder="Enter your name" required />
-                </div>
-                <div className="mb-3">
-                  <label className="form-label fw-semibold small">Email Address</label>
-                  <input type="email" className="form-control rounded-3" placeholder="Enter your email" required />
-                </div>
-                <div className="mb-4">
-                  <label className="form-label fw-semibold small">Consultation Type</label>
-                  <select className="form-select rounded-3">
-                    <option>Select type</option>
-                    <option>Personal Horoscope</option>
-                    <option>Marriage/Relationship</option>
-                    <option>Career & Business</option>
-                  </select>
-                </div>
-                <button type="submit" className="btn btn-primary w-100 py-3 rounded-pill fw-bold" style={{ background: 'var(--primary-color)' }}>CONFIRM BOOKING</button>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      <ConsultationModal 
+        isOpen={isConsultModalOpen}
+        onClose={() => setIsConsultModalOpen(false)}
+        formData={formData}
+        handleChange={handleConsultChange}
+        handleSubmit={handleConsultSubmit}
+        isSubmitting={isSubmitting}
+      />
+
+      <SuccessModal 
+        isOpen={isSuccessOpen}
+        onClose={() => setIsSuccessOpen(false)}
+        title="Consultation Booked!"
+        message="Your consultation request has been received. Our team will contact you shortly to confirm the schedule."
+      />
     </>
   );
 }

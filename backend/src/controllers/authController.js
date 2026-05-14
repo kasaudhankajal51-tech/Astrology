@@ -4,8 +4,7 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   console.log('--- Login Attempt ---');
-  console.log('Email received:', email);
-
+  
   // Clean environment variables (remove potential quotes and whitespace)
   const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@astroava.com')
     .replace(/['"]+/g, '')
@@ -16,12 +15,25 @@ export const login = async (req, res) => {
     .replace(/['"]+/g, '')
     .trim();
 
-  console.log('Expecting Email (from .env):', ADMIN_EMAIL);
+  const inputEmail = (email || '').toLowerCase().trim();
+  const inputPassword = (password || '').trim(); // Trimming input password to avoid accidental spaces
+
+  const emailMatch = inputEmail === ADMIN_EMAIL;
+  const passwordMatch = inputPassword === ADMIN_PASS;
+
+  console.log('Email received:', inputEmail, `(Length: ${inputEmail.length})`);
+  console.log('Expecting Email:', ADMIN_EMAIL, `(Length: ${ADMIN_EMAIL.length})`);
+  console.log('Password Match:', passwordMatch);
+  
+  if (!passwordMatch) {
+    console.log('Input Password Length:', inputPassword.length);
+    console.log('Expected Password Length:', ADMIN_PASS.length);
+  }
 
   const JWT_SECRET = process.env.JWT_SECRET || 'astro-admin-secret-2026';
 
-  if (email && email.toLowerCase().trim() === ADMIN_EMAIL && password === ADMIN_PASS) {
-    console.log('✅ Login SUCCESS: Credentials matched');
+  if (emailMatch && passwordMatch) {
+    console.log('✅ Login SUCCESS');
     const token = jwt.sign(
       { email: ADMIN_EMAIL, role: 'admin' },
       JWT_SECRET,
@@ -36,9 +48,7 @@ export const login = async (req, res) => {
   }
 
   console.log('❌ Login FAIL: Credentials did not match');
-
-  // DEBUG LOG: Check PM2 logs on server to see this
-  console.warn(`[Auth Fail] IP: ${req.ip} | Input Email: "${email}" | Expecting Email: "${ADMIN_EMAIL}"`);
+  console.warn(`[Auth Fail] IP: ${req.ip} | Email Match: ${emailMatch} | Password Match: ${passwordMatch}`);
 
   return res.status(401).json({
     success: false,

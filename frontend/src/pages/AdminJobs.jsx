@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
 
 function AdminJobs() {
   const [applications, setApplications] = useState([]);
@@ -9,7 +10,7 @@ function AdminJobs() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch('/api/jobs', {
+      const res = await fetch(`${API_BASE}/api/jobs`, {
         headers: { 
           'Authorization': `Bearer ${token}`
         }
@@ -30,7 +31,7 @@ function AdminJobs() {
   const handleStatusUpdate = async (id, status) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/jobs/${id}`, {
+      const res = await fetch(`${API_BASE}/api/jobs/${id}`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',

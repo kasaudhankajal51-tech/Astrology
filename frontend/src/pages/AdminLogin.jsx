@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import API_BASE from '../utils/api';
 import './Admin.css';
 
 function AdminLogin() {
@@ -25,7 +26,7 @@ function AdminLogin() {
     setLoginError('');
     
     try {
-      const response = await fetch('http://82.112.234.253:5000/api/auth/login', {
+      const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),

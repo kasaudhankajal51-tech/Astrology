@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
 
 function AdminLeads({ activeFilter }) {
   const [leads, setLeads] = useState([]);
@@ -12,7 +13,7 @@ function AdminLeads({ activeFilter }) {
     try {
       const token = localStorage.getItem('adminToken');
       const query = new URLSearchParams(currentFilters).toString();
-      const res = await fetch(`/api/leads?${query}&_t=${Date.now()}`, {
+      const res = await fetch(`${API_BASE}/api/leads?${query}&_t=${Date.now()}`, {
         headers: { 
           'Authorization': `Bearer ${token}`
         }
@@ -71,7 +72,7 @@ function AdminLeads({ activeFilter }) {
   const handleStatusChange = async (id, newStatus) => {
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/leads/${id}/status`, {
+      const res = await fetch(`${API_BASE}/api/leads/${id}/status`, {
         method: 'PUT',
         headers: { 
           'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ function AdminLeads({ activeFilter }) {
     if (!window.confirm('Are you sure you want to delete this lead?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/leads/${id}`, {
+      const res = await fetch(`${API_BASE}/api/leads/${id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${token}`

@@ -235,7 +235,7 @@ function AdminLeads({ activeFilter }) {
                   </td>
                   <td>
                     <span className={`tag ${
-                      lead.type === 'Course' ? 'tag--violet' : 
+                      lead.type === 'Course' || lead.type === 'Course-Inquiry' ? 'tag--violet' : 
                       lead.type === 'Consultation' ? 'tag--cyan' : 'tag--amber'
                     }`}>
                       {lead.type}

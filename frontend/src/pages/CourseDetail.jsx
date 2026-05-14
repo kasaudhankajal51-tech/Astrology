@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { coursesData } from '../data/coursesData';
+import SuccessModal from '../components/SuccessModal';
+import API_BASE from '../utils/api';
+import toast from 'react-hot-toast';
 
 function CourseDetail() {
   const { courseId } = useParams();
@@ -9,6 +12,13 @@ function CourseDetail() {
   const [showInquiryModal, setShowInquiryModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    phone: ''
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -22,6 +32,38 @@ function CourseDetail() {
       navigate('/courses');
     }
   }, [courseId, navigate]);
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleInquirySubmit = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    try {
+      const res = await fetch(`${API_BASE}/api/leads`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          ...formData, 
+          type: 'Course-Inquiry', 
+          courseName: course.title 
+        }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setShowInquiryModal(false);
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '' });
+      } else {
+        toast.error(data.message || 'Submission failed');
+      }
+    } catch (err) {
+      toast.error('Network Error. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -836,28 +878,37 @@ function CourseDetail() {
             <h3>Course Inquiry</h3>
             <p className="text-muted mb-4">Please fill in your details and our team will get back to you with batch timings and fee structure.</p>
             
-            <form onSubmit={(e) => { e.preventDefault(); alert('Inquiry submitted successfully!'); setShowInquiryModal(false); }}>
+            <form onSubmit={handleInquirySubmit}>
               <div className="form-group">
                 <label>Selected Course</label>
-                <input type="text" value={course.title} disabled />
+                <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
               </div>
               <div className="form-group">
                 <label>Full Name</label>
-                <input type="text" placeholder="Your Name" required />
+                <input type="text" name="name" value={formData.name} onChange={handleInputChange} placeholder="Your Name" required />
               </div>
               <div className="form-group">
                 <label>Phone Number</label>
-                <input type="tel" placeholder="+91 00000 00000" required />
+                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="10 Digit Phone Number" required />
               </div>
               <div className="form-group">
                 <label>Email Address</label>
-                <input type="email" placeholder="your@email.com" required />
+                <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required />
               </div>
-              <button type="submit" className="submit-btn">Send Inquiry</button>
+              <button type="submit" className="submit-btn" disabled={isSubmitting}>
+                {isSubmitting ? 'Sending...' : 'Send Inquiry'}
+              </button>
             </form>
           </div>
         </div>
       )}
+
+      <SuccessModal 
+        isOpen={isSuccessOpen} 
+        onClose={() => setIsSuccessOpen(false)} 
+        title="Inquiry Received!"
+        message={`Thank you for your interest in ${course?.title}. Our academic counselor will contact you shortly with the syllabus, batch timings, and special fee offers.`}
+      />
     </div>
   );
 }

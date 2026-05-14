@@ -31,7 +31,7 @@ const connectDB = async () => {
 const startServer = async () => {
   await connectDB();
   
-  app.listen(PORT, () => {
+  app.listen(PORT, '0.0.0.0', () => {
     logger.info(`🚀 Production Server Live on Port ${PORT}`);
     logger.info(`Mode: ${process.env.NODE_ENV || 'development'}`);
   });

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 // Existing Shared Components
 import LogoCarousel from '../components/webinar/LogoCarousel';
@@ -72,7 +74,7 @@ function Webinar() {
 
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, type: 'Webinar', courseName: '2-Day Mega Astrology Webinar' }),

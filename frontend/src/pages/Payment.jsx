@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function Payment() {
   const [searchParams] = useSearchParams();
@@ -48,7 +50,7 @@ function Payment() {
       toast.success('Simulating Payment...');
       setTimeout(async () => {
         try {
-          const verifyRes = await fetch('http://localhost:5000/api/leads/verify-payment', {
+          const verifyRes = await fetch(`${API_BASE}/api/leads/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
@@ -90,7 +92,7 @@ function Payment() {
       handler: async function (response) {
         setIsProcessing(true);
         try {
-          const verifyRes = await fetch('http://localhost:5000/api/leads/verify-payment', {
+          const verifyRes = await fetch(`${API_BASE}/api/leads/verify-payment`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ ...response, leadId })

@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate, useLocation } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function LandingPage() {
   const [searchParams] = useSearchParams();
@@ -118,7 +120,7 @@ function LandingPage() {
     }
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, type, courseName: content.courseName }),

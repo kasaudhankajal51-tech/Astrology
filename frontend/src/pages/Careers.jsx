@@ -1,5 +1,7 @@
 import { useState } from 'react';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function Careers() {
   const [formData, setFormData] = useState({
@@ -11,7 +13,7 @@ function Careers() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/jobs/apply', {
+      const res = await fetch(`${API_BASE}/api/jobs/apply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData)

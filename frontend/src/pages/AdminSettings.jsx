@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function AdminSettings() {
   const [activeTab, setActiveTab] = useState('general');
@@ -25,7 +27,7 @@ function AdminSettings() {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
+      const res = await fetch(`${API_BASE}/api/settings`);
       const data = await res.json();
       if (data.success) {
         setSettings(data.settings);
@@ -56,7 +58,7 @@ function AdminSettings() {
 
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch('/api/settings', {
+      const res = await fetch(`${API_BASE}/api/settings`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

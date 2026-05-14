@@ -1,4 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
+import API_BASE from '../utils/api';
+
 
 const SettingsContext = createContext();
 
@@ -8,7 +10,7 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchSettings = async () => {
     try {
-      const res = await fetch('/api/settings');
+      const res = await fetch(`${API_BASE}/api/settings`);
       const data = await res.json();
       if (data.success) {
         setSettings(data.settings);

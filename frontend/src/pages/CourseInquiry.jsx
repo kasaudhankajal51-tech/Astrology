@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
+
 
 function CourseInquiry() {
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
@@ -15,7 +17,7 @@ function CourseInquiry() {
     e.preventDefault();
     setIsSubmitting(true);
     try {
-      const res = await fetch('http://localhost:5000/api/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...formData, type: 'Course', courseName: 'Advanced Vedic Astrology Course' }),

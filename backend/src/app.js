@@ -25,7 +25,7 @@ app.use(morgan('dev'));
 app.set('trust proxy', 1);
 
 // --- Essential Middleware ---
-app.use(cors({ origin: true, credentials: true }));
+app.use(cors()); // Allow all CORS
 app.use(express.json());
 
 // --- DB Connection (Serverless-safe singleton) ---

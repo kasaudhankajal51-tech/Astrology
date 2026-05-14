@@ -4,7 +4,7 @@ const leadSchema = new mongoose.Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  type: { type: String, enum: ['Webinar', 'Course', 'Consultation', 'Home-Enroll', 'Contact'], required: true },
+  type: { type: String, enum: ['Webinar', 'Course', 'Consultation', 'Home-Enroll', 'Contact', 'Course-Inquiry'], required: true },
   courseName: { type: String },
   consultationType: { type: String },
   dob: { type: String },

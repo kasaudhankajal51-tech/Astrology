@@ -11,7 +11,7 @@ function LandingPage() {
   
   // Robust type detection
   const isCourse = location.pathname.includes('course-inquiry') || searchParams.get('type') === 'course';
-  const type = isCourse ? 'Course' : 'Webinar';
+  const type = isCourse ? 'Course-Inquiry' : 'Webinar';
   
   const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });

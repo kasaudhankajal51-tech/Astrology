@@ -97,7 +97,7 @@ export const createLead = asyncHandler(async (req, res) => {
     paymentStatus: (type === 'Webinar' || type === 'Course') ? 'Pending' : 'Completed'
   });
 
-  // 2. Only Create Razorpay Order for Paid Types
+  // 2. Only Create Razorpay Order for Paid Types (Course Inquiries are free)
   if (type === 'Webinar' || type === 'Course') {
     const options = {
       amount: 99 * 100, // Amount in paise (₹99)

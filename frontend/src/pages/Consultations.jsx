@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 
 
@@ -12,10 +13,14 @@ function Consultations() {
     email: '',
     phone: '',
     consultationType: '',
+    dob: '',
+    tob: '',
+    pob: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
@@ -39,9 +44,9 @@ function Consultations() {
       });
       const data = await response.json();
       if (data.success) {
-        toast.success('Consultation booking request sent! We will contact you soon.');
         setIsModalOpen(false);
-        setFormData({ name: '', email: '', phone: '', consultationType: '', message: '' });
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '' });
       } else {
         toast.error(data.error || 'Error submitting booking');
       }
@@ -401,6 +406,13 @@ function Consultations() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+      />
+
+      <SuccessModal 
+        isOpen={isSuccessOpen} 
+        onClose={() => setIsSuccessOpen(false)} 
+        title="Consultation Request Received!"
+        message="Your details have been securely sent to our experts. We will contact you on your provided phone number within 24 hours to schedule the session."
       />
 
       <style jsx>{`

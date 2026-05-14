@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 
 
@@ -379,10 +380,14 @@ function Home() {
     email: '', 
     phone: '',
     consultationType: '',
+    dob: '',
+    tob: '',
+    pob: '',
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleOpenModal = (e) => {
@@ -446,9 +451,9 @@ function Home() {
       });
       const data = await res.json();
       if (data.success) {
-        toast.success('Consultation booked successfully!');
         setIsModalOpen(false);
-        setFormData({ name: '', email: '', phone: '', consultationType: '', message: '' });
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '' });
       } else {
         toast.error(data.error || data.message || 'Failed to book. Please try again.');
       }
@@ -1143,6 +1148,13 @@ function Home() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+      />
+
+      <SuccessModal 
+        isOpen={isSuccessOpen} 
+        onClose={() => setIsSuccessOpen(false)} 
+        title="Cosmic Connection Established!"
+        message="Your consultation booking is successful. India's top astrology mentor will review your birth chart soon. Expect a call for session scheduling within 24 hours."
       />
 
       <style jsx>{`

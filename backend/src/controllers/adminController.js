@@ -15,6 +15,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const courseLeads = await Lead.countDocuments({ type: 'Course' });
   const consultingLeads = await Lead.countDocuments({ type: 'Consultation' });
   const webinarLeads = await Lead.countDocuments({ type: 'Webinar' });
+  const contactLeads = await Lead.countDocuments({ type: 'Contact' });
   
   // Growth Calculation (last 30 days)
   const lastMonth = new Date();
@@ -27,6 +28,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const recentCourses = await Lead.countDocuments({ type: 'Course', createdAt: { $gte: lastMonth } });
   const recentConsulting = await Lead.countDocuments({ type: 'Consultation', createdAt: { $gte: lastMonth } });
   const recentWebinars = await Lead.countDocuments({ type: 'Webinar', createdAt: { $gte: lastMonth } });
+  const recentContacts = await Lead.countDocuments({ type: 'Contact', createdAt: { $gte: lastMonth } });
   
   // Helper to format deltas
   const getDelta = (recent, total) => total > 0 ? `+${Math.round((recent / total) * 100)}%` : "0%";
@@ -44,7 +46,8 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       globalReach: { value: estimatedTraffic.toLocaleString(), delta: trafficDelta },
       courseLeads: { value: courseLeads.toLocaleString(), delta: getDelta(recentCourses, courseLeads) },
       consultingLeads: { value: consultingLeads.toLocaleString(), delta: getDelta(recentConsulting, consultingLeads) },
-      webinarLeads: { value: webinarLeads.toLocaleString(), delta: getDelta(recentWebinars, webinarLeads) }
+      webinarLeads: { value: webinarLeads.toLocaleString(), delta: getDelta(recentWebinars, webinarLeads) },
+      contactLeads: { value: contactLeads.toLocaleString(), delta: getDelta(recentContacts, contactLeads) }
     }
   });
 });

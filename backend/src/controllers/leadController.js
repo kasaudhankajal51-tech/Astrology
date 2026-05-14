@@ -14,14 +14,17 @@ const razorpay = new Razorpay({
 
 // Validation Schema
 const leadSchema = Joi.object({
-  name: Joi.string().required().min(3).max(50),
+  name: Joi.string().required().min(2).max(100),
   email: Joi.string().email().required(),
-  phone: Joi.string().pattern(/^[0-9]{10}$/).required(),
+  phone: Joi.string().min(10).max(15).required(),
   type: Joi.string().required(),
   courseName: Joi.string().allow('', null),
   consultationType: Joi.string().allow('', null),
+  dob: Joi.string().allow('', null),
+  tob: Joi.string().allow('', null),
+  pob: Joi.string().allow('', null),
   message: Joi.string().allow('', null)
-});
+}).unknown(true);
 
 const sendConfirmationEmail = async (lead) => {
   const transporter = nodemailer.createTransport({
@@ -81,59 +84,69 @@ const sendConfirmationEmail = async (lead) => {
 export const createLead = asyncHandler(async (req, res) => {
   const { error } = leadSchema.validate(req.body);
   if (error) {
+    console.log('Lead Validation Error:', error.details[0].message);
     res.status(400);
     throw new Error(error.details[0].message);
   }
 
-  const { name, email, phone, type, courseName, consultationType, message } = req.body;
+  const { name, email, phone, type, courseName, consultationType, dob, tob, pob, message } = req.body;
 
   // 1. Create Lead in Database
   const lead = await Lead.create({
-    name, email, phone, type, courseName, consultationType, message,
-    paymentStatus: 'Pending'
+    name, email, phone, type, courseName, consultationType, dob, tob, pob, message,
+    paymentStatus: (type === 'Webinar' || type === 'Course') ? 'Pending' : 'Completed'
   });
 
-  // 2. Create Razorpay Order
-  const options = {
-    amount: 99 * 100, // Amount in paise (₹99)
-    currency: "INR",
-    receipt: `receipt_${lead._id}`,
-  };
+  // 2. Only Create Razorpay Order for Paid Types
+  if (type === 'Webinar' || type === 'Course') {
+    const options = {
+      amount: 99 * 100, // Amount in paise (₹99)
+      currency: "INR",
+      receipt: `receipt_${lead._id}`,
+    };
 
-  try {
-    const order = await razorpay.orders.create(options);
-    
-    res.status(201).json({
-      success: true,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
-      keyId: process.env.RAZORPAY_KEY_ID,
-      leadId: lead._id,
-      name: lead.name,
-      email: lead.email,
-      phone: lead.phone
-    });
-  } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
-      logger.warn('⚠️ Razorpay keys missing/invalid. Falling back to mock order for testing.');
+    try {
+      const order = await razorpay.orders.create(options);
+      
       return res.status(201).json({
         success: true,
-        orderId: `order_mock_${Date.now()}`,
-        amount: options.amount,
-        currency: options.currency,
-        keyId: 'rzp_test_mock',
+        orderId: order.id,
+        amount: order.amount,
+        currency: order.currency,
+        keyId: process.env.RAZORPAY_KEY_ID,
         leadId: lead._id,
-        name,
-        email,
-        phone,
-        isMock: true
+        name: lead.name,
+        email: lead.email,
+        phone: lead.phone
       });
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        logger.warn('⚠️ Razorpay keys missing/invalid. Falling back to mock order for testing.');
+        return res.status(201).json({
+          success: true,
+          orderId: `order_mock_${Date.now()}`,
+          amount: options.amount,
+          currency: options.currency,
+          keyId: 'rzp_test_mock',
+          leadId: lead._id,
+          name,
+          email,
+          phone,
+          isMock: true
+        });
+      }
+      logger.error('Razorpay Order Creation Failed: ' + err.message);
+      res.status(500);
+      throw new Error('Payment gateway error. Please try again.');
     }
-    logger.error('Razorpay Order Creation Failed: ' + err.message);
-    res.status(500);
-    throw new Error('Payment gateway error. Please try again.');
   }
+
+  // 3. For Non-paid Types (Contact, Consultation etc.)
+  res.status(201).json({
+    success: true,
+    message: 'Request received successfully. Our team will contact you soon.',
+    leadId: lead._id
+  });
 });
 
 
@@ -234,6 +247,9 @@ export const exportLeads = asyncHandler(async (req, res) => {
     { header: 'Type', key: 'type', width: 15 },
     { header: 'Course/Webinar', key: 'courseName', width: 25 },
     { header: 'Consultation Type', key: 'consultationType', width: 20 },
+    { header: 'DOB', key: 'dob', width: 15 },
+    { header: 'TOB', key: 'tob', width: 12 },
+    { header: 'POB', key: 'pob', width: 20 },
     { header: 'Message', key: 'message', width: 40 },
     { header: 'Status', key: 'paymentStatus', width: 15 },
   ];
@@ -247,6 +263,9 @@ export const exportLeads = asyncHandler(async (req, res) => {
       type: lead.type,
       courseName: lead.courseName || '-',
       consultationType: lead.consultationType || '-',
+      dob: lead.dob || '-',
+      tob: lead.tob || '-',
+      pob: lead.pob || '-',
       message: lead.message || '-',
       paymentStatus: lead.paymentStatus,
     });

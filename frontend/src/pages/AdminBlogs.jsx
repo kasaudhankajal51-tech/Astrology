@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
 
 function AdminBlogs() {
   const [blogs, setBlogs] = useState([]);
@@ -14,7 +15,7 @@ function AdminBlogs() {
     setIsLoading(true);
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch('/api/blogs/admin', {
+      const res = await fetch(`${API_BASE}/api/blogs/admin`, {
         headers: { 
           'Authorization': `Bearer ${token}`
         }
@@ -42,8 +43,8 @@ function AdminBlogs() {
     e.preventDefault();
     const method = currentBlog._id ? 'PUT' : 'POST';
     const url = currentBlog._id 
-      ? `/api/blogs/${currentBlog._id}` 
-      : '/api/blogs';
+      ? `${API_BASE}/api/blogs/${currentBlog._id}` 
+      : `${API_BASE}/api/blogs`;
     try {
       const token = localStorage.getItem('adminToken');
       const res = await fetch(url, {
@@ -84,7 +85,7 @@ function AdminBlogs() {
     if (!window.confirm('This action cannot be undone. Delete this article?')) return;
     try {
       const token = localStorage.getItem('adminToken');
-      const res = await fetch(`/api/blogs/${id}`, {
+      const res = await fetch(`${API_BASE}/api/blogs/${id}`, {
         method: 'DELETE',
         headers: { 
           'Authorization': `Bearer ${token}`

@@ -18,8 +18,17 @@ const S = {
     paddingTop: '96px',
     paddingBottom: '60px',
     color: '#1a1714',
+    width: '100%',
+    overflowX: 'hidden',
+    boxSizing: 'border-box',
   },
-  inner: { maxWidth: 1100, margin: '0 auto', padding: '0 24px' },
+  inner: { 
+    maxWidth: 1100, 
+    width: '100%', 
+    margin: '0 auto', 
+    padding: '0 24px',
+    boxSizing: 'border-box',
+  },
 
   /* Header */
   pageHeader: { textAlign: 'center', marginBottom: 48 },
@@ -308,7 +317,15 @@ export default function Careers() {
             gap: 12px !important;
           }
           .careers-title {
-            font-size: 28px !important;
+            font-size: 24px !important;
+            line-height: 1.2 !important;
+            text-align: center !important;
+            word-wrap: break-word !important;
+          }
+          .page-sub-text {
+            font-size: 13px !important;
+            line-height: 1.5 !important;
+            padding: 0 10px !important;
           }
           .careers-sidebar {
             order: 1;
@@ -341,7 +358,7 @@ export default function Careers() {
         {/* Page Header */}
         <div style={S.pageHeader}>
           <h1 className="careers-title" style={S.pageTitle}>Cosmic Careers at DS Astro</h1>
-          <p style={S.pageSub}>
+          <p className="page-sub-text" style={S.pageSub}>
             Join India's leading astrology platform — spiritual guides, tech minds &amp; creative souls welcome.
           </p>
         </div>

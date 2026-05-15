@@ -455,12 +455,12 @@ function Header() {
             padding-right: 15px !important;
           }
           .navbar-toggler {
-            position: relative !important;
-            top: 0 !important;
-            right: 0 !important;
+            position: fixed !important;
+            top: 15px !important;
+            right: 15px !important;
+            transform: none !important;
+            z-index: 10000 !important;
             margin: 0 !important;
-            z-index: 10 !important;
-            order: 2;
           }
           .navbar-brand {
             margin: 0 !important;

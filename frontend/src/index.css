@@ -7,8 +7,11 @@
   --astro-card: #0b1220;
 }
 
-body {
+html, body {
   margin: 0;
+  padding: 0;
+  width: 100%;
+  overflow-x: hidden;
   font-family: 'Inter', 'Outfit', sans-serif;
   background-color: var(--astro-dark);
   color: white;

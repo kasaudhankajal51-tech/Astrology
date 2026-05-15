@@ -335,17 +335,12 @@ export default function Careers() {
           }
           .careers-job-list {
             display: flex !important;
-            overflow-x: auto !important;
-            padding-bottom: 10px !important;
+            flex-direction: column !important;
             gap: 12px !important;
             max-height: none !important;
-            scrollbar-width: none;
-          }
-          .careers-job-list::-webkit-scrollbar {
-            display: none;
           }
           .job-item-card {
-            min-width: 260px !important;
+            width: 100% !important;
             margin-bottom: 0 !important;
           }
           .careers-detail-card, .careers-form-card {

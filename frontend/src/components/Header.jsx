@@ -178,9 +178,11 @@ function Header() {
           line-height: 1.3;
         }
 
-        /* Fix for Tailwind 4 conflict with Bootstrap .collapse */
-        .navbar-collapse.collapse {
-          visibility: visible !important;
+        @media (min-width: 1200px) {
+          .navbar-collapse.collapse {
+            visibility: visible !important;
+            display: flex !important;
+          }
         }
 
         @keyframes scrollLeftSmooth {
@@ -435,6 +437,37 @@ function Header() {
           transform: scale(1.05);
           background: var(--accent-color) !important;
         }
+
+        @media (max-width: 1199px) {
+          header, nav {
+            width: 100% !important;
+            flex-grow: 1 !important;
+            display: flex !important;
+            min-height: 70px !important;
+          }
+          .container-fluid {
+            display: flex !important;
+            flex-direction: row !important;
+            justify-content: space-between !important;
+            align-items: center !important;
+            width: 100% !important;
+            padding-left: 15px !important;
+            padding-right: 15px !important;
+          }
+          .navbar-toggler {
+            position: relative !important;
+            top: 0 !important;
+            right: 0 !important;
+            margin: 0 !important;
+            z-index: 10 !important;
+            order: 2;
+          }
+          .navbar-brand {
+            margin: 0 !important;
+            max-width: 70%;
+            order: 1;
+          }
+        }
       `}</style>
 
       <section className="report-bar">
@@ -453,7 +486,7 @@ function Header() {
 
       <header className="w-100 mb-0">
         <nav className="navbar navbar-expand-xl navbar-light py-2">
-          <div className="container-fluid px-3 px-md-4 px-lg-5 d-flex align-items-center flex-nowrap">
+          <div className="container-fluid px-3 px-md-4 px-lg-5 d-flex align-items-center justify-content-between flex-nowrap">
             <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }}>
               <div className="logo-icon-wrapper me-2">
                 <svg viewBox="0 0 22 22" fill="none">
@@ -465,7 +498,7 @@ function Header() {
               </div>
             </Link>
              
-            <button className="navbar-toggler ms-auto" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu">
+            <button className="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu">
               <i className="fas fa-bars"></i>
             </button>
 

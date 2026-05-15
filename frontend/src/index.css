@@ -1,0 +1,69 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+:root {
+  --astro-gold: #d4af37;
+  --astro-dark: #070913;
+  --astro-card: #0b1220;
+}
+
+body {
+  margin: 0;
+  font-family: 'Inter', 'Outfit', sans-serif;
+  background-color: var(--astro-dark);
+  color: white;
+}
+
+.glass-card {
+  background: rgba(11, 18, 32, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.gold-text-gradient {
+  background: linear-gradient(135deg, #d4af37 0%, #f9e27d 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.gold-glow {
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.3);
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.3);
+  border-radius: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.5);
+}
+
+.bg-astro-dark {
+  background-color: #070913 !important;
+}
+
+.bg-astro-card {
+  background-color: #0b1220 !important;
+}
+
+.bg-cosmic-gradient {
+  background: radial-gradient(circle at top right, #1a1b3a 0%, #070913 100%) !important;
+}
+
+.text-astro-gold {
+  color: #d4af37 !important;
+}
+
+.border-astro-gold {
+  border-color: rgba(212, 175, 55, 0.5) !important;
+}

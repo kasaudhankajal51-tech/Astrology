@@ -1,17 +1,30 @@
 import express from 'express';
 import { 
+  getJobs,
+  createJob,
+  updateJob,
+  deleteJob,
   applyForJob, 
   getApplications, 
   updateApplicationStatus, 
   deleteApplication 
 } from '../controllers/jobController.js';
 import { adminAuth } from '../middleware/authMiddleware.js';
+import upload from '../middleware/uploadMiddleware.js';
 
 const router = express.Router();
 
-router.post('/apply', applyForJob);
-router.get('/', adminAuth, getApplications);
-router.put('/:id', adminAuth, updateApplicationStatus);
-router.delete('/:id', adminAuth, deleteApplication);
+// Public routes
+router.get('/', getJobs);
+router.post('/apply', upload.single('resume'), applyForJob);
+
+// Admin routes
+router.post('/', adminAuth, createJob);
+router.put('/:id', adminAuth, updateJob);
+router.delete('/:id', adminAuth, deleteJob);
+
+router.get('/applications', adminAuth, getApplications);
+router.put('/applications/:id', adminAuth, updateApplicationStatus);
+router.delete('/applications/:id', adminAuth, deleteApplication);
 
 export default router;

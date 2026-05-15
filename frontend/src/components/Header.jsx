@@ -59,6 +59,18 @@ function Header() {
       window.AOS.init();
     }
 
+    // Scroll effect
+    const handleScroll = () => {
+      const header = document.querySelector('header');
+      if (header) {
+        if (window.scrollY > 20) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+      }
+    };
+
     // Report Bar Animation Logic
     const handleReportAnimation = () => {
       const content = document.getElementById('reportScrollContent');
@@ -77,9 +89,14 @@ function Header() {
     };
 
     window.addEventListener('resize', handleReportAnimation);
+    window.addEventListener('scroll', handleScroll);
     handleReportAnimation();
+    handleScroll();
 
-    return () => window.removeEventListener('resize', handleReportAnimation);
+    return () => {
+      window.removeEventListener('resize', handleReportAnimation);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   return (
@@ -161,6 +178,11 @@ function Header() {
           line-height: 1.3;
         }
 
+        /* Fix for Tailwind 4 conflict with Bootstrap .collapse */
+        .navbar-collapse.collapse {
+          visibility: visible !important;
+        }
+
         @keyframes scrollLeftSmooth {
           0% { transform: translateX(0); }
           100% { transform: translateX(-48%); }
@@ -168,20 +190,32 @@ function Header() {
 
         /* Navbar */
         header {
-          background: var(--bg-color) !important;
+          background: rgba(253, 246, 238, 0.9) !important;
+          backdrop-filter: blur(12px);
+          -webkit-backdrop-filter: blur(12px);
           border-bottom: 1px solid var(--glass-border);
           position: sticky;
           top: 0;
           z-index: 1020;
           width: 100%;
+          min-height: 75px;
+          display: flex;
+          align-items: center;
+          transition: all 0.3s ease;
+        }
+
+        header.scrolled {
+          background: rgba(253, 246, 238, 0.98) !important;
+          box-shadow: 0 4px 20px rgba(139, 74, 30, 0.1);
+          min-height: 65px;
         }
 
         .logo-icon-wrapper {
-          width: clamp(32px, 4vw, 42px);
-          height: clamp(32px, 4vw, 42px);
+          width: clamp(28px, 3vw, 36px);
+          height: clamp(28px, 3vw, 36px);
           background: var(--primary-color);
           color: #fff;
-          border-radius: 10px;
+          border-radius: 8px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -198,15 +232,37 @@ function Header() {
           transform: rotate(15deg) scale(1.05);
         }
 
-        @media (min-width: 992px) {
+        @media (min-width: 1200px) {
           .navbar-nav .nav-link {
             color: var(--text-main) !important;
             font-weight: 700;
-            padding: 12px 6px !important;
-            font-size: 0.95rem;
+            padding: 8px 3px !important;
+            font-size: clamp(0.7rem, 0.85vw, 0.85rem);
             text-transform: uppercase;
-            letter-spacing: 0.2px;
-            transition: color 0.3s ease;
+            letter-spacing: 0.1px;
+            transition: all 0.3s ease;
+            position: relative;
+            white-space: nowrap;
+          }
+
+          .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 2px;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+          }
+
+          .navbar-nav .nav-link:hover::after {
+            width: 80%;
+          }
+
+          .navbar-nav .nav-link:hover {
+            color: var(--primary-color) !important;
           }
 
           /* Hover Dropdowns for Desktop */
@@ -225,48 +281,45 @@ function Header() {
             transform: translateY(10px);
             transition: all 0.3s ease;
             margin-top: 0;
+            border-radius: 12px;
+            padding: 10px;
+            min-width: 180px;
+            box-shadow: 0 10px 30px rgba(139, 74, 30, 0.1) !important;
           }
 
-          .dropdown-toggle::after {
-            transition: transform 0.3s ease;
-          }
-
-          .nav-item.dropdown:hover .dropdown-toggle::after {
-            transform: rotate(180deg);
-          }
-          
           .btn-consult-header {
             background: var(--primary-color);
             color: #fff !important;
-            padding: 12px 22px;
+            padding: 8px 14px;
             border-radius: 40px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.8rem;
             box-shadow: 0 6px 14px rgba(139, 74, 47, 0.2);
             transition: all 0.25s ease;
             white-space: nowrap;
           }
         }
 
-        @media (min-width: 1100px) {
+        @media (min-width: 1400px) {
           .navbar-nav .nav-link {
-            padding: 12px 10px !important;
-            font-size: 1.05rem;
+            padding: 10px 8px !important;
+            font-size: 0.95rem;
+            letter-spacing: 0.3px;
           }
           .btn-consult-header {
-            padding: 12px 25px;
-            font-size: 1.1rem;
+            padding: 12px 22px;
+            font-size: 1rem;
           }
         }
 
-        @media (min-width: 1300px) {
+        @media (min-width: 1600px) {
           .navbar-nav .nav-link {
-            padding: 12px 15px !important;
-            font-size: 1.15rem;
+            padding: 12px 14px !important;
+            font-size: 1.1rem;
           }
           .btn-consult-header {
-            padding: 14px 32px;
-            font-size: 1.2rem;
+            padding: 14px 30px;
+            font-size: 1.1rem;
           }
         }
 
@@ -357,17 +410,21 @@ function Header() {
         }
 
         .navbar-toggler {
-          border: none !important;
-          padding: 8px 12px;
+          border: 1px solid var(--glass-border) !important;
+          padding: 10px 12px;
           color: #fff !important;
           background: var(--primary-color) !important;
           border-radius: 12px;
-          font-size: 1.2rem;
-          box-shadow: 0 4px 12px rgba(139, 74, 30, 0.2);
+          font-size: 1.1rem;
+          box-shadow: 0 4px 12px rgba(139, 74, 30, 0.15);
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
+        }
+
+        .navbar-toggler i {
+          color: #fff !important;
         }
 
         .navbar-toggler:focus {
@@ -395,15 +452,15 @@ function Header() {
       </section>
 
       <header className="w-100 mb-0">
-        <nav className="navbar navbar-expand-lg navbar-light py-2">
-          <div className="container-fluid px-3 px-md-4 px-lg-5 d-flex align-items-center">
+        <nav className="navbar navbar-expand-xl navbar-light py-2">
+          <div className="container-fluid px-3 px-md-4 px-lg-5 d-flex align-items-center flex-nowrap">
             <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }}>
               <div className="logo-icon-wrapper me-2">
                 <svg viewBox="0 0 22 22" fill="none">
                   <path d="M11 2L13.5 8.5H20L14.5 12.5L16.5 19L11 15L5.5 19L7.5 12.5L2 8.5H8.5L11 2Z" fill="currentColor" />
                 </svg>
               </div>
-              <div className="fb-logo-name" style={{ fontSize: 'clamp(18px, 2vw, 24px)', fontWeight: '700', color: 'var(--text-heading)', fontFamily: 'var(--font-serif)' }}>
+              <div className="fb-logo-name" style={{ fontSize: 'clamp(16px, 1.8vw, 22px)', fontWeight: '700', color: 'var(--text-heading)', fontFamily: 'var(--font-serif)' }}>
                 {settings?.siteName?.split('Astro')[0] || 'Astro'}<em style={{ fontStyle: 'normal', color: 'var(--primary-color)' }}>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em>
               </div>
             </Link>
@@ -439,10 +496,16 @@ function Header() {
                 </li>
                 <li className="nav-item"><Link className="nav-link" to="/about">ABOUT</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/blog">BLOG</Link></li>
+                <li className="nav-item">
+                  <Link className="nav-link d-flex align-items-center gap-1" to="/careers">
+                    CAREERS
+                    <span className="bg-danger text-white px-1 rounded-pill" style={{ fontSize: '7px', padding: '0px 3px', lineHeight: '1.2', fontWeight: '800' }}>HIRING</span>
+                  </Link>
+                </li>
               </ul>
             </div>
 
-            <div className="d-none d-lg-block ms-auto" style={{ flexShrink: 0 }}>
+            <div className="d-none d-xl-block ms-auto" style={{ flexShrink: 0 }}>
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0">BOOK CONSULTATION</button>
             </div>
           </div>
@@ -497,6 +560,12 @@ function Header() {
 
             <li className="nav-item"><Link className="nav-link" to="/about" data-bs-dismiss="offcanvas">ABOUT</Link></li>
             <li className="nav-item"><Link className="nav-link" to="/blog" data-bs-dismiss="offcanvas">BLOG</Link></li>
+            <li className="nav-item">
+              <Link className="nav-link" to="/careers" data-bs-dismiss="offcanvas">
+                CAREERS
+                <span className="badge bg-danger ms-2" style={{ fontSize: '0.7rem' }}>WE'RE HIRING</span>
+              </Link>
+            </li>
             
             <li className="nav-item p-4 d-grid gap-3">
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-mobile-cta primary-cta">

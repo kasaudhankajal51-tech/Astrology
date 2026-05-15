@@ -289,20 +289,66 @@ export default function Careers() {
         .job-item-card:hover { border-color: #C9A84C88 !important; }
         .submit-btn-inner:hover { background: #b8943d !important; }
         .submit-btn-inner:active { transform: scale(0.99); }
+
+        /* Responsive Layout Overrides */
+        @media (max-width: 991px) {
+          .careers-layout {
+            grid-template-columns: 1fr !important;
+            gap: 24px !important;
+          }
+          .careers-inner {
+            padding: 0 16px !important;
+          }
+          .careers-detail-grid {
+            grid-template-columns: 1fr !important;
+            gap: 20px !important;
+          }
+          .careers-form-grid {
+            grid-template-columns: 1fr !important;
+            gap: 12px !important;
+          }
+          .careers-title {
+            font-size: 28px !important;
+          }
+          .careers-sidebar {
+            order: 1;
+          }
+          .careers-content {
+            order: 2;
+          }
+          .careers-job-list {
+            display: flex !important;
+            overflow-x: auto !important;
+            padding-bottom: 10px !important;
+            gap: 12px !important;
+            max-height: none !important;
+            scrollbar-width: none;
+          }
+          .careers-job-list::-webkit-scrollbar {
+            display: none;
+          }
+          .job-item-card {
+            min-width: 260px !important;
+            margin-bottom: 0 !important;
+          }
+          .careers-detail-card, .careers-form-card {
+            padding: 20px !important;
+          }
+        }
       `}</style>
 
-      <div style={S.inner}>
+      <div className="careers-inner" style={S.inner}>
         {/* Page Header */}
         <div style={S.pageHeader}>
-          <h1 style={S.pageTitle}>Cosmic Careers at DS Astro</h1>
+          <h1 className="careers-title" style={S.pageTitle}>Cosmic Careers at DS Astro</h1>
           <p style={S.pageSub}>
             Join India's leading astrology platform — spiritual guides, tech minds &amp; creative souls welcome.
           </p>
         </div>
 
-        <div style={S.layout}>
+        <div className="careers-layout" style={S.layout}>
           {/* ── LEFT: Job List ── */}
-          <div>
+          <div className="careers-sidebar">
             <div style={S.panelLabel}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <Briefcase size={13} /> Open Positions
@@ -310,7 +356,7 @@ export default function Careers() {
               <span style={S.rolesBadge}>{jobs.length} Roles</span>
             </div>
 
-            <div style={{ maxHeight: 800, overflowY: 'auto', paddingRight: 4 }}>
+            <div className="careers-job-list" style={{ maxHeight: 800, overflowY: 'auto', paddingRight: 4 }}>
               {jobs.map((job) => {
                 const active = selectedJob?._id === job._id;
                 return (
@@ -344,7 +390,7 @@ export default function Careers() {
           </div>
 
           {/* ── RIGHT: Detail + Form ── */}
-          <div>
+          <div className="careers-content">
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedJob?._id}
@@ -354,7 +400,7 @@ export default function Careers() {
                 transition={{ duration: 0.2 }}
               >
                 {/* Job Detail Card */}
-                <div style={S.detailCard}>
+                <div className="careers-detail-card" style={S.detailCard}>
                   <h2 style={S.detailTitle}>{selectedJob?.title}</h2>
                   <div style={S.badgeRow}>
                     <span style={S.badge('purple')}>{selectedJob?.department}</span>
@@ -362,7 +408,7 @@ export default function Careers() {
                     <span style={S.badge('green')}>{selectedJob?.type}</span>
                   </div>
 
-                  <div style={S.detailGrid}>
+                  <div className="careers-detail-grid" style={S.detailGrid}>
                     {/* Left column */}
                     <div>
                       <div style={S.sectionLabel}><Star size={12} /> Description</div>
@@ -396,7 +442,7 @@ export default function Careers() {
                 </div>
 
                 {/* Application Form */}
-                <div style={S.formCard}>
+                <div className="careers-form-card" style={S.formCard}>
                   <div style={S.formHeader}>
                     <div style={S.formIconBox}><Send size={16} /></div>
                     <div>
@@ -406,7 +452,7 @@ export default function Careers() {
                   </div>
 
                   <form onSubmit={handleSubmit}>
-                    <div style={S.formGrid}>
+                    <div className="careers-form-grid" style={S.formGrid}>
                       {/* Row 1 */}
                       <Field label="Full Name" icon={<User size={11} />}>
                         <input className="careers-input" style={S.input} type="text" name="fullName" required value={formData.fullName} onChange={handleChange} placeholder="Your full name" />

@@ -1679,6 +1679,47 @@ body {
   transform: none;
 }
 
+.btn-premium {
+  padding: 10px 20px;
+  background: linear-gradient(135deg, var(--violet), #2563eb);
+  color: #fff;
+  border: none;
+  border-radius: var(--r-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.25);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.btn-premium:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(59, 130, 246, 0.35);
+}
+
+.btn-premium-outline {
+  padding: 10px 20px;
+  background: #fff;
+  color: var(--violet);
+  border: 1px solid var(--violet);
+  border-radius: var(--r-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--t);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.btn-premium-outline:hover {
+  background: var(--violet-soft);
+  color: var(--violet-text);
+}
+
 .active-tab-indicator {
   position: absolute;
   left: 0;

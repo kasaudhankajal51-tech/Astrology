@@ -14,10 +14,11 @@ import API_BASE from '../utils/api';
 
 /* ─── Design Tokens ─────────────────────────────────────── */
 const css = `
-  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=EB+Garamond:wght@400;500;600;700&display=swap');
 
   .aj-root { font-family: 'DM Sans', sans-serif; }
   .aj-heading { font-family: 'Syne', sans-serif; }
+  .aj-serif { font-family: 'EB Garamond', serif; }
 
   .aj-grid-bg {
     background-image:
@@ -58,17 +59,37 @@ const css = `
 
   .aj-btn-primary {
     position: relative; overflow: hidden;
-    background: #1e1b4b;
-    transition: transform .2s ease, box-shadow .2s ease;
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow: 0 8px 20px -6px rgba(79, 70, 229, 0.4);
   }
   .aj-btn-primary::after {
     content:''; position:absolute; inset:0;
-    background: linear-gradient(135deg, rgba(99,102,241,.25) 0%, transparent 60%);
-    opacity:0; transition:opacity .2s;
+    background: linear-gradient(135deg, rgba(255,255,255,.2) 0%, transparent 60%);
+    opacity:0; transition:opacity .3s;
   }
-  .aj-btn-primary:hover { transform:translateY(-1px); box-shadow:0 8px 24px rgba(30,27,75,.3); }
+  .aj-btn-primary:hover { 
+    transform:translateY(-2px); 
+    box-shadow: 0 12px 25px -5px rgba(79, 70, 229, 0.5);
+    filter: brightness(1.05);
+  }
   .aj-btn-primary:hover::after { opacity:1; }
   .aj-btn-primary:active { transform:translateY(0); }
+
+  .aj-btn-secondary {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    color: #64748b;
+    transition: all 0.2s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .aj-btn-secondary:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+    color: #1e293b;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+  }
+
 
   .aj-tab {
     position: relative;
@@ -98,7 +119,7 @@ const css = `
   .aj-input:focus {
     outline:none;
     border-color:#6366f1;
-    box-shadow:0 0 0 3px rgba(99,102,241,.12);
+    box-shadow:0 0 0 3px rgba(99,102,241,.08);
   }
 
   .aj-avatar {
@@ -127,7 +148,7 @@ const css = `
 
   .aj-scrollbar::-webkit-scrollbar { width:5px; height:5px; }
   .aj-scrollbar::-webkit-scrollbar-track { background:transparent; }
-  .aj-scrollbar::-webkit-scrollbar-thumb { background:rgba(99,102,241,.25); border-radius:99px; }
+  .aj-scrollbar::-webkit-scrollbar-thumb { background:rgba(99,102,241,.2); border-radius:99px; }
 
   .aj-shine {
     position:relative; overflow:hidden;
@@ -146,6 +167,73 @@ const css = `
     display:inline-block;
     transition:transform .3s cubic-bezier(.22,1,.36,1);
   }
+
+  /* Image specific styles */
+  .aj-section-card {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #F0F0F5;
+    margin-bottom: 24px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+  }
+
+  @media (min-width: 768px) {
+    .aj-section-card {
+      padding: 32px 48px;
+    }
+  }
+
+
+  .aj-section-header {
+    padding: 0;
+    margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+
+  .aj-icon-box {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .aj-input-label {
+    font-size: 9px;
+    font-weight: 800;
+    color: #94A3B8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 6px;
+    display: block;
+  }
+
+  .aj-premium-input {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: #1E293B;
+    background: white;
+    border: 1px solid #E2E8F0;
+    border-radius: 8px;
+    transition: all 0.2s;
+  }
+
+
+  .aj-premium-input:focus {
+    outline: none;
+    border-color: #6366F1;
+    box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.05);
+  }
+
 `;
 
 const STATUS_CONFIG = {
@@ -347,7 +435,7 @@ const AdminJobs = () => {
   return (
     <>
       <style>{css}</style>
-      <div className="aj-root aj-grid-bg min-h-screen bg-[#f7f7fb] px-2 md:px-6 lg:px-8 py-6 space-y-8">
+      <div className="aj-root aj-grid-bg min-h-screen bg-[#f7f7fb] px-4 md:px-12 lg:px-24 py-10 space-y-10">
 
         {/* ── Top Header ── */}
         <div className="aj-slide-up flex flex-col lg:flex-row justify-between items-start lg:items-center gap-5">
@@ -593,8 +681,8 @@ const AdminJobs = () => {
               <table className="w-full text-left border-collapse">
                 <thead>
                   <tr style={{ borderBottom:'1px solid #f1f5f9' }}>
-                    {['Position', 'Department', 'Location', 'Type', 'Experience', 'Actions'].map(h => (
-                      <th key={h} className="px-6 py-4" style={{ background:'#fafafa' }}>
+                    {['Position', 'Department', 'Location', 'Type', 'Experience', 'Actions'].map((h, i) => (
+                      <th key={h} className={`${i === 0 ? 'pl-5' : 'px-6'} py-4`} style={{ background:'#fafafa' }}>
                         <span className="aj-heading text-[10px] font-700 uppercase tracking-[.12em] text-slate-400">{h}</span>
                       </th>
                     ))}
@@ -610,7 +698,7 @@ const AdminJobs = () => {
                     </td></tr>
                   ) : jobs.map(job => (
                     <tr key={job._id} className="aj-row-hover" style={{ borderBottom:'1px solid #f8fafc' }}>
-                      <td className="px-6 py-4">
+                      <td className="pl-5 py-4">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
                             <Briefcase size={16} className="text-indigo-600" />
@@ -682,144 +770,144 @@ const AdminJobs = () => {
 
         {/* ── Job Modal ── */}
         {showJobModal && (
-          <div className="aj-modal-overlay fixed inset-0 bg-slate-900/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-            <div className="aj-modal-enter bg-white rounded-2xl w-full max-w-5xl max-h-[92vh] flex flex-col shadow-2xl">
+          <div className="aj-modal-overlay fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+            <div className="aj-modal-enter bg-[#F8F9FB] rounded-[24px] w-full max-w-5xl max-h-[96vh] flex flex-col shadow-2xl overflow-hidden">
 
               {/* Modal Header */}
-              <div className="px-7 py-5 border-b border-slate-100 flex justify-between items-center shrink-0">
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
-                    {editingJob ? <Edit3 size={16} className="text-white" /> : <Plus size={16} className="text-white" />}
+              <div className="pl-14 pr-10 py-8 bg-white flex justify-between items-center shrink-0">
+                <div className="flex items-center gap-5">
+                  <div className="w-12 h-12 rounded-xl bg-[#5E46E5] flex items-center justify-center shadow-lg shadow-indigo-100 ml-2">
+                    <Plus size={24} className="text-white" />
                   </div>
                   <div>
-                    <h3 className="aj-heading font-700 text-slate-900 text-base">
-                      {editingJob ? 'Edit Posting' : 'New Job Posting'}
+                    <h3 className="aj-serif font-700 text-[#43241C] text-3xl leading-tight">
+                      {editingJob ? 'Update Job Posting' : 'New Job Posting'}
                     </h3>
-                    <p className="text-[11px] text-slate-400 mt-0.5">
-                      {editingJob ? 'Update the job details below' : 'Fill in the details to publish this opening'}
+                    <p className="text-base text-[#8B6D5C] mt-1">
+                      {editingJob ? 'Refine the details of this opening' : 'Fill in the details to publish this opening'}
                     </p>
                   </div>
                 </div>
                 <button onClick={closeModal}
-                  className="text-slate-400 hover:text-slate-600 w-9 h-9 flex items-center justify-center rounded-xl hover:bg-slate-100 transition-colors">
-                  <XCircle size={20} />
+                  className="text-slate-300 hover:text-slate-500 transition-colors">
+                  <XCircle size={32} strokeWidth={1.5} />
                 </button>
               </div>
 
               {/* Modal Body */}
-              <div className="overflow-y-auto aj-scrollbar px-8 py-10 flex-1 bg-slate-50/30">
-                <form onSubmit={handleJobSubmit} id="job-form" className="space-y-16">
+              <div className="overflow-y-auto aj-scrollbar px-10 py-10 flex-1">
+                <form onSubmit={handleJobSubmit} id="job-form" className="space-y-8">
 
-                  {/* Section: Core */}
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden my-10 pt-6">
-                    <div className="px-7 py-5 bg-slate-50/50 border-b border-slate-100 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center shrink-0 shadow-lg shadow-indigo-100">
-                        <Briefcase size={16} className="text-white" />
+
+                  {/* Section: Core Details */}
+                  <div className="aj-section-card shadow-sm border border-slate-100 mt-4">
+                    <div className="aj-section-header">
+                      <div className="aj-icon-box bg-[#6366F120]">
+                        <Briefcase size={18} className="text-[#6366F1]" />
                       </div>
                       <div>
-                        <h4 className="aj-heading text-[11px] font-900 uppercase tracking-widest text-slate-900">Core Job Details</h4>
-                        <p className="text-[10px] text-slate-400 mt-0.5 font-500">Essential identification for the role</p>
+                        <h4 className="text-[13px] font-700 uppercase tracking-wider text-[#4D4D99]">Core Job Details</h4>
+                        <p className="text-[11px] text-[#8B6D5C]">Essential identification for the role</p>
                       </div>
                     </div>
-                    <div className="p-7 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+
                       {[
                         { key:'title',      label:'Job Title',   ph:'e.g. Vedic Astrologer' },
                         { key:'department', label:'Department',  ph:'e.g. Consultation' },
                         { key:'location',   label:'Location',    ph:'e.g. Remote, Delhi' },
                       ].map(({ key, label, ph }) => (
                         <div key={key}>
-                          <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">{label}</label>
+                          <label className="aj-input-label">{label}</label>
                           <input type="text" required placeholder={ph} {...field(key)}
-                            className="aj-input w-full px-5 py-3.5 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 placeholder:text-slate-300 font-500 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                            className="aj-premium-input" />
                         </div>
                       ))}
                     </div>
                   </div>
 
-                  {/* Section: Terms */}
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden my-10 pt-6">
-                    <div className="px-7 py-5 bg-slate-50/50 border-b border-slate-100 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center shrink-0 shadow-lg shadow-blue-100">
-                        <DollarSign size={16} className="text-white" />
+                  {/* Section: Employment Terms */}
+                  <div className="aj-section-card shadow-sm border border-slate-100">
+                    <div className="aj-section-header">
+                      <div className="aj-icon-box bg-[#4F46E520]">
+                        <DollarSign size={18} className="text-[#4F46E5]" />
                       </div>
                       <div>
-                        <h4 className="aj-heading text-[11px] font-900 uppercase tracking-widest text-slate-900">Employment Terms</h4>
-                        <p className="text-[10px] text-slate-400 mt-0.5 font-500">Contractual and financial specifics</p>
+                        <h4 className="text-[13px] font-700 uppercase tracking-wider text-[#4D4D99]">Employment Terms</h4>
+                        <p className="text-[11px] text-[#8B6D5C]">Contractual and financial specifics</p>
                       </div>
                     </div>
-                    <div className="p-7 grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+
                       <div>
-                        <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">Experience Required</label>
+                        <label className="aj-input-label">Experience Required</label>
                         <input type="text" required placeholder="e.g. 2–5 Years" {...field('experience')}
-                          className="aj-input w-full px-5 py-3.5 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 placeholder:text-slate-300 font-500 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                          className="aj-premium-input" />
                       </div>
                       <div>
-                        <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">Employment Type</label>
+                        <label className="aj-input-label">Employment Type</label>
                         <div className="relative">
                           <select {...field('type')}
-                            className="aj-input aj-status-select w-full px-5 py-3.5 pr-12 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 appearance-none font-500 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none">
+                            className="aj-premium-input appearance-none pr-10">
                             {['Full-time','Part-time','Freelance','Contract'].map(t => <option key={t}>{t}</option>)}
                           </select>
-                          <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                          <ChevronDown size={16} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
                         </div>
                       </div>
                       <div>
-                        <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">Salary Range</label>
+                        <label className="aj-input-label">Salary Range</label>
                         <input type="text" required placeholder="₹40k – ₹70k / mo" {...field('salary')}
-                          className="aj-input w-full px-5 py-3.5 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 placeholder:text-slate-300 font-500 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                          className="aj-premium-input" />
                       </div>
                     </div>
                   </div>
 
-                  {/* Section: Description */}
-                  <div className="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden my-10 pt-6">
-                    <div className="px-7 py-5 bg-slate-50/50 border-b border-slate-100 flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center shrink-0 shadow-lg shadow-emerald-100">
-                        <FileText size={16} className="text-white" />
+                  {/* Section: Job Content */}
+                  <div className="aj-section-card shadow-sm border border-slate-100">
+                    <div className="aj-section-header">
+                      <div className="aj-icon-box bg-[#10B98120]">
+                        <FileText size={18} className="text-[#10B981]" />
                       </div>
                       <div>
-                        <h4 className="aj-heading text-[11px] font-900 uppercase tracking-widest text-slate-900">Job Content</h4>
-                        <p className="text-[10px] text-slate-400 mt-0.5 font-500">Detailed role responsibilities and requirements</p>
+                        <h4 className="text-[13px] font-700 uppercase tracking-wider text-[#4D4D99]">Job Content</h4>
+                        <p className="text-[11px] text-[#8B6D5C]">Detailed role responsibilities and requirements</p>
                       </div>
                     </div>
-                    <div className="p-7 space-y-8">
+                    <div className="space-y-5">
+
+
                       <div>
-                        <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">Detailed Description</label>
+                        <label className="aj-input-label">Detailed Description</label>
                         <textarea required rows={4} {...field('description')}
-                          className="aj-input w-full px-5 py-4 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 resize-none font-400 leading-relaxed focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                          className="aj-premium-input resize-none" />
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+
                         <div>
-                          <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">
-                            Responsibilities <span className="font-500 normal-case tracking-normal opacity-50 ml-1">(one per line)</span>
-                          </label>
-                          <textarea rows={5} {...field('responsibilities')}
-                            className="aj-input w-full px-5 py-4 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 resize-none font-400 leading-relaxed focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                          <label className="aj-input-label">Responsibilities <span className="lowercase font-500 opacity-60">(one per line)</span></label>
+                          <textarea rows={4} {...field('responsibilities')}
+                            className="aj-premium-input resize-none" />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">
-                            Requirements <span className="font-500 normal-case tracking-normal opacity-50 ml-1">(one per line)</span>
-                          </label>
-                          <textarea rows={5} {...field('requirements')}
-                            className="aj-input w-full px-5 py-4 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 resize-none font-400 leading-relaxed focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                          <label className="aj-input-label">Requirements <span className="lowercase font-500 opacity-60">(one per line)</span></label>
+                          <textarea rows={4} {...field('requirements')}
+                            className="aj-premium-input resize-none" />
                         </div>
                       </div>
 
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                      <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <div>
-                          <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">
-                            Skills <span className="font-500 normal-case tracking-normal opacity-50 ml-1">(comma separated)</span>
-                          </label>
+                          <label className="aj-input-label">Skills <span className="lowercase font-500 opacity-60">(comma separated)</span></label>
                           <input type="text" placeholder="Vedic Astrology, Sales, Communication" {...field('skills')}
-                            className="aj-input w-full px-5 py-3.5 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 placeholder:text-slate-300 font-500 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                            className="aj-premium-input" />
                         </div>
                         <div>
-                          <label className="block text-[11px] font-800 text-slate-500 uppercase tracking-wider mb-2.5 ml-1">
-                            Qualifications <span className="font-500 normal-case tracking-normal opacity-50 ml-1">(one per line)</span>
-                          </label>
+                          <label className="aj-input-label">Qualifications <span className="lowercase font-500 opacity-60">(one per line)</span></label>
                           <textarea rows={2} {...field('qualifications')}
-                            className="aj-input w-full px-5 py-3.5 text-sm border border-slate-200 rounded-2xl bg-white text-slate-800 resize-none font-400 focus:border-indigo-400 focus:ring-4 focus:ring-indigo-500/5 transition-all outline-none" />
+                            className="aj-premium-input resize-none" />
                         </div>
                       </div>
                     </div>
@@ -827,21 +915,24 @@ const AdminJobs = () => {
                 </form>
               </div>
 
-              {/* Modal Footer */}
-              <div className="px-8 py-6 border-t border-slate-100 flex justify-end items-center gap-4 shrink-0 bg-white rounded-b-2xl">
-                <button type="button" onClick={closeModal}
-                  className="px-6 py-3 text-sm font-700 text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-all active:scale-95">
-                  Cancel
-                </button>
-                <button type="submit" form="job-form"
-                  className="aj-shine px-10 py-3 text-sm font-800 text-white rounded-xl shadow-xl shadow-indigo-100 transition-all hover:-translate-y-0.5 active:scale-95"
-                  style={{ background:'linear-gradient(135deg,#6366f1,#4f46e5)' }}>
-                  {editingJob ? 'Update Position' : 'Publish Position'}
-                </button>
+              <div className="px-10 py-6 bg-white border-t border-slate-100 flex justify-center items-center shrink-0">
+                <div className="w-full max-w-[600px] flex justify-end items-center gap-4 px-12">
+                  <button type="button" onClick={closeModal}
+                    className="aj-btn-secondary px-10 py-3 text-sm font-600 rounded-xl active:scale-95">
+                    Cancel
+                  </button>
+                  <button type="submit" form="job-form"
+                    className="aj-btn-primary aj-shine px-10 py-3 text-sm font-800 text-white rounded-xl active:scale-95 flex items-center gap-2">
+                    {editingJob ? <Edit3 size={16} /> : <CheckCircle size={16} />}
+                    {editingJob ? 'Update Position' : 'Publish Position'}
+                  </button>
+                </div>
               </div>
             </div>
           </div>
         )}
+
+
       </div>
     </>
   );

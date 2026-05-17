@@ -409,11 +409,7 @@ const AdminJobs = () => {
       'Position':         app.appliedRole,
       'Status':           app.status,
       'Total Experience': app.totalExperience,
-      'Astrology Exp':    app.astrologyExperience,
       'Specialization':   app.specialization,
-      'Current Salary':   app.currentSalary,
-      'Expected Salary':  app.expectedSalary,
-      'Notice Period':    app.noticePeriod,
       'Languages':        app.languages,
       'Resume Link':      `${API_BASE}${app.resumeUrl}`,
     }));
@@ -545,8 +541,7 @@ const AdminJobs = () => {
                     {[
                       { label:'Candidate', w:'min-w-[220px]' },
                       { label:'Applied Role', w:'min-w-[150px]' },
-                      { label:'Experience', w:'min-w-[140px]' },
-                      { label:'Compensation', w:'min-w-[130px]' },
+                      { label:'Details', w:'min-w-[140px]' },
                       { label:'Status', w:'min-w-[140px]' },
                       { label:'Actions', w:'min-w-[100px]' },
                     ].map(({ label, w }) => (
@@ -561,7 +556,7 @@ const AdminJobs = () => {
                 <tbody>
                   {loading ? (
                     <tr>
-                      <td colSpan={6} className="py-24 text-center">
+                      <td colSpan={5} className="py-24 text-center">
                         <div className="flex flex-col items-center gap-3 text-slate-400">
                           <div className="w-8 h-8 rounded-full border-2 border-indigo-500/20 border-t-indigo-500"
                             style={{ animation:'aj-spin-slow 1s linear infinite' }} />
@@ -571,7 +566,7 @@ const AdminJobs = () => {
                     </tr>
                   ) : visibleApps.length === 0 ? (
                     <tr>
-                      <td colSpan={6} className="py-24 text-center">
+                      <td colSpan={5} className="py-24 text-center">
                         <div className="flex flex-col items-center gap-2 text-slate-400">
                           <Users size={32} className="opacity-30" />
                           <span className="text-sm">No applications found</span>
@@ -613,7 +608,7 @@ const AdminJobs = () => {
                           </div>
                         </td>
 
-                        {/* Experience */}
+                        {/* Details */}
                         <td className="px-4 py-4">
                           <div className="space-y-1">
                             <div className="flex items-center gap-1.5">
@@ -622,16 +617,8 @@ const AdminJobs = () => {
                             </div>
                             <div className="flex items-center gap-1.5">
                               <span className="w-1 h-1 rounded-full bg-violet-400 shrink-0"></span>
-                              <span className="text-[11px] text-slate-500 truncate">Astro: <b className="text-slate-700 font-600">{app.astrologyExperience}</b></span>
+                              <span className="text-[11px] text-slate-500 truncate">Lang: <b className="text-slate-700 font-600">{app.languages || 'N/A'}</b></span>
                             </div>
-                          </div>
-                        </td>
-
-                        {/* Compensation */}
-                        <td className="px-4 py-4">
-                          <div className="bg-slate-50 rounded-xl px-2.5 py-1.5 border border-slate-100 w-fit min-w-[100px]">
-                            <p className="text-[9px] text-slate-400 font-700 uppercase tracking-wide">Expected</p>
-                            <p className="aj-heading text-xs font-800 text-emerald-700 mt-0.5 truncate">{app.expectedSalary}</p>
                           </div>
                         </td>
 
@@ -657,10 +644,6 @@ const AdminJobs = () => {
                               className="aj-resume-btn w-7 h-7 flex items-center justify-center rounded-lg bg-indigo-50 text-indigo-600" title="View Resume">
                               <FileText size={14} />
                             </a>
-                            <button onClick={() => setSelectedApp(app)}
-                              className="aj-action-btn w-7 h-7 flex items-center justify-center rounded-lg bg-slate-50 text-slate-500" title="Quick View">
-                              <Eye size={14} />
-                            </button>
                             <button onClick={() => handleDeleteApplication(app._id)}
                               className="aj-del-btn w-7 h-7 flex items-center justify-center rounded-lg bg-rose-50 text-rose-500" title="Delete">
                               <Trash2 size={14} />
@@ -746,27 +729,6 @@ const AdminJobs = () => {
           )}
         </div>
 
-        {/* ── Cover Message Preview ── */}
-        {selectedApp && (
-          <div className="aj-modal-overlay fixed inset-0 bg-slate-900/40 backdrop-blur-sm flex items-center justify-center z-50 p-4"
-            onClick={() => setSelectedApp(null)}>
-            <div className="aj-modal-enter bg-white rounded-2xl w-full max-w-lg shadow-2xl p-6" onClick={e => e.stopPropagation()}>
-              <div className="flex justify-between items-start mb-4">
-                <div>
-                  <h3 className="aj-heading font-700 text-slate-900">{selectedApp.fullName}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">{selectedApp.appliedRole}</p>
-                </div>
-                <button onClick={() => setSelectedApp(null)}
-                  className="text-slate-400 hover:text-slate-600 w-8 h-8 flex items-center justify-center rounded-xl hover:bg-slate-100 transition-colors">
-                  <XCircle size={18} />
-                </button>
-              </div>
-              <div className="bg-slate-50 rounded-xl p-4 border border-slate-100 text-sm text-slate-600 leading-relaxed min-h-[100px]">
-                {selectedApp.coverMessage || <span className="italic text-slate-400">No cover message provided.</span>}
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* ── Job Modal ── */}
         {showJobModal && (

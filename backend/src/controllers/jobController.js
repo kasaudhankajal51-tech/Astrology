@@ -58,9 +58,7 @@ export const deleteJob = asyncHandler(async (req, res) => {
 export const applyForJob = asyncHandler(async (req, res) => {
   const { 
     fullName, email, phone, city, totalExperience, 
-    currentOccupation, astrologyExperience, specialization, 
-    currentSalary, expectedSalary, noticePeriod, languages, 
-    coverMessage, appliedRole 
+    specialization, languages, appliedRole 
   } = req.body;
 
   if (!req.file) {
@@ -70,9 +68,7 @@ export const applyForJob = asyncHandler(async (req, res) => {
 
   const application = await JobApplication.create({
     fullName, email, phone, city, totalExperience,
-    currentOccupation, astrologyExperience, specialization,
-    currentSalary, expectedSalary, noticePeriod, languages,
-    coverMessage, appliedRole,
+    specialization, languages, appliedRole,
     resumeUrl: `/uploads/resumes/${req.file.filename}`
   });
 

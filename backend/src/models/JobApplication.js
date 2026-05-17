@@ -6,14 +6,8 @@ const jobApplicationSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   city: { type: String, required: true },
   totalExperience: { type: String, required: true },
-  currentOccupation: { type: String },
-  astrologyExperience: { type: String },
   specialization: { type: String, required: true },
-  currentSalary: { type: String },
-  expectedSalary: { type: String },
-  noticePeriod: { type: String },
   languages: { type: String },
-  coverMessage: { type: String },
   resumeUrl: { type: String, required: true },
   appliedRole: { type: String, required: true }, // The job title or ID
   status: { 

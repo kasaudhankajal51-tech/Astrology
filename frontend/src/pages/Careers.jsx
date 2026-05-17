@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
-  Briefcase, MapPin, Clock, DollarSign, ChevronRight,
+  Briefcase, MapPin, Clock, IndianRupee, ChevronRight,
   Upload, CheckCircle2, Star, Sparkles, Send,
-  User, Mail, Phone, Home, BookOpen, Globe, Zap
+  User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
@@ -213,9 +213,8 @@ const FALLBACK_JOBS = [
 
 const EMPTY_FORM = {
   fullName: '', email: '', phone: '', city: '',
-  totalExperience: '', currentOccupation: '', astrologyExperience: '',
-  specialization: 'Vedic Astrology', currentSalary: '', expectedSalary: '',
-  noticePeriod: '', languages: '', coverMessage: '',
+  totalExperience: '', specialization: 'Vedic Astrology',
+  languages: '',
 };
 
 export default function Careers() {
@@ -225,8 +224,40 @@ export default function Careers() {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [resume, setResume] = useState(null);
+  const detailRef = useRef(null);
+
+  const [searchTerm, setSearchTerm] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [filterDept, setFilterDept] = useState('All');
+
+  // Debounce search input for performance
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchTerm), 300);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const departments = ['All', ...new Set(jobs.map(j => j.department))];
+  const filteredJobs = jobs.filter(j => {
+    const matchSearch = j.title?.toLowerCase().includes(debouncedSearch.toLowerCase()) || j.location?.toLowerCase().includes(debouncedSearch.toLowerCase());
+    const matchDept = filterDept === 'All' || j.department === filterDept;
+    return matchSearch && matchDept;
+  });
+
+  const handleJobClick = (job) => {
+    setSelectedJob(job);
+    setTimeout(() => {
+      if (window.innerWidth <= 991 && detailRef.current) {
+        const y = detailRef.current.getBoundingClientRect().top + window.scrollY - 100;
+        window.scrollTo({ top: y, behavior: 'smooth' });
+      }
+    }, 150);
+  };
 
   useEffect(() => {
+    document.title = 'Careers | DS Astro';
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) metaDesc.content = 'Join India\'s leading astrology platform. Explore cosmic careers at DS Astro.';
+
     fetchJobs();
     /* Inject fonts once */
     if (!document.getElementById('careers-fonts')) {
@@ -261,9 +292,19 @@ export default function Careers() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!resume) return toast.error('Please upload your resume');
+
+    // Client-side Validation
+    const phoneRegex = /^[0-9]{10,12}$/;
+    if (!phoneRegex.test(formData.phone.replace(/[\s\-\+]/g, ''))) {
+      return toast.error('Please enter a valid phone number (10-12 digits)');
+    }
+
     setSubmitting(true);
     const fd = new FormData();
-    Object.keys(formData).forEach((k) => fd.append(k, formData[k]));
+    Object.keys(formData).forEach((k) => {
+      const val = formData[k];
+      fd.append(k, typeof val === 'string' ? val.trim() : val);
+    });
     fd.append('resume', resume);
     fd.append('appliedRole', selectedJob?.title || 'General Application');
     try {
@@ -365,20 +406,55 @@ export default function Careers() {
               <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
                 <Briefcase size={13} /> Open Positions
               </span>
-              <span style={S.rolesBadge}>{jobs.length} Roles</span>
+              <span style={S.rolesBadge}>{filteredJobs.length} Roles</span>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
+              <div style={{ position: 'relative' }}>
+                <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9a8f85' }} />
+                <input
+                  type="text"
+                  placeholder="Search roles or locations..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="careers-input"
+                  style={{ ...S.input, paddingLeft: 30, fontSize: 12, padding: '7px 12px 7px 30px' }}
+                />
+              </div>
+              <div style={{ position: 'relative' }}>
+                <Filter size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9a8f85' }} />
+                <select
+                  value={filterDept}
+                  onChange={(e) => setFilterDept(e.target.value)}
+                  className="careers-input"
+                  style={{ ...S.select, paddingLeft: 30, fontSize: 12, padding: '7px 12px 7px 30px' }}
+                >
+                  {departments.map(dept => (
+                    <option key={dept} value={dept}>{dept}</option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             <div className="careers-job-list" style={{ maxHeight: 800, overflowY: 'auto', paddingRight: 4 }}>
-              {jobs.map((job) => {
+              {filteredJobs.length === 0 && (
+                <div style={{ fontSize: 13, color: '#9a8f85', textAlign: 'center', padding: '20px 0' }}>
+                  No jobs found matching your criteria.
+                </div>
+              )}
+              {filteredJobs.map((job) => {
                 const active = selectedJob?._id === job._id;
                 return (
                   <motion.div
                     key={job._id}
+                    role="button"
+                    tabIndex={0}
                     className="job-item-card"
                     style={S.jobItem(active)}
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
-                    onClick={() => setSelectedJob(job)}
+                    onClick={() => handleJobClick(job)}
+                    onKeyDown={(e) => e.key === 'Enter' && handleJobClick(job)}
                   >
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
                       <span style={S.jobItemTitle(active)}>{job.title}</span>
@@ -393,7 +469,7 @@ export default function Careers() {
                     <div style={S.jobItemMeta}>
                       <div style={S.metaItem}><MapPin size={11} />{job.location}</div>
                       <div style={S.metaItem}><Clock size={11} />{job.experience}</div>
-                      <div style={{ ...S.metaItem, gridColumn: '1 / -1' }}><DollarSign size={11} />{job.salary}</div>
+                      <div style={{ ...S.metaItem, gridColumn: '1 / -1' }}><IndianRupee size={11} />{job.salary}</div>
                     </div>
                   </motion.div>
                 );
@@ -402,7 +478,7 @@ export default function Careers() {
           </div>
 
           {/* ── RIGHT: Detail + Form ── */}
-          <div className="careers-content">
+          <div className="careers-content" ref={detailRef}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={selectedJob?._id}
@@ -485,14 +561,6 @@ export default function Careers() {
                       <Field label="Total Experience" icon={<Briefcase size={11} />}>
                         <input className="careers-input" style={S.input} type="text" name="totalExperience" required value={formData.totalExperience} onChange={handleChange} placeholder="e.g. 5 Years" />
                       </Field>
-                      <Field label="Current Occupation" icon={<Star size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="currentOccupation" value={formData.currentOccupation} onChange={handleChange} placeholder="Current role" />
-                      </Field>
-
-                      {/* Row 4 */}
-                      <Field label="Astrology Experience" icon={<Sparkles size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="astrologyExperience" value={formData.astrologyExperience} onChange={handleChange} placeholder="Years in astrology" />
-                      </Field>
                       <Field label="Specialization" icon={<Globe size={11} />}>
                         <select className="careers-input" style={S.select} name="specialization" value={formData.specialization} onChange={handleChange}>
                           <option>Vedic Astrology</option>
@@ -505,21 +573,11 @@ export default function Careers() {
                         </select>
                       </Field>
 
-                      {/* Row 5 */}
-                      <Field label="Current Salary (LPA)" icon={<DollarSign size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="currentSalary" value={formData.currentSalary} onChange={handleChange} placeholder="e.g. 6 LPA" />
-                      </Field>
-                      <Field label="Expected Salary (LPA)" icon={<DollarSign size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="expectedSalary" value={formData.expectedSalary} onChange={handleChange} placeholder="e.g. 9 LPA" />
-                      </Field>
-
-                      {/* Row 6 */}
-                      <Field label="Notice Period" icon={<Clock size={11} />}>
-                        <input className="careers-input" style={S.input} type="text" name="noticePeriod" value={formData.noticePeriod} onChange={handleChange} placeholder="e.g. 1 Month" />
-                      </Field>
+                      {/* Row 4 */}
                       <Field label="Languages Known" icon={<Globe size={11} />}>
                         <input className="careers-input" style={S.input} type="text" name="languages" value={formData.languages} onChange={handleChange} placeholder="English, Hindi…" />
                       </Field>
+                      <div></div>
                     </div>
 
                     {/* Resume Upload */}
@@ -538,7 +596,7 @@ export default function Careers() {
                         <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
                         <div style={S.uploadText}>
                           {resume ? (
-                            <span style={{ color: '#8a6e1e', fontWeight: 500 }}>{resume.name}</span>
+                            <span style={{ color: '#8a6e1e', fontWeight: 500, wordBreak: 'break-all' }}>{resume.name}</span>
                           ) : (
                             'Click to upload or drag & drop'
                           )}
@@ -547,21 +605,23 @@ export default function Careers() {
                       <input
                         id="resume-upload" type="file" accept=".pdf,.doc,.docx"
                         style={{ display: 'none' }}
-                        onChange={(e) => setResume(e.target.files[0])}
-                      />
-                    </div>
-
-                    {/* Cover Message */}
-                    <div style={{ ...S.fieldWrap, marginBottom: 4 }}>
-                      <label style={S.fieldLabel}><BookOpen size={11} /> Cover Message</label>
-                      <textarea
-                        className="careers-input"
-                        style={S.textarea}
-                        name="coverMessage"
-                        rows={4}
-                        value={formData.coverMessage}
-                        onChange={handleChange}
-                        placeholder="Tell us why you are a great fit for DS Astro…"
+                        onChange={(e) => {
+                          const file = e.target.files[0];
+                          if (file) {
+                            if (file.size > 5 * 1024 * 1024) {
+                              toast.error('File size must be less than 5MB');
+                              e.target.value = '';
+                              return;
+                            }
+                            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                            if (!validTypes.includes(file.type)) {
+                              toast.error('Please upload only PDF, DOC, or DOCX files');
+                              e.target.value = '';
+                              return;
+                            }
+                            setResume(file);
+                          }
+                        }}
                       />
                     </div>
 

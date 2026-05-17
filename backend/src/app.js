@@ -36,7 +36,17 @@ app.use(express.json());
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-app.use('/uploads', express.static(path.join(__dirname, '../uploads')));
+app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
+  setHeaders: (res, filePath) => {
+    const ext = path.extname(filePath).toLowerCase();
+    if (ext === '.pdf') {
+      res.setHeader('Content-Type', 'application/pdf');
+      res.setHeader('Content-Disposition', 'inline; filename="' + path.basename(filePath) + '"');
+    } else if (ext === '.doc' || ext === '.docx') {
+      res.setHeader('Content-Disposition', 'attachment; filename="' + path.basename(filePath) + '"');
+    }
+  }
+}));
 
 // --- DB Connection (Serverless-safe singleton) ---
 let isConnected = false;

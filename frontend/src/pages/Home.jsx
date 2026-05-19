@@ -220,7 +220,15 @@ const AstrologyCourses = ({ onEnroll }) => {
         .aw::before { content: '✦'; position: absolute; top: 20px; left: 30px; font-size: 60px; opacity: .06; color: var(--primary-color); pointer-events: none; }
         .aw::after { content: '☽'; position: absolute; bottom: 30px; right: 40px; font-size: 80px; opacity: .06; color: var(--primary-color); pointer-events: none; }
         .ah { text-align: center; margin-bottom: 2.5rem; }
-        .ah h2 { font-family: var(--font-serif); font-size: clamp(1.8rem,5vw,2.8rem); color: var(--text-heading); letter-spacing: .02em; margin: 0 0 .4rem; font-weight: 700; }
+        .ah h2 {
+          font-family: var(--font-serif) !important;
+          font-size: clamp(42px, 5vw, 48px) !important;
+          font-weight: 700 !important;
+          color: var(--text-heading) !important;
+          line-height: 1.2;
+          letter-spacing: .02em;
+          margin: 0 0 .4rem;
+        }
         .atag { font-size: .75rem; letter-spacing: .15em; color: var(--text-muted); text-transform: uppercase; margin-bottom: .6rem; display: flex; align-items: center; gap: 10px; justify-content: center; }
         .atag::before, .atag::after { content: '—'; opacity: .4; }
         .asub { color: var(--text-content); font-size: .95rem; max-width: 500px; margin: 0 auto; line-height: 1.7; }
@@ -255,9 +263,15 @@ const AstrologyCourses = ({ onEnroll }) => {
         .fts { font-size: 1.15rem; color: var(--text-muted); font-family: var(--font-sans); font-weight: 500; }
         .svgd { position: absolute; opacity: .07; pointer-events: none; }
 
+        @media (max-width: 991px) {
+          .ah h2 { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
+        }
+        @media (max-width: 767px) {
+          .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
+        }
         @media (max-width: 480px) {
           .aw { padding: 3rem 1rem; }
-          .ah h2 { font-size: clamp(1.8rem, 8vw, 2.4rem); }
+          .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
           .cc { max-width: 100%; }
           .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
@@ -314,7 +328,7 @@ const AstrologyCourses = ({ onEnroll }) => {
         </svg>
 
         <div className="ah">
-          <h2>Astrology Courses</h2>
+          <h2>Astrology <span className="text-gradient">Courses</span></h2>
           <div className="dl"><div className="dd"/></div>
           <div className="atag">Ancient Wisdom &nbsp;·&nbsp; Modern Learning &nbsp;·&nbsp; Meaningful Transformation</div>
           <p className="asub">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
@@ -761,7 +775,7 @@ function Home() {
               <div className="col-lg-6">
                 <h5 className="section-subtitle about-subtitle" data-aos="fade-up" data-aos-once="true">About Astro Ava</h5>
                 <h2 className="section-title my-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="100">
-                  Unlock a Brilliant Future with Astrology
+                  Unlock a Brilliant Future with <span className="text-gradient">Astrology</span>
                 </h2>
                 <p className="section-desc mt-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
                   Discover Your True Potential with Expert Astrology Guidance!
@@ -780,7 +794,7 @@ function Home() {
           <div className="container">
             <div className="text-center mb-5">
               <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
-              <h2 className="section-title mt-2" data-aos="fade-up">Guiding You Through Life</h2>
+              <h2 className="section-title mt-2" data-aos="fade-up">Guiding You <span className="text-gradient">Through Life</span></h2>
               <p className="mx-auto mt-3" style={{maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: 'var(--text-content)'}} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
               </p>
@@ -1027,7 +1041,7 @@ function Home() {
           <div className="container">
             <div className="text-center mb-5" data-aos="fade-up">
               <h5 className="section-subtitle">🌟 Professional Guidance 🌟</h5>
-              <h2 className="section-title">Expert Consultations</h2>
+              <h2 className="section-title">Expert <span className="text-gradient">Consultations</span></h2>
               <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
             </div>
             
@@ -1113,7 +1127,7 @@ function Home() {
             <div className="container py-4">
               <div className="text-center mb-5">
                 <h5 className="section-subtitle" data-aos="fade-up">✨ News & Insights ✨</h5>
-                <h2 className="section-title mt-2" data-aos="fade-up">Latest from our Blog</h2>
+                <h2 className="section-title mt-2" data-aos="fade-up">Latest from <span className="text-gradient">our Blog</span></h2>
               </div>
               <div className="row g-4">
                 {blogs.map((blog, idx) => (
@@ -2303,7 +2317,7 @@ function Home() {
           .big-circle { width: 320px; height: 320px; }
           .small-circle { width: 220px; height: 220px; }
           .icon-block { width: 45px; height: 45px; }
-          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem); }
+          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
           .banner-btn-row { justify-content: center; }
           .zodiac-hero-graphic { 
             display: block !important; 
@@ -2326,7 +2340,7 @@ function Home() {
           .banner-title { font-size: clamp(2rem, 8vw, 2.5rem); }
           .banner-desc { font-size: 1.05rem; }
           .about-part-section, .services-section, .testimonial-section { padding: 60px 0; }
-          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem); }
+          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
           .testimonial-text { font-size: 1rem; min-height: 80px; }

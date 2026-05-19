@@ -217,13 +217,19 @@ function CourseDetail() {
         }
 
         .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: 2.2rem;
-          color: #2A0F02;
+          font-family: 'Playfair Display', serif !important;
+          font-size: clamp(42px, 5vw, 48px) !important;
+          color: #2A0F02 !important;
           margin-bottom: 35px;
           position: relative;
           padding-bottom: 20px;
-          font-weight: 700;
+          font-weight: 700 !important;
+        }
+
+        .text-gradient {
+          background: linear-gradient(135deg, #8B4A1E, #C8832A);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .section-title::after {
@@ -643,7 +649,7 @@ function CourseDetail() {
             padding: 35px 20px;
           }
           .section-title {
-            font-size: 1.8rem;
+            font-size: clamp(2.2rem, 5vw, 2.8rem) !important;
           }
         }
 
@@ -665,7 +671,7 @@ function CourseDetail() {
             margin-top: -40px;
           }
           .section-title {
-            font-size: 1.7rem;
+            font-size: clamp(1.8rem, 6vw, 2.2rem) !important;
             text-align: center;
             margin-bottom: 25px;
           }
@@ -744,12 +750,12 @@ function CourseDetail() {
         <div className="row g-5">
           <div className="col-lg-8" data-aos="fade-up">
             <div className="content-card">
-              <h2 className="section-title">Course Overview</h2>
+              <h2 className="section-title">Course <span className="text-gradient">Overview</span></h2>
               <div className="description-text">
                 {course.longDesc}
               </div>
 
-              <h2 className="section-title" data-aos="fade-up">What You Will Learn</h2>
+              <h2 className="section-title" data-aos="fade-up">What You <span className="text-gradient">Will Learn</span></h2>
               <div className="topics-grid">
                 {course.topics.map((topic, i) => (
                   <div key={i} className="topic-item" data-aos="fade-up" data-aos-delay={i * 50}>
@@ -759,7 +765,7 @@ function CourseDetail() {
                 ))}
               </div>
 
-              <h2 className="section-title" data-aos="fade-up">Course Features</h2>
+              <h2 className="section-title" data-aos="fade-up">Course <span className="text-gradient">Features</span></h2>
               <div className="row g-4 mb-5">
                 {[
                   { icon: 'broadcast-tower', title: 'Live Interactive Classes', desc: 'Step-by-step teaching method' },

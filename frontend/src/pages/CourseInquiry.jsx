@@ -119,7 +119,7 @@ function CourseInquiry() {
       <section className="audience-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Is This Course For You?</h2>
+            <h2 className="section-title">Is This Course <span className="text-gradient">For You?</span></h2>
             <div className="header-underline"></div>
           </div>
           <div className="audience-grid">
@@ -147,7 +147,7 @@ function CourseInquiry() {
       <section className="benefits-section">
         <div className="container">
           <div className="section-header">
-            <h2 className="section-title">Course Modules</h2>
+            <h2 className="section-title">Course <span className="text-gradient">Modules</span></h2>
             <div className="header-underline"></div>
           </div>
           <div className="benefits-list">
@@ -210,7 +210,7 @@ function CourseInquiry() {
       <section className="testimonials-section">
         <div className="container">
           <div className="section-header text-center">
-            <h2 className="section-title">Student Success Stories</h2>
+            <h2 className="section-title">Student Success <span className="text-gradient">Stories</span></h2>
             <div className="header-underline mx-auto"></div>
           </div>
           <div className="testimonials-grid">
@@ -276,7 +276,27 @@ function CourseInquiry() {
           -webkit-text-fill-color: transparent;
         }
         .section-header { margin-bottom: 40px; }
-        .section-title { font-size: clamp(2rem, 4vw, 2.8rem); font-weight: 800; line-height: 1.2; margin-bottom: 10px; }
+        .section-title {
+          font-size: clamp(42px, 5vw, 48px) !important;
+          font-weight: 800 !important;
+          line-height: 1.2;
+          margin-bottom: 10px;
+        }
+
+        .text-gradient {
+          background: linear-gradient(135deg, var(--brand-accent), var(--brand-highlight));
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+        }
+
+        @media (max-width: 991px) {
+          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
+        }
+
+        @media (max-width: 767px) {
+          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
+        }
+
         .header-underline { height: 4px; width: 60px; background: var(--brand-accent); border-radius: 2px; }
         .mx-auto { margin-left: auto; margin-right: auto; }
         .text-center { text-align: center; }

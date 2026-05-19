@@ -233,7 +233,7 @@ function Consultations() {
         <div className="container position-relative">
           <div className="text-center mb-5 pb-4">
             <h5 className="section-subtitle" data-aos="fade-down">Divine Guidance & Transformation</h5>
-            <h2 className="section-title mt-2" data-aos="fade-up">Consultation Services</h2>
+            <h2 className="section-title mt-2" data-aos="fade-up">Consultation <span className="text-gradient">Services</span></h2>
             <p className="header-desc mx-auto" data-aos="fade-up" data-aos-delay="100">
               Understand your life path, remove confusion, and make decisions with confidence. Every session is conducted with complete dedication and confidentiality.
             </p>
@@ -460,11 +460,17 @@ function Consultations() {
         }
 
         .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(2.5rem, 5vw, 4rem);
-          font-weight: 900;
-          color: var(--cosmic-text);
+          font-family: 'Playfair Display', serif !important;
+          font-size: clamp(42px, 5vw, 48px) !important;
+          font-weight: 900 !important;
+          color: var(--cosmic-text) !important;
           margin-bottom: 20px;
+        }
+
+        .text-gradient {
+          background: var(--cosmic-gradient);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
         }
 
         .header-desc {
@@ -886,11 +892,12 @@ function Consultations() {
           .category-name { font-size: 2.2rem; }
           .category-icon-box { width: 45px; height: 45px; font-size: 1.2rem; }
           .cta-title { font-size: 2rem; }
+          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
         }
 
         @media (max-width: 767px) {
           .consult-grid { grid-template-columns: 1fr; }
-          .section-title { font-size: 2.2rem; }
+          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
           .card-info h4 { font-size: 1.5rem; }
           .category-name { font-size: 1.8rem; }
           .guidelines-grid { grid-template-columns: 1fr; }

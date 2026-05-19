@@ -83,7 +83,7 @@ function About() {
       <section className="unique-features py-5">
         <div className="container">
           <div className="text-center mb-5" data-aos="fade-up" data-aos-duration="700">
-            <h2 className="section-title text-dark">✨ What Makes Us Unique? ✨</h2>
+            <h2 className="section-title text-dark">✨ What Makes Us <span className="text-gradient">Unique?</span> ✨</h2>
             <p className="unique-subtitle mt-3">Discover why thousands trust us for their cosmic guidance</p>
           </div>
           <div className="row g-4">
@@ -294,11 +294,19 @@ function About() {
         }
 
         .section-title {
-          font-family: var(--font-serif);
-          font-size: clamp(2rem, 4vw, 3rem);
-          font-weight: 700;
-          color: var(--text-heading);
-          line-height: 1.3;
+          font-family: var(--font-serif) !important;
+          font-size: clamp(42px, 5vw, 48px) !important;
+          font-weight: 700 !important;
+          color: var(--text-heading) !important;
+          line-height: 1.2;
+        }
+
+        @media (max-width: 991px) {
+          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
+        }
+
+        @media (max-width: 767px) {
+          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
         }
 
         .about-text {

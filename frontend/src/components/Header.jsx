@@ -76,15 +76,11 @@ function Header() {
       const content = document.getElementById('reportScrollContent');
       if (!content) return;
       
-      if (window.innerWidth >= 768) {
-        content.style.animation = 'scrollLeftSmooth 38s linear infinite';
-        if (content.children.length < 10 && !content.hasAttribute('data-cloned')) {
-          const originalHTML = content.innerHTML;
-          content.innerHTML = originalHTML + originalHTML;
-          content.setAttribute('data-cloned', 'true');
-        }
-      } else {
-        content.style.animation = 'none';
+      content.style.animation = 'scrollLeftSmooth 38s linear infinite';
+      if (!content.hasAttribute('data-cloned')) {
+        const originalHTML = content.innerHTML;
+        content.innerHTML = originalHTML + originalHTML;
+        content.setAttribute('data-cloned', 'true');
       }
     };
 
@@ -137,12 +133,9 @@ function Header() {
         }
         
         .scroll-wrapper {
-          overflow-x: auto;
+          overflow-x: hidden;
           flex: 1;
           width: 100%;
-          scrollbar-width: none;
-          -ms-overflow-style: none;
-          -webkit-overflow-scrolling: touch;
         }
         
         .scroll-wrapper::-webkit-scrollbar {

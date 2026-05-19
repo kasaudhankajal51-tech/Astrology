@@ -5,6 +5,7 @@ import AdminLeads from './AdminLeads';
 import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
 import AdminSettings from './AdminSettings';
+import AdminNewsletter from './AdminNewsletter';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -119,6 +120,7 @@ function AdminDashboard() {
             <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Courses" />
             <SidebarItem id="leads" filter="Consultation" icon="fa-user-md" label="Consulting" />
             <SidebarItem id="leads" filter="Webinar" icon="fa-video" label="Webinars" />
+            <SidebarItem id="newsletter" icon="fa-envelope" label="Newsletter" />
           </div>
 
           <div className="sb-group">
@@ -161,6 +163,7 @@ function AdminDashboard() {
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Team Hiring'}
                 {activeTab === 'settings' && 'Platform Settings'}
+                {activeTab === 'newsletter' && 'Newsletter Subscribers'}
               </div>
               <div className="topbar-breadcrumb">
                 <span>Admin</span>
@@ -295,6 +298,7 @@ function AdminDashboard() {
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
           {activeTab === 'settings' && <AdminSettings />}
+          {activeTab === 'newsletter' && <AdminNewsletter />}
         </main>
       </div>
     </div>

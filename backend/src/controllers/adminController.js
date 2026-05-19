@@ -1,6 +1,7 @@
 import Lead from '../models/leadModel.js';
 import Blog from '../models/Blog.js';
 import JobApplication from '../models/JobApplication.js';
+import Newsletter from '../models/Newsletter.js';
 import asyncHandler from 'express-async-handler';
 
 // @desc    Get dashboard stats
@@ -10,6 +11,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const totalLeadsCount = await Lead.countDocuments();
   const activeBlogsCount = await Blog.countDocuments();
   const expertNetworkCount = await JobApplication.countDocuments();
+  const newsletterSubscribersCount = await Newsletter.countDocuments();
   
   // Specific Category Counts
   const courseLeads = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] } });
@@ -24,6 +26,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const recentLeads = await Lead.countDocuments({ createdAt: { $gte: lastMonth } });
   const recentBlogs = await Blog.countDocuments({ updatedAt: { $gte: lastMonth } });
   const recentJobs = await JobApplication.countDocuments({ createdAt: { $gte: lastMonth } });
+  const recentSubscribers = await Newsletter.countDocuments({ createdAt: { $gte: lastMonth } });
   
   const recentCourses = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] }, createdAt: { $gte: lastMonth } });
   const recentConsulting = await Lead.countDocuments({ type: 'Consultation', createdAt: { $gte: lastMonth } });
@@ -47,7 +50,8 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       courseLeads: { value: courseLeads.toLocaleString(), delta: getDelta(recentCourses, courseLeads) },
       consultingLeads: { value: consultingLeads.toLocaleString(), delta: getDelta(recentConsulting, consultingLeads) },
       webinarLeads: { value: webinarLeads.toLocaleString(), delta: getDelta(recentWebinars, webinarLeads) },
-      contactLeads: { value: contactLeads.toLocaleString(), delta: getDelta(recentContacts, contactLeads) }
+      contactLeads: { value: contactLeads.toLocaleString(), delta: getDelta(recentContacts, contactLeads) },
+      newsletterSubscribers: { value: newsletterSubscribersCount.toLocaleString(), delta: getDelta(recentSubscribers, newsletterSubscribersCount) }
     }
   });
 });

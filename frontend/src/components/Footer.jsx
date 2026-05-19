@@ -1,6 +1,8 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import API_BASE from '../utils/api';
+import toast from 'react-hot-toast';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -124,6 +126,33 @@ const EMISVG = () => (
 function Footer() {
   const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
+  const [desktopEmail, setDesktopEmail] = useState('');
+  const [mobileEmail, setMobileEmail] = useState('');
+
+  const handleSubscribe = async (e, emailToSubscribe, setSubEmail) => {
+    e.preventDefault();
+    if (!emailToSubscribe) {
+      toast.error('Please enter your email address.');
+      return;
+    }
+    
+    try {
+      const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: emailToSubscribe })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success(data.message);
+        setSubEmail('');
+      } else {
+        toast.error(data.message || 'Subscription failed. Please try again.');
+      }
+    } catch (err) {
+      toast.error('Network Error. Please try again.');
+    }
+  };
 
   // Map social links from settings
   const socialLinks = [
@@ -386,10 +415,18 @@ function Footer() {
             </div>
             <div>
               <h5 className="fb-head">Newsletter</h5>
-              <div className="d-flex mt-3">
-                <input type="email" className="form-control" placeholder="Email" style={{borderRadius: '8px 0 0 8px', border: '1px solid #D4B896'}} />
-                <button className="btn" style={{background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0'}}>Join</button>
-              </div>
+              <form onSubmit={(e) => handleSubscribe(e, desktopEmail, setDesktopEmail)} className="d-flex mt-3">
+                <input 
+                  type="email" 
+                  className="form-control" 
+                  placeholder="Email" 
+                  value={desktopEmail}
+                  onChange={(e) => setDesktopEmail(e.target.value)}
+                  style={{borderRadius: '8px 0 0 8px', border: '1px solid #D4B896'}} 
+                  required
+                />
+                <button type="submit" className="btn" style={{background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0'}}>Join</button>
+              </form>
             </div>
           </div>
         </div>
@@ -495,10 +532,17 @@ function Footer() {
           {/* Newsletter */}
           <div className="phone-newsletter">
             <div className="phone-nav-head">Newsletter</div>
-            <div className="phone-email-row">
-              <input type="email" placeholder="Email" className="phone-email-input" />
-              <button className="phone-join-btn">Join</button>
-            </div>
+            <form onSubmit={(e) => handleSubscribe(e, mobileEmail, setMobileEmail)} className="phone-email-row">
+              <input 
+                type="email" 
+                placeholder="Email" 
+                value={mobileEmail}
+                onChange={(e) => setMobileEmail(e.target.value)}
+                className="phone-email-input" 
+                required
+              />
+              <button type="submit" className="phone-join-btn">Join</button>
+            </form>
           </div>
 
           {/* Divider */}

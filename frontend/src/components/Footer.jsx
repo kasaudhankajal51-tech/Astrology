@@ -369,9 +369,9 @@ function Footer() {
             <div>
               <h5 className="fb-head">Consultations</h5>
               <ul className="fb-nav">
-                <li><Link to="#">Horoscope</Link></li>
-                <li><Link to="#">Marriage</Link></li>
-                <li><Link to="#">Career</Link></li>
+                <li><Link to="/consultations/tarot">Tarot Card Reading</Link></li>
+                <li><Link to="/consultations/career">Career Consultation</Link></li>
+                <li><Link to="/consultations/divorce">Divorce Consultation</Link></li>
               </ul>
             </div>
             <div>
@@ -475,9 +475,9 @@ function Footer() {
             <div>
               <div className="phone-nav-head">Consultations</div>
               <ul className="phone-nav-list">
-                <li><Link to="#">Horoscope</Link></li>
-                <li><Link to="#">Marriage</Link></li>
-                <li><Link to="#">Career</Link></li>
+                <li><Link to="/consultations/tarot">Tarot Card Reading</Link></li>
+                <li><Link to="/consultations/career">Career Consultation</Link></li>
+                <li><Link to="/consultations/divorce">Divorce Consultation</Link></li>
               </ul>
             </div>
             <div>
@@ -487,7 +487,7 @@ function Footer() {
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/careers">Careers</Link></li>
-                <li><Link to="/admin">Admin</Link></li>
+          
               </ul>
             </div>
           </div>

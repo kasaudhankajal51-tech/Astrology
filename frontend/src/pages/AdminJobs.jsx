@@ -440,7 +440,7 @@ const AdminJobs = () => {
               <div className="w-8 h-8 rounded-xl bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-200">
                 <Sparkles size={16} className="text-white" />
               </div>
-              <h1 className="aj-heading text-2xl font-800 text-slate-900 tracking-tight">Careers Hub</h1>
+              <h1 className="aj-heading text-xl font-700 text-slate-900 tracking-tight">Careers Hub</h1>
             </div>
             <p className="text-sm text-slate-400 font-400 ml-11">Recruitment pipeline & job management</p>
           </div>
@@ -665,8 +665,8 @@ const AdminJobs = () => {
                 <thead>
                   <tr style={{ borderBottom:'1px solid #f1f5f9' }}>
                     {['Position', 'Department', 'Location', 'Type', 'Experience', 'Actions'].map((h, i) => (
-                      <th key={h} className={`${i === 0 ? 'pl-5' : 'px-6'} py-4`} style={{ background:'#fafafa' }}>
-                        <span className="aj-heading text-[10px] font-700 uppercase tracking-[.12em] text-slate-400">{h}</span>
+                      <th key={h} className={`${i === 0 ? 'pr-6' : 'px-6'} py-4`} style={{ background:'#fafafa', paddingLeft: i === 0 ? '60px' : undefined }}>
+                        <span className="aj-heading text-[10px] font-700 uppercase tracking-[.12em] text-black">{h}</span>
                       </th>
                     ))}
                   </tr>
@@ -681,7 +681,7 @@ const AdminJobs = () => {
                     </td></tr>
                   ) : jobs.map(job => (
                     <tr key={job._id} className="aj-row-hover" style={{ borderBottom:'1px solid #f8fafc' }}>
-                      <td className="pl-5 py-4">
+                      <td className="pr-6 py-4" style={{ paddingLeft: '60px' }}>
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-xl bg-indigo-50 border border-indigo-100 flex items-center justify-center shrink-0">
                             <Briefcase size={16} className="text-indigo-600" />

@@ -114,13 +114,6 @@ function AdminSettings() {
       animate={{ opacity: 1, y: 0 }}
       className="settings-container"
     >
-      <div className="settings-header">
-        <div className="sh-info">
-          <h1>Platform Configuration</h1>
-          <p>Global parameters for the AstroAva ecosystem</p>
-        </div>
-      </div>
-
       <div className="settings-card">
         <aside className="settings-sidebar">
           <div className="sidebar-group-label">Core Settings</div>

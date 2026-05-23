@@ -43,6 +43,16 @@ function Contact() {
             <p><i className="fas fa-building"></i> {settings?.address || 'Varanasi, Uttar Pradesh, India'}</p>
             <p><i className="fas fa-phone"></i> {settings?.contactPhone || '+91 75709 72970'}</p>
             <p><i className="fas fa-envelope"></i> {settings?.contactEmail || 'support@astroava.com'}</p>
+            
+            <div className="grievance-officer mt-4 p-3" style={{ background: 'rgba(255,255,255,0.05)', borderRadius: '8px', borderLeft: '4px solid #ff6a00' }}>
+              <h5 style={{ color: '#ff6a00', marginBottom: '10px' }}>Grievance Officer</h5>
+              <p style={{ margin: '0 0 5px' }}><strong>Name:</strong> Ananya Singh</p>
+              <p style={{ margin: '0 0 5px' }}><strong>Email:</strong> help@dsastroinstitute.com</p>
+              <p style={{ margin: '0 0 5px' }}><strong>Phone:</strong> +91 7570972970</p>
+              <p style={{ margin: '0 0 5px' }}><strong>Address:</strong> D321, Vibhuti Khand, Lucknow, Uttar Pradesh - 226010</p>
+              <p style={{ margin: '0' }}><strong>Response time:</strong> Within 7 working days</p>
+            </div>
+
             <img src="/images/logo.png" alt="logo" className="contact-logo" />
           </div>
 
@@ -64,6 +74,12 @@ function Contact() {
               <div className="form-group">
                 <label>Message</label>
                 <textarea rows="5" value={formData.message} onChange={(e) => setFormData({...formData, message: e.target.value})} required></textarea>
+              </div>
+              <div className="form-group consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginTop: '20px' }}>
+                <input type="checkbox" id="consent" name="consent" required style={{ width: 'auto', marginTop: '4px' }} />
+                <label htmlFor="consent" style={{ fontSize: '13px', color: '#ccc', lineHeight: '1.4' }}>
+                  I agree to the <a href="/privacy-policy" style={{ color: '#ff6a00' }}>Privacy Policy</a> and consent to DS Astro Institute LLP contacting me via phone, email, and WhatsApp.
+                </label>
               </div>
               <button type="submit" className="submit-btn">Submit</button>
             </form>

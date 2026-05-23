@@ -499,15 +499,15 @@ function Header() {
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                 <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/courses">COURSES</Link></li>
-                <li className="nav-item"><Link className="nav-link" to="/consultations">CONSULTATIONS</Link></li>
+                <li className="nav-item"><Link className="nav-link" to="/book-consultation">CONSULTATIONS</Link></li>
                 <li className="nav-item dropdown">
-                  <Link className="nav-link dropdown-toggle" to="/astro-shop" role="button" data-bs-toggle="dropdown">ASTRO SHOP</Link>
+                  <Link className="nav-link dropdown-toggle" to="/shop" role="button" data-bs-toggle="dropdown">ASTRO SHOP</Link>
                   <ul className="dropdown-menu border-0 shadow-sm">
-                    <li><Link className="dropdown-item" to="/astro-shop/gemstones">Gemstones</Link></li>
-                    <li><Link className="dropdown-item" to="/astro-shop/rudraksha">Rudraksha</Link></li>
-                    <li><Link className="dropdown-item" to="/astro-shop/yantras">Yantras</Link></li>
-                    <li><Link className="dropdown-item" to="/astro-shop/puja-kits">Puja Kits</Link></li>
-                    <li><Link className="dropdown-item" to="/astro-shop/bracelets">Bracelets</Link></li>
+                    <li><Link className="dropdown-item" to="/shop/gemstones">Gemstones</Link></li>
+                    <li><Link className="dropdown-item" to="/shop/rudraksha">Rudraksha</Link></li>
+                    <li><Link className="dropdown-item" to="/shop/yantras">Yantras</Link></li>
+                    <li><Link className="dropdown-item" to="/shop/puja-kits">Puja Kits</Link></li>
+                    <li><Link className="dropdown-item" to="/shop/bracelets">Bracelets</Link></li>
                   </ul>
                 </li>
                 <li className="nav-item"><Link className="nav-link" to="/astrologer">ASTROLOGERS</Link></li>
@@ -549,7 +549,7 @@ function Header() {
             
             <li className="nav-item"><Link className="nav-link" to="/courses" data-bs-dismiss="offcanvas">COURSES</Link></li>
 
-            <li className="nav-item"><Link className="nav-link" to="/consultations" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/book-consultation" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>
 
             <li className="nav-item">
               <div className="d-flex justify-content-between align-items-center border-bottom">
@@ -559,11 +559,11 @@ function Header() {
                 </div>
               </div>
               <div className="collapse bg-light" id="mob-shop-collapse">
-                <Link className="dropdown-item d-block" to="/astro-shop/gemstones" data-bs-dismiss="offcanvas">Gemstones</Link>
-                <Link className="dropdown-item d-block" to="/astro-shop/rudraksha" data-bs-dismiss="offcanvas">Rudraksha</Link>
-                <Link className="dropdown-item d-block" to="/astro-shop/yantras" data-bs-dismiss="offcanvas">Yantras</Link>
-                <Link className="dropdown-item d-block" to="/astro-shop/puja-kits" data-bs-dismiss="offcanvas">Puja Kits</Link>
-                <Link className="dropdown-item d-block" to="/astro-shop/bracelets" data-bs-dismiss="offcanvas">Bracelets</Link>
+                <Link className="dropdown-item d-block" to="/shop/gemstones" data-bs-dismiss="offcanvas">Gemstones</Link>
+                <Link className="dropdown-item d-block" to="/shop/rudraksha" data-bs-dismiss="offcanvas">Rudraksha</Link>
+                <Link className="dropdown-item d-block" to="/shop/yantras" data-bs-dismiss="offcanvas">Yantras</Link>
+                <Link className="dropdown-item d-block" to="/shop/puja-kits" data-bs-dismiss="offcanvas">Puja Kits</Link>
+                <Link className="dropdown-item d-block" to="/shop/bracelets" data-bs-dismiss="offcanvas">Bracelets</Link>
               </div>
             </li>
 

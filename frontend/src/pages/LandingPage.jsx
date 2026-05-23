@@ -782,6 +782,14 @@ function LandingPage() {
                       <label>📞 Phone Number</label>
                       <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
                     </div>
+                    
+                    <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
+                      <input type="checkbox" id="consent-lp1" name="consent" required style={{ width: 'auto', marginTop: '4px', padding: 0 }} />
+                      <label htmlFor="consent-lp1" style={{ fontSize: '13px', color: 'var(--lp-text-muted)', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
+                        I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astro Institute LLP contacting me via phone, email, and WhatsApp.
+                      </label>
+                    </div>
+
                     <button type="submit" className="mystic-btn" disabled={isSubmitting}>
                       {isSubmitting ? '⏳ Processing...' : content.cta}
                     </button>
@@ -817,6 +825,14 @@ function LandingPage() {
                     <label>📞 Phone Number</label>
                     <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10 digit mobile number" />
                   </div>
+                  
+                  <div className="input-box consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', marginBottom: '24px' }}>
+                    <input type="checkbox" id="consent-lp2" name="consent" required style={{ width: 'auto', marginTop: '4px', padding: 0 }} />
+                    <label htmlFor="consent-lp2" style={{ fontSize: '13px', color: 'var(--lp-text-muted)', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
+                      I agree to the <a href="/privacy-policy" style={{ color: 'var(--lp-purple)', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astro Institute LLP contacting me via phone, email, and WhatsApp.
+                    </label>
+                  </div>
+
                   <button type="submit" className="mystic-btn" disabled={isSubmitting}>
                     {isSubmitting ? '⏳ Enrolling...' : content.cta}
                   </button>

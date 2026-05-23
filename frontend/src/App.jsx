@@ -52,7 +52,7 @@ function App() {
           <Route path="contact" element={<Contact />} />
           <Route path="privacy" element={<PrivacyPolicy />} />
           <Route path="terms" element={<Terms />} />
-          <Route path="cancellation" element={<Cancellation />} />
+          <Route path="refund" element={<Cancellation />} />
           <Route path="astrologer" element={<Astrologer />} />
           <Route path="vedic-course" element={<VedicCourse />} />
           <Route path="advanced-astrology" element={<AdvancedAstrology />} />

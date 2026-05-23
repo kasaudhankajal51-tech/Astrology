@@ -27,7 +27,7 @@ function Terms() {
             <p>We are not liable for any decisions made based on our astrological guidance. Our services are not a substitute for professional medical, legal, or financial advice.</p>
 
             <h3>8. Contact Information</h3>
-            <p>For questions about these terms, contact us at dsastro@gmail.com or +91 8418-9039-66.</p>
+            <p>For questions about these terms, contact us at dsastro@gmail.com or +91 75709 72970.</p>
           </div>
         </div>
       </div>

@@ -41,7 +41,7 @@ function Contact() {
           <div className="contact-left">
             <h2>Contact Us</h2>
             <p><i className="fas fa-building"></i> {settings?.address || 'Varanasi, Uttar Pradesh, India'}</p>
-            <p><i className="fas fa-phone"></i> {settings?.contactPhone || '+91 98765 43210'}</p>
+            <p><i className="fas fa-phone"></i> {settings?.contactPhone || '+91 75709 72970'}</p>
             <p><i className="fas fa-envelope"></i> {settings?.contactEmail || 'support@astroava.com'}</p>
             <img src="/images/logo.png" alt="logo" className="contact-logo" />
           </div>

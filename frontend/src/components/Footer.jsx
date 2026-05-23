@@ -24,10 +24,10 @@ const VisaSVG = () => (
 /* MASTERCARD — two overlapping circles + "Mastercard" label */
 const MastercardSVG = () => (
   <svg viewBox="0 0 90 44" height="30" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="28" cy="18" r="16" fill="#EB001B"/>
-    <circle cx="52" cy="18" r="16" fill="#F79E1B"/>
+    <circle cx="28" cy="18" r="16" fill="#EB001B" />
+    <circle cx="52" cy="18" r="16" fill="#F79E1B" />
     {/* overlap blend */}
-    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#FF5F00"/>
+    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#FF5F00" />
     <text x="45" y="40" fontFamily="Arial" fontWeight="600" fontSize="9" fill="#555" textAnchor="middle">Mastercard</text>
   </svg>
 );
@@ -35,32 +35,32 @@ const MastercardSVG = () => (
 /* MAESTRO — red + blue circles + "maestro" label */
 const MaestroSVG = () => (
   <svg viewBox="0 0 90 44" height="30" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="28" cy="18" r="16" fill="#EB001B"/>
-    <circle cx="52" cy="18" r="16" fill="#00A2E1"/>
+    <circle cx="28" cy="18" r="16" fill="#EB001B" />
+    <circle cx="52" cy="18" r="16" fill="#00A2E1" />
     {/* overlap blend */}
-    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#7B4EA0" opacity="0.85"/>
+    <path d="M40 5.5a16 16 0 0 1 0 25 16 16 0 0 1 0-25z" fill="#7B4EA0" opacity="0.85" />
     <text x="45" y="40" fontFamily="Arial" fontWeight="600" fontSize="9" fill="#555" textAnchor="middle">maestro</text>
   </svg>
 );
 
 const RuPaySVG = () => (
   <svg viewBox="0 0 100 32" height="18" xmlns="http://www.w3.org/2000/svg">
-    <path d="M15 5l-5 22h6l5-22h-6z" fill="#F26522"/>
-    <path d="M30 5h-8l-2 9h6c4 0 6 2 6 5s-2 5-6 5h-4l-2 7h6l2-9h2c6 0 9-3 9-7.5S34.5 5 30 5z" fill="#283593"/>
+    <path d="M15 5l-5 22h6l5-22h-6z" fill="#F26522" />
+    <path d="M30 5h-8l-2 9h6c4 0 6 2 6 5s-2 5-6 5h-4l-2 7h6l2-9h2c6 0 9-3 9-7.5S34.5 5 30 5z" fill="#283593" />
     <text x="45" y="24" fontFamily="Arial" fontWeight="bold" fontSize="18" fill="#1A237E" fontStyle="italic">RuPay</text>
   </svg>
 );
 
 const UPISVG = () => (
   <svg viewBox="0 0 100 32" height="18" xmlns="http://www.w3.org/2000/svg">
-    <path d="M10 4h4l-3 10-3-10z" fill="#FF9933"/>
+    <path d="M10 4h4l-3 10-3-10z" fill="#FF9933" />
     <text x="25" y="24" fontFamily="Arial" fontWeight="900" fontSize="20" fill="#2D2D2D">UPI</text>
   </svg>
 );
 
 const AmexSVG = () => (
   <svg viewBox="0 0 100 40" height="20" xmlns="http://www.w3.org/2000/svg">
-    <rect width="100" height="40" rx="2" fill="#016FD0"/>
+    <rect width="100" height="40" rx="2" fill="#016FD0" />
     <text x="50" y="26" fontFamily="Arial" fontWeight="bold" fontSize="16" fill="white" textAnchor="middle">AMEX</text>
   </svg>
 );
@@ -69,8 +69,8 @@ const AmexSVG = () => (
 const BhimUpiSVG = () => (
   <svg viewBox="0 0 110 36" height="22" xmlns="http://www.w3.org/2000/svg">
     {/* BHIM triangle logo */}
-    <polygon points="6,30 14,10 22,30" fill="#00B0EF"/>
-    <polygon points="10,30 18,14 26,30" fill="#F7941D" opacity="0.85"/>
+    <polygon points="6,30 14,10 22,30" fill="#00B0EF" />
+    <polygon points="10,30 18,14 26,30" fill="#F7941D" opacity="0.85" />
     {/* BHIM text */}
     <text x="30" y="24" fontFamily="Arial" fontWeight="900" fontSize="13" fill="#00B0EF">BHIM</text>
     {/* UPI text */}
@@ -135,7 +135,7 @@ function Footer() {
       toast.error('Please enter your email address.');
       return;
     }
-    
+
     try {
       const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
         method: 'POST',
@@ -156,53 +156,53 @@ function Footer() {
 
   // Map social links from settings
   const socialLinks = [
-    { 
-      name: 'Facebook', 
+    {
+      name: 'Facebook',
       icon: (
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
         </svg>
-      ), 
-      color: '#0084FF', 
-      link: settings?.facebookUrl || '#' 
+      ),
+      color: '#0084FF',
+      link: settings?.facebookUrl || '#'
     },
-    { 
-      name: 'Instagram', 
+    {
+      name: 'Instagram',
       icon: (
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.777 6.977 6.977 1.28.058 1.688.072 4.947.072 3.259 0 3.667-.014 4.947-.072 4.354-.2 6.773-2.618 6.977-6.977.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.2-4.354-2.618-6.773-6.977-6.977C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/>
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 1.366.062 2.633.332 3.608 1.308.975.975 1.245 2.242 1.308 3.608.058 1.266.07 1.646.07 4.85s-.012 3.584-.07 4.85c-.063 1.366-.333 2.633-1.308 3.608-.975.975-2.242 1.245-3.608 1.308-1.266.058-1.646.07-4.85.07s-3.584-.012-4.85-.07c-1.366-.063-2.633-.333-3.608-1.308-.975-.975-1.245-2.242-1.308-3.608-.058-1.266-.07-1.646-.07-4.85s.012-3.584.07-4.85c.062-1.366.332-2.633 1.308-3.608.975-.975 2.242-1.245 3.608-1.308 1.266-.058 1.646-.07 4.85-.07M12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12s.014 3.667.072 4.947c.2 4.358 2.618 6.777 6.977 6.977 1.28.058 1.688.072 4.947.072 3.259 0 3.667-.014 4.947-.072 4.354-.2 6.773-2.618 6.977-6.977.058-1.28.072-1.688.072-4.947s-.014-3.667-.072-4.947c-.2-4.354-2.618-6.773-6.977-6.977C15.667.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z" />
         </svg>
-      ), 
-      color: '#E1306C', 
-      link: settings?.instagramUrl || '#' 
+      ),
+      color: '#E1306C',
+      link: settings?.instagramUrl || '#'
     },
-    { 
-      name: 'X', 
+    {
+      name: 'X',
       icon: (
         <svg viewBox="0 0 24 24" width="18" height="18" fill="white">
-          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
         </svg>
-      ), 
-      color: '#000000', 
-      link: settings?.twitterUrl || '#' 
+      ),
+      color: '#000000',
+      link: settings?.twitterUrl || '#'
     },
-    { 
-      name: 'YouTube', 
+    {
+      name: 'YouTube',
       icon: (
         <svg viewBox="0 0 24 24" width="20" height="20" fill="white">
-          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+          <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
         </svg>
-      ), 
-      color: '#FF0000', 
-      link: settings?.youtubeUrl || '#' 
+      ),
+      color: '#FF0000',
+      link: settings?.youtubeUrl || '#'
     },
-    { 
-      name: 'WhatsApp', 
+    {
+      name: 'WhatsApp',
       icon: (
-        <i className="fab fa-whatsapp" style={{fontSize: '20px'}}></i>
-      ), 
-      color: '#25D366', 
-      link: settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : '#' 
+        <i className="fab fa-whatsapp" style={{ fontSize: '20px' }}></i>
+      ),
+      color: '#25D366',
+      link: settings?.whatsappNumber ? `https://wa.me/${settings.whatsappNumber}` : '#'
     },
   ];
 
@@ -388,7 +388,7 @@ function Footer() {
               <Link to="/" className="fb-logo">
                 <div className="fb-logo-icon">
                   <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
+                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
                   </svg>
                 </div>
                 <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
@@ -410,22 +410,21 @@ function Footer() {
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/careers">Careers</Link></li>
-                <li><Link to="/admin">Admin</Link></li>
               </ul>
             </div>
             <div>
               <h5 className="fb-head">Newsletter</h5>
               <form onSubmit={(e) => handleSubscribe(e, desktopEmail, setDesktopEmail)} className="d-flex mt-3">
-                <input 
-                  type="email" 
-                  className="form-control" 
-                  placeholder="Email" 
+                <input
+                  type="email"
+                  className="form-control"
+                  placeholder="Email"
                   value={desktopEmail}
                   onChange={(e) => setDesktopEmail(e.target.value)}
-                  style={{borderRadius: '8px 0 0 8px', border: '1px solid #D4B896'}} 
+                  style={{ borderRadius: '8px 0 0 8px', border: '1px solid #D4B896' }}
                   required
                 />
-                <button type="submit" className="btn" style={{background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0'}}>Join</button>
+                <button type="submit" className="btn" style={{ background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0' }}>Join</button>
               </form>
             </div>
           </div>
@@ -438,7 +437,7 @@ function Footer() {
             <div className="trust-label">Follow Us On</div>
             <div className="social-pill-row">
               {socialLinks.map(s => (
-                <a key={s.name} href={s.link} className="soc-circle" style={{background: s.color}} title={s.name}>{s.icon}</a>
+                <a key={s.name} href={s.link} className="soc-circle" style={{ background: s.color }} title={s.name}>{s.icon}</a>
               ))}
             </div>
           </div>
@@ -457,13 +456,13 @@ function Footer() {
               <div className="pay-pill"><MaestroSVG /></div>
 
               {/* Amex */}
-              <div className="pay-pill" style={{background: '#016FD0'}}><AmexSVG /></div>
+              <div className="pay-pill" style={{ background: '#016FD0' }}><AmexSVG /></div>
 
               {/* BHIM UPI */}
               <div className="pay-pill"><BhimUpiSVG /></div>
 
               {/* Google Pay */}
-              <div className="pay-pill" style={{minWidth: '72px'}}>
+              <div className="pay-pill" style={{ minWidth: '72px' }}>
                 <svg viewBox="0 0 90 30" height="22" xmlns="http://www.w3.org/2000/svg">
                   <text x="2" y="22" fontFamily="Arial" fontWeight="700" fontSize="17" fill="#4285F4">G</text>
                   <text x="15" y="22" fontFamily="Arial" fontWeight="400" fontSize="16" fill="#5F6368">Pay</text>
@@ -495,7 +494,7 @@ function Footer() {
           <Link to="/" className="fb-logo">
             <div className="fb-logo-icon">
               <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white"/>
+                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
               </svg>
             </div>
             <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
@@ -524,7 +523,7 @@ function Footer() {
                 <li><Link to="/blog">Blog</Link></li>
                 <li><Link to="/about">About Us</Link></li>
                 <li><Link to="/careers">Careers</Link></li>
-          
+
               </ul>
             </div>
           </div>
@@ -533,12 +532,12 @@ function Footer() {
           <div className="phone-newsletter">
             <div className="phone-nav-head">Newsletter</div>
             <form onSubmit={(e) => handleSubscribe(e, mobileEmail, setMobileEmail)} className="phone-email-row">
-              <input 
-                type="email" 
-                placeholder="Email" 
+              <input
+                type="email"
+                placeholder="Email"
                 value={mobileEmail}
                 onChange={(e) => setMobileEmail(e.target.value)}
-                className="phone-email-input" 
+                className="phone-email-input"
                 required
               />
               <button type="submit" className="phone-join-btn">Join</button>
@@ -553,7 +552,7 @@ function Footer() {
             <div className="phone-section-label">Follow Us On</div>
             <div className="phone-soc-row">
               {socialLinks.map(s => (
-                <a key={s.name} href={s.link} className="soc-circle" style={{background: s.color}} title={s.name}>{s.icon}</a>
+                <a key={s.name} href={s.link} className="soc-circle" style={{ background: s.color }} title={s.name}>{s.icon}</a>
               ))}
             </div>
           </div>
@@ -565,21 +564,21 @@ function Footer() {
               <div className="pay-pill"><VisaSVG /></div>
               <div className="pay-pill"><MastercardSVG /></div>
               <div className="pay-pill"><MaestroSVG /></div>
-              <div className="pay-pill" style={{background:'#016FD0'}}><AmexSVG /></div>
+              <div className="pay-pill" style={{ background: '#016FD0' }}><AmexSVG /></div>
               <div className="pay-pill"><BhimUpiSVG /></div>
-              <div className="pay-pill" style={{minWidth:'68px'}}>
+              <div className="pay-pill" style={{ minWidth: '68px' }}>
                 <svg viewBox="0 0 90 30" height="20" xmlns="http://www.w3.org/2000/svg">
                   <text x="2" y="22" fontFamily="Arial" fontWeight="700" fontSize="17" fill="#4285F4">G</text>
                   <text x="15" y="22" fontFamily="Arial" fontWeight="400" fontSize="16" fill="#5F6368">Pay</text>
                 </svg>
               </div>
-              <div className="pay-pill" style={{minWidth:'66px'}}>
+              <div className="pay-pill" style={{ minWidth: '66px' }}>
                 <svg viewBox="0 0 80 32" height="20" xmlns="http://www.w3.org/2000/svg">
                   <text x="2" y="13" fontFamily="Arial" fontWeight="700" fontSize="12" fill="#1A1F71">NET</text>
                   <text x="2" y="28" fontFamily="Arial" fontWeight="600" fontSize="11" fill="#1A1F71">Banking</text>
                 </svg>
               </div>
-              <div className="pay-pill" style={{minWidth:'52px'}}>
+              <div className="pay-pill" style={{ minWidth: '52px' }}>
                 <svg viewBox="0 0 52 26" height="18" xmlns="http://www.w3.org/2000/svg">
                   <text x="2" y="20" fontFamily="Arial" fontWeight="900" fontSize="17" fill="#2D2D2D">EMI</text>
                 </svg>

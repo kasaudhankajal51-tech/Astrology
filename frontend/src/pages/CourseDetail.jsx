@@ -847,7 +847,7 @@ function CourseDetail() {
                 <i className="fas fa-question-circle"></i>
                 <div>
                   <p className="mb-0 fw-bold">Have Questions?</p>
-                  <p className="mb-0 small text-muted">Call/WhatsApp: +91 91155 05353</p>
+                  <p className="mb-0 small text-muted">Call/WhatsApp: +91 75709 72970</p>
                 </div>
               </div>
             </div>

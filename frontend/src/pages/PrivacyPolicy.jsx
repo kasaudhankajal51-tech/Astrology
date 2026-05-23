@@ -28,7 +28,7 @@ function PrivacyPolicy() {
             <p>You may update, correct, or delete your account information at any time by contacting us. You may also opt out of receiving promotional communications from us.</p>
 
             <h3>6. Contact Us</h3>
-            <p>If you have any questions about this Privacy Policy, please contact us at dsastro@gmail.com or call +91 8418-9039-66.</p>
+            <p>If you have any questions about this Privacy Policy, please contact us at dsastro@gmail.com or call +91 75709 72970.</p>
           </div>
         </div>
       </div>

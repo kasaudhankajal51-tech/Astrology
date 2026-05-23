@@ -5,7 +5,7 @@ const SettingsSchema = new mongoose.Schema({
   siteTitle: { type: String, default: 'AstroAva - Cosmic Guidance & Astrology' },
   siteDescription: { type: String, default: 'Explore the cosmic mysteries with AstroAva.' },
   contactEmail: { type: String, default: 'support@astroava.com' },
-  contactPhone: { type: String, default: '+91 98765 43210' },
+  contactPhone: { type: String, default: '+91 75709 72970' },
   address: { type: String, default: 'Varanasi, Uttar Pradesh, India' },
   
   // Social Media

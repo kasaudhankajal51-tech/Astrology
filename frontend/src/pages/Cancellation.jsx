@@ -33,7 +33,7 @@ function Cancellation() {
 
             <h3>6. Contact for Cancellations</h3>
             <p>For cancellations or refund requests, please contact us at:</p>
-            <p>Email: dsastro@gmail.com<br/>Phone: +91 8418-9039-66</p>
+            <p>Email: dsastro@gmail.com<br/>Phone: +91 75709 72970</p>
           </div>
         </div>
       </div>

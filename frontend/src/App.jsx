@@ -44,15 +44,15 @@ function App() {
       <Routes>
         <Route path="/" element={<MainLayout />}>
           <Route index element={<Home />} />
-          <Route path="consultations" element={<Consultations />} />
-          <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
+          <Route path="book-consultation" element={<Consultations />} />
+          <Route path="book-consultation/:serviceId" element={<ConsultationDetail />} />
           <Route path="about" element={<About />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:slug" element={<BlogDetail />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="privacy" element={<PrivacyPolicy />} />
-          <Route path="terms" element={<Terms />} />
-          <Route path="cancellation" element={<Cancellation />} />
+          <Route path="privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="terms-and-conditions" element={<Terms />} />
+          <Route path="refund-policy" element={<Cancellation />} />
           <Route path="astrologer" element={<Astrologer />} />
           <Route path="vedic-course" element={<VedicCourse />} />
           <Route path="advanced-astrology" element={<AdvancedAstrology />} />
@@ -64,8 +64,8 @@ function App() {
           <Route path="numerology" element={<Numerology />} />
           <Route path="tarot" element={<Tarot />} />
           <Route path="love" element={<Love />} />
-          <Route path="astro-shop" element={<AstroShop />} />
-          <Route path="astro-shop/:category" element={<ShopCategory />} />
+          <Route path="shop" element={<AstroShop />} />
+          <Route path="shop/:category" element={<ShopCategory />} />
           <Route path="careers" element={<Careers />} />
         </Route>
         

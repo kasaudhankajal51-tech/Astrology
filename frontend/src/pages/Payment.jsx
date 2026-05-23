@@ -189,6 +189,9 @@ function Payment() {
           </div>
 
           <div className="action-button mt-5">
+            <p className="policy-notice" style={{ fontSize: '13px', color: '#7f8c8d', marginBottom: '15px', textAlign: 'center' }}>
+              By proceeding with the payment, you agree to our <a href="/terms-and-conditions" style={{ color: '#6b4a44', textDecoration: 'underline' }}>Terms &amp; Conditions</a> and <a href="/refund-policy" style={{ color: '#6b4a44', textDecoration: 'underline' }}>Refund &amp; Cancellation Policy</a>.
+            </p>
             <button 
               className="checkout-btn" 
               onClick={handleCheckout}

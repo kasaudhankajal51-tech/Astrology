@@ -334,6 +334,9 @@ function PredictiveAstrology() {
                   <option value="expert">Expert</option>
                 </select>
               </div>
+              <div className="policy-notice mb-3" style={{ fontSize: '12px', color: '#6b6b8a', lineHeight: '1.4', textAlign: 'center' }}>
+                By proceeding with the payment, you agree to our <a href="/terms-and-conditions" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Terms &amp; Conditions</a> and <a href="/refund-policy" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Refund &amp; Cancellation Policy</a>.
+              </div>
               <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
                 Proceed to Payment (₹1299)
               </button>

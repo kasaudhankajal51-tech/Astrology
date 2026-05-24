@@ -6,8 +6,7 @@ const CookieConsent = () => {
   useEffect(() => {
     const consent = localStorage.getItem('cookieConsent');
     if (!consent) {
-      const timer = setTimeout(() => setIsVisible(true), 1500); // Small delay for better UX
-      return () => clearTimeout(timer);
+      setIsVisible(true);
     }
   }, []);
 
@@ -67,6 +66,7 @@ const CookieConsent = () => {
           font-size: 0.95rem;
           text-align: center;
           line-height: 1.6;
+          color: #ffffff !important;
         }
         .cookie-buttons {
           display: flex;
@@ -92,13 +92,13 @@ const CookieConsent = () => {
           color: #fff;
         }
         .btn-accept {
-          background: #C8832A;
-          border: 1px solid #C8832A;
-          color: #fff;
+          background: #8b4513;
+          border: 1px solid #8b4513;
+          color: #ffffff;
         }
         .btn-accept:hover {
-          background: #8B4A1E;
-          border-color: #8B4A1E;
+          background: #6b340e;
+          border-color: #6b340e;
         }
         @media (min-width: 768px) {
           .cookie-content {

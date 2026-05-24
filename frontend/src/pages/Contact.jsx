@@ -87,13 +87,7 @@ function Contact() {
         </div>
       </section>
 
-      {/* Map */}
-      <div className="map-section">
-        <iframe
-          src="https://www.google.com/maps?q=sector+66+noida&output=embed"
-          width="100%" height="400" style={{ border: 0 }} allowFullScreen="" loading="lazy">
-        </iframe>
-      </div>
+
 
       <style>{`
         .contact-section { padding: 100px 20px 80px; max-width: 1200px; margin: 0 auto; background: #FDF6EE; }

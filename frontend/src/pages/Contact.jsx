@@ -44,7 +44,7 @@ function Contact() {
             <h2>Contact Us</h2>
             <p><i className="fas fa-building"></i> {settings?.address || 'Varanasi, Uttar Pradesh, India'}</p>
             <p><i className="fas fa-phone"></i> {settings?.contactPhone || '+91 75709 72970'}</p>
-            <p><i className="fas fa-envelope"></i> {settings?.contactEmail || 'support@astroava.com'}</p>
+            <p><i className="fas fa-envelope"></i> {settings?.contactEmail || 'info@dsastroinstitute.com'}</p>
             
             <div className="grievance-officer mt-4 p-4" style={{ background: 'rgba(139, 74, 30, 0.05)', borderRadius: '12px', borderLeft: '4px solid #8B4A1E' }}>
               <h5 style={{ color: '#8B4A1E', marginBottom: '12px', fontWeight: 'bold' }}>Grievance Officer</h5>

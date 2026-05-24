@@ -74,7 +74,7 @@ function AdminLogin() {
             >
               A
             </motion.div>
-            <div className="login-brand-name">AstroAva <em>Admin</em></div>
+            <div className="login-brand-name">DS Astro Institute <em>Admin</em></div>
           </div>
 
           <div className="login-headline">
@@ -89,7 +89,7 @@ function AdminLogin() {
                 <i className="fas fa-envelope"></i>
                 <input 
                   type="email" 
-                  placeholder="admin@astroava.com"
+                  placeholder="admin@dsastroinstitute.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -151,7 +151,7 @@ function AdminLogin() {
           </form>
 
           <div className="login-footer">
-            <span>&copy; 2026 AstroAva</span>
+            <span>&copy; 2026 DS Astro Institute</span>
             <div>
               <a href="#">Privacy Policy</a>
               <a href="#">Terms</a>
@@ -171,7 +171,7 @@ function AdminLogin() {
               className="lr-img-container"
             >
               <img 
-                src="/astroava_login.png" 
+                src="/dsastroinstitute_login.png" 
                 alt="Visual" 
                 className="lr-img"
               />

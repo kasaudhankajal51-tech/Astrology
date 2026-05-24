@@ -28,7 +28,7 @@ export const login = async (req, res) => {
     }
   } else if (emailMatch && !ADMIN_PASSWORD_HASH) {
     // Fallback for safety if hash isn't set yet
-    const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'AstroAva@2026!')
+    const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'DS Astro Institute@2026!')
       .replace(/['"]+/g, '')
       .trim();
     passwordMatch = inputPassword === ADMIN_PASS;

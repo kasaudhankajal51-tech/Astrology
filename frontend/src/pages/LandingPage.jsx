@@ -744,7 +744,7 @@ function LandingPage() {
       {/* Minimal Navigation */}
       <nav className="lp-nav" data-aos="fade-down" data-aos-duration="600">
         <div className="container d-flex justify-content-between align-items-center">
-          <div className="logo-text">✨ AstroAva ✨</div>
+          <div className="logo-text">✨ DS Astro Institute ✨</div>
           <button onClick={() => window.scrollTo({top: 0, behavior: 'smooth'})} className="mystic-btn-outline d-none d-md-block">
             📋 Register Now
           </button>

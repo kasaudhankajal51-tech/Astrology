@@ -540,7 +540,7 @@ function Header() {
 
       <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header border-bottom">
-          <h5 className="offcanvas-title fw-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>{settings?.siteName || 'AstroAva'}</h5>
+          <h5 className="offcanvas-title fw-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>{settings?.siteName || 'DS Astro Institute'}</h5>
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body p-0">

@@ -102,7 +102,7 @@ function AdminDashboard() {
         <div className="sb-head">
           <div className="sb-logo">
             <div className="sb-logo-orb">{stats?.siteName?.charAt(0) || 'A'}</div>
-            <div className="sb-logo-text">{stats?.siteName || 'AstroAva'} <em>Pro</em></div>
+            <div className="sb-logo-text">{stats?.siteName || 'DS Astro Institute'} <em>Pro</em></div>
           </div>
           <button className="sb-toggle" onClick={() => setSidebarCollapsed(!sidebarCollapsed)}>
             <i className={`fas ${sidebarCollapsed ? 'fa-chevron-right' : 'fa-chevron-left'}`}></i>
@@ -193,7 +193,7 @@ function AdminDashboard() {
           {activeTab === 'dashboard' && (
             <div className="dash-home">
               <div className="dash-greeting mb-4">
-                <h2>Welcome AstroAva Admin</h2>
+                <h2>Welcome DS Astro Institute Admin</h2>
                 <p>Real-time analytics and management for your cosmic ecosystem.</p>
               </div>
 

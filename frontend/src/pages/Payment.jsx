@@ -123,7 +123,7 @@ function Payment() {
     <div className="razorpay-page-clone">
       <div className="payment-card shadow-sm">
         <div className="card-header-custom">
-          <span>Astroga-Mega Astrology Webinar</span>
+          <span>DS Astro Institute-Mega Astrology Webinar</span>
         </div>
         
         <div className="card-body-custom">

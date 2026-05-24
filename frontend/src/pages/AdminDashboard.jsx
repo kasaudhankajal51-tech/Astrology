@@ -120,6 +120,7 @@ function AdminDashboard() {
             <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Courses" />
             <SidebarItem id="leads" filter="Consultation" icon="fa-user-md" label="Consulting" />
             <SidebarItem id="leads" filter="Webinar" icon="fa-video" label="Webinars" />
+            <SidebarItem id="leads" filter="Contact" icon="fa-address-book" label="Contact Queries" />
             <SidebarItem id="newsletter" icon="fa-envelope" label="Newsletter" />
           </div>
 

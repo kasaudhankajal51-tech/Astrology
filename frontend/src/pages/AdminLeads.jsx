@@ -251,7 +251,7 @@ function AdminLeads({ activeFilter }) {
                         <div className="td-muted x-small">{lead.tob || ''} | {lead.pob || ''}</div>
                       </div>
                     ) : lead.message ? (
-                      <div className="td-muted small text-truncate" style={{ maxWidth: '200px' }} title={lead.message}>
+                      <div className="td-muted small" style={{ maxWidth: '300px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.4' }}>
                         <i className="fas fa-comment-alt me-1 opacity-50"></i> {lead.message}
                       </div>
                     ) : (

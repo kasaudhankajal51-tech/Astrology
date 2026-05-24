@@ -25,6 +25,7 @@ import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailed from './pages/PaymentFailed';
 import AdminDashboard from './pages/AdminDashboard';
 import AstroShop from './pages/AstroShop';
+import ShopCheckout from './pages/ShopCheckout';
 import ShopCategory from './pages/ShopCategory';
 import ConsultationDetail from './pages/ConsultationDetail';
 import Courses from './pages/Courses';
@@ -34,52 +35,58 @@ import BlogDetail from './pages/BlogDetail';
 import AdminLogin from './pages/AdminLogin';
 import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
+import CookieConsent from './components/CookieConsent';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   return (
-    <SettingsProvider>
-      <BrowserRouter>
-      <ScrollToTop />
-      <Toaster position="top-center" reverseOrder={false} />
-      <Routes>
-        <Route path="/" element={<MainLayout />}>
-          <Route index element={<Home />} />
-          <Route path="book-consultation" element={<Consultations />} />
-          <Route path="book-consultation/:serviceId" element={<ConsultationDetail />} />
-          <Route path="about" element={<About />} />
-          <Route path="blog" element={<Blog />} />
-          <Route path="blog/:slug" element={<BlogDetail />} />
-          <Route path="contact" element={<Contact />} />
-          <Route path="privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="terms-and-conditions" element={<Terms />} />
-          <Route path="refund-policy" element={<Cancellation />} />
-          <Route path="astrologer" element={<Astrologer />} />
-          <Route path="vedic-course" element={<VedicCourse />} />
-          <Route path="advanced-astrology" element={<AdvancedAstrology />} />
-          <Route path="predictive-astrology" element={<PredictiveAstrology />} />
-          <Route path="certification-courses" element={<CertificationCourses />} />
-          <Route path="courses" element={<Courses />} />
-          <Route path="courses/:courseId" element={<CourseDetail />} />
-          <Route path="free-tools" element={<FreeTools />} />
-          <Route path="numerology" element={<Numerology />} />
-          <Route path="tarot" element={<Tarot />} />
-          <Route path="love" element={<Love />} />
-          <Route path="shop" element={<AstroShop />} />
-          <Route path="shop/:category" element={<ShopCategory />} />
-          <Route path="careers" element={<Careers />} />
-        </Route>
-        
-        {/* Standalone Landing Pages & Admin (No Header/Footer) */}
-        <Route path="/webinar" element={<Webinar />} />
-        <Route path="/course-inquiry" element={<LandingPage />} />
-        <Route path="/payment" element={<Payment />} />
-        <Route path="/payment-success" element={<PaymentSuccess />} />
-        <Route path="/payment-failed" element={<PaymentFailed />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-      </Routes>
-    </BrowserRouter>
-    </SettingsProvider>
+    <HelmetProvider>
+      <SettingsProvider>
+        <BrowserRouter>
+        <ScrollToTop />
+        <Toaster position="top-center" reverseOrder={false} />
+        <CookieConsent />
+        <Routes>
+          <Route path="/" element={<MainLayout />}>
+            <Route index element={<Home />} />
+            <Route path="book-consultation" element={<Consultations />} />
+            <Route path="book-consultation/:serviceId" element={<ConsultationDetail />} />
+            <Route path="about" element={<About />} />
+            <Route path="blog" element={<Blog />} />
+            <Route path="blog/:slug" element={<BlogDetail />} />
+            <Route path="contact" element={<Contact />} />
+            <Route path="privacy-policy" element={<PrivacyPolicy />} />
+            <Route path="terms-and-conditions" element={<Terms />} />
+            <Route path="refund-policy" element={<Cancellation />} />
+            <Route path="astrologer" element={<Astrologer />} />
+            <Route path="vedic-course" element={<VedicCourse />} />
+            <Route path="advanced-astrology" element={<AdvancedAstrology />} />
+            <Route path="predictive-astrology" element={<PredictiveAstrology />} />
+            <Route path="certification-courses" element={<CertificationCourses />} />
+            <Route path="courses" element={<Courses />} />
+            <Route path="courses/:courseId" element={<CourseDetail />} />
+            <Route path="free-tools" element={<FreeTools />} />
+            <Route path="numerology" element={<Numerology />} />
+            <Route path="tarot" element={<Tarot />} />
+            <Route path="love" element={<Love />} />
+            <Route path="shop" element={<AstroShop />} />
+            <Route path="shop/checkout" element={<ShopCheckout />} />
+            <Route path="shop/:category" element={<ShopCategory />} />
+            <Route path="careers" element={<Careers />} />
+          </Route>
+          
+          {/* Standalone Landing Pages & Admin (No Header/Footer) */}
+          <Route path="/webinar" element={<Webinar />} />
+          <Route path="/course-inquiry" element={<LandingPage />} />
+          <Route path="/payment" element={<Payment />} />
+          <Route path="/payment-success" element={<PaymentSuccess />} />
+          <Route path="/payment-failed" element={<PaymentFailed />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/admin/login" element={<AdminLogin />} />
+        </Routes>
+      </BrowserRouter>
+      </SettingsProvider>
+    </HelmetProvider>
   );
 }
 

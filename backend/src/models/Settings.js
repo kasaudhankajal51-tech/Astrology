@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 
 const SettingsSchema = new mongoose.Schema({
-  siteName: { type: String, default: 'AstroAva' },
-  siteTitle: { type: String, default: 'AstroAva - Cosmic Guidance & Astrology' },
-  siteDescription: { type: String, default: 'Explore the cosmic mysteries with AstroAva.' },
-  contactEmail: { type: String, default: 'support@astroava.com' },
+  siteName: { type: String, default: 'DS Astro Institute' },
+  siteTitle: { type: String, default: 'DS Astro Institute - Cosmic Guidance & Astrology' },
+  siteDescription: { type: String, default: 'Explore the cosmic mysteries with DS Astro Institute.' },
+  contactEmail: { type: String, default: 'info@dsastroinstitute.com' },
   contactPhone: { type: String, default: '+91 75709 72970' },
   address: { type: String, default: 'Varanasi, Uttar Pradesh, India' },
   

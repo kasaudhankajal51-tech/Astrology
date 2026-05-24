@@ -126,33 +126,6 @@ const EMISVG = () => (
 function Footer() {
   const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
-  const [desktopEmail, setDesktopEmail] = useState('');
-  const [mobileEmail, setMobileEmail] = useState('');
-
-  const handleSubscribe = async (e, emailToSubscribe, setSubEmail) => {
-    e.preventDefault();
-    if (!emailToSubscribe) {
-      toast.error('Please enter your email address.');
-      return;
-    }
-
-    try {
-      const res = await fetch(`${API_BASE}/api/newsletter/subscribe`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: emailToSubscribe })
-      });
-      const data = await res.json();
-      if (data.success) {
-        toast.success(data.message);
-        setSubEmail('');
-      } else {
-        toast.error(data.message || 'Subscription failed. Please try again.');
-      }
-    } catch (err) {
-      toast.error('Network Error. Please try again.');
-    }
-  };
 
   // Map social links from settings
   const socialLinks = [
@@ -229,7 +202,7 @@ function Footer() {
         .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 60px 30px 40px; }
         
         /* Desktop Grid */
-        .fb-grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1.5fr; gap: 50px; }
+        .fb-grid { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 50px; }
         
         .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 25px; }
         .fb-logo-icon { width: 45px; height: 45px; border-radius: 12px; background: #2A0F02; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2); }
@@ -243,6 +216,7 @@ function Footer() {
         .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
         .fb-nav li a { color: #5C3D26; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
         .fb-nav li a:hover { color: #8B4A1E; transform: translateX(5px); display: inline-block; }
+        .fb-nav li i { color: #8B4A1E !important; }
 
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
@@ -341,6 +315,7 @@ function Footer() {
           }
           .phone-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
           .phone-nav-list li a { color: #5C3D26; text-decoration: none; font-size: 14px; font-weight: 500; }
+          .phone-nav-list li i { color: #8B4A1E !important; }
 
           /* Newsletter */
           .phone-newsletter { width: 100%; }
@@ -391,41 +366,37 @@ function Footer() {
                     <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
                   </svg>
                 </div>
-                <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
+                <div className="fb-logo-name">DS Astro Institute</div>
               </Link>
-              <p className="fb-desc">{settings?.siteDescription || 'Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.'}</p>
+              <p className="fb-desc">India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
             </div>
             <div>
-              <h5 className="fb-head">Consultations</h5>
+              <h5 className="fb-head">Quick Links</h5>
               <ul className="fb-nav">
-                <li><Link to="/consultations/tarot">Tarot Card Reading</Link></li>
-                <li><Link to="/consultations/career">Career Consultation</Link></li>
-                <li><Link to="/consultations/divorce">Divorce Consultation</Link></li>
-              </ul>
-            </div>
-            <div>
-              <h5 className="fb-head">Explore</h5>
-              <ul className="fb-nav">
+                <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
-                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to="/shop">Merchandise</Link></li>
                 <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/careers">Careers</Link></li>
+                <li><Link to="/contact">Contact Us</Link></li>
               </ul>
             </div>
             <div>
-              <h5 className="fb-head">Newsletter</h5>
-              <form onSubmit={(e) => handleSubscribe(e, desktopEmail, setDesktopEmail)} className="d-flex mt-3">
-                <input
-                  type="email"
-                  className="form-control"
-                  placeholder="Email"
-                  value={desktopEmail}
-                  onChange={(e) => setDesktopEmail(e.target.value)}
-                  style={{ borderRadius: '8px 0 0 8px', border: '1px solid #D4B896' }}
-                  required
-                />
-                <button type="submit" className="btn" style={{ background: '#2A0F02', color: 'white', borderRadius: '0 8px 8px 0' }}>Join</button>
-              </form>
+              <h5 className="fb-head">Contact Info</h5>
+              <ul className="fb-nav" style={{ gap: '10px' }}>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#5C3D26', fontSize: '15px' }}>
+                  <i className="fas fa-phone-alt" style={{ color: '#8B4A1E' }}></i>
+                  <span>+91 7570972970</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'center', gap: '10px', color: '#5C3D26', fontSize: '15px' }}>
+                  <i className="fas fa-envelope" style={{ color: '#8B4A1E' }}></i>
+                  <span>info@dsastroinstitute.com</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', color: '#5C3D26', fontSize: '15px', marginTop: '4px' }}>
+                  <i className="fas fa-map-marker-alt" style={{ color: '#8B4A1E', marginTop: '4px' }}></i>
+                  <span>D321, Vibhuti Khand<br/>Lucknow, UP-226010</span>
+                </li>
+              </ul>
             </div>
           </div>
         </div>
@@ -497,51 +468,45 @@ function Footer() {
                 <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
               </svg>
             </div>
-            <div className="fb-logo-name">{settings?.siteName?.split('Astro')[0] || 'Astro'}<em>{settings?.siteName?.includes('Astro') ? settings.siteName.split('Astro')[1] : 'Ava'}</em></div>
+            <div className="fb-logo-name">DS Astro Institute</div>
           </Link>
 
           {/* Description */}
-          <p className="phone-desc">{settings?.siteDescription || 'Illuminate your life path with the wisdom of the stars. Expert Vedic astrology for clarity, growth, and divine guidance.'}</p>
+          <p className="phone-desc">India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
 
           {/* Divider */}
           <div className="phone-hr" />
 
-          {/* Nav columns — 2 col grid */}
-          <div className="phone-nav-grid">
+          {/* Nav columns */}
+          <div className="phone-nav-grid" style={{ gridTemplateColumns: '1fr 1fr' }}>
             <div>
-              <div className="phone-nav-head">Consultations</div>
+              <div className="phone-nav-head">Quick Links</div>
               <ul className="phone-nav-list">
-                <li><Link to="/consultations/tarot">Tarot Card Reading</Link></li>
-                <li><Link to="/consultations/career">Career Consultation</Link></li>
-                <li><Link to="/consultations/divorce">Divorce Consultation</Link></li>
-              </ul>
-            </div>
-            <div>
-              <div className="phone-nav-head">Explore</div>
-              <ul className="phone-nav-list">
+                <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
-                <li><Link to="/blog">Blog</Link></li>
+                <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to="/shop">Merchandise</Link></li>
                 <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/careers">Careers</Link></li>
-
+                <li><Link to="/contact">Contact Us</Link></li>
               </ul>
             </div>
-          </div>
-
-          {/* Newsletter */}
-          <div className="phone-newsletter">
-            <div className="phone-nav-head">Newsletter</div>
-            <form onSubmit={(e) => handleSubscribe(e, mobileEmail, setMobileEmail)} className="phone-email-row">
-              <input
-                type="email"
-                placeholder="Email"
-                value={mobileEmail}
-                onChange={(e) => setMobileEmail(e.target.value)}
-                className="phone-email-input"
-                required
-              />
-              <button type="submit" className="phone-join-btn">Join</button>
-            </form>
+            <div>
+              <div className="phone-nav-head">Contact Info</div>
+              <ul className="phone-nav-list" style={{ gap: '12px' }}>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#5C3D26', fontSize: '14px' }}>
+                  <i className="fas fa-phone-alt" style={{ color: '#8B4A1E', marginTop: '3px' }}></i>
+                  <span>+91 7570972970</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#5C3D26', fontSize: '14px', wordBreak: 'break-all' }}>
+                  <i className="fas fa-envelope" style={{ color: '#8B4A1E', marginTop: '3px' }}></i>
+                  <span>info@dsastroinstitute.com</span>
+                </li>
+                <li style={{ display: 'flex', alignItems: 'flex-start', gap: '8px', color: '#5C3D26', fontSize: '14px' }}>
+                  <i className="fas fa-map-marker-alt" style={{ color: '#8B4A1E', marginTop: '3px' }}></i>
+                  <span>D321, Vibhuti Khand<br/>Lucknow, UP-226010</span>
+                </li>
+              </ul>
+            </div>
           </div>
 
           {/* Divider */}
@@ -591,11 +556,13 @@ function Footer() {
         {/* Bottom Legal Bar */}
         <div className="fb-bot-wrap">
           <div className="fb-bot">
-            <p className="mb-0">Secure &amp; Confidential Astrology Consultations</p>
-            <div className="fb-legal">
-              <Link to="/privacy-policy">Privacy</Link>
-              <Link to="/terms-and-conditions">Terms</Link>
-              <Link to="/refund-policy">Refund</Link>
+            <p className="mb-0">&copy; {currentYear} DS Astro Institute LLP. All rights reserved.</p>
+            <div className="fb-legal" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/privacy-policy">Privacy Policy</Link>
+              <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>
+              <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
+              <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>
+              <Link to="/refund-policy">Refund &amp; Cancellation Policy</Link>
             </div>
           </div>
         </div>

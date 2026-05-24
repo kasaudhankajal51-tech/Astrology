@@ -36,7 +36,7 @@ const sendConfirmationEmail = async (lead) => {
   });
 
   const mailOptions = {
-    from: `"Astroga Support" <${process.env.EMAIL_USER}>`,
+    from: `"DS Astro Institute Support" <${process.env.EMAIL_USER}>`,
     to: lead.email,
     subject: 'Booking Confirmed: Mega Astrology Webinar',
     html: `
@@ -64,7 +64,7 @@ const sendConfirmationEmail = async (lead) => {
           </div>
         </div>
         <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #777;">
-          <p>© ${new Date().getFullYear()} Astroga. All Rights Reserved.</p>
+          <p>© ${new Date().getFullYear()} DS Astro Institute. All Rights Reserved.</p>
           <p>If you have any questions, reply to this email.</p>
         </div>
       </div>

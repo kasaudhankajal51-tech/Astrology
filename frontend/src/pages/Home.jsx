@@ -4,6 +4,7 @@ import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
+import SEO from '../components/SEO';
 
 
 
@@ -564,6 +565,7 @@ function Home() {
 
   return (
     <>
+      <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
       <section className={`banner-section w-100 ${bannerSlides[currentSlide].themeRust ? 'theme-rust' : ''} ${bannerSlides[currentSlide].themeMustard ? 'theme-mustard' : ''} ${bannerSlides[currentSlide].themeTan ? 'theme-tan' : ''}`}>
         <div className="img-main-banner" key={`bg-${currentSlide}`}>

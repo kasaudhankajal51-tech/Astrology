@@ -1,0 +1,9 @@
+User-agent: *
+Disallow: /admin
+Disallow: /admin/login
+Disallow: /dashboard
+Disallow: /payment
+Disallow: /payment-success
+Disallow: /payment-failed
+
+Sitemap: https://www.dsastroinstitute.com/sitemap.xml

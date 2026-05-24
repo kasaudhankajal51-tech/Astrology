@@ -10,22 +10,23 @@
  *   which Netlify (or the experimental service router) forwards to the backend.
  */
 const getApiBase = () => {
-  // 1. Use environment variable if provided (Vite embeds this at build time)
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-
-  // 2. Fallback: If we are on a live server (not localhost), 
-  // assume the backend is on the same IP but at port 5000
   if (typeof window !== 'undefined') {
     const { hostname, protocol } = window.location;
+    
+    // If we are on a live server or VPS IP (not localhost)
     if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
+      const envUrl = import.meta.env.VITE_API_URL;
+      // If a real production URL was provided in .env, use it
+      if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
+        return envUrl;
+      }
+      // Otherwise dynamically connect to the backend on the same server IP, port 5000
       return `${protocol}//${hostname}:5000`;
     }
   }
 
-  // 3. Local dev fallback
-  return '';
+  // Local development fallback
+  return import.meta.env.VITE_API_URL || 'http://localhost:5000';
 };
 
 const API_BASE = getApiBase();

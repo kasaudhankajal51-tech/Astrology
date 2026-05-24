@@ -187,7 +187,7 @@ function AdminLeads({ activeFilter }) {
               <th>Client Identity</th>
               <th>Contact</th>
               <th>Category</th>
-              <th>Birth Details</th>
+              <th>Details / Message</th>
               <th>Status</th>
               <th className="text-end px-4">Action</th>
             </tr>
@@ -195,7 +195,7 @@ function AdminLeads({ activeFilter }) {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="6">
+                <td colSpan="7">
                   <div className="dash-loading py-5">
                     <div className="dash-spin"></div>
                     <span className="ms-2">Fetching records...</span>
@@ -204,7 +204,7 @@ function AdminLeads({ activeFilter }) {
               </tr>
             ) : filteredLeads.length === 0 ? (
               <tr>
-                <td colSpan="6">
+                <td colSpan="7">
                   <div className="text-center py-5 text-muted">
                     <i className="fas fa-inbox fa-3x mb-3 opacity-25"></i>
                     <p>No leads found matching your criteria.</p>
@@ -249,6 +249,10 @@ function AdminLeads({ activeFilter }) {
                       <div className="birth-info-mini">
                         <div className="td-value small">{lead.dob || 'N/A'}</div>
                         <div className="td-muted x-small">{lead.tob || ''} | {lead.pob || ''}</div>
+                      </div>
+                    ) : lead.message ? (
+                      <div className="td-muted small" style={{ maxWidth: '300px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.4' }}>
+                        <i className="fas fa-comment-alt me-1 opacity-50"></i> {lead.message}
                       </div>
                     ) : (
                       <div className="td-muted small">-</div>

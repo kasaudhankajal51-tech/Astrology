@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import SEO from '../components/SEO';
 
 function About() {
   useEffect(() => {
@@ -9,6 +10,7 @@ function About() {
 
   return (
     <>
+      <SEO title="About Us" description="Guided by knowledge, driven by purpose. Meet our expert astrologers." url="/about" />
       {/* Hero Section */}
       <section className="about-hero">
         <div className="hero-overlay"></div>

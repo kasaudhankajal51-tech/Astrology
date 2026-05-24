@@ -144,7 +144,7 @@ function AdminSettings() {
                         name="siteName" 
                         value={settings.siteName} 
                         onChange={handleChange}
-                        placeholder="e.g. AstroAva"
+                        placeholder="e.g. DS Astro Institute"
                       />
                     </div>
                     <div className="form-group">
@@ -153,7 +153,7 @@ function AdminSettings() {
                         name="siteTitle" 
                         value={settings.siteTitle} 
                         onChange={handleChange}
-                        placeholder="AstroAva - Best Astrology Services"
+                        placeholder="DS Astro Institute - Best Astrology Services"
                       />
                     </div>
                     <div className="form-group full-width">
@@ -225,7 +225,7 @@ function AdminSettings() {
                         name="facebookUrl" 
                         value={settings.facebookUrl} 
                         onChange={handleChange}
-                        placeholder="https://facebook.com/astroava"
+                        placeholder="https://facebook.com/dsastroinstitute"
                       />
                     </div>
                     <div className="form-group">
@@ -234,7 +234,7 @@ function AdminSettings() {
                         name="instagramUrl" 
                         value={settings.instagramUrl} 
                         onChange={handleChange}
-                        placeholder="https://instagram.com/astroava"
+                        placeholder="https://instagram.com/dsastroinstitute"
                       />
                     </div>
                     <div className="form-group">

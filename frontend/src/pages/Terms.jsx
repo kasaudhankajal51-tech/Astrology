@@ -418,9 +418,9 @@ function Terms() {
 
         .terms-page-wrapper {
           min-height: 100vh;
-          background-color: #f8fafc;
+          background-color: #ffffff;
           font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
-          color: #0f172a;
+          color: #000000;
           -webkit-font-smoothing: antialiased;
         }
 
@@ -488,7 +488,7 @@ function Terms() {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: #94a3b8;
+          color: #8b4513;
           margin-bottom: 0.85rem;
           padding: 0 1rem;
         }
@@ -503,14 +503,14 @@ function Terms() {
           transition: all 0.2s ease;
           background: transparent;
           border: 1px solid transparent; /* Invisible border to prevent layout shift */
-          color: #64748b;
+          color: #000000;
           cursor: pointer;
           font-family: inherit;
         }
 
         .sidebar-btn:hover {
           background-color: #f8fafc;
-          color: #475569;
+          color: #000000;
         }
 
         .sidebar-btn.active {
@@ -553,7 +553,7 @@ function Terms() {
 
         /* Content Styling */
         .intro-text p {
-          color: #64748b;
+          color: #000000;
           line-height: 1.8;
           margin-top: 0;
           margin-bottom: 1.25rem;
@@ -579,13 +579,13 @@ function Terms() {
           font-size: 1.75rem !important;
           line-height: 2.2rem;
           font-weight: 600;
-          color: #1e293b;
+          color: #8b4513;
           margin-top: 2rem;
           margin-bottom: 1rem;
         }
 
         .content-section p {
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           margin-top: 0;
           margin-bottom: 1.5rem;
@@ -596,7 +596,7 @@ function Terms() {
         .content-list {
           list-style-type: disc;
           padding-left: 1.5rem;
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           margin-top: 0.85rem;
           margin-bottom: 1.5rem;
@@ -610,15 +610,15 @@ function Terms() {
         }
 
         .content-list li::marker {
-          color: #cbd5e1;
+          color: #000000;
         }
 
         .contact-box {
-          background-color: #f8fafc;
+          background-color: #ffffff;
           padding: 1.5rem;
           border-radius: 1rem;
           border: 1px solid #f1f5f9;
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           font-size: 1.35rem !important; /* Increased content size */
           font-weight: 300;
@@ -634,7 +634,7 @@ function Terms() {
 
         /* Contact Section */
         .contact-section {
-          background-color: #f8fafc;
+          background-color: #ffffff;
           padding: 2rem;
           border-radius: 1rem;
           border: 1px solid #f1f5f9;
@@ -648,13 +648,13 @@ function Terms() {
         }
 
         .contact-desc {
-          color: #64748b;
+          color: #000000;
           font-size: 1.05rem;
           margin-bottom: 1.5rem;
         }
 
         .contact-details {
-          color: #64748b;
+          color: #000000;
           font-size: 1.05rem;
           margin-bottom: 1.5rem;
           line-height: 1.8;

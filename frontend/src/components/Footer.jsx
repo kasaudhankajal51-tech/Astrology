@@ -593,9 +593,9 @@ function Footer() {
           <div className="fb-bot">
             <p className="mb-0">Secure &amp; Confidential Astrology Consultations</p>
             <div className="fb-legal">
-              <Link to="/privacy">Privacy</Link>
-              <Link to="/terms">Terms</Link>
-              <Link to="/refund">Refund</Link>
+              <Link to="/privacy-policy">Privacy</Link>
+              <Link to="/terms-and-conditions">Terms</Link>
+              <Link to="/refund-policy">Refund</Link>
             </div>
           </div>
         </div>

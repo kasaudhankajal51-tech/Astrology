@@ -216,6 +216,7 @@ function Footer() {
         .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
         .fb-nav li a { color: #5C3D26; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
         .fb-nav li a:hover { color: #8B4A1E; transform: translateX(5px); display: inline-block; }
+        .fb-nav li i { color: #8B4A1E !important; }
 
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
@@ -314,6 +315,7 @@ function Footer() {
           }
           .phone-nav-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 12px; }
           .phone-nav-list li a { color: #5C3D26; text-decoration: none; font-size: 14px; font-weight: 500; }
+          .phone-nav-list li i { color: #8B4A1E !important; }
 
           /* Newsletter */
           .phone-newsletter { width: 100%; }

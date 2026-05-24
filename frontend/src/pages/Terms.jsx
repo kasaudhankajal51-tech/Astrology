@@ -426,7 +426,7 @@ function Terms() {
 
         /* Hero Header */
         .terms-header {
-          background-color: #1a567e;
+          background-color: #8b4513;
           padding: 4rem 1.5rem;
           text-align: center;
           color: white;
@@ -515,11 +515,11 @@ function Terms() {
 
         .sidebar-btn.active {
           background-color: #ffffff;
-          color: #1e3a8a; /* Match the dark blue heading color */
+          color: #8b4513; /* Match the brown heading color */
           font-weight: 600;
           box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03); /* Soft drop shadow */
           border: 1px solid #e2e8f0; /* Light gray border all around */
-          border-left: 4px solid #1e3a8a; /* Solid dark blue left edge */
+          border-left: 4px solid #8b4513; /* Solid brown left edge */
           border-radius: 0.5rem;
           padding-left: calc(1.25rem - 3px); /* Adjust padding for the 4px border (1px is already in base border) */
         }
@@ -569,7 +569,7 @@ function Terms() {
           font-size: 2.25rem !important;
           line-height: 2.8rem;
           font-weight: 600;
-          color: #1e3a8a !important; /* Dark blue */
+          color: #8b4513 !important; /* Brown */
           margin-top: 0;
           margin-bottom: 1.25rem;
           font-family: inherit;
@@ -643,7 +643,7 @@ function Terms() {
         .contact-title {
           font-size: 2.25rem !important;
           font-weight: 600;
-          color: #1e3a8a !important; /* Dark blue */
+          color: #8b4513 !important; /* Brown */
           margin-bottom: 0.5rem;
         }
 
@@ -666,7 +666,7 @@ function Terms() {
 
         .contact-button {
           display: inline-block;
-          background-color: #1a567e;
+          background-color: #8b4513;
           color: white;
           padding: 0.75rem 1.75rem;
           border-radius: 0.5rem;
@@ -677,7 +677,7 @@ function Terms() {
         }
 
         .contact-button:hover {
-          background-color: #144362;
+          background-color: #6b340e;
           color: white;
         }
       `}</style>

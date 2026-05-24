@@ -1,5 +1,4 @@
 import jwt from 'jsonwebtoken';
-import bcrypt from 'bcryptjs';
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -12,32 +11,29 @@ export const login = async (req, res) => {
     .trim()
     .toLowerCase();
     
-  const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '';
+  const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'DS Astro Institute@2026!')
+    .replace(/['"]+/g, '')
+    .trim();
 
   const inputEmail = (email || '').toLowerCase().trim();
-  const inputPassword = (password || '').trim();
+  const inputPassword = (password || '').trim(); // Trimming input password to avoid accidental spaces
 
   const emailMatch = inputEmail === ADMIN_EMAIL;
+  const passwordMatch = inputPassword === ADMIN_PASS;
+
+  console.log('Email received:', inputEmail, `(Length: ${inputEmail.length})`);
+  console.log('Expecting Email:', ADMIN_EMAIL, `(Length: ${ADMIN_EMAIL.length})`);
+  console.log('Password Match:', passwordMatch);
   
-  let passwordMatch = false;
-  if (emailMatch && ADMIN_PASSWORD_HASH) {
-    try {
-      passwordMatch = bcrypt.compareSync(inputPassword, ADMIN_PASSWORD_HASH);
-    } catch(err) {
-      console.error('Bcrypt compare error', err);
-    }
-  } else if (emailMatch && !ADMIN_PASSWORD_HASH) {
-    // Fallback for safety if hash isn't set yet
-    const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'DS Astro Institute@2026!')
-      .replace(/['"]+/g, '')
-      .trim();
-    passwordMatch = inputPassword === ADMIN_PASS;
+  if (!passwordMatch) {
+    console.log('Input Password Length:', inputPassword.length);
+    console.log('Expected Password Length:', ADMIN_PASS.length);
   }
 
   const JWT_SECRET = process.env.JWT_SECRET || 'astro-admin-secret-2026';
 
   if (emailMatch && passwordMatch) {
-    console.log('Login SUCCESS');
+    console.log('✅ Login SUCCESS');
     // Session token expires in 2 hours to satisfy the idle timeout requirement
     const token = jwt.sign(
       { email: ADMIN_EMAIL, role: 'admin' },

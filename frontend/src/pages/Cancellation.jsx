@@ -198,66 +198,66 @@ function Cancellation() {
             <div style={{ overflowX: 'auto' }} className="mb-4">
               <table style={{ width: '100%', borderCollapse: 'collapse', marginTop: '1rem', textAlign: 'left' }}>
                 <thead>
-                  <tr style={{ backgroundColor: '#f1f5f9', borderBottom: '2px solid #e2e8f0' }}>
-                    <th style={{ padding: '12px', fontWeight: '600', color: '#1e293b' }}>Service / Scenario</th>
-                    <th style={{ padding: '12px', fontWeight: '600', color: '#1e293b' }}>Cancellation Window</th>
-                    <th style={{ padding: '12px', fontWeight: '600', color: '#1e293b' }}>Refund Eligibility</th>
-                    <th style={{ padding: '12px', fontWeight: '600', color: '#1e293b' }}>Outcome</th>
+                  <tr style={{ backgroundColor: '#ffffff', borderBottom: '2px solid #e2e8f0' }}>
+                    <th style={{ padding: '12px', fontWeight: '600', color: '#8b4513' }}>Service / Scenario</th>
+                    <th style={{ padding: '12px', fontWeight: '600', color: '#8b4513' }}>Cancellation Window</th>
+                    <th style={{ padding: '12px', fontWeight: '600', color: '#8b4513' }}>Refund Eligibility</th>
+                    <th style={{ padding: '12px', fontWeight: '600', color: '#8b4513' }}>Outcome</th>
                   </tr>
                 </thead>
                 <tbody style={{ fontSize: '1rem' }}>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Course — any reason</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Any time</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>None</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Course — any reason</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Any time</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>None</td>
                     <td style={{ padding: '12px', color: '#ef4444', fontWeight: '500' }}>NOT Refundable</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Course — company discontinues (pre-access)</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>N/A</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Full</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Course — company discontinues (pre-access)</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>N/A</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Full</td>
                     <td style={{ padding: '12px', color: '#10b981', fontWeight: '500' }}>Full Refund</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Consultation — user cancels 24h+ before</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>24h+ before session</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Full</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Consultation — user cancels 24h+ before</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>24h+ before session</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Full</td>
                     <td style={{ padding: '12px', color: '#10b981', fontWeight: '500' }}>Full Refund</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Consultation — user cancels &lt;24h before</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>&lt;24h before session</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>None</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Consultation — user cancels &lt;24h before</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>&lt;24h before session</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>None</td>
                     <td style={{ padding: '12px', color: '#ef4444', fontWeight: '500' }}>NOT Refundable</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Consultation — no-show</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>N/A</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>None</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Consultation — no-show</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>N/A</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>None</td>
                     <td style={{ padding: '12px', color: '#ef4444', fontWeight: '500' }}>NOT Refundable</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Consultation — company cancels</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>N/A</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Full</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Consultation — company cancels</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>N/A</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Full</td>
                     <td style={{ padding: '12px', color: '#10b981', fontWeight: '500' }}>Full Refund</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Merchandise — before dispatch</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Before dispatch</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Full</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Merchandise — before dispatch</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Before dispatch</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Full</td>
                     <td style={{ padding: '12px', color: '#10b981', fontWeight: '500' }}>Full Refund</td>
                   </tr>
                   <tr style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '12px', color: '#475569' }}>Merchandise — damaged/incorrect item</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Within 48h of delivery</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>Full / Replacement</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Merchandise — damaged/incorrect item</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Within 48h of delivery</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Full / Replacement</td>
                     <td style={{ padding: '12px', color: '#10b981', fontWeight: '500' }}>Full Refund</td>
                   </tr>
                   <tr>
-                    <td style={{ padding: '12px', color: '#475569' }}>Merchandise — change of mind</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>N/A</td>
-                    <td style={{ padding: '12px', color: '#475569' }}>None</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>Merchandise — change of mind</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>N/A</td>
+                    <td style={{ padding: '12px', color: '#000000' }}>None</td>
                     <td style={{ padding: '12px', color: '#ef4444', fontWeight: '500' }}>NOT Refundable</td>
                   </tr>
                 </tbody>
@@ -332,7 +332,7 @@ function Cancellation() {
               <p><strong>Website:</strong> https://dsastroinstitute.com/</p>
             </div>
             <a href="mailto:help@dsastroinstitute.com" className="contact-button">Contact Support</a>
-            <p className="mt-4" style={{ fontSize: '1rem', color: '#64748b' }}>
+            <p className="mt-4" style={{ fontSize: '1rem', color: '#000000' }}>
               <em>By purchasing any course, booking any consultation, or placing any merchandise order on our Platform, you confirm that you have read, understood, and accepted this Refund and Cancellation Policy in its entirety.</em>
             </p>
           </section>
@@ -343,9 +343,9 @@ function Cancellation() {
 
         .terms-page-wrapper {
           min-height: 100vh;
-          background-color: #f8fafc;
+          background-color: #ffffff;
           font-family: 'Outfit', ui-sans-serif, system-ui, -apple-system, sans-serif;
-          color: #0f172a;
+          color: #000000;
           -webkit-font-smoothing: antialiased;
         }
 
@@ -413,7 +413,7 @@ function Cancellation() {
           font-weight: 600;
           text-transform: uppercase;
           letter-spacing: 0.1em;
-          color: #94a3b8;
+          color: #8b4513;
           margin-bottom: 0.85rem;
           padding: 0 1rem;
         }
@@ -428,14 +428,14 @@ function Cancellation() {
           transition: all 0.2s ease;
           background: transparent;
           border: 1px solid transparent; /* Invisible border to prevent layout shift */
-          color: #64748b;
+          color: #000000;
           cursor: pointer;
           font-family: inherit;
         }
 
         .sidebar-btn:hover {
           background-color: #f8fafc;
-          color: #475569;
+          color: #000000;
         }
 
         .sidebar-btn.active {
@@ -478,7 +478,7 @@ function Cancellation() {
 
         /* Content Styling */
         .intro-text p {
-          color: #64748b;
+          color: #000000;
           line-height: 1.8;
           margin-top: 0;
           margin-bottom: 1.25rem;
@@ -504,13 +504,13 @@ function Cancellation() {
           font-size: 1.75rem !important;
           line-height: 2.2rem;
           font-weight: 600;
-          color: #1e293b;
+          color: #8b4513;
           margin-top: 2rem;
           margin-bottom: 1rem;
         }
 
         .content-section p {
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           margin-top: 0;
           margin-bottom: 1.5rem;
@@ -521,7 +521,7 @@ function Cancellation() {
         .content-list {
           list-style-type: disc;
           padding-left: 1.5rem;
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           margin-top: 0.85rem;
           margin-bottom: 1.5rem;
@@ -535,15 +535,15 @@ function Cancellation() {
         }
 
         .content-list li::marker {
-          color: #cbd5e1;
+          color: #000000;
         }
 
         .contact-box {
-          background-color: #f8fafc;
+          background-color: #ffffff;
           padding: 1.5rem;
           border-radius: 1rem;
           border: 1px solid #f1f5f9;
-          color: #64748b;
+          color: #000000;
           line-height: 1.9;
           font-size: 1.35rem !important; /* Increased content size */
           font-weight: 300;
@@ -559,7 +559,7 @@ function Cancellation() {
 
         /* Contact Section */
         .contact-section {
-          background-color: #f8fafc;
+          background-color: #ffffff;
           padding: 2rem;
           border-radius: 1rem;
           border: 1px solid #f1f5f9;
@@ -573,13 +573,13 @@ function Cancellation() {
         }
 
         .contact-desc {
-          color: #64748b;
+          color: #000000;
           font-size: 1.05rem;
           margin-bottom: 1.5rem;
         }
 
         .contact-details {
-          color: #64748b;
+          color: #000000;
           font-size: 1.05rem;
           margin-bottom: 1.5rem;
           line-height: 1.8;

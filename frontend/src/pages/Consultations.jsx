@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
-
+import SEO from '../components/SEO';
 
 function Consultations() {
   const navigate = useNavigate();
@@ -228,6 +228,7 @@ function Consultations() {
 
   return (
     <>
+      <SEO title="Consultation Services" description="Understand your life path, remove confusion, and make decisions with confidence." url="/book-consultation" />
       <section className="consultation-page">
         <div className="page-header-bg"></div>
         <div className="container position-relative">

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 
 const ShopCategory = () => {
   const { category } = useParams();
   const [categoryData, setCategoryData] = useState(null);
+  const navigate = useNavigate();
 
   const shopData = {
     gemstones: {
@@ -190,7 +191,10 @@ const ShopCategory = () => {
                   <p className="product-price m-0">{prod.price}</p>
                   <span className="text-success small fw-bold">In Stock</span>
                 </div>
-                <button className="btn-add" onClick={() => toast.success(`${prod.name} added to cart!`)}>Add to cart</button>
+                <div className="d-flex gap-2 mt-3">
+                  <button className="btn-add" style={{ flex: 1, background: '#f8f9fa', color: '#2A0F02', border: '1px solid #2A0F02' }} onClick={() => toast.success(`${prod.name} added to cart!`)}>Add to cart</button>
+                  <button className="btn-add" style={{ flex: 1 }} onClick={() => navigate('/shop/checkout', { state: { product: prod } })}>Buy Now</button>
+                </div>
               </div>
             </div>
           ))}

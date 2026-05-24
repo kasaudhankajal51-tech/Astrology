@@ -2,6 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
 import { useSettings } from '../context/SettingsContext';
+import SEO from '../components/SEO';
 
 function Contact() {
   const { settings } = useSettings();
@@ -34,6 +35,7 @@ function Contact() {
 
   return (
     <>
+      <SEO title="Contact Us" description="Get in touch with DS Astro Institute for astrology consultations and courses." url="/contact" />
       {/* Contact Section */}
       <section className="contact-section">
         <div className="contact-container">

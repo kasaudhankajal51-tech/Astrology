@@ -5,7 +5,7 @@ import API_BASE from '../utils/api';
 
 
 function CourseInquiry() {
-  const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', address: '' });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const navigate = useNavigate();
 
@@ -83,6 +83,10 @@ function CourseInquiry() {
                   <div className="form-group">
                     <label>Phone Number</label>
                     <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Enter your phone number" />
+                  </div>
+                  <div className="form-group">
+                    <label>Complete Address</label>
+                    <input type="text" name="address" value={formData.address} onChange={handleChange} required placeholder="Enter your full address" />
                   </div>
                   
                   <div className="form-group consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>

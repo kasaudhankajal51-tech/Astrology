@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { coursesData } from '../data/coursesData';
+import SEO from '../components/SEO';
 
 function Courses() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -11,7 +12,6 @@ function Courses() {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    document.title = "Professional Astrology & Occult Courses | Cosmic Light";
     const filtered = coursesData.filter(course => {
       const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
@@ -23,6 +23,7 @@ function Courses() {
 
   return (
     <div className="courses-page">
+      <SEO title="Professional Astrology Courses" description="Explore our comprehensive range of professional astrology and occult science courses." url="/courses" />
       <style>{`
         .courses-page {
           background: #FDF6EE;

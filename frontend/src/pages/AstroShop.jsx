@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import SEO from '../components/SEO';
 
 const AstroShop = () => {
   useEffect(() => {
@@ -12,12 +14,14 @@ const AstroShop = () => {
     }
   }, []);
 
+  const navigate = useNavigate();
+
   const handleAddToCart = (name) => {
     toast.success(`${name} added to cart!`);
   };
 
-  const handleBuyNow = (name) => {
-    toast.success(`Starting checkout for ${name}...`);
+  const handleBuyNow = (prod) => {
+    navigate('/shop/checkout', { state: { product: prod } });
   };
 
   const categories = [
@@ -156,7 +160,7 @@ const AstroShop = () => {
                 <h4 className="prod-name-v2">{prod.name}</h4>
                 <div className="price-row">
                   <span className="price-v2">{prod.price}</span>
-                  <button className="btn-buy-v2" onClick={() => handleBuyNow(prod.name)}>Buy Now</button>
+                  <button className="btn-buy-v2" onClick={() => handleBuyNow(prod)}>Buy Now</button>
                 </div>
               </div>
             </div>

@@ -1,10 +1,17 @@
 import express from 'express';
+import rateLimit from 'express-rate-limit';
 import { createLead, paymentCallback, verifyPayment, getLeads, exportLeads, updateLeadStatus, deleteLead } from '../controllers/leadController.js';
 import { adminAuth } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
-router.post('/', createLead);
+const submitLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 10,
+  message: { success: false, message: 'Too many submissions, please try again later' }
+});
+
+router.post('/', submitLimiter, createLead);
 router.post('/payment-callback', paymentCallback);
 router.post('/verify-payment', verifyPayment);
 router.get('/', adminAuth, getLeads);

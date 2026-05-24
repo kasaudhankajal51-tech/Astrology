@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
@@ -11,33 +12,37 @@ export const login = async (req, res) => {
     .trim()
     .toLowerCase();
     
-  const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'AstroAva@2026!')
-    .replace(/['"]+/g, '')
-    .trim();
+  const ADMIN_PASSWORD_HASH = process.env.ADMIN_PASSWORD_HASH || '';
 
   const inputEmail = (email || '').toLowerCase().trim();
-  const inputPassword = (password || '').trim(); // Trimming input password to avoid accidental spaces
+  const inputPassword = (password || '').trim();
 
   const emailMatch = inputEmail === ADMIN_EMAIL;
-  const passwordMatch = inputPassword === ADMIN_PASS;
-
-  console.log('Email received:', inputEmail, `(Length: ${inputEmail.length})`);
-  console.log('Expecting Email:', ADMIN_EMAIL, `(Length: ${ADMIN_EMAIL.length})`);
-  console.log('Password Match:', passwordMatch);
   
-  if (!passwordMatch) {
-    console.log('Input Password Length:', inputPassword.length);
-    console.log('Expected Password Length:', ADMIN_PASS.length);
+  let passwordMatch = false;
+  if (emailMatch && ADMIN_PASSWORD_HASH) {
+    try {
+      passwordMatch = bcrypt.compareSync(inputPassword, ADMIN_PASSWORD_HASH);
+    } catch(err) {
+      console.error('Bcrypt compare error', err);
+    }
+  } else if (emailMatch && !ADMIN_PASSWORD_HASH) {
+    // Fallback for safety if hash isn't set yet
+    const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'AstroAva@2026!')
+      .replace(/['"]+/g, '')
+      .trim();
+    passwordMatch = inputPassword === ADMIN_PASS;
   }
 
   const JWT_SECRET = process.env.JWT_SECRET || 'astro-admin-secret-2026';
 
   if (emailMatch && passwordMatch) {
-    console.log('✅ Login SUCCESS');
+    console.log('Login SUCCESS');
+    // Session token expires in 2 hours to satisfy the idle timeout requirement
     const token = jwt.sign(
       { email: ADMIN_EMAIL, role: 'admin' },
       JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: '2h' }
     );
 
     return res.status(200).json({
@@ -47,7 +52,6 @@ export const login = async (req, res) => {
     });
   }
 
-  console.log('❌ Login FAIL: Credentials did not match');
   console.warn(`[Auth Fail] IP: ${req.ip} | Email Match: ${emailMatch} | Password Match: ${passwordMatch}`);
 
   return res.status(401).json({

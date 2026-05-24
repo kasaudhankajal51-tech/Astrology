@@ -591,11 +591,13 @@ function Footer() {
         {/* Bottom Legal Bar */}
         <div className="fb-bot-wrap">
           <div className="fb-bot">
-            <p className="mb-0">Secure &amp; Confidential Astrology Consultations</p>
-            <div className="fb-legal">
-              <Link to="/privacy-policy">Privacy</Link>
-              <Link to="/terms-and-conditions">Terms</Link>
-              <Link to="/refund-policy">Refund</Link>
+            <p className="mb-0">&copy; {currentYear} DS Astro Institute LLP. All rights reserved.</p>
+            <div className="fb-legal" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <Link to="/privacy-policy">Privacy Policy</Link>
+              <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>
+              <Link to="/terms-and-conditions">Terms &amp; Conditions</Link>
+              <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>
+              <Link to="/refund-policy">Refund &amp; Cancellation Policy</Link>
             </div>
           </div>
         </div>

@@ -1171,7 +1171,7 @@ function Home() {
         message="Your consultation booking is successful. India's top astrology mentor will review your birth chart soon. Expect a call for session scheduling within 24 hours."
       />
 
-      <style jsx>{`
+      <style>{`
         html {
           scroll-behavior: smooth;
         }

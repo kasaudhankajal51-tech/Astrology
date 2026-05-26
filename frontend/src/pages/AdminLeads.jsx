@@ -69,7 +69,7 @@ function AdminLeads({ activeFilter }) {
     }
     
     // Generate CSV data directly on frontend (no backend dependency)
-    const headers = ['Name', 'Phone', 'Email', 'Service', 'Category', 'Date', 'Payment Status', 'Booking Status', 'Submitted On'];
+    const headers = ['Name', 'Phone', 'Email', 'Service', 'Category', 'Message', 'Date', 'Payment Status', 'Booking Status', 'Submitted On'];
     
     const csvRows = leads.map(lead => {
       const service = lead.type;
@@ -86,6 +86,7 @@ function AdminLeads({ activeFilter }) {
         escape(lead.email),
         escape(service),
         escape(category),
+        escape(lead.message),
         escape(date),
         escape(lead.paymentStatus),
         escape(lead.status || 'Pending'),
@@ -153,6 +154,7 @@ function AdminLeads({ activeFilter }) {
   };
 
   const [activeMenu, setActiveMenu] = useState(null);
+  const [messageModal, setMessageModal] = useState({ isOpen: false, data: null });
 
   const handleRefresh = () => {
     setFilters({ startDate: '', endDate: '', type: activeFilter || '' });
@@ -224,6 +226,7 @@ function AdminLeads({ activeFilter }) {
               <th>Name</th>
               <th>Phone</th>
               <th>Service</th>
+              <th>Message</th>
               <th>Date</th>
               <th>Status</th>
               <th>Submitted on</th>
@@ -233,7 +236,7 @@ function AdminLeads({ activeFilter }) {
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <div className="dash-loading py-5">
                     <div className="dash-spin"></div>
                     <span className="ms-2">Fetching records...</span>
@@ -242,7 +245,7 @@ function AdminLeads({ activeFilter }) {
               </tr>
             ) : filteredLeads.length === 0 ? (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <div className="text-center py-5 text-muted">
                     <i className="fas fa-inbox fa-3x mb-3 opacity-25"></i>
                     <p>No leads found matching your criteria.</p>
@@ -269,6 +272,21 @@ function AdminLeads({ activeFilter }) {
                     <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '150px' }}>
                       {lead.courseName || lead.consultationType || 'General'}
                     </div>
+                  </td>
+                  <td>
+                    {lead.message ? (
+                      <div 
+                        className="small fw-normal text-secondary text-truncate" 
+                        style={{ maxWidth: '160px', cursor: 'pointer' }}
+                        onClick={() => setMessageModal({ isOpen: true, data: lead })}
+                        title="Click to view full message"
+                      >
+                        <i className="far fa-comment-alt me-1 text-violet"></i>
+                        <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>{lead.message}</span>
+                      </div>
+                    ) : (
+                      <span className="text-muted small">-</span>
+                    )}
                   </td>
                   <td>
                     <div className="td-value small">{lead.preferredDate || lead.dob || '-'}</div>
@@ -344,6 +362,43 @@ function AdminLeads({ activeFilter }) {
           </tbody>
         </table>
       </div>
+
+      {/* Message Modal */}
+      {messageModal.isOpen && (
+        <>
+          <div className="modal-backdrop fade show" style={{ zIndex: 1040 }} onClick={() => setMessageModal({ isOpen: false, data: null })}></div>
+          <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050 }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content border-0 shadow-lg" style={{ borderRadius: 'var(--r-lg)' }}>
+                <div className="modal-header border-bottom-0 pb-0">
+                  <h5 className="modal-title fw-bold" style={{ fontFamily: 'var(--font-display)' }}>
+                    <i className="far fa-comment-dots text-violet me-2"></i>
+                    Message Inquiry
+                  </h5>
+                  <button type="button" className="btn-close" onClick={() => setMessageModal({ isOpen: false, data: null })}></button>
+                </div>
+                <div className="modal-body py-4">
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="sb-profile-avatar" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
+                      {messageModal.data?.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="fw-bold text-dark">{messageModal.data?.name}</div>
+                      <div className="text-muted small">{messageModal.data?.email}</div>
+                    </div>
+                  </div>
+                  <div className="p-3 rounded bg-light border text-secondary" style={{ fontSize: '14px', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+                    {messageModal.data?.message}
+                  </div>
+                </div>
+                <div className="modal-footer border-top-0 pt-0">
+                  <button type="button" className="btn btn-secondary rounded-pill px-4" onClick={() => setMessageModal({ isOpen: false, data: null })}>Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

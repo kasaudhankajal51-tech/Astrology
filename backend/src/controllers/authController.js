@@ -1,57 +1,66 @@
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
+import User from '../models/User.js';
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
 
-  console.log('--- Login Attempt ---');
-  
-  // Clean environment variables (remove potential quotes and whitespace)
-  const ADMIN_EMAIL = (process.env.ADMIN_EMAIL || 'admin@astroava.com')
-    .replace(/['"]+/g, '')
-    .trim()
-    .toLowerCase();
-    
-  const ADMIN_PASS = (process.env.ADMIN_PASSWORD || 'DS Astro Institute@2026!')
-    .replace(/['"]+/g, '')
-    .trim();
+  try {
+    const inputEmail = (email || '').toLowerCase().trim();
+    const inputPassword = (password || '').trim();
 
-  const inputEmail = (email || '').toLowerCase().trim();
-  const inputPassword = (password || '').trim(); // Trimming input password to avoid accidental spaces
+    const user = await User.findOne({ email: inputEmail });
+    if (!user) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
 
-  const emailMatch = inputEmail === ADMIN_EMAIL;
-  const passwordMatch = inputPassword === ADMIN_PASS;
+    const passwordMatch = await bcrypt.compare(inputPassword, user.passwordHash);
+    if (!passwordMatch) {
+      return res.status(401).json({ success: false, message: 'Invalid email or password' });
+    }
 
-  console.log('Email received:', inputEmail, `(Length: ${inputEmail.length})`);
-  console.log('Expecting Email:', ADMIN_EMAIL, `(Length: ${ADMIN_EMAIL.length})`);
-  console.log('Password Match:', passwordMatch);
-  
-  if (!passwordMatch) {
-    console.log('Input Password Length:', inputPassword.length);
-    console.log('Expected Password Length:', ADMIN_PASS.length);
-  }
-
-  const JWT_SECRET = process.env.JWT_SECRET || 'astro-admin-secret-2026';
-
-  if (emailMatch && passwordMatch) {
-    console.log('✅ Login SUCCESS');
-    // Session token expires in 2 hours to satisfy the idle timeout requirement
+    const JWT_SECRET = process.env.JWT_SECRET || 'astro-admin-secret-2026';
     const token = jwt.sign(
-      { email: ADMIN_EMAIL, role: 'admin' },
+      { id: user._id, role: user.role, email: user.email }, // included email for backwards compatibility with adminAuth if needed
       JWT_SECRET,
-      { expiresIn: '2h' }
+      { expiresIn: '30d' }
     );
 
     return res.status(200).json({
       success: true,
       message: 'Login successful',
-      token
+      token,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
     });
+  } catch (error) {
+    console.error('Login error:', error);
+    return res.status(500).json({ success: false, message: 'Server error during login' });
   }
+};
 
-  console.warn(`[Auth Fail] IP: ${req.ip} | Email Match: ${emailMatch} | Password Match: ${passwordMatch}`);
-
-  return res.status(401).json({
-    success: false,
-    message: 'Invalid email or password'
-  });
+export const getMe = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-passwordHash');
+    if (!user) {
+      return res.status(404).json({ success: false, message: 'User not found' });
+    }
+    
+    return res.status(200).json({
+      success: true,
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        role: user.role
+      }
+    });
+  } catch (error) {
+    console.error('Get me error:', error);
+    return res.status(500).json({ success: false, message: 'Server error' });
+  }
 };

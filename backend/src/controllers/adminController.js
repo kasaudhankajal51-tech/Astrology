@@ -55,3 +55,33 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
     }
   });
 });
+
+import Consultation from '../models/Consultation.js';
+
+// @desc    Get all consultations
+// @route   GET /api/admin/consultations
+export const getConsultations = asyncHandler(async (req, res) => {
+  const consultations = await Consultation.find()
+    .populate('courseId', 'title')
+    .populate('userId', 'name email')
+    .sort('-createdAt');
+    
+  res.json({ success: true, consultations });
+});
+
+// @desc    Update consultation status
+// @route   PUT /api/admin/consultations/:id
+export const updateConsultation = asyncHandler(async (req, res) => {
+  const { status } = req.body;
+  const consultation = await Consultation.findById(req.params.id);
+  
+  if (!consultation) {
+    res.status(404);
+    throw new Error('Consultation not found');
+  }
+  
+  consultation.status = status || consultation.status;
+  await consultation.save();
+  
+  res.json({ success: true, consultation });
+});

@@ -16,6 +16,9 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -105,8 +108,9 @@ app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/settings', settingsRoutes);
 app.use('/api/newsletter', newsletterRoutes);
-
-
+app.use('/api/courses', courseRoutes);
+app.use('/api/student', studentRoutes);
+app.use('/api/payment', paymentRoutes);
 
 // --- Error Handling ---
 app.use(notFound);

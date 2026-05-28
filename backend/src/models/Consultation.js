@@ -9,6 +9,11 @@ const ConsultationSchema = new mongoose.Schema({
   tob: String,
   location: String,
   status: { type: String, default: 'pending', enum: ['pending', 'contacted', 'completed', 'cancelled'] },
+  userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+  preferredDatetime: { type: Date },
+  notes: { type: String },
+  bookedAt: { type: Date, default: Date.now },
   createdAt: { type: Date, default: Date.now }
 });
 

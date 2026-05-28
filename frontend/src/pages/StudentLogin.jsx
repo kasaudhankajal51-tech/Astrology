@@ -3,9 +3,9 @@ import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import API_BASE from '../utils/api';
-import './Admin.css';
+import './Admin.css'; // Reusing the premium CSS from admin
 
-function AdminLogin() {
+function StudentLogin() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -14,9 +14,9 @@ function AdminLogin() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const token = localStorage.getItem('adminToken');
+    const token = localStorage.getItem('studentToken');
     if (token) {
-      navigate('/admin');
+      navigate('/dashboard');
     }
   }, [navigate]);
 
@@ -35,9 +35,10 @@ function AdminLogin() {
       const data = await response.json();
 
       if (data.success) {
-        localStorage.setItem('adminToken', data.token);
-        toast.success('Welcome back, Admin!');
-        navigate('/admin');
+        localStorage.setItem('studentToken', data.token);
+        localStorage.setItem('studentName', data.user.name);
+        toast.success('Welcome to your learning portal!');
+        navigate('/dashboard');
       } else {
         const errorMsg = data.message || 'Invalid Credentials';
         setLoginError(errorMsg);
@@ -55,7 +56,7 @@ function AdminLogin() {
 
   return (
     <div className="login-root">
-      <div className="login-bg-glow"></div>
+      <div className="login-bg-glow" style={{ background: 'radial-gradient(circle at top right, rgba(200, 131, 42, 0.2), transparent 40%)' }}></div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
@@ -74,12 +75,12 @@ function AdminLogin() {
             >
               A
             </motion.div>
-            <div className="login-brand-name">DS Astro Institute <em>Admin</em></div>
+            <div className="login-brand-name">Cosmic Light <em>Academy</em></div>
           </div>
 
           <div className="login-headline">
-            <h1>Welcome Back</h1>
-            <p>Sign in to your administrative dashboard</p>
+            <h1>Student Portal</h1>
+            <p>Sign in to access your enrolled courses</p>
           </div>
 
           <form className="login-form" onSubmit={handleLogin}>
@@ -89,7 +90,7 @@ function AdminLogin() {
                 <i className="fas fa-envelope"></i>
                 <input 
                   type="email" 
-                  placeholder="admin@dsastroinstitute.com"
+                  placeholder="your.email@example.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -133,29 +134,17 @@ function AdminLogin() {
               )}
             </AnimatePresence>
 
-            <div className="lf-row">
-              <label className="lf-check">
-                <input type="checkbox" />
-                <span>Remember me</span>
-              </label>
-              <a href="#" className="lf-forgot">Forgot password?</a>
-            </div>
-
             <button 
               type="submit" 
               className={`lf-btn ${isLoading ? 'lf-btn--loading' : ''}`}
               disabled={isLoading}
             >
-              {isLoading ? <div className="lf-spinner"></div> : 'Sign In'}
+              {isLoading ? <div className="lf-spinner"></div> : 'Enter Portal'}
             </button>
           </form>
 
           <div className="login-footer">
-            <span>&copy; 2026 DS Astro Institute</span>
-            <div>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms</a>
-            </div>
+            <span>&copy; 2026 Cosmic Light Astrology</span>
           </div>
         </div>
 
@@ -171,7 +160,7 @@ function AdminLogin() {
               className="lr-img-container"
             >
               <img 
-                src="/owl_login.png" 
+                src="/images/vedic_thumbnail.png" 
                 alt="Visual" 
                 className="lr-img"
               />
@@ -183,4 +172,4 @@ function AdminLogin() {
   );
 }
 
-export default AdminLogin;
+export default StudentLogin;

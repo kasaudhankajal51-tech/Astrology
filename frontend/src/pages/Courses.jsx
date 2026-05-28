@@ -6,20 +6,53 @@ import SEO from '../components/SEO';
 function Courses() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [filteredCourses, setFilteredCourses] = useState(coursesData);
+  const [dbCourses, setDbCourses] = useState([]);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = ['All', ...new Set(coursesData.map(course => course.category))];
+  // Fetch courses from backend
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('/api/courses');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Map DB fields to UI fields
+          const mappedCourses = data.courses.map(course => ({
+            id: course._id,
+            title: course.title,
+            shortDesc: course.description,
+            image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
+            duration: `${course.validityDays} Days`,
+            schedule: 'Self-Paced',
+            level: 'Professional',
+            category: 'Astrology', // Defaulting since we didn't add category to DB yet
+            price: course.price
+          }));
+          setDbCourses(mappedCourses);
+        }
+      } catch (err) {
+        console.error('Failed to fetch courses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  const categories = ['All', ...new Set(dbCourses.map(course => course.category))];
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const filtered = coursesData.filter(course => {
+    const filtered = dbCourses.filter(course => {
       const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || course.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
     setFilteredCourses(filtered);
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, dbCourses]);
 
   return (
     <div className="courses-page">

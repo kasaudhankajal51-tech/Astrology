@@ -9,7 +9,7 @@ function CourseDetail() {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -18,50 +18,170 @@ function CourseDetail() {
     email: '',
     phone: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const foundCourse = coursesData.find(c => c.id === courseId);
-    if (foundCourse) {
-      setCourse(foundCourse);
-      document.title = `${foundCourse.title} | Cosmic Light Astrology`;
-      // Simulate small load for UI smoothness
-      setTimeout(() => setLoading(false), 500);
-    } else {
-      navigate('/courses');
-    }
+    const fetchCourse = async () => {
+      try {
+        const response = await fetch(`/api/courses/${courseId}`);
+        const data = await response.json();
+        
+        if (data.success && data.course) {
+          const dbCourse = data.course;
+          const mappedCourse = {
+            id: dbCourse._id,
+            title: dbCourse.title,
+            shortDesc: dbCourse.description,
+            longDesc: dbCourse.description, // using description for longDesc too
+            image: dbCourse.thumbnailUrl || '/images/vedic_thumbnail.png',
+            duration: `${dbCourse.validityDays} Days`,
+            schedule: 'Self-Paced',
+            level: 'Professional',
+            category: 'Astrology',
+            price: dbCourse.price,
+            topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
+          };
+          setCourse(mappedCourse);
+          document.title = `${mappedCourse.title} | Cosmic Light Astrology`;
+        } else {
+          navigate('/courses');
+        }
+      } catch (err) {
+        console.error('Failed to fetch course details:', err);
+        navigate('/courses');
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCourse();
   }, [courseId, navigate]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleInquirySubmit = async (e) => {
-    e.preventDefault();
-    setIsSubmitting(true);
-    try {
-      const res = await fetch(`${API_BASE}/api/leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          ...formData, 
-          type: 'Course-Inquiry', 
-          courseName: course.title 
-        }),
-      });
-      const data = await res.json();
-      if (data.success) {
-        setShowInquiryModal(false);
-        setIsSuccessOpen(true);
-        setFormData({ name: '', email: '', phone: '' });
-      } else {
-        toast.error(data.message || 'Submission failed');
+  const initiateCheckout = () => {
+    const token = localStorage.getItem('studentToken');
+    if (token) {
+      // Already logged in, straight to payment
+      handlePayment();
+    } else {
+      // Ask for details
+      setShowCheckoutModal(true);
+    }
+  };
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
       }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async (e) => {
+    if (e) e.preventDefault();
+    setIsProcessingPayment(true);
+
+    try {
+      const res = await loadRazorpayScript();
+      if (!res) {
+        toast.error('Razorpay SDK failed to load. Check your connection.');
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      // Create Order
+      const token = localStorage.getItem('studentToken');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const orderResponse = await fetch(`${API_BASE}/api/payment/create-order`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          courseId: course.id,
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.phone
+        })
+      });
+
+      const orderData = await orderResponse.json();
+
+      if (!orderData.success) {
+        toast.error(orderData.message || 'Failed to create order');
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      const options = {
+        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Use Razorpay Key ID from env
+        amount: orderData.amount,
+        currency: orderData.currency,
+        name: 'Cosmic Light Academy',
+        description: `Payment for ${course.title}`,
+        order_id: orderData.razorpayOrderId,
+        handler: async function (response) {
+          try {
+            const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                name: formData.name,
+                email: formData.email
+              })
+            });
+
+            const verifyData = await verifyResponse.json();
+
+            if (verifyData.success) {
+              setShowCheckoutModal(false);
+              setIsSuccessOpen(true);
+              
+              // Automatically redirect to student portal after 3 seconds
+              setTimeout(() => {
+                navigate('/login');
+              }, 3000);
+            } else {
+              toast.error(verifyData.message || 'Payment verification failed');
+            }
+          } catch (err) {
+            console.error(err);
+            toast.error('Verification error');
+          }
+        },
+        prefill: {
+          name: formData.name,
+          email: formData.email,
+          contact: formData.phone
+        },
+        theme: {
+          color: '#8B4A1E'
+        }
+      };
+
+      const paymentObject = new window.Razorpay(options);
+      paymentObject.open();
+
     } catch (err) {
+      console.error(err);
       toast.error('Network Error. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setIsProcessingPayment(false);
     }
   };
 
@@ -814,11 +934,11 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                <div className="enroll-price">₹ Enquire Now</div>
-                <p className="enroll-sub">Get personalized fee structure & syllabus PDF</p>
+                <div className="enroll-price">₹ {course.price}</div>
+                <p className="enroll-sub">Full course access for {course.duration}</p>
                 
-                <button className="enroll-btn" onClick={() => setShowInquiryModal(true)}>
-                  Reserve Your Seat <i className="fas fa-chevron-right ms-2"></i>
+                <button className="enroll-btn" onClick={initiateCheckout} disabled={isProcessingPayment}>
+                  {isProcessingPayment ? 'Processing...' : 'Enroll Now'} <i className="fas fa-chevron-right ms-2"></i>
                 </button>
 
                 <div className="trust-badges">
@@ -862,8 +982,8 @@ function CourseDetail() {
             <p className="small">Upcoming Batch</p>
             <p className="mb-0 fw-bold text-white">Join Today</p>
           </div>
-          <button className="btn-enquire" onClick={() => setShowInquiryModal(true)}>
-            ENQUIRE
+          <button className="btn-enquire" onClick={initiateCheckout} disabled={isProcessingPayment}>
+            {isProcessingPayment ? 'WAIT...' : 'ENROLL NOW'}
           </button>
         </div>
       </div>
@@ -877,14 +997,14 @@ function CourseDetail() {
         <i className="fas fa-arrow-up"></i>
       </button>
 
-      {showInquiryModal && (
-        <div className="modal-overlay" onClick={() => setShowInquiryModal(false)}>
+      {showCheckoutModal && (
+        <div className="modal-overlay" onClick={() => setShowCheckoutModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in">
-            <button className="modal-close" onClick={() => setShowInquiryModal(false)}>&times;</button>
-            <h3>Course Inquiry</h3>
-            <p className="text-muted mb-4">Please fill in your details and our team will get back to you with batch timings and fee structure.</p>
+            <button className="modal-close" onClick={() => setShowCheckoutModal(false)}>&times;</button>
+            <h3>Complete Checkout</h3>
+            <p className="text-muted mb-4">Enter your details to proceed to secure payment.</p>
             
-            <form onSubmit={handleInquirySubmit}>
+            <form onSubmit={handlePayment}>
               <div className="form-group">
                 <label>Selected Course</label>
                 <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
@@ -901,8 +1021,8 @@ function CourseDetail() {
                 <label>Email Address</label>
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required />
               </div>
-              <button type="submit" className="submit-btn" disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : 'Send Inquiry'}
+              <button type="submit" className="submit-btn" disabled={isProcessingPayment}>
+                {isProcessingPayment ? 'Initializing...' : `Pay ₹${course.price}`}
               </button>
             </form>
           </div>
@@ -912,8 +1032,8 @@ function CourseDetail() {
       <SuccessModal 
         isOpen={isSuccessOpen} 
         onClose={() => setIsSuccessOpen(false)} 
-        title="Inquiry Received!"
-        message={`Thank you for your interest in ${course?.title}. Our academic counselor will contact you shortly with the syllabus, batch timings, and special fee offers.`}
+        title="Payment Successful!"
+        message={`Welcome to Cosmic Light Academy! You have been successfully enrolled in ${course?.title}. We've sent your login credentials to your email. Redirecting to your dashboard...`}
       />
     </div>
   );

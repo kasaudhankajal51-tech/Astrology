@@ -97,20 +97,27 @@ app.use(async (req, res, next) => {
 });
 
 // --- API Routes ---
-app.use('/api/tools', toolsRoutes);
-app.use('/api/consultation', consultationRoutes);
-app.use('/api/tarot', tarotRoutes);
-app.use('/api/love', loveRoutes);
-app.use('/api/leads', leadRoutes);
-app.use('/api/blogs', blogRoutes);
-app.use('/api/jobs', jobRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/newsletter', newsletterRoutes);
-app.use('/api/courses', courseRoutes);
-app.use('/api/student', studentRoutes);
-app.use('/api/payment', paymentRoutes);
+const apiRoutes = [
+  ['/tools', toolsRoutes],
+  ['/consultation', consultationRoutes],
+  ['/tarot', tarotRoutes],
+  ['/love', loveRoutes],
+  ['/leads', leadRoutes],
+  ['/blogs', blogRoutes],
+  ['/jobs', jobRoutes],
+  ['/auth', authRoutes],
+  ['/admin', adminRoutes],
+  ['/settings', settingsRoutes],
+  ['/newsletter', newsletterRoutes],
+  ['/courses', courseRoutes],
+  ['/student', studentRoutes],
+  ['/payment', paymentRoutes]
+];
+
+apiRoutes.forEach(([path, route]) => {
+  app.use(`/api${path}`, route);
+  app.use(`${path}`, route); // Fallback for when Nginx strips the /api prefix
+});
 
 // --- Error Handling ---
 app.use(notFound);

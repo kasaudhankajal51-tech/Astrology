@@ -276,11 +276,7 @@ export const getLeads = asyncHandler(async (req, res) => {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
   if (type) {
-    if (type === 'Course') {
-      filter.type = { $in: ['Course', 'Course-Inquiry'] };
-    } else {
-      filter.type = type;
-    }
+    filter.type = type;
   }
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });
@@ -297,11 +293,7 @@ export const exportLeads = asyncHandler(async (req, res) => {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
   if (type) {
-    if (type === 'Course') {
-      filter.type = { $in: ['Course', 'Course-Inquiry'] };
-    } else {
-      filter.type = type;
-    }
+    filter.type = type;
   }
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });

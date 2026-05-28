@@ -10,6 +10,7 @@ function CourseDetail() {
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
   const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -17,6 +18,14 @@ function CourseDetail() {
     name: '',
     email: '',
     phone: ''
+  });
+  const [enquiryData, setEnquiryData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    city: '',
+    age: '',
+    message: ''
   });
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
@@ -40,16 +49,29 @@ function CourseDetail() {
             level: 'Professional',
             category: 'Astrology',
             price: dbCourse.price,
+            isPremium: true,
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
           document.title = `${mappedCourse.title} | Cosmic Light Astrology`;
         } else {
-          navigate('/courses');
+          const staticCourse = coursesData.find(c => c.id === courseId);
+          if (staticCourse) {
+            setCourse({...staticCourse, isPremium: false});
+            document.title = `${staticCourse.title} | Cosmic Light Astrology`;
+          } else {
+            navigate('/courses');
+          }
         }
       } catch (err) {
-        console.error('Failed to fetch course details:', err);
-        navigate('/courses');
+        const staticCourse = coursesData.find(c => c.id === courseId);
+        if (staticCourse) {
+          setCourse({...staticCourse, isPremium: false});
+          document.title = `${staticCourse.title} | Cosmic Light Astrology`;
+        } else {
+          console.error('Failed to fetch course details:', err);
+          navigate('/courses');
+        }
       } finally {
         setLoading(false);
       }
@@ -60,6 +82,40 @@ function CourseDetail() {
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleEnquiryChange = (e) => {
+    setEnquiryData({ ...enquiryData, [e.target.name]: e.target.value });
+  };
+
+  const handleEnquirySubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const res = await fetch('/api/leads', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: enquiryData.name,
+          phone: enquiryData.phone,
+          email: enquiryData.email,
+          type: 'Course-Inquiry',
+          courseName: course.title,
+          dob: enquiryData.age,
+          pob: enquiryData.city,
+          message: enquiryData.message
+        })
+      });
+      const data = await res.json();
+      if (data.success) {
+        toast.success('Enquiry submitted successfully! Our team will contact you soon.');
+        setShowEnquiryModal(false);
+        setEnquiryData({ name: '', phone: '', email: '', city: '', age: '', message: '' });
+      } else {
+        toast.error(data.message || 'Failed to submit enquiry');
+      }
+    } catch (err) {
+      toast.error('Network Error. Please try again.');
+    }
   };
 
   const initiateCheckout = () => {
@@ -919,12 +975,23 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                <div className="enroll-price">₹ {course.price}</div>
-                <p className="enroll-sub">Full course access for {course.duration}</p>
-                
-                <button className="enroll-btn" onClick={initiateCheckout} disabled={isProcessingPayment}>
-                  {isProcessingPayment ? 'Processing...' : 'Enroll Now'} <i className="fas fa-chevron-right ms-2"></i>
-                </button>
+                {course.isPremium ? (
+                  <>
+                    <div className="enroll-price">₹ {course.price}</div>
+                    <p className="enroll-sub">Full course access for {course.duration}</p>
+                    <button className="enroll-btn" onClick={initiateCheckout} disabled={isProcessingPayment}>
+                      {isProcessingPayment ? 'Processing...' : 'Enroll Now'} <i className="fas fa-chevron-right ms-2"></i>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="enroll-price" style={{ fontSize: '1.8rem' }}>Enquire Now</div>
+                    <p className="enroll-sub">Get details about this course</p>
+                    <button className="enroll-btn" onClick={() => setShowEnquiryModal(true)}>
+                      Submit Enquiry <i className="fas fa-arrow-right ms-2"></i>
+                    </button>
+                  </>
+                )}
 
                 <div className="trust-badges">
                   <div className="t-badge"><i className="fas fa-shield-alt"></i> Verified</div>
@@ -967,8 +1034,8 @@ function CourseDetail() {
             <p className="small">Upcoming Batch</p>
             <p className="mb-0 fw-bold text-white">Join Today</p>
           </div>
-          <button className="btn-enquire" onClick={initiateCheckout} disabled={isProcessingPayment}>
-            {isProcessingPayment ? 'WAIT...' : 'ENROLL NOW'}
+          <button className="btn-enquire" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
+            {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'ENROLL NOW' : 'ENQUIRE NOW')}
           </button>
         </div>
       </div>
@@ -1008,6 +1075,52 @@ function CourseDetail() {
               </div>
               <button type="submit" className="submit-btn" disabled={isProcessingPayment}>
                 {isProcessingPayment ? 'Initializing...' : `Pay ₹${course.price}`}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEnquiryModal && (
+        <div className="modal-overlay" onClick={() => setShowEnquiryModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in" style={{maxHeight: '90vh', overflowY: 'auto'}}>
+            <button className="modal-close" onClick={() => setShowEnquiryModal(false)}>&times;</button>
+            <h3>Course Enquiry</h3>
+            <p className="text-muted mb-4">Fill out this form and our team will get in touch with you.</p>
+            
+            <form onSubmit={handleEnquirySubmit}>
+              <div className="form-group">
+                <label>Selected Course</label>
+                <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
+              </div>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" value={enquiryData.name} onChange={handleEnquiryChange} placeholder="Your Name" required />
+              </div>
+              <div className="row">
+                <div className="col-6 form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" value={enquiryData.phone} onChange={handleEnquiryChange} placeholder="10 Digit Phone" required />
+                </div>
+                <div className="col-6 form-group">
+                  <label>Age</label>
+                  <input type="number" name="age" value={enquiryData.age} onChange={handleEnquiryChange} placeholder="Age" required />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" value={enquiryData.email} onChange={handleEnquiryChange} placeholder="your@email.com" required />
+              </div>
+              <div className="form-group">
+                <label>City</label>
+                <input type="text" name="city" value={enquiryData.city} onChange={handleEnquiryChange} placeholder="Your City" required />
+              </div>
+              <div className="form-group">
+                <label>Message / Interest</label>
+                <textarea name="message" value={enquiryData.message} onChange={handleEnquiryChange} placeholder="Why do you want to join this course?" rows="3" required></textarea>
+              </div>
+              <button type="submit" className="submit-btn">
+                Submit Enquiry
               </button>
             </form>
           </div>

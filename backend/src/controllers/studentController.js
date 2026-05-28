@@ -2,13 +2,14 @@ import Course from '../models/Course.js';
 import CourseVideo from '../models/CourseVideo.js';
 import Enrollment from '../models/Enrollment.js';
 import Consultation from '../models/Consultation.js';
+import User from '../models/User.js';
 import { generateBunnyToken } from '../utils/bunnyHelper.js';
 
 // Get all active courses the student is enrolled in
 export const getMyCourses = async (req, res) => {
   try {
     const enrollments = await Enrollment.find({ 
-      userId: req.user._id,
+      userId: req.user.id,
       isActive: true,
       validUntil: { $gte: new Date() } // Ensure it hasn't expired
     }).populate('courseId');
@@ -33,7 +34,7 @@ export const getCoursePlayer = async (req, res) => {
 
     // Check enrollment
     const enrollment = await Enrollment.findOne({
-      userId: req.user._id,
+      userId: req.user.id,
       courseId: id,
       isActive: true,
       validUntil: { $gte: new Date() }
@@ -84,7 +85,7 @@ export const bookCourseConsultation = async (req, res) => {
 
     // Check enrollment
     const enrollment = await Enrollment.findOne({
-      userId: req.user._id,
+      userId: req.user.id,
       courseId: courseId,
       isActive: true
     });
@@ -94,16 +95,21 @@ export const bookCourseConsultation = async (req, res) => {
     }
 
     // Check if they already booked one for this course
-    const existing = await Consultation.findOne({ user: req.user._id, courseId });
+    const existing = await Consultation.findOne({ userId: req.user.id, courseId });
     if (existing) {
       return res.status(400).json({ success: false, message: 'You have already booked a consultation for this course.' });
     }
 
+    const fetchedUser = await User.findById(req.user.id);
+    if (!fetchedUser) {
+      return res.status(404).json({ success: false, message: 'User not found.' });
+    }
+
     const consultation = await Consultation.create({
-      name: req.user.name,
-      email: req.user.email,
+      name: fetchedUser.name,
+      email: fetchedUser.email,
       mobile: mobile || 'N/A', // Assuming user profile has mobile, or they passed it
-      userId: req.user._id,
+      userId: req.user.id,
       courseId: courseId,
       preferredDatetime,
       notes,

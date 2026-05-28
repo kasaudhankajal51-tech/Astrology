@@ -34,6 +34,9 @@ const CourseDetail = lazy(() => import('./pages/CourseDetail'));
 const Careers = lazy(() => import('./pages/Careers'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const StudentLogin = lazy(() => import('./pages/StudentLogin'));
+const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
+const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
@@ -86,6 +89,11 @@ function App() {
             <Route path="/payment-failed" element={<PaymentFailed />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/login" element={<AdminLogin />} />
+            
+            {/* Student Portal Routes */}
+            <Route path="/login" element={<StudentLogin />} />
+            <Route path="/dashboard" element={<StudentDashboard />} />
+            <Route path="/student/course/:id" element={<CoursePlayer />} />
             
             {/* Catch-all 404 Route */}
             <Route path="*" element={<NotFound />} />

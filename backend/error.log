@@ -1,0 +1,6 @@
+ValidationError: User validation failed: name: Path `name` is required., email: Path `email` is required.
+    at model.validate (D:\DS Astro projects\Astrology\backend\node_modules\mongoose\lib\document.js:2864:36)
+    at async model.$__save (D:\DS Astro projects\Astrology\backend\node_modules\mongoose\lib\model.js:393:7)
+    at async model.save (D:\DS Astro projects\Astrology\backend\node_modules\mongoose\lib\model.js:667:5)
+    at async Function.create (D:\DS Astro projects\Astrology\backend\node_modules\mongoose\lib\model.js:2754:5)
+    at async verifyPayment (file:///D:/DS%20Astro%20projects/Astrology/backend/src/controllers/paymentController.js:134:16)

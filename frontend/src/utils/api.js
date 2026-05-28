@@ -26,7 +26,13 @@ const getApiBase = () => {
   }
 
   // Local development fallback
-  return import.meta.env.VITE_API_URL || 'http://localhost:5000';
+  // Ignore VITE_API_URL if it points to live production while we are explicitly on localhost
+  const envUrl = import.meta.env.VITE_API_URL;
+  if (envUrl && envUrl.includes('localhost')) {
+    return envUrl;
+  }
+  
+  return 'http://localhost:5000';
 };
 
 const API_BASE = getApiBase();

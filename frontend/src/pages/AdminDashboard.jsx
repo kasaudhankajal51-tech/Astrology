@@ -6,6 +6,8 @@ import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
 import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
+import AdminCourses from './AdminCourses';
+import AdminConsultations from './AdminConsultations';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -126,6 +128,8 @@ function AdminDashboard() {
 
           <div className="sb-group">
             <span className="sb-section-label">Management</span>
+            <SidebarItem id="lms" icon="fa-chalkboard-teacher" label="LMS Studio" />
+            <SidebarItem id="consultations" icon="fa-handshake" label="Consultations" />
             <SidebarItem id="blogs" icon="fa-newspaper" label="Blog Portal" />
             <SidebarItem id="jobs" icon="fa-briefcase" label="Recruiter" />
           </div>
@@ -161,6 +165,8 @@ function AdminDashboard() {
               <div className="topbar-title">
                 {activeTab === 'dashboard' && 'Admin Overview'}
                 {activeTab === 'leads' && `${leadFilter} Analytics`}
+                {activeTab === 'lms' && 'LMS Studio'}
+                {activeTab === 'consultations' && 'Consultation Requests'}
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Team Hiring'}
                 {activeTab === 'settings' && 'Platform Settings'}
@@ -296,6 +302,8 @@ function AdminDashboard() {
             </div>
           )}
 
+          {activeTab === 'lms' && <AdminCourses />}
+          {activeTab === 'consultations' && <AdminConsultations />}
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
           {activeTab === 'settings' && <AdminSettings />}

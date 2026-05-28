@@ -63,10 +63,49 @@ function AdminLeads({ activeFilter }) {
   };
 
   const handleExport = () => {
-    const token = localStorage.getItem('adminToken');
-    const query = new URLSearchParams(filters).toString();
-    const exportUrl = `/api/leads/export?${query}&token=${token}`;
-    window.open(exportUrl, '_blank');
+    if (leads.length === 0) {
+      toast.error('No leads to export');
+      return;
+    }
+    
+    // Generate CSV data directly on frontend (no backend dependency)
+    const headers = ['Name', 'Phone', 'Email', 'Service', 'Category', 'Message', 'Date', 'Payment Status', 'Booking Status', 'Submitted On'];
+    
+    const csvRows = leads.map(lead => {
+      const service = lead.type;
+      const category = lead.courseName || lead.consultationType || 'General';
+      const date = lead.preferredDate || lead.dob || '';
+      const submitted = new Date(lead.createdAt).toLocaleDateString() + ' ' + new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      
+      // Escape commas and quotes for CSV
+      const escape = (text) => `"${(text || '').toString().replace(/"/g, '""')}"`;
+      
+      return [
+        escape(lead.name),
+        escape(lead.phone),
+        escape(lead.email),
+        escape(service),
+        escape(category),
+        escape(lead.message),
+        escape(date),
+        escape(lead.paymentStatus),
+        escape(lead.status || 'Pending'),
+        escape(submitted)
+      ].join(',');
+    });
+    
+    const csvContent = [headers.join(','), ...csvRows].join('\n');
+    
+    // Create a blob and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.setAttribute('href', url);
+    link.setAttribute('download', `leads_export_${new Date().toLocaleDateString().replace(/\//g, '-')}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const handleStatusChange = async (id, newStatus) => {
@@ -115,6 +154,7 @@ function AdminLeads({ activeFilter }) {
   };
 
   const [activeMenu, setActiveMenu] = useState(null);
+  const [messageModal, setMessageModal] = useState({ isOpen: false, data: null });
 
   const handleRefresh = () => {
     setFilters({ startDate: '', endDate: '', type: activeFilter || '' });
@@ -168,8 +208,8 @@ function AdminLeads({ activeFilter }) {
               </div>
             </div>
             <div className="d-flex gap-2 ms-sm-2">
-              <button onClick={handleExport} className="topbar-icon-btn" title="Export CSV" style={{ height: '42px', width: '42px' }}>
-                <i className="fas fa-file-export"></i>
+              <button onClick={handleExport} className="topbar-icon-btn" title="Download CSV" style={{ height: '42px', width: '42px' }}>
+                <i className="fas fa-download"></i>
               </button>
               <button onClick={handleRefresh} className="topbar-icon-btn" title="Reset & Refresh" style={{ height: '42px', width: '42px' }}>
                 <i className="fas fa-sync-alt"></i>
@@ -183,19 +223,20 @@ function AdminLeads({ activeFilter }) {
         <table className="leads-table w-100">
           <thead>
             <tr>
-              <th>Date / Time</th>
-              <th>Client Identity</th>
-              <th>Contact</th>
-              <th>Category</th>
-              <th>Details / Message</th>
+              <th>Name</th>
+              <th>Phone</th>
+              <th>Service</th>
+              <th>Message</th>
+              <th>Date</th>
               <th>Status</th>
+              <th>Submitted on</th>
               <th className="text-end px-4">Action</th>
             </tr>
           </thead>
           <tbody>
             {isLoading ? (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <div className="dash-loading py-5">
                     <div className="dash-spin"></div>
                     <span className="ms-2">Fetching records...</span>
@@ -204,7 +245,7 @@ function AdminLeads({ activeFilter }) {
               </tr>
             ) : filteredLeads.length === 0 ? (
               <tr>
-                <td colSpan="7">
+                <td colSpan="8">
                   <div className="text-center py-5 text-muted">
                     <i className="fas fa-inbox fa-3x mb-3 opacity-25"></i>
                     <p>No leads found matching your criteria.</p>
@@ -215,23 +256,11 @@ function AdminLeads({ activeFilter }) {
               filteredLeads.map((lead) => (
                 <tr key={lead._id}>
                   <td>
-                    <div className="td-value">{new Date(lead.createdAt).toLocaleDateString()}</div>
-                    <div className="td-muted small">{new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div className="td-value fw-bold">{lead.name}</div>
+                    <div className="td-muted small text-truncate" style={{ maxWidth: '180px' }}>{lead.email}</div>
                   </td>
                   <td>
-                    <div className="lead-name-cell">
-                      <div className="lead-avatar" style={{ background: `hsl(${lead.name.length * 30}, 70%, 90%)`, color: `hsl(${lead.name.length * 30}, 70%, 40%)` }}>
-                        {lead.name.charAt(0).toUpperCase()}
-                      </div>
-                      <div className="lead-info">
-                        <div className="td-value">{lead.name}</div>
-                        <div className="td-muted small text-truncate" style={{ maxWidth: '150px' }}>{lead.service || lead.courseName || lead.consultationType}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td>
-                    <div className="td-value">{lead.email}</div>
-                    <div className="td-muted">{lead.phone}</div>
+                    <div className="td-value">{lead.phone}</div>
                   </td>
                   <td>
                     <span className={`tag ${
@@ -240,29 +269,43 @@ function AdminLeads({ activeFilter }) {
                     }`}>
                       {lead.type}
                     </span>
-                    <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '120px' }}>
+                    <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '150px' }}>
                       {lead.courseName || lead.consultationType || 'General'}
                     </div>
                   </td>
                   <td>
-                    {lead.type === 'Consultation' ? (
-                      <div className="birth-info-mini">
-                        <div className="td-value small">{lead.dob || 'N/A'}</div>
-                        <div className="td-muted x-small">{lead.tob || ''} | {lead.pob || ''}</div>
-                      </div>
-                    ) : lead.message ? (
-                      <div className="td-muted small" style={{ maxWidth: '300px', whiteSpace: 'pre-wrap', wordBreak: 'break-word', lineHeight: '1.4' }}>
-                        <i className="fas fa-comment-alt me-1 opacity-50"></i> {lead.message}
+                    {lead.message ? (
+                      <div 
+                        className="small fw-normal text-secondary text-truncate" 
+                        style={{ maxWidth: '160px', cursor: 'pointer' }}
+                        onClick={() => setMessageModal({ isOpen: true, data: lead })}
+                        title="Click to view full message"
+                      >
+                        <i className="far fa-comment-alt me-1 text-violet"></i>
+                        <span style={{ textDecoration: 'underline', textUnderlineOffset: '3px' }}>{lead.message}</span>
                       </div>
                     ) : (
-                      <div className="td-muted small">-</div>
+                      <span className="text-muted small">-</span>
                     )}
                   </td>
                   <td>
-                    <div className="status-pill">
+                    <div className="td-value small">{lead.preferredDate || lead.dob || '-'}</div>
+                  </td>
+                  <td>
+                    <div className="status-pill mb-1" style={{ padding: '2px 8px', minWidth: '110px', justifyContent: 'flex-start' }}>
+                      <span className="small text-muted me-1" style={{ fontSize: '0.65rem' }}>PAY:</span>
                       <div className={`dot ${lead.paymentStatus === 'Completed' ? 'dot--green' : lead.paymentStatus === 'Failed' ? 'dot--rose' : 'dot--amber'}`}></div>
-                      <span>{lead.paymentStatus}</span>
+                      <span style={{ fontSize: '0.8rem' }}>{lead.paymentStatus}</span>
                     </div>
+                    <div className="status-pill" style={{ padding: '2px 8px', minWidth: '110px', justifyContent: 'flex-start' }}>
+                      <span className="small text-muted me-1" style={{ fontSize: '0.65rem' }}>BOOK:</span>
+                      <div className={`dot ${lead.status === 'Done' ? 'dot--green' : lead.status === 'Confirmed' ? 'dot--blue' : 'dot--amber'}`}></div>
+                      <span style={{ fontSize: '0.8rem' }}>{lead.status || 'Pending'}</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div className="td-value">{new Date(lead.createdAt).toLocaleDateString()}</div>
+                    <div className="td-muted small">{new Date(lead.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                   </td>
                   <td className="text-end px-4">
                     <div className="position-relative d-inline-block">
@@ -282,7 +325,7 @@ function AdminLeads({ activeFilter }) {
                           style={{ position: 'absolute', top: '100%', right: '0', zIndex: '99999', display: 'block' }}
                         >
                           <div className="dropdown-label text-start px-3 py-2 text-muted small fw-bold" style={{ borderBottom: '1px solid var(--border)', marginBottom: '5px' }}>
-                            Update Status
+                            Update Booking Status
                           </div>
                           <button 
                             className="dropdown-item d-flex align-items-center"
@@ -292,21 +335,15 @@ function AdminLeads({ activeFilter }) {
                           </button>
                           <button 
                             className="dropdown-item d-flex align-items-center"
-                            onClick={(e) => { e.stopPropagation(); handleStatusChange(lead._id, 'In Progress'); setActiveMenu(null); }}
+                            onClick={(e) => { e.stopPropagation(); handleStatusChange(lead._id, 'Confirmed'); setActiveMenu(null); }}
                           >
-                            <div className="dot dot--blue me-2"></div> In Progress
+                            <div className="dot dot--blue me-2"></div> Confirmed
                           </button>
                           <button 
                             className="dropdown-item d-flex align-items-center"
-                            onClick={(e) => { e.stopPropagation(); handleStatusChange(lead._id, 'Completed'); setActiveMenu(null); }}
+                            onClick={(e) => { e.stopPropagation(); handleStatusChange(lead._id, 'Done'); setActiveMenu(null); }}
                           >
-                            <div className="dot dot--green me-2"></div> Completed
-                          </button>
-                          <button 
-                            className="dropdown-item d-flex align-items-center"
-                            onClick={(e) => { e.stopPropagation(); handleStatusChange(lead._id, 'Rejected'); setActiveMenu(null); }}
-                          >
-                            <div className="dot dot--rose me-2"></div> Rejected
+                            <div className="dot dot--green me-2"></div> Done
                           </button>
                           <div className="dropdown-divider"></div>
                           <button 
@@ -325,6 +362,43 @@ function AdminLeads({ activeFilter }) {
           </tbody>
         </table>
       </div>
+
+      {/* Message Modal */}
+      {messageModal.isOpen && (
+        <>
+          <div className="modal-backdrop fade show" style={{ zIndex: 1040 }} onClick={() => setMessageModal({ isOpen: false, data: null })}></div>
+          <div className="modal fade show d-block" tabIndex="-1" style={{ zIndex: 1050 }}>
+            <div className="modal-dialog modal-dialog-centered">
+              <div className="modal-content border-0 shadow-lg" style={{ borderRadius: 'var(--r-lg)' }}>
+                <div className="modal-header border-bottom-0 pb-0">
+                  <h5 className="modal-title fw-bold" style={{ fontFamily: 'var(--font-display)' }}>
+                    <i className="far fa-comment-dots text-violet me-2"></i>
+                    Message Inquiry
+                  </h5>
+                  <button type="button" className="btn-close" onClick={() => setMessageModal({ isOpen: false, data: null })}></button>
+                </div>
+                <div className="modal-body py-4">
+                  <div className="d-flex align-items-center gap-3 mb-3">
+                    <div className="sb-profile-avatar" style={{ width: '40px', height: '40px', fontSize: '16px' }}>
+                      {messageModal.data?.name?.charAt(0).toUpperCase()}
+                    </div>
+                    <div>
+                      <div className="fw-bold text-dark">{messageModal.data?.name}</div>
+                      <div className="text-muted small">{messageModal.data?.email}</div>
+                    </div>
+                  </div>
+                  <div className="p-3 rounded bg-light border text-secondary" style={{ fontSize: '14px', whiteSpace: 'pre-wrap', lineHeight: '1.6' }}>
+                    {messageModal.data?.message}
+                  </div>
+                </div>
+                <div className="modal-footer border-top-0 pt-0">
+                  <button type="button" className="btn btn-secondary rounded-pill px-4" onClick={() => setMessageModal({ isOpen: false, data: null })}>Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

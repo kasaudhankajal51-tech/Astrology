@@ -35,32 +35,50 @@ const sendConfirmationEmail = async (lead) => {
     },
   });
 
+  const isWebinar = lead.type === 'Webinar' || lead.type === 'Course';
+  const subjectText = isWebinar ? 'Booking Confirmed: Mega Astrology Webinar' : 'Consultation Request Received';
+  const headerText = isWebinar ? 'Registration Confirmed!' : 'Request Received!';
+  const bodyText = isWebinar 
+    ? `<p>Your seat for the <strong>Mega Astrology Webinar</strong> has been successfully reserved. We are excited to guide you through your cosmic journey!</p>`
+    : `<p>Your consultation request is received. Thank you for reaching out to us, our team will get back to you shortly to confirm your slot.</p>`;
+  const detailsHtml = isWebinar 
+    ? `
+      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <p style="margin: 0;"><strong>Webinar Details:</strong></p>
+        <ul style="padding-left: 20px; margin: 10px 0;">
+          <li><strong>Event:</strong> 2-Day Mega Astrology Webinar</li>
+          <li><strong>Time:</strong> 7:00 PM - 9:00 PM IST</li>
+          <li><strong>Transaction ID:</strong> ${lead.transactionId || 'N/A'}</li>
+        </ul>
+      </div>
+      <p>A calendar invitation and the Zoom joining link will be sent to you 24 hours before the event starts.</p>
+    `
+    : `
+      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
+        <p style="margin: 0;"><strong>Your Request Details:</strong></p>
+        <ul style="padding-left: 20px; margin: 10px 0;">
+          <li><strong>Type:</strong> ${lead.type}</li>
+          <li><strong>Consultation:</strong> ${lead.consultationType || 'N/A'}</li>
+        </ul>
+      </div>
+    `;
+
   const mailOptions = {
     from: `"DS Astro Institute Support" <${process.env.EMAIL_USER}>`,
     to: lead.email,
-    subject: 'Booking Confirmed: Mega Astrology Webinar',
+    subject: subjectText,
     html: `
       <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
         <div style="background: #6b4a44; color: #ffffff; padding: 30px; text-align: center;">
-          <h1 style="margin: 0; font-size: 24px;">Registration Confirmed!</h1>
+          <h1 style="margin: 0; font-size: 24px;">${headerText}</h1>
         </div>
         <div style="padding: 30px; color: #333; line-height: 1.6;">
           <p>Namaste <strong>${lead.name}</strong>,</p>
-          <p>Your seat for the <strong>Mega Astrology Webinar</strong> has been successfully reserved. We are excited to guide you through your cosmic journey!</p>
-          
-          <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-            <p style="margin: 0;"><strong>Webinar Details:</strong></p>
-            <ul style="padding-left: 20px; margin: 10px 0;">
-              <li><strong>Event:</strong> 2-Day Mega Astrology Webinar</li>
-              <li><strong>Time:</strong> 7:00 PM - 9:00 PM IST</li>
-              <li><strong>Transaction ID:</strong> ${lead.transactionId || 'N/A'}</li>
-            </ul>
-          </div>
-
-          <p>A calendar invitation and the Zoom joining link will be sent to you 24 hours before the event starts.</p>
+          ${bodyText}
+          ${detailsHtml}
           
           <div style="text-align: center; margin-top: 30px;">
-            <a href="https://yourwebsite.com" style="background: #6b4a44; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Visit Our Community</a>
+            <a href="https://dsastroinstitute.com" style="background: #6b4a44; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Visit Our Community</a>
           </div>
         </div>
         <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #777;">
@@ -74,6 +92,48 @@ const sendConfirmationEmail = async (lead) => {
   try {
     await transporter.sendMail(mailOptions);
     logger.info(`Confirmation email sent to: ${lead.email}`);
+    
+    // Admin Notification
+    if (process.env.ADMIN_EMAIL) {
+      const adminMailOptions = {
+        from: `"DS Astro System" <${process.env.EMAIL_USER}>`,
+        to: process.env.ADMIN_EMAIL,
+        subject: `New Lead/Booking Alert: ${lead.name}`,
+        html: `
+          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+            <h2 style="color: #6b4a44; margin-top: 0;">New Booking/Lead Received! 🎉</h2>
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Name:</strong></td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.name}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Phone:</strong></td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.phone}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.email}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Service:</strong></td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.type} ${lead.consultationType ? '- ' + lead.consultationType : (lead.courseName ? '- ' + lead.courseName : '')}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Preferred date:</strong></td>
+                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.preferredDate || 'Not specified'}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0;"><strong>Payment Status:</strong></td>
+                <td style="padding: 8px 0;">${lead.paymentStatus || 'Pending'}</td>
+              </tr>
+            </table>
+          </div>
+        `
+      };
+      await transporter.sendMail(adminMailOptions);
+      logger.info(`Admin notification email sent to: ${process.env.ADMIN_EMAIL}`);
+    }
   } catch (err) {
     logger.error('Email sending failed: ' + err.message);
   }
@@ -142,6 +202,8 @@ export const createLead = asyncHandler(async (req, res) => {
   }
 
   // 3. For Non-paid Types (Contact, Consultation etc.)
+  await sendConfirmationEmail(lead);
+
   res.status(201).json({
     success: true,
     message: 'Request received successfully. Our team will contact you soon.',
@@ -214,11 +276,7 @@ export const getLeads = asyncHandler(async (req, res) => {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
   if (type) {
-    if (type === 'Course') {
-      filter.type = { $in: ['Course', 'Course-Inquiry'] };
-    } else {
-      filter.type = type;
-    }
+    filter.type = type;
   }
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });
@@ -235,11 +293,7 @@ export const exportLeads = asyncHandler(async (req, res) => {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
   if (type) {
-    if (type === 'Course') {
-      filter.type = { $in: ['Course', 'Course-Inquiry'] };
-    } else {
-      filter.type = type;
-    }
+    filter.type = type;
   }
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });

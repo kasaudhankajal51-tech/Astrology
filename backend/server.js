@@ -2,7 +2,6 @@ import app from './src/app.js';
 import mongoose from 'mongoose';
 import logger from './src/config/logger.js';
 import dotenv from 'dotenv';
-
 dotenv.config();
 
 const PORT = process.env.PORT || 5000;

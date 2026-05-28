@@ -9,7 +9,8 @@ function CourseDetail() {
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [course, setCourse] = useState(null);
-  const [showInquiryModal, setShowInquiryModal] = useState(false);
+  const [showCheckoutModal, setShowCheckoutModal] = useState(false);
+  const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
@@ -18,50 +19,210 @@ function CourseDetail() {
     email: '',
     phone: ''
   });
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [enquiryData, setEnquiryData] = useState({
+    name: '',
+    phone: '',
+    email: '',
+    city: '',
+    age: '',
+    message: ''
+  });
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const foundCourse = coursesData.find(c => c.id === courseId);
-    if (foundCourse) {
-      setCourse(foundCourse);
-      document.title = `${foundCourse.title} | Cosmic Light Astrology`;
-      // Simulate small load for UI smoothness
-      setTimeout(() => setLoading(false), 500);
-    } else {
-      navigate('/courses');
-    }
+    const fetchCourse = async () => {
+      try {
+        const response = await fetch(`/api/courses/${courseId}`);
+        const data = await response.json();
+        
+        if (data.success && data.course) {
+          const dbCourse = data.course;
+          const mappedCourse = {
+            id: dbCourse._id,
+            title: dbCourse.title,
+            shortDesc: dbCourse.description,
+            longDesc: dbCourse.description, // using description for longDesc too
+            image: dbCourse.thumbnailUrl || '/images/vedic_thumbnail.png',
+            duration: `${dbCourse.validityDays} Days`,
+            schedule: 'Self-Paced',
+            level: 'Professional',
+            category: 'Astrology',
+            price: dbCourse.price,
+            isPremium: true,
+            topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
+          };
+          setCourse(mappedCourse);
+          document.title = `${mappedCourse.title} | Cosmic Light Astrology`;
+        } else {
+          const staticCourse = coursesData.find(c => c.id === courseId);
+          if (staticCourse) {
+            setCourse({...staticCourse, isPremium: false});
+            document.title = `${staticCourse.title} | Cosmic Light Astrology`;
+          } else {
+            navigate('/courses');
+          }
+        }
+      } catch (err) {
+        const staticCourse = coursesData.find(c => c.id === courseId);
+        if (staticCourse) {
+          setCourse({...staticCourse, isPremium: false});
+          document.title = `${staticCourse.title} | Cosmic Light Astrology`;
+        } else {
+          console.error('Failed to fetch course details:', err);
+          navigate('/courses');
+        }
+      } finally {
+        setLoading(false);
+      }
+    };
+    
+    fetchCourse();
   }, [courseId, navigate]);
 
   const handleInputChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleInquirySubmit = async (e) => {
+  const handleEnquiryChange = (e) => {
+    setEnquiryData({ ...enquiryData, [e.target.name]: e.target.value });
+  };
+
+  const handleEnquirySubmit = async (e) => {
     e.preventDefault();
-    setIsSubmitting(true);
     try {
-      const res = await fetch(`${API_BASE}/api/leads`, {
+      const res = await fetch('/api/leads', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          ...formData, 
-          type: 'Course-Inquiry', 
-          courseName: course.title 
-        }),
+        body: JSON.stringify({
+          name: enquiryData.name,
+          phone: enquiryData.phone,
+          email: enquiryData.email,
+          type: 'Course-Inquiry',
+          courseName: course.title,
+          dob: enquiryData.age,
+          pob: enquiryData.city,
+          message: enquiryData.message
+        })
       });
       const data = await res.json();
       if (data.success) {
-        setShowInquiryModal(false);
-        setIsSuccessOpen(true);
-        setFormData({ name: '', email: '', phone: '' });
+        toast.success('Enquiry submitted successfully! Our team will contact you soon.');
+        setShowEnquiryModal(false);
+        setEnquiryData({ name: '', phone: '', email: '', city: '', age: '', message: '' });
       } else {
-        toast.error(data.message || 'Submission failed');
+        toast.error(data.message || 'Failed to submit enquiry');
       }
     } catch (err) {
       toast.error('Network Error. Please try again.');
+    }
+  };
+
+  const initiateCheckout = () => {
+    const token = localStorage.getItem('studentToken');
+    if (token) {
+      // Already logged in, straight to payment
+      handlePayment();
+    } else {
+      // Ask for details
+      setShowCheckoutModal(true);
+    }
+  };
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
+  const handlePayment = async (e) => {
+    if (e) e.preventDefault();
+    setIsProcessingPayment(true);
+
+    try {
+      const res = await loadRazorpayScript();
+      if (!res) {
+        toast.error('Razorpay SDK failed to load. Check your connection.');
+        setIsProcessingPayment(false);
+        return;
+      }
+
+      // Create Order
+      const token = localStorage.getItem('studentToken');
+      const headers = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const orderResponse = await fetch(`${API_BASE}/api/payment/create-order`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          courseId: course.id,
+          name: formData.name,
+          email: formData.email,
+          mobile: formData.phone
+        })
+      });
+
+      const orderData = await orderResponse.json();
+
+      if (!orderData.success) {
+        toast.error(orderData.message || 'Failed to create order');
+        setIsProcessingPayment(false);
+        // If it failed because of missing email (stale token), clear token and show modal
+        if (orderResponse.status === 400 || orderResponse.status === 401) {
+          localStorage.removeItem('studentToken');
+          setShowCheckoutModal(true);
+        }
+        return;
+      }
+
+      // MOCK PAYMENT FOR TESTING
+      try {
+        const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_order_id: orderData.razorpayOrderId,
+            razorpay_payment_id: `pay_mock_${Date.now()}`,
+            razorpay_signature: `sig_mock_${Date.now()}`,
+            name: formData.name,
+            email: formData.email
+          })
+        });
+
+        const verifyData = await verifyResponse.json();
+
+        if (verifyData.success) {
+          setShowCheckoutModal(false);
+          setIsSuccessOpen(true);
+          
+          // Automatically redirect to student portal after 3 seconds
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        } else {
+          toast.error(verifyData.message || 'Payment verification failed');
+        }
+      } catch (err) {
+        console.error(err);
+        toast.error('Verification error');
+      }
+
+    } catch (err) {
+      console.error(err);
+      toast.error('Network Error. Please try again.');
     } finally {
-      setIsSubmitting(false);
+      setIsProcessingPayment(false);
     }
   };
 
@@ -814,12 +975,23 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                <div className="enroll-price">₹ Enquire Now</div>
-                <p className="enroll-sub">Get personalized fee structure & syllabus PDF</p>
-                
-                <button className="enroll-btn" onClick={() => setShowInquiryModal(true)}>
-                  Reserve Your Seat <i className="fas fa-chevron-right ms-2"></i>
-                </button>
+                {course.isPremium ? (
+                  <>
+                    <div className="enroll-price">₹ {course.price}</div>
+                    <p className="enroll-sub">Full course access for {course.duration}</p>
+                    <button className="enroll-btn" onClick={initiateCheckout} disabled={isProcessingPayment}>
+                      {isProcessingPayment ? 'Processing...' : 'Enroll Now'} <i className="fas fa-chevron-right ms-2"></i>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <div className="enroll-price" style={{ fontSize: '1.8rem' }}>Enquire Now</div>
+                    <p className="enroll-sub">Get details about this course</p>
+                    <button className="enroll-btn" onClick={() => setShowEnquiryModal(true)}>
+                      Submit Enquiry <i className="fas fa-arrow-right ms-2"></i>
+                    </button>
+                  </>
+                )}
 
                 <div className="trust-badges">
                   <div className="t-badge"><i className="fas fa-shield-alt"></i> Verified</div>
@@ -862,8 +1034,8 @@ function CourseDetail() {
             <p className="small">Upcoming Batch</p>
             <p className="mb-0 fw-bold text-white">Join Today</p>
           </div>
-          <button className="btn-enquire" onClick={() => setShowInquiryModal(true)}>
-            ENQUIRE
+          <button className="btn-enquire" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
+            {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'ENROLL NOW' : 'ENQUIRE NOW')}
           </button>
         </div>
       </div>
@@ -877,14 +1049,14 @@ function CourseDetail() {
         <i className="fas fa-arrow-up"></i>
       </button>
 
-      {showInquiryModal && (
-        <div className="modal-overlay" onClick={() => setShowInquiryModal(false)}>
+      {showCheckoutModal && (
+        <div className="modal-overlay" onClick={() => setShowCheckoutModal(false)}>
           <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in">
-            <button className="modal-close" onClick={() => setShowInquiryModal(false)}>&times;</button>
-            <h3>Course Inquiry</h3>
-            <p className="text-muted mb-4">Please fill in your details and our team will get back to you with batch timings and fee structure.</p>
+            <button className="modal-close" onClick={() => setShowCheckoutModal(false)}>&times;</button>
+            <h3>Complete Checkout</h3>
+            <p className="text-muted mb-4">Enter your details to proceed to secure payment.</p>
             
-            <form onSubmit={handleInquirySubmit}>
+            <form onSubmit={handlePayment}>
               <div className="form-group">
                 <label>Selected Course</label>
                 <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
@@ -901,8 +1073,54 @@ function CourseDetail() {
                 <label>Email Address</label>
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required />
               </div>
-              <button type="submit" className="submit-btn" disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : 'Send Inquiry'}
+              <button type="submit" className="submit-btn" disabled={isProcessingPayment}>
+                {isProcessingPayment ? 'Initializing...' : `Pay ₹${course.price}`}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {showEnquiryModal && (
+        <div className="modal-overlay" onClick={() => setShowEnquiryModal(false)}>
+          <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in" style={{maxHeight: '90vh', overflowY: 'auto'}}>
+            <button className="modal-close" onClick={() => setShowEnquiryModal(false)}>&times;</button>
+            <h3>Course Enquiry</h3>
+            <p className="text-muted mb-4">Fill out this form and our team will get in touch with you.</p>
+            
+            <form onSubmit={handleEnquirySubmit}>
+              <div className="form-group">
+                <label>Selected Course</label>
+                <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
+              </div>
+              <div className="form-group">
+                <label>Full Name</label>
+                <input type="text" name="name" value={enquiryData.name} onChange={handleEnquiryChange} placeholder="Your Name" required />
+              </div>
+              <div className="row">
+                <div className="col-6 form-group">
+                  <label>Phone Number</label>
+                  <input type="tel" name="phone" value={enquiryData.phone} onChange={handleEnquiryChange} placeholder="10 Digit Phone" required />
+                </div>
+                <div className="col-6 form-group">
+                  <label>Age</label>
+                  <input type="number" name="age" value={enquiryData.age} onChange={handleEnquiryChange} placeholder="Age" required />
+                </div>
+              </div>
+              <div className="form-group">
+                <label>Email Address</label>
+                <input type="email" name="email" value={enquiryData.email} onChange={handleEnquiryChange} placeholder="your@email.com" required />
+              </div>
+              <div className="form-group">
+                <label>City</label>
+                <input type="text" name="city" value={enquiryData.city} onChange={handleEnquiryChange} placeholder="Your City" required />
+              </div>
+              <div className="form-group">
+                <label>Message / Interest</label>
+                <textarea name="message" value={enquiryData.message} onChange={handleEnquiryChange} placeholder="Why do you want to join this course?" rows="3" required></textarea>
+              </div>
+              <button type="submit" className="submit-btn">
+                Submit Enquiry
               </button>
             </form>
           </div>
@@ -912,8 +1130,8 @@ function CourseDetail() {
       <SuccessModal 
         isOpen={isSuccessOpen} 
         onClose={() => setIsSuccessOpen(false)} 
-        title="Inquiry Received!"
-        message={`Thank you for your interest in ${course?.title}. Our academic counselor will contact you shortly with the syllabus, batch timings, and special fee offers.`}
+        title="Payment Successful!"
+        message={`Welcome to Cosmic Light Academy! You have been successfully enrolled in ${course?.title}. We've sent your login credentials to your email. Redirecting to your dashboard...`}
       />
     </div>
   );

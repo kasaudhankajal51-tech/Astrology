@@ -6,20 +6,97 @@ import SEO from '../components/SEO';
 function Courses() {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [filteredCourses, setFilteredCourses] = useState(coursesData);
+  const [dbCourses, setDbCourses] = useState(coursesData);
+  const [filteredCourses, setFilteredCourses] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = ['All', ...new Set(coursesData.map(course => course.category))];
+  // Fetch courses from backend
+  useEffect(() => {
+    const fetchCourses = async () => {
+      try {
+        const response = await fetch('/api/courses');
+        const data = await response.json();
+        
+        if (data.success) {
+          // Map DB fields to UI fields
+          const mappedCourses = data.courses.map(course => ({
+            id: course._id,
+            title: course.title,
+            shortDesc: course.description,
+            image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
+            duration: `${course.validityDays} Days`,
+            schedule: 'Self-Paced',
+            level: 'Professional',
+            category: 'Astrology', // Defaulting since we didn't add category to DB yet
+            price: course.price,
+            isPremium: true
+          }));
+          setDbCourses([...coursesData, ...mappedCourses]);
+        }
+      } catch (err) {
+        console.error('Failed to fetch courses:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchCourses();
+  }, []);
+
+  const categories = ['All', ...new Set(dbCourses.map(course => course.category))];
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const filtered = coursesData.filter(course => {
+    const filtered = dbCourses.filter(course => {
       const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || course.category === selectedCategory;
       return matchesSearch && matchesCategory;
     });
     setFilteredCourses(filtered);
-  }, [searchTerm, selectedCategory]);
+  }, [searchTerm, selectedCategory, dbCourses]);
+
+  const premiumCourses = filteredCourses.filter(c => c.isPremium);
+  const freeCourses = filteredCourses.filter(c => !c.isPremium);
+
+  const renderCourseCard = (course, i) => (
+    <div key={course.id} className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={(i % 3) * 100}>
+      <div className="course-card">
+        {course.isPremium && (
+          <div className="premium-badge">
+            <i className="fas fa-crown"></i> Premium
+          </div>
+        )}
+        <div className="course-badge">{course.level}</div>
+        <div className="course-icon-wrapper">
+          <img src={course.image} alt={course.title} className="course-img" />
+        </div>
+        <div className="course-info">
+          <h3>{course.title}</h3>
+          <p>{course.shortDesc}</p>
+          <div className="course-meta">
+            <div className="meta-item">
+              <i className="fas fa-clock"></i>
+              {course.duration}
+            </div>
+            <div className="meta-item">
+              <i className="fas fa-calendar-alt"></i>
+              {course.schedule}
+            </div>
+          </div>
+          <div className="course-footer">
+            {course.price ? (
+              <div className="price-tag">
+                ₹{course.price}
+              </div>
+            ) : null}
+            <Link to={`/courses/${course.id}`} className="view-btn">
+              Learn More <i className="fas fa-arrow-right ms-2"></i>
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="courses-page">
@@ -193,6 +270,29 @@ function Courses() {
           border-color: #C8832A;
         }
 
+        .section-title {
+          font-family: 'Playfair Display', serif;
+          font-size: 2.5rem;
+          color: #2A0F02;
+          margin-bottom: 40px;
+          text-align: center;
+          position: relative;
+        }
+        .section-title::after {
+          content: '';
+          position: absolute;
+          bottom: -15px;
+          left: 50%;
+          transform: translateX(-50%);
+          width: 80px;
+          height: 3px;
+          background: #C8832A;
+        }
+
+        .course-section {
+          margin-bottom: 80px;
+        }
+
         .courses-grid {
           padding: 80px 0;
         }
@@ -247,6 +347,33 @@ function Courses() {
           font-size: 0.8rem;
           font-weight: 700;
           z-index: 2;
+        }
+
+        .premium-badge {
+          position: absolute;
+          top: 20px;
+          left: 20px;
+          background: linear-gradient(135deg, #FFD700 0%, #F5A623 100%);
+          color: #2A0F02;
+          padding: 5px 15px;
+          border-radius: 20px;
+          font-size: 0.8rem;
+          font-weight: 700;
+          z-index: 2;
+          box-shadow: 0 4px 10px rgba(255, 215, 0, 0.4);
+          display: flex;
+          align-items: center;
+          gap: 5px;
+        }
+
+        .price-tag {
+          font-size: 1.3rem;
+          font-weight: 800;
+          color: #2A0F02;
+          margin-bottom: 15px;
+          display: flex;
+          align-items: center;
+          gap: 5px;
         }
 
         .course-info {
@@ -396,47 +523,33 @@ function Courses() {
       </div>
 
       <div className="container courses-grid">
-        <div className="row g-4">
-          {filteredCourses.length > 0 ? (
-            filteredCourses.map((course, i) => (
-              <div key={course.id} className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={(i % 3) * 100}>
-                <div className="course-card">
-                  <div className="course-badge">{course.level}</div>
-                  <div className="course-icon-wrapper">
-                    <img src={course.image} alt={course.title} className="course-img" />
-                  </div>
-                  <div className="course-info">
-                    <h3>{course.title}</h3>
-                    <p>{course.shortDesc}</p>
-                    <div className="course-meta">
-                      <div className="meta-item">
-                        <i className="fas fa-clock"></i>
-                        {course.duration}
-                      </div>
-                      <div className="meta-item">
-                        <i className="fas fa-calendar-alt"></i>
-                        {course.schedule}
-                      </div>
-                    </div>
-                    <div className="course-footer">
-                      <Link to={`/courses/${course.id}`} className="view-btn">
-                        Learn More <i className="fas fa-arrow-right ms-2"></i>
-                      </Link>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <div className="col-12">
-              <div className="no-results">
-                <i className="fas fa-search"></i>
-                <h3>No courses found</h3>
-                <p>Try searching with different keywords or category.</p>
-              </div>
+        {premiumCourses.length > 0 && (
+          <div className="course-section">
+            <h2 className="section-title">Live & Premium Courses</h2>
+            <div className="row g-4">
+              {premiumCourses.map(renderCourseCard)}
             </div>
-          )}
-        </div>
+          </div>
+        )}
+
+        {freeCourses.length > 0 && (
+          <div className="course-section">
+            <h2 className="section-title">Free & Pre-recorded Courses</h2>
+            <div className="row g-4">
+              {freeCourses.map(renderCourseCard)}
+            </div>
+          </div>
+        )}
+
+        {filteredCourses.length === 0 && (
+          <div className="col-12">
+            <div className="no-results">
+              <i className="fas fa-search"></i>
+              <h3>No courses found</h3>
+              <p>Try searching with different keywords or category.</p>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

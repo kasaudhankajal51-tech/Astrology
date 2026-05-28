@@ -6,6 +6,8 @@ import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
 import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
+import AdminCourses from './AdminCourses';
+import AdminConsultations from './AdminConsultations';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -117,7 +119,8 @@ function AdminDashboard() {
 
           <div className="sb-group">
             <span className="sb-section-label">Global Leads</span>
-            <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Courses" />
+            <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Course Enrollments" />
+            <SidebarItem id="leads" filter="Course-Inquiry" icon="fa-question-circle" label="Free Enquiries" />
             <SidebarItem id="leads" filter="Consultation" icon="fa-user-md" label="Consulting" />
             <SidebarItem id="leads" filter="Webinar" icon="fa-video" label="Webinars" />
             <SidebarItem id="leads" filter="Contact" icon="fa-address-book" label="Contact Queries" />
@@ -126,6 +129,8 @@ function AdminDashboard() {
 
           <div className="sb-group">
             <span className="sb-section-label">Management</span>
+            <SidebarItem id="lms" icon="fa-chalkboard-teacher" label="LMS Studio" />
+            <SidebarItem id="consultations" icon="fa-handshake" label="Consultations" />
             <SidebarItem id="blogs" icon="fa-newspaper" label="Blog Portal" />
             <SidebarItem id="jobs" icon="fa-briefcase" label="Recruiter" />
           </div>
@@ -161,6 +166,8 @@ function AdminDashboard() {
               <div className="topbar-title">
                 {activeTab === 'dashboard' && 'Admin Overview'}
                 {activeTab === 'leads' && `${leadFilter} Analytics`}
+                {activeTab === 'lms' && 'LMS Studio'}
+                {activeTab === 'consultations' && 'Consultation Requests'}
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Team Hiring'}
                 {activeTab === 'settings' && 'Platform Settings'}
@@ -296,6 +303,8 @@ function AdminDashboard() {
             </div>
           )}
 
+          {activeTab === 'lms' && <AdminCourses />}
+          {activeTab === 'consultations' && <AdminConsultations />}
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
           {activeTab === 'settings' && <AdminSettings />}

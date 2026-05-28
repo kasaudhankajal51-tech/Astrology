@@ -1913,3 +1913,18 @@ input:checked + .slider:before { transform: translateX(22px); }
   border-radius: var(--r-md);
   font-size: 13px;
 }
+
+/* Expandable Message Cell */
+.msg-expandable {
+  max-width: 200px;
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.msg-expandable:hover {
+  -webkit-line-clamp: unset;
+}

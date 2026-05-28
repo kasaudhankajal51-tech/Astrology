@@ -16,6 +16,9 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
+import courseRoutes from './routes/courseRoutes.js';
+import studentRoutes from './routes/studentRoutes.js';
+import paymentRoutes from './routes/paymentRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -94,19 +97,27 @@ app.use(async (req, res, next) => {
 });
 
 // --- API Routes ---
-app.use('/api/tools', toolsRoutes);
-app.use('/api/consultation', consultationRoutes);
-app.use('/api/tarot', tarotRoutes);
-app.use('/api/love', loveRoutes);
-app.use('/api/leads', leadRoutes);
-app.use('/api/blogs', blogRoutes);
-app.use('/api/jobs', jobRoutes);
-app.use('/api/auth', authRoutes);
-app.use('/api/admin', adminRoutes);
-app.use('/api/settings', settingsRoutes);
-app.use('/api/newsletter', newsletterRoutes);
+const apiRoutes = [
+  ['/tools', toolsRoutes],
+  ['/consultation', consultationRoutes],
+  ['/tarot', tarotRoutes],
+  ['/love', loveRoutes],
+  ['/leads', leadRoutes],
+  ['/blogs', blogRoutes],
+  ['/jobs', jobRoutes],
+  ['/auth', authRoutes],
+  ['/admin', adminRoutes],
+  ['/settings', settingsRoutes],
+  ['/newsletter', newsletterRoutes],
+  ['/courses', courseRoutes],
+  ['/student', studentRoutes],
+  ['/payment', paymentRoutes]
+];
 
-
+apiRoutes.forEach(([path, route]) => {
+  app.use(`/api${path}`, route);
+  app.use(`${path}`, route); // Fallback for when Nginx strips the /api prefix
+});
 
 // --- Error Handling ---
 app.use(notFound);

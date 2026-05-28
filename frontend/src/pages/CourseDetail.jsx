@@ -122,60 +122,45 @@ function CourseDetail() {
       if (!orderData.success) {
         toast.error(orderData.message || 'Failed to create order');
         setIsProcessingPayment(false);
+        // If it failed because of missing email (stale token), clear token and show modal
+        if (orderResponse.status === 400 || orderResponse.status === 401) {
+          localStorage.removeItem('studentToken');
+          setShowCheckoutModal(true);
+        }
         return;
       }
 
-      const options = {
-        key: import.meta.env.VITE_RAZORPAY_KEY_ID, // Use Razorpay Key ID from env
-        amount: orderData.amount,
-        currency: orderData.currency,
-        name: 'Cosmic Light Academy',
-        description: `Payment for ${course.title}`,
-        order_id: orderData.razorpayOrderId,
-        handler: async function (response) {
-          try {
-            const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_signature: response.razorpay_signature,
-                name: formData.name,
-                email: formData.email
-              })
-            });
+      // MOCK PAYMENT FOR TESTING
+      try {
+        const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            razorpay_order_id: orderData.razorpayOrderId,
+            razorpay_payment_id: `pay_mock_${Date.now()}`,
+            razorpay_signature: `sig_mock_${Date.now()}`,
+            name: formData.name,
+            email: formData.email
+          })
+        });
 
-            const verifyData = await verifyResponse.json();
+        const verifyData = await verifyResponse.json();
 
-            if (verifyData.success) {
-              setShowCheckoutModal(false);
-              setIsSuccessOpen(true);
-              
-              // Automatically redirect to student portal after 3 seconds
-              setTimeout(() => {
-                navigate('/login');
-              }, 3000);
-            } else {
-              toast.error(verifyData.message || 'Payment verification failed');
-            }
-          } catch (err) {
-            console.error(err);
-            toast.error('Verification error');
-          }
-        },
-        prefill: {
-          name: formData.name,
-          email: formData.email,
-          contact: formData.phone
-        },
-        theme: {
-          color: '#8B4A1E'
+        if (verifyData.success) {
+          setShowCheckoutModal(false);
+          setIsSuccessOpen(true);
+          
+          // Automatically redirect to student portal after 3 seconds
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        } else {
+          toast.error(verifyData.message || 'Payment verification failed');
         }
-      };
-
-      const paymentObject = new window.Razorpay(options);
-      paymentObject.open();
+      } catch (err) {
+        console.error(err);
+        toast.error('Verification error');
+      }
 
     } catch (err) {
       console.error(err);

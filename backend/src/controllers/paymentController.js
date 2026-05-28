@@ -5,6 +5,7 @@ import User from '../models/User.js';
 import Course from '../models/Course.js';
 import Order from '../models/Order.js';
 import Enrollment from '../models/Enrollment.js';
+import Lead from '../models/leadModel.js';
 import { sendCredentialsEmail } from '../utils/sendEmail.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -141,6 +142,15 @@ export const verifyPayment = async (req, res) => {
       finalUserId = user._id;
       order.userId = finalUserId;
       await order.save();
+    } else {
+      // If already logged in, fetch their details from DB to satisfy Lead validation
+      if (!studentEmail || !studentName) {
+        const user = await User.findById(finalUserId);
+        if (user) {
+          studentEmail = studentEmail || user.email;
+          studentName = studentName || user.name;
+        }
+      }
     }
 
     // Create Enrollment
@@ -156,6 +166,18 @@ export const verifyPayment = async (req, res) => {
       },
       { upsert: true, new: true }
     );
+
+    // Create Lead for Admin Panel visibility
+    await Lead.create({
+      name: studentName,
+      email: studentEmail,
+      phone: order.guestDetails?.mobile || 'N/A', // mobile might be in guestDetails
+      type: 'Course',
+      courseName: course.title,
+      paymentStatus: 'Completed',
+      status: 'Done',
+      transactionId: razorpay_payment_id
+    });
 
     // Send email with credentials ONLY if we generated a new password
     if (generatedPassword) {
@@ -246,6 +268,26 @@ export const webhook = async (req, res) => {
           if (generatedPassword) {
             await sendCredentialsEmail(studentEmail, generatedPassword, studentName, course.title);
           }
+
+          if (!studentEmail || !studentName) {
+            const user = await User.findById(finalUserId);
+            if (user) {
+              studentEmail = studentEmail || user.email;
+              studentName = studentName || user.name;
+            }
+          }
+
+          // Create Lead for Admin Panel visibility (webhook fallback)
+          await Lead.create({
+            name: studentName || 'Unknown Student',
+            email: studentEmail || 'N/A',
+            phone: order.guestDetails?.mobile || 'N/A',
+            type: 'Course',
+            courseName: course.title,
+            paymentStatus: 'Completed',
+            status: 'Done',
+            transactionId: paymentEntity.id
+          });
         }
       }
     }

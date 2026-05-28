@@ -119,7 +119,8 @@ function AdminDashboard() {
 
           <div className="sb-group">
             <span className="sb-section-label">Global Leads</span>
-            <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Courses" />
+            <SidebarItem id="leads" filter="Course" icon="fa-graduation-cap" label="Course Enrollments" />
+            <SidebarItem id="leads" filter="Course-Inquiry" icon="fa-question-circle" label="Free Enquiries" />
             <SidebarItem id="leads" filter="Consultation" icon="fa-user-md" label="Consulting" />
             <SidebarItem id="leads" filter="Webinar" icon="fa-video" label="Webinars" />
             <SidebarItem id="leads" filter="Contact" icon="fa-address-book" label="Contact Queries" />

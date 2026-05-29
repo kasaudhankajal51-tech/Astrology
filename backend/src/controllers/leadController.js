@@ -202,7 +202,7 @@ export const createLead = asyncHandler(async (req, res) => {
   }
 
   // 3. For Non-paid Types (Contact, Consultation etc.)
-  await sendConfirmationEmail(lead);
+  sendConfirmationEmail(lead);
 
   res.status(201).json({
     success: true,
@@ -235,7 +235,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     lead.transactionId = razorpay_payment_id;
     await lead.save();
 
-    await sendConfirmationEmail(lead);
+    sendConfirmationEmail(lead);
 
     res.json({ success: true, message: 'Payment verified successfully' });
   } else {
@@ -260,7 +260,7 @@ export const paymentCallback = asyncHandler(async (req, res) => {
   await lead.save();
 
   if (status === 'Completed') {
-    await sendConfirmationEmail(lead);
+    sendConfirmationEmail(lead);
   }
 
   res.json({ success: true, status: lead.paymentStatus });

@@ -16,6 +16,7 @@ import authRoutes from './routes/authRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import settingsRoutes from './routes/settingsRoutes.js';
 import newsletterRoutes from './routes/newsletterRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
@@ -109,6 +110,7 @@ const apiRoutes = [
   ['/admin', adminRoutes],
   ['/settings', settingsRoutes],
   ['/newsletter', newsletterRoutes],
+  ['/coupons', couponRoutes],
   ['/courses', courseRoutes],
   ['/student', studentRoutes],
   ['/payment', paymentRoutes]

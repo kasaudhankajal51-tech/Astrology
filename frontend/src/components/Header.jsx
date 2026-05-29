@@ -193,29 +193,37 @@ function Header() {
           top: 0;
           z-index: 1020;
           width: 100%;
-          min-height: 75px;
+          min-height: clamp(4.5rem, 6vw, 5.4rem);
           display: flex;
           align-items: center;
           transition: all 0.3s ease;
+          padding: 0.35rem 0;
         }
 
         header.scrolled {
           background: rgba(253, 246, 238, 0.98) !important;
-          box-shadow: 0 4px 20px rgba(139, 74, 30, 0.1);
-          min-height: 65px;
+          box-shadow: 0 0.25rem 1.25rem rgba(139, 74, 30, 0.1);
+          min-height: clamp(4rem, 5vw, 5rem);
+        }
+
+        header .container-fluid {
+          gap: 1rem;
+          align-items: center;
+          width: 100%;
         }
 
         .logo-icon-wrapper {
-          width: clamp(28px, 3vw, 36px);
-          height: clamp(28px, 3vw, 36px);
+          width: clamp(1.75rem, 3vw, 2.25rem);
+          height: clamp(1.75rem, 3vw, 2.25rem);
           background: var(--primary-color);
           color: #fff;
-          border-radius: 8px;
+          border-radius: 0.85rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 10px rgba(139, 74, 47, 0.2);
+          box-shadow: 0 0.25rem 0.6rem rgba(139, 74, 47, 0.2);
           transition: transform 0.3s ease;
+          flex-shrink: 0;
         }
 
         .logo-icon-wrapper svg {
@@ -227,14 +235,26 @@ function Header() {
           transform: rotate(15deg) scale(1.05);
         }
 
+        .navbar-brand {
+          display: flex;
+          align-items: center;
+          gap: 0.7rem;
+          flex: 1 1 auto;
+          min-width: 0;
+        }
+
+        .navbar-nav {
+          gap: 0.5rem;
+        }
+
         @media (min-width: 1200px) {
           .navbar-nav .nav-link {
             color: var(--text-main) !important;
             font-weight: 700;
-            padding: 8px 3px !important;
-            font-size: clamp(0.7rem, 0.85vw, 0.85rem);
+            padding: 0.65rem 0.65rem !important;
+            font-size: clamp(0.95rem, 0.95vw, 1rem);
             text-transform: uppercase;
-            letter-spacing: 0.1px;
+            letter-spacing: 0.08rem;
             transition: all 0.3s ease;
             position: relative;
             white-space: nowrap;
@@ -243,10 +263,10 @@ function Header() {
           .navbar-nav .nav-link::after {
             content: '';
             position: absolute;
-            bottom: 2px;
+            bottom: 0.2rem;
             left: 50%;
             width: 0;
-            height: 2px;
+            height: 0.12rem;
             background: var(--primary-color);
             transition: all 0.3s ease;
             transform: translateX(-50%);
@@ -273,23 +293,23 @@ function Header() {
             display: block;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(10px);
+            transform: translateY(0.6rem);
             transition: all 0.3s ease;
             margin-top: 0;
-            border-radius: 12px;
-            padding: 10px;
-            min-width: 180px;
-            box-shadow: 0 10px 30px rgba(139, 74, 30, 0.1) !important;
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+            min-width: 12rem;
+            box-shadow: 0 0.6rem 1.9rem rgba(139, 74, 30, 0.12) !important;
           }
 
           .btn-consult-header {
             background: var(--primary-color);
             color: #fff !important;
-            padding: 8px 14px;
-            border-radius: 40px;
+            padding: 0.72rem 1rem;
+            border-radius: 2rem;
             font-weight: 700;
-            font-size: 0.8rem;
-            box-shadow: 0 6px 14px rgba(139, 74, 47, 0.2);
+            font-size: 0.95rem;
+            box-shadow: 0 0.35rem 0.9rem rgba(139, 74, 47, 0.18);
             transition: all 0.25s ease;
             white-space: nowrap;
           }
@@ -297,55 +317,55 @@ function Header() {
 
         @media (min-width: 1400px) {
           .navbar-nav .nav-link {
-            padding: 10px 8px !important;
-            font-size: 0.95rem;
-            letter-spacing: 0.3px;
+            padding: 0.75rem 0.85rem !important;
+            font-size: 1rem;
+            letter-spacing: 0.12rem;
           }
           .btn-consult-header {
-            padding: 12px 22px;
+            padding: 0.85rem 1.4rem;
             font-size: 1rem;
           }
         }
 
         @media (min-width: 1600px) {
           .navbar-nav .nav-link {
-            padding: 12px 14px !important;
-            font-size: 1.1rem;
+            padding: 0.8rem 1rem !important;
+            font-size: 1.05rem;
           }
           .btn-consult-header {
-            padding: 14px 30px;
-            font-size: 1.1rem;
+            padding: 1rem 1.8rem;
+            font-size: 1.05rem;
           }
         }
 
         .mobile-offcanvas {
           background: var(--bg-color);
-          width: 85% !important;
-          max-width: 320px;
+          width: min(100%, 22rem) !important;
+          max-width: 22rem;
         }
 
         .mobile-offcanvas .nav-link {
           color: var(--text-main);
           font-weight: 800;
-          padding: 22px 25px;
+          padding: 1.15rem 1.25rem;
           border-bottom: 1px solid var(--glass-border);
-          font-size: 1.5rem;
-          letter-spacing: 0.3px;
+          font-size: 1rem;
+          letter-spacing: 0.03rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
         }
 
         .mob-drop-trigger {
-          width: 55px;
-          height: 55px;
+          width: 2.75rem;
+          height: 2.75rem;
           display: flex;
           align-items: center;
           justify-content: center;
           cursor: pointer;
           transition: all 0.3s ease;
           border-left: 1px solid var(--glass-border);
-          background: rgba(139, 74, 30, 0.03);
+          background: rgba(139, 74, 30, 0.05);
         }
 
         .mob-drop-trigger[aria-expanded="true"] {
@@ -358,8 +378,8 @@ function Header() {
         }
 
         .mobile-offcanvas .dropdown-item {
-          padding: 18px 45px;
-          font-size: 1.3rem;
+          padding: 1rem 1.8rem;
+          font-size: 0.95rem;
           color: var(--text-content);
           border-bottom: 1px solid rgba(200, 131, 42, 0.08);
           font-weight: 600;
@@ -372,32 +392,32 @@ function Header() {
         }
 
         .btn-mobile-cta {
-          border-radius: 15px !important;
+          border-radius: 0.9rem !important;
           font-weight: 800;
-          padding: 16px 0;
+          padding: 1rem 0;
           text-align: center;
           font-size: 1rem;
           text-transform: uppercase;
-          letter-spacing: 0.8px;
+          letter-spacing: 0.08rem;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 12px;
+          gap: 0.75rem;
           border: none;
         }
         
         .btn-mobile-cta.primary-cta {
           background: linear-gradient(135deg, var(--primary-color), #2A0F02);
           color: #fff !important;
-          box-shadow: 0 8px 20px rgba(42, 15, 2, 0.3);
+          box-shadow: 0 0.5rem 1.25rem rgba(42, 15, 2, 0.25);
         }
         
         .btn-mobile-cta.secondary-cta {
           background: #fff;
           color: var(--primary-color) !important;
-          border: 2px solid var(--primary-color) !important;
-          box-shadow: 0 6px 15px rgba(139, 74, 30, 0.12);
+          border: 0.15rem solid var(--primary-color) !important;
+          box-shadow: 0 0.35rem 0.9rem rgba(139, 74, 30, 0.12);
         }
 
         .btn-mobile-cta:active {
@@ -405,17 +425,18 @@ function Header() {
         }
 
         .navbar-toggler {
-          border: 1px solid var(--glass-border) !important;
-          padding: 10px 12px;
+          border: 0.08rem solid var(--glass-border) !important;
+          padding: 0.85rem 0.95rem;
           color: #fff !important;
           background: var(--primary-color) !important;
-          border-radius: 12px;
+          border-radius: 0.9rem;
           font-size: 1.1rem;
-          box-shadow: 0 4px 12px rgba(139, 74, 30, 0.15);
+          box-shadow: 0 0.25rem 0.75rem rgba(139, 74, 30, 0.15);
           display: flex;
           align-items: center;
           justify-content: center;
           transition: all 0.3s ease;
+          position: relative;
         }
 
         .navbar-toggler i {
@@ -436,29 +457,38 @@ function Header() {
             width: 100% !important;
             flex-grow: 1 !important;
             display: flex !important;
-            min-height: 70px !important;
+            min-height: 4.5rem !important;
           }
-          .container-fluid {
+          header .container-fluid {
             display: flex !important;
-            flex-direction: row !important;
+            flex-wrap: wrap !important;
             justify-content: space-between !important;
             align-items: center !important;
             width: 100% !important;
-            padding-left: 15px !important;
-            padding-right: 15px !important;
+            padding-left: 1rem !important;
+            padding-right: 1rem !important;
           }
           .navbar-toggler {
-            position: fixed !important;
-            top: 15px !important;
-            right: 15px !important;
+            position: relative !important;
+            top: auto !important;
+            right: auto !important;
             transform: none !important;
-            z-index: 10000 !important;
+            z-index: 1000 !important;
             margin: 0 !important;
+            order: 2;
           }
           .navbar-brand {
             margin: 0 !important;
-            max-width: 70%;
+            max-width: 100%;
             order: 1;
+            flex: 1 1 auto;
+          }
+          .navbar-brand .fb-logo-name {
+            font-size: clamp(1rem, 4vw, 1.3rem);
+          }
+          .navbar-collapse {
+            width: 100%;
+            margin-top: 0.75rem;
           }
         }
       `}</style>
@@ -497,7 +527,6 @@ function Header() {
 
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li className="nav-item"><Link className="nav-link" to="/">HOME</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/courses">COURSES</Link></li>
                 <li className="nav-item"><Link className="nav-link" to="/book-consultation">CONSULTATIONS</Link></li>
                 <li className="nav-item dropdown">
@@ -545,8 +574,6 @@ function Header() {
         </div>
         <div className="offcanvas-body p-0">
           <ul className="navbar-nav">
-            <li className="nav-item"><Link className="nav-link" to="/" data-bs-dismiss="offcanvas">HOME</Link></li>
-            
             <li className="nav-item"><Link className="nav-link" to="/courses" data-bs-dismiss="offcanvas">COURSES</Link></li>
 
             <li className="nav-item"><Link className="nav-link" to="/book-consultation" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>

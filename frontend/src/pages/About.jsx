@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import SEO from '../components/SEO';
+console.log("testing")
 
 function About() {
   useEffect(() => {

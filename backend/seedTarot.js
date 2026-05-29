@@ -73,4 +73,5 @@ const seedDB = async () => {
     }
 };
 
+console.log("testing")
 seedDB();

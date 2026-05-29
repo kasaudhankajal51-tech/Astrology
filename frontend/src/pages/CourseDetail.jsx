@@ -1106,8 +1106,8 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                <div className="enroll-price">₹ Enquire Now</div>
-                <p className="enroll-sub">Get personalized fee structure & syllabus PDF</p>
+                <div className="enroll-price">{course.isPremium ? `₹ ${course.price}` : '₹ Enquire Now'}</div>
+                <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'Get personalized fee structure & syllabus PDF'}</p>
 
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}
@@ -1152,8 +1152,8 @@ function CourseDetail() {
                   )}
                 </motion.div>
 
-                <button className="enroll-btn" onClick={() => setShowEnquiryModal(true)}>
-                  Reserve Your Seat <i className="fas fa-chevron-right ms-2"></i>
+                <button className="enroll-btn" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
+                  {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'Enroll Now' : 'Reserve Your Seat')} <i className="fas fa-chevron-right ms-2"></i>
                 </button>
 
                 <div className="trust-badges">

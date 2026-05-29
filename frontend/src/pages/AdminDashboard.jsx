@@ -4,6 +4,7 @@ import API_BASE from '../utils/api';
 import AdminLeads from './AdminLeads';
 import AdminBlogs from './AdminBlogs';
 import AdminJobs from './AdminJobs';
+import AdminCoupons from './AdminCoupons';
 import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
 import './Admin.css';
@@ -128,6 +129,7 @@ function AdminDashboard() {
             <span className="sb-section-label">Management</span>
             <SidebarItem id="blogs" icon="fa-newspaper" label="Blog Portal" />
             <SidebarItem id="jobs" icon="fa-briefcase" label="Recruiter" />
+            <SidebarItem id="coupons" icon="fa-tag" label="Coupons" />
           </div>
 
           <div className="sb-group">
@@ -163,6 +165,7 @@ function AdminDashboard() {
                 {activeTab === 'leads' && `${leadFilter} Analytics`}
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Team Hiring'}
+                {activeTab === 'coupons' && 'Coupon Management'}
                 {activeTab === 'settings' && 'Platform Settings'}
                 {activeTab === 'newsletter' && 'Newsletter Subscribers'}
               </div>
@@ -298,6 +301,7 @@ function AdminDashboard() {
 
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
+          {activeTab === 'coupons' && <AdminCoupons />}
           {activeTab === 'settings' && <AdminSettings />}
           {activeTab === 'newsletter' && <AdminNewsletter />}
         </main>

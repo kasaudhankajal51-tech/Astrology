@@ -33,10 +33,10 @@ function Courses() {
 
         .hero-section {
           background: linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%);
-          padding: 100px 0 160px;
+          padding: clamp(3rem, 5vw, 6rem) 0 clamp(4rem, 6vw, 5rem);
           text-align: center;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .hero-section::before {
@@ -160,7 +160,8 @@ function Courses() {
         }
 
         .filter-container {
-          margin-top: -60px;
+          margin-top: clamp(1.5rem, 3vw, 2.5rem);
+          margin-bottom: clamp(2rem, 4vw, 3rem);
           position: relative;
           z-index: 20;
           display: flex;
@@ -250,7 +251,7 @@ function Courses() {
         }
 
         .course-info {
-          padding: 30px;
+          padding: clamp(1.25rem, 3vw, 1.875rem);
           flex-grow: 1;
           display: flex;
           flex-direction: column;
@@ -331,14 +332,30 @@ function Courses() {
 
         @media (max-width: 768px) {
           .hero-section {
-            padding: 80px 20px 120px;
+            padding: clamp(2rem, 4vw, 4rem) 1.25rem clamp(2rem, 4vw, 3rem);
           }
           .filter-container {
-            margin-top: -40px;
+            margin-top: clamp(1rem, 2vw, 1.5rem);
+            margin-bottom: clamp(1.5rem, 3vw, 2rem);
+            gap: 10px;
           }
           .course-icon-wrapper {
             height: 160px;
             font-size: 4rem;
+          }
+          .filter-btn {
+            padding: 8px 18px;
+            font-size: 0.9rem;
+          }
+          .course-info {
+            padding: clamp(1rem, 2.5vw, 1.5rem);
+          }
+          .course-info h3 {
+            font-size: 1.2rem;
+          }
+          .course-info p {
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
           }
         }
       `}</style>

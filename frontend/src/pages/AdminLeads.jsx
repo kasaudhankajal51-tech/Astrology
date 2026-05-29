@@ -267,7 +267,7 @@ function AdminLeads({ activeFilter }) {
                       lead.type === 'Course' || lead.type === 'Course-Inquiry' ? 'tag--violet' : 
                       lead.type === 'Consultation' ? 'tag--cyan' : 'tag--amber'
                     }`}>
-                      {lead.type}
+                      {lead.type === 'Course-Inquiry' ? 'LIVE COURSE LEAD' : lead.type}
                     </span>
                     <div className="td-muted mt-1 small text-truncate" style={{ maxWidth: '150px' }}>
                       {lead.courseName || lead.consultationType || 'General'}
@@ -294,13 +294,13 @@ function AdminLeads({ activeFilter }) {
                   <td>
                     <div className="status-pill mb-1" style={{ padding: '2px 8px', minWidth: '110px', justifyContent: 'flex-start' }}>
                       <span className="small text-muted me-1" style={{ fontSize: '0.65rem' }}>PAY:</span>
-                      <div className={`dot ${lead.paymentStatus === 'Completed' ? 'dot--green' : lead.paymentStatus === 'Failed' ? 'dot--rose' : 'dot--amber'}`}></div>
-                      <span style={{ fontSize: '0.8rem' }}>{lead.paymentStatus}</span>
+                      <div className={`dot ${lead.type === 'Course-Inquiry' ? 'dot--blue' : (lead.paymentStatus === 'Completed' ? 'dot--green' : lead.paymentStatus === 'Failed' ? 'dot--rose' : 'dot--amber')}`}></div>
+                      <span style={{ fontSize: '0.8rem' }}>{lead.type === 'Course-Inquiry' ? 'Not Required' : lead.paymentStatus}</span>
                     </div>
                     <div className="status-pill" style={{ padding: '2px 8px', minWidth: '110px', justifyContent: 'flex-start' }}>
-                      <span className="small text-muted me-1" style={{ fontSize: '0.65rem' }}>BOOK:</span>
+                      <span className="small text-muted me-1" style={{ fontSize: '0.65rem' }}>STATUS:</span>
                       <div className={`dot ${lead.status === 'Done' ? 'dot--green' : lead.status === 'Confirmed' ? 'dot--blue' : 'dot--amber'}`}></div>
-                      <span style={{ fontSize: '0.8rem' }}>{lead.status || 'Pending'}</span>
+                      <span style={{ fontSize: '0.8rem' }}>{lead.type === 'Course-Inquiry' && lead.status === 'Pending' ? 'ENQUIRY RECEIVED' : (lead.status || 'Pending')}</span>
                     </div>
                   </td>
                   <td>

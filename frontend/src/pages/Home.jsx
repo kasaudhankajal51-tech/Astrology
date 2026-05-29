@@ -604,13 +604,22 @@ function Home() {
                 
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
                   <Link to="/courses" className="btn mystic-btn-primary focus-70">
-                    Enroll in Live Course <i className="fas fa-graduation-cap ms-2"></i>
+                    Enroll in Live Course
+                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <path d="M12 2L3 7l9 5 9-5-9-5zm0 7.5L5 7.2v6.8c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V7.2L12 9.5z" />
+                    </svg>
                   </Link>
                   <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
-                    Book Consultation <i className="fas fa-calendar-check ms-1"></i>
+                    Book Consultation
+                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 6l-7 5-7-5V6l7 5 7-5v4z" />
+                    </svg>
                   </button>
                   <Link to="/astro-shop" className="btn mystic-btn-ghost focus-10">
-                    Astro Shop <i className="fas fa-shopping-bag ms-1"></i>
+                    Astro Shop
+                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                      <path d="M6 2l1 4h10l1-4H6zm12 6H6l-1 14h14L18 8zM9 12h2v6H9v-6zm4 0h2v6h-2v-6z" />
+                    </svg>
                   </Link>
                 </div>
 
@@ -1249,6 +1258,15 @@ function Home() {
           color: #fff !important;
         }
 
+        .btn-icon {
+          width: 1.15em;
+          height: 1.15em;
+          vertical-align: -0.05em;
+          margin-left: 0.6rem;
+          fill: currentColor;
+          flex-shrink: 0;
+        }
+
         .mystic-btn-outline {
           background: #FFFFFF;
           color: #000000;
@@ -1273,12 +1291,17 @@ function Home() {
         /* Banner Section */
         .banner-section {
           position: relative;
-          padding: 20px 0 120px;
-          min-height: 95vh;
+          padding: clamp(2rem, 3vw, 3.5rem) 0 clamp(5rem, 10vw, 8rem);
+          min-height: clamp(70vh, 90vh, 95vh);
           display: flex;
-          align-items: center;
+          align-items: flex-start;
           overflow: hidden;
           background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
+        }
+
+        .banner-section .row.align-items-center {
+          align-items: flex-start !important;
+          margin-top: clamp(0.25rem, 0.5vw, 0.5rem);
         }
 
         .banner-section::before {
@@ -1289,15 +1312,26 @@ function Home() {
           z-index: 0;
         }
 
+        .banner-section .container {
+          position: relative;
+          z-index: 2;
+        }
+
+        .banner-text-home {
+          position: relative;
+          z-index: 2;
+          width: 100%;
+        }
+
         .img-main-banner {
           display: none;
         }
 
         .banner-title {
           font-family: var(--font-serif) !important;
-          font-size: clamp(3rem, 7vw, 5.5rem);
+          font-size: clamp(3rem, 6vw, 5rem);
           font-weight: 700;
-          line-height: 1.1;
+          line-height: 1.05;
           color: #3A1900;
         }
 
@@ -1308,12 +1342,13 @@ function Home() {
         }
 
         .banner-desc {
-          font-size: 1.2rem;
+          font-size: 1.1rem;
           color: #5C3D26 !important;
-          line-height: 1.7;
-          max-width: 90%;
+          line-height: 1.8;
+          max-width: 42rem;
           font-weight: 500;
           font-family: var(--font-sans);
+          margin-bottom: 1.5rem;
         }
 
         .carousel-dots {
@@ -1404,15 +1439,15 @@ function Home() {
           margin: 0;
           display: flex;
           flex-direction: column;
-          gap: 12px;
+          gap: 0.75rem;
         }
 
         .banner-feature-list li {
-          font-size: 1.1rem;
+          font-size: 1.05rem;
           color: #3A1900;
           display: flex;
           align-items: center;
-          gap: 10px;
+          gap: 0.75rem;
           font-weight: 600;
         }
 
@@ -1423,41 +1458,47 @@ function Home() {
 
         .banner-btn-row {
           display: flex;
-          gap: 15px;
+          gap: 1rem;
           align-items: center;
           flex-wrap: wrap;
+          margin-top: 1.5rem;
+        }
+
+        .focus-70,
+        .focus-20,
+        .focus-10 {
+          border-radius: 1rem;
+          transition: all 0.3s ease;
         }
 
         .focus-70 {
           flex: 0 0 auto;
-          min-width: 220px;
-          font-size: 1.15rem !important;
-          padding: 18px 35px !important;
+          min-width: 14rem;
+          font-size: 1.05rem !important;
+          padding: 1rem 2rem !important;
           background: #2A0F02 !important;
           color: #ffffff !important;
-          box-shadow: 0 10px 30px rgba(42, 15, 2, 0.25) !important;
+          box-shadow: 0 0.75rem 1.875rem rgba(42, 15, 2, 0.25) !important;
           border: none !important;
         }
 
         .focus-20 {
           flex: 0 0 auto;
           font-size: 1rem !important;
-          padding: 14px 28px !important;
+          padding: 0.85rem 1.75rem !important;
           background: transparent !important;
-          border: 1.5px solid #2A0F02 !important;
+          border: 0.125rem solid #2A0F02 !important;
           color: #2A0F02 !important;
         }
 
         .focus-10 {
           flex: 0 0 auto;
           font-size: 0.95rem !important;
-          padding: 12px 24px !important;
+          padding: 0.75rem 1.5rem !important;
           color: #2A0F02 !important;
           opacity: 0.9;
           background: rgba(42, 15, 2, 0.04) !important;
-          border: 1px solid rgba(42, 15, 2, 0.15) !important;
-          border-radius: 12px;
-          transition: all 0.3s ease;
+          border: 0.0625rem solid rgba(42, 15, 2, 0.15) !important;
         }
 
         .focus-10:hover {
@@ -1467,19 +1508,35 @@ function Home() {
         }
 
         @media (max-width: 768px) {
+          .banner-section {
+            padding-top: clamp(0.75rem, 3vw, 1.25rem);
+            min-height: auto;
+          }
+          .banner-section .row.align-items-center {
+            margin-top: 0 !important;
+          }
           .banner-btn-row {
             flex-direction: column;
-            gap: 12px;
+            gap: 0.85rem;
             align-items: stretch;
-            margin-top: 2rem !important;
+            margin-top: 0 !important;
           }
           .focus-70, .focus-20, .focus-10 {
             width: 100%;
             text-align: center;
             justify-content: center;
+            min-width: 0;
           }
           .focus-10 {
             background: rgba(139, 74, 30, 0.03) !important;
+          }
+          .trust-indicator {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 0.75rem;
+          }
+          .trust-text {
+            text-align: left;
           }
         }
 
@@ -2351,14 +2408,14 @@ function Home() {
           .nav-btn { width: 32px; height: 32px; }
           .left-btn { left: 5px; }
           .right-btn { right: 5px; }
-          .cosmic-orbit-container, .zodiac-hero-graphic { width: 280px; height: 280px; }
-          .big-circle { width: 260px; height: 260px; }
-          .small-circle { width: 180px; height: 180px; }
+          .cosmic-orbit-container, .zodiac-hero-graphic { width: 260px; height: 260px; }
+          .big-circle { width: 240px; height: 240px; }
+          .small-circle { width: 170px; height: 170px; }
           .icon-block { width: 40px; height: 40px; }
-          .experience-badge { padding: 12px 18px; border-radius: 15px; bottom: -20px; z-index: 100; }
+          .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: -20px; z-index: 100; }
           .experience-badge h4 { font-size: 1.8rem; }
-          .banner-btn-row { flex-direction: row; gap: 10px; justify-content: center; width: 100%; }
-          .banner-btn-row .btn { flex: 1; max-width: 180px; font-size: 0.9rem; padding: 12px 10px; }
+          .banner-btn-row { flex-direction: column; gap: 0.75rem; justify-content: stretch; width: 100%; }
+          .banner-btn-row .btn { flex: 1; max-width: 100%; font-size: 0.95rem; padding: 0.85rem 1rem; }
           .img-box01 { height: 400px; }
         }
 

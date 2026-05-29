@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import { CheckCircle2, Tag, Percent } from 'lucide-react';
 import { coursesData } from '../data/coursesData';
 import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
@@ -28,6 +30,10 @@ function CourseDetail() {
     message: ''
   });
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+  const [couponStatus, setCouponStatus] = useState(null);
+  const [appliedCoupon, setAppliedCoupon] = useState(null);
+  const [couponLoading, setCouponLoading] = useState(false);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -102,8 +108,9 @@ function CourseDetail() {
           courseName: course.title,
           dob: enquiryData.age,
           pob: enquiryData.city,
-          message: enquiryData.message
-        })
+          message: enquiryData.message,
+          couponCode: appliedCoupon?.code || ''
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -224,6 +231,41 @@ function CourseDetail() {
     } finally {
       setIsProcessingPayment(false);
     }
+  };
+
+  const handleCouponApply = async () => {
+    if (!couponCode.trim()) {
+      toast.error('Enter a coupon code to apply.');
+      return;
+    }
+    setCouponLoading(true);
+    setCouponStatus(null);
+
+    try {
+      const res = await fetch(`${API_BASE}/api/coupons/validate`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ code: couponCode.trim(), courseId: course?.id }),
+      });
+      const data = await res.json();
+      if (data.success && data.coupon) {
+        setAppliedCoupon(data.coupon);
+        setCouponStatus({ type: 'success', message: `Applied ${data.coupon.discountType === 'fixed' ? `₹${data.coupon.discountValue}` : `${data.coupon.discountValue}%`} discount` });
+      } else {
+        setAppliedCoupon(null);
+        setCouponStatus({ type: 'error', message: data.message || 'Invalid coupon code' });
+      }
+    } catch (err) {
+      setCouponStatus({ type: 'error', message: 'Coupon validation failed. Try again.' });
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
+  const removeCoupon = () => {
+    setCouponCode('');
+    setAppliedCoupon(null);
+    setCouponStatus(null);
   };
 
   if (loading) {
@@ -484,6 +526,95 @@ function CourseDetail() {
           font-size: 1.8rem;
           margin-bottom: 25px;
           font-weight: 700;
+        }
+
+        .coupon-box {
+          background: rgba(255,255,255,0.12);
+          border: 1px solid rgba(255,255,255,0.22);
+          border-radius: 22px;
+          padding: 18px 20px;
+          margin-bottom: 24px;
+          text-align: left;
+          color: #FFFFFF;
+          backdrop-filter: blur(10px);
+        }
+
+        .coupon-box-head {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          margin-bottom: 14px;
+          font-weight: 700;
+          color: #fff;
+        }
+
+        .coupon-input-row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 12px;
+          margin-bottom: 14px;
+        }
+
+        .coupon-input-row input {
+          width: 100%;
+          border: 1px solid rgba(255,255,255,0.2);
+          border-radius: 14px;
+          padding: 14px 16px;
+          background: rgba(255,255,255,0.12);
+          color: #fff;
+          outline: none;
+        }
+
+        .coupon-input-row input::placeholder {
+          color: rgba(255,255,255,0.65);
+        }
+
+        .coupon-apply-btn {
+          background: #C8832A;
+          color: #fff;
+          border: none;
+          border-radius: 14px;
+          padding: 14px 22px;
+          font-weight: 700;
+          cursor: pointer;
+        }
+
+        .coupon-apply-btn:disabled {
+          opacity: 0.75;
+          cursor: not-allowed;
+        }
+
+        .coupon-status {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          color: #fff;
+          font-size: 0.95rem;
+          padding: 10px 14px;
+          border-radius: 14px;
+          background: rgba(255,255,255,0.08);
+        }
+
+        .coupon-status.success {
+          border: 1px solid rgba(82, 196, 26, 0.35);
+          background: rgba(82, 196, 26, 0.15);
+        }
+
+        .coupon-status.error {
+          border: 1px solid rgba(255, 80, 80, 0.35);
+          background: rgba(255, 80, 80, 0.15);
+        }
+
+        .coupon-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 14px;
+          border-radius: 999px;
+          background: rgba(255,255,255,0.12);
+          color: #fff;
+          font-weight: 700;
+          border: 1px solid rgba(255,255,255,0.18);
         }
 
         .enroll-price {
@@ -975,23 +1106,55 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                {course.isPremium ? (
-                  <>
-                    <div className="enroll-price">₹ {course.price}</div>
-                    <p className="enroll-sub">Full course access for {course.duration}</p>
-                    <button className="enroll-btn" onClick={initiateCheckout} disabled={isProcessingPayment}>
-                      {isProcessingPayment ? 'Processing...' : 'Enroll Now'} <i className="fas fa-chevron-right ms-2"></i>
+                <div className="enroll-price">₹ Enquire Now</div>
+                <p className="enroll-sub">Get personalized fee structure & syllabus PDF</p>
+
+                <motion.div
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="coupon-box"
+                >
+                  <div className="coupon-box-head">
+                    <Tag size={18} />
+                    <span>Apply Coupon</span>
+                  </div>
+
+                  <div className="coupon-input-row">
+                    <input
+                      type="text"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      placeholder={appliedCoupon ? 'Coupon applied' : 'Enter coupon code'}
+                      disabled={Boolean(appliedCoupon)}
+                    />
+                    <button
+                      type="button"
+                      className="coupon-apply-btn"
+                      onClick={appliedCoupon ? removeCoupon : handleCouponApply}
+                      disabled={couponLoading}
+                    >
+                      {couponLoading ? 'Checking...' : appliedCoupon ? 'Remove' : 'Apply'}
                     </button>
-                  </>
-                ) : (
-                  <>
-                    <div className="enroll-price" style={{ fontSize: '1.8rem' }}>Enquire Now</div>
-                    <p className="enroll-sub">Get details about this course</p>
-                    <button className="enroll-btn" onClick={() => setShowEnquiryModal(true)}>
-                      Submit Enquiry <i className="fas fa-arrow-right ms-2"></i>
-                    </button>
-                  </>
-                )}
+                  </div>
+
+                  {couponStatus && (
+                    <div className={`coupon-status ${couponStatus.type}`}>
+                      <CheckCircle2 size={16} />
+                      <span>{couponStatus.message}</span>
+                    </div>
+                  )}
+
+                  {appliedCoupon && (
+                    <div className="coupon-chip">
+                      <Percent size={16} />
+                      <span>Coupon {appliedCoupon.code} active</span>
+                    </div>
+                  )}
+                </motion.div>
+
+                <button className="enroll-btn" onClick={() => setShowEnquiryModal(true)}>
+                  Reserve Your Seat <i className="fas fa-chevron-right ms-2"></i>
+                </button>
 
                 <div className="trust-badges">
                   <div className="t-badge"><i className="fas fa-shield-alt"></i> Verified</div>

@@ -318,7 +318,7 @@ function Astrologer() {
           box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
         }
 
-        .card-body-v2 { padding: 0 25px 30px; }
+        .card-body-v2 { padding: 0 clamp(1rem, 2vw, 1.5625rem) 1.875rem; }
 
         .astro-name { font-family: var(--font-serif); font-weight: 800; font-size: 2rem; margin-bottom: 5px; }
         .astro-role { color: #8B4A1E; font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
@@ -399,6 +399,8 @@ function Astrologer() {
           .display-3 { font-size: 2.2rem; }
           .stats-bar-v2 { margin-top: -30px; }
           .border-start-md { border-left: none; }
+          .card-body-v2 { padding: 0 clamp(0.75rem, 1.5vw, 1rem) 1.5rem; }
+          .astro-name { font-size: 1.5rem; }
         }
       `}</style>
     </div>

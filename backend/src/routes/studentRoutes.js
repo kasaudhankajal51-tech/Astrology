@@ -1,13 +1,52 @@
 import express from 'express';
 import { protect } from '../middleware/authMiddleware.js';
-import { getMyCourses, getCoursePlayer, bookCourseConsultation } from '../controllers/studentController.js';
+import {
+  studentLogin,
+  studentLogout,
+  getStudentProfile,
+  updateStudentProfile,
+  getMyCourses,
+  getCourseDetails,
+  getCourseVideos,
+  updateVideoProgress,
+  getCourseValidity,
+  getCourseMaterials,
+  getBanners,
+  getMerchandise,
+  getNewCourses,
+  getOffers,
+  bookCourseConsultation
+} from '../controllers/studentController.js';
 
 const router = express.Router();
 
-router.use(protect); // all routes below require student login
+// Public routes
+router.post('/login', studentLogin);
+
+// Protected routes (require student login)
+router.use(protect);
+
+router.post('/logout', studentLogout);
+
+router.get('/profile', getStudentProfile);
+router.put('/profile', updateStudentProfile);
 
 router.get('/courses', getMyCourses);
-router.get('/courses/:id/player', getCoursePlayer);
+router.get('/course/:courseId', getCourseDetails);
+
+router.get('/course/:courseId/videos', getCourseVideos);
+router.post('/video/progress', updateVideoProgress);
+
+router.get('/course/:courseId/validity', getCourseValidity);
+
+router.get('/course/:courseId/materials', getCourseMaterials);
+
+router.get('/banners', getBanners);
+router.get('/merchandise', getMerchandise);
+router.get('/new-courses', getNewCourses);
+router.get('/offers', getOffers);
+
+// Keeping original consultations route
 router.post('/consultations', bookCourseConsultation);
 
 export default router;

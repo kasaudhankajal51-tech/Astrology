@@ -10,28 +10,26 @@
  *   which Netlify (or the experimental service router) forwards to the backend.
  */
 const getApiBase = () => {
-  if (typeof window !== 'undefined') {
-    const { hostname, protocol } = window.location;
-    
-    // If we are on a live server or VPS IP (not localhost)
-    if (hostname !== 'localhost' && hostname !== '127.0.0.1') {
-      const envUrl = import.meta.env.VITE_API_URL;
-      // If a real production URL was provided in .env, use it
-      if (envUrl && !envUrl.includes('localhost') && !envUrl.includes('127.0.0.1')) {
-        return envUrl;
-      }
-      // Otherwise dynamically connect to the backend on the same server IP, port 5000
-      return `${protocol}//${hostname}:5000`;
-    }
-  }
-
-  // Local development fallback
-  // Ignore VITE_API_URL if it points to live production while we are explicitly on localhost
   const envUrl = import.meta.env.VITE_API_URL;
-  if (envUrl && envUrl.includes('localhost')) {
+  if (envUrl) {
     return envUrl;
   }
   
+  if (typeof window !== 'undefined') {
+    const { hostname, protocol } = window.location;
+    
+    // If we are explicitly on a local dev setup
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      return 'http://localhost:5000';
+    }
+    
+    // For live/production or custom IP accessed via HTTP, 
+    // we return empty string to use relative paths (e.g., /api/...)
+    // This allows the production reverse proxy or Vite proxy to handle routing
+    // and avoids ERR_SSL_PROTOCOL_ERROR from hardcoded ports.
+    return '';
+  }
+
   return 'http://localhost:5000';
 };
 

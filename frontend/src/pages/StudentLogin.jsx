@@ -26,17 +26,18 @@ function StudentLogin() {
     setLoginError('');
     
     try {
-      const response = await fetch(`${API_BASE}/api/auth/login`, {
+      const response = await fetch(`${API_BASE}/api/student/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
       const data = await response.json();
+      const user = data.user || data.student || {};
 
       if (data.success) {
         localStorage.setItem('studentToken', data.token);
-        localStorage.setItem('studentName', data.user.name);
+        localStorage.setItem('studentName', user.name || user.email || 'Student');
         toast.success('Welcome to your learning portal!');
         navigate('/dashboard');
       } else {

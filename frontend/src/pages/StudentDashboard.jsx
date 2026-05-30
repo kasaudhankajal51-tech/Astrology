@@ -5,7 +5,11 @@ import toast from 'react-hot-toast';
 
 function StudentDashboard() {
   const [profile, setProfile] = useState(null);
+  const [profileForm, setProfileForm] = useState({ name: '', email: '', mobile: '' });
+  const [profileEditMode, setProfileEditMode] = useState(false);
+  const [savingProfile, setSavingProfile] = useState(false);
   const [courses, setCourses] = useState([]);
+  const [courseValidity, setCourseValidity] = useState({});
   const [banners, setBanners] = useState([]);
   const [merchandise, setMerchandise] = useState([]);
   const [newCourses, setNewCourses] = useState([]);
@@ -62,24 +66,41 @@ function StudentDashboard() {
     return diff >= 0 ? `${diff} day${diff === 1 ? '' : 's'}` : 'Expired';
   };
 
+  const fetchSection = async (path) => {
+    const response = await fetch(`${API_BASE}${path}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    });
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.message || 'Failed to load');
+    if (data.success === false) throw new Error(data.message || 'Failed to load');
+    return data;
+  };
+
+  const loadCourseValidity = async (courseId) => {
+    try {
+      const response = await fetch(`${API_BASE}/api/student/course/${courseId}/validity`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) return;
+      const validity = data.validity || data.data || data;
+      setCourseValidity((prev) => ({ ...prev, [courseId]: validity }));
+    } catch (err) {
+      // ignore validity failure; use available validTill data
+    }
+  };
+
   useEffect(() => {
     if (!token) {
       navigate('/login');
       return;
     }
-
-    const requestHeaders = {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/json'
-    };
-
-    const fetchSection = async (path, fallback = []) => {
-      const response = await fetch(`${API_BASE}${path}`, { headers: requestHeaders });
-      const data = await response.json();
-      if (response.ok && data.success) return data; // prefer backend success flag
-      if (response.ok && !data.success) throw new Error(data.message || 'Failed to load');
-      throw new Error(data.message || 'Network error');
-    };
 
     const loadDashboardData = async () => {
       try {
@@ -92,12 +113,24 @@ function StudentDashboard() {
           fetchSection('/api/student/offers')
         ]);
 
-        setProfile(profileData.student || profileData.user || profileData);
-        setCourses(courseData.enrollments || courseData.courses || courseData.data || []);
+        const profilePayload = profileData.student || profileData.user || profileData;
+        setProfile(profilePayload);
+        setProfileForm({ name: profilePayload.name || '', email: profilePayload.email || '', mobile: profilePayload.mobile || '' });
+
+        const loadedCourses = courseData.enrollments || courseData.courses || courseData.data || [];
+        setCourses(loadedCourses);
+
         setBanners(bannerData.banners || bannerData.data || []);
         setMerchandise(merchData.products || merchData.merchandise || merchData.data || []);
         setNewCourses(launchesData.courses || launchesData.newCourses || launchesData.data || []);
         setOffers(offersData.offers || offersData.data || []);
+
+        const courseIds = (loadedCourses || []).map((course) => {
+          const normalized = normalizeCourse(course);
+          return normalized?.id;
+        }).filter(Boolean);
+
+        await Promise.all(courseIds.map((courseId) => loadCourseValidity(courseId)));
       } catch (error) {
         const errorMessage = error.message || 'Unable to load student dashboard';
         toast.error(errorMessage);
@@ -114,10 +147,52 @@ function StudentDashboard() {
     loadDashboardData();
   }, [navigate, token]);
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
+    try {
+      await fetch(`${API_BASE}/api/student/logout`, {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+    } catch (err) {
+      // ignore logout failure and clear client state anyway
+    }
     localStorage.removeItem('studentToken');
     localStorage.removeItem('studentName');
     navigate('/login');
+  };
+
+  const handleProfileChange = (field) => (event) => {
+    setProfileForm((prev) => ({ ...prev, [field]: event.target.value }));
+  };
+
+  const saveProfile = async (event) => {
+    event.preventDefault();
+    setSavingProfile(true);
+
+    try {
+      const response = await fetch(`${API_BASE}/api/student/profile`, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(profileForm)
+      });
+      const data = await response.json();
+      if (!response.ok || data.success === false) throw new Error(data.message || 'Unable to update profile');
+      const updatedProfile = data.student || data.user || data;
+      setProfile(updatedProfile);
+      setProfileForm({ name: updatedProfile.name || '', email: updatedProfile.email || '', mobile: updatedProfile.mobile || '' });
+      setProfileEditMode(false);
+      toast.success('Profile updated successfully');
+    } catch (error) {
+      toast.error(error.message || 'Profile update failed');
+    } finally {
+      setSavingProfile(false);
+    }
   };
 
   const loadMaterials = async (courseId) => {
@@ -130,11 +205,8 @@ function StudentDashboard() {
         headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
       });
       const data = await response.json();
-      if (response.ok && data.success) {
-        setMaterials(data.materials || data.data || []);
-      } else {
-        throw new Error(data.message || 'Failed to load course materials');
-      }
+      if (!response.ok || data.success === false) throw new Error(data.message || 'Failed to load course materials');
+      setMaterials(data.materials || data.data || []);
     } catch (error) {
       toast.error(error.message || 'Unable to fetch materials');
       setMaterials([]);
@@ -178,9 +250,56 @@ function StudentDashboard() {
               <div className="mb-3">
                 <strong>Mobile:</strong> {profile?.mobile || '—'}
               </div>
-              <div>
+              <div className="mb-3">
                 <strong>Status:</strong> <span className="text-success">Active</span>
               </div>
+
+              {profileEditMode ? (
+                <form onSubmit={saveProfile} className="mt-4">
+                  <div className="mb-3">
+                    <label className="form-label small text-dark">Name</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={profileForm.name}
+                      onChange={handleProfileChange('name')}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label small text-dark">Email</label>
+                    <input
+                      type="email"
+                      className="form-control"
+                      value={profileForm.email}
+                      onChange={handleProfileChange('email')}
+                      required
+                    />
+                  </div>
+                  <div className="mb-3">
+                    <label className="form-label small text-dark">Mobile</label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={profileForm.mobile}
+                      onChange={handleProfileChange('mobile')}
+                      required
+                    />
+                  </div>
+                  <div className="d-flex gap-2">
+                    <button type="submit" className="btn btn-primary btn-sm" disabled={savingProfile} style={{ borderRadius: '50px' }}>
+                      {savingProfile ? 'Saving...' : 'Save Changes'}
+                    </button>
+                    <button type="button" className="btn btn-outline-secondary btn-sm" style={{ borderRadius: '50px' }} onClick={() => setProfileEditMode(false)}>
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button className="btn btn-sm btn-outline-primary mt-4" style={{ borderRadius: '50px' }} onClick={() => setProfileEditMode(true)}>
+                  Edit Profile
+                </button>
+              )}
             </div>
           </div>
 
@@ -249,7 +368,7 @@ function StudentDashboard() {
                         <span><strong>Type:</strong> {course.courseType}</span>
                         <span><strong>Purchased:</strong> {formatDate(course.purchaseDate)}</span>
                         <span><strong>Valid Till:</strong> {formatDate(course.validTill)}</span>
-                        <span><strong>Remaining:</strong> {computeDaysRemaining(course.validTill)}</span>
+                        <span><strong>Remaining:</strong> {courseValidity[course.id]?.daysRemaining ?? computeDaysRemaining(course.validTill)}</span>
                       </div>
                       <div className="progress mb-3" style={{ height: '8px', borderRadius: '10px', overflow: 'hidden' }}>
                         <div className="progress-bar bg-warning" role="progressbar" style={{ width: `${Math.min(Math.max(course.progress, 0), 100)}%` }} aria-valuenow={course.progress} aria-valuemin="0" aria-valuemax="100"></div>

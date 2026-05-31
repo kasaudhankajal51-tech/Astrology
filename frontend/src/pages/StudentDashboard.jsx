@@ -104,6 +104,7 @@ function StudentDashboard() {
 
     const loadDashboardData = async () => {
       try {
+<<<<<<< Updated upstream
         const [profileData, courseData, bannerData, merchData, launchesData, offersData] = await Promise.all([
           fetchSection('/api/student/profile'),
           fetchSection('/api/student/courses'),
@@ -135,6 +136,17 @@ function StudentDashboard() {
         const errorMessage = error.message || 'Unable to load student dashboard';
         toast.error(errorMessage);
         if (errorMessage.toLowerCase().includes('session') || errorMessage.toLowerCase().includes('token')) {
+=======
+        const res = await fetch(`${API_BASE}/api/student/courses`, {
+          headers: { 'Authorization': `Bearer ${token}` }
+        });
+        const data = await res.json();
+        
+        if (data.success) {
+          setEnrollments(data.courses || data.enrollments || []);
+        } else {
+          toast.error(data.message || 'Session expired. Please log in again.');
+>>>>>>> Stashed changes
           localStorage.removeItem('studentToken');
           localStorage.removeItem('studentName');
           navigate('/login');

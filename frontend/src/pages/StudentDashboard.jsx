@@ -113,7 +113,7 @@ function StudentDashboard() {
           fetchSection('/api/student/offers')
         ]);
 
-        const profilePayload = profileData.student || profileData.user || profileData;
+        const profilePayload = profileData.profile || profileData.student || profileData.user || profileData;
         setProfile(profilePayload);
         setProfileForm({ name: profilePayload.name || '', email: profilePayload.email || '', mobile: profilePayload.mobile || '' });
 
@@ -183,7 +183,7 @@ function StudentDashboard() {
       });
       const data = await response.json();
       if (!response.ok || data.success === false) throw new Error(data.message || 'Unable to update profile');
-      const updatedProfile = data.student || data.user || data;
+      const updatedProfile = data.profile || data.student || data.user || data;
       setProfile(updatedProfile);
       setProfileForm({ name: updatedProfile.name || '', email: updatedProfile.email || '', mobile: updatedProfile.mobile || '' });
       setProfileEditMode(false);

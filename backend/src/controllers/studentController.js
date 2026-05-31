@@ -75,7 +75,17 @@ export const updateStudentProfile = async (req, res) => {
     if (profileImage) user.profileImage = profileImage;
     
     await user.save();
-    res.json({ success: true, message: 'Profile updated successfully' });
+    res.json({ 
+      success: true, 
+      message: 'Profile updated successfully',
+      profile: {
+        studentId: user._id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile || '',
+        profileImage: user.profileImage || ''
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

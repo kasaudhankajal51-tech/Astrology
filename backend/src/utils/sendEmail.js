@@ -43,3 +43,25 @@ export const sendCredentialsEmail = async (studentEmail, password, studentName, 
     console.error('Error sending email:', error);
   }
 };
+
+export const sendAdminNotificationEmail = async (subject, htmlContent) => {
+  if (!process.env.ADMIN_EMAIL) {
+    console.log('ADMIN_EMAIL not configured, skipping admin notification.');
+    return;
+  }
+  
+  const mailOptions = {
+    from: `"DS Astro System" <${process.env.EMAIL_USER}>`,
+    to: process.env.ADMIN_EMAIL,
+    subject: subject,
+    html: htmlContent,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Admin notification sent to ${process.env.ADMIN_EMAIL}`);
+  } catch (error) {
+    console.error('Error sending admin email:', error);
+  }
+};
+

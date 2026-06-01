@@ -3,6 +3,8 @@ import { protect } from '../middleware/authMiddleware.js';
 import {
   studentLogin,
   studentLogout,
+  forgotPassword,
+  resetPassword,
   getStudentProfile,
   updateStudentProfile,
   getMyCourses,
@@ -22,6 +24,8 @@ const router = express.Router();
 
 // Public routes
 router.post('/login', studentLogin);
+router.post('/forgot-password', forgotPassword);
+router.post('/reset-password', resetPassword);
 
 // Protected routes (require student login)
 router.use(protect);

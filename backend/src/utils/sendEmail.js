@@ -64,3 +64,35 @@ export const sendAdminNotificationEmail = async (subject, htmlContent) => {
     console.error('Error sending admin email:', error);
   }
 };
+
+export const sendPasswordResetEmail = async (studentEmail, studentName, otp) => {
+  const mailOptions = {
+    from: `"Cosmic Light Academy" <${process.env.EMAIL_USER}>`,
+    to: studentEmail,
+    subject: `Password Reset Request - Cosmic Light Academy`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: auto; padding: 20px; border: 1px solid #C8832A; border-radius: 10px;">
+        <h2 style="color: #2A0F02; text-align: center;">Password Reset Request</h2>
+        <p>Dear ${studentName},</p>
+        <p>We received a request to reset the password for your Cosmic Light Academy student account.</p>
+        <p>Your 6-digit OTP code is:</p>
+        <div style="background-color: #FDF6EE; padding: 15px; border-radius: 8px; margin: 20px 0; text-align: center;">
+          <h1 style="margin: 0; color: #C8832A; letter-spacing: 5px;">${otp}</h1>
+        </div>
+        <p>This code is valid for 15 minutes. If you did not request this password reset, please ignore this email.</p>
+        <br/>
+        <p style="color: #666; font-size: 12px; text-align: center;">
+          May the stars guide you.<br/>
+          <strong>Cosmic Light Astrology Team</strong>
+        </p>
+      </div>
+    `,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`Password reset OTP sent to ${studentEmail}`);
+  } catch (error) {
+    console.error('Error sending password reset email:', error);
+  }
+};

@@ -10,7 +10,8 @@ import Offer from '../models/Offer.js';
 import { generateBunnyToken } from '../utils/bunnyHelper.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import { sendAdminNotificationEmail } from '../utils/sendEmail.js';
+import crypto from 'crypto';
+import { sendAdminNotificationEmail, sendPasswordResetEmail } from '../utils/sendEmail.js';
 
 // 1. Student Authentication
 export const studentLogin = async (req, res) => {
@@ -42,6 +43,65 @@ export const studentLogin = async (req, res) => {
 
 export const studentLogout = async (req, res) => {
   res.status(200).json({ success: true, message: 'Logged out successfully' });
+};
+
+export const forgotPassword = async (req, res) => {
+  const { email } = req.body;
+  try {
+    if (!email) return res.status(400).json({ success: false, message: 'Email is required' });
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) {
+      // Return true anyway for security (don't reveal if email exists)
+      return res.json({ success: true, message: 'If the email exists, an OTP has been sent.' });
+    }
+
+    // Generate 6 digit OTP
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    
+    user.resetPasswordOTP = otp;
+    user.resetPasswordExpires = Date.now() + 15 * 60 * 1000; // 15 mins expiry
+    await user.save();
+
+    await sendPasswordResetEmail(user.email, user.name, otp);
+
+    res.json({ success: true, message: 'If the email exists, an OTP has been sent.' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error while requesting password reset' });
+  }
+};
+
+export const resetPassword = async (req, res) => {
+  const { email, otp, newPassword } = req.body;
+  try {
+    if (!email || !otp || !newPassword) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
+    const user = await User.findOne({ email: email.toLowerCase().trim() });
+    if (!user) return res.status(400).json({ success: false, message: 'Invalid OTP or email' });
+
+    if (!user.resetPasswordOTP || user.resetPasswordOTP !== otp) {
+      return res.status(400).json({ success: false, message: 'Invalid OTP' });
+    }
+
+    if (Date.now() > user.resetPasswordExpires) {
+      return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new one.' });
+    }
+
+    // Hash the new password
+    const salt = await bcrypt.genSalt(10);
+    user.passwordHash = await bcrypt.hash(newPassword, salt);
+    
+    // Clear the OTP fields
+    user.resetPasswordOTP = undefined;
+    user.resetPasswordExpires = undefined;
+    await user.save();
+
+    res.json({ success: true, message: 'Password has been successfully reset. You can now login.' });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error while resetting password' });
+  }
 };
 
 // 2. Student Profile

@@ -10,6 +10,7 @@ import Offer from '../models/Offer.js';
 import { generateBunnyToken } from '../utils/bunnyHelper.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
+import { sendAdminNotificationEmail } from '../utils/sendEmail.js';
 
 // 1. Student Authentication
 export const studentLogin = async (req, res) => {
@@ -408,6 +409,39 @@ export const bookCourseConsultation = async (req, res) => {
       notes,
       status: 'pending'
     });
+
+    // Send admin notification
+    await sendAdminNotificationEmail(
+      `New Course Consultation Request: ${fetchedUser.name}`,
+      `
+      <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+        <h2 style="color: #6b4a44; margin-top: 0;">New Consultation Request! 🎉</h2>
+        <p>A student has requested a consultation from within their course player.</p>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Name:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${fetchedUser.name}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${fetchedUser.email}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Mobile:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${consultation.mobile}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Preferred Date & Time:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${preferredDatetime || 'Not provided'}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>Notes:</strong></td>
+            <td style="padding: 8px 0;">${notes || 'None'}</td>
+          </tr>
+        </table>
+      </div>
+      `
+    );
 
     res.status(201).json({ success: true, consultation });
   } catch (error) {

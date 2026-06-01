@@ -6,7 +6,7 @@ import Course from '../models/Course.js';
 import Order from '../models/Order.js';
 import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
-import { sendCredentialsEmail } from '../utils/sendEmail.js';
+import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
 import dotenv from 'dotenv';
 dotenv.config();
 
@@ -184,6 +184,38 @@ export const verifyPayment = async (req, res) => {
       await sendCredentialsEmail(studentEmail, generatedPassword, studentName, course.title);
     }
 
+    // Send admin notification
+    await sendAdminNotificationEmail(
+      `New Course Purchased: ${course.title}`,
+      `
+      <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+        <h2 style="color: #6b4a44; margin-top: 0;">New Course Sale! 🎉</h2>
+        <table style="width: 100%; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Course:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${course.title}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Student:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentName}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentEmail}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Amount:</strong></td>
+            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">₹${order.amount}</td>
+          </tr>
+          <tr>
+            <td style="padding: 8px 0;"><strong>Transaction ID:</strong></td>
+            <td style="padding: 8px 0;">${razorpay_payment_id}</td>
+          </tr>
+        </table>
+      </div>
+      `
+    );
+
     res.status(200).json({
       success: true,
       message: 'Payment verified and enrollment active',
@@ -268,6 +300,38 @@ export const webhook = async (req, res) => {
           if (generatedPassword) {
             await sendCredentialsEmail(studentEmail, generatedPassword, studentName, course.title);
           }
+
+          // Send admin notification
+          await sendAdminNotificationEmail(
+            `New Course Purchased: ${course.title}`,
+            `
+            <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+              <h2 style="color: #6b4a44; margin-top: 0;">New Course Sale (Webhook Fallback)! 🎉</h2>
+              <table style="width: 100%; border-collapse: collapse;">
+                <tr>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Course:</strong></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${course.title}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Student:</strong></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentName}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentEmail}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Amount:</strong></td>
+                  <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">₹${order.amount}</td>
+                </tr>
+                <tr>
+                  <td style="padding: 8px 0;"><strong>Transaction ID:</strong></td>
+                  <td style="padding: 8px 0;">${paymentEntity.id}</td>
+                </tr>
+              </table>
+            </div>
+            `
+          );
 
           if (!studentEmail || !studentName) {
             const user = await User.findById(finalUserId);

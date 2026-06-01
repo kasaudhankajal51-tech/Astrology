@@ -142,7 +142,9 @@ function CoursePlayer() {
             <div style={{ background: '#000', borderRadius: '16px', overflow: 'hidden', aspectRatio: '16/9', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
               {activeVideo ? (
                 <iframe
-                  src={activeVideo.videoUrl || activeVideo.secureUrl}
+                  src={activeVideo.otp && activeVideo.playbackInfo 
+                    ? `https://player.vdocipher.com/v2/?otp=${activeVideo.otp}&playbackInfo=${activeVideo.playbackInfo}` 
+                    : (activeVideo.videoUrl || activeVideo.secureUrl)}
                   loading="lazy"
                   style={{ border: 0, width: '100%', height: '100%' }}
                   allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"

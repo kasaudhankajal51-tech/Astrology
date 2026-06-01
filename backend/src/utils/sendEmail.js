@@ -64,4 +64,3 @@ export const sendAdminNotificationEmail = async (subject, htmlContent) => {
     console.error('Error sending admin email:', error);
   }
 };
-

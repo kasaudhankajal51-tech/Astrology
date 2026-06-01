@@ -57,6 +57,8 @@ function App() {
               <Route index element={<Home />} />
               <Route path="book-consultation" element={<Consultations />} />
               <Route path="book-consultation/:serviceId" element={<ConsultationDetail />} />
+              <Route path="consultations" element={<Consultations />} />
+              <Route path="consultations/:serviceId" element={<ConsultationDetail />} />
               <Route path="about" element={<About />} />
               <Route path="blog" element={<Blog />} />
               <Route path="blog/:slug" element={<BlogDetail />} />

@@ -180,16 +180,45 @@ export const getCourseVideos = async (req, res) => {
       ? enrollment.progress.completedVideos.map(id => id.toString()) 
       : [];
 
-    const mappedVideos = videos.map(video => {
-      const tokenQuery = generateBunnyToken(video.bunnyVideoId, 7200);
+    const mappedVideos = await Promise.all(videos.map(async (video) => {
+      let otp = null;
+      let playbackInfo = null;
+      let videoUrl = null;
+
+      if (video.vdoCipherVideoId && process.env.VDOCIPHER_API_SECRET) {
+        try {
+          // You might need node-fetch if Node < 18, but Node 22 supports fetch natively
+          const vdoRes = await fetch(`https://dev.vdocipher.com/api/videos/${video.vdoCipherVideoId}/otp`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ ttl: 7200 })
+          });
+          const vdoData = await vdoRes.json();
+          if (vdoRes.ok) {
+            otp = vdoData.otp;
+            playbackInfo = vdoData.playbackInfo;
+          }
+        } catch (err) {
+          console.error('VdoCipher API Error:', err);
+        }
+      } else if (video.bunnyVideoId) {
+        const tokenQuery = generateBunnyToken(video.bunnyVideoId, 7200);
+        videoUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${video.bunnyVideoId}${tokenQuery}`;
+      }
+
       return {
         videoId: video._id,
         title: video.title,
-        videoUrl: `https://iframe.mediadelivery.net/embed/${libraryId}/${video.bunnyVideoId}${tokenQuery}`,
+        videoUrl, // Only populated if Bunny.net fallback is used
+        otp, // Populated if VdoCipher is used
+        playbackInfo, // Populated if VdoCipher is used
         duration: '00:00', // Default if duration not available
         isCompleted: completedIds.includes(video._id.toString())
       };
-    });
+    }));
 
     res.json({ success: true, videos: mappedVideos });
   } catch (error) {

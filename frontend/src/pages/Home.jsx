@@ -1173,6 +1173,7 @@ function Home() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        isFixedService={!!formData.consultationType}
       />
 
       <SuccessModal 

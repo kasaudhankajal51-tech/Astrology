@@ -16,7 +16,8 @@ function Consultations() {
     dob: '',
     tob: '',
     pob: '',
-    message: ''
+    message: '',
+    price: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,32 +34,140 @@ function Consultations() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // If there is no price (e.g. general enquiry), use the old free flow
+    if (!formData.price) {
+      try {
+        const response = await fetch(`${API_BASE}/api/leads`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ ...formData, type: 'Consultation', courseName: formData.consultationType || 'General Consultation' })
+        });
+        const data = await response.json();
+        if (data.success) {
+          setIsModalOpen(false);
+          setIsSuccessOpen(true);
+          setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
+        } else {
+          toast.error(data.error || 'Error submitting booking');
+        }
+      } catch (error) {
+        toast.error('Connection Error: ' + error.message);
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    // Razorpay Paid Flow
     try {
-      const response = await fetch(`${API_BASE}/api/leads`, {
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        toast.error('Razorpay SDK failed to load. Check your connection.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const amount = parseInt(formData.price.replace('₹', '').replace(',', ''), 10);
+      const payload = { ...formData, amount, consultationType: formData.consultationType };
+
+      const response = await fetch(`${API_BASE}/api/consultations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Consultation', courseName: formData.consultationType || 'General Consultation' })
+        body: JSON.stringify(payload)
       });
       const data = await response.json();
-      if (data.success) {
-        setIsModalOpen(false);
-        setIsSuccessOpen(true);
-        setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '' });
-      } else {
-        toast.error(data.error || 'Error submitting booking');
+      
+      if (!data.success) {
+        toast.error(data.error || data.message || 'Failed to initiate booking');
+        setIsSubmitting(false);
+        return;
       }
-    } catch (error) {
-      toast.error('Connection Error: ' + error.message);
+
+      const options = {
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "DS Astro Institute",
+        description: `Consultation Booking: ${formData.consultationType}`,
+        image: "/images/logo.png",
+        order_id: data.orderId,
+        handler: async function (response) {
+          try {
+            const verifyRes = await fetch(`${API_BASE}/api/consultations/verify-payment`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                consultationId: data.consultationId
+              })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+              setIsModalOpen(false);
+              setIsSuccessOpen(true); // Reusing the same success modal for consistency
+              setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
+            } else {
+              toast.error('Payment verification failed.');
+            }
+          } catch (err) {
+            toast.error('Error verifying payment.');
+          }
+        },
+        prefill: {
+          name: data.name,
+          email: data.email,
+          contact: data.phone
+        },
+        theme: {
+          color: "#8B4A1E"
+        }
+      };
+
+      if (data.isMock) {
+        toast.success("Test Mode: Simulating Payment Success...");
+        options.handler({
+          razorpay_payment_id: `pay_mock_${Date.now()}`,
+          razorpay_order_id: data.orderId,
+          razorpay_signature: "mock_signature"
+        });
+      } else {
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          toast.error(`Payment Failed: ${response.error.description}`);
+        });
+        rzp.open();
+      }
+
+    } catch (err) {
+      toast.error('Error: ' + err.message);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const openModal = (type = '') => {
-    if (type) setFormData(prev => ({ ...prev, consultationType: type }));
+  const openModal = (type = '', price = '') => {
+    if (type) setFormData(prev => ({ ...prev, consultationType: type, price }));
     setIsModalOpen(true);
   };
 
@@ -214,6 +323,24 @@ function Consultations() {
           short: "5 Day Spell"
         }
       ]
+    },
+    {
+      id: 'testing',
+      name: "Live Testing",
+      icon: "fa-vial",
+      description: "Temporary category for live payment gateway testing.",
+      cards: [
+        {
+          id: 'test-consultation',
+          title: "Test Consultation (₹1)",
+          desc: "Use this card to verify the live Razorpay payment gateway integration using UPI or Netbanking.",
+          price: "₹1",
+          badge: "Testing Purpose",
+          badgeColor: "green",
+          img: "/images/premium_tarot.png",
+          short: "Test Consult"
+        }
+      ]
     }
   ];
 
@@ -304,7 +431,7 @@ function Consultations() {
                             <button className="btn-action secondary" onClick={() => goToDetails(card.id)}>
                               <i className="fas fa-eye me-2"></i> View Page
                             </button>
-                            <button className="btn-action primary" onClick={() => openModal(card.title)}>
+                            <button className="btn-action primary" onClick={() => openModal(card.title, card.price)}>
                               Book Now <i className="fas fa-arrow-right ms-2"></i>
                             </button>
                           </div>
@@ -407,6 +534,7 @@ function Consultations() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        isFixedService={!!formData.consultationType}
       />
 
       <SuccessModal 

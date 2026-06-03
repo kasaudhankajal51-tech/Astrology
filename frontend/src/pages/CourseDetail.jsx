@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { CheckCircle2, Tag, Percent } from 'lucide-react';
 import { coursesData } from '../data/coursesData';
 import SuccessModal from '../components/SuccessModal';
+import CourseTimer from '../components/CourseTimer';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
 
@@ -1108,6 +1109,16 @@ function CourseDetail() {
                 <h4>Start Your Journey</h4>
                 <div className="enroll-price">{course.isPremium ? `₹ ${course.price}` : '₹ Enquire Now'}</div>
                 <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'Get personalized fee structure & syllabus PDF'}</p>
+
+                {course.isPremium && (
+                  <motion.div 
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.5 }}
+                  >
+                    <CourseTimer courseId={courseId} />
+                  </motion.div>
+                )}
 
                 <motion.div
                   initial={{ opacity: 0, y: 14 }}

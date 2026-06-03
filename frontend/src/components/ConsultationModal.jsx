@@ -1,7 +1,7 @@
 import React from 'react';
 import './webinar/RegistrationModal.css'; // Reusing the same base styles for consistency
 
-function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting }) {
+function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting, isFixedService }) {
   if (!isOpen) return null;
 
   return (
@@ -62,14 +62,18 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
 
                 <div className="form-group mb-3">
                   <label>Consultation Type</label>
-                  <select name="consultationType" value={formData.consultationType} onChange={handleChange} required className="form-select-custom">
-                    <option value="">Select consultation type</option>
-                    <option value="Career">Career & Business</option>
-                    <option value="Relationship">Marriage & Relationships</option>
-                    <option value="Health">Health & Wellness</option>
-                    <option value="Finance">Finance & Wealth</option>
-                    <option value="Other">Other Concerns</option>
-                  </select>
+                  {isFixedService ? (
+                    <input type="text" name="consultationType" value={formData.consultationType} readOnly className="form-control" style={{ backgroundColor: '#f0f0f0', cursor: 'not-allowed', padding: '12px 15px', borderRadius: '8px', border: '1px solid #ddd' }} />
+                  ) : (
+                    <select name="consultationType" value={formData.consultationType} onChange={handleChange} required className="form-select-custom">
+                      <option value="">Select consultation type</option>
+                      <option value="Career">Career & Business</option>
+                      <option value="Relationship">Marriage & Relationships</option>
+                      <option value="Health">Health & Wellness</option>
+                      <option value="Finance">Finance & Wealth</option>
+                      <option value="Other">Other Concerns</option>
+                    </select>
+                  )}
                 </div>
 
                 <div className="form-group mb-4">

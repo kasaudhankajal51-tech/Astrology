@@ -3,6 +3,8 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import dotenv from 'dotenv';
+dotenv.config();
+
 import mongoose from 'mongoose';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import toolsRoutes from './routes/toolsRoutes.js';
@@ -22,8 +24,6 @@ import studentRoutes from './routes/studentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
-
-dotenv.config();
 
 const app = express();
 app.use(morgan('dev'));
@@ -101,7 +101,7 @@ app.use(async (req, res, next) => {
 // --- API Routes ---
 const apiRoutes = [
   ['/tools', toolsRoutes],
-  ['/consultation', consultationRoutes],
+  ['/consultations', consultationRoutes],
   ['/tarot', tarotRoutes],
   ['/love', loveRoutes],
   ['/leads', leadRoutes],

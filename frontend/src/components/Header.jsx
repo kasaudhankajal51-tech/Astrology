@@ -639,6 +639,7 @@ function Header() {
         handleChange={handleConsultChange}
         handleSubmit={handleConsultSubmit}
         isSubmitting={isSubmitting}
+        isFixedService={!!formData.consultationType}
       />
 
       <SuccessModal 

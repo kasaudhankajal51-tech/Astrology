@@ -156,25 +156,107 @@ function ConsultationDetail() {
       </div>
     );
   }
-
   const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+
+  const loadRazorpayScript = () => {
+    return new Promise((resolve) => {
+      if (window.Razorpay) {
+        resolve(true);
+        return;
+      }
+      const script = document.createElement('script');
+      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+      script.onload = () => resolve(true);
+      script.onerror = () => resolve(false);
+      document.body.appendChild(script);
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
     try {
-      const response = await fetch(`${API_BASE}/api/leads`, {
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        toast.error('Razorpay SDK failed to load. Check your connection.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const amount = parseInt(service.price.replace('₹', ''), 10);
+      const payload = { ...formData, amount, consultationType: service.title };
+
+      const response = await fetch(`${API_BASE}/api/consultations`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Consultation', courseName: service.title })
+        body: JSON.stringify(payload)
       });
       const data = await response.json();
-      if (data.success) {
-        toast.success('Booking request sent!');
-        setIsModalOpen(false);
-      } else {
-        toast.error(data.error);
+      
+      if (!data.success) {
+        toast.error(data.error || data.message || 'Failed to initiate booking');
+        setIsSubmitting(false);
+        return;
       }
+
+      const options = {
+        key: data.keyId,
+        amount: data.amount,
+        currency: data.currency,
+        name: "DS Astro Institute",
+        description: `Consultation Booking: ${service.title}`,
+        image: "/images/logo.png",
+        order_id: data.orderId,
+        handler: async function (response) {
+          try {
+            const verifyRes = await fetch(`${API_BASE}/api/consultations/verify-payment`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_signature: response.razorpay_signature,
+                consultationId: data.consultationId
+              })
+            });
+            const verifyData = await verifyRes.json();
+            
+            if (verifyData.success) {
+              toast.success('Payment Successful! Your consultation is booked.');
+              setIsModalOpen(false);
+            } else {
+              toast.error('Payment verification failed.');
+            }
+          } catch (err) {
+            toast.error('Error verifying payment.');
+          }
+        },
+        prefill: {
+          name: data.name,
+          email: data.email,
+          contact: data.phone
+        },
+        theme: {
+          color: "#8B4A1E"
+        }
+      };
+
+      if (data.isMock) {
+        toast.success("Test Mode: Simulating Payment Success...");
+        options.handler({
+          razorpay_payment_id: `pay_mock_${Date.now()}`,
+          razorpay_order_id: data.orderId,
+          razorpay_signature: "mock_signature"
+        });
+      } else {
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          toast.error(`Payment Failed: ${response.error.description}`);
+        });
+        rzp.open();
+      }
+
     } catch (err) {
       toast.error('Error: ' + err.message);
     } finally {
@@ -244,6 +326,7 @@ function ConsultationDetail() {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
+        isFixedService={true}
       />
 
       <style jsx>{`

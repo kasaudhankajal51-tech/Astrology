@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import MainLayout from './layouts/MainLayout';
+import StandaloneLayout from './layouts/StandaloneLayout';
 import { Suspense, lazy } from 'react';
 const Home = lazy(() => import('./pages/Home'));
 const Consultations = lazy(() => import('./pages/Consultations'));
@@ -83,22 +84,22 @@ function App() {
               <Route path="careers" element={<Careers />} />
             </Route>
             
-            {/* Standalone Landing Pages & Admin (No Header/Footer) */}
-            <Route path="/webinar" element={<Webinar />} />
-            <Route path="/course-inquiry" element={<LandingPage />} />
-            <Route path="/payment" element={<Payment />} />
-            <Route path="/payment-success" element={<PaymentSuccess />} />
-            <Route path="/payment-failed" element={<PaymentFailed />} />
+            {/* Standalone customer/student pages with contextual header/footer */}
+            <Route element={<StandaloneLayout />}>
+              <Route path="/webinar" element={<Webinar />} />
+              <Route path="/course-inquiry" element={<LandingPage />} />
+              <Route path="/payment" element={<Payment />} />
+              <Route path="/payment-success" element={<PaymentSuccess />} />
+              <Route path="/payment-failed" element={<PaymentFailed />} />
+              <Route path="/login" element={<StudentLogin />} />
+              <Route path="/dashboard" element={<StudentDashboard />} />
+              <Route path="/student/course/:id" element={<CoursePlayer />} />
+              <Route path="*" element={<NotFound />} />
+            </Route>
+
+            {/* Admin remains app-only, without public site chrome */}
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/admin/login" element={<AdminLogin />} />
-            
-            {/* Student Portal Routes */}
-            <Route path="/login" element={<StudentLogin />} />
-            <Route path="/dashboard" element={<StudentDashboard />} />
-            <Route path="/student/course/:id" element={<CoursePlayer />} />
-            
-            {/* Catch-all 404 Route */}
-            <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
       </BrowserRouter>

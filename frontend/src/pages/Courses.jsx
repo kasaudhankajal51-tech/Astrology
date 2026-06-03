@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { coursesData } from '../data/coursesData';
 import SEO from '../components/SEO';
+import API_BASE from '../utils/api';
 
 function Courses() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,7 +15,7 @@ function Courses() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch('/api/courses');
+        const response = await fetch(`${API_BASE}/api/courses`);
         const data = await response.json();
         
         if (data.success) {

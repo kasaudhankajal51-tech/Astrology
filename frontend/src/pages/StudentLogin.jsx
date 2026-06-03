@@ -129,17 +129,22 @@ function StudentLogin() {
   };
 
   return (
-    <div className="login-root">
-      <div className="login-bg-glow" style={{ background: 'radial-gradient(circle at top right, rgba(200, 131, 42, 0.2), transparent 40%)' }}></div>
+    <div className="login-root student-login-root">
+      <div className="login-bg-glow"></div>
       
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: "easeOut" }}
-        className="login-card"
+        className="login-card student-login-card"
       >
         {/* Left Side - Form */}
         <div className="login-left">
+          <button type="button" className="login-home-link student-home-link" onClick={() => navigate('/')}>
+            <i className="fas fa-arrow-left"></i>
+            Back to Website
+          </button>
+
           <div className="login-brand">
             <motion.div 
               initial={{ scale: 0.8 }}
@@ -147,7 +152,7 @@ function StudentLogin() {
               transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
               className="login-brand-orb"
             >
-              A
+              <i className="fas fa-user-graduate"></i>
             </motion.div>
             <div className="login-brand-name">Cosmic Light <em>Academy</em></div>
           </div>
@@ -156,8 +161,9 @@ function StudentLogin() {
           <>
 
             <div className="login-headline">
+              <span className="student-login-kicker">Student Access</span>
               <h1>Student Portal</h1>
-              <p>Sign in to access your enrolled courses</p>
+              <p>Continue your astrology courses, class videos, and learning progress.</p>
             </div>
 
             <form className="login-form" onSubmit={handleLogin}>
@@ -181,8 +187,7 @@ function StudentLogin() {
                   <label className="mb-0">Password</label>
                   <button 
                     type="button" 
-                    className="btn btn-link text-decoration-none p-0" 
-                    style={{ fontSize: '0.8rem', color: '#C8832A' }}
+                    className="student-forgot-link" 
                     onClick={() => { setViewState('FORGOT'); setLoginError(''); }}
                   >
                     Forgot Password?
@@ -226,18 +231,30 @@ function StudentLogin() {
                 className={`lf-btn ${isLoading ? 'lf-btn--loading' : ''}`}
                 disabled={isLoading}
               >
-                {isLoading ? <div className="lf-spinner"></div> : 'Enter Portal'}
+                {isLoading ? <div className="lf-spinner"></div> : (
+                  <>
+                    Enter Portal
+                    <i className="fas fa-arrow-right"></i>
+                  </>
+                )}
               </button>
             </form>
+
+            <div className="student-login-note">
+              <span><i className="fas fa-play-circle"></i> Course videos</span>
+              <span><i className="fas fa-clock"></i> Validity tracking</span>
+              <span><i className="fas fa-lock"></i> Secure access</span>
+            </div>
           </>
           )}
 
           {viewState === 'FORGOT' && (
             <>
-              <div className="login-headline">
-                <h1>Reset Password</h1>
-                <p>Enter your email to receive an OTP</p>
-              </div>
+            <div className="login-headline">
+              <span className="student-login-kicker">Account Help</span>
+              <h1>Reset Password</h1>
+              <p>Enter your email to receive an OTP</p>
+            </div>
               <form className="login-form" onSubmit={handleForgotPassword}>
                 <div className="lf-group">
                   <label>Registered Email</label>
@@ -257,8 +274,7 @@ function StudentLogin() {
                 <div className="d-flex gap-3 mt-4">
                   <button 
                     type="button" 
-                    className="lf-btn" 
-                    style={{ background: 'rgba(255,255,255,0.05)', color: '#FFF' }}
+                    className="lf-btn lf-btn--secondary" 
                     onClick={() => setViewState('LOGIN')}
                     disabled={isLoading}
                   >
@@ -278,10 +294,11 @@ function StudentLogin() {
 
           {viewState === 'RESET' && (
             <>
-              <div className="login-headline">
-                <h1>Set New Password</h1>
-                <p>Enter the 6-digit OTP sent to {email}</p>
-              </div>
+            <div className="login-headline">
+              <span className="student-login-kicker">Verify OTP</span>
+              <h1>Set New Password</h1>
+              <p>Enter the 6-digit OTP sent to {email}</p>
+            </div>
               <form className="login-form" onSubmit={handleResetPassword}>
                 <div className="lf-group">
                   <label>6-Digit OTP</label>
@@ -323,8 +340,7 @@ function StudentLogin() {
                 <div className="d-flex gap-3 mt-4">
                   <button 
                     type="button" 
-                    className="lf-btn" 
-                    style={{ background: 'rgba(255,255,255,0.05)', color: '#FFF' }}
+                    className="lf-btn lf-btn--secondary" 
                     onClick={() => setViewState('LOGIN')}
                     disabled={isLoading}
                   >
@@ -344,6 +360,10 @@ function StudentLogin() {
 
           <div className="login-footer">
             <span>&copy; 2026 Cosmic Light Astrology</span>
+            <div>
+              <button type="button" onClick={() => navigate('/courses')}>Courses</button>
+              <button type="button" onClick={() => navigate('/contact')}>Help</button>
+            </div>
           </div>
         </div>
 
@@ -352,6 +372,10 @@ function StudentLogin() {
           <div className="login-right-inner">
             <div className="lr-orb lr-orb--1"></div>
             <div className="lr-orb lr-orb--2"></div>
+            <div className="student-visual-copy">
+              <span>Live Course Portal</span>
+              <strong>Learn with guided lessons and protected class videos.</strong>
+            </div>
             
             <motion.div
               whileHover={{ scale: 1.02 }}
@@ -364,6 +388,10 @@ function StudentLogin() {
                 className="lr-img"
               />
             </motion.div>
+            <div className="student-visual-pill">
+              <i className="fas fa-graduation-cap"></i>
+              Enrolled student area
+            </div>
           </div>
         </div>
       </motion.div>

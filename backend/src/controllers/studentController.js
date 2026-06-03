@@ -7,10 +7,9 @@ import CourseMaterial from '../models/CourseMaterial.js';
 import Banner from '../models/Banner.js';
 import Merchandise from '../models/Merchandise.js';
 import Offer from '../models/Offer.js';
-import { generateBunnyToken } from '../utils/bunnyHelper.js';
+import { getBunnyEmbedUrl } from '../utils/bunnyHelper.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import crypto from 'crypto';
 import { sendAdminNotificationEmail, sendPasswordResetEmail } from '../utils/sendEmail.js';
 
 // 1. Student Authentication
@@ -235,7 +234,6 @@ export const getCourseVideos = async (req, res) => {
     }
 
     const videos = await CourseVideo.find({ courseId }).sort('sortOrder');
-    const libraryId = process.env.BUNNY_LIBRARY_ID || 'your_library_id';
     
     const completedIds = enrollment.progress && enrollment.progress.completedVideos 
       ? enrollment.progress.completedVideos.map(id => id.toString()) 
@@ -266,12 +264,13 @@ export const getCourseVideos = async (req, res) => {
           console.error('VdoCipher API Error:', err);
         }
       } else if (video.bunnyVideoId) {
-        const tokenQuery = generateBunnyToken(video.bunnyVideoId, 7200);
-        videoUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${video.bunnyVideoId}${tokenQuery}`;
+        videoUrl = getBunnyEmbedUrl(video.bunnyVideoId, 7200);
       }
 
       return {
         videoId: video._id,
+        bunnyVideoId: video.bunnyVideoId,
+        videoProvider: video.videoProvider || (video.vdoCipherVideoId ? 'vdocipher' : 'bunny'),
         title: video.title,
         videoUrl, // Only populated if Bunny.net fallback is used
         otp, // Populated if VdoCipher is used

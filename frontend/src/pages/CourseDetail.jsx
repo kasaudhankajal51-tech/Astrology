@@ -40,7 +40,7 @@ function CourseDetail() {
     window.scrollTo(0, 0);
     const fetchCourse = async () => {
       try {
-        const response = await fetch(`/api/courses/${courseId}`);
+        const response = await fetch(`${API_BASE}/api/courses/${courseId}`);
         const data = await response.json();
         
         if (data.success && data.course) {
@@ -98,7 +98,7 @@ function CourseDetail() {
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch('/api/leads', {
+      const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -194,15 +194,14 @@ function CourseDetail() {
         return;
       }
 
-      // MOCK PAYMENT FOR TESTING
-      try {
+      const completePaymentVerification = async (paymentResponse) => {
         const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            razorpay_order_id: orderData.razorpayOrderId,
-            razorpay_payment_id: `pay_mock_${Date.now()}`,
-            razorpay_signature: `sig_mock_${Date.now()}`,
+            razorpay_order_id: paymentResponse.razorpay_order_id,
+            razorpay_payment_id: paymentResponse.razorpay_payment_id,
+            razorpay_signature: paymentResponse.razorpay_signature,
             name: formData.name,
             email: formData.email
           })
@@ -221,9 +220,42 @@ function CourseDetail() {
         } else {
           toast.error(verifyData.message || 'Payment verification failed');
         }
-      } catch (err) {
-        console.error(err);
-        toast.error('Verification error');
+      };
+
+      if (orderData.isMock || orderData.razorpayOrderId?.startsWith('order_mock_')) {
+        toast.success('Test Mode: Simulating payment success...');
+        await completePaymentVerification({
+          razorpay_order_id: orderData.razorpayOrderId,
+          razorpay_payment_id: `pay_mock_${Date.now()}`,
+          razorpay_signature: `sig_mock_${Date.now()}`
+        });
+      } else {
+        const paymentObject = new window.Razorpay({
+          key: orderData.keyId,
+          amount: Math.round(Number(orderData.amount) * 100),
+          currency: orderData.currency || 'INR',
+          name: 'Cosmic Light Astrology',
+          description: `Course Purchase: ${course.title}`,
+          image: '/images/logo.png',
+          order_id: orderData.razorpayOrderId,
+          prefill: {
+            name: formData.name,
+            email: formData.email,
+            contact: formData.phone
+          },
+          theme: { color: '#8B4A1E' },
+          handler: completePaymentVerification,
+          modal: {
+            ondismiss: () => setIsProcessingPayment(false)
+          }
+        });
+
+        paymentObject.on('payment.failed', function (response) {
+          toast.error(response.error?.description || 'Payment failed. Please try again.');
+          setIsProcessingPayment(false);
+        });
+
+        paymentObject.open();
       }
 
     } catch (err) {

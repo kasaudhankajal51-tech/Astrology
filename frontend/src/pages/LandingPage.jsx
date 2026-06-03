@@ -11,7 +11,7 @@ function LandingPage() {
   
   // Robust type detection
   const isCourse = location.pathname.includes('course-inquiry') || searchParams.get('type') === 'course';
-  const type = isCourse ? 'Course-Inquiry' : 'Webinar';
+  const type = isCourse ? 'Course' : 'Webinar';
   
   const [timeLeft, setTimeLeft] = useState({ hours: 24, minutes: 0, seconds: 0 });
   const [formData, setFormData] = useState({ name: '', email: '', phone: '' });
@@ -128,7 +128,22 @@ function LandingPage() {
       const data = await res.json();
       if (data.success) {
         toast.success('✅ Registration Successful!');
-        navigate(data.paymentUrl);
+        if (data.paymentUrl) {
+          navigate(data.paymentUrl);
+        } else if (data.leadId && data.orderId) {
+          const paymentParams = new URLSearchParams({
+            leadId: data.leadId,
+            name: data.name || formData.name,
+            email: data.email || formData.email,
+            phone: data.phone || formData.phone,
+            amount: String(data.amount || 9900),
+            orderId: data.orderId,
+            keyId: data.keyId || ''
+          });
+          navigate(`/payment?${paymentParams.toString()}`);
+        } else {
+          toast.success(data.message || 'Request submitted successfully.');
+        }
       } else toast.error('❌ Error submitting form. Please try again.');
     } catch (err) { toast.error('🌐 Network Error. Please check your connection.'); }
     finally { setIsSubmitting(false); }

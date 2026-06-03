@@ -41,9 +41,17 @@ export const createOrder = async (req, res) => {
       receipt: `receipt_course_${courseId}_${Date.now()}`
     };
 
-    // MOCK RAZORPAY FOR TESTING
-    // const razorpayOrder = await razorpayInstance.orders.create(options);
-    const razorpayOrder = { id: `order_mock_${Date.now()}` };
+    let razorpayOrder;
+    try {
+      razorpayOrder = await razorpayInstance.orders.create(options);
+    } catch (err) {
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('Razorpay keys missing/invalid. Falling back to mock course order for development.');
+        razorpayOrder = { id: `order_mock_${Date.now()}`, isMock: true };
+      } else {
+        throw err;
+      }
+    }
 
     // If user doesn't exist, we will create the order but link it to the email temporarily
     // We'll create the user after successful payment to avoid junk accounts
@@ -66,7 +74,9 @@ export const createOrder = async (req, res) => {
       orderId: order._id,
       razorpayOrderId: razorpayOrder.id,
       amount: course.price,
-      currency: 'INR'
+      currency: 'INR',
+      keyId: process.env.RAZORPAY_KEY_ID,
+      isMock: Boolean(razorpayOrder.isMock)
     });
   } catch (error) {
     console.error('Error creating order:', error);
@@ -81,17 +91,14 @@ export const verifyPayment = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, name } = req.body;
 
-    // MOCK SIGNATURE VERIFICATION FOR TESTING
-    /*
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
       .update(body.toString())
       .digest('hex');
 
-    const isAuthentic = expectedSignature === razorpay_signature;
-    */
-    const isAuthentic = true;
+    const isMockPayment = process.env.NODE_ENV === 'development' && razorpay_signature?.startsWith('sig_mock_');
+    const isAuthentic = expectedSignature === razorpay_signature || isMockPayment;
 
     if (!isAuthentic) {
       // Find order and mark as failed

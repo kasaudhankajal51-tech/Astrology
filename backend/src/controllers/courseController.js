@@ -1,12 +1,29 @@
 import Course from '../models/Course.js';
 import CourseVideo from '../models/CourseVideo.js';
+import {
+  createBunnyVideo,
+  extractBunnyVideoId,
+  getBunnyEmbedUrl,
+  getBunnyLibraryId,
+  uploadBunnyVideoFile
+} from '../utils/bunnyHelper.js';
 
 // @desc    Get all active courses (Public)
 // @route   GET /api/courses
 export const getActiveCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ isActive: true }).sort({ createdAt: -1 });
-    res.json({ success: true, courses });
+    const courses = await Course.find({ isActive: true }).sort({ createdAt: -1 }).lean();
+    const videoCounts = await CourseVideo.aggregate([
+      { $match: { courseId: { $in: courses.map((course) => course._id) } } },
+      { $group: { _id: '$courseId', count: { $sum: 1 } } }
+    ]);
+    const videoCountByCourseId = new Map(videoCounts.map((item) => [String(item._id), item.count]));
+    const coursesWithVideoCounts = courses.map((course) => ({
+      ...course,
+      videoCount: videoCountByCourseId.get(String(course._id)) || 0
+    }));
+
+    res.json({ success: true, courses: coursesWithVideoCounts });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
@@ -69,10 +86,140 @@ export const addCourseVideo = async (req, res) => {
   try {
     const { title, bunnyVideoId, sortOrder } = req.body;
     const courseId = req.params.id;
-    const video = await CourseVideo.create({ courseId, title, bunnyVideoId, sortOrder });
+
+    if (!title || !bunnyVideoId) {
+      return res.status(400).json({ success: false, message: 'Video title and Bunny.net video ID or URL are required' });
+    }
+
+    const cleanBunnyVideoId = extractBunnyVideoId(bunnyVideoId);
+    const bunnyLibraryId = getBunnyLibraryId();
+    const video = await CourseVideo.create({
+      courseId,
+      title,
+      bunnyVideoId: cleanBunnyVideoId,
+      videoProvider: 'bunny',
+      bunnyLibraryId,
+      sourceType: 'bunny-id',
+      sortOrder: Number(sortOrder) || 0
+    });
+
     res.status(201).json({ success: true, video });
   } catch (error) {
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ success: false, message: error.message || 'Server error' });
+  }
+};
+
+// @desc    Upload video to Bunny Stream and add it to a course (Admin)
+// @route   POST /api/admin/courses/:id/videos/upload
+export const uploadCourseVideo = async (req, res) => {
+  try {
+    const { title, sortOrder } = req.body;
+    const courseId = req.params.id;
+
+    if (!title) {
+      return res.status(400).json({ success: false, message: 'Video title is required' });
+    }
+
+    if (!req.file?.buffer) {
+      return res.status(400).json({ success: false, message: 'Video file is required' });
+    }
+
+    const bunnyVideo = await createBunnyVideo(title);
+    const uploadResult = await uploadBunnyVideoFile(bunnyVideo.guid, req.file.buffer);
+
+    const video = await CourseVideo.create({
+      courseId,
+      title,
+      bunnyVideoId: bunnyVideo.guid,
+      videoProvider: 'bunny',
+      bunnyLibraryId: getBunnyLibraryId(),
+      bunnyStatus: bunnyVideo.status ?? null,
+      bunnyEncodeProgress: bunnyVideo.encodeProgress ?? null,
+      sourceType: 'upload',
+      sortOrder: Number(sortOrder) || 0
+    });
+
+    res.status(201).json({
+      success: true,
+      message: uploadResult.message || 'Video uploaded to Bunny.net',
+      video,
+      bunny: {
+        guid: bunnyVideo.guid,
+        status: bunnyVideo.status,
+        encodeProgress: bunnyVideo.encodeProgress
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message || 'Bunny upload failed' });
+  }
+};
+
+// @desc    Update or replace a course video (Admin)
+// @route   PUT /api/admin/courses/:id/videos/:vid
+export const updateCourseVideo = async (req, res) => {
+  try {
+    const { title, bunnyVideoId, sortOrder } = req.body;
+    const courseId = req.params.id;
+    const video = await CourseVideo.findOne({ _id: req.params.vid, courseId });
+
+    if (!video) {
+      return res.status(404).json({ success: false, message: 'Video not found' });
+    }
+
+    if (title) video.title = title;
+    if (sortOrder !== undefined) video.sortOrder = Number(sortOrder) || 0;
+
+    const cleanBunnyVideoId = bunnyVideoId ? extractBunnyVideoId(bunnyVideoId) : video.bunnyVideoId;
+    if (!cleanBunnyVideoId) {
+      return res.status(400).json({ success: false, message: 'Bunny.net video ID or URL is required' });
+    }
+
+    if (req.file?.buffer) {
+      await uploadBunnyVideoFile(cleanBunnyVideoId, req.file.buffer);
+      video.sourceType = 'upload';
+    } else if (bunnyVideoId) {
+      video.sourceType = 'bunny-id';
+    }
+
+    video.bunnyVideoId = cleanBunnyVideoId;
+    video.videoProvider = 'bunny';
+    video.bunnyLibraryId = getBunnyLibraryId();
+    await video.save();
+
+    res.json({ success: true, message: 'Video updated successfully', video });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message || 'Video update failed' });
+  }
+};
+
+// @desc    Get signed admin preview URL for a course video
+// @route   GET /api/admin/courses/:id/videos/:vid/preview
+export const getAdminCourseVideoPreview = async (req, res) => {
+  try {
+    const courseId = req.params.id;
+    const video = await CourseVideo.findOne({ _id: req.params.vid, courseId });
+
+    if (!video) {
+      return res.status(404).json({ success: false, message: 'Video not found' });
+    }
+
+    if (!video.bunnyVideoId) {
+      return res.status(400).json({ success: false, message: 'No Bunny video ID saved for this video' });
+    }
+
+    const embedUrl = getBunnyEmbedUrl(video.bunnyVideoId, 3600);
+    res.json({
+      success: true,
+      video: {
+        _id: video._id,
+        title: video.title,
+        bunnyVideoId: video.bunnyVideoId,
+        videoProvider: video.videoProvider || 'bunny',
+        embedUrl
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message || 'Failed to create video preview' });
   }
 };
 

@@ -11,6 +11,7 @@ function CoursePlayer() {
   const [validity, setValidity] = useState(null);
   const [activeVideo, setActiveVideo] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [studentProfile, setStudentProfile] = useState(null);
 
   const [showConsultForm, setShowConsultForm] = useState(false);
   const [consultData, setConsultData] = useState({
@@ -75,7 +76,13 @@ function CoursePlayer() {
           throw new Error(videosData.message || 'Unable to load course videos');
         }
 
-        const coursePayload = courseData.course || courseData.data || courseData;
+        const rawCoursePayload = courseData.course || courseData.data || courseData;
+        const coursePayload = {
+          ...rawCoursePayload,
+          id: rawCoursePayload.id || rawCoursePayload._id || rawCoursePayload.courseId,
+          title: rawCoursePayload.title || rawCoursePayload.courseTitle || 'Course',
+          description: rawCoursePayload.description || rawCoursePayload.shortDescription || 'Continue your enrolled course lessons.'
+        };
         const videosPayload = videosData.videos || videosData.data || videosData || [];
         const validityPayload = validityData.validity || validityData.data || validityData;
 
@@ -83,6 +90,13 @@ function CoursePlayer() {
         setVideos(videosPayload);
         setValidity(validityPayload);
         setActiveVideo(videosPayload.length > 0 ? videosPayload[0] : null);
+
+        fetch(`${API_BASE}/api/student/profile`, { headers: { Authorization: `Bearer ${token}` } })
+          .then((res) => res.json())
+          .then((profileData) => {
+            if (profileData.success) setStudentProfile(profileData.profile);
+          })
+          .catch(() => {});
       } catch (err) {
         toast.error(err.message || 'Network Error loading course');
         navigate('/dashboard');
@@ -139,18 +153,49 @@ function CoursePlayer() {
 
         <div className="row g-4">
           <div className="col-lg-8">
-            <div style={{ background: '#000', borderRadius: '16px', overflow: 'hidden', aspectRatio: '16/9', boxShadow: '0 20px 40px rgba(0,0,0,0.2)' }}>
+            <div
+              onContextMenu={(e) => e.preventDefault()}
+              style={{ background: '#000', borderRadius: '16px', overflow: 'hidden', aspectRatio: '16/9', boxShadow: '0 20px 40px rgba(0,0,0,0.2)', position: 'relative' }}
+            >
               {activeVideo ? (
-                <iframe
-                  src={activeVideo.otp && activeVideo.playbackInfo 
-                    ? `https://player.vdocipher.com/v2/?otp=${activeVideo.otp}&playbackInfo=${activeVideo.playbackInfo}` 
-                    : (activeVideo.videoUrl || activeVideo.secureUrl)}
-                  loading="lazy"
-                  style={{ border: 0, width: '100%', height: '100%' }}
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                  allowFullScreen={true}
-                  onContextMenu={(e) => e.preventDefault()}
-                ></iframe>
+                <>
+                  <iframe
+                    src={activeVideo.otp && activeVideo.playbackInfo
+                      ? `https://player.vdocipher.com/v2/?otp=${activeVideo.otp}&playbackInfo=${activeVideo.playbackInfo}`
+                      : (activeVideo.videoUrl || activeVideo.secureUrl)}
+                    title={activeVideo.title || 'Course video'}
+                    loading="lazy"
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    style={{ border: 0, width: '100%', height: '100%' }}
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowFullScreen={true}
+                  ></iframe>
+                  <div
+                    aria-hidden="true"
+                    style={{
+                      position: 'absolute',
+                      inset: 0,
+                      pointerEvents: 'none',
+                      zIndex: 2,
+                      overflow: 'hidden'
+                    }}
+                  >
+                    <div
+                      style={{
+                        position: 'absolute',
+                        top: '18%',
+                        left: '8%',
+                        color: 'rgba(255,255,255,0.45)',
+                        fontSize: '13px',
+                        fontWeight: 700,
+                        textShadow: '0 1px 3px rgba(0,0,0,0.55)',
+                        animation: 'studentWatermarkMove 34s linear infinite'
+                      }}
+                    >
+                      {studentProfile?.email || studentProfile?.mobile || 'Protected course access'}
+                    </div>
+                  </div>
+                </>
               ) : (
                 <div className="d-flex align-items-center justify-content-center h-100 text-white">
                   <h5>No videos uploaded for this course yet.</h5>
@@ -282,6 +327,15 @@ function CoursePlayer() {
           </div>
         </div>
       </div>
+      <style>{`
+        @keyframes studentWatermarkMove {
+          0% { transform: translate(0, 0); }
+          25% { transform: translate(55vw, 8vh); }
+          50% { transform: translate(35vw, 35vh); }
+          75% { transform: translate(8vw, 22vh); }
+          100% { transform: translate(0, 0); }
+        }
+      `}</style>
     </div>
   );
 }

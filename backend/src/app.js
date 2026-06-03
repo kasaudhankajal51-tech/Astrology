@@ -1,10 +1,8 @@
+import './config/env.js';
 import express from 'express';
 import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import dotenv from 'dotenv';
-dotenv.config();
-
 import mongoose from 'mongoose';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import toolsRoutes from './routes/toolsRoutes.js';
@@ -25,6 +23,9 @@ import paymentRoutes from './routes/paymentRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 const app = express();
 app.use(morgan('dev'));
 
@@ -40,8 +41,6 @@ app.use(cors({
 app.options(/.*/, cors());
 app.use(express.json());
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {
   setHeaders: (res, filePath) => {
     const ext = path.extname(filePath).toLowerCase();

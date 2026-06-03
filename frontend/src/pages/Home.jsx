@@ -604,22 +604,16 @@ function Home() {
                 
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
                   <Link to="/courses" className="btn mystic-btn-primary focus-70">
+                    <i className="fas fa-graduation-cap"></i>
                     Enroll in Live Course
-                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M12 2L3 7l9 5 9-5-9-5zm0 7.5L5 7.2v6.8c0 .6.4 1 1 1h12c.6 0 1-.4 1-1V7.2L12 9.5z" />
-                    </svg>
                   </Link>
                   <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
+                    <i className="fas fa-calendar-check"></i>
                     Book Consultation
-                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M19 4h-1V2h-2v2H8V2H6v2H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 6l-7 5-7-5V6l7 5 7-5v4z" />
-                    </svg>
                   </button>
-                  <Link to="/astro-shop" className="btn mystic-btn-ghost focus-10">
+                  <Link to="/shop" className="btn mystic-btn-ghost focus-10">
+                    <i className="fas fa-store"></i>
                     Astro Shop
-                    <svg className="btn-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-                      <path d="M6 2l1 4h10l1-4H6zm12 6H6l-1 14h14L18 8zM9 12h2v6H9v-6zm4 0h2v6h-2v-6z" />
-                    </svg>
                   </Link>
                 </div>
 
@@ -1459,53 +1453,88 @@ function Home() {
 
         .banner-btn-row {
           display: flex;
-          gap: 1rem;
+          gap: 0.75rem;
           align-items: center;
           flex-wrap: wrap;
-          margin-top: 1.5rem;
+          margin-top: 1.75rem;
         }
 
         .focus-70,
         .focus-20,
         .focus-10 {
-          border-radius: 1rem;
-          transition: all 0.3s ease;
+          display: inline-flex !important;
+          align-items: center;
+          justify-content: center;
+          gap: 0.65rem;
+          min-height: 3.125rem;
+          border-radius: 999px !important;
+          font-size: 0.95rem !important;
+          font-weight: 800 !important;
+          letter-spacing: 0;
+          line-height: 1;
+          white-space: nowrap;
+          text-decoration: none !important;
+          transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+        }
+
+        .focus-70 i,
+        .focus-20 i,
+        .focus-10 i {
+          font-size: 0.95rem;
+          line-height: 1;
         }
 
         .focus-70 {
           flex: 0 0 auto;
-          min-width: 14rem;
-          font-size: 1.05rem !important;
-          padding: 1rem 2rem !important;
-          background: #2A0F02 !important;
+          min-width: 13.75rem;
+          padding: 0 1.6rem !important;
+          background: linear-gradient(135deg, #2A0F02 0%, #6B3514 100%) !important;
           color: #ffffff !important;
-          box-shadow: 0 0.75rem 1.875rem rgba(42, 15, 2, 0.25) !important;
-          border: none !important;
+          box-shadow: 0 0.9rem 1.9rem rgba(42, 15, 2, 0.24) !important;
+          border: 1px solid rgba(255, 255, 255, 0.12) !important;
         }
 
         .focus-20 {
           flex: 0 0 auto;
-          font-size: 1rem !important;
-          padding: 0.85rem 1.75rem !important;
-          background: transparent !important;
-          border: 0.125rem solid #2A0F02 !important;
+          padding: 0 1.35rem !important;
+          background: rgba(255, 255, 255, 0.72) !important;
+          border: 1px solid rgba(42, 15, 2, 0.22) !important;
           color: #2A0F02 !important;
+          box-shadow: 0 0.6rem 1.35rem rgba(42, 15, 2, 0.08) !important;
         }
 
         .focus-10 {
           flex: 0 0 auto;
-          font-size: 0.95rem !important;
-          padding: 0.75rem 1.5rem !important;
+          padding: 0 1.2rem !important;
           color: #2A0F02 !important;
-          opacity: 0.9;
-          background: rgba(42, 15, 2, 0.04) !important;
-          border: 0.0625rem solid rgba(42, 15, 2, 0.15) !important;
+          background: rgba(42, 15, 2, 0.06) !important;
+          border: 1px solid rgba(42, 15, 2, 0.12) !important;
+          box-shadow: none !important;
         }
 
+        .focus-70:hover,
+        .focus-20:hover,
         .focus-10:hover {
-          opacity: 1;
-          background: rgba(42, 15, 2, 0.08) !important;
-          border-color: rgba(42, 15, 2, 0.3) !important;
+          transform: translateY(-2px);
+          color: #ffffff !important;
+        }
+
+        .focus-70:hover {
+          box-shadow: 0 1.1rem 2.2rem rgba(42, 15, 2, 0.3) !important;
+        }
+
+        .focus-20:hover,
+        .focus-10:hover {
+          background: #2A0F02 !important;
+          border-color: #2A0F02 !important;
+          box-shadow: 0 0.8rem 1.5rem rgba(42, 15, 2, 0.16) !important;
+        }
+
+        .focus-70:focus-visible,
+        .focus-20:focus-visible,
+        .focus-10:focus-visible {
+          outline: 3px solid rgba(200, 131, 42, 0.38);
+          outline-offset: 3px;
         }
 
         @media (max-width: 768px) {
@@ -1517,19 +1546,28 @@ function Home() {
             margin-top: 0 !important;
           }
           .banner-btn-row {
-            flex-direction: column;
-            gap: 0.85rem;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.65rem;
             align-items: stretch;
-            margin-top: 0 !important;
+            margin-top: 1rem !important;
           }
           .focus-70, .focus-20, .focus-10 {
             width: 100%;
+            min-height: 2.75rem;
+            padding: 0 0.85rem !important;
+            font-size: 0.84rem !important;
             text-align: center;
             justify-content: center;
             min-width: 0;
           }
-          .focus-10 {
-            background: rgba(139, 74, 30, 0.03) !important;
+          .focus-70 {
+            grid-column: 1 / -1;
+          }
+          .focus-70 i,
+          .focus-20 i,
+          .focus-10 i {
+            font-size: 0.86rem;
           }
           .trust-indicator {
             flex-direction: column;
@@ -2415,8 +2453,23 @@ function Home() {
           .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: -20px; z-index: 100; }
           .experience-badge h4 { font-size: 1.8rem; }
-          .banner-btn-row { flex-direction: column; gap: 0.75rem; justify-content: stretch; width: 100%; }
-          .banner-btn-row .btn { flex: 1; max-width: 100%; font-size: 0.95rem; padding: 0.85rem 1rem; }
+          .banner-btn-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 0.65rem;
+            justify-content: stretch;
+            width: 100%;
+          }
+          .banner-btn-row .btn {
+            flex: none;
+            max-width: 100%;
+            min-height: 2.75rem;
+            padding: 0 0.85rem !important;
+            font-size: 0.84rem !important;
+          }
+          .banner-btn-row .focus-70 {
+            grid-column: 1 / -1;
+          }
           .img-box01 { height: 400px; }
         }
 
@@ -2429,16 +2482,25 @@ function Home() {
           .client-details h4 { font-size: 1rem; }
           .rating i { font-size: 0.8rem; }
           .cosmic-orbit-container, .zodiac-hero-graphic { width: 220px; height: 220px; }
+          .banner-btn-row {
+            max-width: 22rem;
+            margin-left: auto;
+            margin-right: auto;
+          }
+          .focus-20,
+          .focus-10 {
+            gap: 0.45rem;
+          }
           .big-circle { width: 200px; height: 200px; }
           .small-circle { width: 140px; height: 140px; }
           .icon-block { width: 32px; height: 32px; }
-          .mystic-btn-primary { width: 100%; text-align: center; padding: 14px 30px; font-size: 0.95rem; }
+          .mystic-btn-primary { width: 100%; text-align: center; padding: 0 0.85rem !important; font-size: 0.84rem !important; }
           .mystic-btn-outline { 
-            width: auto !important; 
-            padding: 10px 25px !important; 
-            font-size: 0.9rem !important;
+            width: 100% !important; 
+            padding: 0 0.85rem !important; 
+            font-size: 0.84rem !important;
             margin: 0 auto;
-            display: inline-block;
+            display: inline-flex !important;
           }
           .experience-badge { width: 140px; padding: 12px; }
           .experience-badge h4 { font-size: 1.6rem; }

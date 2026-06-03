@@ -1,62 +1,101 @@
 # Implementation Status
 
-## Completed
+Last updated: 2026-06-03
 
-1. **Live Courses Flow**
-   - `/courses` page exists.
-   - `/courses/:courseId` detail page exists.
-   - course inquiry form sends leads to backend `/api/leads` with `type: Course-Inquiry`.
+## Completed / Implemented
 
-2. **Consultation Flow**
-   - `/book-consultation` listing page exists.
-   - `/book-consultation/:serviceId` detail page exists.
-   - consultation booking form sends leads to backend `/api/leads` with `type: Consultation`.
+1. Live courses and lead capture
+   - Course listing and detail pages exist.
+   - Enquiry forms submit lead data.
+   - Admin lead dashboard exists with search/filter/export/status actions.
 
-3. **Admin / Lead Capture**
-   - Admin dashboard exists at `/admin`.
-   - Admin leads page fetches and displays leads.
-   - Search and date filters are implemented in admin leads.
-   - CSV export, status update, and delete lead actions exist.
-   - Dashboard shows course, consulting, webinar, and total lead stats.
+2. Recorded course purchase foundation
+   - Razorpay payment verification flow exists.
+   - Enrollment/student account creation flow exists in backend payment logic.
+   - Student credentials email flow exists.
+   - Admin email notification exists for course purchase.
 
-4. **Payment Flow**
-   - Razorpay payment page exists at `/payment`.
-   - payment verification flow is implemented.
-   - success and failure pages exist.
+3. Student portal
+   - Student login exists.
+   - Student forgot-password OTP flow exists.
+   - Student reset-password flow exists.
+   - Student dashboard/course APIs exist.
+   - Student course validity and course progress APIs exist.
 
-## Pending
+4. Secure recorded video delivery
+   - Bunny.net Stream upload support exists in admin course management.
+   - Backend loads Bunny env keys from backend `.env`.
+   - Backend logs Bunny connection status on server restart.
+   - Backend creates signed Bunny embed URLs for student playback.
+   - Admin can preview uploaded videos through signed backend URL.
+   - Admin can add, edit, replace, delete, copy ID, and preview course videos.
+   - Student player includes signed iframe playback, right-click blocking, and moving watermark.
 
-1. **Student Login / Dashboard**
-   - no `StudentLogin` page is present.
-   - no student portal or course access dashboard is implemented.
+5. Admin course management
+   - Admin can create/edit/deactivate courses.
+   - Admin can upload/manage Bunny videos.
+   - Course table displays real attached video counts.
+   - Add/edit modals and Manage Videos modal have improved UI.
 
-2. **Recorded Course Purchase Flow**
-   - recorded course payment is not fully wired from course pages.
-   - `CertificationCourses.jsx` still uses placeholder alerts instead of real checkout.
-   - no integrated `Buy Now` or recorded course purchase flow is completed.
+6. Coupon system
+   - Frontend coupon UI exists on course detail page.
+   - Admin coupon management UI exists.
+   - Backend coupon CRUD and validation APIs exist.
 
-3. **Coupon System**
-   - frontend apply coupon UI has been added to `src/pages/CourseDetail.jsx`.
-   - admin coupon management UI has been added in `src/pages/AdminCoupons.jsx` and wired into admin navigation.
-   - backend coupon validation and CRUD APIs still need implementation.
+7. Countdown timer
+   - Premium course detail page includes 5-hour countdown timer component.
 
-4. **Countdown Timer for Recorded Courses**
-   - countdown timer exists only in webinar components.
-   - not integrated near recorded course payment or course detail section.
+8. Consultation paid booking
+   - Consultation listing and detail pages exist.
+   - Razorpay order creation exists for paid consultation booking.
+   - Razorpay verification endpoint exists.
+   - Admin email notification exists for paid consultation booking.
+   - Rs. 1 test consultation card exists for live gateway testing.
 
-5. **Admin Content Management**
-   - no admin interface for adding/editing courses.
-   - no admin coupon management.
-   - no admin banner or content management screens.
+9. Admin consultation visibility
+   - Admin consultation section exists.
+   - Consultation stats API exists.
 
-6. **Consultation Paid Checkout**
-   - consultation pages submit lead requests only.
-   - no actual paid consultation checkout / payment process is implemented.
+## Pending / Needs Manual Verification
 
-7. **Abandoned / Failed Payment Lead Capture**
-   - lead capture exists for form submissions.
-   - no clear implementation for failed or abandoned payment status capture from frontend.
+1. Full browser QA
+   - Frontend production build passes.
+   - Local Vite foreground startup works, but background browser smoke testing was blocked in the test environment.
+   - Manual browser testing is still required before TL sign-off.
 
-8. **Student Onboarding / Secure Video Access**
-   - no account creation flow is implemented.
-   - no secure video delivery or student course material access is present.
+2. Razorpay end-to-end
+   - Test Rs. 1 consultation payment.
+   - Confirm paid status is saved.
+   - Confirm failed/abandoned payment status is captured as required.
+
+3. Recorded course purchase end-to-end
+   - Buy recorded course.
+   - Verify payment.
+   - Confirm enrollment is created.
+   - Confirm student credentials email arrives.
+   - Login as student and play purchased course video.
+
+4. Coupon payment integration
+   - Coupon validation API exists.
+   - Need confirm discounted amount is used in actual payment/order creation.
+   - Need confirm coupon usage count updates after successful payment.
+
+5. Universal lead capture
+   - Requirement says enquiry, payment attempt, failed payment, consultation interest, and course purchase must be captured.
+   - Need verify failed/abandoned payment records are visible in admin with correct status.
+
+6. Email delivery
+   - Code paths exist for admin notifications and password reset OTP.
+   - Need verify actual SMTP delivery using production/staging `.env`.
+
+7. Video security expectation
+   - Signed URLs and watermark are implemented.
+   - Browser screenshot/screen recording cannot be fully prevented without DRM.
+   - Need decide whether Bunny signed playback is enough or DRM provider is required.
+
+8. Shopify shop
+   - Requirement says Shopify handles checkout/cart/inventory.
+   - Need final Shopify URL/integration confirmation.
+
+9. Admin completeness
+   - Need verify banners, offers, merchandise promotions, consultation statuses, course purchases, and lead filters match final business workflow.

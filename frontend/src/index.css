@@ -70,3 +70,36 @@ html, body {
 .border-astro-gold {
   border-color: rgba(212, 175, 55, 0.5) !important;
 }
+
+.contextual-shell .login-root {
+  min-height: calc(100vh - 174px);
+  padding-top: 24px;
+  padding-bottom: 24px;
+}
+
+.contextual-shell .student-login-card {
+  max-height: calc(100vh - 222px);
+}
+
+.contextual-shell .not-found-container {
+  min-height: calc(100vh - 174px) !important;
+  background: #fff7ed;
+}
+
+@media (max-width: 860px) {
+  .contextual-shell .login-root {
+    min-height: auto;
+    padding-top: 18px;
+    padding-bottom: 18px;
+  }
+
+  .contextual-shell .student-login-card {
+    max-height: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .contextual-main {
+    min-height: calc(100vh - 204px);
+  }
+}

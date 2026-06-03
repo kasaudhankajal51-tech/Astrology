@@ -65,6 +65,11 @@ function AdminLogin() {
       >
         {/* Left Side - Form */}
         <div className="login-left">
+          <button type="button" className="login-home-link" onClick={() => navigate('/')}>
+            <i className="fas fa-arrow-left"></i>
+            Back to Website
+          </button>
+
           <div className="login-brand">
             <motion.div 
               initial={{ scale: 0.8 }}
@@ -153,8 +158,8 @@ function AdminLogin() {
           <div className="login-footer">
             <span>&copy; 2026 DS Astro Institute</span>
             <div>
-              <a href="#">Privacy Policy</a>
-              <a href="#">Terms</a>
+              <button type="button" onClick={() => navigate('/privacy-policy')}>Privacy Policy</button>
+              <button type="button" onClick={() => navigate('/terms-and-conditions')}>Terms</button>
             </div>
           </div>
         </div>

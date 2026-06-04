@@ -38,13 +38,14 @@ export const createOrder = async (req, res) => {
     const options = {
       amount: amountInPaise,
       currency: 'INR',
-      receipt: `receipt_course_${courseId}_${Date.now()}`
+      receipt: `rcpt_${courseId.toString().slice(-6)}_${Date.now()}`
     };
 
     let razorpayOrder;
     try {
       razorpayOrder = await razorpayInstance.orders.create(options);
     } catch (err) {
+      console.error('RAZORPAY ERROR:', err);
       if (process.env.NODE_ENV === 'development') {
         console.warn('Razorpay keys missing/invalid. Falling back to mock course order for development.');
         razorpayOrder = { id: `order_mock_${Date.now()}`, isMock: true };

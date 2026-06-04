@@ -70,6 +70,33 @@ export const createOrder = async (req, res) => {
       guestDetails: userId ? undefined : { name, email, mobile }
     });
 
+    // Capture intent as a Lead (Abandoned Cart Tracking)
+    let studentEmail = email;
+    let studentName = name;
+    let studentMobile = mobile;
+
+    if (req.user) {
+      const user = await User.findById(req.user.id || req.user._id);
+      if (user) {
+        studentEmail = email || user.email;
+        studentName = name || user.name;
+        studentMobile = mobile || user.mobile;
+      }
+    }
+
+    if (studentEmail && studentName) {
+      await Lead.create({
+        name: studentName,
+        email: studentEmail,
+        phone: studentMobile || 'N/A',
+        type: 'Course',
+        courseName: course.title,
+        paymentStatus: 'Pending',
+        status: 'Pending',
+        transactionId: razorpayOrder.id // Storing order ID to find it later
+      });
+    }
+
     res.status(200).json({
       success: true,
       orderId: order._id,
@@ -176,16 +203,24 @@ export const verifyPayment = async (req, res) => {
     );
 
     // Create Lead for Admin Panel visibility
-    await Lead.create({
-      name: studentName,
-      email: studentEmail,
-      phone: order.guestDetails?.mobile || 'N/A', // mobile might be in guestDetails
-      type: 'Course',
-      courseName: course.title,
-      paymentStatus: 'Completed',
-      status: 'Done',
-      transactionId: razorpay_payment_id
-    });
+    const existingLead = await Lead.findOne({ transactionId: razorpay_order_id });
+    if (existingLead) {
+      existingLead.paymentStatus = 'Completed';
+      existingLead.status = 'Done';
+      existingLead.transactionId = razorpay_payment_id;
+      await existingLead.save();
+    } else {
+      await Lead.create({
+        name: studentName,
+        email: studentEmail,
+        phone: order.guestDetails?.mobile || 'N/A', // mobile might be in guestDetails
+        type: 'Course',
+        courseName: course.title,
+        paymentStatus: 'Completed',
+        status: 'Done',
+        transactionId: razorpay_payment_id
+      });
+    }
 
     // Send email with credentials ONLY if we generated a new password
     if (generatedPassword) {
@@ -350,16 +385,24 @@ export const webhook = async (req, res) => {
           }
 
           // Create Lead for Admin Panel visibility (webhook fallback)
-          await Lead.create({
-            name: studentName || 'Unknown Student',
-            email: studentEmail || 'N/A',
-            phone: order.guestDetails?.mobile || 'N/A',
-            type: 'Course',
-            courseName: course.title,
-            paymentStatus: 'Completed',
-            status: 'Done',
-            transactionId: paymentEntity.id
-          });
+          const existingLead = await Lead.findOne({ transactionId: razorpay_order_id });
+          if (existingLead) {
+            existingLead.paymentStatus = 'Completed';
+            existingLead.status = 'Done';
+            existingLead.transactionId = paymentEntity.id;
+            await existingLead.save();
+          } else {
+            await Lead.create({
+              name: studentName || 'Unknown Student',
+              email: studentEmail || 'N/A',
+              phone: order.guestDetails?.mobile || 'N/A',
+              type: 'Course',
+              courseName: course.title,
+              paymentStatus: 'Completed',
+              status: 'Done',
+              transactionId: paymentEntity.id
+            });
+          }
         }
       }
     }

@@ -358,13 +358,6 @@ function StudentLogin() {
             </>
           )}
 
-          <div className="login-footer">
-            <span>&copy; 2026 Cosmic Light Astrology</span>
-            <div>
-              <button type="button" onClick={() => navigate('/courses')}>Courses</button>
-              <button type="button" onClick={() => navigate('/contact')}>Help</button>
-            </div>
-          </div>
         </div>
 
         {/* Right Side - Visual */}

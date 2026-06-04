@@ -32,8 +32,10 @@ function AdminCourses() {
     thumbnailUrl: ''
   });
   
-  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '' });
+  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '' });
   const [initialVideoFile, setInitialVideoFile] = useState(null);
+  const [initialVideos, setInitialVideos] = useState([]);
+  const [editVideoDrafts, setEditVideoDrafts] = useState([]);
 
   const getVideoProvider = (video) => {
     return video?.videoProvider || 'bunny';
@@ -54,6 +56,8 @@ function AdminCourses() {
 
   const getSavedVideoFromResponse = (data) => data?.video || data?.courseVideo || data?.bunny || null;
 
+  const getVideoRowId = (video) => video?._id || video?.id || video?.videoId;
+
   const copyVideoValue = async (video) => {
     const value = getVideoValue(video);
     if (!value) {
@@ -70,7 +74,7 @@ function AdminCourses() {
   };
 
   const openVideoPreview = async (video, courseId = videoCourse?._id || editingCourse?._id) => {
-    const videoId = video?._id || video?.id || video?.videoId;
+    const videoId = getVideoRowId(video);
     const token = localStorage.getItem('adminToken');
 
     if (!token) {
@@ -168,6 +172,78 @@ function AdminCourses() {
     setEditingVideoId(null);
   };
 
+  const buildVideoDraft = ({ localId, title, bunnyVideoId, sortOrder, file, fallbackOrder }) => ({
+    localId,
+    title,
+    bunnyVideoId,
+    sortOrder: Number(sortOrder) || fallbackOrder || 0,
+    file,
+    sourceLabel: file ? file.name : 'Bunny.net ID/URL'
+  });
+
+  const resetInitialVideoForm = () => {
+    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '' });
+    setInitialVideoFile(null);
+  };
+
+  const addInitialVideoDraft = () => {
+    if (!initialVideoForm.title) {
+      toast.error('Video title is required before adding it to the list');
+      return;
+    }
+
+    if (!initialVideoForm.bunnyVideoId && !initialVideoFile) {
+      toast.error('Please paste a Bunny.net ID/URL or select a video file');
+      return;
+    }
+
+    setInitialVideos((current) => ([
+      ...current,
+      buildVideoDraft({
+        localId: `${Date.now()}-${current.length}`,
+        title: initialVideoForm.title,
+        bunnyVideoId: initialVideoForm.bunnyVideoId,
+        sortOrder: initialVideoForm.sortOrder,
+        file: initialVideoFile,
+        fallbackOrder: current.length
+      })
+    ]));
+    resetInitialVideoForm();
+  };
+
+  const removeInitialVideoDraft = (localId) => {
+    setInitialVideos((current) => current.filter((video) => video.localId !== localId));
+  };
+
+  const addEditVideoDraft = () => {
+    if (!videoForm.title) {
+      toast.error('Video title is required before adding it to the queue');
+      return;
+    }
+
+    if (!videoForm.bunnyVideoId && !videoFile) {
+      toast.error('Please paste a Bunny.net ID/URL or select a video file');
+      return;
+    }
+
+    setEditVideoDrafts((current) => ([
+      ...current,
+      buildVideoDraft({
+        localId: `${Date.now()}-${current.length}`,
+        title: videoForm.title,
+        bunnyVideoId: videoForm.bunnyVideoId,
+        sortOrder: videoForm.sortOrder,
+        file: videoFile,
+        fallbackOrder: editingCourseVideos.length + current.length
+      })
+    ]));
+    resetVideoForm();
+  };
+
+  const removeEditVideoDraft = (localId) => {
+    setEditVideoDrafts((current) => current.filter((video) => video.localId !== localId));
+  };
+
   const startEditingVideo = (video) => {
     setEditingVideoId(video._id || video.id || video.videoId);
     setVideoForm({
@@ -225,6 +301,7 @@ function AdminCourses() {
     setVideoCourse(null);
     setCourseVideos([]);
     resetVideoForm();
+    setEditVideoDrafts([]);
   };
 
   const submitCourseVideo = async (courseId, onSuccess, videoId = editingVideoId) => {
@@ -306,6 +383,55 @@ function AdminCourses() {
     }
   };
 
+  const submitVideoDraft = async (courseId, draftVideo, token, videoId = null) => {
+    let res;
+    if (draftVideo.file) {
+      const videoData = new FormData();
+      videoData.append('title', draftVideo.title);
+      videoData.append('sortOrder', Number(draftVideo.sortOrder) || 0);
+      videoData.append('videoProvider', 'bunny');
+      if (draftVideo.bunnyVideoId) videoData.append('bunnyVideoId', draftVideo.bunnyVideoId);
+      videoData.append('videoFile', draftVideo.file);
+
+      res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : '/upload'}`, {
+        method: videoId ? 'PUT' : 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+        body: videoData
+      });
+    } else {
+      res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : ''}`, {
+        method: videoId ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: draftVideo.title,
+          bunnyVideoId: draftVideo.bunnyVideoId,
+          videoProvider: 'bunny',
+          sortOrder: Number(draftVideo.sortOrder) || 0
+        })
+      });
+    }
+
+    const data = await parseApiResponse(res);
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || `Video save failed (${res.status})`);
+    }
+    return data;
+  };
+
+  const refreshEditingCourseVideos = async () => {
+    if (!editingCourse?._id) return [];
+    const res = await fetch(`${API_BASE}/api/courses/${editingCourse._id}`);
+    const data = await parseApiResponse(res);
+    if (!data.success) return [];
+    const videos = data.videos || [];
+    setEditingCourseVideos(videos);
+    syncCourseVideoCount(editingCourse._id, videos);
+    return videos;
+  };
+
   const handleAddVideo = async (e) => {
     e.preventDefault();
     if (!videoCourse) return;
@@ -314,15 +440,35 @@ function AdminCourses() {
 
   const handleAddVideoFromEditModal = async () => {
     if (!editingCourse?._id) return;
-    await submitCourseVideo(editingCourse._id, async () => {
-      const res = await fetch(`${API_BASE}/api/courses/${editingCourse._id}`);
-      const data = await parseApiResponse(res);
-      if (data.success) {
-        const videos = data.videos || [];
-        setEditingCourseVideos(videos);
-        syncCourseVideoCount(editingCourse._id, videos);
+    if (editingVideoId) {
+      await submitCourseVideo(editingCourse._id, refreshEditingCourseVideos);
+      return;
+    }
+    addEditVideoDraft();
+  };
+
+  const uploadEditVideoDrafts = async () => {
+    if (!editingCourse?._id || editVideoDrafts.length === 0) return;
+    const token = localStorage.getItem('adminToken');
+    if (!token) {
+      toast.error('Admin login required');
+      return;
+    }
+
+    setVideoLoading(true);
+    try {
+      for (let index = 0; index < editVideoDrafts.length; index += 1) {
+        await submitVideoDraft(editingCourse._id, editVideoDrafts[index], token);
       }
-    });
+      toast.success(`${editVideoDrafts.length} video${editVideoDrafts.length === 1 ? '' : 's'} attached`);
+      setEditVideoDrafts([]);
+      resetVideoForm();
+      await refreshEditingCourseVideos();
+    } catch (err) {
+      toast.error(err.message || 'Failed to attach queued videos');
+    } finally {
+      setVideoLoading(false);
+    }
   };
 
   const requestConfirm = (config) => {
@@ -399,73 +545,42 @@ function AdminCourses() {
       
       if (data.success) {
         let initialVideoFailed = false;
-        // If creating new course and has initial video, add it
-        if (!editingCourse && (initialVideoForm.title && (initialVideoForm.bunnyVideoId || initialVideoFile))) {
+        // If creating a new course and videos were queued, attach each one after the course exists.
+        if (!editingCourse && initialVideos.length > 0) {
           const courseId = data.course._id;
           const token = localStorage.getItem('adminToken');
-          setCourseSubmitMessage(initialVideoFile ? 'Uploading video to Bunny.net...' : 'Attaching Bunny.net video...');
+          setCourseSubmitMessage(`Attaching ${initialVideos.length} video${initialVideos.length === 1 ? '' : 's'}...`);
           
-          try {
-            let videoRes;
-            if (initialVideoFile) {
-              const videoData = new FormData();
-              videoData.append('title', initialVideoForm.title);
-              videoData.append('sortOrder', 0);
-              videoData.append('videoFile', initialVideoFile);
+          for (let index = 0; index < initialVideos.length; index += 1) {
+            const draftVideo = initialVideos[index];
+            setCourseSubmitMessage(`${draftVideo.file ? 'Uploading' : 'Attaching'} video ${index + 1} of ${initialVideos.length}...`);
 
-              videoRes = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos/upload`, {
-                method: 'POST',
-                headers: {
-                  Authorization: `Bearer ${token}`
-                },
-                body: videoData
-              });
-            } else {
-              videoRes = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos`, {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                  Authorization: `Bearer ${token}`
-                },
-                body: JSON.stringify({
-                  title: initialVideoForm.title,
-                  bunnyVideoId: initialVideoForm.bunnyVideoId,
-                  sortOrder: 0
-                })
-              });
-            }
-            const videoData = await parseApiResponse(videoRes);
-            if (!videoRes.ok || !videoData.success) {
+            try {
+              await submitVideoDraft(courseId, { ...draftVideo, sortOrder: Number(draftVideo.sortOrder) || index }, token);
+            } catch (err) {
               initialVideoFailed = true;
-              toast.error(videoData.message || `Course created, but Bunny video save failed (${videoRes.status}).`);
-            } else {
-              toast.success('Course created and video attached.');
+              console.error('Failed to add initial video:', err);
+              toast.error(`Course created, but video ${index + 1} failed: ${err.message || 'Network error'}`);
+              break;
             }
-          } catch (err) {
-            initialVideoFailed = true;
-            console.error('Failed to add initial video:', err);
-            toast.error(`Course created, but Bunny video save failed: ${err.message || 'Network error'}`);
           }
+
+          if (!initialVideoFailed) toast.success('Course created and videos attached.');
         }
 
         if (initialVideoFailed) {
           setEditingCourse(data.course);
-          setVideoForm({
-            title: initialVideoForm.title,
-            bunnyVideoId: initialVideoForm.bunnyVideoId,
-            sortOrder: 0,
-            videoProvider: 'bunny'
-          });
-          setVideoFile(initialVideoFile);
+          resetVideoForm();
           setEditingCourseVideos([]);
           setEditingCourseVideosLoading(false);
           fetchCourses();
           return;
         }
         
-        if (editingCourse || !(initialVideoForm.title && (initialVideoForm.bunnyVideoId || initialVideoFile))) {
+        if (editingCourse || initialVideos.length === 0) {
           toast.success(editingCourse ? 'Course updated!' : 'Course created!');
         }
+        setInitialVideos([]);
         setShowModal(false);
         fetchCourses();
       } else {
@@ -521,6 +636,7 @@ function AdminCourses() {
       setEditingCourse(course);
       setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
       setVideoFile(null);
+      setEditVideoDrafts([]);
       setFormData({
         title: course.title,
         description: course.description,
@@ -547,8 +663,9 @@ function AdminCourses() {
     } else {
       setEditingCourse(null);
       setFormData({ title: '', description: '', price: '', validityDays: '', thumbnailUrl: '' });
-      setInitialVideoForm({ title: '', bunnyVideoId: '' });
-      setInitialVideoFile(null);
+      resetInitialVideoForm();
+      setInitialVideos([]);
+      setEditVideoDrafts([]);
       setEditingCourseVideos([]);
     }
     setShowModal(true);
@@ -591,7 +708,7 @@ function AdminCourses() {
         <div className="lms-table-head">
           <div>
             <h3>Course Library</h3>
-            <p>Review content inventory and jump straight into video management.</p>
+            <p>Edit a course to add, replace, update, or delete videos. Use the camera button only to preview saved videos.</p>
           </div>
         </div>
         <table className="lms-table">
@@ -642,7 +759,7 @@ function AdminCourses() {
                   </td>
                   <td>
                     <div className="lms-actions">
-                      <button className="lms-icon-btn" title="Manage videos" onClick={() => openVideoModal(course)}>
+                      <button className="lms-icon-btn" title="Preview course videos" onClick={() => openVideoModal(course)}>
                         <i className="fas fa-video"></i>
                       </button>
                       <button className="lms-icon-btn" title="Edit course" onClick={() => openModal(course)}>
@@ -677,8 +794,8 @@ function AdminCourses() {
               )}
               <div className="course-modal-header">
                 <div>
-                  <h3 className="course-modal-title">{editingCourse ? 'Edit Course' : 'Create New Course'}</h3>
-                  <p className="course-modal-subtitle">Update course details below</p>
+                  <h3 className="course-modal-title">{editingCourse ? 'Edit Course & Videos' : 'Create New Course'}</h3>
+                  <p className="course-modal-subtitle">{editingCourse ? 'Update course details, video list, previews, replacements, and deletes from one place.' : 'Add course details and queue one or more videos before saving.'}</p>
                 </div>
                 <button type="button" className="modal-close-btn" disabled={courseSubmitting} onClick={() => setShowModal(false)}>&times;</button>
               </div>
@@ -726,7 +843,7 @@ function AdminCourses() {
                   <h4 className="section-title">Video Management</h4>
                   {editingCourse ? (
                     <>
-                      <p className="section-hint">Videos attached to this course</p>
+                      <p className="section-hint">Saved videos attached to this course. Preview, edit, replace, or delete them here.</p>
                       {editingCourseVideosLoading ? (
                         <div className="text-center py-3"><div className="lf-spinner"></div></div>
                       ) : editingCourseVideos && editingCourseVideos.length > 0 ? (
@@ -771,7 +888,7 @@ function AdminCourses() {
                           ))}
                         </div>
                       ) : (
-                        <div className="empty-state">No videos attached. Click the video icon from the courses table to add videos.</div>
+                        <div className="empty-state">No videos attached yet. Use the form below to add the first video.</div>
                       )}
                       <div className="initial-video-grid edit-video-grid">
                         <div className="form-group">
@@ -828,18 +945,46 @@ function AdminCourses() {
                           disabled={videoLoading}
                           onClick={handleAddVideoFromEditModal}
                         >
-                          {videoLoading ? (editingVideoId ? 'Updating...' : 'Adding...') : (editingVideoId ? 'Update Video' : 'Add Video')}
+                          {videoLoading ? (editingVideoId ? 'Updating...' : 'Adding...') : (editingVideoId ? 'Update Selected Video' : 'Add Video to Queue')}
                         </button>
                         {editingVideoId && (
                           <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={resetVideoForm}>
                             Cancel Edit
                           </button>
                         )}
+                        {editVideoDrafts.length > 0 && (
+                          <div className="queued-video-list">
+                            <div className="video-panel-title">
+                              <h4>Queued Videos</h4>
+                              <span>{editVideoDrafts.length}</span>
+                            </div>
+                            {editVideoDrafts.map((video, index) => (
+                              <div className="queued-video-item" key={video.localId}>
+                                <div className="video-item-index">{index + 1}</div>
+                                <div className="queued-video-info">
+                                  <strong>{video.title}</strong>
+                                  <span>{video.sourceLabel}</span>
+                                </div>
+                                <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeEditVideoDraft(video.localId)}>
+                                  Remove
+                                </button>
+                              </div>
+                            ))}
+                            <button
+                              type="button"
+                              className="btn btn-primary add-video-inline-btn"
+                              disabled={videoLoading}
+                              onClick={uploadEditVideoDrafts}
+                            >
+                              {videoLoading ? 'Uploading...' : `Upload ${editVideoDrafts.length} Queued Video${editVideoDrafts.length === 1 ? '' : 's'}`}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </>
                   ) : (
                     <div className="initial-video-grid">
-                      <p className="section-hint">Optionally add a video when creating this course</p>
+                      <p className="section-hint">Queue one or more videos now. They will be attached after the course is created.</p>
 
                       <div className="form-group">
                         <label className="form-label">Video Title <span className="optional">(Optional)</span></label>
@@ -875,6 +1020,42 @@ function AdminCourses() {
                         </div>
                         <p className="form-hint">If a file is selected, it will be uploaded to Bunny.net automatically.</p>
                       </div>
+
+                      <div className="form-group">
+                        <label className="form-label">Sort Order <span className="optional">(Optional)</span></label>
+                        <input
+                          type="number"
+                          value={initialVideoForm.sortOrder}
+                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, sortOrder: e.target.value })}
+                          className="form-input"
+                          placeholder="0"
+                        />
+                      </div>
+
+                      <button type="button" className="btn btn-secondary add-video-inline-btn" onClick={addInitialVideoDraft}>
+                        Add Video to List
+                      </button>
+
+                      {initialVideos.length > 0 && (
+                        <div className="queued-video-list">
+                          <div className="video-panel-title">
+                            <h4>Videos Ready to Attach</h4>
+                            <span>{initialVideos.length}</span>
+                          </div>
+                          {initialVideos.map((video, index) => (
+                            <div className="queued-video-item" key={video.localId}>
+                              <div className="video-item-index">{index + 1}</div>
+                              <div className="queued-video-info">
+                                <strong>{video.title}</strong>
+                                <span>{video.sourceLabel}</span>
+                              </div>
+                              <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(video.localId)}>
+                                Remove
+                              </button>
+                            </div>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
@@ -905,8 +1086,8 @@ function AdminCourses() {
               <div className="video-modal-header">
                 <div>
                   <span className="lms-eyebrow">Course Videos</span>
-                  <h3 className="video-modal-title">Manage Videos</h3>
-                  <p className="video-modal-subtitle">{videoCourse?.title}</p>
+                  <h3 className="video-modal-title">Preview Videos</h3>
+                  <p className="video-modal-subtitle">{videoCourse?.title} · open Edit Course to add, replace, update, or delete videos</p>
                 </div>
                 <button type="button" className="modal-close-btn" onClick={closeVideoModal}>&times;</button>
               </div>
@@ -924,6 +1105,9 @@ function AdminCourses() {
                       <div className="video-empty-state">
                         <i className="fas fa-film"></i>
                         <p>No videos attached yet.</p>
+                        <button type="button" className="lms-mini-btn" onClick={() => { closeVideoModal(); openModal(videoCourse); }}>
+                          Add from Edit Course
+                        </button>
                       </div>
                     ) : (
                       <div className="video-list">
@@ -944,79 +1128,23 @@ function AdminCourses() {
                             <button type="button" className="lms-mini-btn" onClick={() => copyVideoValue(video)}>
                               Copy ID
                             </button>
-                            <button type="button" className="lms-mini-btn" onClick={() => startEditingVideo(video)}>
-                              Edit
-                            </button>
-                            <button type="button" className="btn-remove" title="Remove video" onClick={() => confirmDeleteVideo(video)}>
-                              <i className="fas fa-trash"></i>
-                            </button>
                           </div>
                         ))}
                       </div>
                     )}
                   </div>
+                  {courseVideos.length > 0 && (
+                    <div className="video-preview-modal-actions">
+                      <button type="button" className="btn btn-secondary" onClick={closeVideoModal}>
+                        Close
+                      </button>
+                      <button type="button" className="btn btn-primary" onClick={() => { closeVideoModal(); openModal(videoCourse); }}>
+                        Edit Course Videos
+                      </button>
+                    </div>
+                  )}
                 </div>
               )}
-
-              <form onSubmit={handleAddVideo} className="video-form">
-                <div className="video-form-head">
-                  <h4 className="video-form-title">{editingVideoId ? 'Update Video' : 'Add New Video'}</h4>
-                  <p>{editingVideoId ? 'Change title, sort order, Bunny URL/ID, or choose a file to replace the video.' : 'Paste a provider URL or ID, or choose a local file for upload.'}</p>
-                </div>
-                
-                <div className="form-group">
-                  <label className="form-label">Video Title</label>
-                  <input type="text" name="title" value={videoForm.title} onChange={handleVideoInputChange} className="form-input" required />
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Video Provider</label>
-                  <div className="form-input lms-provider-lock">
-                    <i className="fas fa-shield-alt"></i>
-                    Bunny.net Stream
-                  </div>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Bunny.net Video ID or URL</label>
-                  <input
-                    type="text"
-                    name="bunnyVideoId"
-                    value={videoForm.bunnyVideoId}
-                    onChange={handleVideoInputChange}
-                    className="form-input"
-                    placeholder="Paste URL or video ID here"
-                  />
-                  <p className="form-hint">Or upload a file below instead</p>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Or Upload Video File</label>
-                  <div className="file-input-wrap">
-                    <input type="file" accept="video/*" onChange={handleVideoFileChange} />
-                  </div>
-                  <p className="form-hint">File will be uploaded to Bunny.net automatically</p>
-                </div>
-
-                <div className="form-group">
-                  <label className="form-label">Sort Order</label>
-                  <input type="number" name="sortOrder" value={videoForm.sortOrder} onChange={handleVideoInputChange} className="form-input" placeholder="0" />
-                </div>
-
-                <div className="form-actions">
-                  <button type="button" className="btn btn-secondary" onClick={closeVideoModal}>
-                    Cancel
-                  </button>
-                  <button type="submit" className="btn btn-primary" disabled={videoLoading}>
-                    {videoLoading ? (editingVideoId ? 'Updating...' : 'Adding...') : (editingVideoId ? 'Update Video' : 'Add Video')}
-                  </button>
-                </div>
-                {editingVideoId && (
-                  <button type="button" className="btn btn-secondary video-cancel-edit-btn" onClick={resetVideoForm}>
-                    Cancel Video Edit
-                  </button>
-                )}
-              </form>
             </motion.div>
           </div>
         )}

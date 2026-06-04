@@ -82,6 +82,7 @@ function App() {
               <Route path="shop/checkout" element={<ShopCheckout />} />
               <Route path="shop/:category" element={<ShopCategory />} />
               <Route path="careers" element={<Careers />} />
+              <Route path="login" element={<StudentLogin />} />
             </Route>
             
             {/* Standalone customer/student pages with contextual header/footer */}
@@ -91,7 +92,6 @@ function App() {
               <Route path="/payment" element={<Payment />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/payment-failed" element={<PaymentFailed />} />
-              <Route path="/login" element={<StudentLogin />} />
               <Route path="/dashboard" element={<StudentDashboard />} />
               <Route path="/student/course/:id" element={<CoursePlayer />} />
               <Route path="*" element={<NotFound />} />

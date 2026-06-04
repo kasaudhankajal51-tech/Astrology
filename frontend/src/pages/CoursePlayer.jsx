@@ -12,6 +12,8 @@ function CoursePlayer() {
   const [activeVideo, setActiveVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [studentProfile, setStudentProfile] = useState(null);
+  const [securityNotice, setSecurityNotice] = useState('');
+  const [isWindowFocused, setIsWindowFocused] = useState(true);
 
   const [showConsultForm, setShowConsultForm] = useState(false);
   const [consultData, setConsultData] = useState({
@@ -22,6 +24,7 @@ function CoursePlayer() {
   const [bookingLoading, setBookingLoading] = useState(false);
 
   const token = localStorage.getItem('studentToken');
+  const protectedIdentity = studentProfile?.email || studentProfile?.mobile || localStorage.getItem('studentName') || 'Protected student access';
 
   const updateVideoProgress = async (videoId, isCompleted = false) => {
     if (!videoId) return;
@@ -108,6 +111,58 @@ function CoursePlayer() {
     fetchCourseData();
   }, [id, navigate, token]);
 
+  useEffect(() => {
+    const blockedKeys = new Set(['PrintScreen']);
+
+    const showNotice = (message) => {
+      setSecurityNotice(message);
+      window.clearTimeout(window.__courseSecurityNoticeTimer);
+      window.__courseSecurityNoticeTimer = window.setTimeout(() => setSecurityNotice(''), 2200);
+    };
+
+    const blockEvent = (event, message) => {
+      event.preventDefault();
+      event.stopPropagation();
+      showNotice(message);
+      return false;
+    };
+
+    const handleKeyDown = (event) => {
+      const key = event.key;
+      const lowerKey = key.toLowerCase();
+      const isSave = (event.ctrlKey || event.metaKey) && lowerKey === 's';
+      const isPrint = (event.ctrlKey || event.metaKey) && lowerKey === 'p';
+      const isDevTools = key === 'F12' || ((event.ctrlKey || event.metaKey) && event.shiftKey && ['i', 'j', 'c'].includes(lowerKey));
+      const isScreenClip = (event.metaKey && event.shiftKey && ['3', '4', '5', 's'].includes(lowerKey)) || (event.ctrlKey && event.shiftKey && lowerKey === 's');
+
+      if (blockedKeys.has(key) || isSave || isPrint || isDevTools || isScreenClip) {
+        blockEvent(event, 'Screen capture and download shortcuts are restricted for course videos.');
+      }
+    };
+
+    const handleVisibility = () => setIsWindowFocused(!document.hidden);
+
+    const handleContextMenu = (event) => blockEvent(event, 'Right click is disabled for protected videos.');
+    const handleCopy = (event) => blockEvent(event, 'Copy is disabled on protected course pages.');
+    const handleDragStart = (event) => blockEvent(event, 'Dragging content is disabled on protected course pages.');
+
+    document.addEventListener('keydown', handleKeyDown, true);
+    document.addEventListener('contextmenu', handleContextMenu, true);
+    document.addEventListener('copy', handleCopy, true);
+    document.addEventListener('dragstart', handleDragStart, true);
+    document.addEventListener('visibilitychange', handleVisibility);
+    handleVisibility();
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown, true);
+      document.removeEventListener('contextmenu', handleContextMenu, true);
+      document.removeEventListener('copy', handleCopy, true);
+      document.removeEventListener('dragstart', handleDragStart, true);
+      document.removeEventListener('visibilitychange', handleVisibility);
+      window.clearTimeout(window.__courseSecurityNoticeTimer);
+    };
+  }, []);
+
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
     setBookingLoading(true);
@@ -145,7 +200,28 @@ function CoursePlayer() {
   if (!course) return null;
 
   return (
-    <div style={{ background: '#FDF6EE', minHeight: '100vh', paddingTop: '80px', paddingBottom: '60px' }}>
+    <div onContextMenu={(e) => e.preventDefault()} style={{ background: '#FDF6EE', minHeight: '100vh', paddingTop: '80px', paddingBottom: '60px', userSelect: 'none' }}>
+      {securityNotice && (
+        <div
+          style={{
+            position: 'fixed',
+            top: 96,
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 9999,
+            padding: '10px 16px',
+            borderRadius: '999px',
+            background: '#2A0F02',
+            color: '#fff',
+            boxShadow: '0 12px 30px rgba(0,0,0,0.25)',
+            fontWeight: 700,
+            fontSize: '0.88rem'
+          }}
+        >
+          <i className="fas fa-shield-alt me-2"></i>
+          {securityNotice}
+        </div>
+      )}
       <div className="container-fluid px-4 mt-4">
         <button className="btn btn-link text-decoration-none text-dark mb-3 px-0" onClick={() => navigate('/dashboard')}>
           <i className="fas fa-arrow-left me-2"></i> Back to Dashboard
@@ -166,9 +242,9 @@ function CoursePlayer() {
                     title={activeVideo.title || 'Course video'}
                     loading="lazy"
                     referrerPolicy="strict-origin-when-cross-origin"
-                    style={{ border: 0, width: '100%', height: '100%' }}
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                    allowFullScreen={true}
+                    style={{ border: 0, width: '100%', height: '100%', filter: isWindowFocused ? 'none' : 'blur(12px)', transition: 'filter 0.2s ease' }}
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media;"
+                    allowFullScreen={false}
                   ></iframe>
                   <div
                     aria-hidden="true"
@@ -192,8 +268,19 @@ function CoursePlayer() {
                         animation: 'studentWatermarkMove 34s linear infinite'
                       }}
                     >
-                      {studentProfile?.email || studentProfile?.mobile || 'Protected course access'}
+                      {protectedIdentity}
                     </div>
+                    <div className="student-watermark-grid">
+                      {Array.from({ length: 18 }).map((_, index) => (
+                        <span key={index}>{protectedIdentity}</span>
+                      ))}
+                    </div>
+                    {!isWindowFocused && (
+                      <div className="student-focus-shield">
+                        <i className="fas fa-eye-slash"></i>
+                        <strong>Video hidden while this tab is not active</strong>
+                      </div>
+                    )}
                   </div>
                 </>
               ) : (
@@ -334,6 +421,46 @@ function CoursePlayer() {
           50% { transform: translate(35vw, 35vh); }
           75% { transform: translate(8vw, 22vh); }
           100% { transform: translate(0, 0); }
+        }
+
+        .student-watermark-grid {
+          position: absolute;
+          inset: -12%;
+          display: grid;
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+          gap: 42px 28px;
+          transform: rotate(-18deg);
+          opacity: 0.2;
+          color: #fff;
+          font-size: 12px;
+          font-weight: 800;
+          line-height: 1.2;
+          text-transform: lowercase;
+        }
+
+        .student-watermark-grid span {
+          white-space: nowrap;
+          text-shadow: 0 1px 3px rgba(0,0,0,0.7);
+        }
+
+        .student-focus-shield {
+          position: absolute;
+          inset: 0;
+          z-index: 4;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+          background: rgba(0,0,0,0.78);
+          color: #fff;
+          text-align: center;
+          padding: 24px;
+        }
+
+        .student-focus-shield i {
+          color: #C8832A;
+          font-size: 28px;
         }
       `}</style>
     </div>

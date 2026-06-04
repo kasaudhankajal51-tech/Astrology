@@ -169,12 +169,18 @@ export const updateCourseVideo = async (req, res) => {
     if (title) video.title = title;
     if (sortOrder !== undefined) video.sortOrder = Number(sortOrder) || 0;
 
-    const cleanBunnyVideoId = bunnyVideoId ? extractBunnyVideoId(bunnyVideoId) : video.bunnyVideoId;
-    if (!cleanBunnyVideoId) {
+    let cleanBunnyVideoId = bunnyVideoId ? extractBunnyVideoId(bunnyVideoId) : video.bunnyVideoId;
+    if (!cleanBunnyVideoId && !req.file?.buffer) {
       return res.status(400).json({ success: false, message: 'Bunny.net video ID or URL is required' });
     }
 
     if (req.file?.buffer) {
+      if (!cleanBunnyVideoId) {
+        const bunnyVideo = await createBunnyVideo(title || video.title);
+        cleanBunnyVideoId = bunnyVideo.guid;
+        video.bunnyStatus = bunnyVideo.status ?? null;
+        video.bunnyEncodeProgress = bunnyVideo.encodeProgress ?? null;
+      }
       await uploadBunnyVideoFile(cleanBunnyVideoId, req.file.buffer);
       video.sourceType = 'upload';
     } else if (bunnyVideoId) {

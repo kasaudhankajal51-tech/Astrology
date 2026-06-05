@@ -23,6 +23,7 @@ import couponRoutes from './routes/couponRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -72,6 +73,9 @@ const limiter = rateLimit({
   message: { success: false, message: 'Too many requests from this IP, please try again later.' }
 });
 app.use('/api', limiter);
+
+// Webhooks must be mounted before express.json() for Razorpay signature verification
+app.use('/api/webhooks', webhookRoutes);
 
 app.use(express.json());
 

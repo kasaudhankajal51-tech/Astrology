@@ -90,7 +90,7 @@ function Courses() {
                 ₹{course.price}
               </div>
             ) : null}
-            <Link to={`/courses/${course.id}`} className="view-btn">
+            <Link to={course.customUrl || `/courses/${course.id}`} className="view-btn">
               Learn More <i className="fas fa-arrow-right ms-2"></i>
             </Link>
           </div>

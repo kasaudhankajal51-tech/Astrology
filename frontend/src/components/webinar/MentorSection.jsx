@@ -22,8 +22,8 @@ function MentorSection({ onJoinNow }) {
               <li><i className="fas fa-chevron-right"></i> Global clientele from India, US, UK, & Middle East</li>
             </ul>
             <div className="mentor-bio-long">
-              <p><strong>Award Winning Expert in Astrology & more</strong><br/>Astro Ava, an award-winning expert in astrology and various related disciplines, like numerology, vastu shastra, palmistry, tarot reading.</p>
-              <p className="mt-4"><strong>Spiritual Speaker & Podcaster</strong><br/>Astro Ava, a profound spiritual luminary and TEDx speaker has graced prestigious platforms and takes Q&A series for seekers. His Podcast Show- Astro Ava invites famous celebrities to engage in enlightening conversations</p>
+              <p><strong>Award Winning Expert in Astrology & more</strong><br/>DS Institute brings expert guidance across astrology and related disciplines like numerology, vastu shastra, palmistry, and tarot reading.</p>
+              <p className="mt-4"><strong>Spiritual Learning Platform</strong><br/>DS Institute hosts guided sessions, Q&A series, and learning programs for seekers who want practical astrology knowledge with clear mentorship.</p>
               <p className="mt-4"><strong>Occult Instructor</strong><br/>His expertise lies in Numerology, Astrology, Vastu Shastra, Palmistry and has taught 5K+ students. He is a renowned astrologer and numerologist taking forward a legacy of 49 years</p>
             </div>
             <div className="mt-5">
@@ -32,7 +32,7 @@ function MentorSection({ onJoinNow }) {
           </div>
           <div className="mentor-v2-img-side" data-aos="fade-left">
             <div className="mentor-image-v2">
-              <img src="/images/mentor-ava.png" alt="Astro Ava" />
+              <img src="/images/mentor-ava.png" alt="DS Institute mentor" />
             </div>
             <div className="mentor-media-logos">
               {mediaLogos.map((logo, i) => (

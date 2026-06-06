@@ -2,12 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet-async';
 
 const SEO = ({ title, description, url, image }) => {
-  const defaultTitle = "DS Astro Institute | Learn Astrology & Book Consultations";
-  const defaultDescription = "Live astrology courses, personalised kundali consultations & astrology merchandise. Join DS Astro Institute today.";
+  const defaultTitle = "DS Institute | Learn Astrology & Book Consultations";
+  const defaultDescription = "Live astrology courses, personalised kundali consultations & astrology merchandise. Join DS Institute today.";
   const defaultImage = "/images/banner.jpg";
   const defaultUrl = "https://dsastroinstitute.com";
 
-  const seoTitle = title ? `${title} | DS Astro Institute` : defaultTitle;
+  const seoTitle = title ? `${title} | DS Institute` : defaultTitle;
   const seoDescription = description || defaultDescription;
   const seoImage = image || defaultImage;
   const seoUrl = url ? `${defaultUrl}${url}` : defaultUrl;

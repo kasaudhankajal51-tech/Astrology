@@ -60,12 +60,12 @@ function CourseDetail() {
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
-          document.title = `${mappedCourse.title} | Cosmic Light Astrology`;
+          document.title = `${mappedCourse.title} | DS Institute`;
         } else {
           const staticCourse = coursesData.find(c => c.id === courseId);
           if (staticCourse) {
             setCourse({...staticCourse, isPremium: false});
-            document.title = `${staticCourse.title} | Cosmic Light Astrology`;
+            document.title = `${staticCourse.title} | DS Institute`;
           } else {
             navigate('/courses');
           }
@@ -170,7 +170,8 @@ function CourseDetail() {
           courseId: course.id,
           name: formData.name,
           email: formData.email,
-          mobile: formData.phone
+          mobile: formData.phone,
+          couponCode: appliedCoupon?.code || ''
         })
       });
 
@@ -197,7 +198,9 @@ function CourseDetail() {
       if (orderData.orderId) {
         const options = {
           key: orderData.keyId,
-          name: "DS Astro Institute",
+          amount: Number(orderData.amount),
+          currency: orderData.currency || 'INR',
+          name: 'DS Institute',
           description: `Course Purchase: ${course.title}`,
           image: "/images/logo.png",
           order_id: orderData.orderId,
@@ -272,7 +275,7 @@ function CourseDetail() {
       const res = await fetch(`${API_BASE}/api/coupons/validate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode.trim(), courseId: course?.id }),
+        body: JSON.stringify({ code: couponCode.trim(), courseId: course?.id, purchaseAmount: getCoursePrice() }),
       });
       const data = await res.json();
       if (data.success && data.coupon) {
@@ -295,6 +298,22 @@ function CourseDetail() {
     setCouponStatus(null);
   };
 
+  const getCoursePrice = () => Number(course?.price) || 0;
+
+  const getDiscountAmount = () => {
+    if (!appliedCoupon) return 0;
+
+    const price = getCoursePrice();
+    const discountValue = Number(appliedCoupon.discountValue) || 0;
+    const discount = appliedCoupon.discountType === 'fixed'
+      ? discountValue
+      : Math.round((price * discountValue) / 100);
+
+    return Math.max(0, Math.min(discount, price));
+  };
+
+  const getPayableAmount = () => Math.max(getCoursePrice() - getDiscountAmount(), 1);
+
   if (loading) {
     return (
       <div style={{ height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#FDF6EE' }}>
@@ -309,21 +328,21 @@ function CourseDetail() {
     <div className="course-detail-page">
       <style>{`
         .course-detail-page {
-          background: #FDF6EE;
+          background: var(--site-bg);
           min-height: 100vh;
-          padding-bottom: 100px;
+          padding-bottom: clamp(3rem, 6vw, 5rem);
         }
 
         .detail-hero {
           background: linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%);
-          padding: 120px 0 140px;
+          padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(4rem, 7vw, 6rem);
           color: #FFF;
           position: relative;
           overflow: hidden;
         }
 
         .detail-hero::before {
-          content: '';
+          content: none;
           position: absolute;
           top: 0; left: 0; right: 0; bottom: 0;
           background: url('https://www.transparenttextures.com/patterns/stardust.png');
@@ -337,14 +356,7 @@ function CourseDetail() {
         }
 
         .hero-decoration {
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, rgba(200, 131, 42, 0.15) 0%, transparent 70%);
-          top: -100px;
-          right: -100px;
-          border-radius: 50%;
-          animation: pulse 8s ease-in-out infinite;
+          display: none;
         }
 
         @keyframes pulse {
@@ -357,9 +369,9 @@ function CourseDetail() {
           text-decoration: none;
           display: inline-flex;
           align-items: center;
-          gap: 8px;
+          gap: 0.5rem;
           font-weight: 600;
-          margin-bottom: 30px;
+          margin-bottom: 1.25rem;
           transition: all 0.3s ease;
           position: relative;
           z-index: 5;
@@ -371,29 +383,29 @@ function CourseDetail() {
         }
 
         .detail-hero h1 {
-          font-family: 'Playfair Display', serif;
+          font-family: var(--font-heading);
           color: #FFFFFF !important;
-          font-size: clamp(2.5rem, 5vw, 4rem);
+          font-size: var(--h1-size);
           font-weight: 800;
-          margin-bottom: 25px;
+          margin-bottom: 1.2rem;
           line-height: 1.2;
-          text-shadow: 0 4px 20px rgba(0,0,0,0.3);
+          text-shadow: 0 2px 12px rgba(0,0,0,0.28);
         }
 
         .hero-meta {
           display: flex;
-          gap: 20px;
+          gap: 0.75rem;
           flex-wrap: wrap;
         }
 
         .hero-meta-item {
           display: flex;
           align-items: center;
-          gap: 12px;
+          gap: 0.55rem;
           background: rgba(255, 255, 255, 0.08);
-          padding: 12px 25px;
-          border-radius: 50px;
-          font-size: 1rem;
+          padding: 0.62rem 0.95rem;
+          border-radius: var(--radius-control);
+          font-size: 0.9rem;
           color: #FFFFFF !important;
           backdrop-filter: blur(10px);
           border: 1px solid rgba(255, 255, 255, 0.15);
@@ -402,7 +414,7 @@ function CourseDetail() {
 
         .hero-meta-item:hover {
           background: rgba(255, 255, 255, 0.15);
-          transform: translateY(-3px);
+          transform: translateY(-2px);
           border-color: #C8832A;
         }
 
@@ -412,13 +424,12 @@ function CourseDetail() {
         }
 
         .detail-hero-img {
-          width: 350px;
-          height: 350px;
+          width: min(100%, 21rem);
+          height: min(62vw, 21rem);
           object-fit: cover;
-          border-radius: 40px;
-          border: 6px solid rgba(255, 255, 255, 0.15);
-          box-shadow: 0 30px 60px rgba(0,0,0,0.4);
-          animation: float 6s ease-in-out infinite;
+          border-radius: var(--radius-card);
+          border: 1px solid rgba(255, 255, 255, 0.18);
+          box-shadow: 0 18px 38px rgba(0,0,0,0.32);
         }
 
         @keyframes float {
@@ -427,32 +438,32 @@ function CourseDetail() {
         }
 
         .main-content {
-          margin-top: -60px;
+          margin-top: -2.25rem;
           position: relative;
           z-index: 10;
           padding-bottom: 20px;
         }
 
         .content-card {
-          background: #FFF;
-          border-radius: 35px;
-          padding: 50px 45px;
-          box-shadow: 0 30px 70px rgba(139, 74, 30, 0.08);
-          border: 1px solid rgba(139, 74, 30, 0.05);
-          transition: all 0.4s ease;
+          background: var(--site-surface);
+          border-radius: var(--radius-card);
+          padding: clamp(1.35rem, 3vw, 2rem);
+          box-shadow: var(--shadow-card);
+          border: 1px solid var(--site-border);
+          transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
         .content-card:hover {
-          box-shadow: 0 40px 90px rgba(139, 74, 30, 0.12);
+          box-shadow: var(--shadow-card-hover);
         }
 
         .section-title {
-          font-family: 'Playfair Display', serif !important;
-          font-size: clamp(42px, 5vw, 48px) !important;
-          color: #2A0F02 !important;
-          margin-bottom: 35px;
+          font-family: var(--font-heading) !important;
+          font-size: var(--h2-size) !important;
+          color: var(--site-text) !important;
+          margin-bottom: 1.35rem;
           position: relative;
-          padding-bottom: 20px;
+          padding-bottom: 0.85rem;
           font-weight: 700 !important;
         }
 
@@ -467,17 +478,17 @@ function CourseDetail() {
           position: absolute;
           bottom: 0;
           left: 0;
-          width: 80px;
-          height: 4px;
+          width: 4.5rem;
+          height: 3px;
           background: linear-gradient(90deg, #C8832A, transparent);
           border-radius: 2px;
         }
 
         .description-text {
-          font-size: 1.2rem;
-          line-height: 1.9;
-          color: #4A3022;
-          margin-bottom: 50px;
+          font-size: var(--body-size);
+          line-height: 1.65;
+          color: var(--site-muted);
+          margin-bottom: 2rem;
           position: relative;
           padding-left: 20px;
           border-left: 3px solid rgba(200, 131, 42, 0.2);
@@ -485,27 +496,27 @@ function CourseDetail() {
 
         .topics-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-          gap: 20px;
-          margin-bottom: 60px;
+          grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+          gap: 0.9rem;
+          margin-bottom: 2rem;
         }
 
         .topic-item {
           display: flex;
           align-items: center;
-          gap: 15px;
+          gap: 0.8rem;
           background: #FFFBF5;
-          padding: 18px 25px;
-          border-radius: 20px;
-          border: 1px solid rgba(200, 131, 42, 0.08);
-          transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+          padding: 0.9rem 1rem;
+          border-radius: var(--radius-control);
+          border: 1px solid var(--site-border);
+          transition: all 0.25s ease;
         }
 
         .topic-item:hover {
-          transform: translateX(10px) scale(1.02);
+          transform: translateY(-2px);
           border-color: #C8832A;
           background: #FDF6EE;
-          box-shadow: 0 10px 20px rgba(200, 131, 42, 0.1);
+          box-shadow: 0 10px 20px rgba(200, 131, 42, 0.08);
         }
 
         .topic-item i {
@@ -521,19 +532,19 @@ function CourseDetail() {
 
         .enroll-sidebar {
           position: sticky;
-          top: 130px;
+          top: 7rem;
           z-index: 5;
-          margin-bottom: 30px;
-          margin-left: 15px;
+          margin-bottom: 1.5rem;
+          margin-left: 0;
         }
 
         .enroll-card {
           background: linear-gradient(135deg, #2A0F02 0%, #1a0a01 100%);
           color: #FFF;
-          padding: 40px 30px;
-          border-radius: 40px;
+          padding: clamp(1.25rem, 3vw, 1.8rem);
+          border-radius: var(--radius-card);
           text-align: center;
-          box-shadow: 0 30px 60px rgba(42, 15, 2, 0.25);
+          box-shadow: 0 18px 42px rgba(42, 15, 2, 0.22);
           border: 1px solid rgba(200, 131, 42, 0.15);
           position: relative;
           overflow: hidden;
@@ -549,18 +560,22 @@ function CourseDetail() {
         }
 
         .enroll-card h4 {
-          font-family: 'Playfair Display', serif;
-          font-size: 1.8rem;
-          margin-bottom: 25px;
+          font-family: var(--font-heading);
+          font-size: 1.45rem;
+          margin-bottom: 1rem;
           font-weight: 700;
+        }
+
+        .enroll-card::before {
+          display: none;
         }
 
         .coupon-box {
           background: rgba(255,255,255,0.12);
           border: 1px solid rgba(255,255,255,0.22);
-          border-radius: 22px;
-          padding: 18px 20px;
-          margin-bottom: 24px;
+          border-radius: var(--radius-control);
+          padding: 1rem;
+          margin-bottom: 1rem;
           text-align: left;
           color: #FFFFFF;
           backdrop-filter: blur(10px);
@@ -569,8 +584,8 @@ function CourseDetail() {
         .coupon-box-head {
           display: flex;
           align-items: center;
-          gap: 10px;
-          margin-bottom: 14px;
+          gap: 0.6rem;
+          margin-bottom: 0.8rem;
           font-weight: 700;
           color: #fff;
         }
@@ -578,15 +593,15 @@ function CourseDetail() {
         .coupon-input-row {
           display: grid;
           grid-template-columns: 1fr auto;
-          gap: 12px;
-          margin-bottom: 14px;
+          gap: 0.65rem;
+          margin-bottom: 0.8rem;
         }
 
         .coupon-input-row input {
           width: 100%;
           border: 1px solid rgba(255,255,255,0.2);
-          border-radius: 14px;
-          padding: 14px 16px;
+          border-radius: var(--radius-control);
+          padding: 0.78rem 0.9rem;
           background: rgba(255,255,255,0.12);
           color: #fff;
           outline: none;
@@ -600,8 +615,8 @@ function CourseDetail() {
           background: #C8832A;
           color: #fff;
           border: none;
-          border-radius: 14px;
-          padding: 14px 22px;
+          border-radius: var(--radius-control);
+          padding: 0.78rem 1rem;
           font-weight: 700;
           cursor: pointer;
         }
@@ -616,9 +631,9 @@ function CourseDetail() {
           align-items: center;
           gap: 8px;
           color: #fff;
-          font-size: 0.95rem;
-          padding: 10px 14px;
-          border-radius: 14px;
+          font-size: 0.9rem;
+          padding: 0.65rem 0.8rem;
+          border-radius: var(--radius-control);
           background: rgba(255,255,255,0.08);
         }
 
@@ -645,17 +660,41 @@ function CourseDetail() {
         }
 
         .enroll-price {
-          font-size: 2.4rem;
+          font-size: 2rem;
           font-weight: 800;
-          margin-bottom: 12px;
+          margin-bottom: 0.45rem;
           color: #C8832A;
           text-shadow: 0 0 20px rgba(200, 131, 42, 0.3);
+        }
+
+        .coupon-price-note {
+          align-items: center;
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+          justify-content: center;
+          margin-bottom: 0.8rem;
+        }
+
+        .coupon-price-note span {
+          color: rgba(255, 255, 255, 0.62);
+          font-size: 0.82rem;
+          text-decoration: line-through;
+        }
+
+        .coupon-price-note strong {
+          background: rgba(200, 131, 42, 0.16);
+          border: 1px solid rgba(200, 131, 42, 0.28);
+          border-radius: 999px;
+          color: #ffd9a1;
+          font-size: 0.8rem;
+          padding: 0.2rem 0.55rem;
         }
 
         .enroll-sub {
           font-size: 0.95rem;
           opacity: 0.8;
-          margin-bottom: 30px;
+          margin-bottom: 1.35rem;
           line-height: 1.4;
         }
 
@@ -697,36 +736,36 @@ function CourseDetail() {
         }
 
         .feature-icon-circle {
-          width: 80px;
-          height: 80px;
+          width: 3.5rem;
+          height: 3.5rem;
           background: #FDF6EE;
-          border-radius: 50%;
+          border-radius: 0.9rem;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 2rem;
+          font-size: 1.35rem;
           color: #C8832A;
-          margin: 0 auto 20px;
-          box-shadow: 0 10px 20px rgba(200, 131, 42, 0.1);
+          margin: 0 auto 0.9rem;
+          box-shadow: 0 8px 18px rgba(200, 131, 42, 0.1);
           transition: all 0.3s ease;
         }
 
         .feature-icon-circle:hover {
           background: #C8832A;
           color: #FFF;
-          transform: rotate(360deg);
+          transform: translateY(-2px);
         }
 
         .why-choose-box {
           background: #FDF6EE;
-          padding: 40px;
-          border-radius: 30px;
-          border: 1px solid rgba(200, 131, 42, 0.1);
+          padding: clamp(1.25rem, 4vw, 2rem);
+          border-radius: var(--radius-card);
+          border: 1px solid var(--site-border);
         }
 
         .why-item {
           display: flex;
-          gap: 15px;
+          gap: 0.9rem;
           align-items: flex-start;
         }
 
@@ -744,14 +783,14 @@ function CourseDetail() {
         }
 
         .contact-small-card {
-          background: #FFF;
-          padding: 20px;
-          border-radius: 20px;
+          background: var(--site-surface);
+          padding: 1rem;
+          border-radius: var(--radius-card);
           display: flex;
           align-items: center;
-          gap: 15px;
-          border: 1px solid rgba(139, 74, 30, 0.1);
-          box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+          gap: 0.9rem;
+          border: 1px solid var(--site-border);
+          box-shadow: var(--shadow-card);
         }
 
         .contact-small-card i {
@@ -766,14 +805,14 @@ function CourseDetail() {
           right: 15px;
           background: rgba(42, 15, 2, 0.95);
           backdrop-filter: blur(15px);
-          padding: 14px 22px;
-          border-radius: 28px;
+          padding: 0.8rem 1rem;
+          border-radius: var(--radius-card);
           box-shadow: 0 20px 50px rgba(0,0,0,0.5);
           z-index: 1000;
           display: flex;
           align-items: center;
           border: 1px solid rgba(200, 131, 42, 0.3);
-          animation: mobileSlideUp 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+          animation: none;
         }
 
         @keyframes mobileSlideUp {
@@ -800,7 +839,7 @@ function CourseDetail() {
           font-size: 0.95rem;
           box-shadow: 0 8px 20px rgba(200, 131, 42, 0.3);
           text-transform: uppercase;
-          animation: ctaPulse 2s infinite;
+          animation: none;
         }
 
         @keyframes ctaPulse {
@@ -886,15 +925,15 @@ function CourseDetail() {
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 1rem;
         }
 
         .modal-content {
-          background: #FFFBF5;
+          background: var(--site-surface);
           max-width: 500px;
           width: 100%;
-          border-radius: 30px;
-          padding: 40px;
+          border-radius: var(--radius-card);
+          padding: clamp(1.35rem, 4vw, 2rem);
           position: relative;
           border: 1px solid rgba(139, 74, 30, 0.2);
         }
@@ -911,13 +950,13 @@ function CourseDetail() {
         }
 
         .modal-content h3 {
-          font-family: 'Playfair Display', serif;
+          font-family: var(--font-heading);
           margin-bottom: 10px;
           color: #2A0F02;
         }
 
         .form-group {
-          margin-bottom: 20px;
+          margin-bottom: 1rem;
         }
 
         .form-group label {
@@ -930,8 +969,8 @@ function CourseDetail() {
 
         .form-group input, .form-group select, .form-group textarea {
           width: 100%;
-          padding: 12px 15px;
-          border-radius: 12px;
+          padding: 0.78rem 0.9rem;
+          border-radius: var(--radius-control);
           border: 1.5px solid rgba(139, 74, 30, 0.1);
           background: #FFF;
           outline: none;
@@ -948,7 +987,7 @@ function CourseDetail() {
           background: #2A0F02;
           color: #FFF;
           padding: 15px;
-          border-radius: 12px;
+          border-radius: var(--radius-control);
           font-weight: 700;
           border: none;
           cursor: pointer;
@@ -962,19 +1001,19 @@ function CourseDetail() {
 
         @media (max-width: 1200px) {
           .content-card {
-            padding: 40px 30px;
+            padding: 1.5rem;
           }
           .enroll-card {
-            padding: 35px 20px;
+            padding: 1.35rem;
           }
           .section-title {
-            font-size: clamp(2.2rem, 5vw, 2.8rem) !important;
+            font-size: var(--h2-size) !important;
           }
         }
 
         @media (max-width: 768px) {
           .detail-hero {
-            padding: 100px 0 80px;
+            padding: 3rem 0 4rem;
             text-align: center;
           }
           .hero-meta {
@@ -982,17 +1021,17 @@ function CourseDetail() {
             gap: 10px;
           }
           .hero-meta-item {
-            padding: 8px 15px;
-            font-size: 0.85rem;
+            padding: 0.5rem 0.72rem;
+            font-size: 0.82rem;
             background: rgba(255, 255, 255, 0.05);
           }
           .main-content {
-            margin-top: -40px;
+            margin-top: -1.5rem;
           }
           .section-title {
             font-size: clamp(1.8rem, 6vw, 2.2rem) !important;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 1.1rem;
           }
           .section-title::after {
             left: 50%;
@@ -1000,30 +1039,30 @@ function CourseDetail() {
             width: 60px;
           }
           .description-text {
-            font-size: 1.1rem;
+            font-size: 1rem;
             padding-left: 0;
             border-left: none;
             text-align: center;
             line-height: 1.7;
           }
           .topic-item {
-            padding: 15px 20px;
+            padding: 0.82rem 0.9rem;
             justify-content: center;
           }
         }
 
         @media (max-width: 992px) {
           .main-content {
-            margin-top: -30px;
+            margin-top: -1.5rem;
           }
           .enroll-sidebar {
             position: static;
-            margin-top: 40px;
+            margin-top: 1.5rem;
             margin-left: 0;
           }
           .content-card {
-            padding: 30px;
-            border-radius: 25px;
+            padding: 1.25rem;
+            border-radius: var(--radius-card);
           }
           .back-to-top {
             right: 15px;
@@ -1036,7 +1075,7 @@ function CourseDetail() {
 
       <section className="detail-hero">
         <div className="hero-decoration"></div>
-        <div className="container">
+        <div className="container site-container">
           <Link to="/courses" className="back-link" data-aos="fade-right">
             <i className="fas fa-arrow-left"></i> Back to Courses
           </Link>
@@ -1065,8 +1104,8 @@ function CourseDetail() {
         </div>
       </section>
 
-      <div className="container main-content">
-        <div className="row g-5">
+      <div className="container site-container main-content">
+        <div className="row g-4">
           <div className="col-lg-8" data-aos="fade-up">
             <div className="content-card">
               <h2 className="section-title">Course <span className="text-gradient">Overview</span></h2>
@@ -1103,7 +1142,7 @@ function CourseDetail() {
 
               {/* Why Choose Us Section */}
               <div className="why-choose-box" data-aos="fade-up">
-                <h3 className="mb-4">Why Study with Cosmic Light?</h3>
+                <h3 className="mb-4">Why Study with DS Institute?</h3>
                 <div className="row g-4">
                   <div className="col-md-6">
                     <div className="why-item">
@@ -1133,7 +1172,13 @@ function CourseDetail() {
               <div className="enroll-card">
                 <div className="enroll-badge">LIMITED SLOTS</div>
                 <h4>Start Your Journey</h4>
-                <div className="enroll-price">{course.isPremium ? `₹ ${course.price}` : '₹ Enquire Now'}</div>
+                <div className="enroll-price">{course.isPremium ? `₹ ${getPayableAmount()}` : '₹ Enquire Now'}</div>
+                {course.isPremium && appliedCoupon && (
+                  <div className="coupon-price-note">
+                    <span>Original ₹{getCoursePrice()}</span>
+                    <strong>Saved ₹{getDiscountAmount()}</strong>
+                  </div>
+                )}
                 <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'Get personalized fee structure & syllabus PDF'}</p>
 
                 {course.isPremium && (
@@ -1274,7 +1319,7 @@ function CourseDetail() {
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required />
               </div>
               <button type="submit" className="submit-btn" disabled={isProcessingPayment}>
-                {isProcessingPayment ? 'Initializing...' : `Pay ₹${course.price}`}
+                {isProcessingPayment ? 'Initializing...' : `Pay ₹${getPayableAmount()}`}
               </button>
             </form>
           </div>

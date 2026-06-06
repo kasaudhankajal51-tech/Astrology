@@ -203,7 +203,9 @@ function ConsultationDetail() {
       if (data.orderId) {
         const options = {
           key: data.keyId,
-          name: "DS Astro Institute",
+          amount: data.amount,
+          currency: data.currency,
+          name: "DS Institute",
           description: `Consultation Booking: ${service.title}`,
           image: "/images/logo.png",
           order_id: data.orderId,
@@ -222,6 +224,7 @@ function ConsultationDetail() {
               const verifyData = await verifyRes.json();
               
               if (verifyData.success) {
+                toast.success('Payment Successful! Your consultation is booked.');
                 setIsModalOpen(false);
                 window.location.href = '/payment-success';
               } else {
@@ -268,21 +271,22 @@ function ConsultationDetail() {
   return (
     <div className="service-detail-page">
       <div className="detail-hero">
-        <div className="container">
-          <Link to="/consultations" className="back-link mb-4 d-inline-block text-decoration-none">
+        <div className="container site-container">
+          <Link to="/consultations" className="back-link mb-3 d-inline-flex align-items-center text-decoration-none">
             <i className="fas fa-arrow-left me-2"></i> Back to Consultations
           </Link>
-          <div className="row g-5 align-items-center">
-            <div className="col-lg-6">
+          <div className="detail-hero-card">
+            <div className="row g-4 align-items-center">
+            <div className="col-lg-6 detail-copy">
               <div className="badge-premium mb-3">{service.category}</div>
-              <h1 className="display-4 fw-bold mb-4">{service.title}</h1>
-              <div className="price-tag-large mb-4">{service.price}</div>
+              <h1 className="fw-bold mb-3">{service.title}</h1>
+              <div className="price-tag-large mb-3">{service.price}</div>
               {service.duration && (
-                <div className="meta-info-item mb-4">
+                <div className="meta-info-item mb-3">
                   <i className="far fa-clock me-2"></i> Duration: {service.duration}
                 </div>
               )}
-              <p className="lead opacity-75 mb-5">{service.desc}</p>
+              <p className="lead opacity-75 mb-4">{service.desc}</p>
               <button className="btn-book-premium" onClick={() => setIsModalOpen(true)}>
                 Book This Session Now <i className="fas fa-paper-plane ms-2"></i>
               </button>
@@ -293,14 +297,15 @@ function ConsultationDetail() {
                 <div className="image-accent"></div>
               </div>
             </div>
+            </div>
           </div>
         </div>
       </div>
 
-      <section className="why-this-session py-5 mt-5">
-        <div className="container">
-          <div className="glass-panel-detail p-5">
-            <h3 className="mb-5 text-center fw-bold">What's Included in this Session?</h3>
+      <section className="why-this-session">
+        <div className="container site-container">
+          <div className="glass-panel-detail">
+            <h3 className="text-center fw-bold">What's Included in this Session?</h3>
             <div className="row g-4">
               {[
                 { icon: 'fa-user-shield', title: '100% Private', desc: 'Your data and discussion remain strictly confidential.' },
@@ -332,50 +337,77 @@ function ConsultationDetail() {
 
       <style jsx>{`
         .service-detail-page {
-          background: #FDF6EE;
+          background: var(--site-bg);
           min-height: 100vh;
-          padding: 140px 0 100px;
-          color: #2A0F02;
+          padding: clamp(1.5rem, 4vw, 2.5rem) 0 clamp(3rem, 6vw, 5rem);
+          color: var(--site-text);
+        }
+        .detail-hero-card {
+          background: var(--site-surface);
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-card);
+          box-shadow: var(--shadow-card);
+          padding: clamp(1.25rem, 4vw, 2.25rem);
+        }
+        .detail-copy {
+          max-width: 42rem;
+        }
+        .detail-hero h1 {
+          color: var(--site-text);
+          font-family: var(--font-heading);
+          font-size: var(--h1-size);
+          line-height: 1.12;
+          letter-spacing: 0;
         }
         .badge-premium {
-          background: rgba(139, 74, 30, 0.1);
-          color: #8B4A1E;
-          padding: 6px 15px;
-          border-radius: 50px;
+          background: var(--site-accent-soft);
+          color: var(--site-accent-dark);
+          padding: 0.42rem 0.75rem;
+          border-radius: var(--radius-control);
           display: inline-block;
           font-weight: 700;
           text-transform: uppercase;
           letter-spacing: 1px;
-          font-size: 0.8rem;
+          font-size: 0.76rem;
         }
         .price-tag-large {
-          font-size: 2.5rem;
+          font-size: clamp(1.8rem, 4vw, 2.35rem);
           font-weight: 900;
-          color: #8B4A1E;
+          color: var(--site-accent-dark);
+        }
+        .meta-info-item,
+        .detail-hero .lead {
+          color: var(--site-text-muted);
+          line-height: 1.65;
         }
         .btn-book-premium {
-          background: #2A0F02;
+          background: var(--site-primary);
           color: white;
           border: none;
-          padding: 18px 40px;
-          border-radius: 15px;
+          padding: 0.82rem 1.2rem;
+          border-radius: var(--radius-control);
           font-weight: 800;
-          font-size: 1.2rem;
-          box-shadow: 0 10px 30px rgba(42, 15, 2, 0.2);
+          font-size: 0.98rem;
+          box-shadow: var(--shadow-card);
           transition: 0.3s;
         }
         .btn-book-premium:hover {
-          transform: translateY(-5px);
-          background: #8B4A1E;
+          transform: translateY(-2px);
+          background: var(--site-primary-hover);
         }
         .detail-image-wrapper {
           position: relative;
+          max-width: 31rem;
+          margin-left: auto;
         }
         .detail-image-wrapper img {
           width: 100%;
-          height: auto;
+          aspect-ratio: 4 / 3;
+          object-fit: cover;
           position: relative;
           z-index: 2;
+          border-radius: var(--radius-card) !important;
+          box-shadow: var(--shadow-card) !important;
         }
         .image-accent {
           position: absolute;
@@ -383,24 +415,69 @@ function ConsultationDetail() {
           right: -20px;
           width: 100%;
           height: 100%;
-          background: #C8832A;
-          border-radius: 20px;
+          background: var(--site-accent);
+          border-radius: var(--radius-card);
           opacity: 0.1;
           z-index: 1;
         }
+        .why-this-session {
+          padding-top: clamp(2rem, 5vw, 3.5rem);
+        }
         .glass-panel-detail {
-          background: white;
-          border-radius: 30px;
-          border: 1px solid rgba(139, 74, 30, 0.1);
-          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.05);
+          background: var(--site-surface);
+          border-radius: var(--radius-card);
+          border: 1px solid var(--site-border);
+          box-shadow: var(--shadow-card);
+          padding: clamp(1.25rem, 4vw, 2rem);
+        }
+        .glass-panel-detail h3 {
+          color: var(--site-text);
+          font-family: var(--font-heading);
+          font-size: var(--h2-size);
+          margin-bottom: clamp(1.25rem, 4vw, 2rem);
         }
         .benefit-icon {
-          font-size: 2rem;
-          color: #8B4A1E;
+          align-items: center;
+          background: var(--site-accent-soft);
+          border-radius: var(--radius-control);
+          color: var(--site-accent-dark);
+          display: inline-flex;
+          font-size: 1.35rem;
+          height: 3rem;
+          justify-content: center;
+          width: 3rem;
+        }
+        .benefit-card {
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-card);
+          height: 100%;
+          padding: 1.2rem;
+        }
+        .benefit-card h4 {
+          color: var(--site-text);
+          font-size: 1.05rem;
+          font-weight: 800;
+        }
+        .benefit-card p {
+          color: var(--site-text-muted) !important;
+          line-height: 1.55;
+          margin-bottom: 0;
         }
         .back-link {
-          color: #8B4A1E;
+          color: var(--site-accent-dark);
           font-weight: 700;
+        }
+        @media (max-width: 991px) {
+          .service-detail-page {
+            padding-top: 1.5rem;
+          }
+          .detail-image-wrapper {
+            max-width: 32rem;
+            margin: 0 auto;
+          }
+          .image-accent {
+            right: -10px;
+          }
         }
       `}</style>
     </div>

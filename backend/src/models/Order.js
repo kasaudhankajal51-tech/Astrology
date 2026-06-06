@@ -9,6 +9,9 @@ const OrderSchema = new mongoose.Schema({
   paymentStatus: { type: String, enum: ['pending', 'completed', 'failed', 'refunded'], default: 'pending' },
   rawWebhookEvents: { type: Array, default: [] },
   amount: { type: Number, required: true },
+  originalAmount: { type: Number },
+  discountAmount: { type: Number, default: 0 },
+  couponCode: { type: String },
   guestDetails: {
     name: String,
     email: String,

@@ -5,38 +5,94 @@ function PaymentSuccess() {
   const txn = searchParams.get('txn') || searchParams.get('razorpay_payment_id');
 
   return (
-    <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: '#070913', color: '#fff', fontFamily: 'Outfit, sans-serif' }}>
-      <div className="text-center p-5" style={{ background: 'rgba(255, 106, 0, 0.05)', border: '1px solid rgba(255, 106, 0, 0.2)', borderRadius: '30px', maxWidth: '600px', backdropFilter: 'blur(10px)' }}>
-        <div className="success-icon-wrapper mb-4">
-          <i className="fas fa-check-circle" style={{ fontSize: '6rem', color: '#ff6a00' }}></i>
+    <div className="payment-result-page site-page">
+      <div className="payment-result-card">
+        <div className="payment-status-icon success">
+          <i className="fas fa-check"></i>
         </div>
-        <h1 className="mb-3" style={{ fontWeight: 800 }}>Registration Successful!</h1>
-        <p className="fs-5 mb-4" style={{ color: '#a0aec0' }}>Your stars are aligned. Your seat for the 2-Day Mega Astrology Webinar is now confirmed.</p>
-        
-        <div className="txn-box p-3 mb-4" style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '15px', border: '1px solid rgba(255,255,255,0.05)' }}>
-          <span className="text-muted small d-block mb-1">TRANSACTION ID</span>
-          <code style={{ color: '#ff6a00', fontSize: '1.1rem' }}>{txn}</code>
-        </div>
+        <span className="site-kicker">Payment Complete</span>
+        <h1>Registration Successful</h1>
+        <p>Your seat for the webinar is confirmed. A confirmation email with the joining details has been sent to you.</p>
 
-        <div className="alert alert-success" style={{ background: 'rgba(40, 167, 69, 0.1)', color: '#a3d1a9', border: '1px solid rgba(40, 167, 69, 0.2)', borderRadius: '15px' }}>
-          <i className="fas fa-envelope-open-text me-2"></i>
-          A confirmation email with the joining link has been sent to you.
-        </div>
-        
-        <div className="d-flex gap-3 justify-content-center mt-5">
-          <Link to="/" className="btn btn-primary px-5 py-3" style={{ background: 'linear-gradient(135deg, #ff6a00, #ff0080)', border: 'none', borderRadius: '50px', fontWeight: '700' }}>
-            Return Home
-          </Link>
-        </div>
+        {txn && (
+          <div className="txn-box">
+            <span>Transaction ID</span>
+            <code>{txn}</code>
+          </div>
+        )}
+
+        <Link to="/" className="site-btn">Return Home</Link>
       </div>
 
       <style>{`
-        .success-icon-wrapper {
-          animation: scaleUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        .payment-result-page {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: var(--site-bg);
+          padding: var(--page-pad-x);
         }
-        @keyframes scaleUp {
-          from { transform: scale(0); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
+
+        .payment-result-card {
+          width: min(100%, 38rem);
+          text-align: center;
+          background: var(--site-surface);
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-card);
+          box-shadow: var(--shadow-card);
+          padding: clamp(1.5rem, 5vw, 2.5rem);
+        }
+
+        .payment-status-icon {
+          width: 4rem;
+          height: 4rem;
+          border-radius: 50%;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-bottom: 1rem;
+          font-size: 1.6rem;
+        }
+
+        .payment-status-icon.success {
+          color: #087f4f;
+          background: rgba(8, 127, 79, 0.12);
+        }
+
+        .payment-result-card h1 {
+          font-family: var(--font-heading);
+          color: var(--site-text);
+          font-size: var(--h1-size);
+          margin-bottom: 0.8rem;
+        }
+
+        .payment-result-card p {
+          color: var(--site-muted);
+          line-height: 1.7;
+          margin-bottom: 1.3rem;
+        }
+
+        .txn-box {
+          background: #fff7ee;
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-control);
+          padding: 0.9rem;
+          margin-bottom: 1.4rem;
+        }
+
+        .txn-box span {
+          display: block;
+          color: var(--site-muted);
+          font-size: 0.76rem;
+          text-transform: uppercase;
+          letter-spacing: 0.1em;
+          margin-bottom: 0.35rem;
+        }
+
+        .txn-box code {
+          color: var(--site-primary);
+          word-break: break-word;
         }
       `}</style>
     </div>

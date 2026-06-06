@@ -492,6 +492,7 @@ function Home() {
       desc: "Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.",
       bgImage: "/images/bg-bannerpic.jpg",
       centerImg: "/images/middle-img.png",
+      primaryCta: { label: "Explore Courses", path: "/courses", icon: "fas fa-graduation-cap" },
       themeRust: false // Light Theme
     },
     {
@@ -501,6 +502,7 @@ function Home() {
       desc: "Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.",
       bgImage: "/images/moon.jpg",
       centerImg: "/images/mentor-ava.png",
+      primaryCta: { label: "Book Consultation", action: "consultation", icon: "fas fa-calendar-check" },
       themeRust: true // Dark Theme
     },
     {
@@ -510,6 +512,7 @@ function Home() {
       desc: "Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.",
       bgImage: "/images/premium_tarot.png",
       centerImg: "/images/homu.png",
+      primaryCta: { label: "View Live Courses", path: "/courses", icon: "fas fa-graduation-cap" },
       themeMustard: true // Mustard/Rust Theme
     },
     {
@@ -519,6 +522,7 @@ function Home() {
       desc: "Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.",
       bgImage: "/images/bg-bannerpic.jpg",
       centerImg: "/images/middle-img.png",
+      primaryCta: { label: "Start Learning", path: "/courses", icon: "fas fa-arrow-right" },
       themeTan: true, // Replacing Indigo with Tan as per request
       isPurpleZodiac: true // Specific graphic variant from image
     }
@@ -603,14 +607,28 @@ function Home() {
                 )}
                 
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
-                  <Link to="/courses" className="btn mystic-btn-primary focus-70">
-                    <i className="fas fa-graduation-cap"></i>
-                    Enroll in Live Course
-                  </Link>
-                  <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
-                    <i className="fas fa-calendar-check"></i>
-                    Book Consultation
-                  </button>
+                  {bannerSlides[currentSlide].primaryCta?.action === 'consultation' ? (
+                    <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
+                      <i className={bannerSlides[currentSlide].primaryCta.icon}></i>
+                      {bannerSlides[currentSlide].primaryCta.label}
+                    </button>
+                  ) : (
+                    <Link to={bannerSlides[currentSlide].primaryCta?.path || '/courses'} className="btn mystic-btn-primary focus-70">
+                      <i className={bannerSlides[currentSlide].primaryCta?.icon || 'fas fa-graduation-cap'}></i>
+                      {bannerSlides[currentSlide].primaryCta?.label || 'Enroll in Live Course'}
+                    </Link>
+                  )}
+                  {bannerSlides[currentSlide].primaryCta?.action === 'consultation' ? (
+                    <Link to="/courses" className="btn mystic-btn-outline focus-20">
+                      <i className="fas fa-graduation-cap"></i>
+                      View Courses
+                    </Link>
+                  ) : (
+                    <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
+                      <i className="fas fa-calendar-check"></i>
+                      Book Consultation
+                    </button>
+                  )}
                   <Link to="/shop" className="btn mystic-btn-ghost focus-10">
                     <i className="fas fa-store"></i>
                     Astro Shop
@@ -778,7 +796,7 @@ function Home() {
                 </div>
               </div>
               <div className="col-lg-6">
-                <h5 className="section-subtitle about-subtitle" data-aos="fade-up" data-aos-once="true">About Astro Ava</h5>
+                <h5 className="section-subtitle about-subtitle" data-aos="fade-up" data-aos-once="true">About DS Institute</h5>
                 <h2 className="section-title my-3" data-aos="fade-up" data-aos-once="true" data-aos-delay="100">
                   Unlock a Brilliant Future with <span className="text-gradient">Astrology</span>
                 </h2>
@@ -2509,6 +2527,339 @@ function Home() {
           .bottom-img { height: 200px; }
         }
 
+        /* Careful home banner refinements without changing the original visual style */
+        .banner-section {
+          isolation: isolate;
+          overflow: visible !important;
+        }
+
+        .banner-title,
+        .banner-desc,
+        .banner-feature-list li {
+          overflow-wrap: anywhere;
+        }
+
+        .banner-section.theme-mustard .banner-desc,
+        .banner-section.theme-rust .banner-desc {
+          text-shadow: 0 2px 12px rgba(0, 0, 0, 0.25);
+        }
+
+        .banner-section.theme-mustard .focus-20,
+        .banner-section.theme-rust .focus-20 {
+          background: rgba(255, 255, 255, 0.12) !important;
+        }
+
+        .banner-section.theme-mustard .focus-20:hover,
+        .banner-section.theme-rust .focus-20:hover,
+        .banner-section.theme-mustard .focus-10:hover,
+        .banner-section.theme-rust .focus-10:hover {
+          color: #2A0F02 !important;
+          background: #ffffff !important;
+          border-color: #ffffff !important;
+        }
+
+        .banner-btn-row .btn {
+          min-width: 0;
+        }
+
+        .carousel-dots .c-dot {
+          flex: 0 0 auto;
+        }
+
+        @media (max-width: 991px) {
+          .banner-section {
+            padding-top: 110px !important;
+            padding-bottom: 96px !important;
+          }
+
+          .banner-title {
+            max-width: 720px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .banner-feature-list {
+            align-items: center;
+          }
+
+          .trust-indicator {
+            justify-content: center;
+          }
+
+          .zodiac-hero-graphic,
+          .cosmic-orbit-container {
+            display: flex !important;
+            height: min(72vw, 360px) !important;
+            margin: 2rem auto 0 !important;
+            width: min(72vw, 360px) !important;
+          }
+
+          .rotating-zodiac-mandala {
+            height: 92% !important;
+            width: 92% !important;
+          }
+        }
+
+        @media (max-width: 767px) {
+          .banner-section {
+            padding-top: 96px !important;
+            padding-bottom: 84px !important;
+          }
+
+          .cosmic-badge {
+            max-width: 100%;
+            white-space: normal;
+            line-height: 1.35;
+          }
+
+          .banner-title {
+            margin-bottom: 1rem !important;
+          }
+
+          .banner-desc {
+            line-height: 1.65;
+          }
+
+          .banner-btn-row {
+            grid-template-columns: 1fr !important;
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .banner-btn-row .focus-70,
+          .banner-btn-row .focus-20,
+          .banner-btn-row .focus-10 {
+            grid-column: auto !important;
+            width: 100%;
+            white-space: normal;
+            line-height: 1.2;
+          }
+
+          .carousel-dots {
+            justify-content: center;
+          }
+
+          .zodiac-hero-graphic,
+          .cosmic-orbit-container {
+            height: min(78vw, 310px) !important;
+            margin-top: 1.5rem !important;
+            width: min(78vw, 310px) !important;
+          }
+        }
+
+        /* Small-screen cleanup: keep buttons compact and remove decorative stars */
+        .aw::before,
+        .aw::after,
+        .consultation-home-section::before,
+        .consultation-home-section::after,
+        .ethereal-sparkle {
+          display: none !important;
+        }
+
+        .btnrow {
+          width: auto !important;
+        }
+
+        .btn-read {
+          display: inline-flex !important;
+          width: auto !important;
+          min-width: 8.75rem;
+          padding-left: 1.4rem !important;
+          padding-right: 1.4rem !important;
+        }
+
+        @media (max-width: 767px) {
+          .banner-btn-row {
+            display: flex !important;
+            flex-wrap: wrap;
+            justify-content: center !important;
+            max-width: none !important;
+            width: auto !important;
+          }
+
+          .banner-btn-row .focus-70,
+          .banner-btn-row .focus-20,
+          .banner-btn-row .focus-10,
+          .banner-btn-row .mystic-btn-primary,
+          .banner-btn-row .mystic-btn-outline,
+          .banner-btn-row .mystic-btn-ghost {
+            flex: 0 1 auto !important;
+            grid-column: auto !important;
+            width: auto !important;
+            min-width: 9rem;
+            max-width: 100%;
+            white-space: normal;
+          }
+        }
+
+        @media (max-width: 480px) {
+          .btnrow {
+            justify-content: flex-start !important;
+          }
+
+          .btn-read {
+            font-size: 0.95rem !important;
+            min-width: 8rem;
+            width: auto !important;
+          }
+
+          .banner-section .zodiac-hero-graphic,
+          .banner-section .cosmic-orbit-container {
+            display: flex !important;
+            height: min(82vw, 280px) !important;
+            width: min(82vw, 280px) !important;
+          }
+
+          .banner-section .rotating-zodiac-mandala {
+            height: 94% !important;
+            width: 94% !important;
+          }
+        }
+
+        /* Course and consultation section spacing refinements */
+        .aw,
+        .consultation-home-section {
+          padding-left: clamp(1rem, 3vw, 2rem) !important;
+          padding-right: clamp(1rem, 3vw, 2rem) !important;
+        }
+
+        .aw {
+          padding-top: clamp(2.5rem, 5vw, 4rem) !important;
+          padding-bottom: clamp(2.5rem, 5vw, 4rem) !important;
+        }
+
+        .cg {
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)) !important;
+          gap: clamp(1rem, 2vw, 1.35rem) !important;
+        }
+
+        .cc {
+          border-radius: 14px !important;
+          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06) !important;
+        }
+
+        .cc:hover {
+          transform: translateY(-4px) !important;
+        }
+
+        .cb {
+          padding: 1.35rem 1rem 1rem !important;
+        }
+
+        .ctitle {
+          font-size: clamp(1.2rem, 2vw, 1.35rem) !important;
+        }
+
+        .cdesc {
+          font-size: 0.92rem !important;
+          line-height: 1.55 !important;
+          margin-bottom: 0.85rem !important;
+          min-height: 3rem;
+        }
+
+        .price-hero {
+          align-items: baseline;
+          background: rgba(200, 131, 42, 0.08);
+          border: 1px solid rgba(200, 131, 42, 0.16);
+          border-radius: 10px;
+          display: inline-flex;
+          font-size: 1.18rem !important;
+          gap: 0.45rem;
+          justify-content: center;
+          margin: 0 auto 0.7rem !important;
+          padding: 0.38rem 0.72rem;
+          width: fit-content;
+        }
+
+        .price-hero span {
+          font-size: 0.82rem !important;
+          margin-left: 0 !important;
+        }
+
+        .divr {
+          margin: 0.45rem 0 0.85rem !important;
+        }
+
+        .cinstr {
+          align-items: center !important;
+          gap: 0.7rem !important;
+          margin-bottom: 0.9rem !important;
+        }
+
+        .iavt {
+          height: 34px !important;
+          width: 34px !important;
+          font-size: 0.76rem !important;
+        }
+
+        .iname {
+          font-size: 0.95rem !important;
+          line-height: 1.25 !important;
+        }
+
+        .iexp {
+          font-size: 0.82rem !important;
+          line-height: 1.25 !important;
+        }
+
+        .btn-read {
+          border-radius: 9px !important;
+          font-size: 0.88rem !important;
+          min-width: 7.5rem !important;
+          padding: 0.68rem 1.2rem !important;
+        }
+
+        .consultation-home-section .container,
+        .aw {
+          max-width: 1180px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .consultation-home-section .mystic-btn-outline {
+          width: auto !important;
+          min-width: 12rem;
+          padding-left: 1.5rem !important;
+          padding-right: 1.5rem !important;
+        }
+
+        @media (max-width: 575px) {
+          .aw,
+          .consultation-home-section {
+            padding-left: 0.85rem !important;
+            padding-right: 0.85rem !important;
+          }
+
+          .cg {
+            grid-template-columns: 1fr !important;
+          }
+
+          .cb {
+            text-align: left !important;
+            padding: 1.2rem 1rem 1rem !important;
+          }
+
+          .ctitle {
+            font-size: 1.35rem !important;
+          }
+
+          .cdesc {
+            font-size: 1rem !important;
+            min-height: 0;
+          }
+
+          .price-hero {
+            justify-content: flex-start;
+            margin-left: 0 !important;
+          }
+
+          .consultation-home-section .mystic-btn-outline {
+            min-width: 0;
+            max-width: 100%;
+          }
+        }
+
         /* Consultation Cards Styling */
         .consultation-home-section {
           background: #FFFBF5;
@@ -2534,6 +2885,11 @@ function Home() {
           font-size: 1.5rem;
           color: rgba(139, 74, 30, 0.2);
           animation: spinLeft 15s linear infinite;
+        }
+
+        .consultation-home-section::before,
+        .consultation-home-section::after {
+          display: none !important;
         }
 
         .consult-card {
@@ -2822,6 +3178,97 @@ function Home() {
           background: #2A0F02;
           color: #ffffff;
           transform: scale(1.05);
+        }
+
+        .consult-card-v2 {
+          border-radius: 16px !important;
+          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06) !important;
+        }
+
+        .consult-card-v2:hover {
+          transform: translateY(-4px) !important;
+          box-shadow: 0 18px 36px rgba(42, 15, 2, 0.12) !important;
+        }
+
+        .consult-img-v2 {
+          height: 170px !important;
+        }
+
+        .consult-card-v2:hover .consult-img-v2 img {
+          transform: scale(1.06) !important;
+        }
+
+        .consult-content-v2 {
+          padding: 1.25rem 1.1rem !important;
+        }
+
+        .consult-icon-v2 {
+          width: 42px !important;
+          height: 42px !important;
+          border-radius: 10px !important;
+          font-size: 1.05rem !important;
+          margin-bottom: 0.85rem !important;
+        }
+
+        .consult-card-v2:hover .consult-icon-v2 {
+          transform: none !important;
+        }
+
+        .consult-content-v2 h3 {
+          font-size: 1.25rem !important;
+          letter-spacing: 0 !important;
+          margin-bottom: 0.55rem !important;
+        }
+
+        .consult-content-v2 p {
+          font-size: 0.92rem !important;
+          line-height: 1.55 !important;
+          margin-bottom: 1.15rem !important;
+        }
+
+        .consult-btn-group {
+          gap: 0.6rem !important;
+        }
+
+        .btn-view,
+        .btn-book {
+          border-radius: 9px !important;
+          padding: 0.55rem 0.5rem !important;
+          font-size: 0.84rem !important;
+        }
+
+        .expert-badge {
+          border-radius: 8px !important;
+          box-shadow: none !important;
+          font-size: 0.58rem !important;
+          letter-spacing: 0.08em !important;
+          padding: 0.35rem 0.6rem !important;
+          animation: none !important;
+        }
+
+        .price-tag-v2 {
+          border-radius: 8px !important;
+          box-shadow: 0 6px 16px rgba(42, 15, 2, 0.14) !important;
+          font-size: 0.9rem !important;
+          left: 12px !important;
+          padding: 0.38rem 0.7rem !important;
+          bottom: 12px !important;
+        }
+
+        @media (max-width: 575px) {
+          .consult-card-v2 {
+            max-width: 360px;
+            margin-left: auto;
+            margin-right: auto;
+          }
+
+          .consult-img-v2 {
+            height: 160px !important;
+          }
+
+          .consult-btn-group {
+            grid-template-columns: 1fr 1fr !important;
+          }
         }
 
         .verified-badge {

@@ -85,7 +85,7 @@ function Payment() {
       key: keyId || "rzp_test_placeholder",
       amount: rawAmount,
       currency: "INR",
-      name: "Astro Ava",
+      name: "DS Institute",
       description: "Webinar Registration",
       image: "/images/logo.png",
       order_id: orderId,
@@ -120,10 +120,10 @@ function Payment() {
   };
 
   return (
-    <div className="razorpay-page-clone">
+    <div className="razorpay-page-clone site-page">
       <div className="payment-card shadow-sm">
         <div className="card-header-custom">
-          <span>DS Astro Institute-Mega Astrology Webinar</span>
+          <span>DS Institute - Mega Astrology Webinar</span>
         </div>
         
         <div className="card-body-custom">
@@ -205,33 +205,34 @@ function Payment() {
 
       <style>{`
         .razorpay-page-clone {
-          background: #fdfdfd;
+          background: var(--site-bg);
           min-height: 100vh;
           display: flex;
           align-items: flex-start;
           justify-content: center;
-          padding: 40px 20px;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          color: #2c3e50;
+          padding: clamp(1.5rem, 5vw, 3rem) var(--page-pad-x);
+          font-family: var(--font-body);
+          color: var(--site-text);
         }
         .payment-card {
-          background: #fff;
+          background: var(--site-surface);
           width: 100%;
-          max-width: 500px;
-          border-radius: 8px;
-          border: 1px solid #e0e0e0;
+          max-width: 540px;
+          border-radius: var(--radius-card);
+          border: 1px solid var(--site-border);
           overflow: hidden;
+          box-shadow: var(--shadow-card);
         }
         .card-header-custom {
-          background: #6b4a44;
+          background: var(--site-primary);
           color: #fff;
-          padding: 15px;
+          padding: 1rem 1.25rem;
           text-align: center;
-          font-weight: 500;
+          font-weight: 800;
           font-size: 1.1rem;
         }
         .card-body-custom {
-          padding: 30px;
+          padding: clamp(1.1rem, 4vw, 1.8rem);
         }
         .price-row {
           display: flex;
@@ -240,7 +241,7 @@ function Payment() {
         }
         .label { font-weight: 500; font-size: 1rem; }
         .value { font-weight: 700; font-size: 1.1rem; }
-        .note-text { font-size: 0.85rem; color: #7f8c8d; }
+        .note-text { font-size: 0.85rem; color: var(--site-text-soft); }
         
         .gst-input-group {
           display: flex;
@@ -248,46 +249,45 @@ function Payment() {
           align-items: center;
           margin-bottom: 20px;
         }
-        .gst-input-group label { font-size: 0.85rem; color: #7f8c8d; flex: 1; }
+        .gst-input-group label { font-size: 0.85rem; color: var(--site-text-soft); flex: 1; }
         .gst-input-group input { width: 140px; }
 
-        .label-sub { font-size: 0.9rem; color: #34495e; }
-        .value-sub { font-size: 0.95rem; color: #34495e; }
+        .label-sub { font-size: 0.9rem; color: var(--site-text-muted); }
+        .value-sub { font-size: 0.95rem; color: var(--site-text-muted); }
 
         .total-box {
-          background: #f8f9fa;
-          padding: 15px 0;
-          margin: 0 -30px;
-          padding: 15px 30px;
+          background: var(--site-surface-soft);
+          margin: 0 calc(clamp(1.1rem, 4vw, 1.8rem) * -1);
+          padding: 1rem clamp(1.1rem, 4vw, 1.8rem);
           display: flex;
           justify-content: space-between;
           align-items: center;
-          border-top: 1px solid #f1f1f1;
-          border-bottom: 1px solid #f1f1f1;
+          border-top: 1px solid var(--site-border);
+          border-bottom: 1px solid var(--site-border);
         }
-        .total-label { font-size: 1.1rem; color: #2c3e50; }
-        .total-value { font-size: 1.2rem; font-weight: 700; color: #2c3e50; }
+        .total-label { font-size: 1.1rem; color: var(--site-text); }
+        .total-value { font-size: 1.2rem; font-weight: 800; color: var(--site-text); }
 
         .section-title {
           font-size: 0.9rem;
           font-weight: 700;
           margin-bottom: 15px;
-          color: #2c3e50;
+          color: var(--site-text);
         }
         .form-control-custom {
           width: 100%;
           padding: 10px;
-          border: 1px solid #dcdde1;
-          border-radius: 4px;
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-control);
           font-size: 0.9rem;
           background: #fff;
         }
-        .form-control-custom:focus { outline: none; border-color: #6b4a44; }
+        .form-control-custom:focus { outline: none; border-color: var(--site-primary); box-shadow: 0 0 0 3px rgba(139, 74, 30, 0.08); }
         .form-select-custom {
           width: 100%;
           padding: 10px;
-          border: 1px solid #dcdde1;
-          border-radius: 4px;
+          border: 1px solid var(--site-border);
+          border-radius: var(--radius-control);
           font-size: 0.9rem;
           background: #fff url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e") no-repeat right 0.75rem center/16px 12px;
           appearance: none;
@@ -295,24 +295,22 @@ function Payment() {
 
         .checkout-btn {
           width: 100%;
-          background: #4a5568;
+          background: var(--site-primary);
           color: #fff;
           border: none;
           padding: 15px;
           font-weight: 600;
-          border-radius: 4px;
+          border-radius: var(--radius-control);
           font-size: 1rem;
           cursor: pointer;
           transition: background 0.3s;
         }
-        .checkout-btn:hover { background: #34495e; }
+        .checkout-btn:hover { background: var(--site-primary-hover); }
         .checkout-btn:disabled { background: #95a5a6; cursor: wait; }
 
         @media (max-width: 500px) {
-          .razorpay-page-clone { padding: 10px; background: #fff; }
-          .payment-card { border: none; border-radius: 0; box-shadow: none; }
-          .card-body-custom { padding: 15px; }
-          .total-box { margin: 0 -15px; padding: 15px; }
+          .razorpay-page-clone { padding: 1rem; align-items: stretch; }
+          .payment-card { border-radius: var(--radius-card); }
           .gst-input-group label { font-size: 0.75rem; }
           .gst-input-group input { width: 100px; }
           .section-title { font-size: 0.85rem; }

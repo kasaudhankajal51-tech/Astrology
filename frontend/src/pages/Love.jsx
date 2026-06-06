@@ -7,7 +7,7 @@ function Love() {
   }, []);
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div className="love-page-shell">
       <LoveCalculator />
     </div>
   );

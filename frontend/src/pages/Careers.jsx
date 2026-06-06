@@ -13,35 +13,35 @@ import API_BASE from '../utils/api';
 const S = {
   root: {
     minHeight: '100vh',
-    background: '#F7F4EE',
-    fontFamily: "'DM Sans', sans-serif",
-    paddingTop: '96px',
-    paddingBottom: '60px',
-    color: '#1a1714',
+    background: 'var(--site-bg)',
+    fontFamily: 'var(--font-body)',
+    paddingTop: 'clamp(2rem, 5vw, 3.5rem)',
+    paddingBottom: 'clamp(2.5rem, 6vw, 4rem)',
+    color: 'var(--site-text)',
     width: '100%',
     overflowX: 'hidden',
     boxSizing: 'border-box',
   },
   inner: { 
-    maxWidth: 1100, 
+    maxWidth: 'var(--container-public)', 
     width: '100%', 
     margin: '0 auto', 
-    padding: '0 24px',
+    padding: '0 var(--page-pad-x)',
     boxSizing: 'border-box',
   },
 
   /* Header */
-  pageHeader: { textAlign: 'center', marginBottom: 48 },
+  pageHeader: { textAlign: 'center', marginBottom: 'clamp(1.5rem, 4vw, 2.5rem)' },
   pageTitle: {
-    fontFamily: "'Playfair Display', serif",
-    fontSize: 38, fontWeight: 600,
-    color: '#1a1714', letterSpacing: -0.5,
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--h1-size)', fontWeight: 800,
+    color: 'var(--site-text)', letterSpacing: 0,
     marginBottom: 10,
   },
-  pageSub: { fontSize: 14.5, color: '#6b6560', maxWidth: 500, margin: '0 auto', lineHeight: 1.7 },
+  pageSub: { fontSize: 'var(--body-size)', color: 'var(--site-text-muted)', maxWidth: 620, margin: '0 auto', lineHeight: 1.65 },
 
   /* Layout */
-  layout: { display: 'grid', gridTemplateColumns: '300px 1fr', gap: 28, alignItems: 'start' },
+  layout: { display: 'grid', gridTemplateColumns: 'minmax(240px, 300px) minmax(0, 1fr)', gap: 'clamp(1rem, 3vw, 1.75rem)', alignItems: 'start' },
 
   /* Panel label */
   panelLabel: {
@@ -57,10 +57,10 @@ const S = {
 
   /* Job list card */
   jobItem: (active) => ({
-    background: active ? '#FFFDF5' : '#fff',
-    border: active ? '0.5px solid #C9A84C' : '0.5px solid #e5dfd7',
-    boxShadow: active ? '0 0 0 2px #C9A84C22' : 'none',
-    borderRadius: 12, padding: '14px 16px', marginBottom: 10,
+    background: active ? '#FFFDF5' : 'var(--site-surface)',
+    border: active ? '1px solid var(--site-accent)' : '1px solid var(--site-border)',
+    boxShadow: active ? '0 0 0 2px rgba(200, 131, 42, 0.12)' : 'var(--shadow-card)',
+    borderRadius: 'var(--radius-card)', padding: '14px 16px', marginBottom: 10,
     cursor: 'pointer', transition: 'all 0.15s',
   }),
   jobItemTitle: (active) => ({
@@ -82,12 +82,13 @@ const S = {
 
   /* Detail card */
   detailCard: {
-    background: '#fff', border: '0.5px solid #e5dfd7',
-    borderRadius: 16, padding: 32, marginBottom: 20,
+    background: 'var(--site-surface)', border: '1px solid var(--site-border)',
+    borderRadius: 'var(--radius-card)', padding: 'clamp(1.2rem, 4vw, 2rem)', marginBottom: 20,
+    boxShadow: 'var(--shadow-card)',
   },
   detailTitle: {
-    fontFamily: "'Playfair Display', serif",
-    fontSize: 24, fontWeight: 600, color: '#1a1714', marginBottom: 12,
+    fontFamily: 'var(--font-heading)',
+    fontSize: 'var(--h2-size)', fontWeight: 700, color: 'var(--site-text)', marginBottom: 12,
   },
   badgeRow: { display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 20 },
   badge: (variant) => {
@@ -99,7 +100,7 @@ const S = {
     const v = map[variant];
     return { fontSize: 11, padding: '3px 10px', borderRadius: 6, background: v.bg, color: v.color, border: `0.5px solid ${v.border}` };
   },
-  detailGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 28 },
+  detailGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 28 },
   sectionLabel: {
     fontSize: 10.5, fontWeight: 500, letterSpacing: '0.08em',
     textTransform: 'uppercase', color: '#C9A84C',
@@ -115,7 +116,7 @@ const S = {
   },
 
   /* Form card */
-  formCard: { background: '#fff', border: '0.5px solid #e5dfd7', borderRadius: 16, padding: 32 },
+  formCard: { background: 'var(--site-surface)', border: '1px solid var(--site-border)', borderRadius: 'var(--radius-card)', padding: 'clamp(1.2rem, 4vw, 2rem)', boxShadow: 'var(--shadow-card)' },
   formHeader: {
     display: 'flex', alignItems: 'center', gap: 12,
     marginBottom: 24, paddingBottom: 16, borderBottom: '0.5px solid #f0ebe3',
@@ -126,9 +127,9 @@ const S = {
     display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8a6e1e',
     flexShrink: 0,
   },
-  formTitle: { fontFamily: "'Playfair Display', serif", fontSize: 17, fontWeight: 500, color: '#1a1714' },
+  formTitle: { fontFamily: 'var(--font-heading)', fontSize: 17, fontWeight: 700, color: 'var(--site-text)' },
   formSub: { fontSize: 12, color: '#9a8f85', marginTop: 2 },
-  formGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 16 },
+  formGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 16 },
   fieldWrap: { display: 'flex', flexDirection: 'column', gap: 5 },
   fieldLabel: {
     fontSize: 10.5, fontWeight: 500, letterSpacing: '0.07em',
@@ -137,31 +138,31 @@ const S = {
   },
   input: {
     width: '100%', background: '#FAFAF8',
-    border: '0.5px solid #e0d9d1', borderRadius: 8,
-    padding: '9px 12px', fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
+    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
     color: '#1a1714', outline: 'none',
   },
   select: {
     width: '100%', background: '#FAFAF8',
-    border: '0.5px solid #e0d9d1', borderRadius: 8,
-    padding: '9px 12px', fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
+    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
     color: '#1a1714', outline: 'none', cursor: 'pointer',
   },
   textarea: {
     width: '100%', background: '#FAFAF8',
-    border: '0.5px solid #e0d9d1', borderRadius: 8,
-    padding: '9px 12px', fontSize: 13, fontFamily: "'DM Sans', sans-serif",
+    border: '1px solid var(--site-border)', borderRadius: 'var(--radius-control)',
+    padding: '10px 12px', fontSize: 13, fontFamily: 'var(--font-body)',
     color: '#1a1714', outline: 'none', resize: 'vertical', lineHeight: 1.55,
   },
   uploadZone: {
-    background: '#FAFAF8', border: '1px dashed #d4ccc2',
-    borderRadius: 10, padding: '20px', textAlign: 'center', cursor: 'pointer',
+    background: '#FAFAF8', border: '1px dashed var(--site-border-strong)',
+    borderRadius: 'var(--radius-control)', padding: '20px', textAlign: 'center', cursor: 'pointer',
   },
   uploadText: { fontSize: 12.5, color: '#9a8f85', marginTop: 4 },
   submitBtn: {
-    width: '100%', background: '#C9A84C', color: '#fff',
-    border: 'none', borderRadius: 10, padding: '13px',
-    fontSize: 14, fontWeight: 500, fontFamily: "'DM Sans', sans-serif",
+    width: '100%', background: 'var(--site-primary)', color: '#fff',
+    border: 'none', borderRadius: 'var(--radius-control)', padding: '13px',
+    fontSize: 14, fontWeight: 700, fontFamily: 'var(--font-body)',
     cursor: 'pointer', display: 'flex', alignItems: 'center',
     justifyContent: 'center', gap: 8, marginTop: 20, letterSpacing: '0.02em',
   },

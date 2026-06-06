@@ -204,14 +204,14 @@ function Astrologer() {
 
         .astro-hero-v2 {
           position: relative;
-          padding: 160px 0 120px;
+          padding: clamp(6rem, 10vw, 8rem) clamp(0.9rem, 3vw, 2rem) clamp(3.5rem, 7vw, 5rem);
           background: linear-gradient(180deg, #FFFBF5 0%, #FDF6EE 100%);
         }
 
         .hero-pattern-bg {
           position: absolute;
           inset: 0;
-          opacity: 0.1;
+          opacity: 0.06;
           background-image: url('/images/zodiac-pattern.png');
           background-size: cover;
           background-position: center;
@@ -232,46 +232,83 @@ function Astrologer() {
           padding: 10px 24px;
           border-radius: 50px;
           font-weight: 700;
-          font-size: 1.1rem;
+          font-size: 0.82rem;
           text-transform: uppercase;
-          letter-spacing: 2px;
-          margin-bottom: 25px;
+          letter-spacing: 0.12em;
+          margin-bottom: 1rem;
           box-shadow: 0 5px 15px rgba(42, 15, 2, 0.2);
+        }
+
+        .astro-hero-v2 h1 {
+          font-size: clamp(2.1rem, 5vw, 3.45rem) !important;
+          line-height: 1.12;
+          margin-bottom: 1rem !important;
+        }
+
+        .astro-hero-v2 .lead {
+          font-size: clamp(1rem, 1.6vw, 1.12rem);
+          line-height: 1.65;
+          max-width: 680px;
+          margin-left: auto;
+          margin-right: auto;
+          margin-bottom: 1.75rem !important;
+        }
+
+        .trust-bars {
+          gap: 0.7rem !important;
+        }
+
+        .trust-item {
+          background: #fff;
+          border: 1px solid rgba(200, 131, 42, 0.12);
+          border-radius: 9px;
+          color: #4a2815;
+          font-size: 0.9rem;
+          font-weight: 700;
+          padding: 0.55rem 0.85rem;
         }
 
         .stats-bar-v2 {
           background: #fff;
-          margin-top: -50px;
-          border-radius: 25px;
-          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.08);
+          margin-top: -34px;
+          border-radius: 16px;
+          box-shadow: 0 14px 30px rgba(139, 74, 30, 0.08);
           position: relative;
           z-index: 10;
           border: 1px solid rgba(200, 131, 42, 0.1);
         }
 
-        .stat-box { padding: 10px; }
+        .stat-box { padding: 0.4rem; }
+        .stat-box .h3 {
+          color: #2A0F02;
+          font-size: clamp(1.35rem, 2.5vw, 1.6rem);
+        }
+        .stat-box small {
+          font-size: 0.72rem;
+          letter-spacing: 0.08em;
+        }
         .border-start-md { border-left: 1px solid rgba(0,0,0,0.05); }
 
         /* Modern Astro Card */
         .modern-astro-card {
           background: #fff;
-          border-radius: 30px;
+          border-radius: 14px;
           overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
           border: 1px solid rgba(200, 131, 42, 0.1);
           height: 100%;
-          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.04);
+          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
         }
 
         .modern-astro-card:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 25px 50px rgba(139, 74, 30, 0.12);
+          transform: translateY(-4px);
+          box-shadow: 0 18px 36px rgba(139, 74, 30, 0.12);
           border-color: #C8832A;
         }
 
         .card-top {
           position: relative;
-          padding: 30px 20px 20px;
+          padding: 1.4rem 1rem 1rem;
           background: linear-gradient(180deg, #FDF6EE 0%, #fff 100%);
           display: flex;
           justify-content: center;
@@ -283,9 +320,9 @@ function Astrologer() {
           right: 20px;
           background: #fff;
           padding: 4px 12px;
-          border-radius: 50px;
+          border-radius: 8px;
           font-weight: 800;
-          font-size: 1.1rem;
+          font-size: 0.88rem;
           color: #8B4A1E;
           box-shadow: 0 4px 10px rgba(0,0,0,0.05);
           border: 1px solid rgba(200, 131, 42, 0.1);
@@ -295,6 +332,8 @@ function Astrologer() {
           position: relative;
           width: 140px;
           height: 140px;
+          max-width: 38vw;
+          max-height: 38vw;
         }
 
         .main-img {
@@ -318,17 +357,17 @@ function Astrologer() {
           box-shadow: 0 0 10px rgba(40, 167, 69, 0.4);
         }
 
-        .card-body-v2 { padding: 0 clamp(1rem, 2vw, 1.5625rem) 1.875rem; }
+        .card-body-v2 { padding: 0 clamp(1rem, 2vw, 1.2rem) 1.2rem; }
 
-        .astro-name { font-family: var(--font-serif); font-weight: 800; font-size: 2rem; margin-bottom: 5px; }
-        .astro-role { color: #8B4A1E; font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; }
+        .astro-name { font-family: var(--font-serif); font-weight: 800; font-size: clamp(1.35rem, 2.5vw, 1.55rem); margin-bottom: 0.25rem; line-height: 1.25; }
+        .astro-role { color: #8B4A1E; font-weight: 700; font-size: 0.96rem; margin-bottom: 0.8rem; }
 
         .exp-pill {
           display: inline-flex;
           background: #FDF6EE;
-          padding: 6px 15px;
-          border-radius: 50px;
-          font-size: 1.1rem;
+          padding: 0.42rem 0.75rem;
+          border-radius: 8px;
+          font-size: 0.86rem;
           font-weight: 700;
           color: #8B4A1E;
           border: 1px solid rgba(200, 131, 42, 0.1);
@@ -336,9 +375,9 @@ function Astrologer() {
 
         .spec-tag {
           display: inline-block;
-          font-size: 0.95rem;
+          font-size: 0.78rem;
           background: #f8f9fa;
-          padding: 5px 12px;
+          padding: 0.35rem 0.55rem;
           border-radius: 4px;
           margin: 3px;
           color: #6c757d;
@@ -346,38 +385,40 @@ function Astrologer() {
         }
 
         .astro-bio-v2 {
-          font-size: 1.3rem;
+          font-size: 0.92rem;
           color: #5C2D12;
-          line-height: 1.7;
-          margin-bottom: 20px;
+          line-height: 1.55;
+          margin-bottom: 1rem;
           font-style: italic;
           opacity: 0.95;
         }
 
-        .lang-info { font-size: 1.1rem; font-weight: 600; color: #9B6640; }
+        .lang-info { font-size: 0.88rem; font-weight: 600; color: #9B6640; }
 
         .btn-group-v2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
         .btn-chat, .btn-call {
           border: none;
-          padding: 12px;
-          border-radius: 12px;
+          padding: 0.65rem 0.55rem;
+          border-radius: 9px;
           font-weight: 700;
-          font-size: 1.2rem;
+          font-size: 0.9rem;
           transition: all 0.3s;
         }
 
         .btn-chat { background: #2A0F02; color: #fff; }
         .btn-call { background: transparent; border: 1.5px solid #2A0F02; color: #2A0F02; }
 
-        .btn-chat:hover { background: #000; transform: translateY(-2px); }
-        .btn-call:hover { background: #2A0F02; color: #fff; transform: translateY(-2px); }
+        .btn-chat:hover { background: #000; transform: translateY(-1px); }
+        .btn-call:hover { background: #2A0F02; color: #fff; transform: translateY(-1px); }
 
         /* Why Cards */
         .why-card {
           background: #fff;
           border: 1px solid rgba(200, 131, 42, 0.1);
           transition: 0.3s;
+          border-radius: 14px !important;
+          height: 100%;
         }
         .why-card:hover { border-color: #C8832A; box-shadow: 0 15px 30px rgba(139, 74, 30, 0.05); }
 
@@ -386,7 +427,7 @@ function Astrologer() {
           height: 60px;
           background: rgba(200, 131, 42, 0.1);
           color: #8B4A1E;
-          border-radius: 50%;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -394,13 +435,31 @@ function Astrologer() {
           margin: 0 auto;
         }
 
+        .why-consult h2 {
+          font-size: clamp(1.8rem, 4vw, 2.35rem) !important;
+          line-height: 1.2;
+          margin-bottom: 2rem !important;
+        }
+
+        .why-card h4 {
+          font-size: 1.15rem;
+          color: #2A0F02;
+        }
+
+        .why-card p {
+          font-size: 0.92rem;
+          line-height: 1.5;
+          margin-bottom: 0;
+        }
+
         @media (max-width: 768px) {
-          .astro-hero-v2 { padding: 120px 0 80px; }
+          .astro-hero-v2 { padding: 6rem 0.9rem 3.75rem; }
           .display-3 { font-size: 2.2rem; }
-          .stats-bar-v2 { margin-top: -30px; }
+          .stats-bar-v2 { margin-top: -24px; width: calc(100% - 1.7rem); }
           .border-start-md { border-left: none; }
-          .card-body-v2 { padding: 0 clamp(0.75rem, 1.5vw, 1rem) 1.5rem; }
-          .astro-name { font-size: 1.5rem; }
+          .card-body-v2 { padding: 0 clamp(0.85rem, 1.5vw, 1rem) 1rem; }
+          .astro-name { font-size: 1.35rem; }
+          .btn-group-v2 { gap: 0.55rem; }
         }
       `}</style>
     </div>

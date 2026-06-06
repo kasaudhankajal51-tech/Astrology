@@ -7,7 +7,7 @@ function Numerology() {
   }, []);
 
   return (
-    <div style={{ paddingTop: '80px' }}>
+    <div>
       <NumerologyTool />
     </div>
   );

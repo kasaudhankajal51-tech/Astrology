@@ -77,13 +77,13 @@ const ShopCategory = () => {
   if (!categoryData) return null;
 
   return (
-    <div className="category-page" style={{ background: '#FFFDFB', minHeight: '100vh', paddingTop: '80px' }}>
+    <div className="category-page" style={{ background: '#FFFDFB', minHeight: '100vh' }}>
       <style>{`
         .cat-hero {
           background: linear-gradient(rgba(42, 15, 2, 0.7), rgba(42, 15, 2, 0.7)), url(${categoryData.banner});
           background-size: cover;
           background-position: center;
-          padding: 100px 0;
+          padding: clamp(3rem, 7vw, 5.5rem) 0;
           color: #fff;
           text-align: center;
         }
@@ -104,8 +104,8 @@ const ShopCategory = () => {
         .product-grid {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 30px;
-          margin-top: 50px;
+          gap: 24px;
+          margin-top: 32px;
         }
         .product-card {
           background: #fff;
@@ -172,7 +172,7 @@ const ShopCategory = () => {
         </div>
       </section>
 
-      <div className="container py-5">
+      <div className="container py-4 py-lg-5">
         <div className="d-flex justify-content-between align-items-center mb-4">
           <h2 style={{ fontFamily: 'var(--font-serif)', color: '#2A0F02' }}>Explore Products</h2>
           <div className="text-muted small">Showing {categoryData.products.length} Items</div>

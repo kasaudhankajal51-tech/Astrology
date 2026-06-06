@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
-import API_BASE from '../utils/api';
-import toast from 'react-hot-toast';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -126,6 +124,25 @@ const EMISVG = () => (
 function Footer() {
   const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
+  const [authState, setAuthState] = useState({ isStudent: false, isAdmin: false });
+
+  const syncAuthState = () => {
+    setAuthState({
+      isStudent: Boolean(localStorage.getItem('studentToken')),
+      isAdmin: Boolean(localStorage.getItem('adminToken'))
+    });
+  };
+
+  useEffect(() => {
+    syncAuthState();
+    window.addEventListener('storage', syncAuthState);
+    window.addEventListener('focus', syncAuthState);
+
+    return () => {
+      window.removeEventListener('storage', syncAuthState);
+      window.removeEventListener('focus', syncAuthState);
+    };
+  }, []);
 
   // Map social links from settings
   const socialLinks = [
@@ -199,24 +216,36 @@ function Footer() {
         }
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 60px 30px 40px; }
+        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 52px 30px 34px; }
         
         /* Desktop Grid */
-        .fb-grid { display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 50px; }
+        .fb-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.35fr; gap: 34px; }
         
-        .fb-logo { display: flex; align-items: center; gap: 12px; text-decoration: none; margin-bottom: 25px; }
-        .fb-logo-icon { width: 45px; height: 45px; border-radius: 12px; background: #2A0F02; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2); }
-        .fb-logo-name { font-family: var(--font-serif); font-size: 28px; font-weight: 700; color: #2A0F02; letter-spacing: -0.5px; }
-        .fb-logo-name em { font-style: normal; color: #8B4A1E; }
+        .fb-logo { display: inline-flex; align-items: center; text-decoration: none; margin-bottom: 20px; }
+        .fb-logo-img { display: block; height: clamp(5.4rem, 8vw, 7.4rem); max-width: min(19rem, 76vw); object-fit: contain; }
 
         .fb-desc { font-size: 15px; line-height: 1.7; color: #5C3D26; max-width: 320px; margin-bottom: 30px; }
         .fb-head { font-family: var(--font-serif); font-size: 20px; font-weight: 700; color: #2A0F02; margin-bottom: 25px; }
         .fb-head::after { content: ''; display: block; width: 30px; height: 3px; background: #8B4A1E; margin-top: 10px; border-radius: 2px; }
 
-        .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+        .fb-nav { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 11px; }
         .fb-nav li a { color: #5C3D26; text-decoration: none; font-size: 15px; font-weight: 500; transition: all 0.2s; }
         .fb-nav li a:hover { color: #8B4A1E; transform: translateX(5px); display: inline-block; }
         .fb-nav li i { color: #8B4A1E !important; }
+
+        .fb-important-link {
+          align-items: center;
+          display: inline-flex;
+          gap: 0.5rem;
+        }
+
+        .fb-important-link::before {
+          background: rgba(139, 74, 30, 0.18);
+          border-radius: 999px;
+          content: '';
+          height: 0.42rem;
+          width: 0.42rem;
+        }
 
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
@@ -274,9 +303,10 @@ function Footer() {
         /* Phone Layout — hidden on desktop */
         .fb-phone-section { display: none; }
 
-        .fb-bot-wrap { background: #FDF6EE; padding: 25px 20px; border-top: 1px solid rgba(0,0,0,0.03); }
-        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; }
-        .fb-legal a { color: #8B4A1E; text-decoration: none; margin-left: 20px; font-weight: 500; }
+        .fb-bot-wrap { background: #f7eadb; padding: 18px 20px; border-top: 1px solid rgba(139,74,30,0.14); }
+        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; gap: 1rem; }
+        .fb-legal a { color: #8B4A1E; text-decoration: none; font-weight: 700; }
+        .fb-legal a:hover { color: #2A0F02; }
 
 
         @media(max-width: 767px) {
@@ -295,7 +325,7 @@ function Footer() {
 
           /* Logo (reuse desktop classes — ensure they work on mobile) */
           .fb-logo { margin-bottom: 0; }
-          .fb-logo-name { font-size: 24px; }
+          .fb-logo-img { height: 5.4rem; max-width: 15rem; }
 
           /* Description */
           .phone-desc { font-size: 14px; line-height: 1.7; color: #5C3D26; margin: 0; }
@@ -351,6 +381,11 @@ function Footer() {
           .fb-legal a { margin: 0 8px; }
 
         }
+
+        @media(max-width: 1100px) and (min-width: 768px) {
+          .fb-grid { grid-template-columns: 1.4fr 1fr 1fr; }
+          .fb-grid > div:first-child { grid-column: 1 / -1; }
+        }
       `}</style>
 
       <footer className="fb-root">
@@ -361,12 +396,7 @@ function Footer() {
           <div className="fb-grid">
             <div>
               <Link to="/" className="fb-logo">
-                <div className="fb-logo-icon">
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
-                  </svg>
-                </div>
-                <div className="fb-logo-name">DS Astro Institute</div>
+                <img className="fb-logo-img" src="/newbg.webp" alt="DS Institute" />
               </Link>
               <p className="fb-desc">India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
             </div>
@@ -376,9 +406,21 @@ function Footer() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to={authState.isStudent ? '/dashboard' : '/login'}>{authState.isStudent ? 'Student Dashboard' : 'Student Login'}</Link></li>
+                {authState.isAdmin && <li><Link to="/admin">Admin Dashboard</Link></li>}
                 <li><Link to="/shop">Merchandise</Link></li>
-                <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/contact">Contact Us</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
+              </ul>
+            </div>
+            <div>
+              <h5 className="fb-head">Important Links</h5>
+              <ul className="fb-nav">
+                <li><Link className="fb-important-link" to="/about">About Us</Link></li>
+                <li><Link className="fb-important-link" to="/contact">Contact Us</Link></li>
+                <li><Link className="fb-important-link" to="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link className="fb-important-link" to="/terms-and-conditions">Terms &amp; Conditions</Link></li>
+                <li><Link className="fb-important-link" to="/refund-policy">Refund Policy</Link></li>
+                <li><Link className="fb-important-link" to="/careers">Careers</Link></li>
               </ul>
             </div>
             <div>
@@ -463,12 +505,7 @@ function Footer() {
 
           {/* Logo */}
           <Link to="/" className="fb-logo">
-            <div className="fb-logo-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z" fill="white" />
-              </svg>
-            </div>
-            <div className="fb-logo-name">DS Astro Institute</div>
+            <img className="fb-logo-img" src="/newbg.webp" alt="DS Institute" />
           </Link>
 
           {/* Description */}
@@ -485,11 +522,26 @@ function Footer() {
                 <li><Link to="/">Home</Link></li>
                 <li><Link to="/courses">Courses</Link></li>
                 <li><Link to="/book-consultation">Book a Consultation</Link></li>
+                <li><Link to={authState.isStudent ? '/dashboard' : '/login'}>{authState.isStudent ? 'Student Dashboard' : 'Student Login'}</Link></li>
+                {authState.isAdmin && <li><Link to="/admin">Admin Dashboard</Link></li>}
                 <li><Link to="/shop">Merchandise</Link></li>
-                <li><Link to="/about">About Us</Link></li>
-                <li><Link to="/contact">Contact Us</Link></li>
+                <li><Link to="/blog">Blog</Link></li>
               </ul>
             </div>
+            <div>
+              <div className="phone-nav-head">Important</div>
+              <ul className="phone-nav-list">
+                <li><Link to="/about">About Us</Link></li>
+                <li><Link to="/contact">Contact Us</Link></li>
+                <li><Link to="/privacy-policy">Privacy Policy</Link></li>
+                <li><Link to="/terms-and-conditions">Terms &amp; Conditions</Link></li>
+                <li><Link to="/refund-policy">Refund Policy</Link></li>
+                <li><Link to="/careers">Careers</Link></li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="phone-nav-grid" style={{ gridTemplateColumns: '1fr' }}>
             <div>
               <div className="phone-nav-head">Contact Info</div>
               <ul className="phone-nav-list" style={{ gap: '12px' }}>
@@ -556,7 +608,7 @@ function Footer() {
         {/* Bottom Legal Bar */}
         <div className="fb-bot-wrap">
           <div className="fb-bot">
-            <p className="mb-0">&copy; {currentYear} DS Astro Institute LLP. All rights reserved.</p>
+            <p className="mb-0">&copy; {currentYear} DS Institute LLP. All rights reserved.</p>
             <div className="fb-legal" style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
               <Link to="/privacy-policy">Privacy Policy</Link>
               <span style={{ color: '#8B4A1E', opacity: 0.5 }}>|</span>

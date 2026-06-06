@@ -103,7 +103,9 @@ function Consultations() {
 
       const options = {
         key: data.keyId,
-        name: "DS Astro Institute",
+        amount: data.amount,
+        currency: data.currency,
+        name: "DS Institute",
         description: `Consultation Booking: ${formData.consultationType}`,
         image: "/images/logo.png",
         order_id: data.orderId,
@@ -558,11 +560,11 @@ function Consultations() {
         }
 
         .consultation-page {
-          padding: 160px 0 100px;
+          padding: clamp(6rem, 10vw, 8.5rem) clamp(0.85rem, 3vw, 2rem) clamp(3rem, 6vw, 5rem);
           background: var(--cosmic-bg);
           min-height: 100vh;
           position: relative;
-          overflow: hidden;
+          overflow: visible;
         }
 
         .page-header-bg {
@@ -570,28 +572,28 @@ function Consultations() {
           top: 0;
           left: 0;
           width: 100%;
-          height: 600px;
-          background: radial-gradient(circle at 50% 0%, var(--cosmic-accent-soft), transparent 70%);
-          opacity: 0.6;
+          height: 420px;
+          background: radial-gradient(circle at 50% 0%, rgba(139, 74, 30, 0.08), transparent 70%);
+          opacity: 1;
           pointer-events: none;
         }
 
         .section-subtitle {
           color: var(--cosmic-accent-pink);
           text-transform: uppercase;
-          letter-spacing: 4px;
+          letter-spacing: 0.14em;
           font-weight: 800;
-          font-size: 1rem;
-          margin-bottom: 15px;
+          font-size: 0.82rem;
+          margin-bottom: 10px;
           display: block;
         }
 
         .section-title {
           font-family: 'Playfair Display', serif !important;
-          font-size: clamp(42px, 5vw, 48px) !important;
-          font-weight: 900 !important;
+          font-size: clamp(2.2rem, 5vw, 3.25rem) !important;
+          font-weight: 800 !important;
           color: var(--cosmic-text) !important;
-          margin-bottom: 20px;
+          margin-bottom: 14px;
         }
 
         .text-gradient {
@@ -603,34 +605,33 @@ function Consultations() {
         .header-desc {
           max-width: 800px;
           color: var(--cosmic-text-muted);
-          font-size: 1.4rem;
-          line-height: 1.7;
+          font-size: clamp(1rem, 1.7vw, 1.12rem);
+          line-height: 1.65;
           font-weight: 500;
           font-family: var(--font-sans);
         }
 
         .search-container-v2 {
-          max-width: 700px;
+          max-width: 640px;
           position: relative;
           z-index: 10;
         }
 
         .search-box-v2 {
           background: var(--cosmic-white);
-          border: 2px solid var(--glass-border);
-          border-radius: 50px;
-          padding: 15px 25px;
+          border: 1px solid var(--glass-border);
+          border-radius: 12px;
+          padding: 0.78rem 1rem;
           display: flex;
           align-items: center;
           gap: 15px;
-          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.08);
+          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
           transition: all 0.3s ease;
         }
 
         .search-box-v2:focus-within {
           border-color: var(--cosmic-accent-pink);
-          box-shadow: 0 15px 40px rgba(139, 74, 30, 0.15);
-          transform: translateY(-2px);
+          box-shadow: 0 14px 30px rgba(139, 74, 30, 0.12);
         }
 
         .search-icon {
@@ -642,7 +643,7 @@ function Consultations() {
           border: none;
           outline: none;
           flex-grow: 1;
-          font-size: 1.25rem;
+          font-size: 1rem;
           font-weight: 500;
           background: transparent;
           color: var(--cosmic-text);
@@ -670,7 +671,7 @@ function Consultations() {
         }
 
         .search-hint {
-          font-size: 1.2rem;
+          font-size: 0.9rem;
           font-weight: 700;
           color: var(--cosmic-text-muted);
         }
@@ -678,9 +679,9 @@ function Consultations() {
         .badge-hint {
           background: var(--cosmic-white);
           border: 1px solid var(--glass-border);
-          padding: 6px 18px;
-          border-radius: 50px;
-          font-size: 1.05rem;
+          padding: 0.42rem 0.85rem;
+          border-radius: 9px;
+          font-size: 0.9rem;
           font-weight: 700;
           color: var(--cosmic-accent-pink);
           cursor: pointer;
@@ -694,31 +695,31 @@ function Consultations() {
         }
 
         .title-underline {
-          width: 70px;
-          height: 4px;
+          width: 64px;
+          height: 3px;
           background: var(--cosmic-gradient);
           border-radius: 10px;
-          margin-top: 40px;
+          margin-top: 30px;
         }
 
         .category-name {
           font-family: var(--font-serif);
-          font-size: 3.2rem;
+          font-size: clamp(1.8rem, 4vw, 2.55rem);
           color: var(--cosmic-text);
           font-weight: 800;
         }
         
-        .category-name.small { font-size: 2rem; }
+        .category-name.small { font-size: clamp(1.5rem, 3vw, 1.85rem); }
 
         .category-icon-box {
-          width: 55px;
-          height: 55px;
+          width: 46px;
+          height: 46px;
           background: var(--cosmic-white);
-          border-radius: 15px;
+          border-radius: 12px;
           display: flex;
           align-items: center;
           justify-content: center;
-          font-size: 1.4rem;
+          font-size: 1.1rem;
           color: var(--cosmic-accent-pink);
           box-shadow: var(--premium-shadow);
           border: 1px solid var(--glass-border);
@@ -733,39 +734,48 @@ function Consultations() {
         .category-description {
           max-width: 900px;
           color: var(--cosmic-text-muted);
-          font-size: 1.2rem;
+          font-size: 1rem;
           font-weight: 500;
           margin-top: 10px;
           font-family: 'Be Vietnam Pro', sans-serif;
         }
 
+        .category-section {
+          margin-bottom: clamp(2.25rem, 5vw, 3.5rem) !important;
+          padding-bottom: clamp(1rem, 3vw, 2rem) !important;
+        }
+
+        .category-header {
+          margin-bottom: clamp(1.25rem, 3vw, 2rem) !important;
+        }
+
         .consult-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-          gap: 30px;
+          grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+          gap: clamp(1rem, 2vw, 1.35rem);
         }
 
         .consult-card {
           background: var(--cosmic-white);
           border: 1px solid var(--glass-border);
-          border-radius: 30px;
+          border-radius: 14px;
           overflow: hidden;
-          transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
-          box-shadow: var(--premium-shadow);
+          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
           height: 100%;
           display: flex;
           flex-direction: column;
         }
 
         .consult-card:hover {
-          transform: translateY(-10px);
+          transform: translateY(-4px);
           border-color: var(--cosmic-accent-pink);
-          box-shadow: 0 25px 50px rgba(139, 74, 30, 0.15);
+          box-shadow: 0 18px 36px rgba(139, 74, 30, 0.12);
         }
 
         .card-image-box {
           position: relative;
-          height: 220px;
+          height: 176px;
           overflow: hidden;
         }
 
@@ -777,7 +787,7 @@ function Consultations() {
         }
 
         .consult-card:hover .card-image-box img {
-          transform: scale(1.08);
+          transform: scale(1.04);
         }
 
         .card-overlay-gradient {
@@ -791,7 +801,7 @@ function Consultations() {
           top: 15px;
           right: 15px;
           padding: 6px 14px;
-          border-radius: 50px;
+          border-radius: 8px;
           font-size: 0.65rem;
           font-weight: 800;
           text-transform: uppercase;
@@ -808,10 +818,10 @@ function Consultations() {
           background: var(--cosmic-white);
           color: var(--cosmic-text);
           padding: 6px 16px;
-          border-radius: 50px;
+          border-radius: 8px;
           font-weight: 800;
-          font-size: 1.1rem;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+          font-size: 0.95rem;
+          box-shadow: 0 6px 16px rgba(0,0,0,0.16);
         }
 
         .status-badge.purple { background: rgba(107, 33, 168, 0.85); }
@@ -820,7 +830,7 @@ function Consultations() {
         .status-badge.red { background: rgba(220, 38, 38, 0.85); }
 
         .card-info {
-          padding: 25px;
+          padding: 1.15rem;
           flex-grow: 1;
           display: flex;
           flex-direction: column;
@@ -828,17 +838,17 @@ function Consultations() {
 
         .card-info h4 {
           font-family: var(--font-serif);
-          font-size: 2rem;
+          font-size: clamp(1.28rem, 2.5vw, 1.55rem);
           font-weight: 800;
           color: var(--cosmic-text);
-          margin-bottom: 12px;
+          margin-bottom: 0.55rem;
         }
 
         .card-preview-text {
           color: var(--cosmic-text-muted);
-          font-size: 1.1rem;
-          line-height: 1.6;
-          margin-bottom: 15px;
+          font-size: 0.94rem;
+          line-height: 1.55;
+          margin-bottom: 0.9rem;
           font-family: var(--font-sans);
         }
         
@@ -848,7 +858,7 @@ function Consultations() {
           color: var(--cosmic-accent-pink);
           background: var(--cosmic-accent-soft);
           padding: 5px 12px;
-          border-radius: 50px;
+          border-radius: 8px;
           display: inline-flex;
           align-items: center;
           width: fit-content;
@@ -857,16 +867,16 @@ function Consultations() {
         .card-actions {
           display: grid;
           grid-template-columns: 1fr 1fr;
-          gap: 10px;
+          gap: 0.6rem;
         }
 
         .btn-action {
-          padding: 10px;
-          border-radius: 12px;
+          padding: 0.6rem 0.55rem;
+          border-radius: 9px;
           font-weight: 700;
           font-size: 0.9rem;
-          text-transform: uppercase;
-          letter-spacing: 0.5px;
+          text-transform: none;
+          letter-spacing: 0;
           transition: 0.3s;
           border: none;
           cursor: pointer;
@@ -898,15 +908,15 @@ function Consultations() {
         .glass-panel {
           background: rgba(255, 255, 255, 0.6);
           backdrop-filter: blur(15px);
-          border-radius: 35px;
+          border-radius: 16px;
           border: 1px solid var(--glass-border);
           box-shadow: var(--premium-shadow);
         }
         
         .guidelines-grid {
           display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-          gap: 25px;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1rem;
         }
         
         .guideline-item {
@@ -942,7 +952,7 @@ function Consultations() {
 
         .booking-card-new {
           background: var(--cosmic-gradient);
-          border-radius: 40px;
+          border-radius: 18px;
           color: white;
           box-shadow: 0 20px 50px rgba(139, 74, 30, 0.3);
           position: relative;
@@ -962,13 +972,13 @@ function Consultations() {
         
         .cta-title {
           font-family: 'Playfair Display', serif;
-          font-size: 2.5rem;
+          font-size: clamp(1.75rem, 4vw, 2.2rem);
           font-weight: 800;
           margin-bottom: 10px;
         }
         
         .cta-desc {
-          font-size: 1.2rem;
+          font-size: 1rem;
           opacity: 0.9;
           font-weight: 400;
         }
@@ -982,7 +992,7 @@ function Consultations() {
         .detail-pill {
           background: rgba(255,255,255,0.15);
           padding: 6px 18px;
-          border-radius: 50px;
+          border-radius: 8px;
           font-size: 0.9rem;
           font-weight: 700;
           border: 1px solid rgba(255,255,255,0.2);
@@ -993,12 +1003,12 @@ function Consultations() {
           background: white;
           color: var(--cosmic-accent-pink);
           border: none;
-          padding: 18px 35px;
-          border-radius: 15px;
+          padding: 0.9rem 1.35rem;
+          border-radius: 10px;
           font-weight: 800;
-          font-size: 1.1rem;
-          text-transform: uppercase;
-          letter-spacing: 1px;
+          font-size: 0.95rem;
+          text-transform: none;
+          letter-spacing: 0;
           box-shadow: 0 10px 20px rgba(0,0,0,0.1);
           transition: 0.3s;
           cursor: pointer;
@@ -1006,7 +1016,7 @@ function Consultations() {
         }
         
         .premium-booking-btn:hover {
-          transform: scale(1.05);
+          transform: translateY(-2px);
           box-shadow: 0 15px 30px rgba(0,0,0,0.2);
         }
 
@@ -1015,7 +1025,7 @@ function Consultations() {
         }
 
         @media (max-width: 991px) {
-          .consultation-page { padding-top: 130px; }
+          .consultation-page { padding-top: 6.75rem; }
           .category-name { font-size: 2.2rem; }
           .category-icon-box { width: 45px; height: 45px; font-size: 1.2rem; }
           .cta-title { font-size: 2rem; }
@@ -1029,6 +1039,18 @@ function Consultations() {
           .category-name { font-size: 1.8rem; }
           .guidelines-grid { grid-template-columns: 1fr; }
           .premium-booking-btn { width: 100%; padding: 15px; }
+          .category-header .d-flex {
+            align-items: flex-start !important;
+          }
+          .category-line-flex {
+            display: none;
+          }
+          .search-badges {
+            justify-content: flex-start;
+          }
+          .card-actions {
+            grid-template-columns: 1fr;
+          }
         }
       `}</style>
     </>

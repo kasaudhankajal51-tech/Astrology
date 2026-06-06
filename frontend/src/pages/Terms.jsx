@@ -58,7 +58,7 @@ function Terms() {
   };
 
   return (
-    <div className="terms-page-wrapper">
+    <div className="terms-page-wrapper legal-policy-page">
       {/* Solid Color Header matching the requested design */}
       <div className="terms-header">
         <h1 className="terms-title">Terms and Conditions</h1>
@@ -679,6 +679,235 @@ function Terms() {
         .contact-button:hover {
           background-color: #6b340e;
           color: white;
+        }
+
+        .legal-policy-page {
+          background:
+            radial-gradient(circle at top left, rgba(200, 131, 42, 0.1), transparent 28rem),
+            linear-gradient(180deg, #fff8ef 0%, #f7ecdf 42%, #fffaf4 100%);
+          color: #2a0f02;
+        }
+
+        .legal-policy-page .terms-header {
+          background:
+            linear-gradient(135deg, rgba(69, 27, 7, 0.9), rgba(139, 74, 30, 0.86)),
+            radial-gradient(circle at 22% 18%, rgba(255, 232, 189, 0.24), transparent 18rem) !important;
+          border-bottom: 0;
+          color: #fffaf3;
+          padding: clamp(2rem, 4vw, 3rem) 1rem;
+        }
+
+        .legal-policy-page .terms-title {
+          color: #fffaf3 !important;
+          font-family: var(--site-heading-font);
+          font-size: clamp(2rem, 4vw, 3rem);
+          font-weight: 800;
+          margin-bottom: 0.45rem;
+        }
+
+        .legal-policy-page .terms-subtitle {
+          color: rgba(255, 250, 243, 0.86) !important;
+          font-size: 0.95rem;
+          font-weight: 700;
+          margin: 0;
+        }
+
+        .legal-policy-page .terms-container {
+          align-items: start;
+          display: grid;
+          gap: 1.25rem;
+          grid-template-columns: 240px minmax(0, 1fr);
+          margin: 0 auto;
+          max-width: 1180px;
+          padding: clamp(1.25rem, 3vw, 2rem) 1rem clamp(1.75rem, 4vw, 2.5rem);
+          position: relative;
+        }
+
+        .legal-policy-page .terms-container::before {
+          background: rgba(255, 255, 255, 0.4);
+          border: 1px solid rgba(139, 74, 30, 0.1);
+          border-radius: 1.2rem;
+          content: '';
+          inset: 0.9rem 0.45rem 1.1rem;
+          pointer-events: none;
+          position: absolute;
+        }
+
+        .legal-policy-page .terms-sidebar-wrapper {
+          min-width: 0;
+          padding-top: 0;
+          position: relative;
+          width: auto;
+          z-index: 1;
+        }
+
+        .legal-policy-page .terms-sidebar {
+          background: rgba(255, 250, 243, 0.94);
+          border: 1px solid rgba(139, 74, 30, 0.14);
+          border-radius: 0.75rem;
+          box-shadow: 0 14px 35px rgba(42, 15, 2, 0.06);
+          gap: 0.15rem;
+          max-height: calc(100vh - 11rem);
+          overflow-x: hidden;
+          overflow-y: auto;
+          padding: 0.75rem;
+          position: sticky;
+          scrollbar-color: rgba(139, 74, 30, 0.28) transparent;
+          scrollbar-width: thin;
+          top: 9.25rem;
+          width: 100%;
+        }
+
+        .legal-policy-page .terms-sidebar::-webkit-scrollbar {
+          width: 0.35rem;
+        }
+
+        .legal-policy-page .terms-sidebar::-webkit-scrollbar-thumb {
+          background: rgba(139, 74, 30, 0.26);
+          border-radius: 999px;
+        }
+
+        .legal-policy-page .sidebar-heading {
+          color: #8b4a1e;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.12em;
+          margin: 0 0 0.45rem;
+          padding: 0 0.45rem;
+        }
+
+        .legal-policy-page .sidebar-btn {
+          border-radius: 0.55rem;
+          color: #4b2a16;
+          font-size: 0.82rem;
+          font-weight: 700;
+          line-height: 1.3;
+          padding: 0.52rem 0.62rem;
+        }
+
+        .legal-policy-page .sidebar-btn.active {
+          background: #fff6ea;
+          border: 1px solid rgba(139, 74, 30, 0.18);
+          border-left: 4px solid #9b5522;
+          box-shadow: none;
+          color: #2a0f02;
+          padding-left: 0.5rem;
+        }
+
+        .legal-policy-page .terms-main-content {
+          background: #fffaf4;
+          border: 1px solid rgba(139, 74, 30, 0.16);
+          border-radius: 0.9rem;
+          box-shadow: 0 16px 38px rgba(42, 15, 2, 0.08);
+          gap: 1.45rem;
+          max-width: none;
+          min-width: 0;
+          overflow: hidden;
+          padding: clamp(1.15rem, 2.5vw, 2rem);
+          position: relative;
+          width: 100%;
+          z-index: 1;
+        }
+
+        .legal-policy-page .section-title,
+        .legal-policy-page .contact-title {
+          color: #8b4a1e !important;
+          font-family: var(--site-heading-font);
+          font-size: clamp(1.45rem, 2.4vw, 2rem) !important;
+          line-height: 1.18;
+          margin-bottom: 0.65rem;
+        }
+
+        .legal-policy-page .subsection-title {
+          color: #5a2a11;
+          font-family: var(--site-heading-font);
+          font-size: clamp(1.12rem, 1.7vw, 1.38rem) !important;
+          line-height: 1.25;
+          margin: 0.95rem 0 0.5rem;
+        }
+
+        .legal-policy-page .content-section p,
+        .legal-policy-page .content-list,
+        .legal-policy-page .contact-box,
+        .legal-policy-page .contact-desc,
+        .legal-policy-page .contact-details {
+          color: #4b2a16;
+          font-size: 0.94rem !important;
+          font-weight: 400;
+          line-height: 1.68;
+        }
+
+        .legal-policy-page .content-list {
+          padding-left: 1.1rem;
+        }
+
+        .legal-policy-page .content-list li {
+          margin: 0.42rem 0;
+        }
+
+        .legal-policy-page .content-section p strong,
+        .legal-policy-page .content-list strong,
+        .legal-policy-page .contact-box strong,
+        .legal-policy-page .contact-details strong {
+          color: #2a0f02;
+          font-weight: 800;
+        }
+
+        .legal-policy-page .contact-box,
+        .legal-policy-page .contact-section {
+          background: #fff6ea;
+          border: 1px solid rgba(139, 74, 30, 0.14);
+          border-radius: 0.75rem;
+          padding: 1rem;
+        }
+
+        .legal-policy-page .contact-button {
+          background: #8b4a1e;
+          border-radius: 999px;
+          color: #fff;
+          padding: 0.72rem 1.25rem;
+        }
+
+        @media (max-width: 991.98px) {
+          .legal-policy-page .terms-container {
+            display: block;
+            padding-inline: 0.9rem;
+          }
+
+          .legal-policy-page .terms-container::before {
+            display: none;
+          }
+
+          .legal-policy-page .terms-sidebar {
+            display: flex;
+            flex-direction: row;
+            gap: 0.45rem;
+            margin-bottom: 1rem;
+            max-height: none;
+            overflow-x: auto;
+            overflow-y: hidden;
+            position: static;
+          }
+
+          .legal-policy-page .sidebar-heading {
+            display: none;
+          }
+
+          .legal-policy-page .sidebar-btn {
+            flex: 0 0 auto;
+            white-space: nowrap;
+          }
+        }
+
+        @media (max-width: 575.98px) {
+          .legal-policy-page .terms-header {
+            padding-block: 1.75rem;
+          }
+
+          .legal-policy-page .terms-main-content {
+            border-radius: 0.75rem;
+            padding: 1rem;
+          }
         }
       `}</style>
     </div>

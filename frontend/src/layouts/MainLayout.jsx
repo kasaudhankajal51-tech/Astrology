@@ -4,13 +4,13 @@ import Footer from '../components/Footer';
 
 function MainLayout() {
   return (
-    <>
+    <div className="site-shell">
       <Header />
-      <main style={{ minHeight: '80vh' }}>
+      <main className="site-main" style={{ minHeight: '80vh' }}>
         <Outlet />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
 

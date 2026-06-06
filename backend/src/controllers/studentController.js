@@ -34,7 +34,18 @@ export const studentLogin = async (req, res) => {
       { expiresIn: '30d' }
     );
 
-    res.status(200).json({ success: true, token, message: 'Login successful' });
+    res.status(200).json({
+      success: true,
+      token,
+      message: 'Login successful',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        mobile: user.mobile,
+        role: user.role
+      }
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
   }

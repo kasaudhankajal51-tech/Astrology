@@ -121,7 +121,7 @@ const AstroShop = () => {
 
         <div className="category-grid-v2">
           {categories.map((cat, i) => (
-            <Link key={i} to={`/astro-shop/${cat.path}`} className="cat-card-v2" data-aos="zoom-in" data-aos-delay={i * 100}>
+            <Link key={i} to={`/shop/${cat.path}`} className="cat-card-v2" data-aos="zoom-in" data-aos-delay={i * 100}>
               <div className="cat-img-box">
                 <img src={cat.image} alt={cat.name} />
                 <div className="cat-overlay" style={{ background: `linear-gradient(to top, ${cat.accent}, transparent)` }}></div>
@@ -171,8 +171,8 @@ const AstroShop = () => {
         <div className="support-banner-v2 mt-5 p-5" data-aos="flip-up">
           <div className="row align-items-center">
             <div className="col-lg-8">
-              <h3 className="fw-bold mb-3">Not Sure What You Need?</h3>
-              <p className="mb-0 opacity-75">Our expert astrologers can recommend the perfect gemstone or remedy 
+              <h3 className="fw-bold text-[#fff] mb-3">Not Sure What You Need?</h3>
+              <p className="mb-0  text-[#fff]">Our expert astrologers can recommend the perfect gemstone or remedy 
               based on your unique birth chart analysis.</p>
             </div>
             <div className="col-lg-4 text-lg-end mt-4 mt-lg-0">
@@ -195,7 +195,7 @@ const AstroShop = () => {
           background: linear-gradient(rgba(42, 15, 2, 0.8), rgba(42, 15, 2, 0.8)), url('https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=1200');
           background-size: cover;
           background-position: center;
-          padding: 180px 0 140px;
+          padding: clamp(4rem, 8vw, 6.5rem) 0;
           position: relative;
         }
 
@@ -204,7 +204,7 @@ const AstroShop = () => {
           text-transform: uppercase;
           letter-spacing: 3px;
           font-weight: 800;
-          font-size: 1.1rem;
+          font-size: 0.82rem;
           margin-bottom: 10px;
         }
 
@@ -212,11 +212,11 @@ const AstroShop = () => {
 
         .trust-row {
           background: #fff;
-          margin-top: -50px;
-          border-radius: 20px;
+          margin-top: -32px;
+          border-radius: var(--radius-card);
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-          padding: 30px;
+          padding: clamp(1rem, 2vw, 1.35rem);
           position: relative;
           z-index: 10;
           border: 1px solid rgba(200, 131, 42, 0.1);
@@ -225,18 +225,18 @@ const AstroShop = () => {
         .trust-col {
           display: flex;
           align-items: center;
-          gap: 15px;
-          padding: 10px 20px;
+          gap: 0.8rem;
+          padding: 0.65rem 1rem;
           border-right: 1px solid rgba(0,0,0,0.05);
         }
         .trust-col:last-child { border-right: none; }
 
         .trust-col i {
-          font-size: 2.2rem;
+          font-size: 1.5rem;
           color: #8B4A1E;
         }
-        .trust-col h6 { margin: 0; font-weight: 700; font-size: 1.2rem; }
-        .trust-col small { color: #6c757d; font-size: 0.95rem; }
+        .trust-col h6 { margin: 0; font-weight: 700; font-size: 0.98rem; }
+        .trust-col small { color: #6c757d; font-size: 0.82rem; }
 
         .section-head { margin-bottom: 40px; }
         .h-line { width: 60px; height: 3px; background: #C8832A; margin: 15px auto; }
@@ -245,20 +245,20 @@ const AstroShop = () => {
         .category-grid-v2 {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 25px;
+          gap: 1.25rem;
         }
 
         .cat-card-v2 {
           text-decoration: none;
           color: #fff;
-          border-radius: 25px;
+          border-radius: var(--radius-card);
           overflow: hidden;
           position: relative;
-          height: 380px;
+          height: clamp(17rem, 28vw, 21rem);
           transition: all 0.4s ease;
         }
 
-        .cat-card-v2:hover { transform: translateY(-10px); }
+        .cat-card-v2:hover { transform: translateY(-5px); }
 
         .cat-img-box {
           width: 100%;
@@ -285,7 +285,7 @@ const AstroShop = () => {
           position: absolute;
           bottom: 0;
           left: 0;
-          padding: 30px;
+          padding: 1.35rem;
           width: 100%;
           z-index: 5;
         }
@@ -296,13 +296,13 @@ const AstroShop = () => {
           backdrop-filter: blur(5px);
           padding: 6px 16px;
           border-radius: 50px;
-          font-size: 1rem;
+          font-size: 0.78rem;
           font-weight: 700;
           margin-bottom: 15px;
         }
 
-        .cat-content h3 { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 2rem; margin-bottom: 5px; }
-        .cat-content p { font-size: 1.1rem; opacity: 0.9; margin-bottom: 20px; }
+        .cat-content h3 { font-family: var(--font-heading); font-weight: 800; font-size: clamp(1.35rem, 2.2vw, 1.75rem); margin-bottom: 5px; }
+        .cat-content p { font-size: 0.95rem; opacity: 0.9; margin-bottom: 1rem; }
 
         .explore-link { font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
 
@@ -310,12 +310,12 @@ const AstroShop = () => {
         .product-grid-v2 {
           display: grid;
           grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-          gap: 30px;
+          gap: 1.25rem;
         }
 
         .prod-card-v2 {
           background: #fff;
-          border-radius: 20px;
+          border-radius: var(--radius-card);
           overflow: hidden;
           transition: all 0.3s;
           border: 1px solid rgba(200, 131, 42, 0.08);
@@ -325,7 +325,7 @@ const AstroShop = () => {
 
         .prod-img-wrapper {
           position: relative;
-          height: 220px;
+          height: 13.5rem;
           overflow: hidden;
         }
 
@@ -339,7 +339,7 @@ const AstroShop = () => {
           color: #fff;
           padding: 6px 15px;
           border-radius: 50px;
-          font-size: 0.95rem;
+          font-size: 0.72rem;
           font-weight: 700;
           text-transform: uppercase;
         }
@@ -371,12 +371,12 @@ const AstroShop = () => {
         }
         .icon-btn:hover { background: #8B4A1E; color: #fff; }
 
-        .prod-info-v2 { padding: 20px; }
+        .prod-info-v2 { padding: 1rem; }
         .rating-row { color: #F59E0B; font-size: 0.9rem; margin-bottom: 8px; }
-        .prod-name-v2 { font-weight: 700; font-size: 1.3rem; margin-bottom: 15px; height: 3.2rem; overflow: hidden; }
+        .prod-name-v2 { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.9rem; height: 2.8rem; overflow: hidden; }
         
         .price-row { display: flex; justify-content: space-between; align-items: center; }
-        .price-v2 { font-weight: 800; color: #8B4A1E; font-size: 1.5rem; }
+        .price-v2 { font-weight: 800; color: #8B4A1E; font-size: 1.15rem; }
         
         .btn-buy-v2 {
           background: transparent;
@@ -385,15 +385,20 @@ const AstroShop = () => {
           padding: 8px 20px;
           border-radius: 8px;
           font-weight: 700;
-          font-size: 1.1rem;
+          font-size: 0.9rem;
           transition: 0.3s;
         }
         .btn-buy-v2:hover { background: #2A0F02; color: #fff; }
 
         .support-banner-v2 {
           background: linear-gradient(135deg, #2A0F02 0%, #5C2D12 100%);
-          border-radius: 30px;
+          border-radius: var(--radius-card);
           color: #fff;
+        }
+
+        .support-banner-v2 h3,
+        .support-banner-v2 p {
+          color: #fff !important;
         }
 
         .btn-premium-v2 {
@@ -412,7 +417,7 @@ const AstroShop = () => {
         @media (max-width: 991px) {
           .trust-col { border-right: none; border-bottom: 1px solid rgba(0,0,0,0.05); }
           .trust-col:last-child { border-bottom: none; }
-          .shop-hero-v2 { padding: 140px 0 100px; }
+          .shop-hero-v2 { padding: 3.5rem 0 4.5rem; }
         }
       `}</style>
     </div>

@@ -144,7 +144,7 @@ function AdminSettings() {
                         name="siteName" 
                         value={settings.siteName} 
                         onChange={handleChange}
-                        placeholder="e.g. DS Astro Institute"
+                        placeholder="e.g. DS Institute"
                       />
                     </div>
                     <div className="form-group">
@@ -153,7 +153,7 @@ function AdminSettings() {
                         name="siteTitle" 
                         value={settings.siteTitle} 
                         onChange={handleChange}
-                        placeholder="DS Astro Institute - Best Astrology Services"
+                        placeholder="DS Institute - Best Astrology Services"
                       />
                     </div>
                     <div className="form-group full-width">

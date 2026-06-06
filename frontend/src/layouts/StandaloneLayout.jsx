@@ -1,4 +1,5 @@
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 
 const pageMeta = [
@@ -82,7 +83,34 @@ function getPageMeta(pathname) {
 
 function StandaloneLayout() {
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const meta = getPageMeta(pathname);
+  const [authState, setAuthState] = useState({ isStudent: false, isAdmin: false });
+
+  const syncAuthState = () => {
+    setAuthState({
+      isStudent: Boolean(localStorage.getItem('studentToken')),
+      isAdmin: Boolean(localStorage.getItem('adminToken'))
+    });
+  };
+
+  const handleStudentLogout = () => {
+    localStorage.removeItem('studentToken');
+    localStorage.removeItem('studentName');
+    syncAuthState();
+    navigate('/login');
+  };
+
+  useEffect(() => {
+    syncAuthState();
+    window.addEventListener('storage', syncAuthState);
+    window.addEventListener('focus', syncAuthState);
+
+    return () => {
+      window.removeEventListener('storage', syncAuthState);
+      window.removeEventListener('focus', syncAuthState);
+    };
+  }, [pathname]);
 
   return (
     <div className="contextual-shell min-h-screen bg-[#fff7ed] text-[#2a0f02]">
@@ -117,6 +145,20 @@ function StandaloneLayout() {
             <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/consultations">
               Consultation
             </Link>
+            {authState.isStudent ? (
+              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/dashboard">
+                Dashboard
+              </Link>
+            ) : (
+              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/login">
+                Student Login
+              </Link>
+            )}
+            {authState.isAdmin && (
+              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/admin">
+                Admin
+              </Link>
+            )}
           </nav>
 
           <div className="flex shrink-0 items-center gap-2">
@@ -133,6 +175,16 @@ function StandaloneLayout() {
               {meta.primary.label}
               <i className="fas fa-arrow-right text-[11px]"></i>
             </Link>
+            {authState.isStudent && pathname !== '/login' && (
+              <button
+                type="button"
+                onClick={handleStudentLogout}
+                className="hidden h-9 w-9 items-center justify-center rounded-full border border-[#ead8c6] text-[#6f4a32] transition hover:border-[#c8832a] hover:bg-[#f8ead8] sm:inline-flex"
+                aria-label="Logout"
+              >
+                <i className="fas fa-sign-out-alt text-xs"></i>
+              </button>
+            )}
           </div>
         </div>
       </motion.header>
@@ -160,7 +212,7 @@ function StandaloneLayout() {
             <Link className="text-[#fff7ed] no-underline opacity-85 transition hover:opacity-100" to="/contact">Support</Link>
           </div>
 
-          <p className="mb-0 text-xs font-bold text-[#d8b894]">© 2026 Cosmic Light Astrology</p>
+          <p className="mb-0 text-xs font-bold text-[#d8b894]">&copy; 2026 Cosmic Light Astrology</p>
         </div>
       </motion.footer>
     </div>

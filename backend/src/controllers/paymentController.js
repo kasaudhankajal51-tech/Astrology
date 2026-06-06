@@ -6,6 +6,7 @@ import Course from '../models/Course.js';
 import Order from '../models/Order.js';
 import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
+import Coupon from '../models/Coupon.js';
 import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
 import dotenv from 'dotenv';
 dotenv.config();
@@ -21,15 +22,49 @@ const razorpayInstance = new Razorpay({
 // @access  Public (Guest Checkout) or Private
 export const createOrder = async (req, res) => {
   try {
-    const { courseId, name, email, mobile } = req.body;
+    const { courseId, name, email, mobile, couponCode } = req.body;
 
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
 
-    // Razorpay accepts amount in paise (multiply by 100)
-    const amountInPaise = Math.round(course.price * 100);
+    const originalAmount = Number(course.price) || 0;
+    let payableAmount = originalAmount;
+    let discountAmount = 0;
+    let appliedCoupon = null;
+
+    if (couponCode) {
+      const normalizedCoupon = String(couponCode).trim().toUpperCase();
+      const coupon = await Coupon.findOne({ code: normalizedCoupon });
+
+      if (!coupon || !coupon.active) {
+        return res.status(400).json({ success: false, message: 'Coupon code is invalid or expired' });
+      }
+
+      if (coupon.usageLimit > 0 && coupon.usageCount >= coupon.usageLimit) {
+        return res.status(400).json({ success: false, message: 'Coupon usage limit reached' });
+      }
+
+      if (coupon.courseId && coupon.courseId !== String(courseId)) {
+        return res.status(400).json({ success: false, message: 'Coupon is not valid for this course' });
+      }
+
+      if (coupon.minPurchase > 0 && originalAmount < coupon.minPurchase) {
+        return res.status(400).json({ success: false, message: `Minimum purchase of ${coupon.minPurchase} is required` });
+      }
+
+      discountAmount = coupon.discountType === 'fixed'
+        ? Number(coupon.discountValue)
+        : Math.round((originalAmount * Number(coupon.discountValue)) / 100);
+
+      discountAmount = Math.max(0, Math.min(discountAmount, originalAmount));
+      payableAmount = Math.max(originalAmount - discountAmount, 1);
+      appliedCoupon = coupon;
+    }
+
+    // Razorpay accepts amount in paise.
+    const amountInPaise = Math.round(payableAmount * 100);
 
     if (!req.user && (!email || email.trim() === '')) {
       return res.status(400).json({ success: false, message: 'Email is required for checkout. Please fill in your details.' });
@@ -57,7 +92,10 @@ export const createOrder = async (req, res) => {
     const order = await Order.create({
       userId: userId, // This can be null for guest checkouts until verify phase
       courseId: courseId,
-      amount: course.price,
+      amount: payableAmount,
+      originalAmount,
+      discountAmount,
+      couponCode: appliedCoupon?.code,
       paymentStatus: 'pending',
       guestDetails: userId ? undefined : { name: studentName, email: studentEmail, mobile: studentMobile }
     });
@@ -83,6 +121,7 @@ export const createOrder = async (req, res) => {
         phone: studentMobile || 'N/A',
         type: 'Course',
         courseName: course.title,
+        message: appliedCoupon ? `Coupon applied: ${appliedCoupon.code}, discount: ${discountAmount}` : '',
         paymentStatus: 'Pending',
         status: 'Pending',
         transactionId: razorpayOrder.id // Storing order ID to find it later
@@ -94,6 +133,10 @@ export const createOrder = async (req, res) => {
       orderId: razorpayOrder.id,
       internalOrderId: order._id,
       amount: razorpayOrder.amount, // Return exact amount in paise
+      payableAmount,
+      originalAmount,
+      discountAmount,
+      couponCode: appliedCoupon?.code || '',
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID,
       name: studentName || '',
@@ -127,6 +170,10 @@ export const verifyPayment = async (req, res) => {
       await Order.findOneAndUpdate(
         { razorpayOrderId: razorpay_order_id },
         { paymentStatus: 'failed' }
+      );
+      await Lead.findOneAndUpdate(
+        { transactionId: razorpay_order_id },
+        { paymentStatus: 'Failed', status: 'Pending' }
       );
       return res.status(400).json({ success: false, message: 'Invalid payment signature' });
     }
@@ -202,6 +249,9 @@ export const verifyPayment = async (req, res) => {
       existingLead.paymentStatus = 'Completed';
       existingLead.status = 'Done';
       existingLead.transactionId = razorpay_payment_id;
+      if (order.couponCode) {
+        existingLead.message = `${existingLead.message || ''}${existingLead.message ? '\n' : ''}Coupon used: ${order.couponCode}`;
+      }
       await existingLead.save();
     } else {
       await Lead.create({
@@ -210,10 +260,18 @@ export const verifyPayment = async (req, res) => {
         phone: order.guestDetails?.mobile || 'N/A', // mobile might be in guestDetails
         type: 'Course',
         courseName: course.title,
+        message: order.couponCode ? `Coupon used: ${order.couponCode}` : '',
         paymentStatus: 'Completed',
         status: 'Done',
         transactionId: razorpay_payment_id
       });
+    }
+
+    if (order.couponCode) {
+      await Coupon.findOneAndUpdate(
+        { code: order.couponCode },
+        { $inc: { usageCount: 1 } }
+      );
     }
 
     // Send email with credentials ONLY if we generated a new password

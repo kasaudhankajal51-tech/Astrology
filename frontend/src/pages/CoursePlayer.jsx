@@ -26,6 +26,21 @@ function CoursePlayer() {
   const token = localStorage.getItem('studentToken');
   const protectedIdentity = studentProfile?.email || studentProfile?.mobile || localStorage.getItem('studentName') || 'Protected student access';
 
+  const getVideoProvider = (video) => video?.videoProvider || video?.provider || (video?.otp && video?.playbackInfo ? 'vdocipher' : 'bunny');
+
+  const getPlayerSrc = (video) => {
+    if (!video) return '';
+
+    if (getVideoProvider(video) === 'vdocipher') {
+      if (video.otp && video.playbackInfo) {
+        return `https://player.vdocipher.com/v2/?otp=${encodeURIComponent(video.otp)}&playbackInfo=${encodeURIComponent(video.playbackInfo)}`;
+      }
+      return video.signedEmbedUrl || video.drmEmbedUrl || video.secureEmbedUrl || video.embedUrl || video.videoUrl || video.secureUrl || '';
+    }
+
+    return video.signedEmbedUrl || video.drmEmbedUrl || video.secureEmbedUrl || video.embedUrl || video.videoUrl || video.secureUrl || '';
+  };
+
   const updateVideoProgress = async (videoId, isCompleted = false) => {
     if (!videoId) return;
 
@@ -140,6 +155,8 @@ function CoursePlayer() {
       }
     };
 
+    const handleFocus = () => setIsWindowFocused(true);
+    const handleBlur = () => setIsWindowFocused(false);
     const handleVisibility = () => setIsWindowFocused(!document.hidden);
 
     const handleContextMenu = (event) => blockEvent(event, 'Right click is disabled for protected videos.');
@@ -150,14 +167,17 @@ function CoursePlayer() {
     document.addEventListener('contextmenu', handleContextMenu, true);
     document.addEventListener('copy', handleCopy, true);
     document.addEventListener('dragstart', handleDragStart, true);
+    window.addEventListener('blur', handleBlur);
+    window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibility);
-    handleVisibility();
 
     return () => {
       document.removeEventListener('keydown', handleKeyDown, true);
       document.removeEventListener('contextmenu', handleContextMenu, true);
       document.removeEventListener('copy', handleCopy, true);
       document.removeEventListener('dragstart', handleDragStart, true);
+      window.removeEventListener('blur', handleBlur);
+      window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibility);
       window.clearTimeout(window.__courseSecurityNoticeTimer);
     };
@@ -236,9 +256,7 @@ function CoursePlayer() {
               {activeVideo ? (
                 <>
                   <iframe
-                    src={activeVideo.otp && activeVideo.playbackInfo
-                      ? `https://player.vdocipher.com/v2/?otp=${activeVideo.otp}&playbackInfo=${activeVideo.playbackInfo}`
-                      : (activeVideo.videoUrl || activeVideo.secureUrl)}
+                    src={getPlayerSrc(activeVideo)}
                     title={activeVideo.title || 'Course video'}
                     loading="lazy"
                     referrerPolicy="strict-origin-when-cross-origin"
@@ -278,7 +296,7 @@ function CoursePlayer() {
                     {!isWindowFocused && (
                       <div className="student-focus-shield">
                         <i className="fas fa-eye-slash"></i>
-                        <strong>Video hidden while this tab is not active</strong>
+                        <strong>Video hidden while this window is not active</strong>
                       </div>
                     )}
                   </div>

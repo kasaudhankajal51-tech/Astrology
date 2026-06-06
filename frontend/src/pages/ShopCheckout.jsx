@@ -39,12 +39,15 @@ const ShopCheckout = () => {
   };
 
   return (
-    <div className="checkout-page pb-5" style={{ background: '#FFFDFB', minHeight: '100vh', paddingTop: '100px' }}>
-      <div className="container mt-5">
-        <h2 className="mb-4" style={{ fontFamily: 'var(--font-serif)', color: '#2A0F02', fontWeight: 800 }}>Checkout</h2>
+    <div className="checkout-page site-page">
+      <div className="site-container">
+        <div className="checkout-head">
+          <span className="site-kicker">Secure Order</span>
+          <h2 className="site-title">Checkout</h2>
+        </div>
         <div className="row g-4">
           <div className="col-lg-8">
-            <div className="card border-0 shadow-sm rounded-4 p-4" style={{ background: '#fff', border: '1px solid rgba(200, 131, 42, 0.08) !important' }}>
+            <div className="checkout-card">
               <h4 className="mb-4" style={{ color: '#8B4A1E', fontWeight: 700 }}>Delivery Details</h4>
               <form onSubmit={handleSubmit}>
                 <div className="row g-3">
@@ -73,7 +76,7 @@ const ShopCheckout = () => {
                 <div className="form-group consent-group mt-4 p-3 rounded" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', background: '#fcf8f2', border: '1px solid #f0e4d4' }}>
                   <input type="checkbox" id="consent-checkout" name="consent" required style={{ width: '18px', height: '18px', marginTop: '2px', cursor: 'pointer' }} />
                   <label htmlFor="consent-checkout" style={{ fontSize: '14px', color: '#444', lineHeight: '1.4', margin: 0, cursor: 'pointer' }}>
-                    I agree to the <a href="/privacy-policy" style={{ color: '#ff6a00', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astro Institute LLP contacting me via phone, email, and WhatsApp.
+                    I agree to the <a href="/privacy-policy" style={{ color: '#ff6a00', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
                   </label>
                 </div>
 
@@ -85,7 +88,7 @@ const ShopCheckout = () => {
           </div>
 
           <div className="col-lg-4">
-            <div className="card border-0 shadow-sm rounded-4 p-4" style={{ background: '#fff', border: '1px solid rgba(200, 131, 42, 0.08) !important' }}>
+            <div className="checkout-card checkout-summary">
               <h4 className="mb-4" style={{ color: '#8B4A1E', fontWeight: 700 }}>Order Summary</h4>
               <div className="d-flex gap-3 mb-3 pb-3 border-bottom">
                 <img src={product.image} alt={product.name} style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '10px' }} />
@@ -114,6 +117,29 @@ const ShopCheckout = () => {
         </div>
       </div>
       <style>{`
+        .checkout-page {
+          background: var(--site-bg);
+          min-height: 100vh;
+          padding: clamp(2rem, 5vw, 4rem) 0 clamp(3rem, 6vw, 5rem);
+        }
+
+        .checkout-head {
+          margin-bottom: 1.5rem;
+        }
+
+        .checkout-card {
+          background: #fff;
+          border: 1px solid rgba(200, 131, 42, 0.12);
+          border-radius: var(--radius-card);
+          box-shadow: var(--shadow-card);
+          padding: clamp(1.15rem, 3vw, 1.75rem);
+        }
+
+        .checkout-summary {
+          position: sticky;
+          top: 7rem;
+        }
+
         .form-control {
           padding: 12px 15px;
           border-radius: 8px;
@@ -142,6 +168,12 @@ const ShopCheckout = () => {
         }
         .letter-spacing-1 {
           letter-spacing: 1px;
+        }
+
+        @media (max-width: 991px) {
+          .checkout-summary {
+            position: static;
+          }
         }
       `}</style>
     </div>

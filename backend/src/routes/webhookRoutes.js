@@ -7,6 +7,7 @@ import User from '../models/User.js';
 import Lead from '../models/leadModel.js';
 import CourseVideo from '../models/CourseVideo.js';
 import Consultation from '../models/Consultation.js';
+import Coupon from '../models/Coupon.js';
 import bcrypt from 'bcryptjs';
 import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
 
@@ -150,6 +151,13 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
               await sendCredentialsEmail(studentEmail, generatedPassword, studentName, course.title);
             }
 
+            if (order.couponCode) {
+              await Coupon.findOneAndUpdate(
+                { code: order.couponCode },
+                { $inc: { usageCount: 1 } }
+              );
+            }
+
             await sendAdminNotificationEmail(
               `New Course Purchased: ${course.title}`,
               `<div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
@@ -177,6 +185,9 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
               existingLead.paymentStatus = 'Completed';
               existingLead.status = 'Done';
               existingLead.transactionId = razorpay_payment_id;
+              if (order.couponCode) {
+                existingLead.message = `${existingLead.message || ''}${existingLead.message ? '\n' : ''}Coupon used: ${order.couponCode}`;
+              }
               await existingLead.save();
             } else {
               await Lead.create({
@@ -185,6 +196,7 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
                 phone: order.guestDetails?.mobile || 'N/A',
                 type: 'Course',
                 courseName: course.title,
+                message: order.couponCode ? `Coupon used: ${order.couponCode}` : '',
                 paymentStatus: 'Completed',
                 status: 'Done',
                 transactionId: razorpay_payment_id
@@ -199,6 +211,10 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
       case 'payment.failed':
         order.paymentStatus = 'failed';
         await order.save();
+        await Lead.findOneAndUpdate(
+          { transactionId: razorpay_order_id },
+          { paymentStatus: 'Failed', status: 'Pending' }
+        );
         break;
 
       case 'refund.processed':

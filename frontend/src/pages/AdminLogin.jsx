@@ -79,7 +79,7 @@ function AdminLogin() {
             >
               A
             </motion.div>
-            <div className="login-brand-name">DS Astro Institute <em>Admin</em></div>
+            <div className="login-brand-name">DS Institute <em>Admin</em></div>
           </div>
 
           <div className="login-headline">
@@ -156,7 +156,7 @@ function AdminLogin() {
           </form>
 
           <div className="login-footer">
-            <span>&copy; 2026 DS Astro Institute</span>
+            <span>&copy; 2026 DS Institute</span>
             <div>
               <button type="button" onClick={() => navigate('/privacy-policy')}>Privacy Policy</button>
               <button type="button" onClick={() => navigate('/terms-and-conditions')}>Terms</button>

@@ -84,7 +84,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                 <div className="form-group mb-3 consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <input type="checkbox" id="consent-consultation" name="consent" required style={{ width: 'auto', marginTop: '4px' }} />
                   <label htmlFor="consent-consultation" style={{ fontSize: '13px', color: '#555', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
-                    I agree to the <a href="/privacy-policy" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Astro Institute LLP contacting me via phone, email, and WhatsApp.
+                    I agree to the <a href="/privacy-policy" style={{ color: '#8B4A1E', textDecoration: 'underline' }}>Privacy Policy</a> and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
                   </label>
                 </div>
 

@@ -32,18 +32,42 @@ function AdminCourses() {
     thumbnailUrl: ''
   });
   
-  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '' });
+  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
   const [initialVideoFile, setInitialVideoFile] = useState(null);
   const [initialVideos, setInitialVideos] = useState([]);
   const [editVideoDrafts, setEditVideoDrafts] = useState([]);
 
-  const getVideoProvider = (video) => {
-    return video?.videoProvider || 'bunny';
+  const videoProviders = {
+    bunny: {
+      label: 'Bunny.net',
+      idLabel: 'Bunny Video ID',
+      fieldLabel: 'Bunny.net Video ID or URL',
+      placeholder: 'Paste Bunny Stream URL or video ID',
+      fileHint: 'If a file is selected, it will be uploaded to Bunny.net automatically.'
+    },
+    vdocipher: {
+      label: 'VdoCipher',
+      idLabel: 'VdoCipher Video ID',
+      fieldLabel: 'VdoCipher Video ID',
+      placeholder: 'Paste VdoCipher video ID',
+      fileHint: 'Upload will be connected to VdoCipher after backend keys are configured.'
+    }
   };
+
+  const getVideoProvider = (video) => video?.videoProvider || video?.provider || 'bunny';
+  const getProviderConfig = (provider = 'bunny') => videoProviders[provider] || videoProviders.bunny;
+  const getProviderLabel = (provider = 'bunny') => getProviderConfig(provider).label;
+  const getProviderIdLabel = (provider = 'bunny') => getProviderConfig(provider).idLabel;
 
   const getVideoValue = (video) => {
     return (
+      video?.vdocipherVideoId ||
+      video?.vdoCipherVideoId ||
+      video?.vdoVideoId ||
       video?.bunnyVideoId ||
+      video?.signedEmbedUrl ||
+      video?.drmEmbedUrl ||
+      video?.secureEmbedUrl ||
       video?.videoUrl ||
       video?.url ||
       video?.playbackUrl ||
@@ -54,6 +78,16 @@ function AdminCourses() {
     );
   };
 
+  const getVideoEmbedUrl = (video) => (
+    video?.signedEmbedUrl ||
+    video?.drmEmbedUrl ||
+    video?.secureEmbedUrl ||
+    video?.embedUrl ||
+    video?.videoUrl ||
+    video?.secureUrl ||
+    ''
+  );
+
   const getSavedVideoFromResponse = (data) => data?.video || data?.courseVideo || data?.bunny || null;
 
   const getVideoRowId = (video) => video?._id || video?.id || video?.videoId;
@@ -61,13 +95,13 @@ function AdminCourses() {
   const copyVideoValue = async (video) => {
     const value = getVideoValue(video);
     if (!value) {
-      toast.error('No Bunny video ID saved yet');
+      toast.error(`No ${getProviderIdLabel(getVideoProvider(video))} saved yet`);
       return;
     }
 
     try {
       await navigator.clipboard.writeText(value);
-      toast.success('Bunny video ID copied');
+      toast.success(`${getProviderIdLabel(getVideoProvider(video))} copied`);
     } catch {
       toast.error('Could not copy video ID');
     }
@@ -172,17 +206,18 @@ function AdminCourses() {
     setEditingVideoId(null);
   };
 
-  const buildVideoDraft = ({ localId, title, bunnyVideoId, sortOrder, file, fallbackOrder }) => ({
+  const buildVideoDraft = ({ localId, title, bunnyVideoId, sortOrder, file, fallbackOrder, videoProvider = 'bunny' }) => ({
     localId,
     title,
     bunnyVideoId,
+    videoProvider,
     sortOrder: Number(sortOrder) || fallbackOrder || 0,
     file,
-    sourceLabel: file ? file.name : 'Bunny.net ID/URL'
+    sourceLabel: file ? `${file.name} (${getProviderLabel(videoProvider)})` : `${getProviderLabel(videoProvider)} ID/URL`
   });
 
   const resetInitialVideoForm = () => {
-    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '' });
+    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
     setInitialVideoFile(null);
   };
 
@@ -193,7 +228,7 @@ function AdminCourses() {
     }
 
     if (!initialVideoForm.bunnyVideoId && !initialVideoFile) {
-      toast.error('Please paste a Bunny.net ID/URL or select a video file');
+      toast.error(`Please paste a ${getProviderIdLabel(initialVideoForm.videoProvider)} or select a video file`);
       return;
     }
 
@@ -203,6 +238,7 @@ function AdminCourses() {
         localId: `${Date.now()}-${current.length}`,
         title: initialVideoForm.title,
         bunnyVideoId: initialVideoForm.bunnyVideoId,
+        videoProvider: initialVideoForm.videoProvider,
         sortOrder: initialVideoForm.sortOrder,
         file: initialVideoFile,
         fallbackOrder: current.length
@@ -222,7 +258,7 @@ function AdminCourses() {
     }
 
     if (!videoForm.bunnyVideoId && !videoFile) {
-      toast.error('Please paste a Bunny.net ID/URL or select a video file');
+      toast.error(`Please paste a ${getProviderIdLabel(videoForm.videoProvider)} or select a video file`);
       return;
     }
 
@@ -232,6 +268,7 @@ function AdminCourses() {
         localId: `${Date.now()}-${current.length}`,
         title: videoForm.title,
         bunnyVideoId: videoForm.bunnyVideoId,
+        videoProvider: videoForm.videoProvider,
         sortOrder: videoForm.sortOrder,
         file: videoFile,
         fallbackOrder: editingCourseVideos.length + current.length
@@ -250,7 +287,7 @@ function AdminCourses() {
       title: video.title || '',
       bunnyVideoId: getVideoValue(video),
       sortOrder: video.sortOrder ?? '',
-      videoProvider: 'bunny'
+      videoProvider: getVideoProvider(video)
     });
     setVideoFile(null);
   };
@@ -316,12 +353,11 @@ function AdminCourses() {
       return false;
     }
 
-    // Check if either file or video ID is provided
     const hasVideoFile = !!videoFile;
     const hasVideoId = !!videoForm.bunnyVideoId;
 
     if (!hasVideoFile && !hasVideoId) {
-      toast.error('Please provide a Bunny.net Video ID or select a file to upload.');
+      toast.error(`Please provide a ${getProviderIdLabel(videoForm.videoProvider)} or select a file to upload.`);
       return false;
     }
 
@@ -334,7 +370,14 @@ function AdminCourses() {
         formData.append('title', videoForm.title);
         formData.append('sortOrder', Number(videoForm.sortOrder) || 0);
         formData.append('videoProvider', videoForm.videoProvider);
-        if (videoForm.bunnyVideoId) formData.append('bunnyVideoId', videoForm.bunnyVideoId);
+        if (videoForm.bunnyVideoId) {
+          formData.append('videoId', videoForm.bunnyVideoId);
+          if (videoForm.videoProvider === 'vdocipher') {
+            formData.append('vdocipherVideoId', videoForm.bunnyVideoId);
+          } else {
+            formData.append('bunnyVideoId', videoForm.bunnyVideoId);
+          }
+        }
         formData.append('videoFile', videoFile);
 
         res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : '/upload'}`, {
@@ -351,7 +394,12 @@ function AdminCourses() {
           sortOrder: Number(videoForm.sortOrder) || 0
         };
 
-        payload.bunnyVideoId = videoForm.bunnyVideoId;
+        payload.videoId = videoForm.bunnyVideoId;
+        if (videoForm.videoProvider === 'vdocipher') {
+          payload.vdocipherVideoId = videoForm.bunnyVideoId;
+        } else {
+          payload.bunnyVideoId = videoForm.bunnyVideoId;
+        }
 
         res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : ''}`, {
           method: videoId ? 'PUT' : 'POST',
@@ -389,8 +437,15 @@ function AdminCourses() {
       const videoData = new FormData();
       videoData.append('title', draftVideo.title);
       videoData.append('sortOrder', Number(draftVideo.sortOrder) || 0);
-      videoData.append('videoProvider', 'bunny');
-      if (draftVideo.bunnyVideoId) videoData.append('bunnyVideoId', draftVideo.bunnyVideoId);
+      videoData.append('videoProvider', draftVideo.videoProvider || 'bunny');
+      if (draftVideo.bunnyVideoId) {
+        videoData.append('videoId', draftVideo.bunnyVideoId);
+        if (draftVideo.videoProvider === 'vdocipher') {
+          videoData.append('vdocipherVideoId', draftVideo.bunnyVideoId);
+        } else {
+          videoData.append('bunnyVideoId', draftVideo.bunnyVideoId);
+        }
+      }
       videoData.append('videoFile', draftVideo.file);
 
       res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : '/upload'}`, {
@@ -407,8 +462,10 @@ function AdminCourses() {
         },
         body: JSON.stringify({
           title: draftVideo.title,
-          bunnyVideoId: draftVideo.bunnyVideoId,
-          videoProvider: 'bunny',
+          videoId: draftVideo.bunnyVideoId,
+          bunnyVideoId: draftVideo.videoProvider === 'vdocipher' ? undefined : draftVideo.bunnyVideoId,
+          vdocipherVideoId: draftVideo.videoProvider === 'vdocipher' ? draftVideo.bunnyVideoId : undefined,
+          videoProvider: draftVideo.videoProvider || 'bunny',
           sortOrder: Number(draftVideo.sortOrder) || 0
         })
       });
@@ -852,9 +909,9 @@ function AdminCourses() {
                             <div key={video._id} className="video-preview-item">
                               <div className="video-preview-info">
                                 <div className="video-preview-title">{video.title}</div>
-                                <div className="video-preview-provider">{getVideoProvider(video) === 'bunny' ? 'Bunny.net' : getVideoProvider(video)}</div>
+                                <div className="video-preview-provider">{getProviderLabel(getVideoProvider(video))}</div>
                                 <div className="video-saved-id">
-                                  <span>Bunny ID</span>
+                                  <span>{getProviderIdLabel(getVideoProvider(video))}</span>
                                   <code>{getVideoValue(video) || 'No video ID saved'}</code>
                                 </div>
                               </div>
@@ -904,16 +961,29 @@ function AdminCourses() {
                         </div>
 
                         <div className="form-group">
-                          <label className="form-label">Bunny.net Video ID or URL</label>
+                          <label className="form-label">Video Provider</label>
+                          <select
+                            name="videoProvider"
+                            value={videoForm.videoProvider}
+                            onChange={handleVideoInputChange}
+                            className="form-input"
+                          >
+                            <option value="bunny">Bunny.net</option>
+                            <option value="vdocipher">VdoCipher</option>
+                          </select>
+                        </div>
+
+                        <div className="form-group">
+                          <label className="form-label">{getProviderConfig(videoForm.videoProvider).fieldLabel}</label>
                           <input
                             type="text"
                             name="bunnyVideoId"
                             value={videoForm.bunnyVideoId}
                             onChange={handleVideoInputChange}
                             className="form-input"
-                            placeholder="Paste URL or video ID here"
+                            placeholder={getProviderConfig(videoForm.videoProvider).placeholder}
                           />
-                          <p className="form-hint">Paste a Bunny video URL/ID, or upload a file.</p>
+                          <p className="form-hint">Paste an existing {getProviderLabel(videoForm.videoProvider)} video ID, or upload a file.</p>
                         </div>
 
                         <div className="form-group">
@@ -925,6 +995,7 @@ function AdminCourses() {
                               onChange={handleVideoFileChange}
                             />
                           </div>
+                          <p className="form-hint">{getProviderConfig(videoForm.videoProvider).fileHint}</p>
                         </div>
 
                         <div className="form-group">
@@ -998,15 +1069,27 @@ function AdminCourses() {
                       </div>
 
                       <div className="form-group">
-                        <label className="form-label">Bunny.net Video ID or URL <span className="optional">(Optional)</span></label>
+                        <label className="form-label">Video Provider</label>
+                        <select
+                          value={initialVideoForm.videoProvider}
+                          onChange={(e) => setInitialVideoForm({ ...initialVideoForm, videoProvider: e.target.value })}
+                          className="form-input"
+                        >
+                          <option value="bunny">Bunny.net</option>
+                          <option value="vdocipher">VdoCipher</option>
+                        </select>
+                      </div>
+
+                      <div className="form-group">
+                        <label className="form-label">{getProviderConfig(initialVideoForm.videoProvider).fieldLabel} <span className="optional">(Optional)</span></label>
                         <input 
                           type="text" 
                           value={initialVideoForm.bunnyVideoId} 
                           onChange={(e) => setInitialVideoForm({ ...initialVideoForm, bunnyVideoId: e.target.value })}
                           className="form-input"
-                          placeholder="e.g., https://vod.bunnycdn.com/... or video-id-12345"
+                          placeholder={getProviderConfig(initialVideoForm.videoProvider).placeholder}
                         />
-                        <p className="form-hint">Paste your Bunny.net video URL or ID here, OR upload a file below.</p>
+                        <p className="form-hint">Paste your {getProviderLabel(initialVideoForm.videoProvider)} video ID here, OR upload a file below.</p>
                       </div>
 
                       <div className="form-group">
@@ -1018,7 +1101,7 @@ function AdminCourses() {
                             onChange={(e) => setInitialVideoFile(e.target.files?.[0] || null)}
                           />
                         </div>
-                        <p className="form-hint">If a file is selected, it will be uploaded to Bunny.net automatically.</p>
+                        <p className="form-hint">{getProviderConfig(initialVideoForm.videoProvider).fileHint}</p>
                       </div>
 
                       <div className="form-group">
@@ -1047,7 +1130,7 @@ function AdminCourses() {
                               <div className="video-item-index">{index + 1}</div>
                               <div className="queued-video-info">
                                 <strong>{video.title}</strong>
-                                <span>{video.sourceLabel}</span>
+                                  <span>{video.sourceLabel}</span>
                               </div>
                               <button type="button" className="lms-mini-btn lms-mini-btn--danger" onClick={() => removeInitialVideoDraft(video.localId)}>
                                 Remove
@@ -1116,9 +1199,9 @@ function AdminCourses() {
                             <div className="video-item-index">{index + 1}</div>
                             <div className="video-item-info">
                               <div className="video-item-title">{video.title || `Video ${index + 1}`}</div>
-                              <div className="video-item-provider">{getVideoProvider(video) === 'bunny' ? 'Bunny.net' : getVideoProvider(video)}</div>
+                              <div className="video-item-provider">{getProviderLabel(getVideoProvider(video))}</div>
                               <div className="video-saved-id">
-                                <span>Bunny ID</span>
+                                <span>{getProviderIdLabel(getVideoProvider(video))}</span>
                                 <code>{getVideoValue(video) || 'No video ID saved'}</code>
                               </div>
                             </div>
@@ -1196,13 +1279,13 @@ function AdminCourses() {
                 <div>
                   <span className="lms-eyebrow">Video Preview</span>
                   <h3>{previewVideo.title || 'Course video'}</h3>
-                  <p>{previewVideo.bunnyVideoId}</p>
+                  <p>{getProviderLabel(getVideoProvider(previewVideo))} · {getVideoValue(previewVideo)}</p>
                 </div>
                 <button type="button" className="modal-close-btn" onClick={closeVideoPreview}>&times;</button>
               </div>
               <div className="lms-preview-frame">
                 <iframe
-                  src={previewVideo.embedUrl}
+                  src={getVideoEmbedUrl(previewVideo)}
                   title={previewVideo.title || 'Video preview'}
                   loading="lazy"
                   allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"

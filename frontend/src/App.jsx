@@ -42,6 +42,7 @@ const NotFound = lazy(() => import('./pages/NotFound'));
 import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
 import CookieConsent from './components/CookieConsent';
+import FloatingChatAssistant from './components/FloatingChatAssistant';
 import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
         <ScrollToTop />
         <Toaster position="top-center" reverseOrder={false} />
         <CookieConsent />
+        <FloatingChatAssistant />
         <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{height: '100vh', background: 'var(--bg-color)'}}><div className="spinner-border" style={{color: 'var(--primary-color)'}}></div></div>}>
           <Routes>
             <Route path="/" element={<MainLayout />}>

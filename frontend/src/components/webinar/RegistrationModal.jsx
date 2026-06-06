@@ -18,7 +18,7 @@ function RegistrationModal({ isOpen, onClose, formData, handleChange, handleSubm
               <ul className="modal-points">
                 <li><i className="fa fa-check-circle"></i> 2 Days Live Training</li>
                 <li><i className="fa fa-check-circle"></i> Practical Reading Skills</li>
-                <li><i className="fa fa-check-circle"></i> Q&A with Astro Ava</li>
+                <li><i className="fa fa-check-circle"></i> Q&A with DS Institute mentors</li>
               </ul>
             </div>
             <div className="modal-form-side">

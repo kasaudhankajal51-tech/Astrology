@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 
 const textReviews = [
-  { id: 1, text: "This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you Astro Ava!", author: "Siddharth Jain", role: "Software Engineer" },
+  { id: 1, text: "This webinar completely changed my perspective on career. The remedies provided were so simple yet effective. Thank you DS Institute!", author: "Siddharth Jain", role: "Software Engineer" },
   { id: 2, text: "I was skeptical at first, but the depth of knowledge shared in just 2 days was mind-blowing. Highly recommended for everyone.", author: "Megha Malhotra", role: "Business Owner" },
   { id: 3, text: "The way complex astrological concepts were explained made it so easy to understand. I finally know why certain patterns repeat in my life.", author: "Vikram Singh", role: "Creative Designer" },
   { id: 4, text: "Professional, insightful, and truly life-altering. Best investment of ₹99 I've ever made. The Q&A session was very helpful.", author: "Anjali Deshmukh", role: "Homemaker" },

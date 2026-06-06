@@ -197,8 +197,6 @@ function CourseDetail() {
       if (orderData.orderId) {
         const options = {
           key: orderData.keyId,
-          amount: orderData.amount * 100, // paise
-          currency: orderData.currency,
           name: "DS Astro Institute",
           description: `Course Purchase: ${course.title}`,
           image: "/images/logo.png",

@@ -156,14 +156,7 @@ function CourseDetail() {
     setIsProcessingPayment(true);
 
     try {
-      const res = await loadRazorpayScript();
-      if (!res) {
-        toast.error('Razorpay SDK failed to load. Check your connection.');
-        setIsProcessingPayment(false);
-        return;
-      }
-
-      // Create Order
+      // Create Order & get Payment Link
       const token = localStorage.getItem('studentToken');
       const headers = { 'Content-Type': 'application/json' };
       if (token) {
@@ -194,74 +187,77 @@ function CourseDetail() {
         return;
       }
 
-      const completePaymentVerification = async (paymentResponse) => {
-        const verifyResponse = await fetch(`${API_BASE}/api/payment/verify`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            razorpay_order_id: paymentResponse.razorpay_order_id,
-            razorpay_payment_id: paymentResponse.razorpay_payment_id,
-            razorpay_signature: paymentResponse.razorpay_signature,
-            name: formData.name,
-            email: formData.email
-          })
-        });
+      const isLoaded = await loadRazorpayScript();
+      if (!isLoaded) {
+        toast.error('Razorpay SDK failed to load. Check your connection.');
+        setIsProcessingPayment(false);
+        return;
+      }
 
-        const verifyData = await verifyResponse.json();
-
-        if (verifyData.success) {
-          setShowCheckoutModal(false);
-          setIsSuccessOpen(true);
-          
-          // Automatically redirect to student portal after 3 seconds
-          setTimeout(() => {
-            navigate('/login');
-          }, 3000);
-        } else {
-          toast.error(verifyData.message || 'Payment verification failed');
-        }
-      };
-
-      if (orderData.isMock || orderData.razorpayOrderId?.startsWith('order_mock_')) {
-        toast.success('Test Mode: Simulating payment success...');
-        await completePaymentVerification({
-          razorpay_order_id: orderData.razorpayOrderId,
-          razorpay_payment_id: `pay_mock_${Date.now()}`,
-          razorpay_signature: `sig_mock_${Date.now()}`
-        });
-      } else {
-        const paymentObject = new window.Razorpay({
+      if (orderData.orderId) {
+        const options = {
           key: orderData.keyId,
-          amount: Math.round(Number(orderData.amount) * 100),
-          currency: orderData.currency || 'INR',
-          name: 'Cosmic Light Astrology',
+          amount: orderData.amount * 100, // paise
+          currency: orderData.currency,
+          name: "DS Astro Institute",
           description: `Course Purchase: ${course.title}`,
-          image: '/images/logo.png',
-          order_id: orderData.razorpayOrderId,
-          prefill: {
-            name: formData.name,
-            email: formData.email,
-            contact: formData.phone
+          image: "/images/logo.png",
+          order_id: orderData.orderId,
+          handler: async function (response) {
+            try {
+              const verifyRes = await fetch(`${API_BASE}/api/payment/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  razorpay_order_id: response.razorpay_order_id,
+                  razorpay_signature: response.razorpay_signature,
+                  email: orderData.email,
+                  name: orderData.name
+                })
+              });
+              const verifyData = await verifyRes.json();
+              if (verifyData.success) {
+                setShowCheckoutModal(false);
+                setIsSuccessOpen(true);
+              } else {
+                toast.error('Payment verification failed.');
+              }
+            } catch (err) {
+              toast.error('Error verifying payment.');
+            } finally {
+              setIsProcessingPayment(false);
+            }
           },
-          theme: { color: '#8B4A1E' },
-          handler: completePaymentVerification,
+          prefill: {
+            name: orderData.name,
+            email: orderData.email,
+            contact: orderData.phone
+          },
+          theme: {
+            color: "#8B4A1E"
+          },
           modal: {
-            ondismiss: () => setIsProcessingPayment(false)
+            ondismiss: function() {
+              setIsProcessingPayment(false);
+            }
           }
-        });
+        };
 
-        paymentObject.on('payment.failed', function (response) {
-          toast.error(response.error?.description || 'Payment failed. Please try again.');
+        const rzp = new window.Razorpay(options);
+        rzp.on('payment.failed', function (response) {
+          toast.error(`Payment Failed: ${response.error.description}`);
           setIsProcessingPayment(false);
         });
-
-        paymentObject.open();
+        rzp.open();
+      } else {
+        toast.error('Order ID not generated. Please try again.');
+        setIsProcessingPayment(false);
       }
 
     } catch (err) {
       console.error(err);
       toast.error('Network Error. Please try again.');
-    } finally {
       setIsProcessingPayment(false);
     }
   };

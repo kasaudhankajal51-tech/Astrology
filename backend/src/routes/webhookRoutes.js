@@ -6,6 +6,7 @@ import Course from '../models/Course.js';
 import User from '../models/User.js';
 import Lead from '../models/leadModel.js';
 import CourseVideo from '../models/CourseVideo.js';
+import Consultation from '../models/Consultation.js';
 import bcrypt from 'bcryptjs';
 import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
 
@@ -41,12 +42,46 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
       return res.status(200).json({ success: true, message: 'No payment entity' });
     }
     
-    const razorpay_order_id = paymentEntity.order_id;
+    const razorpay_order_id = paymentEntity.order_id || paymentEntity.payment_link_id;
     const razorpay_payment_id = paymentEntity.id;
 
     const order = await Order.findOne({ razorpayOrderId: razorpay_order_id });
-    if (!order) {
-      return res.status(404).json({ success: false, message: 'Order not found' });
+    const consultation = !order ? await Consultation.findOne({ transactionId: razorpay_order_id }) : null;
+
+    if (!order && !consultation) {
+      return res.status(404).json({ success: false, message: 'Order or Consultation not found' });
+    }
+
+    if (consultation) {
+      if (eventName === 'payment.captured' || eventName === 'order.paid') {
+        if (consultation.paymentStatus === 'pending') {
+          consultation.paymentStatus = 'completed';
+          consultation.transactionId = razorpay_payment_id; // Update to actual payment ID
+          await consultation.save();
+
+          const emailHtml = `
+            <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #C8832A; border-radius: 10px;">
+              <h2 style="color: #2A0F02;">New Paid Consultation Booking (Webhook)</h2>
+              <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Name:</strong></td><td>${consultation.name || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td><td>${consultation.email || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Mobile:</strong></td><td>${consultation.mobile || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Consultation Type:</strong></td><td>${consultation.consultationType || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Amount Paid:</strong></td><td>₹${consultation.amount || 'N/A'}</td></tr>
+                <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Transaction ID:</strong></td><td>${razorpay_payment_id}</td></tr>
+              </table>
+            </div>
+          `;
+          await sendAdminNotificationEmail('Alert: New Paid Consultation Booked', emailHtml);
+        }
+      } else if (eventName === 'payment.failed') {
+        consultation.paymentStatus = 'failed';
+        await consultation.save();
+      } else if (eventName === 'refund.processed') {
+        consultation.paymentStatus = 'refunded';
+        await consultation.save();
+      }
+      return res.status(200).json({ success: true });
     }
     
     // Idempotency Check: Don't process if eventId already exists in order

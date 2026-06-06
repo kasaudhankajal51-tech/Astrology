@@ -24,44 +24,30 @@ export const submitConsultation = asyncHandler(async (req, res) => {
     throw new Error('Amount is required for consultation');
   }
 
-  const options = {
-    amount: req.body.amount * 100, // paise
-    currency: "INR",
-    receipt: `rcpt_${consultation._id}`
-  };
-
   try {
-    const order = await razorpay.orders.create(options);
+    const razorpayOrder = await razorpay.orders.create({
+      amount: req.body.amount * 100, // paise
+      currency: "INR",
+      receipt: consultation._id.toString()
+    });
+    
+    consultation.transactionId = razorpayOrder.id; // Store order ID as reference
+    await consultation.save();
+
     return res.status(201).json({
       success: true,
-      orderId: order.id,
-      amount: order.amount,
-      currency: order.currency,
+      orderId: razorpayOrder.id, // Razorpay Order ID for standard checkout
+      consultationId: consultation._id, // internal reference
+      amount: razorpayOrder.amount,
+      currency: razorpayOrder.currency,
       keyId: process.env.RAZORPAY_KEY_ID,
-      consultationId: consultation._id,
       name: consultation.name,
       email: consultation.email,
       phone: consultation.mobile
     });
   } catch (err) {
     console.error("RAZORPAY ERROR:", err);
-    if (process.env.NODE_ENV === 'development') {
-      logger.warn('⚠️ Razorpay keys missing/invalid. Falling back to mock order for testing.');
-      return res.status(201).json({
-        success: true,
-        orderId: `order_mock_${Date.now()}`,
-        amount: options.amount,
-        currency: options.currency,
-        keyId: 'rzp_test_mock',
-        consultationId: consultation._id,
-        name: consultation.name,
-        email: consultation.email,
-        phone: consultation.mobile,
-        isMock: true,
-        debugError: err.message || err.description || JSON.stringify(err)
-      });
-    }
-    logger.error('Razorpay Order Creation Failed: ' + err.message);
+    logger.error('Razorpay Payment Link Creation Failed: ' + err.message);
     res.status(500);
     throw new Error('Payment gateway error. Please try again.');
   }

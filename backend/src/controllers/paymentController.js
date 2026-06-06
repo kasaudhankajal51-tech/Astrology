@@ -35,42 +35,12 @@ export const createOrder = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Email is required for checkout. Please fill in your details.' });
     }
 
-    const options = {
-      amount: amountInPaise,
-      currency: 'INR',
-      receipt: `rcpt_${courseId.toString().slice(-6)}_${Date.now()}`
-    };
-
-    let razorpayOrder;
-    try {
-      razorpayOrder = await razorpayInstance.orders.create(options);
-    } catch (err) {
-      console.error('RAZORPAY ERROR:', err);
-      if (process.env.NODE_ENV === 'development') {
-        console.warn('Razorpay keys missing/invalid. Falling back to mock course order for development.');
-        razorpayOrder = { id: `order_mock_${Date.now()}`, isMock: true };
-      } else {
-        throw err;
-      }
-    }
-
-    // If user doesn't exist, we will create the order but link it to the email temporarily
-    // We'll create the user after successful payment to avoid junk accounts
     let userId = null;
     if (req.user) {
       userId = req.user.id || req.user._id;
     }
 
-    const order = await Order.create({
-      userId: userId, // This can be null for guest checkouts until verify phase
-      courseId: courseId,
-      razorpayOrderId: razorpayOrder.id,
-      amount: course.price,
-      paymentStatus: 'pending',
-      guestDetails: userId ? undefined : { name, email, mobile }
-    });
-
-    // Capture intent as a Lead (Abandoned Cart Tracking)
+    // Determine student details
     let studentEmail = email;
     let studentName = name;
     let studentMobile = mobile;
@@ -82,6 +52,28 @@ export const createOrder = async (req, res) => {
         studentName = name || user.name;
         studentMobile = mobile || user.mobile;
       }
+    }
+
+    const order = await Order.create({
+      userId: userId, // This can be null for guest checkouts until verify phase
+      courseId: courseId,
+      amount: course.price,
+      paymentStatus: 'pending',
+      guestDetails: userId ? undefined : { name: studentName, email: studentEmail, mobile: studentMobile }
+    });
+
+    let razorpayOrder;
+    try {
+      razorpayOrder = await razorpayInstance.orders.create({
+        amount: amountInPaise,
+        currency: 'INR',
+        receipt: order._id.toString()
+      });
+      order.razorpayOrderId = razorpayOrder.id; // Store order ID as the razorpay reference
+      await order.save();
+    } catch (err) {
+      console.error('RAZORPAY ERROR:', err);
+      throw new Error('Failed to create Razorpay Order');
     }
 
     if (studentEmail && studentName) {
@@ -99,12 +91,14 @@ export const createOrder = async (req, res) => {
 
     res.status(200).json({
       success: true,
-      orderId: order._id,
-      razorpayOrderId: razorpayOrder.id,
-      amount: course.price,
+      orderId: razorpayOrder.id,
+      internalOrderId: order._id,
+      amount: razorpayOrder.amount, // Return exact amount in paise
       currency: 'INR',
       keyId: process.env.RAZORPAY_KEY_ID,
-      isMock: Boolean(razorpayOrder.isMock)
+      name: studentName || '',
+      email: studentEmail || '',
+      phone: studentMobile || ''
     });
   } catch (error) {
     console.error('Error creating order:', error);

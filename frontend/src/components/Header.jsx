@@ -4,6 +4,7 @@ import ConsultationModal from './ConsultationModal';
 import SuccessModal from './SuccessModal';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
+import { handleRazorpayPayment } from '../utils/paymentUtils';
 
 function Header() {
   const location = useLocation();
@@ -30,7 +31,7 @@ function Header() {
   });
 
   const handleConsultChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const readAuthState = () => ({
@@ -70,6 +71,23 @@ function Header() {
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
+    
+    // Use Razorpay Flow if price is present
+    if (formData.price) {
+      const onSuccess = () => {
+        setIsConsultModalOpen(false);
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '', consultationType: 'General Consultation', dob: '', tob: '', pob: '', message: '', price: '' });
+        setIsSubmitting(false);
+      };
+      
+      const success = await handleRazorpayPayment(formData, onSuccess);
+      if (!success) {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
     try {
       const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',

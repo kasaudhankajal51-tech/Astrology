@@ -5,6 +5,7 @@ import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
+import { handleRazorpayPayment } from '../utils/paymentUtils';
 
 
 
@@ -458,6 +459,24 @@ function Home() {
     }
 
     setIsSubmitting(true);
+    
+    // Use Razorpay Flow if price is present
+    if (formData.price) {
+      const onSuccess = () => {
+        setIsModalOpen(false);
+        setIsSuccessOpen(true);
+        setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
+        setIsSubmitting(false);
+      };
+      
+      const success = await handleRazorpayPayment(formData, onSuccess);
+      if (!success) {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    // Free Lead Flow
     try {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',

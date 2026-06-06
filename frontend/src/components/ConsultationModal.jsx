@@ -1,8 +1,31 @@
 import React from 'react';
 import './webinar/RegistrationModal.css'; // Reusing the same base styles for consistency
 
+const CONSULTATION_PRICES = {
+  'Career': '3600',
+  'Relationship': '2700',
+  'Health': '3600',
+  'Finance': '3600',
+  'Other': '3600'
+};
+
 function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubmit, isSubmitting, isFixedService }) {
   if (!isOpen) return null;
+
+  const handleTypeChange = (e) => {
+    const selectedType = e.target.value;
+    handleChange(e); // Trigger original change for consultationType
+    
+    // Update price based on selection
+    const priceEvent = {
+      target: {
+        name: 'price',
+        value: CONSULTATION_PRICES[selectedType] ? `₹${CONSULTATION_PRICES[selectedType]}` : ''
+      }
+    };
+    handleChange(priceEvent);
+  };
+
 
   return (
     <div className="modal-overlay" onClick={(e) => e.target.className === 'modal-overlay' && onClose()}>
@@ -13,7 +36,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
         <div className="modal-scroll-area">
           <div className="modal-content-wrapper">
             <div className="modal-image-side">
-              <h4>Book Your <br/><span className="text-highlight">Consultation</span></h4>
+              <h4>Book Your <br /><span className="text-highlight">Consultation</span></h4>
               <p>Get personalized insights and life guidance from India's leading astrology mentor.</p>
               <ul className="modal-points">
                 <li><i className="fa fa-check-circle"></i> Detailed Birth Chart Analysis</li>
@@ -65,13 +88,13 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                   {isFixedService ? (
                     <input type="text" name="consultationType" value={formData.consultationType} readOnly className="form-control" style={{ backgroundColor: '#f0f0f0', cursor: 'not-allowed', padding: '12px 15px', borderRadius: '8px', border: '1px solid #ddd' }} />
                   ) : (
-                    <select name="consultationType" value={formData.consultationType} onChange={handleChange} required className="form-select-custom">
+                    <select name="consultationType" value={formData.consultationType} onChange={handleTypeChange} required className="form-select-custom">
                       <option value="">Select consultation type</option>
-                      <option value="Career">Career & Business</option>
-                      <option value="Relationship">Marriage & Relationships</option>
-                      <option value="Health">Health & Wellness</option>
-                      <option value="Finance">Finance & Wealth</option>
-                      <option value="Other">Other Concerns</option>
+                      <option value="Career">Career & Business (₹3600)</option>
+                      <option value="Relationship">Marriage & Relationships (₹2700)</option>
+                      <option value="Health">Health & Wellness (₹3600)</option>
+                      <option value="Finance">Finance & Wealth (₹3600)</option>
+                      <option value="Other">Other Concerns (₹3600)</option>
                     </select>
                   )}
                 </div>
@@ -80,7 +103,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                   <label>Your Message (Optional)</label>
                   <textarea name="message" value={formData.message} onChange={handleChange} placeholder="Describe your concern briefly..." rows="2"></textarea>
                 </div>
-                
+
                 <div className="form-group mb-3 consent-group" style={{ display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
                   <input type="checkbox" id="consent-consultation" name="consent" required style={{ width: 'auto', marginTop: '4px' }} />
                   <label htmlFor="consent-consultation" style={{ fontSize: '13px', color: '#555', lineHeight: '1.4', margin: 0, fontWeight: 'normal' }}>
@@ -89,7 +112,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                 </div>
 
                 <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
-                  {isSubmitting ? 'Booking...' : 'Confirm Consultation Booking'}
+                  {isSubmitting ? 'Processing...' : (formData.price ? `Proceed to Payment (${formData.price})` : 'Proceed to Payment')}
                 </button>
                 <p className="secure-text"><i className="fas fa-lock me-2"></i> Private & Encrypted Consultation</p>
               </form>

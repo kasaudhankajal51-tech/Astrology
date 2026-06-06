@@ -1,5 +1,6 @@
 import Course from '../models/Course.js';
 import CourseVideo from '../models/CourseVideo.js';
+import mongoose from 'mongoose';
 import {
   createBunnyVideo,
   extractBunnyVideoId,
@@ -33,6 +34,9 @@ export const getActiveCourses = async (req, res) => {
 // @route   GET /api/courses/:id
 export const getCourseById = async (req, res) => {
   try {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(404).json({ success: false, message: 'Course not found (Invalid ID)' });
+    }
     const course = await Course.findById(req.params.id);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });

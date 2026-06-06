@@ -44,15 +44,16 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin (like mobile apps or curl requests)
-    if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+    // In development or if ALLOWED_ORIGINS contains '*', allow any origin
+    if (!origin || process.env.NODE_ENV === 'development' || allowedOrigins.includes('*') || allowedOrigins.includes(origin) || origin.startsWith('http://localhost') || origin.startsWith('http://127.0.0.1')) {
       callback(null, true);
     } else {
       callback(new Error('Not allowed by CORS'));
     }
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 app.options(/.*/, cors());
 

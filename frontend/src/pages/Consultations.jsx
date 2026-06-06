@@ -103,8 +103,6 @@ function Consultations() {
 
       const options = {
         key: data.keyId,
-        amount: data.amount,
-        currency: data.currency,
         name: "DS Astro Institute",
         description: `Consultation Booking: ${formData.consultationType}`,
         image: "/images/logo.png",

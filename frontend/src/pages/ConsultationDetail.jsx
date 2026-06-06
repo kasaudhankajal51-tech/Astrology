@@ -203,8 +203,6 @@ function ConsultationDetail() {
       if (data.orderId) {
         const options = {
           key: data.keyId,
-          amount: data.amount,
-          currency: data.currency,
           name: "DS Astro Institute",
           description: `Consultation Booking: ${service.title}`,
           image: "/images/logo.png",

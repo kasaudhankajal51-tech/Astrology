@@ -156,7 +156,7 @@ function ConsultationDetail() {
       </div>
     );
   }
-  const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {

@@ -2,7 +2,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 
 function PaymentSuccess() {
   const [searchParams] = useSearchParams();
-  const txn = searchParams.get('txn');
+  const txn = searchParams.get('txn') || searchParams.get('razorpay_payment_id');
 
   return (
     <div className="d-flex align-items-center justify-content-center" style={{ minHeight: '100vh', backgroundColor: '#070913', color: '#fff', fontFamily: 'Outfit, sans-serif' }}>

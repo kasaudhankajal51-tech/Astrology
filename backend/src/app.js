@@ -4,6 +4,9 @@ import cors from 'cors';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
+import helmet from 'helmet';
+import compression from 'compression';
+import rateLimit from 'express-rate-limit';
 import { errorHandler, notFound } from './middleware/errorMiddleware.js';
 import toolsRoutes from './routes/toolsRoutes.js';
 import consultationRoutes from './routes/consultationRoutes.js';
@@ -20,6 +23,7 @@ import couponRoutes from './routes/couponRoutes.js';
 import courseRoutes from './routes/courseRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
+import webhookRoutes from './routes/webhookRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -33,12 +37,46 @@ app.use(morgan('dev'));
 app.set('trust proxy', 1);
 
 // --- Essential Middleware ---
+// CORS Configuration
+const allowedOrigins = process.env.ALLOWED_ORIGINS 
+  ? process.env.ALLOWED_ORIGINS.split(',') 
+  : ['http://localhost:5173', 'http://localhost:4173'];
+
 app.use(cors({
-  origin: '*',
+  origin: function (origin, callback) {
+    // allow requests with no origin (like mobile apps or curl requests)
+    if (!origin || allowedOrigins.includes('*') || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.options(/.*/, cors());
+
+// Security Headers
+app.use(helmet({
+  crossOriginResourcePolicy: { policy: "cross-origin" } // Allows fetching static assets cross-origin
+}));
+
+// Payload Compression
+app.use(compression());
+
+// Rate Limiting (Global)
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 1000, // Limit each IP to 1000 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, message: 'Too many requests from this IP, please try again later.' }
+});
+app.use('/api', limiter);
+
+// Webhooks must be mounted before express.json() for Razorpay signature verification
+app.use('/api/webhooks', webhookRoutes);
+
 app.use(express.json());
 
 app.use('/uploads', express.static(path.join(__dirname, '../uploads'), {

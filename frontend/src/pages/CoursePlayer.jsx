@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
+import { isValidIndianMobile, normalizeIndianMobile } from '../utils/validation';
 
 function CoursePlayer() {
   const { id } = useParams();
@@ -185,7 +186,13 @@ function CoursePlayer() {
 
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
+    if (!isValidIndianMobile(consultData.mobile)) {
+      toast.error('Please enter a valid 10-digit Indian mobile number.');
+      return;
+    }
+
     setBookingLoading(true);
+    const sanitizedMobile = normalizeIndianMobile(consultData.mobile);
 
     try {
       const res = await fetch(`${API_BASE}/api/student/consultations`, {
@@ -198,7 +205,7 @@ function CoursePlayer() {
           courseId: id,
           preferredDatetime: consultData.preferredDatetime,
           notes: consultData.notes,
-          mobile: consultData.mobile
+          mobile: sanitizedMobile
         })
       });
       const data = await res.json();

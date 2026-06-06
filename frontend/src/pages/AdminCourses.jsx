@@ -27,6 +27,7 @@ function AdminCourses() {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
+    courseType: 'Recorded',
     price: '',
     validityDays: '',
     thumbnailUrl: ''
@@ -594,6 +595,7 @@ function AdminCourses() {
         },
         body: JSON.stringify({
           ...formData,
+          courseType: formData.courseType === 'Live' ? 'Live' : 'Recorded',
           price: Number(formData.price),
           validityDays: Number(formData.validityDays)
         })
@@ -697,6 +699,7 @@ function AdminCourses() {
       setFormData({
         title: course.title,
         description: course.description,
+        courseType: course.courseType || 'Recorded',
         price: course.price,
         validityDays: course.validityDays,
         thumbnailUrl: course.thumbnailUrl || ''
@@ -719,7 +722,7 @@ function AdminCourses() {
         });
     } else {
       setEditingCourse(null);
-      setFormData({ title: '', description: '', price: '', validityDays: '', thumbnailUrl: '' });
+      setFormData({ title: '', description: '', courseType: 'Recorded', price: '', validityDays: '', thumbnailUrl: '' });
       resetInitialVideoForm();
       setInitialVideos([]);
       setEditVideoDrafts([]);
@@ -876,6 +879,16 @@ function AdminCourses() {
                   </div>
 
                   <div className="form-row">
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">Course Type</label>
+                        <select name="courseType" value={formData.courseType} onChange={handleInputChange} className="form-input" required>
+                          <option value="Recorded">Recorded - direct purchase</option>
+                          <option value="Live">Live - enquiry only</option>
+                        </select>
+                        <p className="form-hint">Live courses collect leads only. Recorded courses use payment and student access.</p>
+                      </div>
+                    </div>
                     <div className="form-col">
                       <div className="form-group">
                         <label className="form-label">Price (Rs.)</label>

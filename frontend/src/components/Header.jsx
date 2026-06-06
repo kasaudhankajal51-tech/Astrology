@@ -5,6 +5,7 @@ import SuccessModal from './SuccessModal';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 function Header() {
   const location = useLocation();
@@ -70,7 +71,14 @@ function Header() {
 
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     
     // Use Razorpay Flow if price is present
     if (formData.price) {
@@ -81,7 +89,12 @@ function Header() {
         setIsSubmitting(false);
       };
       
-      const success = await handleRazorpayPayment(formData, onSuccess);
+      const success = await handleRazorpayPayment({
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: sanitizedPhone
+      }, onSuccess);
       if (!success) {
         setIsSubmitting(false);
       }
@@ -93,7 +106,10 @@ function Header() {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ 
-          ...formData, 
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
           type: 'Consultation', 
           courseName: formData.consultationType 
         })
@@ -742,7 +758,7 @@ function Header() {
 
         @media (max-width: 640px) {
           .report-bar .label {
-            padding-inline: 0.9rem;
+            padding-inline: var(--page-pad-x);
           }
 
           .new {
@@ -780,7 +796,8 @@ function Header() {
 
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li className="nav-item"><Link className={navLinkClass('/courses')} to="/courses">COURSES</Link></li>
+                <li className="nav-item"><Link className={navLinkClass('/live-courses')} to="/live-courses">LIVE COURSES</Link></li>
+                <li className="nav-item"><Link className={navLinkClass('/recorded-courses')} to="/recorded-courses">RECORDED COURSES</Link></li>
                 <li className="nav-item"><Link className={navLinkClass('/book-consultation')} to="/book-consultation">CONSULTATIONS</Link></li>
                 <li className="nav-item"><Link className={navLinkClass('/astrologer')} to="/astrologer">ASTROLOGERS</Link></li>
               </ul>
@@ -826,7 +843,8 @@ function Header() {
         </div>
         <div className="offcanvas-body p-0">
           <ul className="navbar-nav">
-            <li className="nav-item"><Link className="nav-link" to="/courses" data-bs-dismiss="offcanvas">COURSES</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/live-courses" data-bs-dismiss="offcanvas">LIVE COURSES</Link></li>
+            <li className="nav-item"><Link className="nav-link" to="/recorded-courses" data-bs-dismiss="offcanvas">RECORDED COURSES</Link></li>
 
             <li className="nav-item"><Link className="nav-link" to="/book-consultation" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>
 

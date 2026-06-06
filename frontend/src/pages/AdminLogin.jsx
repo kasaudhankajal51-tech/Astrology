@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import API_BASE from '../utils/api';
 import './Admin.css';
+import { isValidEmail } from '../utils/validation';
 
 function AdminLogin() {
   const [email, setEmail] = useState('');
@@ -22,6 +23,11 @@ function AdminLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+
     setIsLoading(true);
     setLoginError('');
     
@@ -29,7 +35,7 @@ function AdminLogin() {
       const response = await fetch(`${API_BASE}/api/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       const data = await response.json();

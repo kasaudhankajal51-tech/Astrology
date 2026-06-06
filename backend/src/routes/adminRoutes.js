@@ -13,6 +13,16 @@ import {
   reorderVideos,
   deleteCourseVideo
 } from '../controllers/courseController.js';
+import {
+  createBanner,
+  createMaterial,
+  deleteBanner,
+  deleteMaterial,
+  getAdminBanners,
+  getAdminMaterials,
+  updateBanner,
+  updateMaterial
+} from '../controllers/adminContentController.js';
 
 const router = express.Router();
 const videoUpload = multer({
@@ -43,6 +53,17 @@ router.put('/courses/:id/videos/reorder', adminAuth, reorderVideos);
 router.get('/courses/:id/videos/:vid/preview', adminAuth, getAdminCourseVideoPreview);
 router.put('/courses/:id/videos/:vid', adminAuth, videoUpload.single('videoFile'), updateCourseVideo);
 router.delete('/courses/:id/videos/:vid', adminAuth, deleteCourseVideo);
+
+// Student dashboard content management (Admin)
+router.get('/banners', adminAuth, getAdminBanners);
+router.post('/banners', adminAuth, createBanner);
+router.put('/banners/:id', adminAuth, updateBanner);
+router.delete('/banners/:id', adminAuth, deleteBanner);
+
+router.get('/course-materials', adminAuth, getAdminMaterials);
+router.post('/course-materials', adminAuth, createMaterial);
+router.put('/course-materials/:id', adminAuth, updateMaterial);
+router.delete('/course-materials/:id', adminAuth, deleteMaterial);
 
 // Consultation Management (Admin)
 router.get('/consultations', adminAuth, getConsultations);

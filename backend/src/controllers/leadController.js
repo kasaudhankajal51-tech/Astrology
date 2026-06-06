@@ -3,14 +3,8 @@ import asyncHandler from 'express-async-handler';
 import nodemailer from 'nodemailer';
 import exceljs from 'exceljs';
 import logger from '../config/logger.js';
-import Razorpay from 'razorpay';
 import Joi from 'joi';
-
-// Setup Razorpay
-const razorpay = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-  key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder'
-});
+import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
 
 // Validation Schema
 const leadSchema = Joi.object({
@@ -166,14 +160,16 @@ export const createLead = asyncHandler(async (req, res) => {
     };
 
     try {
+      const razorpay = createRazorpayInstance();
       const order = await razorpay.orders.create(options);
+      const { keyId } = getRazorpayConfig();
       
       return res.status(201).json({
         success: true,
         orderId: order.id,
         amount: order.amount,
         currency: order.currency,
-        keyId: process.env.RAZORPAY_KEY_ID,
+        keyId,
         leadId: lead._id,
         name: lead.name,
         email: lead.email,
@@ -216,9 +212,10 @@ export const createLead = asyncHandler(async (req, res) => {
 // @route   POST /api/leads/verify-payment
 export const verifyPayment = asyncHandler(async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, leadId } = req.body;
+  const { keySecret } = getRazorpayConfig();
 
   const crypto = await import('crypto');
-  const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder');
+  const hmac = crypto.createHmac('sha256', keySecret);
   hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
   const generated_signature = hmac.digest('hex');
 

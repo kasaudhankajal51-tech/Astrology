@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 
 function CourseInquiry() {
@@ -15,12 +16,26 @@ function CourseInquiry() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     try {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Course', courseName: 'Advanced Vedic Astrology Course' }),
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
+          type: 'Course',
+          courseName: 'Advanced Vedic Astrology Course'
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -82,7 +97,7 @@ function CourseInquiry() {
                   </div>
                   <div className="form-group">
                     <label>Phone Number</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="Enter your phone number" />
+                    <input type="tel" name="phone" value={formData.phone} onChange={handleChange} required placeholder="10-digit Indian mobile number" />
                   </div>
                   <div className="form-group">
                     <label>Complete Address</label>
@@ -277,9 +292,10 @@ function CourseInquiry() {
         }
 
         .container {
-          max-width: 1200px;
+          max-width: var(--container-public);
           margin: 0 auto;
-          padding: 0 20px;
+          padding-left: var(--page-pad-x);
+          padding-right: var(--page-pad-x);
         }
 
         .text-highlight {

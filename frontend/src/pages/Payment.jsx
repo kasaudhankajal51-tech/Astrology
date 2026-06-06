@@ -81,8 +81,14 @@ function Payment() {
       return;
     }
 
+    if (!keyId) {
+      toast.error('Payment gateway key is missing. Please contact support.');
+      setIsProcessing(false);
+      return;
+    }
+
     const options = {
-      key: keyId || "rzp_test_placeholder",
+      key: keyId,
       amount: rawAmount,
       currency: "INR",
       name: "DS Institute",

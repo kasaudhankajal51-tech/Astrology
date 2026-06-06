@@ -39,8 +39,10 @@ const LogoCarousel = () => {
           position: relative;
         }
         .logo-carousel-track {
-          max-width: 1200px;
+          max-width: var(--container-public);
           margin: 0 auto;
+          padding-left: var(--page-pad-x);
+          padding-right: var(--page-pad-x);
           position: relative;
         }
         .logo-carousel-track::before,

@@ -1,9 +1,12 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import SEO from '../components/SEO';
+import { openShopifyStore } from '../utils/shopify';
+import { useSettings } from '../context/SettingsContext';
 
 const AstroShop = () => {
+  const { settings } = useSettings();
   useEffect(() => {
     if (window.AOS) {
       window.AOS.refresh();
@@ -14,14 +17,12 @@ const AstroShop = () => {
     }
   }, []);
 
-  const navigate = useNavigate();
-
   const handleAddToCart = (name) => {
-    toast.success(`${name} added to cart!`);
+    openShopifyStore({ storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${name} will be managed from Shopify checkout.` });
   };
 
   const handleBuyNow = (prod) => {
-    navigate('/shop/checkout', { state: { product: prod } });
+    openShopifyStore({ path: 'collections/all', storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${prod.name} checkout will open from Shopify.` });
   };
 
   const categories = [
@@ -160,7 +161,7 @@ const AstroShop = () => {
                 <h4 className="prod-name-v2">{prod.name}</h4>
                 <div className="price-row">
                   <span className="price-v2">{prod.price}</span>
-                  <button className="btn-buy-v2" onClick={() => handleBuyNow(prod)}>Buy Now</button>
+              <button className="btn-buy-v2" onClick={() => handleBuyNow(prod)}>Open in Shopify</button>
                 </div>
               </div>
             </div>

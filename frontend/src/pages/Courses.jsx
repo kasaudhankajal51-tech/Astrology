@@ -4,10 +4,10 @@ import { coursesData } from '../data/coursesData';
 import SEO from '../components/SEO';
 import API_BASE from '../utils/api';
 
-function Courses() {
+function Courses({ mode = 'all' }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [dbCourses, setDbCourses] = useState(coursesData);
+  const [dbCourses, setDbCourses] = useState(coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false })));
   const [filteredCourses, setFilteredCourses] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,16 +26,19 @@ function Courses() {
             shortDesc: course.description,
             image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
             duration: `${course.validityDays} Days`,
-            schedule: 'Self-Paced',
+            schedule: course.courseType === 'Live' ? 'Upcoming Batch' : 'Self-Paced',
             level: 'Professional',
             category: 'Astrology', // Defaulting since we didn't add category to DB yet
             price: course.price,
-            isPremium: true
+            courseType: course.courseType || 'Recorded',
+            isPremium: course.courseType !== 'Live'
           }));
-          setDbCourses([...coursesData, ...mappedCourses]);
+          const liveStaticCourses = coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false }));
+          setDbCourses([...liveStaticCourses, ...mappedCourses]);
         }
       } catch (err) {
         console.error('Failed to fetch courses:', err);
+        setDbCourses(coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false })));
       } finally {
         setLoading(false);
       }
@@ -51,20 +54,42 @@ function Courses() {
       const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
                            course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
       const matchesCategory = selectedCategory === 'All' || course.category === selectedCategory;
-      return matchesSearch && matchesCategory;
+      const matchesMode = mode === 'all'
+        || (mode === 'live' && course.courseType === 'Live')
+        || (mode === 'recorded' && course.courseType !== 'Live');
+      return matchesSearch && matchesCategory && matchesMode;
     });
     setFilteredCourses(filtered);
-  }, [searchTerm, selectedCategory, dbCourses]);
+  }, [searchTerm, selectedCategory, dbCourses, mode]);
 
-  const premiumCourses = filteredCourses.filter(c => c.isPremium);
-  const freeCourses = filteredCourses.filter(c => !c.isPremium);
+  const recordedCourses = filteredCourses.filter(c => c.courseType !== 'Live');
+  const liveCourses = filteredCourses.filter(c => c.courseType === 'Live');
+  const pageCopy = {
+    all: {
+      title: 'Master Ancient Wisdom',
+      subtitle: 'Explore live classes and recorded learning programs from beginner fundamentals to advanced prediction techniques.'
+    },
+    live: {
+      title: 'Live Astrology Courses',
+      subtitle: 'Browse instructor-led batches and submit an enquiry. Our team will share timing, pricing and batch details.'
+    },
+    recorded: {
+      title: 'Recorded Courses',
+      subtitle: 'Buy self-paced recorded courses, unlock student access and continue learning from your dashboard.'
+    }
+  }[mode] || {};
 
   const renderCourseCard = (course, i) => (
     <div key={course.id} className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={(i % 3) * 100}>
       <div className="course-card">
         {course.isPremium && (
           <div className="premium-badge">
-            <i className="fas fa-crown"></i> Premium
+            <i className="fas fa-play-circle"></i> Recorded
+          </div>
+        )}
+        {!course.isPremium && (
+          <div className="premium-badge live-badge">
+            <i className="fas fa-video"></i> Live Batch
           </div>
         )}
         <div className="course-badge">{course.level}</div>
@@ -248,7 +273,7 @@ function Courses() {
           justify-content: center;
           gap: 10px;
           flex-wrap: wrap;
-          padding: 0 clamp(1rem, 3vw, 2rem);
+          padding: 0 var(--page-pad-x);
         }
 
         .filter-btn {
@@ -298,8 +323,8 @@ function Courses() {
         }
 
         .courses-grid {
-          padding: clamp(2.25rem, 5vw, 4rem) clamp(1rem, 3vw, 2rem);
-          max-width: 1160px;
+          padding: clamp(2.25rem, 5vw, 4rem) var(--page-pad-x);
+          max-width: var(--container-public);
         }
 
         .course-card {
@@ -370,6 +395,11 @@ function Courses() {
           display: flex;
           align-items: center;
           gap: 5px;
+        }
+
+        .premium-badge.live-badge {
+          background: linear-gradient(135deg, #8B4A1E 0%, #C8832A 100%);
+          color: #fff;
         }
 
         .price-tag {
@@ -503,8 +533,8 @@ function Courses() {
           }
 
           .courses-grid {
-            padding-left: 0.85rem;
-            padding-right: 0.85rem;
+            padding-left: var(--page-pad-x);
+            padding-right: var(--page-pad-x);
           }
 
           .course-card {
@@ -661,10 +691,9 @@ function Courses() {
 
       <section className="hero-section">
         <div className="container hero-content">
-          <h1 data-aos="fade-down">Master Ancient Wisdom</h1>
+          <h1 data-aos="fade-down">{pageCopy.title}</h1>
           <p data-aos="fade-up" data-aos-delay="100">
-            Explore our comprehensive range of professional astrology and occult science courses. 
-            From beginner fundamentals to advanced prediction techniques.
+            {pageCopy.subtitle}
           </p>
           <div className="search-container" data-aos="zoom-in" data-aos-delay="200">
             <div className="search-box">
@@ -712,20 +741,20 @@ function Courses() {
       </div>
 
       <div className="container courses-grid">
-        {premiumCourses.length > 0 && (
+        {liveCourses.length > 0 && (
           <div className="course-section">
-            <h2 className="section-title">Live & Premium Courses</h2>
+            <h2 className="section-title">Live Courses</h2>
             <div className="row g-4">
-              {premiumCourses.map(renderCourseCard)}
+              {liveCourses.map(renderCourseCard)}
             </div>
           </div>
         )}
 
-        {freeCourses.length > 0 && (
+        {recordedCourses.length > 0 && (
           <div className="course-section">
-            <h2 className="section-title">Free & Pre-recorded Courses</h2>
+            <h2 className="section-title">Recorded Courses</h2>
             <div className="row g-4">
-              {freeCourses.map(renderCourseCard)}
+              {recordedCourses.map(renderCourseCard)}
             </div>
           </div>
         )}

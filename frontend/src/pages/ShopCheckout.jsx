@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 const ShopCheckout = () => {
   const location = useLocation();
@@ -29,10 +30,22 @@ const ShopCheckout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+    if (!/^[1-9][0-9]{5}$/.test(formData.pincode.trim())) {
+      toast.error('Please enter a valid 6-digit Indian pincode.');
+      return;
+    }
+
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     // Simulate checkout process
     setTimeout(() => {
       toast.success('Order placed successfully! We will contact you soon.');
+      setFormData({ ...formData, phone: sanitizedPhone });
       setIsSubmitting(false);
       navigate('/shop');
     }, 1500);

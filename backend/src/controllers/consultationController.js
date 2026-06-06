@@ -2,16 +2,11 @@ import asyncHandler from 'express-async-handler';
 import consultationService from '../services/consultationService.js';
 import Consultation from '../models/Consultation.js';
 import { sendAdminNotificationEmail } from '../utils/sendEmail.js';
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import logger from '../config/logger.js';
+import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
 
 export const submitConsultation = asyncHandler(async (req, res) => {
-  const razorpay = new Razorpay({
-    key_id: process.env.RAZORPAY_KEY_ID || 'rzp_test_placeholder',
-    key_secret: process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder'
-  });
-
   if (req.body.phone && !req.body.mobile) {
     req.body.mobile = req.body.phone;
   }
@@ -25,6 +20,7 @@ export const submitConsultation = asyncHandler(async (req, res) => {
   }
 
   try {
+    const razorpay = createRazorpayInstance();
     const razorpayOrder = await razorpay.orders.create({
       amount: req.body.amount * 100, // paise
       currency: "INR",
@@ -34,13 +30,15 @@ export const submitConsultation = asyncHandler(async (req, res) => {
     consultation.transactionId = razorpayOrder.id; // Store order ID as reference
     await consultation.save();
 
+    const { keyId } = getRazorpayConfig();
+
     return res.status(201).json({
       success: true,
       orderId: razorpayOrder.id, // Razorpay Order ID for standard checkout
       consultationId: consultation._id, // internal reference
       amount: razorpayOrder.amount,
       currency: razorpayOrder.currency,
-      keyId: process.env.RAZORPAY_KEY_ID,
+      keyId,
       name: consultation.name,
       email: consultation.email,
       phone: consultation.mobile
@@ -55,8 +53,9 @@ export const submitConsultation = asyncHandler(async (req, res) => {
 
 export const verifyPayment = asyncHandler(async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, consultationId } = req.body;
+  const { keySecret } = getRazorpayConfig();
 
-  const hmac = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || 'secret_placeholder');
+  const hmac = crypto.createHmac('sha256', keySecret);
   hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
   const generated_signature = hmac.digest('hex');
 

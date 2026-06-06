@@ -21,6 +21,7 @@ import ItinerarySection from '../components/webinar/ItinerarySection';
 import FaqSection from '../components/webinar/FaqSection';
 import FixedBottomCTA from '../components/webinar/FixedBottomCTA';
 import RegistrationModal from '../components/webinar/RegistrationModal';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 // Styles
 import './Webinar.css';
@@ -66,18 +67,26 @@ function Webinar() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const phoneRegex = /^[0-9]{10}$/;
-    if (!phoneRegex.test(formData.phone)) {
-      toast.error('Please enter a valid 10-digit phone number.');
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
       return;
     }
 
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     try {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Webinar', courseName: '2-Day Mega Astrology Webinar' }),
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
+          type: 'Webinar',
+          courseName: '2-Day Mega Astrology Webinar'
+        }),
       });
       const data = await res.json();
       if (data.success) {

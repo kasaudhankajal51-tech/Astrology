@@ -52,8 +52,16 @@ export const getCourseById = async (req, res) => {
 // @route   POST /api/admin/courses
 export const createCourse = async (req, res) => {
   try {
-    const { title, description, price, validityDays, thumbnailUrl } = req.body;
-    const course = await Course.create({ title, description, price, validityDays, thumbnailUrl });
+    const { title, description, price, validityDays, thumbnailUrl, courseType } = req.body;
+    const normalizedCourseType = courseType === 'Live' ? 'Live' : 'Recorded';
+    const course = await Course.create({
+      title,
+      description,
+      price,
+      validityDays,
+      thumbnailUrl,
+      courseType: normalizedCourseType
+    });
     res.status(201).json({ success: true, course });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });

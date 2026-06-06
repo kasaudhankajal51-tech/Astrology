@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import API_BASE from '../utils/api';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 
 function ConsultationDetail() {
@@ -174,11 +175,26 @@ function ConsultationDetail() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     setIsSubmitting(true);
     
     try {
       const amount = parseInt(service.price.replace('₹', ''), 10);
-      const payload = { ...formData, amount, type: 'Consultation', consultationType: service.title };
+      const payload = {
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: sanitizedPhone,
+        amount,
+        type: 'Consultation',
+        consultationType: service.title
+      };
 
       const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',

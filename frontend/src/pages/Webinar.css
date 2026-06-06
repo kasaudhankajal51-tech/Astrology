@@ -25,7 +25,7 @@
   overflow-x: hidden;
 }
 
-.container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+.webinar-landing .container { max-width: var(--container-public); margin: 0 auto; padding-left: var(--page-pad-x); padding-right: var(--page-pad-x); }
 .text-highlight { color: var(--brand-coral); }
 .text-purple { color: var(--brand-purple); }
 .section-header { margin-bottom: 50px; text-align: center; }
@@ -286,7 +286,8 @@
 .cta-container-v4 {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
   display: flex;
   flex-direction: column;
   gap: 6px;

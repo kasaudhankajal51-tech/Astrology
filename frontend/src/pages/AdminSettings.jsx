@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import API_BASE from '../utils/api';
+import AdminContentManager from '../components/AdminContentManager';
 
 
 function AdminSettings() {
@@ -21,6 +22,7 @@ function AdminSettings() {
     twitterUrl: '',
     whatsappNumber: '',
     razorpayKeyId: '',
+    shopifyStoreUrl: '',
     googleAnalyticsId: '',
     maintenanceMode: false
   });
@@ -119,6 +121,7 @@ function AdminSettings() {
           <div className="sidebar-group-label">Core Settings</div>
           <TabButton id="general" label="General Info" icon="fa-info-circle" />
           <TabButton id="social" label="Social Media" icon="fa-share-alt" />
+          <TabButton id="content" label="Banners & Materials" icon="fa-layer-group" />
           
           <div className="sidebar-group-label mt-4">Advanced</div>
           <TabButton id="integrations" label="Integrations" icon="fa-plug" />
@@ -283,6 +286,19 @@ function AdminSettings() {
                       <small>Used for processing consultations and course payments.</small>
                     </div>
                     <div className="form-group">
+                      <label>Shopify Store URL</label>
+                      <div className="input-with-icon">
+                        <i className="fab fa-shopify"></i>
+                        <input
+                          name="shopifyStoreUrl"
+                          value={settings.shopifyStoreUrl || ''}
+                          onChange={handleChange}
+                          placeholder="https://your-store.myshopify.com"
+                        />
+                      </div>
+                      <small>Shop buttons redirect here. No Shopify API key is required.</small>
+                    </div>
+                    <div className="form-group">
                       <label>Google Analytics (G-ID)</label>
                       <div className="input-with-icon">
                         <i className="fas fa-chart-line"></i>
@@ -314,6 +330,18 @@ function AdminSettings() {
                 </motion.div>
               )}
 
+              {activeTab === 'content' && (
+                <motion.div
+                  key="content"
+                  initial={{ opacity: 0, x: 10 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -10 }}
+                  className="settings-section"
+                >
+                  <AdminContentManager />
+                </motion.div>
+              )}
+
               {activeTab === 'security' && (
                 <motion.div 
                   key="security"
@@ -340,6 +368,7 @@ function AdminSettings() {
               )}
             </AnimatePresence>
 
+            {activeTab !== 'content' && (
             <div className="settings-footer">
               <button 
                 type="submit" 
@@ -363,6 +392,7 @@ function AdminSettings() {
                 )}
               </button>
             </div>
+            )}
           </form>
         </main>
       </div>

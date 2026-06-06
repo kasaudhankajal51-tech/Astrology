@@ -24,7 +24,7 @@ export const updateSettings = async (req, res) => {
       'siteName', 'siteTitle', 'siteDescription', 'contactEmail', 
       'contactPhone', 'address', 'facebookUrl', 'instagramUrl', 
       'youtubeUrl', 'twitterUrl', 'whatsappNumber', 'razorpayKeyId', 
-      'googleAnalyticsId', 'maintenanceMode'
+      'shopifyStoreUrl', 'googleAnalyticsId', 'maintenanceMode'
     ];
 
     fieldsToUpdate.forEach(field => {

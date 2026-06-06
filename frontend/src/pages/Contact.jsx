@@ -3,6 +3,7 @@ import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
 import { useSettings } from '../context/SettingsContext';
 import SEO from '../components/SEO';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 function Contact() {
   const { settings } = useSettings();
@@ -12,12 +13,25 @@ function Contact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     try {
       const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Contact' })
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
+          type: 'Contact'
+        })
       });
       const data = await response.json();
       if (data.success) {
@@ -70,7 +84,7 @@ function Contact() {
               </div>
               <div className="form-group">
                 <label>Phone number</label>
-                <input type="text" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} />
+                <input type="tel" value={formData.phone} onChange={(e) => setFormData({...formData, phone: e.target.value})} required placeholder="10-digit Indian mobile number" />
               </div>
               <div className="form-group">
                 <label>Message</label>

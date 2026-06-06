@@ -2,6 +2,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 function StudentDashboard() {
   const [profile, setProfile] = useState(null);
@@ -170,7 +171,19 @@ function StudentDashboard() {
 
   const saveProfile = async (event) => {
     event.preventDefault();
+    const validationError = getContactValidationError(profileForm);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
     setSavingProfile(true);
+    const sanitizedProfile = {
+      ...profileForm,
+      name: profileForm.name.trim(),
+      email: profileForm.email.trim(),
+      mobile: normalizeIndianMobile(profileForm.mobile)
+    };
 
     try {
       const response = await fetch(`${API_BASE}/api/student/profile`, {
@@ -179,7 +192,7 @@ function StudentDashboard() {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(profileForm)
+        body: JSON.stringify(sanitizedProfile)
       });
       const data = await response.json();
       if (!response.ok || data.success === false) throw new Error(data.message || 'Unable to update profile');

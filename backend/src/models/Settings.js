@@ -17,6 +17,7 @@ const SettingsSchema = new mongoose.Schema({
 
   // API Keys (Masked in frontend usually)
   razorpayKeyId: { type: String, default: '' },
+  shopifyStoreUrl: { type: String, default: '' },
   googleAnalyticsId: { type: String, default: '' },
 
   // UI Settings

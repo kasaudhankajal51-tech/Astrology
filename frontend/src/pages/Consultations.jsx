@@ -5,6 +5,7 @@ import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 function Consultations() {
   const navigate = useNavigate();
@@ -50,6 +51,13 @@ function Consultations() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     setIsSubmitting(true);
     
     // If there is no price (e.g. general enquiry), use the old free flow
@@ -58,7 +66,14 @@ function Consultations() {
         const response = await fetch(`${API_BASE}/api/leads`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ ...formData, type: 'Consultation', courseName: formData.consultationType || 'General Consultation' })
+          body: JSON.stringify({
+            ...formData,
+            name: formData.name.trim(),
+            email: formData.email.trim(),
+            phone: sanitizedPhone,
+            type: 'Consultation',
+            courseName: formData.consultationType || 'General Consultation'
+          })
         });
         const data = await response.json();
         if (data.success) {
@@ -86,7 +101,15 @@ function Consultations() {
       }
 
       const amount = parseInt(formData.price.replace('₹', '').replace(',', ''), 10);
-      const payload = { ...formData, amount, type: 'Consultation', consultationType: formData.consultationType };
+      const payload = {
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: sanitizedPhone,
+        amount,
+        type: 'Consultation',
+        consultationType: formData.consultationType
+      };
 
       const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { openShopifyStore } from '../utils/shopify';
+import { useSettings } from '../context/SettingsContext';
 
 const ShopCategory = () => {
   const { category } = useParams();
+  const { settings } = useSettings();
   const [categoryData, setCategoryData] = useState(null);
-  const navigate = useNavigate();
 
   const shopData = {
     gemstones: {
@@ -192,8 +194,20 @@ const ShopCategory = () => {
                   <span className="text-success small fw-bold">In Stock</span>
                 </div>
                 <div className="d-flex gap-2 mt-3">
-                  <button className="btn-add" style={{ flex: 1, background: '#f8f9fa', color: '#2A0F02', border: '1px solid #2A0F02' }} onClick={() => toast.success(`${prod.name} added to cart!`)}>Add to cart</button>
-                  <button className="btn-add" style={{ flex: 1 }} onClick={() => navigate('/shop/checkout', { state: { product: prod } })}>Buy Now</button>
+                  <button
+                    className="btn-add"
+                    style={{ flex: 1, background: '#f8f9fa', color: '#2A0F02', border: '1px solid #2A0F02' }}
+                    onClick={() => openShopifyStore({ path: `collections/${category || 'all'}`, storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${prod.name} cart will be handled in Shopify.` })}
+                  >
+                    Shopify Cart
+                  </button>
+                  <button
+                    className="btn-add"
+                    style={{ flex: 1 }}
+                    onClick={() => openShopifyStore({ path: `collections/${category || 'all'}`, storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${prod.name} checkout will open from Shopify.` })}
+                  >
+                    Open Store
+                  </button>
                 </div>
               </div>
             </div>

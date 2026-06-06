@@ -24,10 +24,10 @@
   --font-heading: 'Playfair Display', Georgia, serif;
   --font-body: var(--font-sans, 'Inter', 'Outfit', Arial, sans-serif);
 
-  --page-pad-x: clamp(0.9rem, 3vw, 2rem);
+  --page-pad-x: clamp(1rem, 3.2vw, 3rem);
   --section-pad-y: clamp(2.75rem, 6vw, 5rem);
   --section-pad-y-sm: clamp(2rem, 4vw, 3.25rem);
-  --container-public: 1180px;
+  --container-public: 1440px;
 
   --h1-size: clamp(2.15rem, 5vw, 3.5rem);
   --h2-size: clamp(1.8rem, 4vw, 2.45rem);
@@ -127,9 +127,35 @@ html, body {
 }
 
 .site-container {
+  width: 100%;
   max-width: var(--container-public);
   margin-inline: auto;
   padding-inline: var(--page-pad-x);
+}
+
+.site-shell .container,
+.site-shell .container-sm,
+.site-shell .container-md,
+.site-shell .container-lg,
+.site-shell .container-xl,
+.site-shell .container-xxl {
+  width: 100%;
+  max-width: var(--container-public);
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
+}
+
+.site-shell .container.site-container,
+.site-shell .site-container.container {
+  max-width: var(--container-public);
+  padding-left: var(--page-pad-x);
+  padding-right: var(--page-pad-x);
+}
+
+.site-main > [class*="-page"],
+.site-main > [class*="-wrapper"],
+.site-main > [class*="-container"] {
+  width: 100%;
 }
 
 .site-section {
@@ -246,7 +272,7 @@ html, body {
 
 @media (max-width: 640px) {
   :root {
-    --page-pad-x: 0.85rem;
+    --page-pad-x: 1rem;
     --section-pad-y: clamp(2.25rem, 9vw, 3.25rem);
   }
 

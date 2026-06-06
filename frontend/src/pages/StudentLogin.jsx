@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-hot-toast';
 import API_BASE from '../utils/api';
 import './Admin.css'; // Reusing the premium CSS from admin
+import { isValidEmail } from '../utils/validation';
 
 function StudentLogin() {
   const [email, setEmail] = useState('');
@@ -29,6 +30,11 @@ function StudentLogin() {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
+
     setIsLoading(true);
     setLoginError('');
     
@@ -36,7 +42,7 @@ function StudentLogin() {
       const response = await fetch(`${API_BASE}/api/student/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
 
       const data = await response.json();
@@ -64,7 +70,7 @@ function StudentLogin() {
 
   const handleForgotPassword = async (e) => {
     e.preventDefault();
-    if (!email) {
+    if (!isValidEmail(email)) {
       toast.error('Please enter your registered email address');
       return;
     }
@@ -77,7 +83,7 @@ function StudentLogin() {
       const response = await fetch(`${API_BASE}/api/student/forgot-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email: email.trim() }),
       });
       const data = await response.json();
       
@@ -97,6 +103,10 @@ function StudentLogin() {
 
   const handleResetPassword = async (e) => {
     e.preventDefault();
+    if (!isValidEmail(email)) {
+      toast.error('Please enter a valid email address.');
+      return;
+    }
     if (!otp || !newPassword) {
       toast.error('Please fill all fields');
       return;
@@ -107,7 +117,7 @@ function StudentLogin() {
       const response = await fetch(`${API_BASE}/api/student/reset-password`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, otp, newPassword }),
+        body: JSON.stringify({ email: email.trim(), otp, newPassword }),
       });
       const data = await response.json();
       

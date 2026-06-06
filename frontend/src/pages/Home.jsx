@@ -6,6 +6,7 @@ import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 
 
@@ -437,20 +438,9 @@ function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Proper Validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const phoneRegex = /^[0-9]{10}$/;
-    
-    if (!formData.name || formData.name.length < 3) {
-      toast.error('Please enter a valid name (min 3 chars).');
-      return;
-    }
-    if (!emailRegex.test(formData.email)) {
-      toast.error('Please enter a valid email address.');
-      return;
-    }
-    if (!phoneRegex.test(formData.phone)) {
-      toast.error('Please enter a valid 10-digit phone number.');
+    const validationError = getContactValidationError(formData);
+    if (validationError) {
+      toast.error(validationError);
       return;
     }
     if (!formData.consultationType) {
@@ -459,6 +449,7 @@ function Home() {
     }
 
     setIsSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     
     // Use Razorpay Flow if price is present
     if (formData.price) {
@@ -469,7 +460,12 @@ function Home() {
         setIsSubmitting(false);
       };
       
-      const success = await handleRazorpayPayment(formData, onSuccess);
+      const success = await handleRazorpayPayment({
+        ...formData,
+        name: formData.name.trim(),
+        email: formData.email.trim(),
+        phone: sanitizedPhone
+      }, onSuccess);
       if (!success) {
         setIsSubmitting(false);
       }
@@ -481,7 +477,14 @@ function Home() {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type: 'Consultation', courseName: 'Professional Consultation' }),
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
+          type: 'Consultation',
+          courseName: 'Professional Consultation'
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -2831,9 +2834,11 @@ function Home() {
 
         .consultation-home-section .container,
         .aw {
-          max-width: 1180px;
+          max-width: var(--container-public);
           margin-left: auto;
           margin-right: auto;
+          padding-left: var(--page-pad-x);
+          padding-right: var(--page-pad-x);
         }
 
         .consultation-home-section .mystic-btn-outline {
@@ -2846,8 +2851,8 @@ function Home() {
         @media (max-width: 575px) {
           .aw,
           .consultation-home-section {
-            padding-left: 0.85rem !important;
-            padding-right: 0.85rem !important;
+            padding-left: var(--page-pad-x) !important;
+            padding-right: var(--page-pad-x) !important;
           }
 
           .cg {

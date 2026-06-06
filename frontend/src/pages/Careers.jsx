@@ -8,6 +8,7 @@ import {
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 /* ─── Inline styles (no Tailwind dependency) ─── */
 const S = {
@@ -294,16 +295,20 @@ export default function Careers() {
     e.preventDefault();
     if (!resume) return toast.error('Please upload your resume');
 
-    // Client-side Validation
-    const phoneRegex = /^[0-9]{10,12}$/;
-    if (!phoneRegex.test(formData.phone.replace(/[\s\-\+]/g, ''))) {
-      return toast.error('Please enter a valid phone number (10-12 digits)');
+    const validationError = getContactValidationError({
+      name: formData.fullName,
+      email: formData.email,
+      phone: formData.phone
+    });
+    if (validationError) {
+      return toast.error(validationError);
     }
 
     setSubmitting(true);
+    const sanitizedPhone = normalizeIndianMobile(formData.phone);
     const fd = new FormData();
     Object.keys(formData).forEach((k) => {
-      const val = formData[k];
+      const val = k === 'phone' ? sanitizedPhone : formData[k];
       fd.append(k, typeof val === 'string' ? val.trim() : val);
     });
     fd.append('resume', resume);

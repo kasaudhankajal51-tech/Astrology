@@ -7,6 +7,7 @@ import SuccessModal from '../components/SuccessModal';
 import CourseTimer from '../components/CourseTimer';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
+import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
 function CourseDetail() {
   const { courseId } = useParams();
@@ -28,6 +29,7 @@ function CourseDetail() {
     email: '',
     city: '',
     age: '',
+    interest: '',
     message: ''
   });
   const [isProcessingPayment, setIsProcessingPayment] = useState(false);
@@ -56,7 +58,8 @@ function CourseDetail() {
             level: 'Professional',
             category: 'Astrology',
             price: dbCourse.price,
-            isPremium: true,
+            courseType: dbCourse.courseType || 'Recorded',
+            isPremium: dbCourse.courseType !== 'Live',
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
@@ -88,28 +91,43 @@ function CourseDetail() {
   }, [courseId, navigate]);
 
   const handleInputChange = (e) => {
+    if (e.target.name === 'phone') {
+      setFormData({ ...formData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) });
+      return;
+    }
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleEnquiryChange = (e) => {
+    if (e.target.name === 'phone') {
+      setEnquiryData({ ...enquiryData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) });
+      return;
+    }
     setEnquiryData({ ...enquiryData, [e.target.name]: e.target.value });
   };
 
   const handleEnquirySubmit = async (e) => {
     e.preventDefault();
+    const validationError = getContactValidationError(enquiryData);
+    if (validationError) {
+      toast.error(validationError);
+      return;
+    }
+
+    const sanitizedPhone = normalizeIndianMobile(enquiryData.phone);
     try {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: enquiryData.name,
-          phone: enquiryData.phone,
-          email: enquiryData.email,
+          name: enquiryData.name.trim(),
+          phone: sanitizedPhone,
+          email: enquiryData.email.trim(),
           type: 'Course-Inquiry',
           courseName: course.title,
           dob: enquiryData.age,
           pob: enquiryData.city,
-          message: enquiryData.message,
+          message: `Interest: ${enquiryData.interest || 'Not specified'}${enquiryData.message ? `\nNotes: ${enquiryData.message}` : ''}`,
           couponCode: appliedCoupon?.code || ''
         }),
       });
@@ -117,7 +135,7 @@ function CourseDetail() {
       if (data.success) {
         toast.success('Enquiry submitted successfully! Our team will contact you soon.');
         setShowEnquiryModal(false);
-        setEnquiryData({ name: '', phone: '', email: '', city: '', age: '', message: '' });
+        setEnquiryData({ name: '', phone: '', email: '', city: '', age: '', interest: '', message: '' });
       } else {
         toast.error(data.message || 'Failed to submit enquiry');
       }
@@ -153,11 +171,20 @@ function CourseDetail() {
 
   const handlePayment = async (e) => {
     if (e) e.preventDefault();
-    setIsProcessingPayment(true);
 
     try {
       // Create Order & get Payment Link
       const token = localStorage.getItem('studentToken');
+      if (!token) {
+        const validationError = getContactValidationError(formData);
+        if (validationError) {
+          toast.error(validationError);
+          return;
+        }
+      }
+
+      const sanitizedPhone = normalizeIndianMobile(formData.phone);
+      setIsProcessingPayment(true);
       const headers = { 'Content-Type': 'application/json' };
       if (token) {
         headers['Authorization'] = `Bearer ${token}`;
@@ -168,9 +195,9 @@ function CourseDetail() {
         headers,
         body: JSON.stringify({
           courseId: course.id,
-          name: formData.name,
-          email: formData.email,
-          mobile: formData.phone,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          mobile: sanitizedPhone,
           couponCode: appliedCoupon?.code || ''
         })
       });
@@ -335,7 +362,7 @@ function CourseDetail() {
 
         .detail-hero {
           background: linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%);
-          padding: clamp(3.5rem, 7vw, 5.5rem) 0 clamp(4rem, 7vw, 6rem);
+          padding: clamp(2.75rem, 5vw, 4.25rem) 0 clamp(3rem, 5vw, 4.5rem);
           color: #FFF;
           position: relative;
           overflow: hidden;
@@ -385,9 +412,9 @@ function CourseDetail() {
         .detail-hero h1 {
           font-family: var(--font-heading);
           color: #FFFFFF !important;
-          font-size: var(--h1-size);
+          font-size: clamp(2.4rem, 4.5vw, 4.25rem);
           font-weight: 800;
-          margin-bottom: 1.2rem;
+          margin-bottom: 1rem;
           line-height: 1.2;
           text-shadow: 0 2px 12px rgba(0,0,0,0.28);
         }
@@ -424,8 +451,8 @@ function CourseDetail() {
         }
 
         .detail-hero-img {
-          width: min(100%, 21rem);
-          height: min(62vw, 21rem);
+          width: min(100%, 18rem);
+          height: min(50vw, 18rem);
           object-fit: cover;
           border-radius: var(--radius-card);
           border: 1px solid rgba(255, 255, 255, 0.18);
@@ -438,18 +465,24 @@ function CourseDetail() {
         }
 
         .main-content {
-          margin-top: -2.25rem;
+          margin-top: clamp(1.5rem, 3vw, 2.5rem);
           position: relative;
-          z-index: 10;
-          padding-bottom: 20px;
+          z-index: 1;
+          padding-bottom: clamp(2.25rem, 5vw, 4rem);
+        }
+
+        .course-detail-layout {
+          align-items: flex-start;
         }
 
         .content-card {
           background: var(--site-surface);
           border-radius: var(--radius-card);
-          padding: clamp(1.35rem, 3vw, 2rem);
+          padding: clamp(1.35rem, 3vw, 2.15rem);
           box-shadow: var(--shadow-card);
           border: 1px solid var(--site-border);
+          position: relative;
+          z-index: 0;
           transition: box-shadow 0.25s ease, transform 0.25s ease;
         }
 
@@ -461,10 +494,14 @@ function CourseDetail() {
           font-family: var(--font-heading) !important;
           font-size: var(--h2-size) !important;
           color: var(--site-text) !important;
-          margin-bottom: 1.35rem;
+          margin-bottom: 1.15rem;
           position: relative;
-          padding-bottom: 0.85rem;
+          padding-bottom: 0.75rem;
           font-weight: 700 !important;
+        }
+
+        .content-card .section-title:not(:first-child) {
+          margin-top: clamp(1.75rem, 3vw, 2.35rem);
         }
 
         .text-gradient {
@@ -488,7 +525,7 @@ function CourseDetail() {
           font-size: var(--body-size);
           line-height: 1.65;
           color: var(--site-muted);
-          margin-bottom: 2rem;
+          margin-bottom: 0;
           position: relative;
           padding-left: 20px;
           border-left: 3px solid rgba(200, 131, 42, 0.2);
@@ -498,7 +535,7 @@ function CourseDetail() {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
           gap: 0.9rem;
-          margin-bottom: 2rem;
+          margin-bottom: 0;
         }
 
         .topic-item {
@@ -532,7 +569,7 @@ function CourseDetail() {
 
         .enroll-sidebar {
           position: sticky;
-          top: 7rem;
+          top: 6rem;
           z-index: 5;
           margin-bottom: 1.5rem;
           margin-left: 0;
@@ -574,7 +611,7 @@ function CourseDetail() {
           background: rgba(255,255,255,0.12);
           border: 1px solid rgba(255,255,255,0.22);
           border-radius: var(--radius-control);
-          padding: 1rem;
+          padding: 0.9rem;
           margin-bottom: 1rem;
           text-align: left;
           color: #FFFFFF;
@@ -585,7 +622,7 @@ function CourseDetail() {
           display: flex;
           align-items: center;
           gap: 0.6rem;
-          margin-bottom: 0.8rem;
+          margin-bottom: 0.7rem;
           font-weight: 700;
           color: #fff;
         }
@@ -593,15 +630,15 @@ function CourseDetail() {
         .coupon-input-row {
           display: grid;
           grid-template-columns: 1fr auto;
-          gap: 0.65rem;
-          margin-bottom: 0.8rem;
+          gap: 0.55rem;
+          margin-bottom: 0.7rem;
         }
 
         .coupon-input-row input {
           width: 100%;
           border: 1px solid rgba(255,255,255,0.2);
           border-radius: var(--radius-control);
-          padding: 0.78rem 0.9rem;
+          padding: 0.7rem 0.8rem;
           background: rgba(255,255,255,0.12);
           color: #fff;
           outline: none;
@@ -616,7 +653,7 @@ function CourseDetail() {
           color: #fff;
           border: none;
           border-radius: var(--radius-control);
-          padding: 0.78rem 1rem;
+          padding: 0.7rem 0.9rem;
           font-weight: 700;
           cursor: pointer;
         }
@@ -662,7 +699,7 @@ function CourseDetail() {
         .enroll-price {
           font-size: 2rem;
           font-weight: 800;
-          margin-bottom: 0.45rem;
+          margin-bottom: 0.35rem;
           color: #C8832A;
           text-shadow: 0 0 20px rgba(200, 131, 42, 0.3);
         }
@@ -694,7 +731,7 @@ function CourseDetail() {
         .enroll-sub {
           font-size: 0.95rem;
           opacity: 0.8;
-          margin-bottom: 1.35rem;
+          margin-bottom: 1rem;
           line-height: 1.4;
         }
 
@@ -706,15 +743,16 @@ function CourseDetail() {
           font-weight: 800;
           padding: 4px 12px;
           border-radius: 50px;
-          margin-bottom: 15px;
+          margin-bottom: 0.8rem;
           letter-spacing: 1px;
         }
 
         .trust-badges {
           display: flex;
           justify-content: center;
-          gap: 15px;
-          margin-bottom: 25px;
+          gap: 0.75rem;
+          margin-bottom: 1rem;
+          flex-wrap: wrap;
         }
 
         .t-badge {
@@ -732,7 +770,7 @@ function CourseDetail() {
         .sidebar-divider {
           height: 1px;
           background: rgba(255, 255, 255, 0.1);
-          margin-bottom: 25px;
+          margin-bottom: 1rem;
         }
 
         .feature-icon-circle {
@@ -906,7 +944,7 @@ function CourseDetail() {
           display: flex;
           align-items: center;
           gap: 10px;
-          margin-bottom: 12px;
+          margin-bottom: 0.75rem;
           font-size: 0.9rem;
           opacity: 0.9;
         }
@@ -1013,7 +1051,7 @@ function CourseDetail() {
 
         @media (max-width: 768px) {
           .detail-hero {
-            padding: 3rem 0 4rem;
+            padding: 2.5rem 0 2.75rem;
             text-align: center;
           }
           .hero-meta {
@@ -1026,7 +1064,7 @@ function CourseDetail() {
             background: rgba(255, 255, 255, 0.05);
           }
           .main-content {
-            margin-top: -1.5rem;
+            margin-top: 1rem;
           }
           .section-title {
             font-size: clamp(1.8rem, 6vw, 2.2rem) !important;
@@ -1053,11 +1091,11 @@ function CourseDetail() {
 
         @media (max-width: 992px) {
           .main-content {
-            margin-top: -1.5rem;
+            margin-top: 1.25rem;
           }
           .enroll-sidebar {
             position: static;
-            margin-top: 1.5rem;
+            margin-top: 0;
             margin-left: 0;
           }
           .content-card {
@@ -1105,7 +1143,7 @@ function CourseDetail() {
       </section>
 
       <div className="container site-container main-content">
-        <div className="row g-4">
+        <div className="row g-4 course-detail-layout">
           <div className="col-lg-8" data-aos="fade-up">
             <div className="content-card">
               <h2 className="section-title">Course <span className="text-gradient">Overview</span></h2>
@@ -1124,7 +1162,7 @@ function CourseDetail() {
               </div>
 
               <h2 className="section-title" data-aos="fade-up">Course <span className="text-gradient">Features</span></h2>
-              <div className="row g-4 mb-5">
+              <div className="row g-4 mb-4 course-features-row">
                 {[
                   { icon: 'broadcast-tower', title: 'Live Interactive Classes', desc: 'Step-by-step teaching method' },
                   { icon: 'user-graduate', title: 'Practical Training', desc: 'Real-world prediction techniques' },
@@ -1312,7 +1350,17 @@ function CourseDetail() {
               </div>
               <div className="form-group">
                 <label>Phone Number</label>
-                <input type="tel" name="phone" value={formData.phone} onChange={handleInputChange} placeholder="10 Digit Phone Number" required />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleInputChange}
+                  placeholder="10-digit mobile number"
+                  inputMode="numeric"
+                  maxLength="10"
+                  pattern="[6-9][0-9]{9}"
+                  required
+                />
               </div>
               <div className="form-group">
                 <label>Email Address</label>
@@ -1345,7 +1393,7 @@ function CourseDetail() {
               <div className="row">
                 <div className="col-6 form-group">
                   <label>Phone Number</label>
-                  <input type="tel" name="phone" value={enquiryData.phone} onChange={handleEnquiryChange} placeholder="10 Digit Phone" required />
+                  <input type="tel" name="phone" value={enquiryData.phone} onChange={handleEnquiryChange} placeholder="10 Digit Phone" inputMode="numeric" maxLength="10" pattern="[6-9][0-9]{9}" required />
                 </div>
                 <div className="col-6 form-group">
                   <label>Age</label>
@@ -1361,8 +1409,12 @@ function CourseDetail() {
                 <input type="text" name="city" value={enquiryData.city} onChange={handleEnquiryChange} placeholder="Your City" required />
               </div>
               <div className="form-group">
-                <label>Message / Interest</label>
-                <textarea name="message" value={enquiryData.message} onChange={handleEnquiryChange} placeholder="Why do you want to join this course?" rows="3" required></textarea>
+                <label>Interest</label>
+                <input type="text" name="interest" value={enquiryData.interest} onChange={handleEnquiryChange} placeholder="e.g. prediction, career, marriage, professional practice" required />
+              </div>
+              <div className="form-group">
+                <label>Notes <span className="text-muted">(Optional)</span></label>
+                <textarea name="message" value={enquiryData.message} onChange={handleEnquiryChange} placeholder="Any preferred timing or question for our team?" rows="3"></textarea>
               </div>
               <button type="submit" className="submit-btn">
                 Submit Enquiry

@@ -75,6 +75,8 @@ function App() {
               <Route path="predictive-astrology" element={<PredictiveAstrology />} />
               <Route path="certification-courses" element={<CertificationCourses />} />
               <Route path="courses" element={<Courses />} />
+              <Route path="live-courses" element={<Courses mode="live" />} />
+              <Route path="recorded-courses" element={<Courses mode="recorded" />} />
               <Route path="courses/:courseId" element={<CourseDetail />} />
               <Route path="free-tools" element={<FreeTools />} />
               <Route path="numerology" element={<Numerology />} />

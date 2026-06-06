@@ -216,7 +216,7 @@ function Footer() {
         }
         @keyframes fb-shift { 0%{background-position:0%} 100%{background-position:200%} }
 
-        .fb-inner { position: relative; z-index: 1; max-width: 1200px; margin: 0 auto; padding: 52px 30px 34px; }
+        .fb-inner { position: relative; z-index: 1; max-width: var(--container-public); margin: 0 auto; padding: 52px var(--page-pad-x) 34px; }
         
         /* Desktop Grid */
         .fb-grid { display: grid; grid-template-columns: 1.8fr 1fr 1fr 1.35fr; gap: 34px; }
@@ -249,9 +249,9 @@ function Footer() {
 
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
-          max-width: 1200px;
+          max-width: var(--container-public);
           margin: 0 auto;
-          padding: 28px 30px 44px;
+          padding: 28px var(--page-pad-x) 44px;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -303,8 +303,8 @@ function Footer() {
         /* Phone Layout — hidden on desktop */
         .fb-phone-section { display: none; }
 
-        .fb-bot-wrap { background: #f7eadb; padding: 18px 20px; border-top: 1px solid rgba(139,74,30,0.14); }
-        .fb-bot { max-width: 1200px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; gap: 1rem; }
+        .fb-bot-wrap { background: #f7eadb; padding: 18px var(--page-pad-x); border-top: 1px solid rgba(139,74,30,0.14); }
+        .fb-bot { max-width: var(--container-public); margin: 0 auto; display: flex; align-items: center; justify-content: space-between; color: #5C3D26; font-size: 14px; gap: 1rem; }
         .fb-legal a { color: #8B4A1E; text-decoration: none; font-weight: 700; }
         .fb-legal a:hover { color: #2A0F02; }
 

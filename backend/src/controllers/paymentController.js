@@ -1,4 +1,3 @@
-import Razorpay from 'razorpay';
 import crypto from 'crypto';
 import bcrypt from 'bcryptjs';
 import User from '../models/User.js';
@@ -8,14 +7,9 @@ import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
 import Coupon from '../models/Coupon.js';
 import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
+import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
 import dotenv from 'dotenv';
 dotenv.config();
-
-// Initialize Razorpay
-const razorpayInstance = new Razorpay({
-  key_id: process.env.RAZORPAY_KEY_ID,
-  key_secret: process.env.RAZORPAY_KEY_SECRET,
-});
 
 // @desc    Create Razorpay Order
 // @route   POST /api/payment/create-order
@@ -102,6 +96,7 @@ export const createOrder = async (req, res) => {
 
     let razorpayOrder;
     try {
+      const razorpayInstance = createRazorpayInstance();
       razorpayOrder = await razorpayInstance.orders.create({
         amount: amountInPaise,
         currency: 'INR',
@@ -111,7 +106,7 @@ export const createOrder = async (req, res) => {
       await order.save();
     } catch (err) {
       console.error('RAZORPAY ERROR:', err);
-      throw new Error('Failed to create Razorpay Order');
+      return res.status(500).json({ success: false, message: err.message || 'Failed to create Razorpay Order' });
     }
 
     if (studentEmail && studentName) {
@@ -128,6 +123,8 @@ export const createOrder = async (req, res) => {
       });
     }
 
+    const { keyId } = getRazorpayConfig();
+
     res.status(200).json({
       success: true,
       orderId: razorpayOrder.id,
@@ -138,7 +135,7 @@ export const createOrder = async (req, res) => {
       discountAmount,
       couponCode: appliedCoupon?.code || '',
       currency: 'INR',
-      keyId: process.env.RAZORPAY_KEY_ID,
+      keyId,
       name: studentName || '',
       email: studentEmail || '',
       phone: studentMobile || ''
@@ -155,10 +152,11 @@ export const createOrder = async (req, res) => {
 export const verifyPayment = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, name } = req.body;
+    const { keySecret } = getRazorpayConfig();
 
     const body = razorpay_order_id + "|" + razorpay_payment_id;
     const expectedSignature = crypto
-      .createHmac('sha256', process.env.RAZORPAY_KEY_SECRET)
+      .createHmac('sha256', keySecret)
       .update(body.toString())
       .digest('hex');
 

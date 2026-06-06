@@ -106,7 +106,8 @@ function LandingPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!/^[0-9]{10}$/.test(formData.phone)) {
+    const sanitizedPhone = formData.phone.replace(/\D/g, '').replace(/^91(?=\d{10}$)/, '').replace(/^0(?=\d{10}$)/, '');
+    if (!/^[6-9]\d{9}$/.test(sanitizedPhone)) {
       toast.error('📞 Please enter a valid 10-digit phone number.');
       return;
     }
@@ -123,7 +124,14 @@ function LandingPage() {
       const res = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...formData, type, courseName: content.courseName }),
+        body: JSON.stringify({
+          ...formData,
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: sanitizedPhone,
+          type,
+          courseName: content.courseName
+        }),
       });
       const data = await res.json();
       if (data.success) {
@@ -135,7 +143,7 @@ function LandingPage() {
             leadId: data.leadId,
             name: data.name || formData.name,
             email: data.email || formData.email,
-            phone: data.phone || formData.phone,
+            phone: data.phone || sanitizedPhone,
             amount: String(data.amount || 9900),
             orderId: data.orderId,
             keyId: data.keyId || ''
@@ -262,9 +270,10 @@ function LandingPage() {
         }
         
         .container {
-          max-width: 1280px;
+          max-width: var(--container-public);
           margin: 0 auto;
-          padding: 0 32px;
+          padding-left: var(--page-pad-x);
+          padding-right: var(--page-pad-x);
         }
         
         .d-flex {
@@ -309,9 +318,10 @@ function LandingPage() {
         .hero-content { 
           position: relative; 
           z-index: 2; 
-          max-width: 1280px; 
+          max-width: var(--container-public);
           margin: 0 auto; 
-          padding: 0 32px; 
+          padding-left: var(--page-pad-x);
+          padding-right: var(--page-pad-x);
           width: 100%; 
         }
         
@@ -705,7 +715,8 @@ function LandingPage() {
         
         @media (max-width: 640px) {
           .container {
-            padding: 0 20px;
+            padding-left: var(--page-pad-x);
+            padding-right: var(--page-pad-x);
           }
           
           .hero-h1 {

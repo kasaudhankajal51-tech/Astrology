@@ -643,8 +643,8 @@ function Cancellation() {
           gap: 1.25rem;
           grid-template-columns: 240px minmax(0, 1fr);
           margin: 0 auto;
-          max-width: 1180px;
-          padding: clamp(1.25rem, 3vw, 2rem) 1rem clamp(1.75rem, 4vw, 2.5rem);
+          max-width: var(--container-public);
+          padding: clamp(1.25rem, 3vw, 2rem) var(--page-pad-x) clamp(1.75rem, 4vw, 2.5rem);
           position: relative;
         }
 
@@ -813,7 +813,7 @@ function Cancellation() {
         @media (max-width: 991.98px) {
           .legal-policy-page .terms-container {
             display: block;
-            padding-inline: 0.9rem;
+            padding-inline: var(--page-pad-x);
           }
 
           .legal-policy-page .terms-container::before {

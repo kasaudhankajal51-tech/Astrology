@@ -178,9 +178,9 @@ function ConsultationDetail() {
     
     try {
       const amount = parseInt(service.price.replace('₹', ''), 10);
-      const payload = { ...formData, amount, consultationType: service.title };
+      const payload = { ...formData, amount, type: 'Consultation', consultationType: service.title };
 
-      const response = await fetch(`${API_BASE}/api/consultations`, {
+      const response = await fetch(`${API_BASE}/api/leads`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -211,14 +211,14 @@ function ConsultationDetail() {
           order_id: data.orderId,
           handler: async function (response) {
             try {
-              const verifyRes = await fetch(`${API_BASE}/api/consultations/verify-payment`, {
+              const verifyRes = await fetch(`${API_BASE}/api/leads/verify-payment`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                   razorpay_payment_id: response.razorpay_payment_id,
                   razorpay_order_id: response.razorpay_order_id,
                   razorpay_signature: response.razorpay_signature,
-                  consultationId: data.consultationId
+                  leadId: data.leadId
                 })
               });
               const verifyData = await verifyRes.json();

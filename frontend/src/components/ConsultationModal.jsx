@@ -1,6 +1,8 @@
 import React from 'react';
 import './webinar/RegistrationModal.css'; // Reusing the same base styles for consistency
 
+
+
 const CONSULTATION_PRICES = {
   'Career': '3600',
   'Relationship': '2700',
@@ -25,6 +27,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
     };
     handleChange(priceEvent);
   };
+
 
 
   return (

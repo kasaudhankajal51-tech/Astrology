@@ -149,18 +149,18 @@ export const createLead = asyncHandler(async (req, res) => {
     throw new Error(error.details[0].message);
   }
 
-  const { name, email, phone, type, courseName, consultationType, dob, tob, pob, message } = req.body;
+  const { name, email, phone, type, courseName, consultationType, dob, tob, pob, message, amount } = req.body;
 
   // 1. Create Lead in Database
   const lead = await Lead.create({
     name, email, phone, type, courseName, consultationType, dob, tob, pob, message,
-    paymentStatus: (type === 'Webinar' || type === 'Course') ? 'Pending' : 'Completed'
+    paymentStatus: (type === 'Webinar' || type === 'Course' || amount) ? 'Pending' : 'Completed'
   });
 
-  // 2. Only Create Razorpay Order for Paid Types (Course Inquiries are free)
-  if (type === 'Webinar' || type === 'Course') {
+  // 2. Only Create Razorpay Order for Paid Types
+  if (type === 'Webinar' || type === 'Course' || amount) {
     const options = {
-      amount: 99 * 100, // Amount in paise (₹99)
+      amount: amount ? amount * 100 : 99 * 100, // Amount in paise
       currency: "INR",
       receipt: `receipt_${lead._id}`,
     };

@@ -1,51 +1,5 @@
 export const coursesData = [
   {
-    id: "vedic-course",
-    title: "Vedic Astrology Mastery (Live)",
-    icon: "🌟",
-    duration: "10 Weeks",
-    schedule: "25-30 Live Classes",
-    shortDesc: "Embark on a transformative journey from basic charts to professional mastery with interactive live sessions.",
-    longDesc: "Embark on a transformative journey from basic charts to professional mastery. Learn the ancient wisdom of Navagrahas, Bhavas, and Nakshatras with 25-30 interactive live sessions.",
-    image: "/images/moon.jpg",
-    topics: [
-      "Foundations & Zodiac Signs",
-      "9 Planets (Navagrahas)",
-      "12 Houses (Bhavas)",
-      "27 Nakshatras",
-      "Predictions & Timing",
-      "Professional Mastery"
-    ],
-    category: "Vedic Astrology",
-    level: "Professional",
-    isPremium: true,
-    price: 699,
-    customUrl: "/vedic-course"
-  },
-  {
-    id: "predictive-astrology",
-    title: "Predictive Astrology Mastery (Live)",
-    icon: "🎯",
-    duration: "8 Weeks",
-    schedule: "20-24 Live Sessions",
-    shortDesc: "Learn to predict life events with remarkable precision. Master Vimshottari Dasha, Transits, and advanced planetary combinations.",
-    longDesc: "Learn to predict life events with remarkable precision. Master Vimshottari Dasha, Transits, and advanced planetary combinations for professional forecasting through interactive live sessions.",
-    image: "/images/tengyart-VgijAV-e97Y-unsplash.jpg",
-    topics: [
-      "Event Prediction",
-      "Timing (Transit & Dasha)",
-      "Career Predictions",
-      "Marriage Timing",
-      "Health (Medical Astrology)",
-      "Yearly Forecasting"
-    ],
-    category: "Vedic Astrology",
-    level: "Professional",
-    isPremium: true,
-    price: 1299,
-    customUrl: "/predictive-astrology"
-  },
-  {
     id: "basic-vedic-astrology",
     title: "Basic Vedic Astrology Course",
     icon: "🔱",

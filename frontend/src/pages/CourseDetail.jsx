@@ -272,12 +272,21 @@ function CourseDetail() {
           }
         };
 
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-          toast.error(`Payment Failed: ${response.error.description}`);
-          setIsProcessingPayment(false);
-        });
-        rzp.open();
+        if (orderData.isMock) {
+          toast.success("Test Mode: Simulating Payment Success...");
+          options.handler({
+            razorpay_payment_id: `pay_mock_${Date.now()}`,
+            razorpay_order_id: orderData.orderId,
+            razorpay_signature: "mock_signature"
+          });
+        } else {
+          const rzp = new window.Razorpay(options);
+          rzp.on('payment.failed', function (response) {
+            toast.error(`Payment Failed: ${response.error.description}`);
+            setIsProcessingPayment(false);
+          });
+          rzp.open();
+        }
       } else {
         toast.error('Order ID not generated. Please try again.');
         setIsProcessingPayment(false);

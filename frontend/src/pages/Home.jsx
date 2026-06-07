@@ -406,8 +406,21 @@ function Home() {
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const navigate = useNavigate();
 
-  const handleOpenModal = (e) => {
+  const handleOpenModal = (e, item = null) => {
     if (e) e.preventDefault();
+    if (item) {
+      setFormData(prev => ({
+        ...prev,
+        consultationType: item.title,
+        price: item.price || ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        consultationType: '',
+        price: ''
+      }));
+    }
     setIsModalOpen(true);
   };
 
@@ -1147,7 +1160,7 @@ function Home() {
                       <p>{item.desc}</p>
                       <div className="consult-btn-group">
                         <Link to={item.link} className="btn-view" onClick={(e) => e.stopPropagation()}>View Page</Link>
-                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(); }}>Book Now</button>
+                        <button className="btn-book" onClick={(e) => { e.stopPropagation(); handleOpenModal(e, item); }}>Book Now</button>
                       </div>
                     </div>
                   </div>

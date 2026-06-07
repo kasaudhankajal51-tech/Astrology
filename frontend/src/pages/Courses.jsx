@@ -26,15 +26,15 @@ function Courses({ mode = 'all' }) {
             shortDesc: course.description,
             image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
             duration: `${course.validityDays} Days`,
-            schedule: course.courseType === 'Live' ? 'Upcoming Batch' : 'Self-Paced',
+            schedule: course.courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
             level: 'Professional',
             category: 'Astrology', // Defaulting since we didn't add category to DB yet
             price: course.price,
-            courseType: course.courseType || 'Recorded',
-            isPremium: course.courseType !== 'Live'
+            courseType: course.courseType || 'Live',
+            isPremium: true
           }));
-          const liveStaticCourses = coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false }));
-          setDbCourses([...liveStaticCourses, ...mappedCourses]);
+          const staticCourses = coursesData.map((course) => ({ ...course, courseType: 'Recorded', isPremium: false }));
+          setDbCourses([...staticCourses, ...mappedCourses]);
         }
       } catch (err) {
         console.error('Failed to fetch courses:', err);
@@ -82,12 +82,12 @@ function Courses({ mode = 'all' }) {
   const renderCourseCard = (course, i) => (
     <div key={course.id} className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={(i % 3) * 100}>
       <div className="course-card">
-        {course.isPremium && (
+        {course.courseType === 'Recorded' && (
           <div className="premium-badge">
             <i className="fas fa-play-circle"></i> Recorded
           </div>
         )}
-        {!course.isPremium && (
+        {course.courseType === 'Live' && (
           <div className="premium-badge live-badge">
             <i className="fas fa-video"></i> Live Batch
           </div>

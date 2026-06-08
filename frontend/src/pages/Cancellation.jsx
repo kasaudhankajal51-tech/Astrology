@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-
-function Cancellation() {
+import SEO from '../components/SEO';function Cancellation() {
   const [activeSection, setActiveSection] = useState('online-courses');
 
   const sections = [
@@ -45,6 +44,7 @@ function Cancellation() {
 
   return (
     <div className="terms-page-wrapper legal-policy-page">
+      <SEO title="Refund & Cancellation Policy" description="Read our refund and cancellation policy for courses, consultations, and merchandise at DS Astro Institute." url="/refund-policy" />
       <div className="terms-header">
         <h1 className="terms-title">Refund & Cancellation Policy</h1>
         <p className="terms-subtitle">Last Updated: May 22, 2026</p>

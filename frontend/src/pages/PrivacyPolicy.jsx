@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-
-function PrivacyPolicy() {
+import SEO from '../components/SEO';function PrivacyPolicy() {
   const [activeSection, setActiveSection] = useState('info-collect');
 
   const sections = [
@@ -54,6 +53,7 @@ function PrivacyPolicy() {
 
   return (
     <div className="terms-page-wrapper privacy-page-wrapper">
+      <SEO title="Privacy Policy" description="Read our privacy policy to understand how we collect, use, and protect your personal information at DS Astro Institute." url="/privacy-policy" />
       <div className="terms-header">
         <h1 className="terms-title">Privacy Policy</h1>
         <p className="terms-subtitle">Last Updated: May 22, 2026</p>

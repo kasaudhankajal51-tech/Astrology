@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-
-function Terms() {
+import SEO from '../components/SEO';function Terms() {
   const [activeSection, setActiveSection] = useState('definitions');
 
   const sections = [
@@ -59,6 +58,7 @@ function Terms() {
 
   return (
     <div className="terms-page-wrapper legal-policy-page">
+      <SEO title="Terms and Conditions" description="Read the terms and conditions for using the DS Astro Institute website and services." url="/terms-and-conditions" />
       {/* Solid Color Header matching the requested design */}
       <div className="terms-header">
         <h1 className="terms-title">Terms and Conditions</h1>

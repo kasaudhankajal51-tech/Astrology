@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import API_BASE from '../utils/api';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
-
+import SEO from '../components/SEO';
 
 function ConsultationDetail() {
   const { serviceId } = useParams();
@@ -295,6 +295,7 @@ function ConsultationDetail() {
 
   return (
     <div className="service-detail-page">
+      <SEO title={`${service.title} Consultation`} description={service.desc} url={`/consultations/${service.id}`} />
       <div className="detail-hero">
         <div className="container site-container">
           <Link to="/consultations" className="back-link mb-3 d-inline-flex align-items-center text-decoration-none">

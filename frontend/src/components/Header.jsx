@@ -838,7 +838,10 @@ function Header() {
 
       <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header border-bottom">
-          <h5 className="offcanvas-title fw-bold" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>{brandName}</h5>
+          <h5 className="offcanvas-title fw-bold d-flex align-items-center gap-2" style={{ fontFamily: 'var(--font-serif)', color: 'var(--primary-color)' }}>
+            <img src="/images/ds_logo.png" alt={brandName} style={{ height: '32px', width: 'auto' }} />
+            {brandName}
+          </h5>
           <button type="button" className="btn-close" data-bs-dismiss="offcanvas"></button>
         </div>
         <div className="offcanvas-body p-0">
@@ -917,15 +920,20 @@ function Header() {
                   </button>
                 </>
               ) : !isStudentLoginPage ? (
-                <Link to="/login" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
-                  <i className="fas fa-user"></i> STUDENT LOGIN
-                </Link>
+                <>
+                  <Link to="/login" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
+                    <i className="fas fa-user"></i> STUDENT LOGIN
+                  </Link>
+                  <button type="button" onClick={handleStudentLogout} className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+                    <i className="fas fa-sign-out-alt"></i> LOGOUT
+                  </button>
+                </>
               ) : null}
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-mobile-cta primary-cta">
                 <i className="fas fa-calendar-check"></i> BOOK CONSULTATION
               </button>
-              <Link to="/certification-courses" className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
-                <i className="fas fa-graduation-cap"></i> ENROLL LIVE COURSE
+              <Link to="/live-courses" className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
+                <i className="fas fa-graduation-cap"></i> COURSES
               </Link>
               {authState.isAdmin && (
                 <button type="button" onClick={handleAdminLogout} className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">

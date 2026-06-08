@@ -20,69 +20,69 @@ const AstrologyCourses = ({ onEnroll }) => {
   ];
 
   const Card1SVG = () => (
-    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
         <radialGradient id="bg1" cx="50%" cy="50%" r="70%">
-          <stop offset="0%" stopColor="#8B4A1E"/>
-          <stop offset="100%" stopColor="#2A0F02"/>
+          <stop offset="0%" stopColor="#8B4A1E" />
+          <stop offset="100%" stopColor="#2A0F02" />
         </radialGradient>
         <radialGradient id="glow1" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4"/>
-          <stop offset="100%" stopColor="#2A0F02" stopOpacity="0"/>
+          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4" />
+          <stop offset="100%" stopColor="#2A0F02" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <rect width="300" height="160" fill="url(#bg1)"/>
-      <ellipse cx="150" cy="80" rx="90" ry="70" fill="url(#glow1)"/>
-      <rect x="80" y="65" width="140" height="70" rx="3" fill="#C8832A" opacity=".9"/>
-      <rect x="147" y="62" width="6" height="76" rx="2" fill="#5C2D12"/>
-      <rect x="83" y="68" width="62" height="64" rx="2" fill="#FDF6EE"/>
-      <rect x="155" y="68" width="62" height="64" rx="2" fill="#FFFBF5"/>
-      <line x1="90" y1="80" x2="138" y2="80" stroke="#C8832A" strokeWidth=".8"/>
-      <line x1="90" y1="87" x2="138" y2="87" stroke="#C8832A" strokeWidth=".8"/>
-      <line x1="90" y1="94" x2="138" y2="94" stroke="#C8832A" strokeWidth=".8"/>
-      <line x1="90" y1="101" x2="138" y2="101" stroke="#C8832A" strokeWidth=".8"/>
-      <line x1="90" y1="108" x2="138" y2="108" stroke="#C8832A" strokeWidth=".8"/>
-      <line x1="90" y1="115" x2="138" y2="115" stroke="#C8832A" strokeWidth=".8"/>
-      <circle cx="186" cy="100" r="22" fill="none" stroke="#5C2D12" strokeWidth="1"/>
-      <circle cx="186" cy="100" r="15" fill="none" stroke="#5C2D12" strokeWidth=".7"/>
-      <circle cx="186" cy="100" r="6" fill="#5C2D12" opacity=".5"/>
-      <line x1="186" y1="78" x2="186" y2="122" stroke="#5C2D12" strokeWidth=".6"/>
-      <line x1="164" y1="100" x2="208" y2="100" stroke="#5C2D12" strokeWidth=".6"/>
-      <line x1="170" y1="84" x2="202" y2="116" stroke="#5C2D12" strokeWidth=".5"/>
-      <line x1="202" y1="84" x2="170" y2="116" stroke="#5C2D12" strokeWidth=".5"/>
+      <rect width="300" height="160" fill="url(#bg1)" />
+      <ellipse cx="150" cy="80" rx="90" ry="70" fill="url(#glow1)" />
+      <rect x="80" y="65" width="140" height="70" rx="3" fill="#C8832A" opacity=".9" />
+      <rect x="147" y="62" width="6" height="76" rx="2" fill="#5C2D12" />
+      <rect x="83" y="68" width="62" height="64" rx="2" fill="#FDF6EE" />
+      <rect x="155" y="68" width="62" height="64" rx="2" fill="#FFFBF5" />
+      <line x1="90" y1="80" x2="138" y2="80" stroke="#C8832A" strokeWidth=".8" />
+      <line x1="90" y1="87" x2="138" y2="87" stroke="#C8832A" strokeWidth=".8" />
+      <line x1="90" y1="94" x2="138" y2="94" stroke="#C8832A" strokeWidth=".8" />
+      <line x1="90" y1="101" x2="138" y2="101" stroke="#C8832A" strokeWidth=".8" />
+      <line x1="90" y1="108" x2="138" y2="108" stroke="#C8832A" strokeWidth=".8" />
+      <line x1="90" y1="115" x2="138" y2="115" stroke="#C8832A" strokeWidth=".8" />
+      <circle cx="186" cy="100" r="22" fill="none" stroke="#5C2D12" strokeWidth="1" />
+      <circle cx="186" cy="100" r="15" fill="none" stroke="#5C2D12" strokeWidth=".7" />
+      <circle cx="186" cy="100" r="6" fill="#5C2D12" opacity=".5" />
+      <line x1="186" y1="78" x2="186" y2="122" stroke="#5C2D12" strokeWidth=".6" />
+      <line x1="164" y1="100" x2="208" y2="100" stroke="#5C2D12" strokeWidth=".6" />
+      <line x1="170" y1="84" x2="202" y2="116" stroke="#5C2D12" strokeWidth=".5" />
+      <line x1="202" y1="84" x2="170" y2="116" stroke="#5C2D12" strokeWidth=".5" />
       <text x="186" y="76" textAnchor="middle" fill="#C8832A" fontSize="6">♈</text>
       <text x="208" y="104" textAnchor="middle" fill="#C8832A" fontSize="6">♉</text>
       <text x="186" y="126" textAnchor="middle" fill="#C8832A" fontSize="6">♊</text>
       <text x="163" y="104" textAnchor="middle" fill="#C8832A" fontSize="6">♋</text>
-      <path d="M83,68 Q150,58 217,68" fill="none" stroke="#8B4A1E" strokeWidth="1" opacity=".6"/>
-      <circle cx="50" cy="25" r="1.2" fill="#C8832A" opacity=".8"/>
-      <circle cx="260" cy="40" r="1" fill="#C8832A" opacity=".7"/>
-      <circle cx="30" cy="120" r=".8" fill="#C8832A" opacity=".6"/>
-      <circle cx="275" cy="130" r="1.2" fill="#C8832A" opacity=".8"/>
-      <circle cx="240" cy="20" r=".8" fill="#C8832A" opacity=".5"/>
-      <circle cx="70" cy="140" r="1" fill="#C8832A" opacity=".6"/>
+      <path d="M83,68 Q150,58 217,68" fill="none" stroke="#8B4A1E" strokeWidth="1" opacity=".6" />
+      <circle cx="50" cy="25" r="1.2" fill="#C8832A" opacity=".8" />
+      <circle cx="260" cy="40" r="1" fill="#C8832A" opacity=".7" />
+      <circle cx="30" cy="120" r=".8" fill="#C8832A" opacity=".6" />
+      <circle cx="275" cy="130" r="1.2" fill="#C8832A" opacity=".8" />
+      <circle cx="240" cy="20" r=".8" fill="#C8832A" opacity=".5" />
+      <circle cx="70" cy="140" r="1" fill="#C8832A" opacity=".6" />
     </svg>
   );
 
   const Card2SVG = () => (
-    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
         <radialGradient id="bg2" cx="40%" cy="50%" r="70%">
-          <stop offset="0%" stopColor="#C8832A"/>
-          <stop offset="100%" stopColor="#8B4A1E"/>
+          <stop offset="0%" stopColor="#C8832A" />
+          <stop offset="100%" stopColor="#8B4A1E" />
         </radialGradient>
         <radialGradient id="glow2" cx="55%" cy="45%" r="50%">
-          <stop offset="0%" stopColor="#FDF6EE" stopOpacity=".3"/>
-          <stop offset="100%" stopColor="#8B4A1E" stopOpacity="0"/>
+          <stop offset="0%" stopColor="#FDF6EE" stopOpacity=".3" />
+          <stop offset="100%" stopColor="#8B4A1E" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <rect width="300" height="160" fill="url(#bg2)"/>
-      <ellipse cx="170" cy="75" rx="100" ry="65" fill="url(#glow2)"/>
-      <rect x="75" y="20" width="120" height="120" fill="none" stroke="#f0d070" strokeWidth="1.2" opacity=".8"/>
-      <polygon points="135,20 195,80 135,140 75,80" fill="none" stroke="#f0d070" strokeWidth="1" opacity=".7"/>
-      <rect x="105" y="50" width="60" height="60" fill="rgba(240,210,100,.08)" stroke="#f0d070" strokeWidth=".8" opacity=".6"/>
-      <line x1="75" y1="20" x2="195" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
-      <line x1="195" y1="20" x2="75" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5"/>
+      <rect width="300" height="160" fill="url(#bg2)" />
+      <ellipse cx="170" cy="75" rx="100" ry="65" fill="url(#glow2)" />
+      <rect x="75" y="20" width="120" height="120" fill="none" stroke="#f0d070" strokeWidth="1.2" opacity=".8" />
+      <polygon points="135,20 195,80 135,140 75,80" fill="none" stroke="#f0d070" strokeWidth="1" opacity=".7" />
+      <rect x="105" y="50" width="60" height="60" fill="rgba(240,210,100,.08)" stroke="#f0d070" strokeWidth=".8" opacity=".6" />
+      <line x1="75" y1="20" x2="195" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5" />
+      <line x1="195" y1="20" x2="75" y2="140" stroke="#f0d070" strokeWidth=".6" opacity=".5" />
       <text x="135" y="38" textAnchor="middle" fill="#f0d890" fontSize="8" fontFamily="serif" opacity=".9">1</text>
       <text x="180" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">2</text>
       <text x="188" y="82" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">3</text>
@@ -93,103 +93,103 @@ const AstrologyCourses = ({ onEnroll }) => {
       <text x="88" y="55" textAnchor="middle" fill="#f0d890" fontSize="7" fontFamily="serif" opacity=".8">12</text>
       <text x="135" y="76" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">☿ ♀</text>
       <text x="135" y="90" textAnchor="middle" fill="#f8e8a0" fontSize="9" fontFamily="serif">♃ ♄</text>
-      <line x1="230" y1="40" x2="245" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
-      <line x1="230" y1="40" x2="215" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7"/>
-      <line x1="218" y1="90" x2="242" y2="90" stroke="#d4b060" strokeWidth="1.5" opacity=".7"/>
-      <circle cx="40" cy="30" r="1.2" fill="#f0e080" opacity=".7"/>
-      <circle cx="270" cy="50" r="1" fill="#f0e080" opacity=".6"/>
-      <circle cx="255" cy="130" r=".8" fill="#f0e080" opacity=".5"/>
-      <circle cx="25" cy="110" r="1" fill="#f0e080" opacity=".6"/>
+      <line x1="230" y1="40" x2="245" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7" />
+      <line x1="230" y1="40" x2="215" y2="120" stroke="#d4b060" strokeWidth="2" strokeLinecap="round" opacity=".7" />
+      <line x1="218" y1="90" x2="242" y2="90" stroke="#d4b060" strokeWidth="1.5" opacity=".7" />
+      <circle cx="40" cy="30" r="1.2" fill="#f0e080" opacity=".7" />
+      <circle cx="270" cy="50" r="1" fill="#f0e080" opacity=".6" />
+      <circle cx="255" cy="130" r=".8" fill="#f0e080" opacity=".5" />
+      <circle cx="25" cy="110" r="1" fill="#f0e080" opacity=".6" />
     </svg>
   );
 
   const Card3SVG = () => (
-    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
         <radialGradient id="bg3" cx="50%" cy="50%" r="70%">
-          <stop offset="0%" stopColor="#3D1A08"/>
-          <stop offset="100%" stopColor="#2A0F02"/>
+          <stop offset="0%" stopColor="#3D1A08" />
+          <stop offset="100%" stopColor="#2A0F02" />
         </radialGradient>
         <radialGradient id="jupGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#C8832A"/>
-          <stop offset="60%" stopColor="#8B4A1E"/>
-          <stop offset="100%" stopColor="#5C2D12"/>
+          <stop offset="0%" stopColor="#C8832A" />
+          <stop offset="60%" stopColor="#8B4A1E" />
+          <stop offset="100%" stopColor="#5C2D12" />
         </radialGradient>
         <radialGradient id="jupAtm" cx="40%" cy="35%" r="60%">
-          <stop offset="0%" stopColor="#EBC9A3" stopOpacity=".5"/>
-          <stop offset="100%" stopColor="#C8832A" stopOpacity="0"/>
+          <stop offset="0%" stopColor="#EBC9A3" stopOpacity=".5" />
+          <stop offset="100%" stopColor="#C8832A" stopOpacity="0" />
         </radialGradient>
       </defs>
-      <rect width="300" height="160" fill="url(#bg3)"/>
-      <circle cx="20" cy="15" r=".8" fill="white" opacity=".8"/>
-      <circle cx="45" cy="8" r="1" fill="white" opacity=".6"/>
-      <circle cx="80" cy="20" r=".6" fill="white" opacity=".7"/>
-      <circle cx="10" cy="50" r=".8" fill="white" opacity=".5"/>
-      <circle cx="260" cy="12" r="1" fill="white" opacity=".8"/>
-      <circle cx="285" cy="35" r=".7" fill="white" opacity=".6"/>
-      <circle cx="270" cy="60" r=".9" fill="white" opacity=".7"/>
-      <circle cx="250" cy="140" r=".8" fill="white" opacity=".5"/>
-      <circle cx="30" cy="130" r=".7" fill="white" opacity=".6"/>
-      <circle cx="180" cy="145" r=".8" fill="white" opacity=".6"/>
-      <circle cx="130" cy="15" r=".5" fill="white" opacity=".7"/>
-      <circle cx="160" cy="10" r=".8" fill="white" opacity=".6"/>
-      <ellipse cx="155" cy="78" rx="75" ry="12" fill="none" stroke="#d4a050" strokeWidth="2.5" opacity=".35"/>
-      <ellipse cx="155" cy="78" rx="68" ry="10" fill="none" stroke="#e0b860" strokeWidth="1.2" opacity=".25"/>
-      <circle cx="155" cy="78" r="52" fill="url(#jupGlow)"/>
-      <circle cx="155" cy="78" r="52" fill="url(#jupAtm)"/>
-      <ellipse cx="155" cy="62" rx="51" ry="7" fill="#8a4818" opacity=".5"/>
-      <ellipse cx="155" cy="72" rx="52" ry="4" fill="#d09040" opacity=".35"/>
-      <ellipse cx="155" cy="82" rx="52" ry="6" fill="#7a3e14" opacity=".45"/>
-      <ellipse cx="155" cy="92" rx="51" ry="4" fill="#c88038" opacity=".3"/>
-      <ellipse cx="155" cy="100" rx="50" ry="5" fill="#8a4818" opacity=".4"/>
-      <ellipse cx="135" cy="86" rx="10" ry="7" fill="#a03818" opacity=".7"/>
-      <ellipse cx="140" cy="60" rx="18" ry="12" fill="white" opacity=".08"/>
+      <rect width="300" height="160" fill="url(#bg3)" />
+      <circle cx="20" cy="15" r=".8" fill="white" opacity=".8" />
+      <circle cx="45" cy="8" r="1" fill="white" opacity=".6" />
+      <circle cx="80" cy="20" r=".6" fill="white" opacity=".7" />
+      <circle cx="10" cy="50" r=".8" fill="white" opacity=".5" />
+      <circle cx="260" cy="12" r="1" fill="white" opacity=".8" />
+      <circle cx="285" cy="35" r=".7" fill="white" opacity=".6" />
+      <circle cx="270" cy="60" r=".9" fill="white" opacity=".7" />
+      <circle cx="250" cy="140" r=".8" fill="white" opacity=".5" />
+      <circle cx="30" cy="130" r=".7" fill="white" opacity=".6" />
+      <circle cx="180" cy="145" r=".8" fill="white" opacity=".6" />
+      <circle cx="130" cy="15" r=".5" fill="white" opacity=".7" />
+      <circle cx="160" cy="10" r=".8" fill="white" opacity=".6" />
+      <ellipse cx="155" cy="78" rx="75" ry="12" fill="none" stroke="#d4a050" strokeWidth="2.5" opacity=".35" />
+      <ellipse cx="155" cy="78" rx="68" ry="10" fill="none" stroke="#e0b860" strokeWidth="1.2" opacity=".25" />
+      <circle cx="155" cy="78" r="52" fill="url(#jupGlow)" />
+      <circle cx="155" cy="78" r="52" fill="url(#jupAtm)" />
+      <ellipse cx="155" cy="62" rx="51" ry="7" fill="#8a4818" opacity=".5" />
+      <ellipse cx="155" cy="72" rx="52" ry="4" fill="#d09040" opacity=".35" />
+      <ellipse cx="155" cy="82" rx="52" ry="6" fill="#7a3e14" opacity=".45" />
+      <ellipse cx="155" cy="92" rx="51" ry="4" fill="#c88038" opacity=".3" />
+      <ellipse cx="155" cy="100" rx="50" ry="5" fill="#8a4818" opacity=".4" />
+      <ellipse cx="135" cy="86" rx="10" ry="7" fill="#a03818" opacity=".7" />
+      <ellipse cx="140" cy="60" rx="18" ry="12" fill="white" opacity=".08" />
     </svg>
   );
 
   const Card4SVG = () => (
-    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{width:"100%",height:"100%",display:"block"}}>
+    <svg viewBox="0 0 300 160" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" style={{ width: "100%", height: "100%", display: "block" }}>
       <defs>
         <radialGradient id="bg4" cx="50%" cy="50%" r="70%">
-          <stop offset="0%" stopColor="#8B4A1E"/>
-          <stop offset="100%" stopColor="#5C2D12"/>
+          <stop offset="0%" stopColor="#8B4A1E" />
+          <stop offset="100%" stopColor="#5C2D12" />
         </radialGradient>
         <radialGradient id="cmpGlow" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4"/>
-          <stop offset="100%" stopColor="#8B4A1E" opacity="0"/>
+          <stop offset="0%" stopColor="#C8832A" stopOpacity=".4" />
+          <stop offset="100%" stopColor="#8B4A1E" opacity="0" />
         </radialGradient>
       </defs>
-      <rect width="300" height="160" fill="url(#bg4)"/>
-      <ellipse cx="155" cy="80" rx="100" ry="70" fill="url(#cmpGlow)"/>
-      <circle cx="155" cy="80" r="56" fill="#c89850" opacity=".15"/>
-      <circle cx="155" cy="80" r="56" fill="none" stroke="#d4a840" strokeWidth="2" opacity=".7"/>
-      <circle cx="155" cy="80" r="50" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
-      <circle cx="155" cy="80" r="42" fill="#a07828" opacity=".2"/>
-      <circle cx="155" cy="80" r="42" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5"/>
-      <line x1="155" y1="24" x2="155" y2="32" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-      <line x1="155" y1="128" x2="155" y2="136" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-      <line x1="99" y1="80" x2="107" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-      <line x1="203" y1="80" x2="211" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9"/>
-      <line x1="115" y1="40" x2="120" y2="47" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-      <line x1="190" y1="113" x2="195" y2="120" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-      <line x1="115" y1="120" x2="120" y2="113" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
-      <line x1="190" y1="47" x2="195" y2="40" stroke="#d4b040" strokeWidth="1.2" opacity=".7"/>
+      <rect width="300" height="160" fill="url(#bg4)" />
+      <ellipse cx="155" cy="80" rx="100" ry="70" fill="url(#cmpGlow)" />
+      <circle cx="155" cy="80" r="56" fill="#c89850" opacity=".15" />
+      <circle cx="155" cy="80" r="56" fill="none" stroke="#d4a840" strokeWidth="2" opacity=".7" />
+      <circle cx="155" cy="80" r="50" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5" />
+      <circle cx="155" cy="80" r="42" fill="#a07828" opacity=".2" />
+      <circle cx="155" cy="80" r="42" fill="none" stroke="#c89830" strokeWidth=".8" opacity=".5" />
+      <line x1="155" y1="24" x2="155" y2="32" stroke="#e8c050" strokeWidth="2" opacity=".9" />
+      <line x1="155" y1="128" x2="155" y2="136" stroke="#e8c050" strokeWidth="2" opacity=".9" />
+      <line x1="99" y1="80" x2="107" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9" />
+      <line x1="203" y1="80" x2="211" y2="80" stroke="#e8c050" strokeWidth="2" opacity=".9" />
+      <line x1="115" y1="40" x2="120" y2="47" stroke="#d4b040" strokeWidth="1.2" opacity=".7" />
+      <line x1="190" y1="113" x2="195" y2="120" stroke="#d4b040" strokeWidth="1.2" opacity=".7" />
+      <line x1="115" y1="120" x2="120" y2="113" stroke="#d4b040" strokeWidth="1.2" opacity=".7" />
+      <line x1="190" y1="47" x2="195" y2="40" stroke="#d4b040" strokeWidth="1.2" opacity=".7" />
       <text x="155" y="22" textAnchor="middle" fill="#f0d060" fontSize="9" fontFamily="serif" fontWeight="bold">N</text>
       <text x="155" y="146" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">S</text>
       <text x="96" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">W</text>
       <text x="214" y="84" textAnchor="middle" fill="#d4b040" fontSize="8" fontFamily="serif">E</text>
-      <polygon points="155,38 150,80 155,68 160,80" fill="#e84030" opacity=".9"/>
-      <polygon points="155,122 150,80 155,92 160,80" fill="#d0c890" opacity=".8"/>
-      <circle cx="155" cy="80" r="6" fill="#e8c050" opacity=".9"/>
-      <circle cx="155" cy="80" r="3.5" fill="#a07020"/>
-      <circle cx="30" cy="30" r="1.5" fill="#f0d060" opacity=".6"/>
-      <circle cx="55" cy="50" r="1.5" fill="#f0d060" opacity=".6"/>
-      <circle cx="45" cy="75" r="1.5" fill="#f0d060" opacity=".6"/>
-      <line x1="30" y1="30" x2="55" y2="50" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
-      <line x1="55" y1="50" x2="45" y2="75" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
-      <circle cx="260" cy="25" r="1.5" fill="#f0d060" opacity=".5"/>
-      <circle cx="278" cy="45" r="1.2" fill="#f0d060" opacity=".4"/>
-      <line x1="260" y1="25" x2="278" y2="45" stroke="#d4b040" strokeWidth=".5" opacity=".3"/>
+      <polygon points="155,38 150,80 155,68 160,80" fill="#e84030" opacity=".9" />
+      <polygon points="155,122 150,80 155,92 160,80" fill="#d0c890" opacity=".8" />
+      <circle cx="155" cy="80" r="6" fill="#e8c050" opacity=".9" />
+      <circle cx="155" cy="80" r="3.5" fill="#a07020" />
+      <circle cx="30" cy="30" r="1.5" fill="#f0d060" opacity=".6" />
+      <circle cx="55" cy="50" r="1.5" fill="#f0d060" opacity=".6" />
+      <circle cx="45" cy="75" r="1.5" fill="#f0d060" opacity=".6" />
+      <line x1="30" y1="30" x2="55" y2="50" stroke="#d4b040" strokeWidth=".5" opacity=".3" />
+      <line x1="55" y1="50" x2="45" y2="75" stroke="#d4b040" strokeWidth=".5" opacity=".3" />
+      <circle cx="260" cy="25" r="1.5" fill="#f0d060" opacity=".5" />
+      <circle cx="278" cy="45" r="1.2" fill="#f0d060" opacity=".4" />
+      <line x1="260" y1="25" x2="278" y2="45" stroke="#d4b040" strokeWidth=".5" opacity=".3" />
     </svg>
   );
 
@@ -323,16 +323,16 @@ const AstrologyCourses = ({ onEnroll }) => {
       `}</style>
 
       <section className="aw">
-        <svg className="svgd" style={{top:0,right:0,width:150,height:150}} viewBox="0 0 160 160">
-          <circle cx="130" cy="30" r="50" fill="none" stroke="#4a2508" strokeWidth=".8"/>
-          <circle cx="130" cy="30" r="35" fill="none" stroke="#4a2508" strokeWidth=".5"/>
-          <line x1="130" y1="0" x2="130" y2="80" stroke="#4a2508" strokeWidth=".5"/>
-          <line x1="100" y1="30" x2="160" y2="30" stroke="#4a2508" strokeWidth=".5"/>
+        <svg className="svgd" style={{ top: 0, right: 0, width: 150, height: 150 }} viewBox="0 0 160 160">
+          <circle cx="130" cy="30" r="50" fill="none" stroke="#4a2508" strokeWidth=".8" />
+          <circle cx="130" cy="30" r="35" fill="none" stroke="#4a2508" strokeWidth=".5" />
+          <line x1="130" y1="0" x2="130" y2="80" stroke="#4a2508" strokeWidth=".5" />
+          <line x1="100" y1="30" x2="160" y2="30" stroke="#4a2508" strokeWidth=".5" />
         </svg>
 
         <div className="ah">
           <h2>Astrology <span className="text-gradient">Courses</span></h2>
-          <div className="dl"><div className="dd"/></div>
+          <div className="dl"><div className="dd" /></div>
           <div className="atag">Ancient Wisdom &nbsp;·&nbsp; Modern Learning &nbsp;·&nbsp; Meaningful Transformation</div>
           <p className="asub">Explore our carefully designed courses from beginner to advanced level by experienced astrologers.</p>
         </div>
@@ -340,10 +340,10 @@ const AstrologyCourses = ({ onEnroll }) => {
         <div className="cg">
           {courses.map(({ id, level, title, desc, icon, price, original, SVG, isBold, link }) => (
             <div key={id} className="cc" onClick={() => navigate(link)}>
-              <div className="ci" style={{position:"relative"}}>
+              <div className="ci" style={{ position: "relative" }}>
                 <SVG />
                 <span className="badge-discount">Mega DISCOUNT</span>
-                <div className="ico" style={isBold ? {fontSize:"13px",fontWeight:600} : {}}>
+                <div className="ico" style={isBold ? { fontSize: "13px", fontWeight: 600 } : {}}>
                   {icon}
                 </div>
               </div>
@@ -352,7 +352,7 @@ const AstrologyCourses = ({ onEnroll }) => {
                 <h3 className="ctitle">{title}</h3>
                 <p className="cdesc">{desc}</p>
                 <div className="price-hero">{price} <span>{original}</span></div>
-                <div className="divr"/>
+                <div className="divr" />
                 <div className="cinstr">
                   <div className="iavt">MS</div>
                   <div style={{ textAlign: 'left' }}>
@@ -361,9 +361,9 @@ const AstrologyCourses = ({ onEnroll }) => {
                   </div>
                 </div>
                 <div className="btnrow">
-                  <Link 
-                    to="/courses" 
-                    className="btn-read" 
+                  <Link
+                    to="/courses"
+                    className="btn-read"
                     onClick={(e) => e.stopPropagation()}
                   >
                     Learn More
@@ -392,9 +392,9 @@ const AstrologyCourses = ({ onEnroll }) => {
 function Home() {
 
   const trackRef = useRef(null);
-  const [formData, setFormData] = useState({ 
-    name: '', 
-    email: '', 
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
     phone: '',
     consultationType: '',
     dob: '',
@@ -450,7 +450,7 @@ function Home() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     const validationError = getContactValidationError(formData);
     if (validationError) {
       toast.error(validationError);
@@ -463,7 +463,7 @@ function Home() {
 
     setIsSubmitting(true);
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
-    
+
     // Use Razorpay Flow if price is present
     if (formData.price) {
       const onSuccess = () => {
@@ -472,7 +472,7 @@ function Home() {
         setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
         setIsSubmitting(false);
       };
-      
+
       const success = await handleRazorpayPayment({
         ...formData,
         name: formData.name.trim(),
@@ -618,17 +618,17 @@ function Home() {
                 {/* Floating Ethereal Elements */}
                 <div className="ethereal-sparkle s-1">✦</div>
                 <div className="ethereal-sparkle s-2">✧</div>
-                
+
                 <div className="cosmic-badge animate__animated animate__zoomIn" style={{ animationDelay: '0.1s' }}>
                   <span className="badge-glow"></span>
                   <i className="fas fa-moon me-2"></i> {bannerSlides[currentSlide].badge}
                 </div>
-                
+
                 <h1 className="banner-title my-4 animate__animated animate__fadeInLeft" style={{ animationDelay: '0.2s' }}>
-                  {bannerSlides[currentSlide].title1}<br/>
+                  {bannerSlides[currentSlide].title1}<br />
                   <span className="text-gradient drop-glow">{bannerSlides[currentSlide].title2}</span>
                 </h1>
-                
+
                 <p className="banner-desc mb-4 animate__animated animate__fadeInUp" style={{ animationDelay: '0.3s' }}>
                   {bannerSlides[currentSlide].desc}
                 </p>
@@ -640,7 +640,7 @@ function Home() {
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
                   </ul>
                 )}
-                
+
                 <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
                   {bannerSlides[currentSlide].primaryCta?.action === 'consultation' ? (
                     <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
@@ -672,8 +672,8 @@ function Home() {
 
                 <div className="carousel-dots mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.6s' }}>
                   {bannerSlides.map((_, idx) => (
-                    <span 
-                      key={idx} 
+                    <span
+                      key={idx}
                       className={`c-dot ${idx === currentSlide ? 'active' : ''}`}
                       onClick={() => setCurrentSlide(idx)}
                     ></span>
@@ -708,16 +708,16 @@ function Home() {
 
                       {/* Outer Constellation Ring (Spins Slowly Left) */}
                       <g className="spin-slow-left" style={{ transformOrigin: '200px 200px' }}>
-                        <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="4 6"/>
-                        <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5"/>
-                        <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5"/>
+                        <circle cx="200" cy="200" r="190" fill="none" stroke="rgba(255,255,255,0.15)" strokeWidth="1" strokeDasharray="4 6" />
+                        <circle cx="200" cy="200" r="180" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
+                        <circle cx="200" cy="200" r="155" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
                         {[...Array(12)].map((_, i) => (
                           <g key={i} transform={`rotate(${i * 30} 200 200)`}>
-                            <path d="M 200 12 L 215 35 L 190 50 L 205 60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5"/>
-                            <circle cx="200" cy="12" r="2" fill="#fff" filter="url(#glow)"/>
-                            <circle cx="215" cy="35" r="1" fill="#fff"/>
-                            <circle cx="190" cy="50" r="2.5" fill="#fff" filter="url(#glow)"/>
-                            <circle cx="205" cy="60" r="1.5" fill="#fff"/>
+                            <path d="M 200 12 L 215 35 L 190 50 L 205 60" fill="none" stroke="rgba(255,255,255,0.3)" strokeWidth="0.5" />
+                            <circle cx="200" cy="12" r="2" fill="#fff" filter="url(#glow)" />
+                            <circle cx="215" cy="35" r="1" fill="#fff" />
+                            <circle cx="190" cy="50" r="2.5" fill="#fff" filter="url(#glow)" />
+                            <circle cx="205" cy="60" r="1.5" fill="#fff" />
                             <line x1="200" y1="10" x2="200" y2="20" stroke="rgba(255,255,255,0.2)" strokeWidth="0.5" />
                           </g>
                         ))}
@@ -725,16 +725,16 @@ function Home() {
 
                       {/* Middle Zodiac Ring (Spins Right) */}
                       <g className="spin-right" style={{ transformOrigin: '200px 200px' }}>
-                        <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1"/>
-                        <circle cx="200" cy="200" r="100" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1"/>
+                        <circle cx="200" cy="200" r="140" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
+                        <circle cx="200" cy="200" r="100" fill="none" stroke="rgba(255,255,255,0.4)" strokeWidth="1" />
                         {[...Array(12)].map((_, i) => (
-                          <line key={i} x1="200" y1="60" x2="200" y2="100" stroke="rgba(255,255,255,0.3)" strokeWidth="1" transform={`rotate(${i * 30} 200 200)`}/>
+                          <line key={i} x1="200" y1="60" x2="200" y2="100" stroke="rgba(255,255,255,0.3)" strokeWidth="1" transform={`rotate(${i * 30} 200 200)`} />
                         ))}
-                        {['♈','♉','♊','♋','♌','♍','♎','♏','♐','♑','♒','♓'].map((sign, i) => (
+                        {['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'].map((sign, i) => (
                           <g key={i} transform={`rotate(${i * 30 + 15} 200 200)`}>
                             {bannerSlides[currentSlide].isPurpleZodiac ? (
                               <>
-                                <rect x="185" y="65" width="30" height="30" rx="4" fill="rgba(147, 112, 219, 0.8)" transform="rotate(-15 200 80)"/>
+                                <rect x="185" y="65" width="30" height="30" rx="4" fill="rgba(147, 112, 219, 0.8)" transform="rotate(-15 200 80)" />
                                 <text x="200" y="86" fill="#ffffff" fontSize="20" textAnchor="middle" transform="rotate(-15 200 80)" style={{ fontFamily: 'sans-serif' }}>
                                   {sign}
                                 </text>
@@ -750,38 +750,38 @@ function Home() {
 
                       {/* Inner Astrolabe Geometry (Spins Fast Left) */}
                       <g className="spin-fast-left" style={{ transformOrigin: '200px 200px' }}>
-                        <circle cx="200" cy="200" r="90" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="2 4"/>
-                        <path d="M 200 110 L 263 263 L 110 165 L 290 165 L 137 263 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
-                        <path d="M 200 290 L 137 137 L 290 235 L 110 235 L 263 137 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1"/>
-                        <circle cx="200" cy="200" r="50" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.5"/>
+                        <circle cx="200" cy="200" r="90" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" strokeDasharray="2 4" />
+                        <path d="M 200 110 L 263 263 L 110 165 L 290 165 L 137 263 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                        <path d="M 200 290 L 137 137 L 290 235 L 110 235 L 263 137 Z" fill="none" stroke="rgba(255,255,255,0.2)" strokeWidth="1" />
+                        <circle cx="200" cy="200" r="50" fill="none" stroke="rgba(255,255,255,0.5)" strokeWidth="0.5" />
                         {[...Array(8)].map((_, i) => (
-                           <circle key={`node-${i}`} cx="200" cy="150" r="3" fill="rgba(255,255,255,0.8)" transform={`rotate(${i * 45} 200 200)`} filter="url(#glow)" />
+                          <circle key={`node-${i}`} cx="200" cy="150" r="3" fill="rgba(255,255,255,0.8)" transform={`rotate(${i * 45} 200 200)`} filter="url(#glow)" />
                         ))}
                       </g>
-                      
+
                       {/* Center Static Sun/Moon/Focus Point */}
-                      <circle cx="200" cy="200" r="14" fill="rgba(255,255,255,0.95)" filter="url(#glow)"/>
-                      <circle cx="200" cy="200" r="30" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="0.5" strokeDasharray="3 3"/>
+                      <circle cx="200" cy="200" r="14" fill="rgba(255,255,255,0.95)" filter="url(#glow)" />
+                      <circle cx="200" cy="200" r="30" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="0.5" strokeDasharray="3 3" />
                     </svg>
                     {/* Image removed based on user request */}
-                    
+
                     {currentSlide === 0 && (
                       <>
                         <div className="float-badge fb-1">
                           <div className="fb-icon"><i className="fas fa-award"></i></div>
-                          <div className="fb-text"><span>53+ Years</span><br/>of Legacy</div>
+                          <div className="fb-text"><span>53+ Years</span><br />of Legacy</div>
                         </div>
                         <div className="float-badge fb-2">
                           <div className="fb-icon"><i className="fas fa-users"></i></div>
-                          <div className="fb-text"><span>2 Lakhs +</span> Consultation<br/>Completed</div>
+                          <div className="fb-text"><span>2 Lakhs +</span> Consultation<br />Completed</div>
                         </div>
                         <div className="float-badge fb-3">
                           <div className="fb-icon"><i className="fas fa-thumbs-up"></i></div>
-                          <div className="fb-text"><span>98% Positive</span><br/>Clients Feedback</div>
+                          <div className="fb-text"><span>98% Positive</span><br />Clients Feedback</div>
                         </div>
                       </>
                     )}
-                    
+
                   </div>
                 ) : (
                   <div className="cosmic-orbit-container animate__animated animate__fadeInRight" key="light-graphic">
@@ -853,11 +853,11 @@ function Home() {
             <div className="text-center mb-5">
               <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
               <h2 className="section-title mt-2" data-aos="fade-up">Guiding You <span className="text-gradient">Through Life</span></h2>
-              <p className="mx-auto mt-3" style={{maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: 'var(--text-content)'}} data-aos="fade-down">
+              <p className="mx-auto mt-3" style={{ maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: 'var(--text-content)' }} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
               </p>
             </div>
-            
+
             <div className="row g-4 align-items-center mt-4">
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="100">
@@ -875,14 +875,14 @@ function Home() {
                   <p className="mt-3">Gain practical knowledge with real-life case studies and guidance.</p>
                 </div>
               </div>
-              
+
               <div className="col-lg-4 text-center" data-aos="zoom-in">
                 <div className="service-center-img position-relative">
                   <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid" /></div>
                   <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
                 </div>
               </div>
-              
+
               <div className="col-md-6 col-lg-4">
                 <div className="service-card" data-aos="fade-up" data-aos-delay="300">
                   <div className="service-card-header">
@@ -906,188 +906,188 @@ function Home() {
 
 
         {/* Video Testimonials - Professional Production Level */}
-    {/* Video Testimonials */}
-<section className="testimonial-section">
-  <div className="container">
-    <div className="section-header text-center mb-5">
-      <span className="section-badge" data-aos="fade-up">
-        Real Stories
-      </span>
-      {/* Heading with gradient color on "Clients Say" only */}
-      <h2 className="section-title mt-3">
-        What Our <span className="text-gradient">Students Say</span>
-      </h2>
-      <p className="section-description mx-auto mt-3">
-        Trusted by thousands of satisfied students across globe
-      </p>
-    </div>
-    
-    <div className="testimonial-slider-wrapper position-relative">
-      <button className="nav-btn left-btn" onClick={() => scrollTestimonials('left')}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-      
-      <div className="testimonial-track" ref={trackRef}>
-        {/* Testimonial Card 1 */}
-        <div className="testimonial-card">
-          <div className="card-inner">
-            <div className="quote-icon">“</div>
-            <div className="video-container" onClick={handleVideoClick}>
-              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-              <div className="play-btn-overlay">
-                <div className="play-circle">
-                  <i className="fas fa-play"></i>
-                </div>
-              </div>
-            </div>
-            <div className="testimonial-content">
-              <p className="testimonial-text">
-                "The astrological guidance I received completely transformed my perspective. Highly recommended!"
+        {/* Video Testimonials */}
+        <section className="testimonial-section">
+          <div className="container">
+            <div className="section-header text-center mb-5">
+              <span className="section-badge" data-aos="fade-up">
+                Real Stories
+              </span>
+              {/* Heading with gradient color on "Clients Say" only */}
+              <h2 className="section-title mt-3">
+                What Our <span className="text-gradient">Students Say</span>
+              </h2>
+              <p className="section-description mx-auto mt-3">
+                Trusted by thousands of satisfied students across globe
               </p>
-              <div className="client-info">
-                <div className="client-avatar">
-                  <img src="/images/avatar1.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/1.jpg'} />
+            </div>
+
+            <div className="testimonial-slider-wrapper position-relative">
+              <button className="nav-btn left-btn" onClick={() => scrollTestimonials('left')}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M15 18L9 12L15 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+
+              <div className="testimonial-track" ref={trackRef}>
+                {/* Testimonial Card 1 */}
+                <div className="testimonial-card">
+                  <div className="card-inner">
+                    <div className="quote-icon">“</div>
+                    <div className="video-container" onClick={handleVideoClick}>
+                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+                      <div className="play-btn-overlay">
+                        <div className="play-circle">
+                          <i className="fas fa-play"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-content">
+                      <p className="testimonial-text">
+                        "The astrological guidance I received completely transformed my perspective. Highly recommended!"
+                      </p>
+                      <div className="client-info">
+                        <div className="client-avatar">
+                          <img src="/images/avatar1.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/1.jpg'} />
+                        </div>
+                        <div className="client-details">
+                          <h4>Priya Sharma</h4>
+                          <div className="rating">
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div className="client-details">
-                  <h4>Priya Sharma</h4>
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
+
+
+                {/* Testimonial Card 3 */}
+                <div className="testimonial-card">
+                  <div className="card-inner">
+                    <div className="quote-icon">“</div>
+                    <div className="video-container" onClick={handleVideoClick}>
+                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+                      <div className="play-btn-overlay">
+                        <div className="play-circle">
+                          <i className="fas fa-play"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-content">
+                      <p className="testimonial-text">
+                        "The career guidance helped me make the right decisions. I'm now in a much better place professionally."
+                      </p>
+                      <div className="client-info">
+                        <div className="client-avatar">
+                          <img src="/images/avatar3.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/3.jpg'} />
+                        </div>
+                        <div className="client-details">
+                          <h4>Anjali Patel</h4>
+                          <div className="rating">
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star-half-alt"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial Card 4 */}
+                <div className="testimonial-card">
+                  <div className="card-inner">
+                    <div className="quote-icon">“</div>
+                    <div className="video-container" onClick={handleVideoClick}>
+                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+                      <div className="play-btn-overlay">
+                        <div className="play-circle">
+                          <i className="fas fa-play"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-content">
+                      <p className="testimonial-text">
+                        "Amazing experience! The remedies suggested were simple yet effective. Feeling blessed."
+                      </p>
+                      <div className="client-info">
+                        <div className="client-avatar">
+                          <img src="/images/avatar4.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/men/4.jpg'} />
+                        </div>
+                        <div className="client-details">
+                          <h4>Vikram Singh</h4>
+                          <div className="rating">
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Testimonial Card 5 */}
+                <div className="testimonial-card">
+                  <div className="card-inner">
+                    <div className="quote-icon">“</div>
+                    <div className="video-container" onClick={handleVideoClick}>
+                      <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
+                      <div className="play-btn-overlay">
+                        <div className="play-circle">
+                          <i className="fas fa-play"></i>
+                        </div>
+                      </div>
+                    </div>
+                    <div className="testimonial-content">
+                      <p className="testimonial-text">
+                        "The relationship compatibility analysis was spot on! Truly grateful for this service."
+                      </p>
+                      <div className="client-info">
+                        <div className="client-avatar">
+                          <img src="/images/avatar5.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/5.jpg'} />
+                        </div>
+                        <div className="client-details">
+                          <h4>Neha Gupta</h4>
+                          <div className="rating">
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                            <i className="fas fa-star"></i>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
+
+              <button className="nav-btn right-btn" onClick={() => scrollTestimonials('right')}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </div>
+
+            {/* Navigation Dots */}
+            <div className="slider-dots">
+              <span className="dot active"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
+              <span className="dot"></span>
             </div>
           </div>
-        </div>
-        
-        
-        {/* Testimonial Card 3 */}
-        <div className="testimonial-card">
-          <div className="card-inner">
-            <div className="quote-icon">“</div>
-            <div className="video-container" onClick={handleVideoClick}>
-              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-              <div className="play-btn-overlay">
-                <div className="play-circle">
-                  <i className="fas fa-play"></i>
-                </div>
-              </div>
-            </div>
-            <div className="testimonial-content">
-              <p className="testimonial-text">
-                "The career guidance helped me make the right decisions. I'm now in a much better place professionally."
-              </p>
-              <div className="client-info">
-                <div className="client-avatar">
-                  <img src="/images/avatar3.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/3.jpg'} />
-                </div>
-                <div className="client-details">
-                  <h4>Anjali Patel</h4>
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star-half-alt"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Testimonial Card 4 */}
-        <div className="testimonial-card">
-          <div className="card-inner">
-            <div className="quote-icon">“</div>
-            <div className="video-container" onClick={handleVideoClick}>
-              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-              <div className="play-btn-overlay">
-                <div className="play-circle">
-                  <i className="fas fa-play"></i>
-                </div>
-              </div>
-            </div>
-            <div className="testimonial-content">
-              <p className="testimonial-text">
-                "Amazing experience! The remedies suggested were simple yet effective. Feeling blessed."
-              </p>
-              <div className="client-info">
-                <div className="client-avatar">
-                  <img src="/images/avatar4.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/men/4.jpg'} />
-                </div>
-                <div className="client-details">
-                  <h4>Vikram Singh</h4>
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        {/* Testimonial Card 5 */}
-        <div className="testimonial-card">
-          <div className="card-inner">
-            <div className="quote-icon">“</div>
-            <div className="video-container" onClick={handleVideoClick}>
-              <video src="/videohomefinal.mp4" poster="/images/bg-bannerpic.jpg" preload="auto" muted loop playsInline></video>
-              <div className="play-btn-overlay">
-                <div className="play-circle">
-                  <i className="fas fa-play"></i>
-                </div>
-              </div>
-            </div>
-            <div className="testimonial-content">
-              <p className="testimonial-text">
-                "The relationship compatibility analysis was spot on! Truly grateful for this service."
-              </p>
-              <div className="client-info">
-                <div className="client-avatar">
-                  <img src="/images/avatar5.jpg" alt="client" onError={(e) => e.target.src = 'https://randomuser.me/api/portraits/women/5.jpg'} />
-                </div>
-                <div className="client-details">
-                  <h4>Neha Gupta</h4>
-                  <div className="rating">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      
-      <button className="nav-btn right-btn" onClick={() => scrollTestimonials('right')}>
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-          <path d="M9 18L15 12L9 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      </button>
-    </div>
-    
-    {/* Navigation Dots */}
-    <div className="slider-dots">
-      <span className="dot active"></span>
-      <span className="dot"></span>
-      <span className="dot"></span>
-      <span className="dot"></span>
-    </div>
-  </div>
-</section>
+        </section>
 
 
 
@@ -1102,13 +1102,13 @@ function Home() {
               <h2 className="section-title">Expert <span className="text-gradient">Consultations</span></h2>
               <p className="asub mx-auto mt-3">Book a personalized session with our master astrologers to illuminate your life path and find clarity in your journey.</p>
             </div>
-            
+
             <div className="row g-4">
               {/* Consultation Cards Mapping */}
               {[
-                { 
-                  title: 'Tarot Card Reading', 
-                  img: '/images/tarot_thumbnail.png', 
+                {
+                  title: 'Tarot Card Reading',
+                  img: '/images/tarot_thumbnail.png',
                   desc: 'Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions.',
                   duration: '45 Minutes',
                   icon: 'magic',
@@ -1116,9 +1116,9 @@ function Home() {
                   badge: 'INTUITION EXPERT',
                   link: '/consultations/tarot'
                 },
-                { 
-                  title: 'Career Consultation', 
-                  img: '/images/consultations/career.png', 
+                {
+                  title: 'Career Consultation',
+                  img: '/images/consultations/career.png',
                   desc: 'Detailed guidance regarding jobs, promotions, business growth, career changes, and foreign opportunities.',
                   duration: '30-40 Min',
                   icon: 'briefcase',
@@ -1126,9 +1126,9 @@ function Home() {
                   badge: 'CAREER EXPERT',
                   link: '/consultations/career'
                 },
-                { 
-                  title: 'Divorce Consultation', 
-                  img: '/images/consultations/health.png', 
+                {
+                  title: 'Divorce Consultation',
+                  img: '/images/consultations/health.png',
                   desc: 'Understand separation possibilities, legal stress, emotional healing, and future relationship stability.',
                   duration: '30-40 Min',
                   icon: 'heart-broken',
@@ -1136,9 +1136,9 @@ function Home() {
                   badge: 'RECOVERY EXPERT',
                   link: '/consultations/divorce'
                 },
-                { 
-                  title: 'Affair & Relationship', 
-                  img: '/images/consultations/love.png', 
+                {
+                  title: 'Affair & Relationship',
+                  img: '/images/consultations/love.png',
                   desc: 'Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities.',
                   duration: '30-40 Min',
                   icon: 'heart',
@@ -1213,8 +1213,8 @@ function Home() {
 
       </main>
 
-      <ConsultationModal 
-        isOpen={isModalOpen} 
+      <ConsultationModal
+        isOpen={isModalOpen}
         onClose={handleCloseModal}
         formData={formData}
         handleChange={handleChange}
@@ -1223,9 +1223,9 @@ function Home() {
         isFixedService={!!formData.consultationType}
       />
 
-      <SuccessModal 
-        isOpen={isSuccessOpen} 
-        onClose={() => setIsSuccessOpen(false)} 
+      <SuccessModal
+        isOpen={isSuccessOpen}
+        onClose={() => setIsSuccessOpen(false)}
         title="Cosmic Connection Established!"
         message="Your consultation booking is successful. India's top astrology mentor will review your birth chart soon. Expect a call for session scheduling within 24 hours."
       />
@@ -2006,6 +2006,11 @@ function Home() {
           display: block;
         }
 
+        .about-part-section {
+          position: relative;
+          z-index: 1;
+        }
+
         .img-box01 {
           position: relative;
           height: 550px;
@@ -2077,9 +2082,9 @@ function Home() {
           border: 1px solid var(--accent-color);
           box-shadow: 0 15px 35px rgba(200, 131, 42, 0.2);
           position: absolute;
-          bottom: -20px;
+          bottom: 20px;
           right: 20px;
-          z-index: 500;
+          z-index: 5;
         }
 
         .experience-badge h4 { 
@@ -2463,7 +2468,7 @@ function Home() {
           .banner-section { text-align: center; padding: 120px 0 80px; }
           .banner-desc { margin: 0 auto 30px; }
           .img-box01 { margin-bottom: 80px; height: 450px; }
-          .experience-badge { left: 50%; transform: translateX(-50%); bottom: -30px; }
+          .experience-badge { left: 50%; transform: translateX(-50%); bottom: 20px; }
           .cosmic-orbit-container, .zodiac-hero-graphic { width: 350px; height: 350px; margin: 40px auto 0; }
           .big-circle { width: 320px; height: 320px; }
           .small-circle { width: 220px; height: 220px; }
@@ -2504,7 +2509,7 @@ function Home() {
           .big-circle { width: 240px; height: 240px; }
           .small-circle { width: 170px; height: 170px; }
           .icon-block { width: 40px; height: 40px; }
-          .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: -20px; z-index: 100; }
+          .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: 20px; z-index: 5; }
           .experience-badge h4 { font-size: 1.8rem; }
           .banner-btn-row {
             display: grid;

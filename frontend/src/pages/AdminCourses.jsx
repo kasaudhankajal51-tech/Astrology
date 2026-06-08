@@ -884,9 +884,9 @@ function AdminCourses() {
                         <label className="form-label">Course Type</label>
                         <select name="courseType" value={formData.courseType} onChange={handleInputChange} className="form-input" required>
                           <option value="Recorded">Recorded - direct purchase</option>
-                          <option value="Live">Live - enquiry only</option>
+                          <option value="Live">Live - direct purchase</option>
                         </select>
-                        <p className="form-hint">Live courses collect leads only. Recorded courses use payment and student access.</p>
+                        <p className="form-hint">Both Live and Recorded courses use payment and student access.</p>
                       </div>
                     </div>
                     <div className="form-col">

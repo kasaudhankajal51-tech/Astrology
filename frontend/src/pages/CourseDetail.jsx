@@ -58,8 +58,8 @@ function CourseDetail() {
             level: 'Professional',
             category: 'Astrology',
             price: dbCourse.price,
-            courseType: dbCourse.courseType || 'Recorded',
-            isPremium: dbCourse.courseType !== 'Live',
+            courseType: dbCourse.courseType || 'Live',
+            isPremium: true,
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
@@ -67,7 +67,7 @@ function CourseDetail() {
         } else {
           const staticCourse = coursesData.find(c => c.id === courseId);
           if (staticCourse) {
-            setCourse({...staticCourse, isPremium: false});
+            setCourse({...staticCourse, courseType: 'Recorded', isPremium: false});
             document.title = `${staticCourse.title} | DS Institute`;
           } else {
             navigate('/courses');
@@ -76,7 +76,7 @@ function CourseDetail() {
       } catch (err) {
         const staticCourse = coursesData.find(c => c.id === courseId);
         if (staticCourse) {
-          setCourse({...staticCourse, isPremium: false});
+          setCourse({...staticCourse, courseType: 'Recorded', isPremium: false});
           document.title = `${staticCourse.title} | Cosmic Light Astrology`;
         } else {
           console.error('Failed to fetch course details:', err);

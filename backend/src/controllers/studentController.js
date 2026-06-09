@@ -7,7 +7,7 @@ import CourseMaterial from '../models/CourseMaterial.js';
 import Banner from '../models/Banner.js';
 import Merchandise from '../models/Merchandise.js';
 import Offer from '../models/Offer.js';
-import { getBunnyEmbedUrl } from '../utils/bunnyHelper.js';
+import { getBunnyPlaybackInfo } from '../utils/bunnyHelper.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import { sendAdminNotificationEmail, sendPasswordResetEmail } from '../utils/sendEmail.js';
@@ -34,17 +34,25 @@ export const studentLogin = async (req, res) => {
       { expiresIn: '30d' }
     );
 
+    const student = {
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile || '',
+    };
+
     res.status(200).json({
       success: true,
       token,
       message: 'Login successful',
+      student,
       user: {
         id: user._id,
         name: user.name,
         email: user.email,
         mobile: user.mobile,
-        role: user.role
-      }
+        role: user.role,
+      },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -177,14 +185,21 @@ export const getMyCourses = async (req, res) => {
       const completedCount = e.progress && e.progress.completedVideos ? e.progress.completedVideos.length : 0;
       const progressPercent = totalVideos === 0 ? 0 : Math.round((completedCount / totalVideos) * 100);
 
+      const completedVideos = e.progress?.completedVideos?.length || 0;
+
       return {
+        _id: e.courseId._id,
+        title: e.courseId.title,
+        thumbnailUrl: e.courseId.thumbnailUrl || '',
+        progress: progressPercent,
+        validUntil: e.validUntil ? e.validUntil.toISOString().split('T')[0] : null,
+        totalVideos,
+        completedVideos,
         courseId: e.courseId._id,
         courseTitle: e.courseId.title,
         thumbnail: e.courseId.thumbnailUrl || '',
-        purchaseDate: e.purchasedAt,
         validTill: e.validUntil,
         courseType: e.courseId.courseType || 'Recorded',
-        progress: progressPercent
       };
     }));
 
@@ -250,21 +265,31 @@ export const getCourseVideos = async (req, res) => {
       ? enrollment.progress.completedVideos.map(id => id.toString()) 
       : [];
 
+    const videoProgressMap = enrollment.progress?.videoProgress || new Map();
+
     const mappedVideos = await Promise.all(videos.map(async (video) => {
+      let playbackUrl = null;
+      let expiresAt = null;
       let otp = null;
       let playbackInfo = null;
-      let videoUrl = null;
 
-      if (video.vdoCipherVideoId && process.env.VDOCIPHER_API_SECRET) {
+      if (video.bunnyVideoId) {
         try {
-          // You might need node-fetch if Node < 18, but Node 22 supports fetch natively
+          const bunnyPlayback = getBunnyPlaybackInfo(video.bunnyVideoId, 7200);
+          playbackUrl = bunnyPlayback.playbackUrl;
+          expiresAt = bunnyPlayback.expiresAt;
+        } catch (err) {
+          console.error('Bunny playback URL error:', err.message);
+        }
+      } else if (video.vdoCipherVideoId && process.env.VDOCIPHER_API_SECRET) {
+        try {
           const vdoRes = await fetch(`https://dev.vdocipher.com/api/videos/${video.vdoCipherVideoId}/otp`, {
             method: 'POST',
             headers: {
-              'Authorization': `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
-              'Content-Type': 'application/json'
+              Authorization: `Apisecret ${process.env.VDOCIPHER_API_SECRET}`,
+              'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ ttl: 7200 })
+            body: JSON.stringify({ ttl: 7200 }),
           });
           const vdoData = await vdoRes.json();
           if (vdoRes.ok) {
@@ -274,20 +299,26 @@ export const getCourseVideos = async (req, res) => {
         } catch (err) {
           console.error('VdoCipher API Error:', err);
         }
-      } else if (video.bunnyVideoId) {
-        videoUrl = getBunnyEmbedUrl(video.bunnyVideoId, 7200);
       }
 
+      const progressSeconds = videoProgressMap.get?.(video._id.toString())
+        ?? videoProgressMap[video._id.toString()]
+        ?? 0;
+
       return {
+        _id: video._id,
         videoId: video._id,
-        bunnyVideoId: video.bunnyVideoId,
-        videoProvider: video.videoProvider || (video.vdoCipherVideoId ? 'vdocipher' : 'bunny'),
         title: video.title,
-        videoUrl, // Only populated if Bunny.net fallback is used
-        otp, // Populated if VdoCipher is used
-        playbackInfo, // Populated if VdoCipher is used
-        duration: '00:00', // Default if duration not available
-        isCompleted: completedIds.includes(video._id.toString())
+        duration: video.duration || 0,
+        bunnyVideoId: video.bunnyVideoId,
+        playbackUrl,
+        videoUrl: playbackUrl,
+        expiresAt,
+        otp,
+        playbackInfo,
+        videoProvider: video.videoProvider || (video.vdoCipherVideoId ? 'vdocipher' : 'bunny'),
+        isCompleted: completedIds.includes(video._id.toString()),
+        progressSeconds: Number(progressSeconds) || 0,
       };
     }));
 
@@ -299,23 +330,34 @@ export const getCourseVideos = async (req, res) => {
 
 export const updateVideoProgress = async (req, res) => {
   try {
-    const { videoId, courseId } = req.body;
+    const { videoId, courseId, progressSeconds, completed } = req.body;
     const enrollment = await Enrollment.findOne({
       userId: req.user.id,
       courseId,
-      isActive: true
+      isActive: true,
     });
 
     if (!enrollment) return res.status(403).json({ success: false, message: 'Not enrolled in this course.' });
 
-    if (!enrollment.progress) enrollment.progress = { completedVideos: [] };
+    if (!enrollment.progress) enrollment.progress = { completedVideos: [], videoProgress: {} };
     if (!enrollment.progress.completedVideos) enrollment.progress.completedVideos = [];
 
-    const isAlreadyCompleted = enrollment.progress.completedVideos.some(id => id.toString() === videoId);
-    if (!isAlreadyCompleted) {
-      enrollment.progress.completedVideos.push(videoId);
-      await enrollment.save();
+    if (progressSeconds !== undefined && progressSeconds !== null) {
+      if (!enrollment.progress.videoProgress || enrollment.progress.videoProgress instanceof Map === false) {
+        const existing = enrollment.progress.videoProgress || {};
+        enrollment.progress.videoProgress = new Map(Object.entries(existing));
+      }
+      enrollment.progress.videoProgress.set(String(videoId), Number(progressSeconds));
+      enrollment.markModified('progress.videoProgress');
     }
+
+    const markCompleted = completed === true || completed === 'true';
+    const isAlreadyCompleted = enrollment.progress.completedVideos.some((id) => id.toString() === videoId);
+    if (markCompleted && !isAlreadyCompleted) {
+      enrollment.progress.completedVideos.push(videoId);
+    }
+
+    await enrollment.save();
 
     res.json({ success: true, message: 'Progress updated' });
   } catch (error) {

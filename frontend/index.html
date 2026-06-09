@@ -35,8 +35,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" />
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
     <link href="/css/all.min.css" rel="stylesheet">
     <link href="/css/style.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
@@ -66,57 +66,82 @@
         --premium-shadow:      0 4px 24px rgba(139, 74, 30, 0.08);
 
         /* ── Typography ── */
-        --font-sans:           'Inter', 'Segoe UI', sans-serif;
-        --font-serif:          'Playfair Display', 'Georgia', serif;
+        --font-heading:        'fh-regular', sans-serif;
+        --font-body:           'Be Vietnam', 'Be Vietnam Pro', sans-serif;
+        --font-sans:           var(--font-body);
+        --font-serif:          var(--font-heading);
       }
       
       body {
         background-color: var(--bg-color) !important;
         color: var(--text-content) !important;
-        font-family: var(--font-sans);
-        font-size: 15px;
+        font-family: var(--font-body);
+        font-size: 16px;
         line-height: 1.6;
         overflow-x: hidden;
       }
       
       h1 {
-        font-family: var(--font-serif) !important;
-        font-size: clamp(42px, 5vw, 48px) !important;
-        font-weight: 700 !important;
+        font-family: var(--font-heading) !important;
+        font-size: clamp(2.25rem, 4.5vw, 3.5rem) !important;
+        font-weight: 600 !important;
         color: var(--text-heading) !important;
-        line-height: 1.2;
-        margin-bottom: 1.5rem;
+        letter-spacing: 0 !important;
+        line-height: 1.12;
+        margin-bottom: 1rem;
       }
 
       h2, .section-title {
-        font-family: var(--font-serif) !important;
-        font-size: clamp(32px, 4vw, 38px) !important;
+        font-family: var(--font-heading) !important;
+        font-size: clamp(1.875rem, 3vw, 2.5rem) !important;
         font-weight: 600 !important;
         color: var(--text-heading) !important;
+        letter-spacing: 0 !important;
+        line-height: 1.18 !important;
       }
 
       h3, .card-title {
-        font-family: var(--font-serif) !important;
-        font-size: 24px !important;
+        font-family: var(--font-heading) !important;
+        font-size: clamp(1.35rem, 2vw, 1.875rem) !important;
         font-weight: 600 !important;
         color: var(--text-card-heading) !important;
+        letter-spacing: 0 !important;
+        line-height: 1.22 !important;
+      }
+
+      h4 {
+        font-family: var(--font-heading) !important;
+        font-size: clamp(1.15rem, 1.6vw, 1.5rem) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0 !important;
+        line-height: 1.28 !important;
+      }
+
+      h5, h6 {
+        font-family: var(--font-heading) !important;
+        font-size: 1rem !important;
+        font-weight: 600 !important;
+        letter-spacing: 0 !important;
+        line-height: 1.35 !important;
       }
 
       .section-subtitle, .sub-heading {
-        font-family: var(--font-sans) !important;
-        font-size: 18px !important;
+        font-family: var(--font-body) !important;
+        font-size: 1rem !important;
         font-weight: 500 !important;
         color: var(--text-muted) !important;
         text-transform: none !important;
-        letter-spacing: 0.5px !important;
+        letter-spacing: 0 !important;
         font-style: normal !important;
       }
 
       p {
-        font-family: var(--font-sans) !important;
-        font-size: 15px !important;
+        font-family: var(--font-body) !important;
+        font-size: 1rem !important;
         font-weight: 400 !important;
         color: var(--text-content) !important;
+        letter-spacing: 0 !important;
+        line-height: 1.65 !important;
       }
   
       /* Global Card / Glass Panel */
@@ -141,10 +166,10 @@
         border-radius: 12px !important;
         padding: 14px 32px !important;
         font-weight: 600 !important;
-        font-family: var(--font-sans) !important;
-        font-size: 16px !important;
+        font-family: var(--font-body) !important;
+        font-size: 0.95rem !important;
         text-transform: none !important;
-        letter-spacing: 0.5px !important;
+        letter-spacing: 0 !important;
         box-shadow: 0 4px 12px rgba(139, 74, 47, 0.2) !important;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
       }
@@ -162,8 +187,8 @@
         color: var(--text-main) !important;
         border-radius: 12px !important;
         padding: 12px 16px !important;
-        font-family: var(--font-sans) !important;
-        font-size: 15px !important;
+        font-family: var(--font-body) !important;
+        font-size: 0.95rem !important;
       }
 
       .form-control:focus, .t-input:focus {

@@ -6,6 +6,7 @@ import SuccessModal from '../components/SuccessModal';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { reportPaymentFailure } from '../utils/paymentUtils';
 
 function Consultations() {
   const navigate = useNavigate();
@@ -178,6 +179,13 @@ function Consultations() {
         const rzp = new window.Razorpay(options);
         rzp.on('payment.failed', function (response) {
           toast.error(`Payment Failed: ${response.error.description}`);
+          reportPaymentFailure({
+            leadId: data.leadId,
+            orderId: data.orderId,
+            consultationType: formData.consultationType,
+            paymentFor: 'Consultation',
+            error: response.error,
+          });
         });
         rzp.open();
       }

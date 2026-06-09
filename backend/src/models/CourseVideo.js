@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 const CourseVideoSchema = new mongoose.Schema({
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course', required: true },
   title: { type: String, required: true },
+  description: { type: String },
+  duration: { type: Number, default: 0 },
   bunnyVideoId: { type: String, required: false },
   vdoCipherVideoId: { type: String, required: false },
   videoProvider: { type: String, enum: ['bunny', 'vdocipher'], default: 'bunny' },

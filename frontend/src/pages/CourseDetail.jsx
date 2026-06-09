@@ -8,6 +8,7 @@ import CourseTimer from '../components/CourseTimer';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import { reportPaymentFailure } from '../utils/paymentUtils';
 
 function CourseDetail() {
   const { courseId } = useParams();
@@ -47,6 +48,7 @@ function CourseDetail() {
         
         if (data.success && data.course) {
           const dbCourse = data.course;
+          const courseType = dbCourse.courseType || 'Live';
           const mappedCourse = {
             id: dbCourse._id,
             title: dbCourse.title,
@@ -54,12 +56,12 @@ function CourseDetail() {
             longDesc: dbCourse.description, // using description for longDesc too
             image: dbCourse.thumbnailUrl || '/images/vedic_thumbnail.png',
             duration: `${dbCourse.validityDays} Days`,
-            schedule: 'Self-Paced',
+            schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
             level: 'Professional',
             category: 'Astrology',
             price: dbCourse.price,
-            courseType: dbCourse.courseType || 'Live',
-            isPremium: true,
+            courseType,
+            isPremium: courseType !== 'Live' && Number(dbCourse.price) > 0,
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
@@ -124,11 +126,15 @@ function CourseDetail() {
           phone: sanitizedPhone,
           email: enquiryData.email.trim(),
           type: 'Course-Inquiry',
+          leadType: course.courseType === 'Live' ? 'LIVE COURSE LEAD' : 'COURSE ENQUIRY',
+          status: 'ENQUIRY RECEIVED',
+          paymentStatus: course.courseType === 'Live' ? 'NOT REQUIRED' : 'NOT PAID',
           courseName: course.title,
+          courseType: course.courseType,
           dob: enquiryData.age,
           pob: enquiryData.city,
           message: `Interest: ${enquiryData.interest || 'Not specified'}${enquiryData.message ? `\nNotes: ${enquiryData.message}` : ''}`,
-          couponCode: appliedCoupon?.code || ''
+          couponCode: course.isPremium ? appliedCoupon?.code || '' : ''
         }),
       });
       const data = await res.json();
@@ -283,6 +289,14 @@ function CourseDetail() {
           const rzp = new window.Razorpay(options);
           rzp.on('payment.failed', function (response) {
             toast.error(`Payment Failed: ${response.error.description}`);
+            reportPaymentFailure({
+              leadId: orderData.leadId,
+              orderId: orderData.orderId,
+              courseId: course.id,
+              courseName: course.title,
+              paymentFor: 'Recorded Course',
+              error: response.error,
+            });
             setIsProcessingPayment(false);
           });
           rzp.open();
@@ -366,7 +380,11 @@ function CourseDetail() {
         .course-detail-page {
           background: var(--site-bg);
           min-height: 100vh;
-          padding-bottom: clamp(3rem, 6vw, 5rem);
+          padding-bottom: clamp(1rem, 2vw, 1.5rem);
+        }
+
+        .course-detail-page + .fb-root {
+          margin-top: clamp(1.25rem, 2.5vw, 2rem);
         }
 
         .detail-hero {
@@ -477,7 +495,7 @@ function CourseDetail() {
           margin-top: clamp(1.5rem, 3vw, 2.5rem);
           position: relative;
           z-index: 1;
-          padding-bottom: clamp(2.25rem, 5vw, 4rem);
+          padding-bottom: clamp(1rem, 2.5vw, 1.75rem);
         }
 
         .course-detail-layout {
@@ -739,7 +757,9 @@ function CourseDetail() {
 
         .enroll-sub {
           font-size: 0.95rem;
-          opacity: 0.8;
+          color: #F9E6C8 !important;
+          opacity: 1;
+          font-weight: 700;
           margin-bottom: 1rem;
           line-height: 1.4;
         }
@@ -1217,16 +1237,16 @@ function CourseDetail() {
           <div className="col-lg-4" data-aos="fade-left" data-aos-delay="200">
             <div className="enroll-sidebar">
               <div className="enroll-card">
-                <div className="enroll-badge">LIMITED SLOTS</div>
-                <h4>Start Your Journey</h4>
-                <div className="enroll-price">{course.isPremium ? `₹ ${getPayableAmount()}` : '₹ Enquire Now'}</div>
+                <div className="enroll-badge">{course.isPremium ? 'LIMITED SLOTS' : 'ENQUIRY ONLY'}</div>
+                <h4>{course.isPremium ? 'Start Your Journey' : 'Request Course Details'}</h4>
+                <div className="enroll-price">{course.isPremium ? `₹ ${getPayableAmount()}` : 'Enquiry Only'}</div>
                 {course.isPremium && appliedCoupon && (
                   <div className="coupon-price-note">
                     <span>Original ₹{getCoursePrice()}</span>
                     <strong>Saved ₹{getDiscountAmount()}</strong>
                   </div>
                 )}
-                <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'Get personalized fee structure & syllabus PDF'}</p>
+                <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'No online payment required. Our team will contact you with batch details.'}</p>
 
                 {course.isPremium && (
                   <motion.div 
@@ -1238,51 +1258,53 @@ function CourseDetail() {
                   </motion.div>
                 )}
 
-                <motion.div
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="coupon-box"
-                >
-                  <div className="coupon-box-head">
-                    <Tag size={18} />
-                    <span>Apply Coupon</span>
-                  </div>
-
-                  <div className="coupon-input-row">
-                    <input
-                      type="text"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder={appliedCoupon ? 'Coupon applied' : 'Enter coupon code'}
-                      disabled={Boolean(appliedCoupon)}
-                    />
-                    <button
-                      type="button"
-                      className="coupon-apply-btn"
-                      onClick={appliedCoupon ? removeCoupon : handleCouponApply}
-                      disabled={couponLoading}
-                    >
-                      {couponLoading ? 'Checking...' : appliedCoupon ? 'Remove' : 'Apply'}
-                    </button>
-                  </div>
-
-                  {couponStatus && (
-                    <div className={`coupon-status ${couponStatus.type}`}>
-                      <CheckCircle2 size={16} />
-                      <span>{couponStatus.message}</span>
+                {course.isPremium && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    className="coupon-box"
+                  >
+                    <div className="coupon-box-head">
+                      <Tag size={18} />
+                      <span>Apply Coupon</span>
                     </div>
-                  )}
 
-                  {appliedCoupon && (
-                    <div className="coupon-chip">
-                      <Percent size={16} />
-                      <span>Coupon {appliedCoupon.code} active</span>
+                    <div className="coupon-input-row">
+                      <input
+                        type="text"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder={appliedCoupon ? 'Coupon applied' : 'Enter coupon code'}
+                        disabled={Boolean(appliedCoupon)}
+                      />
+                      <button
+                        type="button"
+                        className="coupon-apply-btn"
+                        onClick={appliedCoupon ? removeCoupon : handleCouponApply}
+                        disabled={couponLoading}
+                      >
+                        {couponLoading ? 'Checking...' : appliedCoupon ? 'Remove' : 'Apply'}
+                      </button>
                     </div>
-                  )}
-                </motion.div>
+
+                    {couponStatus && (
+                      <div className={`coupon-status ${couponStatus.type}`}>
+                        <CheckCircle2 size={16} />
+                        <span>{couponStatus.message}</span>
+                      </div>
+                    )}
+
+                    {appliedCoupon && (
+                      <div className="coupon-chip">
+                        <Percent size={16} />
+                        <span>Coupon {appliedCoupon.code} active</span>
+                      </div>
+                    )}
+                  </motion.div>
+                )}
 
                 <button className="enroll-btn" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
-                  {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'Enroll Now' : 'Reserve Your Seat')} <i className="fas fa-chevron-right ms-2"></i>
+                  {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'Enroll Now' : 'Enquire Now')} <i className="fas fa-chevron-right ms-2"></i>
                 </button>
 
                 <div className="trust-badges">
@@ -1295,10 +1317,19 @@ function CourseDetail() {
 
                 <ul className="features-list">
                   {[
-                    { icon: 'certificate', text: 'Professional Certification' },
-                    { icon: 'video', text: 'Live Recording Access' },
-                    { icon: 'book-open', text: 'Exclusive Study Notes' },
-                    { icon: 'whatsapp', text: 'Student Support Group', fab: true }
+                    ...(course.isPremium
+                      ? [
+                          { icon: 'certificate', text: 'Professional Certification' },
+                          { icon: 'video', text: 'Secure Video Access' },
+                          { icon: 'book-open', text: 'Exclusive Study Notes' },
+                          { icon: 'whatsapp', text: 'Student Support Group', fab: true }
+                        ]
+                      : [
+                          { icon: 'calendar-alt', text: 'Batch Details by Counsellor' },
+                          { icon: 'book-open', text: 'Syllabus & Benefits Shared' },
+                          { icon: 'phone-alt', text: 'Sales Team Follow-up' },
+                          { icon: 'whatsapp', text: 'WhatsApp Support', fab: true }
+                        ])
                   ].map((item, idx) => (
                     <li key={idx} data-aos="fade-left" data-aos-delay={300 + (idx * 100)}>
                       <i className={`${item.fab ? 'fab' : 'fas'} fa-${item.icon}`}></i> {item.text}
@@ -1323,8 +1354,8 @@ function CourseDetail() {
       <div className="mobile-cta d-lg-none">
         <div className="d-flex align-items-center justify-content-between w-100">
           <div>
-            <p className="small">Upcoming Batch</p>
-            <p className="mb-0 fw-bold text-white">Join Today</p>
+            <p className="small">{course.isPremium ? 'Recorded Course' : 'Upcoming Batch'}</p>
+            <p className="mb-0 fw-bold text-white">{course.isPremium ? 'Instant Access' : 'Enquiry Only'}</p>
           </div>
           <button className="btn-enquire" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
             {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'ENROLL NOW' : 'ENQUIRE NOW')}

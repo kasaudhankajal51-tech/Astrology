@@ -69,6 +69,24 @@ function Header() {
     setOpenMobileGroup((current) => (current === group ? null : group));
   };
 
+  const primaryNavLinks = authState.isStudent
+    ? [
+        { label: 'HOME', to: '/', match: '/' },
+        { label: 'DASHBOARD', to: '/dashboard', match: '/dashboard' },
+        { label: 'MY COURSES', to: '/dashboard', match: '/student/course' },
+        { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'SHOP', to: '/shop', match: '/shop' }
+      ]
+    : [
+        { label: 'HOME', to: '/', match: '/' },
+        { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
+        { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'SHOP', to: '/shop', match: '/shop' },
+        { label: 'ABOUT', to: '/about', match: '/about' }
+      ];
+
   const handleConsultSubmit = async (e) => {
     e.preventDefault();
     const validationError = getContactValidationError(formData);
@@ -796,10 +814,11 @@ function Header() {
 
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                <li className="nav-item"><Link className={navLinkClass('/live-courses')} to="/live-courses">LIVE COURSES</Link></li>
-                <li className="nav-item"><Link className={navLinkClass('/recorded-courses')} to="/recorded-courses">RECORDED COURSES</Link></li>
-                <li className="nav-item"><Link className={navLinkClass('/book-consultation')} to="/book-consultation">CONSULTATIONS</Link></li>
-                <li className="nav-item"><Link className={navLinkClass('/astrologer')} to="/astrologer">ASTROLOGERS</Link></li>
+                {primaryNavLinks.map((item) => (
+                  <li className="nav-item" key={item.to}>
+                    <Link className={navLinkClass(item.match)} to={item.to}>{item.label}</Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
@@ -846,10 +865,11 @@ function Header() {
         </div>
         <div className="offcanvas-body p-0">
           <ul className="navbar-nav">
-            <li className="nav-item"><Link className="nav-link" to="/live-courses" data-bs-dismiss="offcanvas">LIVE COURSES</Link></li>
-            <li className="nav-item"><Link className="nav-link" to="/recorded-courses" data-bs-dismiss="offcanvas">RECORDED COURSES</Link></li>
-
-            <li className="nav-item"><Link className="nav-link" to="/book-consultation" data-bs-dismiss="offcanvas">CONSULTATIONS</Link></li>
+            {primaryNavLinks.map((item) => (
+              <li className="nav-item" key={item.to}>
+                <Link className="nav-link" to={item.to} data-bs-dismiss="offcanvas">{item.label}</Link>
+              </li>
+            ))}
 
             <li className="nav-item">
               <div className="mobile-menu-group">
@@ -864,11 +884,11 @@ function Header() {
                 </button>
                 <div className={`mobile-submenu ${openMobileGroup === 'shop' ? '' : 'is-collapsed'}`}>
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">All Astro Shop</Link>
-                  <Link className="dropdown-item" to="/shop/gemstones" data-bs-dismiss="offcanvas">Gemstones</Link>
-                  <Link className="dropdown-item" to="/shop/rudraksha" data-bs-dismiss="offcanvas">Rudraksha</Link>
-                  <Link className="dropdown-item" to="/shop/yantras" data-bs-dismiss="offcanvas">Yantras</Link>
-                  <Link className="dropdown-item" to="/shop/puja-kits" data-bs-dismiss="offcanvas">Puja Kits</Link>
-                  <Link className="dropdown-item" to="/shop/bracelets" data-bs-dismiss="offcanvas">Bracelets</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Gemstones</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Rudraksha</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Yantras</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Puja Kits</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Bracelets</Link>
                 </div>
               </div>
             </li>
@@ -920,14 +940,9 @@ function Header() {
                   </button>
                 </>
               ) : !isStudentLoginPage ? (
-                <>
-                  <Link to="/login" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
-                    <i className="fas fa-user"></i> STUDENT LOGIN
-                  </Link>
-                  <button type="button" onClick={handleStudentLogout} className="btn btn-mobile-cta ghost-cta" data-bs-dismiss="offcanvas">
-                    <i className="fas fa-sign-out-alt"></i> LOGOUT
-                  </button>
-                </>
+                <Link to="/login" className="btn btn-mobile-cta secondary-cta" data-bs-dismiss="offcanvas">
+                  <i className="fas fa-user"></i> STUDENT LOGIN
+                </Link>
               ) : null}
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-mobile-cta primary-cta">
                 <i className="fas fa-calendar-check"></i> BOOK CONSULTATION

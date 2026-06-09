@@ -36,7 +36,8 @@ const Careers = lazy(() => import('./pages/Careers'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const StudentLogin = lazy(() => import('./pages/StudentLogin'));
-const StudentDashboard = lazy(() => import('./pages/StudentDashboard'));
+const StudentDashboard = lazy(() => import('./pages/StudentDashboardNew'));
+const NewStudentDashboard = lazy(() => import('./pages/newstudentdashboard'));
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import { Toaster } from 'react-hot-toast';
@@ -56,6 +57,8 @@ function App() {
         <FloatingChatAssistant />
         <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{height: '100vh', background: 'var(--bg-color)'}}><div className="spinner-border" style={{color: 'var(--primary-color)'}}></div></div>}>
           <Routes>
+            <Route path="/test" element={<NewStudentDashboard />} />
+
             <Route path="/" element={<MainLayout />}>
               <Route index element={<Home />} />
               <Route path="book-consultation" element={<Consultations />} />
@@ -87,6 +90,8 @@ function App() {
               <Route path="shop/:category" element={<ShopCategory />} />
               <Route path="careers" element={<Careers />} />
               <Route path="login" element={<StudentLogin />} />
+              <Route path="dashboard" element={<StudentDashboard />} />
+              <Route path="student/course/:id" element={<CoursePlayer />} />
             </Route>
             
             {/* Standalone customer/student pages with contextual header/footer */}
@@ -96,8 +101,6 @@ function App() {
               <Route path="/payment" element={<Payment />} />
               <Route path="/payment-success" element={<PaymentSuccess />} />
               <Route path="/payment-failed" element={<PaymentFailed />} />
-              <Route path="/dashboard" element={<StudentDashboard />} />
-              <Route path="/student/course/:id" element={<CoursePlayer />} />
               <Route path="*" element={<NotFound />} />
             </Route>
 

@@ -56,12 +56,23 @@ export const generateBunnyToken = (videoId, expiresInSeconds = 3600) => {
   return `?token=${hash}&expires=${expires}`;
 };
 
-export const getBunnyEmbedUrl = (videoId, expiresInSeconds = 7200) => {
+export const getBunnyPlaybackInfo = (videoId, expiresInSeconds = 7200) => {
   const libraryId = getBunnyLibraryId();
   const cleanVideoId = extractBunnyVideoId(videoId);
-  const tokenQuery = generateBunnyToken(cleanVideoId, expiresInSeconds);
-  return `${BUNNY_IFRAME_BASE_URL}/embed/${libraryId}/${cleanVideoId}${tokenQuery}`;
+  const expires = Math.floor(Date.now() / 1000) + expiresInSeconds;
+  const securityKey = getRequiredEnv('BUNNY_TOKEN_KEY');
+  const dataToSign = securityKey + cleanVideoId + expires;
+  const hash = crypto.createHash('sha256').update(dataToSign).digest('hex');
+  const playbackUrl = `${BUNNY_IFRAME_BASE_URL}/embed/${libraryId}/${cleanVideoId}?token=${hash}&expires=${expires}`;
+
+  return {
+    playbackUrl,
+    expiresAt: new Date(expires * 1000).toISOString(),
+  };
 };
+
+export const getBunnyEmbedUrl = (videoId, expiresInSeconds = 7200) =>
+  getBunnyPlaybackInfo(videoId, expiresInSeconds).playbackUrl;
 
 const bunnyFetch = async (path, options = {}) => {
   const apiKey = getRequiredEnv('BUNNY_API_KEY');

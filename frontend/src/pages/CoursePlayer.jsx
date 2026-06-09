@@ -227,7 +227,7 @@ function CoursePlayer() {
   if (!course) return null;
 
   return (
-    <div onContextMenu={(e) => e.preventDefault()} style={{ background: '#FDF6EE', minHeight: '100vh', paddingTop: '80px', paddingBottom: '60px', userSelect: 'none' }}>
+    <div onContextMenu={(e) => e.preventDefault()} style={{ background: '#FDF6EE', minHeight: '100vh', paddingTop: 'clamp(1.5rem, 3vw, 2.5rem)', paddingBottom: '60px', userSelect: 'none' }}>
       {securityNotice && (
         <div
           style={{
@@ -249,7 +249,7 @@ function CoursePlayer() {
           {securityNotice}
         </div>
       )}
-      <div className="container-fluid px-4 mt-4">
+      <div className="container-fluid px-4 mt-4 course-player-shell">
         <button className="btn btn-link text-decoration-none text-dark mb-3 px-0" onClick={() => navigate('/dashboard')}>
           <i className="fas fa-arrow-left me-2"></i> Back to Dashboard
         </button>
@@ -331,18 +331,18 @@ function CoursePlayer() {
             </div>
 
             <div className="mt-4 p-4" style={{ background: 'linear-gradient(135deg, #2A0F02, #1a0a01)', borderRadius: '16px', color: '#FFF' }}>
-              <div className="d-flex justify-content-between align-items-center">
+              <div className="course-consult-head d-flex justify-content-between align-items-center">
                 <div>
-                  <h4 style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, color: '#C8832A' }}>
-                    <i className="fas fa-gem me-2"></i> Complimentary Expert Consultation
+                  <h4 style={{ fontFamily: "var(--font-heading, 'Playfair Display', serif)", fontWeight: 800, color: '#F5C98D' }}>
+                    <i className="fas fa-gem me-2"></i> BOOK YOUR 1 FREE CONSULTATION
                   </h4>
-                  <p className="mb-0" style={{ opacity: 0.8, fontSize: '0.9rem' }}>
-                    Included in your purchase! We recommend completing all course videos before booking to maximize your session.
+                  <p className="mb-0" style={{ color: '#FFF7ED', opacity: 0.92, fontSize: '0.95rem', lineHeight: 1.55 }}>
+                    Please book this only after completing the course, otherwise discussion quality may suffer.
                   </p>
                 </div>
                 {!showConsultForm && (
-                  <button onClick={() => setShowConsultForm(true)} className="btn" style={{ background: '#C8832A', color: '#FFF', padding: '10px 25px', borderRadius: '50px', fontWeight: 700, flexShrink: 0 }}>
-                    Book Now
+                  <button onClick={() => setShowConsultForm(true)} className="btn course-consult-btn" style={{ background: '#C8832A', color: '#FFF', padding: '10px 25px', borderRadius: '9px', fontWeight: 700, flexShrink: 0 }}>
+                    Book Free Consultation
                   </button>
                 )}
               </div>
@@ -382,9 +382,9 @@ function CoursePlayer() {
                         style={{ background: 'rgba(255,255,255,0.1)', border: '1px solid rgba(255,255,255,0.2)', color: '#FFF' }}
                       ></textarea>
                     </div>
-                    <div className="col-12 text-end mt-3">
+                    <div className="col-12 text-end mt-3 course-consult-actions">
                       <button type="button" onClick={() => setShowConsultForm(false)} className="btn btn-link text-white text-decoration-none me-3">Cancel</button>
-                      <button type="submit" className="btn" disabled={bookingLoading} style={{ background: '#C8832A', color: '#FFF', padding: '8px 30px', borderRadius: '50px' }}>
+                      <button type="submit" className="btn" disabled={bookingLoading} style={{ background: '#C8832A', color: '#FFF', padding: '8px 30px', borderRadius: '9px' }}>
                         {bookingLoading ? 'Submitting...' : 'Confirm Request'}
                       </button>
                     </div>
@@ -486,6 +486,57 @@ function CoursePlayer() {
         .student-focus-shield i {
           color: #C8832A;
           font-size: 28px;
+        }
+
+        .course-player-shell {
+          max-width: 1500px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+
+        .course-player-shell,
+        .course-player-shell * {
+          min-width: 0;
+        }
+
+        .course-consult-btn {
+          min-height: 42px;
+        }
+
+        @media (max-width: 768px) {
+          .course-player-shell {
+            padding-left: 14px !important;
+            padding-right: 14px !important;
+            margin-top: 0.75rem !important;
+          }
+
+          .course-consult-head {
+            align-items: stretch !important;
+            flex-direction: column;
+            gap: 16px;
+          }
+
+          .course-consult-btn {
+            width: 100%;
+          }
+
+          .course-consult-actions {
+            display: grid;
+            gap: 10px;
+            text-align: stretch !important;
+          }
+
+          .course-consult-actions .btn,
+          .course-consult-actions .btn-link {
+            width: 100%;
+            margin: 0 !important;
+          }
+
+          .student-watermark-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 28px 18px;
+            font-size: 10px;
+          }
         }
       `}</style>
     </div>

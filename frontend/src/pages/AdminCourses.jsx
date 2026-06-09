@@ -1183,7 +1183,7 @@ function AdminCourses() {
                 <div>
                   <span className="lms-eyebrow">Course Videos</span>
                   <h3 className="video-modal-title">Preview Videos</h3>
-                  <p className="video-modal-subtitle">{videoCourse?.title} · open Edit Course to add, replace, update, or delete videos</p>
+                  <p className="video-modal-subtitle">{videoCourse?.title} - open Edit Course to add, replace, update, or delete videos</p>
                 </div>
                 <button type="button" className="modal-close-btn" onClick={closeVideoModal}>&times;</button>
               </div>
@@ -1292,7 +1292,7 @@ function AdminCourses() {
                 <div>
                   <span className="lms-eyebrow">Video Preview</span>
                   <h3>{previewVideo.title || 'Course video'}</h3>
-                  <p>{getProviderLabel(getVideoProvider(previewVideo))} · {getVideoValue(previewVideo)}</p>
+                  <p>{getProviderLabel(getVideoProvider(previewVideo))} - {getVideoValue(previewVideo)}</p>
                 </div>
                 <button type="button" className="modal-close-btn" onClick={closeVideoPreview}>&times;</button>
               </div>

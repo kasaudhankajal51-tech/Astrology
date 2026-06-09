@@ -6,6 +6,16 @@ import Settings from '../models/Settings.js';
 export const getSettings = async (req, res) => {
   try {
     const settings = await Settings.getSettings();
+
+    if (!req.headers.authorization) {
+      return res.json({
+        success: true,
+        settings: {
+          shopifyStoreUrl: settings.shopifyStoreUrl || process.env.SHOPIFY_STORE_URL || '',
+        },
+      });
+    }
+
     res.json({ success: true, settings });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

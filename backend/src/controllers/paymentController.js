@@ -6,10 +6,9 @@ import Order from '../models/Order.js';
 import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
 import Coupon from '../models/Coupon.js';
-import { sendCredentialsEmail, sendAdminNotificationEmail } from '../utils/sendEmail.js';
+import { sendCredentialsEmail, sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
 import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
-import dotenv from 'dotenv';
-dotenv.config();
+import { calculateCouponDiscount } from '../utils/couponHelper.js';
 
 // @desc    Create Razorpay Order
 // @route   POST /api/payment/create-order
@@ -21,6 +20,10 @@ export const createOrder = async (req, res) => {
     const course = await Course.findById(courseId);
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
+    }
+
+    if (course.courseType !== 'Recorded') {
+      return res.status(400).json({ success: false, message: 'Only recorded courses can be purchased online' });
     }
 
     const originalAmount = Number(course.price) || 0;
@@ -48,16 +51,12 @@ export const createOrder = async (req, res) => {
         return res.status(400).json({ success: false, message: `Minimum purchase of ${coupon.minPurchase} is required` });
       }
 
-      discountAmount = coupon.discountType === 'fixed'
-        ? Number(coupon.discountValue)
-        : Math.round((originalAmount * Number(coupon.discountValue)) / 100);
-
-      discountAmount = Math.max(0, Math.min(discountAmount, originalAmount));
-      payableAmount = Math.max(originalAmount - discountAmount, 1);
+      const discount = calculateCouponDiscount(coupon, originalAmount);
+      discountAmount = discount.discountAmount;
+      payableAmount = discount.finalAmount;
       appliedCoupon = coupon;
     }
 
-    // Razorpay accepts amount in paise.
     const amountInPaise = Math.round(payableAmount * 100);
 
     if (!req.user && (!email || email.trim() === '')) {
@@ -69,7 +68,6 @@ export const createOrder = async (req, res) => {
       userId = req.user.id || req.user._id;
     }
 
-    // Determine student details
     let studentEmail = email;
     let studentName = name;
     let studentMobile = mobile;
@@ -84,14 +82,14 @@ export const createOrder = async (req, res) => {
     }
 
     const order = await Order.create({
-      userId: userId, // This can be null for guest checkouts until verify phase
-      courseId: courseId,
+      userId,
+      courseId,
       amount: payableAmount,
       originalAmount,
       discountAmount,
       couponCode: appliedCoupon?.code,
       paymentStatus: 'pending',
-      guestDetails: userId ? undefined : { name: studentName, email: studentEmail, mobile: studentMobile }
+      guestDetails: userId ? undefined : { name: studentName, email: studentEmail, mobile: studentMobile },
     });
 
     let razorpayOrder;
@@ -100,26 +98,32 @@ export const createOrder = async (req, res) => {
       razorpayOrder = await razorpayInstance.orders.create({
         amount: amountInPaise,
         currency: 'INR',
-        receipt: order._id.toString()
+        receipt: order._id.toString(),
       });
-      order.razorpayOrderId = razorpayOrder.id; // Store order ID as the razorpay reference
+      order.razorpayOrderId = razorpayOrder.id;
       await order.save();
     } catch (err) {
       console.error('RAZORPAY ERROR:', err);
       return res.status(500).json({ success: false, message: err.message || 'Failed to create Razorpay Order' });
     }
 
+    let lead = null;
     if (studentEmail && studentName) {
-      await Lead.create({
+      lead = await Lead.create({
         name: studentName,
         email: studentEmail,
         phone: studentMobile || 'N/A',
         type: 'Course',
         courseName: course.title,
+        courseId: course._id,
+        courseType: 'Recorded',
+        leadType: 'RECORDED COURSE LEAD',
         message: appliedCoupon ? `Coupon applied: ${appliedCoupon.code}, discount: ${discountAmount}` : '',
-        paymentStatus: 'Pending',
-        status: 'Pending',
-        transactionId: razorpayOrder.id // Storing order ID to find it later
+        paymentStatus: 'PENDING',
+        status: 'Recorded Course Lead - Payment Initiated',
+        orderId: razorpayOrder.id,
+        amount: payableAmount,
+        paymentFor: 'Recorded Course',
       });
     }
 
@@ -127,18 +131,15 @@ export const createOrder = async (req, res) => {
 
     res.status(200).json({
       success: true,
+      leadId: lead?._id || null,
+      purchaseId: order._id,
       orderId: razorpayOrder.id,
-      internalOrderId: order._id,
-      amount: razorpayOrder.amount, // Return exact amount in paise
-      payableAmount,
-      originalAmount,
-      discountAmount,
-      couponCode: appliedCoupon?.code || '',
+      amount: razorpayOrder.amount,
       currency: 'INR',
       keyId,
       name: studentName || '',
       email: studentEmail || '',
-      phone: studentMobile || ''
+      phone: studentMobile || '',
     });
   } catch (error) {
     console.error('Error creating order:', error);
@@ -154,7 +155,7 @@ export const verifyPayment = async (req, res) => {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, name } = req.body;
     const { keySecret } = getRazorpayConfig();
 
-    const body = razorpay_order_id + "|" + razorpay_payment_id;
+    const body = razorpay_order_id + '|' + razorpay_payment_id;
     const expectedSignature = crypto
       .createHmac('sha256', keySecret)
       .update(body.toString())
@@ -164,19 +165,17 @@ export const verifyPayment = async (req, res) => {
     const isAuthentic = expectedSignature === razorpay_signature || isMockPayment;
 
     if (!isAuthentic) {
-      // Find order and mark as failed
       await Order.findOneAndUpdate(
         { razorpayOrderId: razorpay_order_id },
         { paymentStatus: 'failed' }
       );
       await Lead.findOneAndUpdate(
-        { transactionId: razorpay_order_id },
-        { paymentStatus: 'Failed', status: 'Pending' }
+        { orderId: razorpay_order_id },
+        { paymentStatus: 'FAILED', status: 'Recorded Course Lead - Failed Payment' }
       );
       return res.status(400).json({ success: false, message: 'Invalid payment signature' });
     }
 
-    // Payment Successful
     const order = await Order.findOne({ razorpayOrderId: razorpay_order_id });
     if (!order) {
       return res.status(404).json({ success: false, message: 'Order not found in our database' });
@@ -187,6 +186,7 @@ export const verifyPayment = async (req, res) => {
     }
 
     order.paymentStatus = 'completed';
+    order.razorpayPaymentId = razorpay_payment_id;
     await order.save();
 
     const course = await Course.findById(order.courseId);
@@ -196,56 +196,48 @@ export const verifyPayment = async (req, res) => {
     let studentEmail = email || (order.guestDetails ? order.guestDetails.email : '');
     let studentName = name || (order.guestDetails ? order.guestDetails.name : '');
 
-    // Guest Checkout Logic
     if (!finalUserId) {
-      // Check if user already exists
       let user = await User.findOne({ email: studentEmail });
-      
+
       if (!user) {
-        // Generate random password
-        generatedPassword = crypto.randomBytes(4).toString('hex'); // 8 char password
+        generatedPassword = crypto.randomBytes(4).toString('hex');
         const hashedPassword = await bcrypt.hash(generatedPassword, 10);
-        
+
         user = await User.create({
           name: studentName,
           email: studentEmail,
           passwordHash: hashedPassword,
-          role: 'student'
+          role: 'student',
         });
       }
       finalUserId = user._id;
       order.userId = finalUserId;
       await order.save();
-    } else {
-      // If already logged in, fetch their details from DB to satisfy Lead validation
-      if (!studentEmail || !studentName) {
-        const user = await User.findById(finalUserId);
-        if (user) {
-          studentEmail = studentEmail || user.email;
-          studentName = studentName || user.name;
-        }
+    } else if (!studentEmail || !studentName) {
+      const user = await User.findById(finalUserId);
+      if (user) {
+        studentEmail = studentEmail || user.email;
+        studentName = studentName || user.name;
       }
     }
 
-    // Create Enrollment
     const validUntil = new Date();
     validUntil.setDate(validUntil.getDate() + (course.validityDays || 365));
 
     await Enrollment.findOneAndUpdate(
       { userId: finalUserId, courseId: course._id },
-      { 
-        validUntil, 
+      {
+        validUntil,
         isActive: true,
-        $setOnInsert: { progress: { completedVideos: [] } } 
+        $setOnInsert: { progress: { completedVideos: [], videoProgress: {} } },
       },
       { upsert: true, new: true }
     );
 
-    // Create Lead for Admin Panel visibility
-    const existingLead = await Lead.findOne({ transactionId: razorpay_order_id });
+    const existingLead = await Lead.findOne({ orderId: razorpay_order_id });
     if (existingLead) {
-      existingLead.paymentStatus = 'Completed';
-      existingLead.status = 'Done';
+      existingLead.paymentStatus = 'PAID';
+      existingLead.status = 'Recorded Course Lead - Paid';
       existingLead.transactionId = razorpay_payment_id;
       if (order.couponCode) {
         existingLead.message = `${existingLead.message || ''}${existingLead.message ? '\n' : ''}Coupon used: ${order.couponCode}`;
@@ -255,13 +247,19 @@ export const verifyPayment = async (req, res) => {
       await Lead.create({
         name: studentName,
         email: studentEmail,
-        phone: order.guestDetails?.mobile || 'N/A', // mobile might be in guestDetails
+        phone: order.guestDetails?.mobile || 'N/A',
         type: 'Course',
         courseName: course.title,
+        courseId: course._id,
+        courseType: 'Recorded',
+        leadType: 'RECORDED COURSE LEAD',
         message: order.couponCode ? `Coupon used: ${order.couponCode}` : '',
-        paymentStatus: 'Completed',
-        status: 'Done',
-        transactionId: razorpay_payment_id
+        paymentStatus: 'PAID',
+        status: 'Recorded Course Lead - Paid',
+        orderId: razorpay_order_id,
+        transactionId: razorpay_payment_id,
+        amount: order.amount,
+        paymentFor: 'Recorded Course',
       });
     }
 
@@ -272,52 +270,26 @@ export const verifyPayment = async (req, res) => {
       );
     }
 
-    // Send email with credentials ONLY if we generated a new password
     if (generatedPassword) {
       await sendCredentialsEmail(studentEmail, generatedPassword, studentName, course.title);
     }
 
-    // Send admin notification
-    await sendAdminNotificationEmail(
-      `New Course Purchased: ${course.title}`,
-      `
-      <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
-        <h2 style="color: #6b4a44; margin-top: 0;">New Course Sale! 🎉</h2>
-        <table style="width: 100%; border-collapse: collapse;">
-          <tr>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Course:</strong></td>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${course.title}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Student:</strong></td>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentName}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${studentEmail}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Amount:</strong></td>
-            <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">₹${order.amount}</td>
-          </tr>
-          <tr>
-            <td style="padding: 8px 0;"><strong>Transaction ID:</strong></td>
-            <td style="padding: 8px 0;">${razorpay_payment_id}</td>
-          </tr>
-        </table>
-      </div>
-      `
-    );
+    await sendPaidLeadAdminEmail({
+      customerName: studentName,
+      phone: order.guestDetails?.mobile,
+      email: studentEmail,
+      product: course.title,
+      amount: order.amount,
+      paymentId: razorpay_payment_id,
+      orderId: razorpay_order_id,
+    });
 
     res.status(200).json({
       success: true,
       message: 'Payment verified and enrollment active',
     });
-
   } catch (error) {
     console.error('Error verifying payment:', error);
-    import('fs').then(fs => fs.writeFileSync('error.log', error.stack || error.message));
-    res.status(500).json({ success: false, message: 'Server error during verification', error: error.message, stack: error.stack });
+    res.status(500).json({ success: false, message: 'Server error during verification', error: error.message });
   }
 };
-

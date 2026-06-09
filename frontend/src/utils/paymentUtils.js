@@ -15,6 +15,40 @@ export const loadRazorpayScript = () => {
   });
 };
 
+export const reportPaymentFailure = async ({
+  leadId,
+  orderId,
+  courseId,
+  courseName,
+  consultationType,
+  paymentFor = 'Consultation',
+  error,
+}) => {
+  try {
+    await fetch(`${API_BASE}/api/leads/payment-failed`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        leadId,
+        orderId,
+        courseId,
+        courseName,
+        consultationType,
+        paymentFor,
+        status:
+          paymentFor === 'Recorded Course'
+            ? 'Recorded Course Lead - Failed Payment'
+            : 'Consultation Lead - Not Paid',
+        paymentStatus: 'FAILED',
+        failureReason: error?.description || error?.reason || error?.message || 'Payment failed or was cancelled',
+        razorpayError: error || null,
+      }),
+    });
+  } catch (err) {
+    console.warn('Unable to report payment failure', err);
+  }
+};
+
 export const handleRazorpayPayment = async (formData, onSuccess) => {
   try {
     const isLoaded = await loadRazorpayScript();
@@ -88,6 +122,13 @@ export const handleRazorpayPayment = async (formData, onSuccess) => {
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', function (response) {
         toast.error(`Payment Failed: ${response.error.description}`);
+        reportPaymentFailure({
+          leadId: data.leadId,
+          orderId: data.orderId,
+          consultationType: formData.consultationType,
+          paymentFor: 'Consultation',
+          error: response.error,
+        });
       });
       rzp.open();
     }

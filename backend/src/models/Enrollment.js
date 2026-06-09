@@ -7,7 +7,12 @@ const EnrollmentSchema = new mongoose.Schema({
   purchasedAt: { type: Date, default: Date.now },
   isActive: { type: Boolean, default: true },
   progress: {
-    completedVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseVideo' }]
+    completedVideos: [{ type: mongoose.Schema.Types.ObjectId, ref: 'CourseVideo' }],
+    videoProgress: {
+      type: Map,
+      of: Number,
+      default: {},
+    },
   }
 });
 

@@ -232,7 +232,7 @@ function AdminCoupons() {
 
             <div className="coupon-form-actions">
               <button type="submit" className="btn-primary" disabled={saving}>
-                {saving ? 'Saving…' : editingId ? 'Update Coupon' : 'Create Coupon'}
+                {saving ? 'Saving...' : editingId ? 'Update Coupon' : 'Create Coupon'}
               </button>
               {editingId && (
                 <button type="button" className="btn-secondary" onClick={resetForm} disabled={saving}>
@@ -255,7 +255,7 @@ function AdminCoupons() {
           </div>
 
           {loading ? (
-            <div className="coupon-table-empty">Loading coupons…</div>
+            <div className="coupon-table-empty">Loading coupons...</div>
           ) : coupons.length === 0 ? (
             <div className="coupon-table-empty">No coupons available. Add one to start offering discounts.</div>
           ) : (
@@ -274,8 +274,8 @@ function AdminCoupons() {
                   {coupons.map((coupon) => (
                     <tr key={coupon._id}>
                       <td>{coupon.code}</td>
-                      <td>{coupon.discountType === 'fixed' ? `₹${coupon.discountValue}` : `${coupon.discountValue}%`}</td>
-                      <td>{coupon.minPurchase ? `₹${coupon.minPurchase}` : 'None'}</td>
+                      <td>{coupon.discountType === 'fixed' ? `Rs.${coupon.discountValue}` : `${coupon.discountValue}%`}</td>
+                      <td>{coupon.minPurchase ? `Rs.${coupon.minPurchase}` : 'None'}</td>
                       <td>
                         <span className={`status-pill ${coupon.active ? 'active' : 'disabled'}`}>
                           {coupon.active ? 'Active' : 'Disabled'}

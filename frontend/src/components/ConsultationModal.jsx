@@ -115,7 +115,7 @@ function ConsultationModal({ isOpen, onClose, formData, handleChange, handleSubm
                 </div>
 
                 <button type="submit" className="cta-reg-btn w-100 justify-content-center" disabled={isSubmitting}>
-                  {isSubmitting ? 'Processing...' : (formData.price ? `Proceed to Payment (${formData.price})` : 'Proceed to Payment')}
+                  {isSubmitting ? 'Processing...' : (formData.price ? `Proceed to Payment (${formData.price})` : 'Book Consultation')}
                 </button>
                 <p className="secure-text"><i className="fas fa-lock me-2"></i> Private & Encrypted Consultation</p>
               </form>

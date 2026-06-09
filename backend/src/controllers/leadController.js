@@ -26,7 +26,7 @@ const leadSchema = Joi.object({
 }).unknown(true);
 
 const isPaidLeadType = (type, amount) =>
-  type === 'Webinar' || type === 'Course' || type === 'Consultation' || Boolean(amount);
+  type === 'Webinar' || type === 'Course' || (type === 'Consultation' && Boolean(amount)) || Boolean(amount);
 
 const isLiveCourseEnquiry = (body) =>
   body.type === 'Course-Inquiry' ||

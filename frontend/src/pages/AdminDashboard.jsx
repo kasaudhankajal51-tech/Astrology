@@ -9,6 +9,8 @@ import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
 import AdminCourses from './AdminCourses';
 import AdminConsultations from './AdminConsultations';
+import AdminStudents from './AdminStudents';
+import AdminOrders from './AdminOrders';
 import './Admin.css';
 
 function AdminDashboard() {
@@ -130,6 +132,8 @@ function AdminDashboard() {
 
           <div className="sb-group">
             <span className="sb-section-label">Management</span>
+            <SidebarItem id="students" icon="fa-users" label="Registered Students" />
+            <SidebarItem id="orders" icon="fa-shopping-cart" label="Course Purchases" />
             <SidebarItem id="lms" icon="fa-chalkboard-teacher" label="LMS Studio" />
             <SidebarItem id="consultations" icon="fa-handshake" label="Consultations" />
             <SidebarItem id="blogs" icon="fa-newspaper" label="Blog Portal" />
@@ -170,6 +174,8 @@ function AdminDashboard() {
                 {activeTab === 'leads' && `${leadFilter} Analytics`}
                 {activeTab === 'lms' && 'LMS Studio'}
                 {activeTab === 'consultations' && 'Consultation Requests'}
+                {activeTab === 'students' && 'Registered Students'}
+                {activeTab === 'orders' && 'Course Purchases'}
                 {activeTab === 'blogs' && 'Content Studio'}
                 {activeTab === 'jobs' && 'Team Hiring'}
                 {activeTab === 'coupons' && 'Coupon Management'}
@@ -308,6 +314,8 @@ function AdminDashboard() {
 
           {activeTab === 'lms' && <AdminCourses />}
           {activeTab === 'consultations' && <AdminConsultations />}
+          {activeTab === 'students' && <AdminStudents />}
+          {activeTab === 'orders' && <AdminOrders />}
           {activeTab === 'blogs' && <AdminBlogs />}
           {activeTab === 'jobs' && <AdminJobs />}
           {activeTab === 'coupons' && <AdminCoupons />}

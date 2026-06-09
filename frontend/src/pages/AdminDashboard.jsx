@@ -20,13 +20,13 @@ function AdminDashboard() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const navigate = useNavigate();
   const [stats, setStats] = useState({
-    totalLeads: { value: '0', delta: '0%' },
+    totalLeadsDetail: { value: '0', delta: '0%' },
     activeBlogs: { value: '0', delta: '0%' },
     expertNetwork: { value: '0', delta: '0%' },
     globalReach: { value: '0', delta: '0%' },
-    courseLeads: { value: '0', delta: '0%' },
-    consultingLeads: { value: '0', delta: '0%' },
-    webinarLeads: { value: '0', delta: '0%' }
+    recordedCoursePurchases: 0,
+    paidConsultations: 0,
+    liveCourseEnquiries: 0
   });
 
   const fetchStats = async () => {
@@ -212,10 +212,10 @@ function AdminDashboard() {
                 <div className="stat-card stat-card--violet">
                   <div className="sc-top">
                     <div className="sc-icon sc-icon--violet"><i className="fas fa-graduation-cap"></i></div>
-                    <div className="sc-delta">{stats.courseLeads.delta}</div>
+                    <div className="sc-delta">{stats.courseLeads?.delta || '0%'}</div>
                   </div>
-                  <div className="sc-value">{stats.courseLeads.value}</div>
-                  <div className="sc-label">Course Leads</div>
+                  <div className="sc-value">{stats.recordedCoursePurchases || stats.courseLeads?.value || 0}</div>
+                  <div className="sc-label">Course Purchases</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
 
@@ -223,10 +223,10 @@ function AdminDashboard() {
                 <div className="stat-card stat-card--cyan">
                   <div className="sc-top">
                     <div className="sc-icon sc-icon--cyan"><i className="fas fa-user-md"></i></div>
-                    <div className="sc-delta">{stats.consultingLeads.delta}</div>
+                    <div className="sc-delta">{stats.consultingLeads?.delta || '0%'}</div>
                   </div>
-                  <div className="sc-value">{stats.consultingLeads.value}</div>
-                  <div className="sc-label">Consulting Leads</div>
+                  <div className="sc-value">{stats.paidConsultations || stats.consultingLeads?.value || 0}</div>
+                  <div className="sc-label">Paid Consultations</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
 
@@ -234,10 +234,10 @@ function AdminDashboard() {
                 <div className="stat-card stat-card--amber">
                   <div className="sc-top">
                     <div className="sc-icon sc-icon--amber"><i className="fas fa-video"></i></div>
-                    <div className="sc-delta">{stats.webinarLeads.delta}</div>
+                    <div className="sc-delta">{stats.webinarLeads?.delta || '0%'}</div>
                   </div>
-                  <div className="sc-value">{stats.webinarLeads.value}</div>
-                  <div className="sc-label">Webinar Leads</div>
+                  <div className="sc-value">{stats.liveCourseEnquiries || stats.webinarLeads?.value || 0}</div>
+                  <div className="sc-label">Live Enquiries</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>
 
@@ -245,9 +245,9 @@ function AdminDashboard() {
                 <div className="stat-card stat-card--indigo">
                   <div className="sc-top">
                     <div className="sc-icon sc-icon--indigo"><i className="fas fa-users"></i></div>
-                    <div className="sc-delta">{stats.totalLeads.delta}</div>
+                    <div className="sc-delta">{stats.totalLeadsDetail?.delta || stats.totalLeads?.delta || '0%'}</div>
                   </div>
-                  <div className="sc-value">{stats.totalLeads.value}</div>
+                  <div className="sc-value">{stats.totalLeadsDetail?.value || stats.totalLeads?.value || stats.totalLeads || 0}</div>
                   <div className="sc-label">Total Leads</div>
                   <div className="sc-bar"><div className="sc-bar-fill"></div></div>
                 </div>

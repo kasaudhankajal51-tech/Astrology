@@ -2560,6 +2560,11 @@ function Home() {
             margin: 0 auto;
             display: inline-flex !important;
           }
+          .about-part-section .mystic-btn-outline {
+            width: max-content !important;
+            padding: 0.75rem 2.5rem !important;
+            font-size: 0.95rem !important;
+          }
           .experience-badge { width: 140px; padding: 12px; }
           .experience-badge h4 { font-size: 1.6rem; }
           .moon-img { height: 160px; }

@@ -72,6 +72,7 @@ function Header() {
   const primaryNavLinks = authState.isStudent
     ? [
         { label: 'HOME', to: '/', match: '/' },
+        { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
         { label: 'MY COURSES', to: '/dashboard', match: '/student/course' },
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },

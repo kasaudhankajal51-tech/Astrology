@@ -241,7 +241,7 @@ const AstrologyCourses = ({ onEnroll }) => {
         .cg { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
         .cc { background: var(--card-color); border-radius: 20px; overflow: hidden; border: 1px solid var(--glass-border); display: flex; flex-direction: column; transition: transform .3s ease; cursor: pointer; box-shadow: var(--premium-shadow); }
         .cc:hover { transform: translateY(-8px); }
-        .ci { width: 100%; height: 160px; display: block; position: relative; overflow: hidden; }
+        .ci { width: 100%; height: 170px; display: block; position: relative; overflow: hidden; }
         .ci svg { width: 100%; height: 100%; display: block; }
         .badge-discount { position: absolute; top: 10px; left: 10px; background: var(--primary-color); color: #fff; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; padding: 4px 10px; border-radius: 20px; font-family: var(--font-sans); font-weight: 600; z-index: 3; }
         .ico { position: absolute; bottom: -20px; left: 50%; transform: translateX(-50%); width: 44px; height: 44px; background: var(--card-color); border: 2px solid var(--accent-color); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--primary-color); z-index: 2; font-family: var(--font-serif); }
@@ -272,10 +272,13 @@ const AstrologyCourses = ({ onEnroll }) => {
         @media (max-width: 767px) {
           .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
         }
+        @media (max-width: 575px) {
+          .cc { max-width: 360px; margin-left: auto; margin-right: auto; }
+          .ci { height: 160px !important; }
+        }
         @media (max-width: 480px) {
           .aw { padding: 3rem 1rem; }
           .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
-          .cc { max-width: 100%; }
           .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
           .ctitle { text-align: left; font-size: 1.6rem; margin-bottom: 0.6rem; }

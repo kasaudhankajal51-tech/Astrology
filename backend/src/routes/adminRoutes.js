@@ -1,6 +1,6 @@
 import express from 'express';
 import multer from 'multer';
-import { getDashboardStats, getConsultations, updateConsultation } from '../controllers/adminController.js';
+import { getDashboardStats, getConsultations, updateConsultation, getAdminUsers, getAdminOrders } from '../controllers/adminController.js';
 import { adminAuth } from '../middleware/authMiddleware.js';
 import {
   createCourse,
@@ -40,6 +40,10 @@ const videoUpload = multer({
 });
 
 router.get('/stats', adminAuth, getDashboardStats);
+
+// User & Order Management (Admin)
+router.get('/users', adminAuth, getAdminUsers);
+router.get('/orders', adminAuth, getAdminOrders);
 
 // Course Management (Admin)
 router.post('/courses', adminAuth, createCourse);

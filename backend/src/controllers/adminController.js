@@ -2,6 +2,8 @@ import Lead from '../models/leadModel.js';
 import Blog from '../models/Blog.js';
 import JobApplication from '../models/JobApplication.js';
 import Newsletter from '../models/Newsletter.js';
+import User from '../models/User.js';
+import Order from '../models/Order.js';
 import Consultation from '../models/Consultation.js';
 import asyncHandler from 'express-async-handler';
 
@@ -94,4 +96,21 @@ export const updateConsultation = asyncHandler(async (req, res) => {
   await consultation.save();
 
   res.json({ success: true, consultation });
+});
+
+// @desc    Get all users (students)
+// @route   GET /api/admin/users
+export const getAdminUsers = asyncHandler(async (req, res) => {
+  const users = await User.find({ role: 'student' }).sort('-createdAt');
+  res.json({ success: true, users });
+});
+
+// @desc    Get all orders (purchases)
+// @route   GET /api/admin/orders
+export const getAdminOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find()
+    .populate('userId', 'name email mobile')
+    .populate('courseId', 'title')
+    .sort('-createdAt');
+  res.json({ success: true, orders });
 });

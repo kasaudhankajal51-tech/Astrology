@@ -31,12 +31,10 @@ const DIGIT_MAP = {
 const pts = (arr) => arr.map(([x, y]) => `${x},${y}`).join(" ");
 const SEGS = Object.fromEntries(Object.entries(SEG_POINTS).map(([k, v]) => [k, pts(v)]));
 
-const ON_COLOR  = "#ffaa22";
-const OFF_COLOR = "rgba(255,90,0,0.09)";
+const ON_COLOR  = "#8B4A1E";
+const OFF_COLOR = "rgba(139,74,30,0.12)";
 const ON_FILTER =
-  "drop-shadow(0 0 2px rgba(255,180,30,1)) " +
-  "drop-shadow(0 0 6px rgba(255,130,0,0.85)) " +
-  "drop-shadow(0 0 14px rgba(255,80,0,0.55))";
+  "drop-shadow(0 1px 1px rgba(42,15,2,0.18))";
 
 function Digit({ char }) {
   const on = new Set(DIGIT_MAP[char] || []);
@@ -59,9 +57,9 @@ function Digit({ char }) {
 
 function SegColon({ visible }) {
   const DW = 3.2, DH = 7, CX = 6;
-  const color = visible ? "#ff8c00" : "rgba(255,90,0,0.09)";
+  const color = visible ? "#8B4A1E" : "rgba(139,74,30,0.12)";
   const glow  = visible
-    ? "drop-shadow(0 0 3px rgba(255,160,0,0.95)) drop-shadow(0 0 8px rgba(255,90,0,0.7))"
+    ? "drop-shadow(0 1px 1px rgba(42,15,2,0.18))"
     : "none";
   return (
     <svg width={12} height={H} viewBox={`0 0 12 ${H}`} style={{ overflow: "visible", display: "block" }}>
@@ -72,28 +70,29 @@ function SegColon({ visible }) {
 }
 
 const ss = {
-  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "5px", marginBottom: "25px" },
+  timerRoot: { display: "flex", flexDirection: "column", alignItems: "center", gap: 5, padding: "2px 0", marginBottom: "14px", width: "100%" },
   timerLabel: {
-    margin: 0, fontSize: 11, fontWeight: 800,
-    color: "#C8832A", letterSpacing: "2px", textTransform: "uppercase",
+    margin: 0, fontSize: 11, fontWeight: 900,
+    color: "#FFFFFF", letterSpacing: "0.8px", textTransform: "uppercase",
+    textShadow: "0 1px 3px rgba(0,0,0,0.55)",
   },
   timerBox: {
-    background: "rgba(10, 10, 10, 0.9)", padding: "12px 24px",
-    borderRadius: 16, border: "1.5px solid rgba(255,140,0,0.3)",
-    boxShadow: "inset 0 2px 15px rgba(0,0,0,0.8), 0 0 25px rgba(255,100,0,0.15)",
+    width: "100%",
+    background: "linear-gradient(180deg, #FFF8ED 0%, #F7E7D4 100%)", padding: "9px 12px",
+    borderRadius: 12, border: "1.5px solid rgba(200,131,42,0.42)",
+    boxShadow: "0 12px 24px rgba(42,15,2,0.22), inset 0 1px 0 rgba(255,255,255,0.8)",
     position: "relative", overflow: "hidden",
-    backdropFilter: "blur(8px)",
   },
   scanlines: {
     position: "absolute", inset: 0, borderRadius: 10,
-    background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.055) 3px, rgba(0,0,0,0.055) 4px)",
+    background: "linear-gradient(90deg, rgba(200,131,42,0.08), transparent 42%, rgba(139,74,30,0.08))",
     pointerEvents: "none", zIndex: 2,
   },
-  timerInner: { display: "flex", alignItems: "center", gap: 8, position: "relative", zIndex: 1 },
+  timerInner: { display: "flex", alignItems: "center", justifyContent: "center", gap: 8, position: "relative", zIndex: 1 },
   segLabel: {
-    fontSize: 10, fontWeight: 700,
-    color: "rgba(255,255,255,0.45)", letterSpacing: "1px",
-    textTransform: "uppercase", fontFamily: "'Poppins', sans-serif",
+    fontSize: 11, fontWeight: 900,
+    color: "#5C3D26", letterSpacing: "0.6px",
+    textTransform: "uppercase", fontFamily: "var(--font-body, sans-serif)",
   },
 };
 

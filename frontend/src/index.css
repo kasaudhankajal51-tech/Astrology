@@ -21,8 +21,8 @@
   --site-accent-dark: #8b4a1e;
   --site-accent-soft: rgba(200, 131, 42, 0.09);
 
-  --font-heading: 'Playfair Display', Georgia, serif;
-  --font-body: var(--font-sans, 'Inter', 'Outfit', Arial, sans-serif);
+  --font-heading: 'fh-regular', sans-serif;
+  --font-body: 'Be Vietnam', 'Be Vietnam Pro', sans-serif;
 
   --page-pad-x: clamp(1rem, 3.2vw, 3rem);
   --section-pad-y: clamp(2.75rem, 6vw, 5rem);
@@ -46,9 +46,133 @@ html, body {
   padding: 0;
   width: 100%;
   overflow-x: hidden;
-  font-family: 'Inter', 'Outfit', sans-serif;
+  font-family: var(--font-body);
   background-color: var(--astro-dark);
   color: white;
+  text-size-adjust: 100%;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  min-height: 100vh;
+  overflow-x: clip;
+}
+
+img,
+video,
+iframe,
+canvas,
+svg {
+  max-width: 100%;
+}
+
+.student-dashboard-preview {
+  --student-heading-font: var(--font-heading);
+  --student-body-font: var(--font-body);
+  font-family: var(--student-body-font) !important;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+.site-title,
+.section-title,
+.card-title,
+.hero-h1,
+.tarot-title {
+  font-family: var(--font-heading) !important;
+  letter-spacing: 0 !important;
+}
+
+p,
+button,
+a,
+input,
+textarea,
+select,
+label,
+.site-copy,
+.site-subtitle,
+.site-btn,
+.btn,
+.form-control,
+.form-select {
+  font-family: var(--font-body) !important;
+  letter-spacing: 0 !important;
+}
+
+body {
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1 {
+  font-size: clamp(2.25rem, 4.5vw, 3.5rem) !important;
+  line-height: 1.12 !important;
+}
+
+h2,
+.site-title,
+.section-title {
+  font-size: clamp(1.875rem, 3vw, 2.5rem) !important;
+  line-height: 1.18 !important;
+}
+
+h3,
+.card-title {
+  font-size: clamp(1.35rem, 2vw, 1.875rem) !important;
+  line-height: 1.22 !important;
+}
+
+h4 {
+  font-size: clamp(1.15rem, 1.6vw, 1.5rem) !important;
+  line-height: 1.28 !important;
+}
+
+h5,
+h6 {
+  font-size: 1rem !important;
+  line-height: 1.35 !important;
+}
+
+p {
+  font-size: 1rem !important;
+  line-height: 1.65 !important;
+}
+
+button,
+.btn,
+.site-btn {
+  font-size: 0.95rem !important;
+  line-height: 1.2 !important;
+}
+
+.student-dashboard-preview h1,
+.student-dashboard-preview h2,
+.student-dashboard-preview h3,
+.student-dashboard-preview h4,
+.student-dashboard-preview h5,
+.student-dashboard-preview h6 {
+  color: inherit !important;
+  font-family: var(--student-heading-font) !important;
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  line-height: inherit !important;
+  margin: 0 !important;
+}
+
+.student-dashboard-preview p,
+.student-dashboard-preview a,
+.student-dashboard-preview button,
+.student-dashboard-preview input,
+.student-dashboard-preview label,
+.student-dashboard-preview span,
+.student-dashboard-preview dt,
+.student-dashboard-preview dd {
+  font-family: var(--student-body-font) !important;
 }
 
 .glass-card {

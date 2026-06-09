@@ -2,8 +2,11 @@ import nodemailer from 'nodemailer';
 import dotenv from 'dotenv';
 dotenv.config();
 
+const getEmailFrom = () =>
+  process.env.EMAIL_FROM || `"DS Institute" <${process.env.EMAIL_USER}>`;
+
 const transporter = nodemailer.createTransport({
-  service: 'gmail', // You can change this based on your provider
+  service: 'gmail',
   auth: {
     user: process.env.EMAIL_USER,
     pass: process.env.EMAIL_PASS,
@@ -12,7 +15,7 @@ const transporter = nodemailer.createTransport({
 
 export const sendCredentialsEmail = async (studentEmail, password, studentName, courseTitle) => {
   const mailOptions = {
-    from: `"Cosmic Light Academy" <${process.env.EMAIL_USER}>`,
+    from: getEmailFrom(),
     to: studentEmail,
     subject: `Welcome to Cosmic Light Academy - Your Login Credentials`,
     html: `
@@ -44,6 +47,36 @@ export const sendCredentialsEmail = async (studentEmail, password, studentName, 
   }
 };
 
+export const sendPaidLeadAdminEmail = async ({
+  customerName,
+  phone,
+  email,
+  product,
+  amount,
+  paymentId,
+  orderId,
+}) => {
+  const timestamp = new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' });
+  await sendAdminNotificationEmail(
+    `Paid booking: ${product}`,
+    `
+    <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
+      <h2 style="color: #6b4a44; margin-top: 0;">Payment received</h2>
+      <table style="width: 100%; border-collapse: collapse;">
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Customer:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${customerName}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Phone:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${phone || 'N/A'}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${email}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Product/Service:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${product}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Amount:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">₹${amount ?? 'N/A'}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Payment ID:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${paymentId || 'N/A'}</td></tr>
+        <tr><td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Order ID:</strong></td><td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${orderId || 'N/A'}</td></tr>
+        <tr><td style="padding: 8px 0;"><strong>Timestamp:</strong></td><td style="padding: 8px 0;">${timestamp}</td></tr>
+      </table>
+    </div>
+    `
+  );
+};
+
 export const sendAdminNotificationEmail = async (subject, htmlContent) => {
   if (!process.env.ADMIN_EMAIL) {
     console.log('ADMIN_EMAIL not configured, skipping admin notification.');
@@ -51,7 +84,7 @@ export const sendAdminNotificationEmail = async (subject, htmlContent) => {
   }
   
   const mailOptions = {
-    from: `"DS Astro System" <${process.env.EMAIL_USER}>`,
+    from: getEmailFrom(),
     to: process.env.ADMIN_EMAIL,
     subject: subject,
     html: htmlContent,
@@ -67,7 +100,7 @@ export const sendAdminNotificationEmail = async (subject, htmlContent) => {
 
 export const sendPasswordResetEmail = async (studentEmail, studentName, otp) => {
   const mailOptions = {
-    from: `"Cosmic Light Academy" <${process.env.EMAIL_USER}>`,
+    from: getEmailFrom(),
     to: studentEmail,
     subject: `Password Reset Request - Cosmic Light Academy`,
     html: `

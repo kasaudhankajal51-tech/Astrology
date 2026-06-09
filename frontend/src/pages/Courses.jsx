@@ -20,19 +20,22 @@ function Courses({ mode = 'all' }) {
         
         if (data.success) {
           // Map DB fields to UI fields
-          const mappedCourses = data.courses.map(course => ({
+          const mappedCourses = data.courses.map(course => {
+            const courseType = course.courseType || 'Live';
+            return ({
             id: course._id,
             title: course.title,
             shortDesc: course.description,
             image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
             duration: `${course.validityDays} Days`,
-            schedule: course.courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
+            schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
             level: 'Professional',
             category: 'Astrology', // Defaulting since we didn't add category to DB yet
             price: course.price,
-            courseType: course.courseType || 'Live',
-            isPremium: true
-          }));
+            courseType,
+            isPremium: courseType !== 'Live' && Number(course.price) > 0
+          });
+          });
           const staticCourses = coursesData.map((course) => ({ ...course, courseType: 'Recorded', isPremium: false }));
           setDbCourses([...staticCourses, ...mappedCourses]);
         }

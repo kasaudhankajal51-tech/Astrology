@@ -1,135 +1,82 @@
 import Lead from '../models/leadModel.js';
 import asyncHandler from 'express-async-handler';
-import nodemailer from 'nodemailer';
 import exceljs from 'exceljs';
 import logger from '../config/logger.js';
 import Joi from 'joi';
 import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
+import { sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
 
-// Validation Schema
 const leadSchema = Joi.object({
   name: Joi.string().required().min(2).max(100),
   email: Joi.string().email().required(),
   phone: Joi.string().min(10).max(15).required(),
   type: Joi.string().required(),
   courseName: Joi.string().allow('', null),
+  courseType: Joi.string().allow('', null),
+  courseId: Joi.string().allow('', null),
   consultationType: Joi.string().allow('', null),
+  leadType: Joi.string().allow('', null),
+  status: Joi.string().allow('', null),
+  paymentStatus: Joi.string().allow('', null),
   dob: Joi.string().allow('', null),
   tob: Joi.string().allow('', null),
   pob: Joi.string().allow('', null),
-  message: Joi.string().allow('', null)
+  message: Joi.string().allow('', null),
+  amount: Joi.number().allow(null),
 }).unknown(true);
 
-const sendConfirmationEmail = async (lead) => {
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS,
-    },
-  });
+const isPaidLeadType = (type, amount) =>
+  type === 'Webinar' || type === 'Course' || type === 'Consultation' || Boolean(amount);
 
-  const isWebinar = lead.type === 'Webinar' || lead.type === 'Course';
-  const subjectText = isWebinar ? 'Booking Confirmed: Mega Astrology Webinar' : 'Consultation Request Received';
-  const headerText = isWebinar ? 'Registration Confirmed!' : 'Request Received!';
-  const bodyText = isWebinar 
-    ? `<p>Your seat for the <strong>Mega Astrology Webinar</strong> has been successfully reserved. We are excited to guide you through your cosmic journey!</p>`
-    : `<p>Your consultation request is received. Thank you for reaching out to us, our team will get back to you shortly to confirm your slot.</p>`;
-  const detailsHtml = isWebinar 
-    ? `
-      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 0;"><strong>Webinar Details:</strong></p>
-        <ul style="padding-left: 20px; margin: 10px 0;">
-          <li><strong>Event:</strong> 2-Day Mega Astrology Webinar</li>
-          <li><strong>Time:</strong> 7:00 PM - 9:00 PM IST</li>
-          <li><strong>Transaction ID:</strong> ${lead.transactionId || 'N/A'}</li>
-        </ul>
-      </div>
-      <p>A calendar invitation and the Zoom joining link will be sent to you 24 hours before the event starts.</p>
-    `
-    : `
-      <div style="background: #f9f9f9; padding: 20px; border-radius: 8px; margin: 20px 0;">
-        <p style="margin: 0;"><strong>Your Request Details:</strong></p>
-        <ul style="padding-left: 20px; margin: 10px 0;">
-          <li><strong>Type:</strong> ${lead.type}</li>
-          <li><strong>Consultation:</strong> ${lead.consultationType || 'N/A'}</li>
-        </ul>
-      </div>
-    `;
+const isLiveCourseEnquiry = (body) =>
+  body.type === 'Course-Inquiry' ||
+  body.leadType === 'LIVE COURSE LEAD' ||
+  body.courseType === 'Live';
 
-  const mailOptions = {
-    from: `"DS Astro Institute Support" <${process.env.EMAIL_USER}>`,
-    to: lead.email,
-    subject: subjectText,
-    html: `
-      <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: auto; border: 1px solid #eee; border-radius: 10px; overflow: hidden;">
-        <div style="background: #6b4a44; color: #ffffff; padding: 30px; text-align: center;">
-          <h1 style="margin: 0; font-size: 24px;">${headerText}</h1>
-        </div>
-        <div style="padding: 30px; color: #333; line-height: 1.6;">
-          <p>Namaste <strong>${lead.name}</strong>,</p>
-          ${bodyText}
-          ${detailsHtml}
-          
-          <div style="text-align: center; margin-top: 30px;">
-            <a href="https://dsastroinstitute.com" style="background: #6b4a44; color: #fff; padding: 12px 25px; text-decoration: none; border-radius: 5px; font-weight: bold;">Visit Our Community</a>
-          </div>
-        </div>
-        <div style="background: #f4f4f4; padding: 20px; text-align: center; font-size: 12px; color: #777;">
-          <p>© ${new Date().getFullYear()} DS Astro Institute. All Rights Reserved.</p>
-          <p>If you have any questions, reply to this email.</p>
-        </div>
-      </div>
-    `,
+const createRazorpayOrderForLead = async (lead, amount) => {
+  const options = {
+    amount: Math.round(amount * 100),
+    currency: 'INR',
+    receipt: `receipt_${lead._id}`,
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    logger.info(`Confirmation email sent to: ${lead.email}`);
-    
-    // Admin Notification
-    if (process.env.ADMIN_EMAIL) {
-      const adminMailOptions = {
-        from: `"DS Astro System" <${process.env.EMAIL_USER}>`,
-        to: process.env.ADMIN_EMAIL,
-        subject: `New Lead/Booking Alert: ${lead.name}`,
-        html: `
-          <div style="font-family: Arial, sans-serif; padding: 20px; border: 1px solid #eee; border-radius: 8px; background: #f9f9f9;">
-            <h2 style="color: #6b4a44; margin-top: 0;">New Booking/Lead Received! 🎉</h2>
-            <table style="width: 100%; border-collapse: collapse;">
-              <tr>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Name:</strong></td>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.name}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Phone:</strong></td>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.phone}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Email:</strong></td>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.email}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Service:</strong></td>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.type} ${lead.consultationType ? '- ' + lead.consultationType : (lead.courseName ? '- ' + lead.courseName : '')}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;"><strong>Preferred date:</strong></td>
-                <td style="padding: 8px 0; border-bottom: 1px solid #ddd;">${lead.preferredDate || 'Not specified'}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0;"><strong>Payment Status:</strong></td>
-                <td style="padding: 8px 0;">${lead.paymentStatus || 'Pending'}</td>
-              </tr>
-            </table>
-          </div>
-        `
-      };
-      await transporter.sendMail(adminMailOptions);
-      logger.info(`Admin notification email sent to: ${process.env.ADMIN_EMAIL}`);
+    const razorpay = createRazorpayInstance();
+    const order = await razorpay.orders.create(options);
+    const { keyId } = getRazorpayConfig();
+
+    lead.orderId = order.id;
+    lead.paymentStatus = 'PENDING';
+    if (lead.type === 'Consultation') {
+      lead.status = 'Consultation Lead - Not Paid';
+    } else if (lead.type === 'Webinar') {
+      lead.status = 'Webinar Lead - Not Paid';
     }
+    await lead.save();
+
+    return {
+      orderId: order.id,
+      amount: order.amount,
+      currency: order.currency,
+      keyId,
+    };
   } catch (err) {
-    logger.error('Email sending failed: ' + err.message);
+    if (process.env.NODE_ENV === 'development') {
+      logger.warn('Razorpay keys missing/invalid. Falling back to mock order for testing.');
+      const mockOrderId = `order_mock_${Date.now()}`;
+      lead.orderId = mockOrderId;
+      lead.paymentStatus = 'PENDING';
+      await lead.save();
+      return {
+        orderId: mockOrderId,
+        amount: options.amount,
+        currency: options.currency,
+        keyId: 'rzp_test_mock',
+        isMock: true,
+      };
+    }
+    logger.error('Razorpay Order Creation Failed: ' + err.message);
+    throw new Error('Payment gateway error. Please try again.');
   }
 };
 
@@ -138,75 +85,69 @@ const sendConfirmationEmail = async (lead) => {
 export const createLead = asyncHandler(async (req, res) => {
   const { error } = leadSchema.validate(req.body);
   if (error) {
-    console.log('Lead Validation Error:', error.details[0].message);
     res.status(400);
     throw new Error(error.details[0].message);
   }
 
-  const { name, email, phone, type, courseName, consultationType, dob, tob, pob, message, amount } = req.body;
+  const {
+    name, email, phone, type, courseName, courseType, courseId,
+    consultationType, dob, tob, pob, message, amount,
+    leadType, status, paymentStatus,
+  } = req.body;
 
-  // 1. Create Lead in Database
-  const lead = await Lead.create({
-    name, email, phone, type, courseName, consultationType, dob, tob, pob, message,
-    paymentStatus: (type === 'Webinar' || type === 'Course' || amount) ? 'Pending' : 'Completed'
-  });
+  const requiresPayment = isPaidLeadType(type, amount);
+  const liveEnquiry = isLiveCourseEnquiry(req.body);
 
-  // 2. Only Create Razorpay Order for Paid Types
-  if (type === 'Webinar' || type === 'Course' || amount) {
-    const options = {
-      amount: amount ? amount * 100 : 99 * 100, // Amount in paise
-      currency: "INR",
-      receipt: `receipt_${lead._id}`,
-    };
+  const leadData = {
+    name,
+    email,
+    phone,
+    type,
+    courseName,
+    courseType,
+    courseId: courseId || undefined,
+    consultationType,
+    dob,
+    tob,
+    pob,
+    message,
+    amount: amount || undefined,
+    leadType: leadType || (liveEnquiry ? 'LIVE COURSE LEAD' : undefined),
+    status: status || (liveEnquiry ? 'ENQUIRY RECEIVED' : requiresPayment ? 'Pending' : 'Pending'),
+    paymentStatus: paymentStatus || (liveEnquiry ? 'NOT REQUIRED' : requiresPayment ? 'PENDING' : 'NOT REQUIRED'),
+  };
 
-    try {
-      const razorpay = createRazorpayInstance();
-      const order = await razorpay.orders.create(options);
-      const { keyId } = getRazorpayConfig();
-      
-      return res.status(201).json({
-        success: true,
-        orderId: order.id,
-        amount: order.amount,
-        currency: order.currency,
-        keyId,
-        leadId: lead._id,
-        name: lead.name,
-        email: lead.email,
-        phone: lead.phone
-      });
-    } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
-        logger.warn('⚠️ Razorpay keys missing/invalid. Falling back to mock order for testing.');
-        return res.status(201).json({
-          success: true,
-          orderId: `order_mock_${Date.now()}`,
-          amount: options.amount,
-          currency: options.currency,
-          keyId: 'rzp_test_mock',
-          leadId: lead._id,
-          name,
-          email,
-          phone,
-          isMock: true
-        });
-      }
-      logger.error('Razorpay Order Creation Failed: ' + err.message);
-      res.status(500);
-      throw new Error('Payment gateway error. Please try again.');
+  const lead = await Lead.create(leadData);
+
+  if (requiresPayment && !liveEnquiry) {
+    const payableAmount = amount || (type === 'Webinar' ? 99 : 0);
+    if (!payableAmount) {
+      res.status(400);
+      throw new Error('Amount is required for paid lead types');
     }
-  }
 
-  // 3. For Non-paid Types (Contact, Consultation etc.)
-  sendConfirmationEmail(lead);
+    const orderData = await createRazorpayOrderForLead(lead, payableAmount);
+
+    return res.status(201).json({
+      success: true,
+      leadId: lead._id,
+      orderId: orderData.orderId,
+      amount: orderData.amount,
+      currency: orderData.currency,
+      keyId: orderData.keyId,
+      name: lead.name,
+      email: lead.email,
+      phone: lead.phone,
+      ...(orderData.isMock ? { isMock: true } : {}),
+    });
+  }
 
   res.status(201).json({
     success: true,
     message: 'Request received successfully. Our team will contact you soon.',
-    leadId: lead._id
+    leadId: lead._id,
   });
 });
-
 
 // @desc    Verify Razorpay Payment
 // @route   POST /api/leads/verify-payment
@@ -216,29 +157,106 @@ export const verifyPayment = asyncHandler(async (req, res) => {
 
   const crypto = await import('crypto');
   const hmac = crypto.createHmac('sha256', keySecret);
-  hmac.update(razorpay_order_id + "|" + razorpay_payment_id);
+  hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
   const generated_signature = hmac.digest('hex');
 
   const isMockPayment = process.env.NODE_ENV === 'development' && razorpay_signature === 'mock_signature';
 
-  if (generated_signature === razorpay_signature || isMockPayment) {
-    const lead = await Lead.findById(leadId);
-    if (!lead) {
-      res.status(404);
-      throw new Error('Lead not found');
-    }
-
-    lead.paymentStatus = 'Completed';
-    lead.transactionId = razorpay_payment_id;
-    await lead.save();
-
-    sendConfirmationEmail(lead);
-
-    res.json({ success: true, message: 'Payment verified successfully' });
-  } else {
+  if (generated_signature !== razorpay_signature && !isMockPayment) {
     res.status(400);
     throw new Error('Invalid payment signature');
   }
+
+  const lead = await Lead.findById(leadId);
+  if (!lead) {
+    res.status(404);
+    throw new Error('Lead not found');
+  }
+
+  lead.paymentStatus = 'PAID';
+  lead.transactionId = razorpay_payment_id;
+  lead.orderId = razorpay_order_id;
+
+  if (lead.type === 'Consultation') {
+    lead.status = 'Consultation Lead - Paid';
+  } else if (lead.type === 'Webinar') {
+    lead.status = 'Webinar Lead - Paid';
+  } else {
+    lead.status = 'Done';
+  }
+
+  await lead.save();
+
+  await sendPaidLeadAdminEmail({
+    customerName: lead.name,
+    phone: lead.phone,
+    email: lead.email,
+    product: lead.consultationType || lead.courseName || lead.type,
+    amount: lead.amount,
+    paymentId: razorpay_payment_id,
+    orderId: razorpay_order_id,
+  });
+
+  res.json({ success: true, message: 'Payment verified successfully' });
+});
+
+// @desc    Report failed payment
+// @route   POST /api/leads/payment-failed
+export const paymentFailed = asyncHandler(async (req, res) => {
+  const {
+    leadId,
+    orderId,
+    courseId,
+    courseName,
+    consultationType,
+    paymentFor,
+    status,
+    paymentStatus,
+    failureReason,
+    razorpayError,
+    name,
+    email,
+    phone,
+  } = req.body;
+
+  let lead = null;
+
+  if (leadId) {
+    lead = await Lead.findById(leadId);
+  } else if (orderId) {
+    lead = await Lead.findOne({ $or: [{ orderId }, { transactionId: orderId }] });
+  }
+
+  if (lead) {
+    lead.paymentStatus = paymentStatus || 'FAILED';
+    lead.status = status || lead.status;
+    if (failureReason) lead.failureReason = failureReason;
+    if (razorpayError) lead.razorpayError = razorpayError;
+    if (orderId) lead.orderId = orderId;
+    await lead.save();
+  } else if (name && email && phone) {
+    lead = await Lead.create({
+      name,
+      email,
+      phone,
+      type: paymentFor === 'Consultation' ? 'Consultation' : 'Course',
+      courseName: courseName || paymentFor,
+      courseId: courseId || undefined,
+      consultationType,
+      paymentFor,
+      status: status || 'Recorded Course Lead - Failed Payment',
+      paymentStatus: paymentStatus || 'FAILED',
+      failureReason,
+      razorpayError,
+      orderId,
+    });
+  }
+
+  res.json({
+    success: true,
+    message: 'Payment failure recorded',
+    leadId: lead?._id || null,
+  });
 });
 
 // @desc    Update lead payment status (Legacy/Webhook)
@@ -252,13 +270,9 @@ export const paymentCallback = asyncHandler(async (req, res) => {
     throw new Error('Lead not found');
   }
 
-  lead.paymentStatus = status;
+  lead.paymentStatus = status === 'Completed' ? 'PAID' : status;
   if (transactionId) lead.transactionId = transactionId;
   await lead.save();
-
-  if (status === 'Completed') {
-    sendConfirmationEmail(lead);
-  }
 
   res.json({ success: true, status: lead.paymentStatus });
 });
@@ -266,14 +280,24 @@ export const paymentCallback = asyncHandler(async (req, res) => {
 // @desc    Get all leads (Admin)
 // @route   GET /api/leads
 export const getLeads = asyncHandler(async (req, res) => {
-  const { startDate, endDate, type } = req.query;
+  const { startDate, endDate, type, status, paymentStatus, search } = req.query;
   const filter = {};
-  
+
   if (startDate && endDate) {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
-  if (type) {
-    filter.type = type;
+  if (type) filter.type = type;
+  if (status) filter.status = status;
+  if (paymentStatus) filter.paymentStatus = paymentStatus;
+  if (search) {
+    const regex = new RegExp(search, 'i');
+    filter.$or = [
+      { name: regex },
+      { email: regex },
+      { phone: regex },
+      { courseName: regex },
+      { consultationType: regex },
+    ];
   }
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });
@@ -283,15 +307,15 @@ export const getLeads = asyncHandler(async (req, res) => {
 // @desc    Export leads to Excel (Admin)
 // @route   GET /api/leads/export
 export const exportLeads = asyncHandler(async (req, res) => {
-  const { startDate, endDate, type } = req.query;
+  const { startDate, endDate, type, status, paymentStatus } = req.query;
   const filter = {};
-  
+
   if (startDate && endDate) {
     filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
   }
-  if (type) {
-    filter.type = type;
-  }
+  if (type) filter.type = type;
+  if (status) filter.status = status;
+  if (paymentStatus) filter.paymentStatus = paymentStatus;
 
   const leads = await Lead.find(filter).sort({ createdAt: -1 });
 
@@ -304,13 +328,12 @@ export const exportLeads = asyncHandler(async (req, res) => {
     { header: 'Email', key: 'email', width: 30 },
     { header: 'Phone', key: 'phone', width: 20 },
     { header: 'Type', key: 'type', width: 15 },
+    { header: 'Lead Type', key: 'leadType', width: 25 },
     { header: 'Course/Webinar', key: 'courseName', width: 25 },
     { header: 'Consultation Type', key: 'consultationType', width: 20 },
-    { header: 'DOB', key: 'dob', width: 15 },
-    { header: 'TOB', key: 'tob', width: 12 },
-    { header: 'POB', key: 'pob', width: 20 },
+    { header: 'Status', key: 'status', width: 30 },
+    { header: 'Payment Status', key: 'paymentStatus', width: 15 },
     { header: 'Message', key: 'message', width: 40 },
-    { header: 'Status', key: 'paymentStatus', width: 15 },
   ];
 
   leads.forEach((lead) => {
@@ -320,13 +343,12 @@ export const exportLeads = asyncHandler(async (req, res) => {
       email: lead.email,
       phone: lead.phone,
       type: lead.type,
+      leadType: lead.leadType || '-',
       courseName: lead.courseName || '-',
       consultationType: lead.consultationType || '-',
-      dob: lead.dob || '-',
-      tob: lead.tob || '-',
-      pob: lead.pob || '-',
-      message: lead.message || '-',
+      status: lead.status,
       paymentStatus: lead.paymentStatus,
+      message: lead.message || '-',
     });
   });
 
@@ -341,10 +363,10 @@ export const exportLeads = asyncHandler(async (req, res) => {
 // @route   PUT /api/leads/:id/status
 export const updateLeadStatus = asyncHandler(async (req, res) => {
   const { status } = req.body;
-  
+
   const lead = await Lead.findByIdAndUpdate(
-    req.params.id, 
-    { status: status }, 
+    req.params.id,
+    { status },
     { new: true, runValidators: true }
   );
 

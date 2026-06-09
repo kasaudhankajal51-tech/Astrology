@@ -4,61 +4,71 @@ import JobApplication from '../models/JobApplication.js';
 import Newsletter from '../models/Newsletter.js';
 import User from '../models/User.js';
 import Order from '../models/Order.js';
+import Consultation from '../models/Consultation.js';
 import asyncHandler from 'express-async-handler';
 
 // @desc    Get dashboard stats
 // @route   GET /api/admin/stats
 export const getDashboardStats = asyncHandler(async (req, res) => {
-  // General Counts
-  const totalLeadsCount = await Lead.countDocuments();
+  const totalLeads = await Lead.countDocuments();
+  const paidConsultations = await Lead.countDocuments({
+    $or: [
+      { status: 'Consultation Lead - Paid' },
+      { type: 'Consultation', paymentStatus: { $in: ['PAID', 'Completed'] } },
+    ],
+  });
+  const recordedCoursePurchases = await Lead.countDocuments({
+    $or: [
+      { status: 'Recorded Course Lead - Paid' },
+      { type: 'Course', paymentStatus: { $in: ['PAID', 'Completed'] } },
+    ],
+  });
+  const failedPayments = await Lead.countDocuments({
+    $or: [
+      { status: 'Recorded Course Lead - Failed Payment' },
+      { status: 'Consultation Lead - Not Paid', paymentStatus: 'FAILED' },
+      { paymentStatus: { $in: ['FAILED', 'Failed'] } },
+    ],
+  });
+  const liveCourseEnquiries = await Lead.countDocuments({
+    $or: [
+      { leadType: 'LIVE COURSE LEAD' },
+      { status: 'ENQUIRY RECEIVED' },
+      { type: 'Course-Inquiry' },
+    ],
+  });
+
+  const lastMonth = new Date();
+  lastMonth.setDate(lastMonth.getDate() - 30);
+
+  const recentLeads = await Lead.countDocuments({ createdAt: { $gte: lastMonth } });
   const activeBlogsCount = await Blog.countDocuments();
   const expertNetworkCount = await JobApplication.countDocuments();
   const newsletterSubscribersCount = await Newsletter.countDocuments();
-  
-  // Specific Category Counts
-  const courseLeads = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] } });
-  const consultingLeads = await Lead.countDocuments({ type: 'Consultation' });
-  const webinarLeads = await Lead.countDocuments({ type: 'Webinar' });
-  const contactLeads = await Lead.countDocuments({ type: 'Contact' });
-  
-  // Growth Calculation (last 30 days)
-  const lastMonth = new Date();
-  lastMonth.setDate(lastMonth.getDate() - 30);
-  
-  const recentLeads = await Lead.countDocuments({ createdAt: { $gte: lastMonth } });
   const recentBlogs = await Blog.countDocuments({ updatedAt: { $gte: lastMonth } });
   const recentJobs = await JobApplication.countDocuments({ createdAt: { $gte: lastMonth } });
   const recentSubscribers = await Newsletter.countDocuments({ createdAt: { $gte: lastMonth } });
-  
-  const recentCourses = await Lead.countDocuments({ type: { $in: ['Course', 'Course-Inquiry'] }, createdAt: { $gte: lastMonth } });
-  const recentConsulting = await Lead.countDocuments({ type: 'Consultation', createdAt: { $gte: lastMonth } });
-  const recentWebinars = await Lead.countDocuments({ type: 'Webinar', createdAt: { $gte: lastMonth } });
-  const recentContacts = await Lead.countDocuments({ type: 'Contact', createdAt: { $gte: lastMonth } });
-  
-  // Helper to format deltas
-  const getDelta = (recent, total) => total > 0 ? `+${Math.round((recent / total) * 100)}%` : "0%";
 
-  // Traffic simulation based on real volume
-  const estimatedTraffic = (totalLeadsCount * 124) + (activeBlogsCount * 450) + (expertNetworkCount * 88);
-  const trafficDelta = totalLeadsCount > 0 ? `+${Math.floor(Math.random() * 12) + 8}%` : "0%";
+  const getDelta = (recent, total) => (total > 0 ? `+${Math.round((recent / total) * 100)}%` : '0%');
+  const estimatedTraffic = (totalLeads * 124) + (activeBlogsCount * 450) + (expertNetworkCount * 88);
+  const trafficDelta = totalLeads > 0 ? `+${Math.floor(Math.random() * 12) + 8}%` : '0%';
 
   res.json({
     success: true,
     stats: {
-      totalLeads: { value: totalLeadsCount.toLocaleString(), delta: getDelta(recentLeads, totalLeadsCount) },
+      totalLeads,
+      paidConsultations,
+      recordedCoursePurchases,
+      failedPayments,
+      liveCourseEnquiries,
+      totalLeadsDetail: { value: totalLeads.toLocaleString(), delta: getDelta(recentLeads, totalLeads) },
       activeBlogs: { value: activeBlogsCount.toLocaleString(), delta: getDelta(recentBlogs, activeBlogsCount) },
       expertNetwork: { value: expertNetworkCount.toLocaleString(), delta: getDelta(recentJobs, expertNetworkCount) },
       globalReach: { value: estimatedTraffic.toLocaleString(), delta: trafficDelta },
-      courseLeads: { value: courseLeads.toLocaleString(), delta: getDelta(recentCourses, courseLeads) },
-      consultingLeads: { value: consultingLeads.toLocaleString(), delta: getDelta(recentConsulting, consultingLeads) },
-      webinarLeads: { value: webinarLeads.toLocaleString(), delta: getDelta(recentWebinars, webinarLeads) },
-      contactLeads: { value: contactLeads.toLocaleString(), delta: getDelta(recentContacts, contactLeads) },
-      newsletterSubscribers: { value: newsletterSubscribersCount.toLocaleString(), delta: getDelta(recentSubscribers, newsletterSubscribersCount) }
-    }
+      newsletterSubscribers: { value: newsletterSubscribersCount.toLocaleString(), delta: getDelta(recentSubscribers, newsletterSubscribersCount) },
+    },
   });
 });
-
-import Consultation from '../models/Consultation.js';
 
 // @desc    Get all consultations
 // @route   GET /api/admin/consultations
@@ -67,7 +77,7 @@ export const getConsultations = asyncHandler(async (req, res) => {
     .populate('courseId', 'title')
     .populate('userId', 'name email')
     .sort('-createdAt');
-    
+
   res.json({ success: true, consultations });
 });
 
@@ -76,15 +86,15 @@ export const getConsultations = asyncHandler(async (req, res) => {
 export const updateConsultation = asyncHandler(async (req, res) => {
   const { status } = req.body;
   const consultation = await Consultation.findById(req.params.id);
-  
+
   if (!consultation) {
     res.status(404);
     throw new Error('Consultation not found');
   }
-  
+
   consultation.status = status || consultation.status;
   await consultation.save();
-  
+
   res.json({ success: true, consultation });
 });
 

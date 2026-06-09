@@ -122,7 +122,7 @@ const AstroShop = () => {
 
         <div className="category-grid-v2">
           {categories.map((cat, i) => (
-            <Link key={i} to={`/shop/${cat.path}`} className="cat-card-v2" data-aos="zoom-in" data-aos-delay={i * 100}>
+            <button key={i} type="button" onClick={() => openShopifyStore({ path: `collections/${cat.path}`, storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${cat.name} collection will open from Shopify.` })} className="cat-card-v2" data-aos="zoom-in" data-aos-delay={i * 100}>
               <div className="cat-img-box">
                 <img src={cat.image} alt={cat.name} />
                 <div className="cat-overlay" style={{ background: `linear-gradient(to top, ${cat.accent}, transparent)` }}></div>
@@ -133,7 +133,7 @@ const AstroShop = () => {
                   <div className="explore-link">Explore Collection <i className="fas fa-arrow-right"></i></div>
                 </div>
               </div>
-            </Link>
+            </button>
           ))}
         </div>
 
@@ -257,6 +257,12 @@ const AstroShop = () => {
           position: relative;
           height: clamp(17rem, 28vw, 21rem);
           transition: all 0.4s ease;
+          border: 0;
+          display: block;
+          padding: 0;
+          text-align: left;
+          width: 100%;
+          cursor: pointer;
         }
 
         .cat-card-v2:hover { transform: translateY(-5px); }

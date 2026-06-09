@@ -1,5 +1,6 @@
 import asyncHandler from 'express-async-handler';
 import Coupon from '../models/Coupon.js';
+import { calculateCouponDiscount } from '../utils/couponHelper.js';
 
 // @desc    Validate coupon code
 // @route   POST /api/coupons/validate
@@ -46,9 +47,20 @@ export const validateCoupon = asyncHandler(async (req, res) => {
     }
   }
 
+  const purchaseTotal = purchaseAmount !== undefined && purchaseAmount !== null
+    ? Number(purchaseAmount)
+    : 0;
+  const { discountAmount, finalAmount } = calculateCouponDiscount(coupon, purchaseTotal);
+
   return res.status(200).json({
     success: true,
-    coupon,
+    coupon: {
+      code: coupon.code,
+      discountType: coupon.discountType,
+      discountValue: coupon.discountValue,
+      discountAmount,
+      finalAmount,
+    },
   });
 });
 

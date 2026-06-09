@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
+import { reportPaymentFailure } from '../utils/paymentUtils';
 
 
 function Payment() {
@@ -122,6 +123,16 @@ function Payment() {
     };
 
     const paymentObject = new window.Razorpay(options);
+    paymentObject.on('payment.failed', function (response) {
+      toast.error(`Payment Failed: ${response.error.description}`);
+      reportPaymentFailure({
+        leadId,
+        orderId,
+        paymentFor: 'Webinar',
+        error: response.error,
+      });
+      setIsProcessing(false);
+    });
     paymentObject.open();
   };
 

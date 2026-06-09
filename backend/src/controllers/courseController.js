@@ -9,6 +9,51 @@ import {
   uploadBunnyVideoFile
 } from '../utils/bunnyHelper.js';
 
+const formatInstructor = (instructor) => {
+  if (!instructor) return '';
+  if (typeof instructor === 'string') return instructor;
+  return {
+    name: instructor.name || '',
+    bio: instructor.bio || '',
+    image: instructor.image || '',
+  };
+};
+
+const formatCourseListItem = (course, modulesCount) => ({
+  _id: course._id,
+  title: course.title,
+  description: course.description || '',
+  thumbnailUrl: course.thumbnailUrl || '',
+  price: course.price,
+  courseType: course.courseType === 'Live' ? 'Live' : 'Recorded',
+  validityDays: course.validityDays,
+  level: course.level || 'Beginner',
+  instructor: formatInstructor(course.instructor),
+  duration: course.duration || '',
+  modulesCount: modulesCount ?? course.modulesCount ?? 0,
+  isActive: course.isActive,
+});
+
+const formatCourseDetail = (course, modulesCount) => ({
+  _id: course._id,
+  title: course.title,
+  description: course.description || '',
+  thumbnailUrl: course.thumbnailUrl || '',
+  price: course.price,
+  courseType: course.courseType === 'Live' ? 'Live' : 'Recorded',
+  validityDays: course.validityDays,
+  level: course.level || 'Beginner',
+  instructor: formatInstructor(course.instructor),
+  duration: course.duration || '',
+  modulesCount: modulesCount ?? course.modulesCount ?? 0,
+  curriculum: course.curriculum || [],
+  learningOutcomes: course.learningOutcomes || [],
+  batchDetails: course.batchDetails || null,
+  faqs: course.faqs || [],
+  testimonials: course.testimonials || [],
+  isActive: course.isActive,
+});
+
 // @desc    Get all active courses (Public)
 // @route   GET /api/courses
 export const getActiveCourses = async (req, res) => {
@@ -19,10 +64,9 @@ export const getActiveCourses = async (req, res) => {
       { $group: { _id: '$courseId', count: { $sum: 1 } } }
     ]);
     const videoCountByCourseId = new Map(videoCounts.map((item) => [String(item._id), item.count]));
-    const coursesWithVideoCounts = courses.map((course) => ({
-      ...course,
-      videoCount: videoCountByCourseId.get(String(course._id)) || 0
-    }));
+    const coursesWithVideoCounts = courses.map((course) =>
+      formatCourseListItem(course, videoCountByCourseId.get(String(course._id)) || course.modulesCount || 0)
+    );
 
     res.json({ success: true, courses: coursesWithVideoCounts });
   } catch (error) {
@@ -37,12 +81,17 @@ export const getCourseById = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
       return res.status(404).json({ success: false, message: 'Course not found (Invalid ID)' });
     }
-    const course = await Course.findById(req.params.id);
+    const course = await Course.findById(req.params.id).lean();
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
+    const videoCount = await CourseVideo.countDocuments({ courseId: course._id });
     const videos = await CourseVideo.find({ courseId: course._id }).sort({ sortOrder: 1 });
-    res.json({ success: true, course, videos });
+    res.json({
+      success: true,
+      course: formatCourseDetail(course, videoCount || course.modulesCount || 0),
+      videos,
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Server error' });
   }
@@ -52,7 +101,11 @@ export const getCourseById = async (req, res) => {
 // @route   POST /api/admin/courses
 export const createCourse = async (req, res) => {
   try {
-    const { title, description, price, validityDays, thumbnailUrl, courseType } = req.body;
+    const {
+      title, description, price, validityDays, thumbnailUrl, courseType,
+      level, instructor, duration, modulesCount, curriculum,
+      learningOutcomes, batchDetails, faqs, testimonials,
+    } = req.body;
     const normalizedCourseType = courseType === 'Live' ? 'Live' : 'Recorded';
     const course = await Course.create({
       title,
@@ -60,7 +113,16 @@ export const createCourse = async (req, res) => {
       price,
       validityDays,
       thumbnailUrl,
-      courseType: normalizedCourseType
+      courseType: normalizedCourseType,
+      level,
+      instructor,
+      duration,
+      modulesCount,
+      curriculum,
+      learningOutcomes,
+      batchDetails,
+      faqs,
+      testimonials,
     });
     res.status(201).json({ success: true, course });
   } catch (error) {

@@ -4041,6 +4041,237 @@ input:checked + .slider:before { transform: translateX(22px); }
   border: 0;
 }
 
+/* Responsive stability pass for admin, LMS, student login, and coupon screens */
+.app-shell,
+.main-area,
+.page-content,
+.dash-home,
+.leads-view,
+.admin-coupons-section,
+.lms-studio {
+  min-width: 0;
+}
+
+.page-content {
+  overflow-x: clip;
+}
+
+.topbar {
+  min-width: 0;
+}
+
+.topbar-left,
+.topbar-right,
+.topbar-title,
+.topbar-breadcrumb {
+  min-width: 0;
+}
+
+.topbar-title,
+.sb-item span,
+.sb-logo-text,
+.lms-course-modal .course-modal-title,
+.lms-video-modal .video-modal-title,
+.coupon-list-header h3 {
+  overflow-wrap: anywhere;
+}
+
+.search-bar {
+  min-width: 0;
+}
+
+.search-bar input {
+  min-width: 0;
+}
+
+.leads-table-wrap,
+.coupon-table-wrap,
+.lms-table-card,
+.settings-main {
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.coupon-form-card,
+.coupon-list-card,
+.stat-card,
+.settings-card,
+.lms-course-modal,
+.lms-video-modal,
+.admin-modal,
+.course-modal {
+  border-radius: var(--r-lg);
+}
+
+.coupon-form-card,
+.coupon-list-card {
+  padding: clamp(18px, 3vw, 28px);
+}
+
+.coupon-action-btn,
+.coupon-form-actions .btn-primary,
+.coupon-form-actions .btn-secondary {
+  border-radius: var(--r-sm);
+}
+
+.coupon-form-row.two-col,
+.form-grid,
+.lms-course-modal .form-row {
+  min-width: 0;
+}
+
+.coupon-form-row input,
+.coupon-form-row select,
+.form-group input,
+.form-group textarea,
+.lms-course-modal .form-input,
+.lms-course-modal .form-textarea,
+.lms-video-modal .form-input {
+  max-width: 100%;
+}
+
+@media (max-width: 1180px) {
+  .topbar {
+    gap: 14px;
+  }
+
+  .topbar-right {
+    flex: 1 1 320px;
+    justify-content: flex-end;
+    min-width: 0;
+  }
+
+  .search-bar {
+    width: min(100%, 320px);
+  }
+
+  .stat-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 900px) {
+  .page-content,
+  .admin-coupons-section {
+    padding: 18px;
+  }
+
+  .topbar {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .topbar-right {
+    width: 100%;
+    justify-content: stretch;
+  }
+
+  .search-bar {
+    flex: 1 1 auto;
+    width: auto;
+  }
+
+  .settings-card {
+    display: block;
+  }
+
+  .settings-sidebar {
+    width: 100%;
+    border-right: 0;
+    border-bottom: 1px solid var(--border);
+    flex-direction: row;
+    overflow-x: auto;
+    padding: 10px;
+  }
+
+  .settings-tab-btn {
+    flex: 0 0 auto;
+    padding: 10px 14px;
+    white-space: nowrap;
+  }
+
+  .settings-main {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-content,
+  .admin-coupons-section {
+    padding: 14px;
+  }
+
+  .topbar-title {
+    font-size: 20px;
+    line-height: 1.2;
+  }
+
+  .topbar-breadcrumb,
+  .search-bar {
+    display: none;
+  }
+
+  .topbar-right {
+    gap: 8px;
+    justify-content: flex-start;
+  }
+
+  .stat-grid,
+  .form-grid,
+  .coupon-form-row.two-col,
+  .lms-course-modal .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .form-group.full-width {
+    grid-column: auto;
+  }
+
+  .coupons-header {
+    align-items: stretch;
+  }
+
+  .coupon-action-btn,
+  .coupon-form-actions .btn-primary,
+  .coupon-form-actions .btn-secondary,
+  .lms-confirm-actions .btn {
+    width: 100%;
+  }
+
+  .coupon-list-header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .queued-video-item,
+  .lms-video-modal .video-item {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .queued-video-list .add-video-inline-btn,
+  .lms-course-modal .add-video-inline-btn {
+    width: 100%;
+    justify-self: stretch;
+  }
+
+  .lms-preview-modal {
+    padding: 16px;
+  }
+
+  .lms-preview-header,
+  .course-modal-header,
+  .video-modal-header,
+  .admin-modal-header {
+    align-items: flex-start;
+  }
+
+  .student-login-card .login-left,
+  .login-left {
+    width: 100%;
+  }
+}
+
 @media (max-width: 768px) {
   .lms-modal-overlay {
     align-items: flex-start;

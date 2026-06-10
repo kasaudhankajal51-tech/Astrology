@@ -75,15 +75,15 @@ function Header() {
         { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
         { label: 'MY COURSES', to: '/dashboard', match: '/student/course' },
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
-        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
-        { label: 'SHOP', to: '/shop', match: '/shop' }
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' }
+        // { label: 'SHOP', to: '/shop', match: '/shop' }
       ]
     : [
         { label: 'HOME', to: '/', match: '/' },
         { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
-        { label: 'SHOP', to: '/shop', match: '/shop' },
+        // { label: 'SHOP', to: '/shop', match: '/shop' },
         { label: 'ABOUT', to: '/about', match: '/about' }
       ];
 
@@ -871,7 +871,7 @@ function Header() {
               </li>
             ))}
 
-            <li className="nav-item">
+            {/* <li className="nav-item">
               <div className="mobile-menu-group">
                 <button
                   type="button"
@@ -891,7 +891,7 @@ function Header() {
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Bracelets</Link>
                 </div>
               </div>
-            </li>
+            </li> */}
 
             <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
 

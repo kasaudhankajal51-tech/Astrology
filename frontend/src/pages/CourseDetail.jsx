@@ -125,7 +125,7 @@ function CourseDetail() {
           name: enquiryData.name.trim(),
           phone: sanitizedPhone,
           email: enquiryData.email.trim(),
-          type: 'Course-Inquiry',
+          type: course.courseType === 'Live' ? 'Course' : 'Course-Inquiry',
           leadType: course.courseType === 'Live' ? 'LIVE COURSE LEAD' : 'COURSE ENQUIRY',
           status: 'ENQUIRY RECEIVED',
           paymentStatus: course.courseType === 'Live' ? 'NOT REQUIRED' : 'NOT PAID',

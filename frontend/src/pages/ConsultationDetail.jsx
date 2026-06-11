@@ -18,137 +18,49 @@ function ConsultationDetail() {
     message: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Data mapping (Same as Consultations.jsx)
-  const allServices = [
-    {
-      id: 'tarot',
-      title: "Tarot Card Reading",
-      desc: "Get clarity and intuitive guidance regarding love, relationships, career, marriage, and life decisions. In this session, cards are read intuitively to give accurate answers and practical guidance.",
-      price: "₹5400",
-      duration: "45 min",
-      img: "/images/tarot_thumbnail.png",
-      category: "Tarot Sessions"
-    },
-    {
-      id: 'zoom-session',
-      title: "45-minute Zoom Call Session",
-      desc: "Tarot reading helps you understand the current energies around you and gives clear guidance regarding love, career, relationships, marriage, finances, and life decisions. In this session, cards are read intuitively to give accurate answers and practical guidance. This video session is ideal if you want quick clarity about a situation or decision with a face-to-face connection.",
-      price: "₹7200",
-      duration: "45 min",
-      img: "/images/premium_tarot.png",
-      category: "Tarot Sessions"
-    },
-    {
-      id: 'phone-session',
-      title: "45-minute Phone Call Session",
-      desc: "Personalized guidance over a phone call. Cards are read intuitively to give accurate answers and practical guidance regarding your most pressing life questions. Ideal for those who prefer a private voice conversation.",
-      price: "₹5400",
-      duration: "45 min",
-      img: "/images/tarot-card.webp",
-      category: "Tarot Sessions"
-    },
-    {
-      id: 'career',
-      title: "Career Consultation",
-      desc: "Vedic astrology provides deep and accurate analysis based on your birth chart (Kundali). Get guidance about job, promotion, business, career change, government job chances, foreign opportunities, and financial growth. Understand your destiny and upcoming opportunities.",
-      price: "₹3600",
-      duration: "30-40 min",
-      img: "/images/consult_career.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'marriage',
-      title: "Marriage Consultation",
-      desc: "Get detailed prediction about marriage timing, love vs arranged marriage, delay in marriage, relationship problems, and married life stability. We analyze your birth chart to provide deep and accurate insights into your marital destiny.",
-      price: "₹2700",
-      duration: "30-40 min",
-      img: "/images/consult_marriage.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'divorce',
-      title: "Divorce Consultation",
-      desc: "Understand separation possibilities, legal stress, emotional healing, and future relationship stability. We analyze your birth chart to provide clarity during difficult transitions.",
-      price: "₹3400",
-      duration: "30-40 min",
-      img: "/images/consultations/health.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'relationship',
-      title: "Affair & Relationship",
-      desc: "Clarity regarding loyalty, hidden relationships, compatibility, love triangles, and future possibilities. Get deep insights into your emotional connections.",
-      price: "₹3400",
-      duration: "30-40 min",
-      img: "/images/consultations/love.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'financial',
-      title: "Financial Consultation",
-      desc: "Understand your money flow, losses, gains, investments, and future financial stability through planetary analysis. Vedic astrology helps in understanding your financial destiny and planetary effects on wealth.",
-      price: "₹3600",
-      duration: "30 min",
-      img: "/images/consult_finance.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'other',
-      title: "Other Concern Consultation",
-      desc: "You can ask about any specific issue such as health concerns, family problems, court cases, education, property matters, or personal life confusion. A comprehensive analysis of your birth chart to address your unique worries.",
-      price: "₹3600",
-      duration: "30 min",
-      img: "/images/consult_personal.png",
-      category: "Vedic Astrology"
-    },
-    {
-      id: 'kundali-matching',
-      title: "Kundali Matching",
-      desc: "Detailed horoscope matching for marriage including Ashtkoot Milan, Guna Milan score, Mangal dosh analysis, Dasha compatibility, and long-term married life prediction. This is a complete compatibility analysis of bride & groom charts, not just basic matching.",
-      price: "₹5100",
-      img: "/images/vedic_info.png",
-      category: "Premium Analysis"
-    },
-    {
-      id: 'time-rectification',
-      title: "Kundali Time Rectification",
-      desc: "If your birth time is not accurate, predictions may not work properly. In this session: Birth time is corrected using life events, accurate chart is prepared, and future predictions become more precise.",
-      price: "₹5100",
-      img: "/images/cosmic_blueprint.png",
-      category: "Premium Analysis"
-    },
-    {
-      id: '1-day-spell',
-      title: "1 Day Spell",
-      desc: "Focused spiritual ritual to remove negative energy, obstacles, and delays. Used for removing negativity, love & relationship healing, career blockage removal, protection from evil eye, and success.",
-      price: "₹4500",
-      img: "/images/sop.png",
-      category: "Spiritual Remedies"
-    },
-    {
-      id: '3-day-spell',
-      title: "3 Day Spell",
-      desc: "Intensive spiritual ritual performed over three days to remove deep-rooted obstacles and attract positive energies for success and healing.",
-      price: "₹7200",
-      img: "/images/roadmap_bg2.png",
-      category: "Spiritual Remedies"
-    },
-    {
-      id: '5-day-spell',
-      title: "5 Day Spell",
-      desc: "Master level spiritual rituals performed for five days for complete protection, success, and removal of significant life blockages.",
-      price: "₹11000",
-      img: "/images/advanced_info.png",
-      category: "Spiritual Remedies"
-    }
-  ];
-
-  const service = allServices.find(s => s.id === serviceId);
+  const [service, setService] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    const fetchServiceDetails = async () => {
+      try {
+        const res = await fetch(`${API_BASE}/api/consultations/categories`);
+        const data = await res.json();
+        if (data.success) {
+          let foundService = null;
+          let categoryName = "";
+          for (const cat of data.data) {
+            const card = cat.cards.find(c => c.id === serviceId);
+            if (card) {
+              foundService = card;
+              categoryName = cat.name;
+              break;
+            }
+          }
+          if (foundService) {
+            setService({ ...foundService, category: categoryName });
+          }
+        }
+      } catch (err) {
+        console.error('Failed to fetch service details:', err);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchServiceDetails();
     window.scrollTo(0, 0);
-  }, []);
+  }, [serviceId]);
+
+  if (isLoading) {
+    return (
+      <div className="container py-5 text-center" style={{ marginTop: '120px' }}>
+        <div className="spinner-border text-primary" role="status" style={{ color: 'var(--site-accent-dark)' }}>
+          <span className="visually-hidden">Loading...</span>
+        </div>
+        <p className="mt-3">Loading details...</p>
+      </div>
+    );
+  }
 
   if (!service) {
     return (

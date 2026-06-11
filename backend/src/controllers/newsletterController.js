@@ -1,6 +1,7 @@
 import Newsletter from '../models/Newsletter.js';
 import asyncHandler from 'express-async-handler';
 import Joi from 'joi';
+import { notify } from '../utils/notify.js';
 
 // Validation Schema for subscribe
 const subscribeSchema = Joi.object({
@@ -35,6 +36,15 @@ export const subscribeNewsletter = asyncHandler(async (req, res) => {
       // Re-subscribe if previously unsubscribed
       subscriber.status = 'Subscribed';
       await subscriber.save();
+      notify({
+        title: 'Newsletter Re-subscription',
+        message: `${normalizedEmail} re-subscribed to the newsletter`,
+        type: 'newsletter',
+        icon: 'fa-envelope',
+        color: 'emerald',
+        link: 'newsletter',
+        meta: { email: normalizedEmail },
+      });
       return res.status(200).json({
         success: true,
         message: 'Thank you for re-subscribing to our newsletter!'
@@ -44,6 +54,16 @@ export const subscribeNewsletter = asyncHandler(async (req, res) => {
 
   // Create new subscriber
   await Newsletter.create({ email: normalizedEmail });
+
+  notify({
+    title: 'New Newsletter Subscriber',
+    message: `${normalizedEmail} subscribed to the newsletter`,
+    type: 'newsletter',
+    icon: 'fa-envelope',
+    color: 'emerald',
+    link: 'newsletter',
+    meta: { email: normalizedEmail },
+  });
 
   res.status(201).json({
     success: true,
@@ -68,7 +88,15 @@ export const getSubscribers = asyncHandler(async (req, res) => {
   }
 
   const subscribers = await Newsletter.find(filter).sort({ createdAt: -1 });
-  res.json({ success: true, subscribers });
+  res.json({
+    success: true,
+    subscribers: subscribers.map((sub) => ({
+      _id: sub._id,
+      email: sub.email,
+      status: sub.status,
+      subscribedAt: sub.createdAt,
+    })),
+  });
 });
 
 // @desc    Update subscriber status (Admin only)

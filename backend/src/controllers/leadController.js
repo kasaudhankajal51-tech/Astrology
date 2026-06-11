@@ -5,6 +5,7 @@ import logger from '../config/logger.js';
 import Joi from 'joi';
 import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
 import { sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
+import { notify } from '../utils/notify.js';
 
 const leadSchema = Joi.object({
   name: Joi.string().required().min(2).max(100),
@@ -21,17 +22,69 @@ const leadSchema = Joi.object({
   dob: Joi.string().allow('', null),
   tob: Joi.string().allow('', null),
   pob: Joi.string().allow('', null),
+  city: Joi.string().allow('', null),
+  age: Joi.alternatives().try(Joi.number(), Joi.string()).allow('', null),
+  interest: Joi.string().allow('', null),
   message: Joi.string().allow('', null),
   amount: Joi.number().allow(null),
 }).unknown(true);
 
-const isPaidLeadType = (type, amount) =>
-  type === 'Webinar' || type === 'Course' || (type === 'Consultation' && Boolean(amount)) || Boolean(amount);
+const getSubmittedAt = (lead) => lead.submittedAt || lead.createdAt;
 
+const buildCreatedAtRange = (startDate, endDate) => {
+  const start = new Date(startDate);
+  start.setHours(0, 0, 0, 0);
+  const end = new Date(endDate);
+  end.setHours(23, 59, 59, 999);
+  return { $gte: start, $lte: end };
+};
+
+const LEAD_SORT_MAP = {
+  newest: { submittedAt: -1, createdAt: -1 },
+  oldest: { submittedAt: 1, createdAt: 1 },
+  name_asc: { name: 1, submittedAt: -1 },
+  name_desc: { name: -1, submittedAt: -1 },
+};
+
+const resolveLeadSort = (sortKey) => LEAD_SORT_MAP[sortKey] || LEAD_SORT_MAP.newest;
+
+/** Match submittedAt when present, else legacy createdAt */
+const applySubmittedDateFilter = (filter, startDate, endDate) => {
+  if (!startDate || !endDate) return;
+  const range = buildCreatedAtRange(startDate, endDate);
+  filter.$and = [
+    ...(filter.$and || []),
+    {
+      $or: [
+        { submittedAt: range },
+        {
+          $and: [
+            { $or: [{ submittedAt: null }, { submittedAt: { $exists: false } }] },
+            { createdAt: range },
+          ],
+        },
+      ],
+    },
+  ];
+};
+
+const isPaidLeadType = (type, amount) =>
+  type === 'Webinar' || type === 'Recorded-Course' || type === 'Course-Inquiry' ||
+  (type === 'Consultation' && Boolean(amount)) || Boolean(amount);
+
+// A LIVE course enquiry has no payment — it's a manual follow-up lead.
+// Recorded-Course / Course-Inquiry types are NOT live enquiries even if they have no amount yet.
 const isLiveCourseEnquiry = (body) =>
-  body.type === 'Course-Inquiry' ||
-  body.leadType === 'LIVE COURSE LEAD' ||
-  body.courseType === 'Live';
+  (body.type === 'Course' && body.courseType !== 'Recorded') ||
+  (body.type === 'Course-Inquiry' && body.courseType === 'Live') ||
+  body.leadType === 'LIVE COURSE LEAD';
+
+/** Live + recorded enquiry forms — no Razorpay until payment keys are added */
+const isEnquiryOnlyLead = (body) =>
+  isLiveCourseEnquiry(body) ||
+  body.paymentStatus === 'NOT REQUIRED' ||
+  body.status === 'ENQUIRY RECEIVED' ||
+  body.type === 'Course-Inquiry';
 
 const createRazorpayOrderForLead = async (lead, amount) => {
   const options = {
@@ -51,6 +104,8 @@ const createRazorpayOrderForLead = async (lead, amount) => {
       lead.status = 'Consultation Lead - Not Paid';
     } else if (lead.type === 'Webinar') {
       lead.status = 'Webinar Lead - Not Paid';
+    } else if (lead.type === 'Recorded-Course' || lead.type === 'Course-Inquiry') {
+      lead.status = 'Recorded Course Lead - Payment Initiated';
     }
     await lead.save();
 
@@ -91,12 +146,14 @@ export const createLead = asyncHandler(async (req, res) => {
 
   const {
     name, email, phone, type, courseName, courseType, courseId,
-    consultationType, dob, tob, pob, message, amount,
+    consultationType, dob, tob, pob, city, age, interest, message, amount,
     leadType, status, paymentStatus,
   } = req.body;
 
   const requiresPayment = isPaidLeadType(type, amount);
   const liveEnquiry = isLiveCourseEnquiry(req.body);
+  const enquiryOnly = isEnquiryOnlyLead(req.body);
+  const recordedEnquiry = enquiryOnly && !liveEnquiry;
 
   const leadData = {
     name,
@@ -110,16 +167,57 @@ export const createLead = asyncHandler(async (req, res) => {
     dob,
     tob,
     pob,
+    city,
+    age,
+    interest,
     message,
     amount: amount || undefined,
-    leadType: leadType || (liveEnquiry ? 'LIVE COURSE LEAD' : undefined),
-    status: status || (liveEnquiry ? 'ENQUIRY RECEIVED' : requiresPayment ? 'Pending' : 'Pending'),
-    paymentStatus: paymentStatus || (liveEnquiry ? 'NOT REQUIRED' : requiresPayment ? 'PENDING' : 'NOT REQUIRED'),
+    leadType: leadType || (liveEnquiry ? 'LIVE COURSE LEAD' : recordedEnquiry ? 'RECORDED COURSE LEAD' : undefined),
+    status: status || (enquiryOnly ? 'ENQUIRY RECEIVED' : requiresPayment ? 'Pending' : 'Pending'),
+    paymentStatus: paymentStatus || (enquiryOnly ? 'NOT REQUIRED' : requiresPayment ? 'PENDING' : 'NOT REQUIRED'),
+    submittedAt: new Date(),
   };
 
   const lead = await Lead.create(leadData);
 
-  if (requiresPayment && !liveEnquiry) {
+  const notifyLabel = {
+    'Course':           'live course enquiry',
+    'Course-Inquiry':   'recorded course enquiry',
+    'Recorded-Course':  'recorded course purchase',
+    'Consultation':     'consultation request',
+    'Webinar':          'webinar registration',
+    'Contact':          'contact query',
+    'Home-Enroll':      'home enrollment',
+  };
+  const notifyIcon = {
+    'Consultation':     'fa-user-md',
+    'Webinar':          'fa-video',
+    'Contact':          'fa-address-book',
+    'Recorded-Course':  'fa-play-circle',
+    'Course-Inquiry':   'fa-play-circle',
+    'Course':           'fa-chalkboard-teacher',
+    'Home-Enroll':      'fa-home',
+  };
+  const notifyColor = {
+    'Consultation':    'cyan',
+    'Webinar':         'violet',
+    'Contact':         'amber',
+    'Recorded-Course': 'blue',
+    'Course-Inquiry':  'blue',
+    'Course':          'green',
+    'Home-Enroll':     'emerald',
+  };
+  notify({
+    title: `New ${type === 'Recorded-Course' ? 'Recorded Course' : type === 'Course-Inquiry' ? 'Recorded Course' : type} Lead`,
+    message: `${name} (${phone}) submitted a ${notifyLabel[type] || type.toLowerCase() + ' form'}`,
+    type: 'lead',
+    icon: notifyIcon[type] || 'fa-graduation-cap',
+    color: notifyColor[type] || 'blue',
+    link: 'leads',
+    meta: { leadId: lead._id, name, phone, email, type },
+  });
+
+  if (requiresPayment && !enquiryOnly) {
     const payableAmount = amount || (type === 'Webinar' ? 99 : 0);
     if (!payableAmount) {
       res.status(400);
@@ -138,7 +236,7 @@ export const createLead = asyncHandler(async (req, res) => {
       name: lead.name,
       email: lead.email,
       phone: lead.phone,
-      ...(orderData.isMock ? { isMock: true } : {}),
+      ...(orderData.isMock ? { isMock: true } : { isMock: false }),
     });
   }
 
@@ -181,11 +279,23 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     lead.status = 'Consultation Lead - Paid';
   } else if (lead.type === 'Webinar') {
     lead.status = 'Webinar Lead - Paid';
+  } else if (lead.type === 'Recorded-Course' || lead.type === 'Course-Inquiry') {
+    lead.status = 'Recorded Course Lead - Paid';
   } else {
     lead.status = 'Done';
   }
 
   await lead.save();
+
+  notify({
+    title: 'Payment Confirmed',
+    message: `${lead.name} paid ₹${lead.amount || 'N/A'} for ${lead.consultationType || lead.courseName || lead.type}`,
+    type: 'payment_success',
+    icon: 'fa-check-circle',
+    color: 'green',
+    link: 'leads',
+    meta: { leadId: lead._id, name: lead.name, paymentId: razorpay_payment_id },
+  });
 
   await sendPaidLeadAdminEmail({
     customerName: lead.name,
@@ -197,7 +307,7 @@ export const verifyPayment = asyncHandler(async (req, res) => {
     orderId: razorpay_order_id,
   });
 
-  res.json({ success: true, message: 'Payment verified successfully' });
+  res.json({ success: true });
 });
 
 // @desc    Report failed payment
@@ -234,12 +344,12 @@ export const paymentFailed = asyncHandler(async (req, res) => {
     if (razorpayError) lead.razorpayError = razorpayError;
     if (orderId) lead.orderId = orderId;
     await lead.save();
-  } else if (name && email && phone) {
+  } else {
     lead = await Lead.create({
-      name,
-      email,
-      phone,
-      type: paymentFor === 'Consultation' ? 'Consultation' : 'Course',
+      name: name || 'Unknown',
+      email: email || 'unknown@example.com',
+      phone: phone || 'N/A',
+      type: paymentFor === 'Consultation' ? 'Consultation' : 'Recorded-Course',
       courseName: courseName || paymentFor,
       courseId: courseId || undefined,
       consultationType,
@@ -249,8 +359,19 @@ export const paymentFailed = asyncHandler(async (req, res) => {
       failureReason,
       razorpayError,
       orderId,
+      submittedAt: new Date(),
     });
   }
+
+  notify({
+    title: 'Payment Failed',
+    message: `${lead?.name || name || 'Unknown user'} payment failed for ${lead?.courseName || courseName || lead?.type || paymentFor || 'Unknown product'}`,
+    type: 'payment_failed',
+    icon: 'fa-times-circle',
+    color: 'rose',
+    link: 'leads',
+    meta: { leadId: lead?._id, name: lead?.name || name },
+  });
 
   res.json({
     success: true,
@@ -277,53 +398,90 @@ export const paymentCallback = asyncHandler(async (req, res) => {
   res.json({ success: true, status: lead.paymentStatus });
 });
 
+const formatLead = (lead) => {
+  const submittedAt = getSubmittedAt(lead);
+  return {
+    _id: lead._id,
+    name: lead.name,
+    phone: lead.phone,
+    email: lead.email,
+    type: lead.type,
+    leadType: lead.leadType || '',
+    status: lead.status,
+    paymentStatus: lead.paymentStatus,
+    courseName: lead.courseName || '',
+    courseType: lead.courseType || '',
+    courseId: lead.courseId || null,
+    consultationType: lead.consultationType || '',
+    city: lead.city || '',
+    age: lead.age ?? '',
+    interest: lead.interest || '',
+    message: lead.message || '',
+    dob: lead.dob || '',
+    tob: lead.tob || '',
+    pob: lead.pob || '',
+    amount: lead.amount ?? 0,
+    razorpay_payment_id: lead.transactionId || '',
+    razorpay_order_id: lead.orderId || '',
+    submittedAt,
+    createdAt: lead.createdAt,
+    updatedAt: lead.updatedAt,
+  };
+};
+
 // @desc    Get all leads (Admin)
 // @route   GET /api/leads
 export const getLeads = asyncHandler(async (req, res) => {
-  const { startDate, endDate, type, status, paymentStatus, search } = req.query;
+  const { startDate, endDate, type, status, paymentStatus, search, sort, _limit } = req.query;
   const filter = {};
 
-  if (startDate && endDate) {
-    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
-  }
+  applySubmittedDateFilter(filter, startDate, endDate);
   if (type) filter.type = type;
   if (status) filter.status = status;
   if (paymentStatus) filter.paymentStatus = paymentStatus;
   if (search) {
     const regex = new RegExp(search, 'i');
-    filter.$or = [
-      { name: regex },
-      { email: regex },
-      { phone: regex },
-      { courseName: regex },
-      { consultationType: regex },
+    filter.$and = [
+      ...(filter.$and || []),
+      {
+        $or: [
+          { name: regex },
+          { email: regex },
+          { phone: regex },
+          { courseName: regex },
+          { consultationType: regex },
+        ],
+      },
     ];
   }
 
-  const leads = await Lead.find(filter).sort({ createdAt: -1 });
-  res.json({ success: true, leads });
+  let query = Lead.find(filter).sort(resolveLeadSort(sort));
+  const limit = parseInt(_limit, 10);
+  if (limit > 0) query = query.limit(limit);
+
+  const leads = await query;
+  res.json({ success: true, leads: leads.map(formatLead), sort: sort || 'newest' });
 });
 
 // @desc    Export leads to Excel (Admin)
 // @route   GET /api/leads/export
 export const exportLeads = asyncHandler(async (req, res) => {
-  const { startDate, endDate, type, status, paymentStatus } = req.query;
+  const { startDate, endDate, type, status, paymentStatus, sort } = req.query;
   const filter = {};
 
-  if (startDate && endDate) {
-    filter.createdAt = { $gte: new Date(startDate), $lte: new Date(endDate) };
-  }
+  applySubmittedDateFilter(filter, startDate, endDate);
   if (type) filter.type = type;
   if (status) filter.status = status;
   if (paymentStatus) filter.paymentStatus = paymentStatus;
 
-  const leads = await Lead.find(filter).sort({ createdAt: -1 });
+  const leads = await Lead.find(filter).sort(resolveLeadSort(sort));
 
   const workbook = new exceljs.Workbook();
   const worksheet = workbook.addWorksheet('Leads');
 
   worksheet.columns = [
-    { header: 'Date', key: 'date', width: 20 },
+    { header: 'Submitted Date', key: 'submittedDate', width: 16 },
+    { header: 'Submitted Time', key: 'submittedTime', width: 14 },
     { header: 'Name', key: 'name', width: 25 },
     { header: 'Email', key: 'email', width: 30 },
     { header: 'Phone', key: 'phone', width: 20 },
@@ -331,14 +489,23 @@ export const exportLeads = asyncHandler(async (req, res) => {
     { header: 'Lead Type', key: 'leadType', width: 25 },
     { header: 'Course/Webinar', key: 'courseName', width: 25 },
     { header: 'Consultation Type', key: 'consultationType', width: 20 },
+    { header: 'Date of Birth', key: 'dob', width: 14 },
+    { header: 'Birth Time', key: 'tob', width: 12 },
+    { header: 'Birth Place', key: 'pob', width: 20 },
     { header: 'Status', key: 'status', width: 30 },
     { header: 'Payment Status', key: 'paymentStatus', width: 15 },
     { header: 'Message', key: 'message', width: 40 },
   ];
 
   leads.forEach((lead) => {
+    const submitted = getSubmittedAt(lead);
     worksheet.addRow({
-      date: lead.createdAt.toLocaleDateString(),
+      submittedDate: submitted.toLocaleDateString('en-IN'),
+      submittedTime: submitted.toLocaleTimeString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }),
       name: lead.name,
       email: lead.email,
       phone: lead.phone,
@@ -346,6 +513,9 @@ export const exportLeads = asyncHandler(async (req, res) => {
       leadType: lead.leadType || '-',
       courseName: lead.courseName || '-',
       consultationType: lead.consultationType || '-',
+      dob: lead.dob || '-',
+      tob: lead.tob || '-',
+      pob: lead.pob || '-',
       status: lead.status,
       paymentStatus: lead.paymentStatus,
       message: lead.message || '-',

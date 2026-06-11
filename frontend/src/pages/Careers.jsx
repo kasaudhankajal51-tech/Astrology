@@ -8,7 +8,11 @@ import {
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
+import { uploadResume } from '../utils/uploadMedia';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import PageBanner from '../components/PageBanner';
+import { PAGE_BANNERS } from '../data/pageBanners';
+import SEO from '../components/SEO';
 
 /* ─── Inline styles (no Tailwind dependency) ─── */
 const S = {
@@ -16,7 +20,7 @@ const S = {
     minHeight: '100vh',
     background: 'var(--site-bg)',
     fontFamily: 'var(--font-body)',
-    paddingTop: 'clamp(2rem, 5vw, 3.5rem)',
+    paddingTop: 0,
     paddingBottom: 'clamp(2.5rem, 6vw, 4rem)',
     color: 'var(--site-text)',
     width: '100%',
@@ -219,6 +223,25 @@ const EMPTY_FORM = {
   languages: '',
 };
 
+function normalizeJob(job) {
+  return {
+    ...job,
+    salary: job.salaryRange || job.salary || '',
+    experience: job.experience || '',
+    requirements: Array.isArray(job.requirements) ? job.requirements : [],
+    responsibilities: Array.isArray(job.responsibilities) ? job.responsibilities : [],
+    skills: Array.isArray(job.skills) ? job.skills : [],
+    qualifications: Array.isArray(job.qualifications) ? job.qualifications : [],
+  };
+}
+
+function getJobSalaryLabel(job) {
+  if (!job) return null;
+  const raw = job.salaryRange ?? job.salary ?? '';
+  const salary = String(raw).trim();
+  return salary || null;
+}
+
 export default function Careers() {
   const [jobs, setJobs] = useState([]);
   const [selectedJob, setSelectedJob] = useState(null);
@@ -226,6 +249,8 @@ export default function Careers() {
   const [submitting, setSubmitting] = useState(false);
   const [formData, setFormData] = useState(EMPTY_FORM);
   const [resume, setResume] = useState(null);
+  const [resumeUrl, setResumeUrl] = useState('');
+  const [resumeUploading, setResumeUploading] = useState(false);
   const detailRef = useRef(null);
 
   const [searchTerm, setSearchTerm] = useState('');
@@ -261,26 +286,20 @@ export default function Careers() {
     if (metaDesc) metaDesc.content = 'Join India\'s leading astrology platform. Explore cosmic careers at DS Astro.';
 
     fetchJobs();
-    /* Inject fonts once */
-    if (!document.getElementById('careers-fonts')) {
-      const link = document.createElement('link');
-      link.id = 'careers-fonts';
-      link.rel = 'stylesheet';
-      link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600&family=DM+Sans:wght@300;400;500&display=swap';
-      document.head.appendChild(link);
-    }
   }, []);
 
   const fetchJobs = async () => {
     try {
       const { data } = await axios.get(`${API_BASE}/api/jobs`);
       if (data.success && data.jobs.length) {
-        setJobs(data.jobs);
-        setSelectedJob(data.jobs[0]);
+        const normalized = data.jobs.map(normalizeJob);
+        setJobs(normalized);
+        setSelectedJob(normalized[0]);
       } else throw new Error('empty');
     } catch {
-      setJobs(FALLBACK_JOBS);
-      setSelectedJob(FALLBACK_JOBS[0]);
+      const normalized = FALLBACK_JOBS.map(normalizeJob);
+      setJobs(normalized);
+      setSelectedJob(normalized[0]);
     } finally {
       setLoading(false);
     }
@@ -293,7 +312,8 @@ export default function Careers() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!resume) return toast.error('Please upload your resume');
+    if (!resumeUrl) return toast.error('Please upload your resume and wait for it to finish');
+    if (resumeUploading) return toast.error('Resume is still uploading. Please wait.');
 
     const validationError = getContactValidationError({
       name: formData.fullName,
@@ -306,21 +326,23 @@ export default function Careers() {
 
     setSubmitting(true);
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
-    const fd = new FormData();
-    Object.keys(formData).forEach((k) => {
-      const val = k === 'phone' ? sanitizedPhone : formData[k];
-      fd.append(k, typeof val === 'string' ? val.trim() : val);
-    });
-    fd.append('resume', resume);
-    fd.append('appliedRole', selectedJob?.title || 'General Application');
     try {
-      const { data } = await axios.post(`${API_BASE}/api/jobs/apply`, fd, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const { data } = await axios.post(`${API_BASE}/api/jobs/apply`, {
+        ...formData,
+        phone: sanitizedPhone,
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        city: formData.city.trim(),
+        languages: formData.languages.trim(),
+        resumeUrl,
+        jobId: selectedJob?._id || undefined,
+        appliedRole: selectedJob?.title || 'General Application',
       });
       if (data.success) {
         toast.success('Application submitted! Our team will contact you soon.');
         setFormData(EMPTY_FORM);
         setResume(null);
+        setResumeUrl('');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to submit application');
@@ -336,13 +358,17 @@ export default function Careers() {
     </div>
   );
 
+  const salaryLabel = getJobSalaryLabel(selectedJob);
+
   return (
-    <div style={S.root}>
+    <div className="careers-page site-page w-full overflow-x-hidden">
+      <SEO title="Careers" description="Join DS Astro Institute — explore open roles in astrology, technology, and creative teams." url="/careers" />
+      <PageBanner {...PAGE_BANNERS.careers} />
       <style>{`
         @keyframes spin { to { transform: rotate(360deg); } }
         .careers-input:focus { border-color: #C9A84C !important; }
         .careers-upload:hover { border-color: #C9A84C !important; background: #FFFDF5 !important; }
-        .job-item-card:hover { border-color: #C9A84C88 !important; }
+        .careers-job-card:hover { border-color: rgba(200, 131, 42, 0.45) !important; }
         .submit-btn-inner:hover { background: #b8943d !important; }
         .submit-btn-inner:active { transform: scale(0.99); }
 
@@ -396,86 +422,93 @@ export default function Careers() {
         }
       `}</style>
 
-      <div className="careers-inner" style={S.inner}>
-        {/* Page Header */}
-        <div style={S.pageHeader}>
-          <h1 className="careers-title" style={S.pageTitle}>Cosmic Careers at DS Astro</h1>
-          <p className="page-sub-text" style={S.pageSub}>
-            Join India's leading astrology platform — spiritual guides, tech minds &amp; creative souls welcome.
-          </p>
-        </div>
-
-        <div className="careers-layout" style={S.layout}>
+      <div className="site-container site-banner-content-gap">
+        <div className="careers-layout">
           {/* ── LEFT: Job List ── */}
           <div className="careers-sidebar">
-            <div style={S.panelLabel}>
-              <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                <Briefcase size={13} /> Open Positions
+            <div className="careers-panel-label">
+              <span className="flex items-center gap-1.5">
+                <Briefcase size={14} aria-hidden="true" /> Open Positions
               </span>
-              <span style={S.rolesBadge}>{filteredJobs.length} Roles</span>
+              <span className="careers-roles-badge">{filteredJobs.length} Roles</span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 }}>
-              <div style={{ position: 'relative' }}>
-                <Search size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9a8f85' }} />
+            <div className="site-mb-3 flex flex-col gap-2">
+              <div className="relative">
+                <Search size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-site-text-soft" aria-hidden="true" />
                 <input
                   type="text"
                   placeholder="Search roles or locations..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
-                  className="careers-input"
-                  style={{ ...S.input, paddingLeft: 30, fontSize: 12, padding: '7px 12px 7px 30px' }}
+                  className="careers-filter-input careers-input"
                 />
               </div>
-              <div style={{ position: 'relative' }}>
-                <Filter size={13} style={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)', color: '#9a8f85' }} />
+              <div className="relative">
+                <Filter size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-site-text-soft" aria-hidden="true" />
                 <select
                   value={filterDept}
                   onChange={(e) => setFilterDept(e.target.value)}
-                  className="careers-input"
-                  style={{ ...S.select, paddingLeft: 30, fontSize: 12, padding: '7px 12px 7px 30px' }}
+                  className="careers-filter-input careers-input"
                 >
-                  {departments.map(dept => (
+                  {departments.map((dept) => (
                     <option key={dept} value={dept}>{dept}</option>
                   ))}
                 </select>
               </div>
             </div>
 
-            <div className="careers-job-list" style={{ maxHeight: 800, overflowY: 'auto', paddingRight: 4 }}>
+            <div className="careers-job-list">
               {filteredJobs.length === 0 && (
-                <div style={{ fontSize: 13, color: '#9a8f85', textAlign: 'center', padding: '20px 0' }}>
-                  No jobs found matching your criteria.
-                </div>
+                <p className="careers-empty">No jobs found matching your criteria.</p>
               )}
               {filteredJobs.map((job) => {
                 const active = selectedJob?._id === job._id;
+                const cardSalary = getJobSalaryLabel(job);
                 return (
                   <motion.div
                     key={job._id}
                     role="button"
                     tabIndex={0}
-                    className="job-item-card"
-                    style={S.jobItem(active)}
+                    className={`careers-job-card job-item-card${active ? ' careers-job-card--active' : ''}`}
                     whileHover={{ scale: 1.01 }}
                     whileTap={{ scale: 0.99 }}
                     onClick={() => handleJobClick(job)}
                     onKeyDown={(e) => e.key === 'Enter' && handleJobClick(job)}
                   >
-                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 8 }}>
-                      <span style={S.jobItemTitle(active)}>{job.title}</span>
-                      <ChevronRight size={14} style={{ color: active ? '#C9A84C' : '#c4bbb4', transform: active ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s', marginTop: 1, flexShrink: 0 }} />
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="careers-job-card__title">{job.title}</h3>
+                      <ChevronRight
+                        size={16}
+                        className={`mt-0.5 shrink-0 transition-transform ${active ? 'rotate-90 text-site-accent' : 'text-site-text-soft'}`}
+                        aria-hidden="true"
+                      />
                     </div>
 
-                    <div style={S.jobItemTags}>
-                      <span style={S.tagDept}>{job.department}</span>
-                      <span style={S.tagType}>{job.type}</span>
+                    <div className="careers-job-card__tags">
+                      {job.department ? <span className="careers-job-tag careers-job-tag--dept">{job.department}</span> : null}
+                      {job.type ? <span className="careers-job-tag careers-job-tag--type">{job.type}</span> : null}
                     </div>
 
-                    <div style={S.jobItemMeta}>
-                      <div style={S.metaItem}><MapPin size={11} />{job.location}</div>
-                      <div style={S.metaItem}><Clock size={11} />{job.experience}</div>
-                      <div style={{ ...S.metaItem, gridColumn: '1 / -1' }}><IndianRupee size={11} />{job.salary}</div>
+                    <div className="careers-job-card__meta">
+                      {job.location ? (
+                        <div className="careers-job-card__meta-item">
+                          <MapPin size={13} aria-hidden="true" />
+                          <span>{job.location}</span>
+                        </div>
+                      ) : null}
+                      {job.experience ? (
+                        <div className="careers-job-card__meta-item">
+                          <Clock size={13} aria-hidden="true" />
+                          <span>{job.experience}</span>
+                        </div>
+                      ) : null}
+                      {cardSalary ? (
+                        <div className="careers-job-card__meta-item careers-job-card__meta-item--salary">
+                          <IndianRupee size={13} aria-hidden="true" />
+                          <span>{cardSalary}</span>
+                        </div>
+                      ) : null}
                     </div>
                   </motion.div>
                 );
@@ -494,43 +527,86 @@ export default function Careers() {
                 transition={{ duration: 0.2 }}
               >
                 {/* Job Detail Card */}
-                <div className="careers-detail-card" style={S.detailCard}>
-                  <h2 style={S.detailTitle}>{selectedJob?.title}</h2>
-                  <div style={S.badgeRow}>
-                    <span style={S.badge('purple')}>{selectedJob?.department}</span>
-                    <span style={S.badge('blue')}>{selectedJob?.location}</span>
-                    <span style={S.badge('green')}>{selectedJob?.type}</span>
+                <div className="careers-detail-card">
+                  <h2 className="careers-detail-card__title">{selectedJob?.title}</h2>
+                  <div className="careers-detail-badges">
+                    {selectedJob?.department ? (
+                      <span className="careers-detail-badge careers-detail-badge--dept">{selectedJob.department}</span>
+                    ) : null}
+                    {selectedJob?.location ? (
+                      <span className="careers-detail-badge careers-detail-badge--location">{selectedJob.location}</span>
+                    ) : null}
+                    {selectedJob?.type ? (
+                      <span className="careers-detail-badge careers-detail-badge--type">{selectedJob.type}</span>
+                    ) : null}
+                    {salaryLabel ? (
+                      <span className="careers-detail-badge careers-detail-badge--salary">{salaryLabel}</span>
+                    ) : null}
                   </div>
 
-                  <div className="careers-detail-grid" style={S.detailGrid}>
-                    {/* Left column */}
+                  <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:gap-7">
                     <div>
-                      <div style={S.sectionLabel}><Star size={12} /> Description</div>
-                      <p style={S.desc}>{selectedJob?.description}</p>
+                      <div className="careers-section-label">
+                        <Star size={13} aria-hidden="true" /> Description
+                      </div>
+                      <p className="careers-prose">{selectedJob?.description}</p>
 
-                      <div style={S.sectionLabel}><CheckCircle2 size={12} /> Responsibilities</div>
-                      {selectedJob?.responsibilities?.map((r, i) => (
-                        <div key={i} style={S.listItem}>
-                          <span style={S.bullet} />{r}
-                        </div>
-                      ))}
+                      {selectedJob?.requirements?.length > 0 ? (
+                        <>
+                          <div className="careers-section-label careers-section-label--spaced">
+                            <CheckCircle2 size={13} aria-hidden="true" /> Requirements
+                          </div>
+                          {selectedJob.requirements.map((item) => (
+                            <div key={item} className="careers-list-item">
+                              <span className="careers-list-bullet" aria-hidden="true" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </>
+                      ) : null}
+
+                      {selectedJob?.responsibilities?.length > 0 ? (
+                        <>
+                          <div className="careers-section-label careers-section-label--spaced">
+                            <CheckCircle2 size={13} aria-hidden="true" /> Responsibilities
+                          </div>
+                          {selectedJob.responsibilities.map((item) => (
+                            <div key={item} className="careers-list-item">
+                              <span className="careers-list-bullet" aria-hidden="true" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </>
+                      ) : null}
                     </div>
 
-                    {/* Right column */}
                     <div>
-                      <div style={S.sectionLabel}><Zap size={12} /> Required Skills</div>
-                      <div style={{ marginBottom: 20 }}>
-                        {selectedJob?.skills?.map((s, i) => (
-                          <span key={i} style={S.skillChip}>{s}</span>
-                        ))}
-                      </div>
+                      {selectedJob?.skills?.length > 0 ? (
+                        <>
+                          <div className="careers-section-label">
+                            <Zap size={13} aria-hidden="true" /> Required Skills
+                          </div>
+                          <div className="site-mb-3">
+                            {selectedJob.skills.map((skill) => (
+                              <span key={skill} className="careers-skill-chip">{skill}</span>
+                            ))}
+                          </div>
+                        </>
+                      ) : null}
 
-                      <div style={S.sectionLabel}><BookOpen size={12} /> Qualifications</div>
-                      {selectedJob?.qualifications?.map((q, i) => (
-                        <div key={i} style={S.listItem}>
-                          <span style={S.bullet} />{q}
-                        </div>
-                      ))}
+                      {selectedJob?.qualifications?.length > 0 ? (
+                        <>
+                          <div className={`careers-section-label${selectedJob?.skills?.length ? ' careers-section-label--spaced' : ''}`}>
+                            <BookOpen size={13} aria-hidden="true" /> Qualifications
+                          </div>
+                          {selectedJob.qualifications.map((item) => (
+                            <div key={item} className="careers-list-item">
+                              <span className="careers-list-bullet" aria-hidden="true" />
+                              <span>{item}</span>
+                            </div>
+                          ))}
+                        </>
+                      ) : null}
                     </div>
                   </div>
                 </div>
@@ -601,8 +677,14 @@ export default function Careers() {
                       >
                         <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
                         <div style={S.uploadText}>
-                          {resume ? (
-                            <span style={{ color: '#8a6e1e', fontWeight: 500, wordBreak: 'break-all' }}>{resume.name}</span>
+                          {resumeUploading ? (
+                            <span style={{ color: '#8a6e1e', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+                              <span style={{ ...S.spinner, border: '2px solid #e0d9d1', borderTop: '2px solid #C9A84C' }} /> Uploading to secure storage…
+                            </span>
+                          ) : resume ? (
+                            <span style={{ color: resumeUrl ? '#3B6D11' : '#8a6e1e', fontWeight: 500, wordBreak: 'break-all' }}>
+                              {resumeUrl ? '✓ ' : ''}{resume.name}
+                            </span>
                           ) : (
                             'Click to upload or drag & drop'
                           )}
@@ -611,21 +693,36 @@ export default function Careers() {
                       <input
                         id="resume-upload" type="file" accept=".pdf,.doc,.docx"
                         style={{ display: 'none' }}
-                        onChange={(e) => {
+                        disabled={resumeUploading}
+                        onChange={async (e) => {
                           const file = e.target.files[0];
-                          if (file) {
-                            if (file.size > 5 * 1024 * 1024) {
-                              toast.error('File size must be less than 5MB');
-                              e.target.value = '';
-                              return;
-                            }
-                            const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                            if (!validTypes.includes(file.type)) {
-                              toast.error('Please upload only PDF, DOC, or DOCX files');
-                              e.target.value = '';
-                              return;
-                            }
-                            setResume(file);
+                          if (!file) return;
+
+                          if (file.size > 5 * 1024 * 1024) {
+                            toast.error('File size must be less than 5MB');
+                            e.target.value = '';
+                            return;
+                          }
+                          const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
+                          if (!validTypes.includes(file.type)) {
+                            toast.error('Please upload only PDF, DOC, or DOCX files');
+                            e.target.value = '';
+                            return;
+                          }
+
+                          setResume(file);
+                          setResumeUrl('');
+                          setResumeUploading(true);
+                          try {
+                            const url = await uploadResume(file);
+                            setResumeUrl(url);
+                            toast.success('Resume uploaded successfully');
+                          } catch (err) {
+                            toast.error(err.message || 'Resume upload failed');
+                            setResume(null);
+                            e.target.value = '';
+                          } finally {
+                            setResumeUploading(false);
                           }
                         }}
                       />
@@ -634,7 +731,7 @@ export default function Careers() {
                     <motion.button
                       className="submit-btn-inner"
                       type="submit"
-                      disabled={submitting}
+                      disabled={submitting || resumeUploading || !resumeUrl}
                       style={S.submitBtn}
                       whileTap={{ scale: 0.99 }}
                     >

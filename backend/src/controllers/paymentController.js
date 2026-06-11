@@ -7,14 +7,45 @@ import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
 import Coupon from '../models/Coupon.js';
 import { sendCredentialsEmail, sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
-import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
+import { createRazorpayInstance, getRazorpayConfig, isPaymentEnabled } from '../utils/razorpayConfig.js';
 import { calculateCouponDiscount } from '../utils/couponHelper.js';
+
+// @desc    Payment gateway availability (public)
+// @route   GET /api/payment/status
+export const getPaymentStatus = async (req, res) => {
+  const enabled = isPaymentEnabled();
+  let keyId = '';
+  if (enabled) {
+    try {
+      keyId = getRazorpayConfig().keyId;
+    } catch {
+      // ignore
+    }
+  }
+  res.json({
+    success: true,
+    paymentEnabled: enabled,
+    mode: enabled ? 'checkout' : 'lead_capture',
+    keyId: enabled ? keyId : '',
+    message: enabled
+      ? 'Online payment is active for recorded courses and consultations.'
+      : 'Lead capture mode — add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend .env to enable checkout.',
+  });
+};
 
 // @desc    Create Razorpay Order
 // @route   POST /api/payment/create-order
 // @access  Public (Guest Checkout) or Private
 export const createOrder = async (req, res) => {
   try {
+    if (!isPaymentEnabled()) {
+      return res.status(503).json({
+        success: false,
+        code: 'PAYMENT_DISABLED',
+        message: 'Online payment is not enabled yet. Please submit an enquiry and our team will contact you.',
+      });
+    }
+
     const { courseId, name, email, mobile, couponCode } = req.body;
 
     const course = await Course.findById(courseId);
@@ -93,6 +124,7 @@ export const createOrder = async (req, res) => {
     });
 
     let razorpayOrder;
+    let isMock = false;
     try {
       const razorpayInstance = createRazorpayInstance();
       razorpayOrder = await razorpayInstance.orders.create({
@@ -103,8 +135,16 @@ export const createOrder = async (req, res) => {
       order.razorpayOrderId = razorpayOrder.id;
       await order.save();
     } catch (err) {
-      console.error('RAZORPAY ERROR:', err);
-      return res.status(500).json({ success: false, message: err.message || 'Failed to create Razorpay Order' });
+      if (process.env.NODE_ENV === 'development') {
+        const mockOrderId = `order_mock_${Date.now()}`;
+        razorpayOrder = { id: mockOrderId, amount: amountInPaise };
+        order.razorpayOrderId = mockOrderId;
+        await order.save();
+        isMock = true;
+      } else {
+        console.error('RAZORPAY ERROR:', err);
+        return res.status(500).json({ success: false, message: err.message || 'Failed to create Razorpay Order' });
+      }
     }
 
     let lead = null;
@@ -113,7 +153,7 @@ export const createOrder = async (req, res) => {
         name: studentName,
         email: studentEmail,
         phone: studentMobile || 'N/A',
-        type: 'Course-Inquiry',
+        type: 'Recorded-Course',
         courseName: course.title,
         courseId: course._id,
         courseType: 'Recorded',
@@ -127,7 +167,7 @@ export const createOrder = async (req, res) => {
       });
     }
 
-    const { keyId } = getRazorpayConfig();
+    const keyId = isMock ? 'rzp_test_mock' : getRazorpayConfig().keyId;
 
     res.status(200).json({
       success: true,
@@ -140,6 +180,7 @@ export const createOrder = async (req, res) => {
       name: studentName || '',
       email: studentEmail || '',
       phone: studentMobile || '',
+      isMock,
     });
   } catch (error) {
     console.error('Error creating order:', error);
@@ -161,7 +202,8 @@ export const verifyPayment = async (req, res) => {
       .update(body.toString())
       .digest('hex');
 
-    const isMockPayment = process.env.NODE_ENV === 'development' && razorpay_signature?.startsWith('sig_mock_');
+    const isMockPayment = process.env.NODE_ENV === 'development'
+      && (razorpay_signature === 'mock_signature' || razorpay_signature?.startsWith('sig_mock_'));
     const isAuthentic = expectedSignature === razorpay_signature || isMockPayment;
 
     if (!isAuthentic) {
@@ -193,6 +235,7 @@ export const verifyPayment = async (req, res) => {
 
     let finalUserId = order.userId;
     let generatedPassword = null;
+    let studentCreated = false;
     let studentEmail = email || (order.guestDetails ? order.guestDetails.email : '');
     let studentName = name || (order.guestDetails ? order.guestDetails.name : '');
 
@@ -209,6 +252,7 @@ export const verifyPayment = async (req, res) => {
           passwordHash: hashedPassword,
           role: 'student',
         });
+        studentCreated = true;
       }
       finalUserId = user._id;
       order.userId = finalUserId;
@@ -248,7 +292,7 @@ export const verifyPayment = async (req, res) => {
         name: studentName,
         email: studentEmail,
         phone: order.guestDetails?.mobile || 'N/A',
-        type: 'Course-Inquiry',
+        type: 'Recorded-Course',
         courseName: course.title,
         courseId: course._id,
         courseType: 'Recorded',
@@ -287,6 +331,7 @@ export const verifyPayment = async (req, res) => {
     res.status(200).json({
       success: true,
       message: 'Payment verified and enrollment active',
+      studentCreated,
     });
   } catch (error) {
     console.error('Error verifying payment:', error);

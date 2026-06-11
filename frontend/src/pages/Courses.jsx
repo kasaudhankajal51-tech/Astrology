@@ -133,8 +133,7 @@ function Courses({ mode = 'all' }) {
       <style>{`
         .courses-page {
           background: #FDF6EE;
-          min-height: 100vh;
-          padding-bottom: clamp(2.5rem, 5vw, 4.5rem);
+          padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
         }
 
         .hero-section {
@@ -270,8 +269,6 @@ function Courses({ mode = 'all' }) {
         .filter-container {
           margin-top: clamp(1.25rem, 3vw, 2rem);
           margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
-          position: relative;
-          z-index: 20;
           display: flex;
           justify-content: center;
           gap: 10px;
@@ -322,11 +319,17 @@ function Courses({ mode = 'all' }) {
         }
 
         .course-section {
-          margin-bottom: clamp(2.5rem, 5vw, 4rem);
+          margin-bottom: clamp(2rem, 4vw, 3rem);
+        }
+
+        .course-section:last-child {
+          margin-bottom: 0;
         }
 
         .courses-grid {
-          padding: clamp(2.25rem, 5vw, 4rem) var(--page-pad-x);
+          position: relative;
+          z-index: 0;
+          padding: clamp(1.75rem, 4vw, 2.75rem) var(--page-pad-x) clamp(1rem, 2.5vw, 1.75rem);
           max-width: var(--container-public);
         }
 
@@ -613,11 +616,16 @@ function Courses({ mode = 'all' }) {
         }
 
         .courses-grid {
-          padding-top: clamp(1.75rem, 4vw, 3rem) !important;
+          padding-top: clamp(1.75rem, 4vw, 2.75rem) !important;
+          padding-bottom: clamp(1rem, 2.5vw, 1.75rem) !important;
         }
 
         .course-section {
-          margin-bottom: clamp(2.25rem, 4vw, 3.25rem) !important;
+          margin-bottom: clamp(2rem, 4vw, 3rem) !important;
+        }
+
+        .course-section:last-child {
+          margin-bottom: 0 !important;
         }
 
         .row.g-4 {

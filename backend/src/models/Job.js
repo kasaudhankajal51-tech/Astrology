@@ -6,7 +6,9 @@ const jobSchema = new mongoose.Schema({
   location: { type: String, required: true },
   experience: { type: String, required: true },
   type: { type: String, required: true }, // e.g., "Full-time", "Remote", "Freelance"
-  salary: { type: String, required: true },
+  salary: { type: String, default: '' },
+  salaryRange: { type: String, default: '' },
+  postedAt: { type: Date },
   description: { type: String, required: true },
   responsibilities: [{ type: String }],
   requirements: [{ type: String }],

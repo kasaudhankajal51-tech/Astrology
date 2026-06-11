@@ -27,10 +27,14 @@ function CoursePlayer() {
   const token = localStorage.getItem('studentToken');
   const protectedIdentity = studentProfile?.email || studentProfile?.mobile || localStorage.getItem('studentName') || 'Protected student access';
 
-  const getVideoProvider = (video) => video?.videoProvider || video?.provider || (video?.otp && video?.playbackInfo ? 'vdocipher' : 'bunny');
+  const getVideoProvider = (video) => video?.videoProvider || video?.provider || (video?.otp && video?.playbackInfo ? 'vdocipher' : (video?.videoUrl ? 'supabase' : 'bunny'));
 
   const getPlayerSrc = (video) => {
     if (!video) return '';
+
+    if (getVideoProvider(video) === 'supabase') {
+      return video.videoUrl || video.playbackUrl || video.signedEmbedUrl || video.embedUrl || '';
+    }
 
     if (getVideoProvider(video) === 'vdocipher') {
       if (video.otp && video.playbackInfo) {
@@ -262,15 +266,28 @@ function CoursePlayer() {
             >
               {activeVideo ? (
                 <>
-                  <iframe
-                    src={getPlayerSrc(activeVideo)}
-                    title={activeVideo.title || 'Course video'}
-                    loading="lazy"
-                    referrerPolicy="strict-origin-when-cross-origin"
-                    style={{ border: 0, width: '100%', height: '100%', filter: isWindowFocused ? 'none' : 'blur(12px)', transition: 'filter 0.2s ease' }}
-                    allow="accelerometer; gyroscope; autoplay; encrypted-media;"
-                    allowFullScreen={false}
-                  ></iframe>
+                  {getVideoProvider(activeVideo) === 'supabase' ? (
+                    <video
+                      key={activeVideo.videoId || activeVideo._id}
+                      src={getPlayerSrc(activeVideo)}
+                      title={activeVideo.title || 'Course video'}
+                      controls
+                      controlsList="nodownload"
+                      playsInline
+                      onContextMenu={(e) => e.preventDefault()}
+                      style={{ width: '100%', height: '100%', filter: isWindowFocused ? 'none' : 'blur(12px)', transition: 'filter 0.2s ease', background: '#000' }}
+                    />
+                  ) : (
+                    <iframe
+                      src={getPlayerSrc(activeVideo)}
+                      title={activeVideo.title || 'Course video'}
+                      loading="lazy"
+                      referrerPolicy="strict-origin-when-cross-origin"
+                      style={{ border: 0, width: '100%', height: '100%', filter: isWindowFocused ? 'none' : 'blur(12px)', transition: 'filter 0.2s ease' }}
+                      allow="accelerometer; gyroscope; autoplay; encrypted-media;"
+                      allowFullScreen={false}
+                    ></iframe>
+                  )}
                   <div
                     aria-hidden="true"
                     style={{

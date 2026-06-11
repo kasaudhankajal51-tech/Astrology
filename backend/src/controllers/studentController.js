@@ -90,28 +90,31 @@ export const forgotPassword = async (req, res) => {
 };
 
 export const resetPassword = async (req, res) => {
-  const { email, otp, newPassword } = req.body;
+  const { email, otp, token, newPassword } = req.body;
   try {
-    if (!email || !otp || !newPassword) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
+    if (!newPassword) {
+      return res.status(400).json({ success: false, message: 'New password is required' });
+    }
+
+    const resetToken = token || otp;
+    if (!email || !resetToken) {
+      return res.status(400).json({ success: false, message: 'Email and reset token are required' });
     }
 
     const user = await User.findOne({ email: email.toLowerCase().trim() });
-    if (!user) return res.status(400).json({ success: false, message: 'Invalid OTP or email' });
+    if (!user) return res.status(400).json({ success: false, message: 'Invalid token or email' });
 
-    if (!user.resetPasswordOTP || user.resetPasswordOTP !== otp) {
-      return res.status(400).json({ success: false, message: 'Invalid OTP' });
+    if (!user.resetPasswordOTP || user.resetPasswordOTP !== resetToken) {
+      return res.status(400).json({ success: false, message: 'Invalid token or email' });
     }
 
     if (Date.now() > user.resetPasswordExpires) {
-      return res.status(400).json({ success: false, message: 'OTP has expired. Please request a new one.' });
+      return res.status(400).json({ success: false, message: 'Reset token has expired. Please request a new one.' });
     }
 
-    // Hash the new password
     const salt = await bcrypt.genSalt(10);
     user.passwordHash = await bcrypt.hash(newPassword, salt);
-    
-    // Clear the OTP fields
+
     user.resetPasswordOTP = undefined;
     user.resetPasswordExpires = undefined;
     await user.save();
@@ -127,16 +130,23 @@ export const getStudentProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-passwordHash');
     if (!user) return res.status(404).json({ success: false, message: 'User not found' });
-    
+
+    const enrolledCoursesCount = await Enrollment.countDocuments({
+      userId: user._id,
+      isActive: true,
+      validUntil: { $gte: new Date() },
+    });
+
     res.json({
       success: true,
       profile: {
-        studentId: user._id,
+        _id: user._id,
         name: user.name,
         email: user.email,
         mobile: user.mobile || '',
-        profileImage: user.profileImage || ''
-      }
+        enrolledCoursesCount,
+        profileImage: user.profileImage || '',
+      },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -273,7 +283,9 @@ export const getCourseVideos = async (req, res) => {
       let otp = null;
       let playbackInfo = null;
 
-      if (video.bunnyVideoId) {
+      if (video.videoProvider === 'supabase' && video.videoUrl) {
+        playbackUrl = video.videoUrl;
+      } else if (video.bunnyVideoId) {
         try {
           const bunnyPlayback = getBunnyPlaybackInfo(video.bunnyVideoId, 7200);
           playbackUrl = bunnyPlayback.playbackUrl;
@@ -307,16 +319,15 @@ export const getCourseVideos = async (req, res) => {
 
       return {
         _id: video._id,
-        videoId: video._id,
         title: video.title,
+        sortOrder: video.sortOrder ?? 0,
         duration: video.duration || 0,
-        bunnyVideoId: video.bunnyVideoId,
-        playbackUrl,
-        videoUrl: playbackUrl,
-        expiresAt,
-        otp,
-        playbackInfo,
-        videoProvider: video.videoProvider || (video.vdoCipherVideoId ? 'vdocipher' : 'bunny'),
+        videoProvider: video.videoProvider || (video.videoUrl ? 'supabase' : (video.vdoCipherVideoId ? 'vdocipher' : 'bunny')),
+        bunnyVideoId: video.bunnyVideoId || undefined,
+        vdocipherVideoId: video.vdoCipherVideoId || undefined,
+        signedEmbedUrl: playbackUrl || undefined,
+        otp: otp || undefined,
+        playbackInfo: playbackInfo || undefined,
         isCompleted: completedIds.includes(video._id.toString()),
         progressSeconds: Number(progressSeconds) || 0,
       };
@@ -330,7 +341,7 @@ export const getCourseVideos = async (req, res) => {
 
 export const updateVideoProgress = async (req, res) => {
   try {
-    const { videoId, courseId, progressSeconds, completed } = req.body;
+    const { videoId, courseId, progressSeconds, completed, isCompleted } = req.body;
     const enrollment = await Enrollment.findOne({
       userId: req.user.id,
       courseId,
@@ -351,7 +362,7 @@ export const updateVideoProgress = async (req, res) => {
       enrollment.markModified('progress.videoProgress');
     }
 
-    const markCompleted = completed === true || completed === 'true';
+    const markCompleted = completed === true || completed === 'true' || isCompleted === true || isCompleted === 'true';
     const isAlreadyCompleted = enrollment.progress.completedVideos.some((id) => id.toString() === videoId);
     if (markCompleted && !isAlreadyCompleted) {
       enrollment.progress.completedVideos.push(videoId);
@@ -385,11 +396,12 @@ export const getCourseValidity = async (req, res) => {
     res.json({
       success: true,
       validity: {
-        courseId,
-        validFrom: enrollment.purchasedAt,
-        validTill,
-        daysRemaining
-      }
+        validFrom: enrollment.purchasedAt
+          ? enrollment.purchasedAt.toISOString().split('T')[0]
+          : null,
+        validTill: validTill.toISOString().split('T')[0],
+        daysRemaining,
+      },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -519,7 +531,7 @@ export const bookCourseConsultation = async (req, res) => {
       courseId: courseId,
       preferredDatetime,
       notes,
-      status: 'pending'
+      status: 'Pending',
     });
 
     // Send admin notification

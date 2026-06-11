@@ -1,6 +1,20 @@
 import { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
+import { Receipt } from 'lucide-react';
 import API_BASE from '../utils/api';
+import { formatAdminCurrency, formatAdminDate } from '../utils/adminTableUtils';
+import AdminDataTable from '../components/admin/AdminDataTable';
+import {
+  AdminPersonCell,
+  AdminStatusDot,
+} from '../components/admin/AdminTableCells';
+
+const PAYMENT_TONE = {
+  completed: 'green',
+  paid: 'green',
+  pending: 'amber',
+  failed: 'rose',
+};
 
 function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -12,9 +26,7 @@ function AdminOrders() {
     try {
       const token = localStorage.getItem('adminToken');
       const res = await fetch(`${API_BASE}/api/admin/orders`, {
-        headers: { 
-          'Authorization': `Bearer ${token}`
-        }
+        headers: { Authorization: `Bearer ${token}` },
       });
       const data = await res.json();
       if (data.success) {
@@ -22,7 +34,7 @@ function AdminOrders() {
       } else {
         toast.error(data.message || 'Failed to fetch orders');
       }
-    } catch (err) {
+    } catch {
       toast.error('Network Error');
     } finally {
       setIsLoading(false);
@@ -33,85 +45,115 @@ function AdminOrders() {
     fetchOrders();
   }, []);
 
-  const filteredOrders = orders.filter(order => 
-    (order.guestDetails?.name || order.userId?.name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (order.guestDetails?.email || order.userId?.email || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-    (order.courseId?.title || '').toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredOrders = orders.filter((order) => {
+    const name = (order.userId?.name || order.guestDetails?.name || '').toLowerCase();
+    const email = (order.userId?.email || order.guestDetails?.email || '').toLowerCase();
+    const course = (order.courseId?.title || '').toLowerCase();
+    const q = searchTerm.toLowerCase();
+    return name.includes(q) || email.includes(q) || course.includes(q);
+  });
+
+  const columns = [
+    {
+      key: 'orderId',
+      label: 'Order ID',
+      sortable: true,
+      sortValue: (order) => order.razorpayOrderId || order._id,
+      render: (order) => (
+        <span className="atd-secondary" style={{ fontFamily: 'ui-monospace, monospace' }}>
+          {order.razorpayOrderId || order._id.toString().slice(-8)}
+        </span>
+      ),
+    },
+    {
+      key: 'student',
+      label: 'Student',
+      sortable: true,
+      sortValue: (order) => order.userId?.name || order.guestDetails?.name || '',
+      render: (order) => {
+        const name = order.userId?.name || order.guestDetails?.name || 'Guest';
+        const email = order.userId?.email || order.guestDetails?.email;
+        return <AdminPersonCell name={name} secondary={email} />;
+      },
+    },
+    {
+      key: 'course',
+      label: 'Course',
+      sortable: true,
+      sortValue: (order) => order.courseId?.title || '',
+      render: (order) => (
+        <div className="atd-primary">{order.courseId?.title || 'Unknown Course'}</div>
+      ),
+    },
+    {
+      key: 'amount',
+      label: 'Amount',
+      sortable: true,
+      align: 'right',
+      render: (order) => (
+        <div className="atd-primary">{formatAdminCurrency(order.amount)}</div>
+      ),
+    },
+    {
+      key: 'paymentStatus',
+      label: 'Payment',
+      sortable: true,
+      render: (order) => {
+        const status = String(order.paymentStatus || 'pending').toLowerCase();
+        const tone = PAYMENT_TONE[status] || 'slate';
+        return <AdminStatusDot label={order.paymentStatus || 'Pending'} tone={tone} />;
+      },
+    },
+    {
+      key: 'createdAt',
+      label: 'Order Date',
+      sortable: true,
+      sortValue: (order) => order.createdAt,
+      render: (order) => <span className="atd-secondary">{formatAdminDate(order.createdAt)}</span>,
+    },
+  ];
 
   return (
     <div className="admin-leads-content">
       <div className="d-flex flex-column gap-3 mb-4">
         <div className="d-flex flex-column flex-xl-row justify-content-between gap-3">
           <div className="search-bar flex-grow-1" style={{ maxWidth: '400px', background: 'var(--surface)' }}>
-            <i className="fas fa-search"></i>
-            <input 
-              type="text" 
-              placeholder="Search by student or course..." 
+            <i className="fas fa-search" />
+            <input
+              type="text"
+              placeholder="Search by student, email, or course…"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               style={{ width: '100%' }}
             />
           </div>
-          <button onClick={fetchOrders} className="topbar-icon-btn" title="Refresh" style={{ height: '42px', width: '42px' }}>
-            <i className="fas fa-sync-alt"></i>
+          <button
+            type="button"
+            onClick={fetchOrders}
+            className="topbar-icon-btn"
+            title="Refresh"
+            style={{ height: '42px', width: '42px' }}
+          >
+            <i className="fas fa-sync-alt" />
           </button>
         </div>
       </div>
 
-      <div className="leads-table-wrap border-0 shadow-sm" style={{ minHeight: '400px', background: 'var(--surface)' }}>
-        <table className="leads-table w-100">
-          <thead>
-            <tr>
-              <th>Order ID</th>
-              <th>Student Name</th>
-              <th>Course</th>
-              <th>Amount</th>
-              <th>Status</th>
-              <th>Date</th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading ? (
-              <tr>
-                <td colSpan="6">
-                  <div className="dash-loading py-5">
-                    <div className="dash-spin"></div>
-                    <span className="ms-2">Fetching purchases...</span>
-                  </div>
-                </td>
-              </tr>
-            ) : filteredOrders.length === 0 ? (
-              <tr>
-                <td colSpan="6">
-                  <div className="text-center py-5 text-muted">
-                    <i className="fas fa-shopping-cart fa-3x mb-3 opacity-25"></i>
-                    <p className="mb-0">No purchases found</p>
-                  </div>
-                </td>
-              </tr>
-            ) : (
-              filteredOrders.map(order => {
-                const name = order.userId?.name || order.guestDetails?.name || 'Guest';
-                return (
-                  <tr key={order._id}>
-                    <td><small className="text-muted">{order.razorpayOrderId || order._id.toString().slice(-6)}</small></td>
-                    <td className="fw-bold">{name}</td>
-                    <td>{order.courseId?.title || 'Unknown Course'}</td>
-                    <td className="text-success fw-bold">₹{order.amount}</td>
-                    <td>
-                      <span className={`badge bg-${order.paymentStatus === 'completed' ? 'success' : order.paymentStatus === 'pending' ? 'warning' : 'danger'}`}>
-                        {order.paymentStatus}
-                      </span>
-                    </td>
-                    <td>{new Date(order.createdAt).toLocaleDateString()}</td>
-                  </tr>
-                );
-              })
-            )}
-          </tbody>
-        </table>
-      </div>
+      <AdminDataTable
+        columns={columns}
+        data={filteredOrders}
+        loading={isLoading}
+        loadingMessage="Loading orders…"
+        entityLabel="order"
+        totalCount={orders.length}
+        filteredCount={filteredOrders.length}
+        title="Course Orders"
+        subtitle="Paid purchases and enrollment transactions"
+        emptyIcon={Receipt}
+        emptyTitle="No orders found"
+        emptyMessage={searchTerm ? 'Try a different search term.' : 'Orders appear here after successful purchases.'}
+        minWidth={860}
+      />
     </div>
   );
 }

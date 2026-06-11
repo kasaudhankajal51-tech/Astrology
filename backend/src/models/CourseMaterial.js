@@ -5,6 +5,7 @@ const CourseMaterialSchema = new mongoose.Schema({
   title: { type: String, required: true },
   fileType: { type: String, default: 'PDF' },
   fileUrl: { type: String, required: true },
+  order: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });
 

@@ -29,3 +29,13 @@ export const createRazorpayInstance = () => {
     key_secret: keySecret
   });
 };
+
+/** True when live Razorpay keys are configured — enables online checkout flows */
+export const isPaymentEnabled = () => {
+  try {
+    getRazorpayConfig();
+    return true;
+  } catch {
+    return false;
+  }
+};

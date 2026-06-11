@@ -7,13 +7,16 @@ const CourseVideoSchema = new mongoose.Schema({
   duration: { type: Number, default: 0 },
   bunnyVideoId: { type: String, required: false },
   vdoCipherVideoId: { type: String, required: false },
-  videoProvider: { type: String, enum: ['bunny', 'vdocipher'], default: 'bunny' },
+  videoUrl: { type: String, default: '' },
+  storagePath: { type: String, default: '' },
+  storageBucket: { type: String, default: '' },
+  videoProvider: { type: String, enum: ['supabase', 'bunny', 'vdocipher'], default: 'supabase' },
   bunnyLibraryId: { type: String, default: '' },
   bunnyStatus: { type: Number, default: null },
   bunnyEncodeProgress: { type: Number, default: null },
   status: { type: String, enum: ['uploading', 'processing', 'ready', 'failed'], default: 'uploading' },
   rawWebhookEvents: { type: Array, default: [] },
-  sourceType: { type: String, enum: ['bunny-id', 'upload'], default: 'bunny-id' },
+  sourceType: { type: String, enum: ['supabase', 'bunny-id', 'upload'], default: 'supabase' },
   sortOrder: { type: Number, default: 0 },
   createdAt: { type: Date, default: Date.now }
 });

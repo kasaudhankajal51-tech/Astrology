@@ -4,8 +4,18 @@ import CourseMaterial from '../models/CourseMaterial.js';
 
 export const getAdminBanners = async (req, res) => {
   try {
-    const banners = await Banner.find().sort({ createdAt: -1 });
-    res.json({ success: true, banners });
+    const banners = await Banner.find().sort({ order: 1, createdAt: -1 });
+    res.json({
+      success: true,
+      banners: banners.map((b) => ({
+        _id: b._id,
+        title: b.title,
+        imageUrl: b.image,
+        link: b.redirectLink || '',
+        isActive: b.isActive,
+        order: b.order ?? 0,
+      })),
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to load banners' });
   }
@@ -13,13 +23,40 @@ export const getAdminBanners = async (req, res) => {
 
 export const createBanner = async (req, res) => {
   try {
-    const { title, image, redirectLink, isActive = true } = req.body;
-    if (!title || !image) {
+    const {
+      title,
+      image,
+      imageUrl,
+      redirectLink,
+      link,
+      isActive = true,
+      order = 0,
+    } = req.body;
+    const bannerImage = imageUrl || image;
+    const bannerLink = link || redirectLink;
+
+    if (!title || !bannerImage) {
       return res.status(400).json({ success: false, message: 'Banner title and image URL are required' });
     }
 
-    const banner = await Banner.create({ title, image, redirectLink, isActive });
-    res.status(201).json({ success: true, banner });
+    const banner = await Banner.create({
+      title,
+      image: bannerImage,
+      redirectLink: bannerLink,
+      isActive,
+      order,
+    });
+    res.status(201).json({
+      success: true,
+      banner: {
+        _id: banner._id,
+        title: banner.title,
+        imageUrl: banner.image,
+        link: banner.redirectLink || '',
+        isActive: banner.isActive,
+        order: banner.order ?? 0,
+      },
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to create banner' });
   }
@@ -27,7 +64,17 @@ export const createBanner = async (req, res) => {
 
 export const updateBanner = async (req, res) => {
   try {
-    const banner = await Banner.findByIdAndUpdate(req.params.id, req.body, { new: true });
+    const payload = { ...req.body };
+    if (payload.imageUrl) {
+      payload.image = payload.imageUrl;
+      delete payload.imageUrl;
+    }
+    if (payload.link) {
+      payload.redirectLink = payload.link;
+      delete payload.link;
+    }
+
+    const banner = await Banner.findByIdAndUpdate(req.params.id, payload, { new: true });
     if (!banner) {
       return res.status(404).json({ success: false, message: 'Banner not found' });
     }
@@ -65,7 +112,16 @@ export const getAdminMaterials = async (req, res) => {
 
 export const createMaterial = async (req, res) => {
   try {
-    const { courseId, title, fileType = 'PDF', fileUrl } = req.body;
+    const {
+      courseId,
+      title,
+      fileType = 'PDF',
+      type,
+      fileUrl,
+      order = 0,
+    } = req.body;
+    const materialType = type || fileType || 'PDF';
+
     if (!courseId || !title || !fileUrl) {
       return res.status(400).json({ success: false, message: 'Course, material title and file URL are required' });
     }
@@ -75,8 +131,24 @@ export const createMaterial = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
 
-    const material = await CourseMaterial.create({ courseId, title, fileType, fileUrl });
-    res.status(201).json({ success: true, material });
+    const material = await CourseMaterial.create({
+      courseId,
+      title,
+      fileType: materialType,
+      fileUrl,
+      order,
+    });
+    res.status(201).json({
+      success: true,
+      material: {
+        _id: material._id,
+        courseId: material.courseId,
+        title: material.title,
+        fileUrl: material.fileUrl,
+        type: material.fileType,
+        order: material.order ?? 0,
+      },
+    });
   } catch (error) {
     res.status(500).json({ success: false, message: 'Failed to create course material' });
   }

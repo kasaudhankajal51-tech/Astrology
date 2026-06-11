@@ -68,8 +68,14 @@ export const validateCoupon = asyncHandler(async (req, res) => {
 // @route   GET /api/coupons
 // @access  Private/Admin
 export const getCoupons = asyncHandler(async (req, res) => {
-  const coupons = await Coupon.find({}).sort({ createdAt: -1 });
-  res.json({ success: true, coupons });
+  const coupons = await Coupon.find({}).sort({ createdAt: -1 }).lean();
+  res.json({
+    success: true,
+    coupons: coupons.map((coupon) => ({
+      ...coupon,
+      usedCount: coupon.usageCount ?? 0,
+    })),
+  });
 });
 
 // @desc    Create a new coupon

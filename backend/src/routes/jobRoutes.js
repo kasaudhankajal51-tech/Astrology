@@ -10,13 +10,11 @@ import {
   deleteApplication 
 } from '../controllers/jobController.js';
 import { adminAuth } from '../middleware/authMiddleware.js';
-import upload from '../middleware/uploadMiddleware.js';
-
 const router = express.Router();
 
 // Public routes
 router.get('/', getJobs);
-router.post('/apply', upload.single('resume'), applyForJob);
+router.post('/apply', applyForJob);
 
 // Admin routes
 router.post('/', adminAuth, createJob);

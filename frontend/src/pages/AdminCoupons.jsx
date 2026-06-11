@@ -182,11 +182,16 @@ function AdminCoupons() {
               <div>
                 <label>Discount Value</label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="^[0-9]+(\.[0-9]{1,2})?$"
                   name="discountValue"
                   value={form.discountValue}
                   onChange={handleChange}
-                  min="1"
+                  onBlur={e => {
+                    const v = parseFloat(e.target.value);
+                    if (!isNaN(v)) handleChange({ target: { name: 'discountValue', value: String(Math.round(v * 100) / 100) } });
+                  }}
                   placeholder="10"
                   required
                 />
@@ -197,22 +202,32 @@ function AdminCoupons() {
               <div>
                 <label>Min. Purchase <span className="optional-label">(optional)</span></label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="^[0-9]*$"
                   name="minPurchase"
                   value={form.minPurchase}
                   onChange={handleChange}
-                  min="0"
+                  onBlur={e => {
+                    const v = parseInt(e.target.value, 10);
+                    handleChange({ target: { name: 'minPurchase', value: isNaN(v) ? '0' : String(v) } });
+                  }}
                   placeholder="0"
                 />
               </div>
               <div>
                 <label>Usage Limit <span className="optional-label">(optional)</span></label>
                 <input
-                  type="number"
+                  type="text"
+                  inputMode="numeric"
+                  pattern="^[0-9]*$"
                   name="usageLimit"
                   value={form.usageLimit}
                   onChange={handleChange}
-                  min="0"
+                  onBlur={e => {
+                    const v = parseInt(e.target.value, 10);
+                    handleChange({ target: { name: 'usageLimit', value: isNaN(v) ? '0' : String(v) } });
+                  }}
                   placeholder="0"
                 />
               </div>

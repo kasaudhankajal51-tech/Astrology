@@ -135,8 +135,21 @@ function AdminNewsletter() {
         </div>
       </div>
 
-      <div className="leads-table-wrap border-0 shadow-sm" style={{ minHeight: '400px', background: 'var(--surface)' }}>
-        <table className="leads-table w-100">
+      <div className="admin-table-shell" style={{ minHeight: '400px' }}>
+        <div className="admin-table-shell__bar">
+          <div>
+            <div className="admin-table-shell__title">Subscriber List</div>
+            <div className="admin-table-shell__subtitle">Newsletter sign-ups and subscription status</div>
+          </div>
+          {!isLoading && (
+            <div className="admin-table-shell__count">
+              <strong>{filteredSubscribers.length}</strong>
+              <span>subscriber{filteredSubscribers.length !== 1 ? 's' : ''}</span>
+            </div>
+          )}
+        </div>
+        <div className="admin-table-scroll">
+        <table className="admin-table leads-table w-100">
           <thead>
             <tr>
               <th>Date Subscribed</th>
@@ -214,6 +227,14 @@ function AdminNewsletter() {
             )}
           </tbody>
         </table>
+        </div>
+        {!isLoading && filteredSubscribers.length > 0 && (
+          <div className="admin-table-footer">
+            <span>
+              Showing <strong>{filteredSubscribers.length}</strong> subscriber{filteredSubscribers.length !== 1 ? 's' : ''}
+            </span>
+          </div>
+        )}
       </div>
     </div>
   );

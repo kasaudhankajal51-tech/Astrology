@@ -24,6 +24,7 @@ import courseRoutes from './routes/courseRoutes.js';
 import studentRoutes from './routes/studentRoutes.js';
 import paymentRoutes from './routes/paymentRoutes.js';
 import webhookRoutes from './routes/webhookRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
 import logger from './config/logger.js';
 import morgan from 'morgan';
 
@@ -152,7 +153,8 @@ const apiRoutes = [
   ['/coupons', couponRoutes],
   ['/courses', courseRoutes],
   ['/student', studentRoutes],
-  ['/payment', paymentRoutes]
+  ['/payment', paymentRoutes],
+  ['/upload', uploadRoutes],
 ];
 
 apiRoutes.forEach(([path, route]) => {

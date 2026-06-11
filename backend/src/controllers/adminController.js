@@ -1,11 +1,31 @@
 import Lead from '../models/leadModel.js';
 import Blog from '../models/Blog.js';
-import JobApplication from '../models/JobApplication.js';
-import Newsletter from '../models/Newsletter.js';
+import Job from '../models/Job.js';
 import User from '../models/User.js';
 import Order from '../models/Order.js';
+import Enrollment from '../models/Enrollment.js';
 import Consultation from '../models/Consultation.js';
 import asyncHandler from 'express-async-handler';
+
+const formatConsultationStatus = (status) => {
+  if (!status) return 'Pending';
+  const normalized = String(status).toLowerCase();
+  const map = {
+    pending: 'Pending',
+    contacted: 'Confirmed',
+    confirmed: 'Confirmed',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
+  };
+  return map[normalized] || status;
+};
+
+const mapOrderPaymentStatus = (status) => {
+  if (status === 'completed') return 'PAID';
+  if (status === 'failed') return 'FAILED';
+  if (status === 'pending') return 'PENDING';
+  return String(status || '').toUpperCase();
+};
 
 // @desc    Get dashboard stats
 // @route   GET /api/admin/stats
@@ -20,7 +40,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const recordedCoursePurchases = await Lead.countDocuments({
     $or: [
       { status: 'Recorded Course Lead - Paid' },
-      { type: 'Course', paymentStatus: { $in: ['PAID', 'Completed'] } },
+      { type: 'Recorded-Course', paymentStatus: { $in: ['PAID', 'Completed'] } },
     ],
   });
   const failedPayments = await Lead.countDocuments({
@@ -33,39 +53,23 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   const liveCourseEnquiries = await Lead.countDocuments({
     $or: [
       { leadType: 'LIVE COURSE LEAD' },
-      { status: 'ENQUIRY RECEIVED' },
-      { type: 'Course-Inquiry' },
+      { type: 'Course', courseType: { $ne: 'Recorded' } },
+      { type: 'Course-Inquiry', courseType: 'Live' },
     ],
   });
-
-  const lastMonth = new Date();
-  lastMonth.setDate(lastMonth.getDate() - 30);
-
-  const recentLeads = await Lead.countDocuments({ createdAt: { $gte: lastMonth } });
-  const activeBlogsCount = await Blog.countDocuments();
-  const expertNetworkCount = await JobApplication.countDocuments();
-  const newsletterSubscribersCount = await Newsletter.countDocuments();
-  const recentBlogs = await Blog.countDocuments({ updatedAt: { $gte: lastMonth } });
-  const recentJobs = await JobApplication.countDocuments({ createdAt: { $gte: lastMonth } });
-  const recentSubscribers = await Newsletter.countDocuments({ createdAt: { $gte: lastMonth } });
-
-  const getDelta = (recent, total) => (total > 0 ? `+${Math.round((recent / total) * 100)}%` : '0%');
-  const estimatedTraffic = (totalLeads * 124) + (activeBlogsCount * 450) + (expertNetworkCount * 88);
-  const trafficDelta = totalLeads > 0 ? `+${Math.floor(Math.random() * 12) + 8}%` : '0%';
+  const activeArticles = await Blog.countDocuments({ isPublished: true });
+  const jobOpenings = await Job.countDocuments({ isActive: true });
 
   res.json({
     success: true,
     stats: {
-      totalLeads,
-      paidConsultations,
       recordedCoursePurchases,
-      failedPayments,
+      paidConsultations,
       liveCourseEnquiries,
-      totalLeadsDetail: { value: totalLeads.toLocaleString(), delta: getDelta(recentLeads, totalLeads) },
-      activeBlogs: { value: activeBlogsCount.toLocaleString(), delta: getDelta(recentBlogs, activeBlogsCount) },
-      expertNetwork: { value: expertNetworkCount.toLocaleString(), delta: getDelta(recentJobs, expertNetworkCount) },
-      globalReach: { value: estimatedTraffic.toLocaleString(), delta: trafficDelta },
-      newsletterSubscribers: { value: newsletterSubscribersCount.toLocaleString(), delta: getDelta(recentSubscribers, newsletterSubscribersCount) },
+      failedPayments,
+      totalLeads,
+      activeArticles,
+      jobOpenings,
     },
   });
 });
@@ -73,10 +77,23 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
 // @desc    Get all consultations
 // @route   GET /api/admin/consultations
 export const getConsultations = asyncHandler(async (req, res) => {
-  const consultations = await Consultation.find()
+  const rows = await Consultation.find()
     .populate('courseId', 'title')
     .populate('userId', 'name email')
     .sort('-createdAt');
+
+  const consultations = rows.map((c) => ({
+    _id: c._id,
+    studentId: c.userId?._id || c.userId || null,
+    studentName: c.userId?.name || c.name || '',
+    courseId: c.courseId?._id || c.courseId || null,
+    courseName: c.courseId?.title || '',
+    mobile: c.mobile || c.phone || '',
+    preferredDatetime: c.preferredDatetime || null,
+    notes: c.notes || c.message || '',
+    status: formatConsultationStatus(c.status),
+    createdAt: c.createdAt,
+  }));
 
   res.json({ success: true, consultations });
 });
@@ -101,8 +118,36 @@ export const updateConsultation = asyncHandler(async (req, res) => {
 // @desc    Get all users (students)
 // @route   GET /api/admin/users
 export const getAdminUsers = asyncHandler(async (req, res) => {
-  const users = await User.find({ role: 'student' }).sort('-createdAt');
-  res.json({ success: true, users });
+  const users = await User.find({ role: 'student' }).sort('-createdAt').lean();
+  const userIds = users.map((u) => u._id);
+
+  const enrollments = await Enrollment.find({
+    userId: { $in: userIds },
+    isActive: true,
+  }).populate('courseId', 'title').lean();
+
+  const coursesByUser = new Map();
+  for (const enrollment of enrollments) {
+    if (!enrollment.courseId) continue;
+    const key = String(enrollment.userId);
+    if (!coursesByUser.has(key)) coursesByUser.set(key, []);
+    coursesByUser.get(key).push({
+      _id: enrollment.courseId._id,
+      title: enrollment.courseId.title,
+    });
+  }
+
+  res.json({
+    success: true,
+    users: users.map((user) => ({
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+      mobile: user.mobile || '',
+      enrolledCourses: coursesByUser.get(String(user._id)) || [],
+      createdAt: user.createdAt,
+    })),
+  });
 });
 
 // @desc    Get all orders (purchases)
@@ -112,5 +157,19 @@ export const getAdminOrders = asyncHandler(async (req, res) => {
     .populate('userId', 'name email mobile')
     .populate('courseId', 'title')
     .sort('-createdAt');
-  res.json({ success: true, orders });
+
+  res.json({
+    success: true,
+    orders: orders.map((order) => ({
+      _id: order._id,
+      guestDetails: order.guestDetails || null,
+      userId: order.userId || null,
+      courseId: order.courseId || null,
+      amount: order.amount,
+      paymentStatus: mapOrderPaymentStatus(order.paymentStatus),
+      razorpay_payment_id: order.razorpayPaymentId || '',
+      razorpay_order_id: order.razorpayOrderId || '',
+      createdAt: order.createdAt,
+    })),
+  });
 });

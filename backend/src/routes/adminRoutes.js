@@ -3,6 +3,14 @@ import multer from 'multer';
 import { getDashboardStats, getConsultations, updateConsultation, getAdminUsers, getAdminOrders } from '../controllers/adminController.js';
 import { adminAuth } from '../middleware/authMiddleware.js';
 import {
+  getNotifications,
+  getUnreadCount,
+  markAllRead,
+  markAsRead,
+  deleteNotification,
+  clearAllNotifications,
+} from '../controllers/notificationController.js';
+import {
   createCourse,
   updateCourse,
   deleteCourse,
@@ -72,5 +80,13 @@ router.delete('/course-materials/:id', adminAuth, deleteMaterial);
 // Consultation Management (Admin)
 router.get('/consultations', adminAuth, getConsultations);
 router.put('/consultations/:id', adminAuth, updateConsultation);
+
+// Notifications (Admin)
+router.get('/notifications/unread-count', adminAuth, getUnreadCount);
+router.get('/notifications', adminAuth, getNotifications);
+router.put('/notifications/read-all', adminAuth, markAllRead);
+router.put('/notifications/:id/read', adminAuth, markAsRead);
+router.delete('/notifications', adminAuth, clearAllNotifications);
+router.delete('/notifications/:id', adminAuth, deleteNotification);
 
 export default router;

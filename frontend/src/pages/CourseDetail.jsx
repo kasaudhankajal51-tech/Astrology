@@ -10,6 +10,9 @@ import toast from 'react-hot-toast';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure } from '../utils/paymentUtils';
 
+/** Recorded-course Razorpay checkout — disabled until keys are configured in production */
+const RECORDED_PAYMENT_ENABLED = false;
+
 function CourseDetail() {
   const { courseId } = useParams();
   const navigate = useNavigate();
@@ -38,6 +41,24 @@ function CourseDetail() {
   const [couponStatus, setCouponStatus] = useState(null);
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
+  const [paymentEnabled, setPaymentEnabled] = useState(false);
+
+  const isLiveCourse = course?.courseType === 'Live';
+  const isRecordedCourse = course?.courseType === 'Recorded';
+  const canPayOnline = RECORDED_PAYMENT_ENABLED
+    && isRecordedCourse
+    && paymentEnabled
+    && Number(course?.price) > 0;
+  /* Payment gateway status — kept for when RECORDED_PAYMENT_ENABLED is turned on */
+  useEffect(() => {
+    if (!RECORDED_PAYMENT_ENABLED) return;
+    fetch(`${API_BASE}/api/payment/status`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setPaymentEnabled(!!data.paymentEnabled);
+      })
+      .catch(() => setPaymentEnabled(false));
+  }, []);
 
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -61,7 +82,6 @@ function CourseDetail() {
             category: 'Astrology',
             price: dbCourse.price,
             courseType,
-            isPremium: courseType !== 'Live' && Number(dbCourse.price) > 0,
             topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
           };
           setCourse(mappedCourse);
@@ -69,7 +89,7 @@ function CourseDetail() {
         } else {
           const staticCourse = coursesData.find(c => c.id === courseId);
           if (staticCourse) {
-            setCourse({...staticCourse, courseType: 'Recorded', isPremium: false});
+            setCourse({ ...staticCourse, courseType: 'Recorded' });
             document.title = `${staticCourse.title} | DS Institute`;
           } else {
             navigate('/courses');
@@ -78,7 +98,7 @@ function CourseDetail() {
       } catch (err) {
         const staticCourse = coursesData.find(c => c.id === courseId);
         if (staticCourse) {
-          setCourse({...staticCourse, courseType: 'Recorded', isPremium: false});
+          setCourse({ ...staticCourse, courseType: 'Recorded' });
           document.title = `${staticCourse.title} | Cosmic Light Astrology`;
         } else {
           console.error('Failed to fetch course details:', err);
@@ -125,16 +145,19 @@ function CourseDetail() {
           name: enquiryData.name.trim(),
           phone: sanitizedPhone,
           email: enquiryData.email.trim(),
-          type: course.courseType === 'Live' ? 'Course' : 'Course-Inquiry',
-          leadType: course.courseType === 'Live' ? 'LIVE COURSE LEAD' : 'COURSE ENQUIRY',
+          type: isLiveCourse ? 'Course' : 'Recorded-Course',
+          leadType: isLiveCourse ? 'LIVE COURSE LEAD' : 'RECORDED COURSE LEAD',
           status: 'ENQUIRY RECEIVED',
-          paymentStatus: course.courseType === 'Live' ? 'NOT REQUIRED' : 'NOT PAID',
+          paymentStatus: 'NOT REQUIRED',
           courseName: course.title,
+          courseId: course.id,
           courseType: course.courseType,
-          dob: enquiryData.age,
-          pob: enquiryData.city,
-          message: `Interest: ${enquiryData.interest || 'Not specified'}${enquiryData.message ? `\nNotes: ${enquiryData.message}` : ''}`,
-          couponCode: course.isPremium ? appliedCoupon?.code || '' : ''
+          city: enquiryData.city,
+          age: enquiryData.age,
+          interest: enquiryData.interest,
+          message: enquiryData.message
+            ? enquiryData.message
+            : `Interest: ${enquiryData.interest || 'Not specified'}`,
         }),
       });
       const data = await res.json();
@@ -150,13 +173,18 @@ function CourseDetail() {
     }
   };
 
+  const openEnquiryModal = () => setShowEnquiryModal(true);
+
   const initiateCheckout = () => {
+    if (!RECORDED_PAYMENT_ENABLED || !canPayOnline) {
+      openEnquiryModal();
+      return;
+    }
+
     const token = localStorage.getItem('studentToken');
     if (token) {
-      // Already logged in, straight to payment
       handlePayment();
     } else {
-      // Ask for details
       setShowCheckoutModal(true);
     }
   };
@@ -177,6 +205,10 @@ function CourseDetail() {
 
   const handlePayment = async (e) => {
     if (e) e.preventDefault();
+    if (!RECORDED_PAYMENT_ENABLED) {
+      openEnquiryModal();
+      return;
+    }
 
     try {
       // Create Order & get Payment Link
@@ -211,9 +243,14 @@ function CourseDetail() {
       const orderData = await orderResponse.json();
 
       if (!orderData.success) {
-        toast.error(orderData.message || 'Failed to create order');
+        if (orderData.code === 'PAYMENT_DISABLED' || orderResponse.status === 503) {
+          toast.error('Online payment is not live yet. Please submit an enquiry — our team will call you.');
+          setShowCheckoutModal(false);
+          setShowEnquiryModal(true);
+        } else {
+          toast.error(orderData.message || 'Failed to create order');
+        }
         setIsProcessingPayment(false);
-        // If it failed because of missing email (stale token), clear token and show modal
         if (orderResponse.status === 400 || orderResponse.status === 401) {
           localStorage.removeItem('studentToken');
           setShowCheckoutModal(true);
@@ -982,88 +1019,161 @@ function CourseDetail() {
           color: #C8832A;
         }
 
-        /* Inquiry Modal */
-        .modal-overlay {
+        /* Course enquiry & checkout modals */
+        .ce-modal-overlay {
           position: fixed;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: rgba(0,0,0,0.8);
+          inset: 0;
+          background: rgba(42, 15, 2, 0.55);
           backdrop-filter: blur(10px);
-          z-index: 9999;
+          z-index: 100001;
           display: flex;
           align-items: center;
           justify-content: center;
           padding: 1rem;
         }
 
-        .modal-content {
-          background: var(--site-surface);
-          max-width: 500px;
+        .ce-modal-panel {
+          background: #fff;
+          max-width: 520px;
           width: 100%;
-          border-radius: var(--radius-card);
-          padding: clamp(1.35rem, 4vw, 2rem);
+          max-height: 90vh;
+          overflow-y: auto;
+          border-radius: 20px;
+          padding: 1.75rem 1.5rem 1.5rem;
           position: relative;
-          border: 1px solid rgba(139, 74, 30, 0.2);
+          border: 1px solid rgba(139, 74, 30, 0.18);
+          box-shadow: 0 24px 64px rgba(42, 15, 2, 0.22);
+          scrollbar-width: thin;
         }
 
-        .modal-close {
+        .ce-modal-close {
           position: absolute;
-          top: 20px;
-          right: 20px;
-          background: none;
-          border: none;
-          font-size: 1.5rem;
+          top: 14px;
+          right: 14px;
+          width: 38px;
+          height: 38px;
+          border-radius: 50%;
+          border: 2px solid rgba(255, 255, 255, 0.25);
+          background: #8B4A1E;
+          color: #fff;
+          font-size: 15px;
+          line-height: 1;
           cursor: pointer;
-          color: #2A0F02;
+          z-index: 5;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: background 0.2s ease, transform 0.2s ease;
+          box-shadow: 0 4px 14px rgba(42, 15, 2, 0.25);
         }
 
-        .modal-content h3 {
-          font-family: var(--font-heading);
-          margin-bottom: 10px;
-          color: #2A0F02;
+        .ce-modal-close:hover {
+          background: #C8832A;
+          transform: rotate(90deg);
         }
 
-        .form-group {
-          margin-bottom: 1rem;
+        .ce-modal-header {
+          padding-right: 2.75rem;
+          margin-bottom: 1.25rem;
         }
 
-        .form-group label {
+        .ce-modal-header h3 {
+          font-family: var(--font-heading, 'Bricolage Grotesque', serif);
+          font-size: 1.5rem !important;
+          font-weight: 800 !important;
+          line-height: 1.2 !important;
+          color: #2A0F02 !important;
+          margin: 0 0 0.5rem !important;
+          letter-spacing: -0.02em;
+        }
+
+        .ce-modal-header p {
+          font-size: 0.9rem !important;
+          line-height: 1.55 !important;
+          color: #9B6640 !important;
+          margin: 0 !important;
+        }
+
+        .ce-modal-form .form-group {
+          margin-bottom: 0.95rem;
+        }
+
+        .ce-modal-form .form-group label {
           display: block;
-          margin-bottom: 8px;
-          font-weight: 600;
+          margin-bottom: 6px;
+          font-weight: 700;
           color: #8B4A1E;
-          font-size: 0.9rem;
+          font-size: 0.8rem;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
         }
 
-        .form-group input, .form-group select, .form-group textarea {
+        .ce-modal-form .form-group input,
+        .ce-modal-form .form-group select,
+        .ce-modal-form .form-group textarea {
           width: 100%;
-          padding: 0.78rem 0.9rem;
-          border-radius: var(--radius-control);
-          border: 1.5px solid rgba(139, 74, 30, 0.1);
-          background: #FFF;
+          padding: 0.72rem 0.85rem;
+          border-radius: 10px;
+          border: 1.5px solid rgba(139, 74, 30, 0.14);
+          background: #fff;
           outline: none;
-          transition: all 0.3s ease;
+          font-size: 0.95rem;
+          color: #2A0F02;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .form-group input:focus {
+        .ce-modal-form .form-group input:disabled {
+          background: #f5f0ea;
+          color: #6f4a32;
+        }
+
+        .ce-modal-form .form-group input:focus,
+        .ce-modal-form .form-group textarea:focus {
           border-color: #C8832A;
-          box-shadow: 0 0 0 4px rgba(200, 131, 42, 0.1);
+          box-shadow: 0 0 0 3px rgba(200, 131, 42, 0.12);
         }
 
-        .submit-btn {
+        .ce-modal-form .form-group textarea {
+          resize: vertical;
+          min-height: 88px;
+        }
+
+        .ce-modal-form .submit-btn {
           width: 100%;
-          background: #2A0F02;
-          color: #FFF;
-          padding: 15px;
-          border-radius: var(--radius-control);
+          background: linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%);
+          color: #fff;
+          padding: 0.9rem 1rem;
+          border-radius: 10px;
+          font-size: 0.95rem;
           font-weight: 700;
           border: none;
           cursor: pointer;
-          transition: all 0.3s ease;
+          margin-top: 0.35rem;
+          transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .submit-btn:hover {
-          background: #8B4A1E;
-          transform: translateY(-2px);
+        .ce-modal-form .submit-btn:hover:not(:disabled) {
+          transform: translateY(-1px);
+          box-shadow: 0 8px 20px rgba(42, 15, 2, 0.18);
+        }
+
+        .ce-modal-form .submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        @media (max-width: 576px) {
+          .ce-modal-panel {
+            padding: 1.5rem 1.1rem 1.25rem;
+            border-radius: 16px;
+          }
+          .ce-modal-header h3 {
+            font-size: 1.3rem !important;
+          }
+          .ce-modal-form .row .col-6 {
+            flex: 0 0 100%;
+            max-width: 100%;
+          }
         }
 
         @media (max-width: 1200px) {
@@ -1237,28 +1347,37 @@ function CourseDetail() {
           <div className="col-lg-4" data-aos="fade-left" data-aos-delay="200">
             <div className="enroll-sidebar">
               <div className="enroll-card">
-                <div className="enroll-badge">{course.isPremium ? 'LIMITED SLOTS' : 'ENQUIRY ONLY'}</div>
-                <h4>{course.isPremium ? 'Start Your Journey' : 'Request Course Details'}</h4>
-                <div className="enroll-price">{course.isPremium ? `₹ ${getPayableAmount()}` : 'Enquiry Only'}</div>
-                {course.isPremium && appliedCoupon && (
+                <div className="enroll-badge">{canPayOnline ? 'LIMITED OFFER' : 'ENQUIRY ONLY'}</div>
+                <h4>{canPayOnline ? 'Start Your Journey' : (isLiveCourse ? 'Request Batch Details' : 'Talk to Our Counsellor')}</h4>
+                <div className="enroll-price">{canPayOnline ? `₹ ${getPayableAmount()}` : (course.price ? `From ₹ ${course.price}` : 'Enquiry Only')}</div>
+                {canPayOnline && appliedCoupon && (
                   <div className="coupon-price-note">
                     <span>Original ₹{getCoursePrice()}</span>
                     <strong>Saved ₹{getDiscountAmount()}</strong>
                   </div>
                 )}
-                <p className="enroll-sub">{course.isPremium ? 'Full access to course contents' : 'No online payment required. Our team will contact you with batch details.'}</p>
+                <p className="enroll-sub">
+                  {canPayOnline
+                    ? 'Full access to course contents after payment.'
+                    : isLiveCourse
+                      ? 'No online payment. Submit enquiry — sales team shares batch timing and fees.'
+                      : 'Payment gateway coming soon. Submit enquiry now — our counsellor will call you to complete enrollment.'}
+                </p>
 
-                {course.isPremium && (
-                  <motion.div 
+                {(isRecordedCourse || canPayOnline) && (
+                  <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.5 }}
                   >
-                    <CourseTimer courseId={courseId} />
+                    <CourseTimer
+                      courseId={courseId}
+                      label={canPayOnline ? 'Offer closes in' : 'Enrolment window closes in'}
+                    />
                   </motion.div>
                 )}
 
-                {course.isPremium && (
+                {canPayOnline && (
                   <motion.div
                     initial={{ opacity: 0, y: 14 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -1303,8 +1422,13 @@ function CourseDetail() {
                   </motion.div>
                 )}
 
-                <button className="enroll-btn" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
-                  {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'Enroll Now' : 'Enquire Now')} <i className="fas fa-chevron-right ms-2"></i>
+                <button
+                  className="enroll-btn"
+                  onClick={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
+                  disabled={isProcessingPayment}
+                >
+                  {isProcessingPayment ? 'WAIT...' : (canPayOnline ? 'Buy Now' : 'Enquire Now')}
+                  <i className="fas fa-chevron-right ms-2" />
                 </button>
 
                 <div className="trust-badges">
@@ -1317,7 +1441,7 @@ function CourseDetail() {
 
                 <ul className="features-list">
                   {[
-                    ...(course.isPremium
+                    ...(canPayOnline
                       ? [
                           { icon: 'certificate', text: 'Professional Certification' },
                           { icon: 'video', text: 'Secure Video Access' },
@@ -1325,9 +1449,9 @@ function CourseDetail() {
                           { icon: 'whatsapp', text: 'Student Support Group', fab: true }
                         ]
                       : [
-                          { icon: 'calendar-alt', text: 'Batch Details by Counsellor' },
-                          { icon: 'book-open', text: 'Syllabus & Benefits Shared' },
-                          { icon: 'phone-alt', text: 'Sales Team Follow-up' },
+                          { icon: 'calendar-alt', text: isLiveCourse ? 'Live Batch Schedule Shared' : 'Counsellor Callback' },
+                          { icon: 'book-open', text: 'Syllabus & Pricing Explained' },
+                          { icon: 'phone-alt', text: 'Sales Team Follow-up Call' },
                           { icon: 'whatsapp', text: 'WhatsApp Support', fab: true }
                         ])
                   ].map((item, idx) => (
@@ -1354,11 +1478,11 @@ function CourseDetail() {
       <div className="mobile-cta d-lg-none">
         <div className="d-flex align-items-center justify-content-between w-100">
           <div>
-            <p className="small">{course.isPremium ? 'Recorded Course' : 'Upcoming Batch'}</p>
-            <p className="mb-0 fw-bold text-white">{course.isPremium ? 'Instant Access' : 'Enquiry Only'}</p>
+            <p className="small">{isLiveCourse ? 'Live Course' : 'Recorded Course'}</p>
+            <p className="mb-0 fw-bold text-white">{canPayOnline ? 'Buy Online' : 'Enquiry Only'}</p>
           </div>
-          <button className="btn-enquire" onClick={() => course.isPremium ? initiateCheckout() : setShowEnquiryModal(true)} disabled={isProcessingPayment}>
-            {isProcessingPayment ? 'WAIT...' : (course.isPremium ? 'ENROLL NOW' : 'ENQUIRE NOW')}
+          <button className="btn-enquire" onClick={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())} disabled={isProcessingPayment}>
+            {isProcessingPayment ? 'WAIT...' : (canPayOnline ? 'BUY NOW' : 'ENQUIRE NOW')}
           </button>
         </div>
       </div>
@@ -1372,17 +1496,22 @@ function CourseDetail() {
         <i className="fas fa-arrow-up"></i>
       </button>
 
-      {showCheckoutModal && (
-        <div className="modal-overlay" onClick={() => setShowCheckoutModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in">
-            <button className="modal-close" onClick={() => setShowCheckoutModal(false)}>&times;</button>
-            <h3>Complete Checkout</h3>
-            <p className="text-muted mb-4">Enter your details to proceed to secure payment.</p>
-            
-            <form onSubmit={handlePayment}>
+      {/* Checkout / Razorpay — re-enable when RECORDED_PAYMENT_ENABLED is true */}
+      {RECORDED_PAYMENT_ENABLED && showCheckoutModal && (
+        <div className="ce-modal-overlay" onClick={() => setShowCheckoutModal(false)} role="dialog" aria-modal="true">
+          <div className="ce-modal-panel" onClick={(e) => e.stopPropagation()} data-aos="zoom-in">
+            <button type="button" className="ce-modal-close" onClick={() => setShowCheckoutModal(false)} aria-label="Close checkout">
+              <i className="fas fa-times" aria-hidden="true" />
+            </button>
+            <div className="ce-modal-header">
+              <h3>Complete Checkout</h3>
+              <p>Enter your details to proceed to secure payment.</p>
+            </div>
+
+            <form className="ce-modal-form" onSubmit={handlePayment}>
               <div className="form-group">
                 <label>Selected Course</label>
-                <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
+                <input type="text" value={course.title} disabled readOnly />
               </div>
               <div className="form-group">
                 <label>Full Name</label>
@@ -1415,16 +1544,20 @@ function CourseDetail() {
       )}
 
       {showEnquiryModal && (
-        <div className="modal-overlay" onClick={() => setShowEnquiryModal(false)}>
-          <div className="modal-content" onClick={e => e.stopPropagation()} data-aos="zoom-in" style={{maxHeight: '90vh', overflowY: 'auto'}}>
-            <button className="modal-close" onClick={() => setShowEnquiryModal(false)}>&times;</button>
-            <h3>Course Enquiry</h3>
-            <p className="text-muted mb-4">Fill out this form and our team will get in touch with you.</p>
-            
-            <form onSubmit={handleEnquirySubmit}>
+        <div className="ce-modal-overlay" onClick={() => setShowEnquiryModal(false)} role="dialog" aria-modal="true">
+          <div className="ce-modal-panel" onClick={(e) => e.stopPropagation()} data-aos="zoom-in">
+            <button type="button" className="ce-modal-close" onClick={() => setShowEnquiryModal(false)} aria-label="Close enquiry form">
+              <i className="fas fa-times" aria-hidden="true" />
+            </button>
+            <div className="ce-modal-header">
+              <h3>Course Enquiry</h3>
+              <p>Fill out this form and our team will get in touch with you.</p>
+            </div>
+
+            <form className="ce-modal-form" onSubmit={handleEnquirySubmit}>
               <div className="form-group">
                 <label>Selected Course</label>
-                <input type="text" value={course.title} disabled style={{ background: '#eee' }} />
+                <input type="text" value={course.title} disabled readOnly />
               </div>
               <div className="form-group">
                 <label>Full Name</label>

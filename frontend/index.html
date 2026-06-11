@@ -30,20 +30,14 @@
     <meta name="twitter:site" content="@DSAstro">
 
     <link href="/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link href="/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" />
-    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <link href="/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+    <noscript><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"></noscript>
     <link href="/css/style.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
-
-    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.2/themes/smoothness/jquery-ui.css"/>
-    <link rel="stylesheet" href="https://code.jquery.com/ui/1.10.2/themes/smoothness/jquery-ui.css"/>
     <style>
       :root {
         /* ── Base ── */
@@ -117,9 +111,17 @@
         line-height: 1.28 !important;
       }
 
-      h5, h6 {
+      h5 {
         font-family: var(--font-heading) !important;
-        font-size: 1rem !important;
+        font-size: clamp(1rem, 1.3vw, 1.125rem) !important;
+        font-weight: 600 !important;
+        letter-spacing: 0 !important;
+        line-height: 1.35 !important;
+      }
+
+      h6 {
+        font-family: var(--font-heading) !important;
+        font-size: 0.9rem !important;
         font-weight: 600 !important;
         letter-spacing: 0 !important;
         line-height: 1.35 !important;
@@ -127,7 +129,7 @@
 
       .section-subtitle, .sub-heading {
         font-family: var(--font-body) !important;
-        font-size: 1rem !important;
+        font-size: clamp(0.92rem, 1.4vw, 1rem) !important;
         font-weight: 500 !important;
         color: var(--text-muted) !important;
         text-transform: none !important;
@@ -137,11 +139,20 @@
 
       p {
         font-family: var(--font-body) !important;
-        font-size: 1rem !important;
+        font-size: clamp(0.9rem, 1.5vw, 1rem) !important;
         font-weight: 400 !important;
         color: var(--text-content) !important;
         letter-spacing: 0 !important;
         line-height: 1.65 !important;
+      }
+
+      small, .small {
+        font-size: 0.82rem !important;
+        line-height: 1.5 !important;
+      }
+
+      .text-xs {
+        font-size: 0.75rem !important;
       }
   
       /* Global Card / Glass Panel */
@@ -220,12 +231,8 @@
   </head>
   <body>
     <div id="root"></div>
-    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <script type="module" src="/src/main.jsx"></script>
-
     <script defer src="/js/jquery.min.js"></script>
-    <script defer src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
-    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
     <script defer src="/js/bootstrap.bundle.min.js"></script>
     <script defer src="/js/custom.js"></script>
     <script defer src="https://unpkg.com/aos@next/dist/aos.js"></script>

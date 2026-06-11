@@ -6,7 +6,14 @@ const leadSchema = new mongoose.Schema({
   phone: { type: String, required: true },
   type: {
     type: String,
-    enum: ['Webinar', 'Course', 'Consultation', 'Home-Enroll', 'Contact', 'Course-Inquiry'],
+    // Course         = Live course enquiry (no payment)
+    // Recorded-Course= Recorded course purchase/interest (paid flow)
+    // Course-Inquiry = Legacy alias for Recorded-Course (kept for backward compat)
+    // Consultation   = Direct paid consultation booking
+    // Webinar        = Paid webinar registration
+    // Home-Enroll    = Homepage enrollment enquiry
+    // Contact        = General contact form
+    enum: ['Webinar', 'Course', 'Consultation', 'Home-Enroll', 'Contact', 'Course-Inquiry', 'Recorded-Course'],
     required: true
   },
   leadType: { type: String },
@@ -17,6 +24,9 @@ const leadSchema = new mongoose.Schema({
   dob: { type: String },
   tob: { type: String },
   pob: { type: String },
+  city: { type: String },
+  age: { type: mongoose.Schema.Types.Mixed },
+  interest: { type: String },
   message: { type: String },
   amount: { type: Number },
   paymentFor: { type: String },
@@ -26,6 +36,8 @@ const leadSchema = new mongoose.Schema({
   transactionId: { type: String },
   failureReason: { type: String },
   razorpayError: { type: mongoose.Schema.Types.Mixed },
+  /** Server-set moment the lead form was received (falls back to createdAt for legacy rows) */
+  submittedAt: { type: Date, default: Date.now },
 }, { timestamps: true });
 
 export default mongoose.models.Lead || mongoose.model('Lead', leadSchema);

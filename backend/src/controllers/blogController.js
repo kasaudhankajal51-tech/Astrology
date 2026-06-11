@@ -5,7 +5,20 @@ import asyncHandler from 'express-async-handler';
 // @route   GET /api/blogs
 // @access  Public
 export const getBlogs = asyncHandler(async (req, res) => {
-  const blogs = await Blog.find({ isPublished: true }).sort({ createdAt: -1 });
+  const { category, search, limit } = req.query;
+  const filter = { isPublished: true };
+
+  if (category) filter.category = category;
+  if (search) {
+    const regex = new RegExp(search, 'i');
+    filter.$or = [{ title: regex }, { excerpt: regex }, { content: regex }];
+  }
+
+  let query = Blog.find(filter).sort({ createdAt: -1 });
+  const parsedLimit = parseInt(limit, 10);
+  if (parsedLimit > 0) query = query.limit(parsedLimit);
+
+  const blogs = await query;
   res.json({ success: true, blogs });
 });
 

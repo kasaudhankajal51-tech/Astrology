@@ -3,22 +3,131 @@ import { Link, useNavigate } from 'react-router-dom';
 import {
   BadgePercent,
   BookOpen,
+  ChevronRight,
   Download,
   FileArchive,
   FileText,
   FolderOpen,
-  LayoutDashboard,
+  GraduationCap,
+  Loader2,
   LogOut,
   Package,
   PenLine,
+  Plus,
   Rocket,
   Save,
+  Sparkles,
   UserRound,
-  X
+  X,
 } from 'lucide-react';
 import toast from 'react-hot-toast';
 import API_BASE from '../utils/api';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+
+function SectionTitle({ icon: Icon, title, badge }) {
+  return (
+    <div className="sd-section-title">
+      <Icon size={18} className="text-[#8b4a1e]" />
+      <h2 className="text-base font-extrabold sm:text-lg">{title}</h2>
+      {badge}
+    </div>
+  );
+}
+
+function DashboardSkeleton() {
+  return (
+    <div className="student-dashboard sd-loader">
+      <section className="sd-hero">
+        <div className="sd-page-pad flex flex-col gap-5 py-1 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-1 flex-col gap-3">
+            <div className="sd-skeleton sd-skeleton--dark h-3.5 w-28" />
+            <div className="sd-skeleton sd-skeleton--dark h-9 w-full max-w-md" />
+            <div className="sd-skeleton sd-skeleton--dark h-4 w-full max-w-xl" />
+          </div>
+          <div className="sd-skeleton sd-skeleton--dark h-11 w-44 shrink-0 rounded-xl" />
+        </div>
+        <div className="sd-page-pad mt-4 flex items-center gap-2 pb-1">
+          <span className="sd-loader-pulse">
+            <span className="sd-loader-dot" />
+            <span className="sd-loader-dot" />
+            <span className="sd-loader-dot" />
+            Preparing your dashboard
+          </span>
+        </div>
+      </section>
+
+      <div className="sd-page-pad py-6">
+        <div className="sd-stats-row mb-6">
+          {[1, 2, 3, 4].map((item) => (
+            <div key={item} className="sd-stat-card sd-card">
+              <div className="sd-skeleton h-11 w-11 shrink-0 rounded-xl" />
+              <div className="flex flex-1 flex-col gap-2">
+                <div className="sd-skeleton h-3 w-20" />
+                <div className="sd-skeleton h-7 w-10" />
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="sd-body">
+          <aside className="sd-aside">
+            <div className="sd-card p-5">
+              <div className="flex items-center gap-3">
+                <div className="sd-skeleton h-12 w-12 shrink-0 rounded-full" />
+                <div className="flex flex-1 flex-col gap-2">
+                  <div className="sd-skeleton h-3 w-24" />
+                  <div className="sd-skeleton h-4 w-32" />
+                </div>
+              </div>
+              <div className="sd-skeleton mt-4 h-10 w-full rounded-xl" />
+            </div>
+            <div className="sd-card p-5">
+              <div className="sd-skeleton mb-4 h-5 w-28" />
+              <div className="flex flex-col gap-3">
+                <div className="sd-skeleton h-4 w-full" />
+                <div className="sd-skeleton h-4 w-full" />
+                <div className="sd-skeleton h-4 w-3/4" />
+              </div>
+            </div>
+          </aside>
+
+          <div className="sd-content">
+            <div className="sd-card p-6">
+              <div className="sd-skeleton mb-5 h-6 w-48" />
+              <div className="sd-progress-row">
+                <div className="sd-progress-main sd-card-muted p-5">
+                  <div className="sd-skeleton h-4 w-36" />
+                  <div className="sd-skeleton mt-4 h-3 w-full rounded-full" />
+                </div>
+                <div className="sd-progress-side">
+                  <div className="sd-card-muted p-4">
+                    <div className="sd-skeleton h-4 w-16" />
+                    <div className="sd-skeleton mt-3 h-8 w-10" />
+                  </div>
+                  <div className="sd-card-muted p-4">
+                    <div className="sd-skeleton h-4 w-16" />
+                    <div className="sd-skeleton mt-3 h-8 w-10" />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="sd-flex-2">
+              <div className="sd-card p-5">
+                <div className="sd-skeleton mb-4 h-5 w-40" />
+                <div className="sd-skeleton h-44 w-full rounded-xl" />
+              </div>
+              <div className="sd-card p-5">
+                <div className="sd-skeleton mb-4 h-5 w-32" />
+                <div className="sd-skeleton h-36 w-full rounded-xl" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function StudentDashboardNew() {
   const [profile, setProfile] = useState(null);
@@ -52,7 +161,7 @@ function StudentDashboardNew() {
         purchaseDate: entry.purchaseDate || entry.course.purchaseDate || entry.purchase_date,
         validTill: entry.validTill || entry.course.validTill || entry.course.valid_until || entry.validUntil,
         courseType: entry.course.courseType || entry.courseType || 'Recorded',
-        progress: entry.course.progress ?? entry.progress ?? 0
+        progress: entry.course.progress ?? entry.progress ?? 0,
       };
     }
 
@@ -64,7 +173,7 @@ function StudentDashboardNew() {
       purchaseDate: entry.purchaseDate,
       validTill: entry.validTill || entry.valid_until || entry.validity,
       courseType: entry.courseType || 'Recorded',
-      progress: entry.progress ?? 0
+      progress: entry.progress ?? 0,
     };
   };
 
@@ -87,8 +196,8 @@ function StudentDashboardNew() {
     const response = await fetch(`${API_BASE}${path}`, {
       headers: {
         Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
+        'Content-Type': 'application/json',
+      },
     });
     const data = await response.json();
     if (!response.ok) throw new Error(data.message || 'Failed to load');
@@ -101,15 +210,15 @@ function StudentDashboardNew() {
       const response = await fetch(`${API_BASE}/api/student/course/${courseId}/validity`, {
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
       const data = await response.json();
       if (!response.ok || data.success === false) return;
       const validity = data.validity || data.data || data;
       setCourseValidity((prev) => ({ ...prev, [courseId]: validity }));
-    } catch (err) {
-      // Validity data is optional; card dates still render without it.
+    } catch {
+      // Validity is optional.
     }
   };
 
@@ -127,14 +236,18 @@ function StudentDashboardNew() {
           fetchSection('/api/student/banners'),
           fetchSection('/api/student/merchandise'),
           fetchSection('/api/student/new-courses'),
-          fetchSection('/api/student/offers')
+          fetchSection('/api/student/offers'),
         ]);
 
         const profilePayload = profileData.profile || profileData.student || profileData.user || profileData;
         const loadedCourses = courseData.enrollments || courseData.courses || courseData.data || [];
 
         setProfile(profilePayload);
-        setProfileForm({ name: profilePayload.name || '', email: profilePayload.email || '', mobile: profilePayload.mobile || '' });
+        setProfileForm({
+          name: profilePayload.name || '',
+          email: profilePayload.email || '',
+          mobile: profilePayload.mobile || '',
+        });
         setCourses(loadedCourses);
         setBanners(bannerData.banners || bannerData.data || []);
         setMerchandise(merchData.products || merchData.merchandise || merchData.data || []);
@@ -165,11 +278,11 @@ function StudentDashboardNew() {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
+          'Content-Type': 'application/json',
+        },
       });
-    } catch (err) {
-      // Clear local session regardless of server response.
+    } catch {
+      // Clear local session regardless.
     }
     localStorage.removeItem('studentToken');
     localStorage.removeItem('studentName');
@@ -193,7 +306,7 @@ function StudentDashboardNew() {
       ...profileForm,
       name: profileForm.name.trim(),
       email: profileForm.email.trim(),
-      mobile: normalizeIndianMobile(profileForm.mobile)
+      mobile: normalizeIndianMobile(profileForm.mobile),
     };
 
     try {
@@ -201,15 +314,19 @@ function StudentDashboardNew() {
         method: 'PUT',
         headers: {
           Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(sanitizedProfile)
+        body: JSON.stringify(sanitizedProfile),
       });
       const data = await response.json();
       if (!response.ok || data.success === false) throw new Error(data.message || 'Unable to update profile');
       const updatedProfile = data.profile || data.student || data.user || data;
       setProfile(updatedProfile);
-      setProfileForm({ name: updatedProfile.name || '', email: updatedProfile.email || '', mobile: updatedProfile.mobile || '' });
+      setProfileForm({
+        name: updatedProfile.name || '',
+        email: updatedProfile.email || '',
+        mobile: updatedProfile.mobile || '',
+      });
       setProfileEditMode(false);
       toast.success('Profile updated successfully');
     } catch (error) {
@@ -226,7 +343,7 @@ function StudentDashboardNew() {
 
     try {
       const response = await fetch(`${API_BASE}/api/student/course/${courseId}/materials`, {
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' }
+        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
       });
       const data = await response.json();
       if (!response.ok || data.success === false) throw new Error(data.message || 'Failed to load course materials');
@@ -240,10 +357,10 @@ function StudentDashboardNew() {
   };
 
   const stats = [
-    { label: 'My Courses', value: enrolledCourses.length, icon: BookOpen, tone: 'student-stat-icon student-stat-icon--gold' },
-    { label: 'Materials', value: materials.length, icon: FolderOpen, tone: 'student-stat-icon student-stat-icon--sage' },
-    { label: 'Offers', value: offers.length, icon: BadgePercent, tone: 'student-stat-icon student-stat-icon--copper' },
-    { label: 'Launches', value: newCourses.length, icon: Rocket, tone: 'student-stat-icon student-stat-icon--violet' }
+    { label: 'My Courses', value: enrolledCourses.length, icon: BookOpen, tone: 'bg-[#fff0d6] text-[#8b4a1e]' },
+    { label: 'Materials', value: materials.length, icon: FolderOpen, tone: 'bg-[#f0f4df] text-[#5f6f23]' },
+    { label: 'Offers', value: offers.length, icon: BadgePercent, tone: 'bg-[#fde8d8] text-[#b25518]' },
+    { label: 'Launches', value: newCourses.length, icon: Rocket, tone: 'bg-[#f4e8dd] text-[#7b3f2a]' },
   ];
 
   const completedCourses = enrolledCourses.filter((course) => Number(course.progress) >= 100).length;
@@ -253,705 +370,372 @@ function StudentDashboardNew() {
     : 0;
 
   const materialTabs = enrolledCourses.slice(0, 4);
-  const primaryButton = 'student-btn student-btn-primary';
-  const outlineButton = 'student-btn student-btn-outline';
-  const panel = 'student-panel rounded-lg';
+  const promoItems = [...merchandise.slice(0, 3), ...newCourses.slice(0, 3)];
 
   if (loading) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-[#f6efe6] px-4 font-[var(--font-body)]">
-        <div className="rounded-lg border border-[#e5d8c7] bg-white px-7 py-6 text-center shadow-lg">
-          <div className="mx-auto h-10 w-10 animate-spin rounded-full border-2 border-[#d8c9b7] border-t-[#006d67]" />
-          <p className="mt-3 text-sm font-bold text-[#5c3d26]">Loading dashboard...</p>
-        </div>
-      </div>
-    );
+    return <DashboardSkeleton />;
   }
 
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning' : hour < 17 ? 'Good afternoon' : 'Good evening';
+
   return (
-    <div className="student-dashboard-preview student-portal min-h-screen font-[var(--font-body)]">
-      <main className="student-main mx-auto grid max-w-[1600px] grid-cols-1 gap-5 px-4 py-5 sm:px-5 lg:grid-cols-[minmax(260px,20%)_minmax(0,1fr)] xl:gap-6 2xl:gap-7">
-        <aside className="student-left-rail space-y-4">
-          <section className="student-rail-card rounded-lg">
-            <div className="student-portal-user flex items-center gap-3">
-              <div className="student-avatar flex h-11 w-11 items-center justify-center rounded-full">
-                <UserRound size={21} />
-              </div>
-              <div className="min-w-0 leading-tight">
-                <div className="student-portal-brand text-base font-extrabold tracking-normal">Student Portal</div>
-                <div className="student-header-label mt-2 text-[11px] font-semibold">Signed in as</div>
-                <div className="student-header-value truncate text-sm font-bold">{studentName}</div>
-              </div>
-            </div>
-            <div className="student-rail-divider" />
-            <div className="flex items-center justify-between gap-3">
-              <div className="leading-tight">
-                <div className="student-header-label text-[11px] font-semibold">Learning Portal</div>
-                <div className="student-header-title text-xl font-black tracking-normal">Dashboard</div>
-              </div>
-              <button onClick={handleLogout} className="student-btn student-btn-light student-logout-btn">
-                <LogOut size={17} />
-                <span>Logout</span>
-              </button>
-            </div>
-          </section>
-
-          <section className={`${panel} p-4`}>
-            <div className="mb-4 flex items-center justify-between">
-              <div className="text-lg font-extrabold tracking-normal">My Account Status</div>
-              <span className="student-status-pill inline-flex items-center rounded-full px-2.5 py-1 text-xs font-bold">Active</span>
-            </div>
-            <dl className="grid grid-cols-[82px_minmax(0,1fr)] gap-x-3 gap-y-2 text-sm">
-              <dt className="font-bold text-[#6f4b32]">Name</dt>
-              <dd className="font-semibold">{profile?.name || '-'}</dd>
-              <dt className="font-bold text-[#6f4b32]">Email</dt>
-              <dd className="break-all font-semibold">{profile?.email || '-'}</dd>
-              <dt className="font-bold text-[#6f4b32]">Mobile</dt>
-              <dd className="font-semibold">{profile?.mobile || '-'}</dd>
-            </dl>
-            <button onClick={() => setProfileEditMode((value) => !value)} className={`${outlineButton} mt-4 w-full`}>
-              <PenLine size={16} />
-              Edit Profile
+    <div className="student-dashboard min-h-screen w-full pb-10">
+      <section className="sd-hero w-full">
+        <div className="sd-page-pad flex flex-col gap-4 py-1 sm:flex-row sm:items-center sm:justify-between">
+          <div className="min-w-0 flex-1">
+            <p className="mb-1 flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-[#f5c98d]">
+              <Sparkles size={14} />
+              {greeting}
+            </p>
+            <h1 className="text-2xl font-extrabold text-white sm:text-3xl">Welcome back, {studentName}</h1>
+            <p className="mt-2 max-w-3xl text-sm text-[#f5d9b8] sm:text-base">
+              {enrolledCourses.length > 0
+                ? `You have ${enrolledCourses.length} enrolled course${enrolledCourses.length > 1 ? 's' : ''}. Pick up where you left off.`
+                : 'Explore recorded courses and begin your Vedic astrology journey with DS Institute.'}
+            </p>
+          </div>
+          <div className="flex shrink-0 flex-wrap items-center gap-2">
+            <Link to="/recorded-courses" className="sd-btn sd-btn-ghost">
+              <Plus size={16} />
+              Explore Courses
+            </Link>
+            <button type="button" onClick={handleLogout} className="sd-btn sd-btn-ghost lg:hidden">
+              <LogOut size={16} />
+              Logout
             </button>
-          </section>
+          </div>
+        </div>
+      </section>
 
-          {profileEditMode && (
-            <form onSubmit={saveProfile} className={`${panel} student-profile-editor space-y-4 p-4`}>
-              <div>
-                <div className="text-lg font-extrabold tracking-normal">Edit Profile</div>
-                <p className="mt-1 text-sm font-semibold text-[#6f4b32]">Update your account details.</p>
+      <div className="sd-page-pad py-6 sm:py-8">
+        <div className="sd-stats-row mb-6 sm:mb-8">
+          {stats.map((stat) => {
+            const Icon = stat.icon;
+            return (
+              <div key={stat.label} className="sd-stat-card sd-card">
+                <div className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl ${stat.tone}`}>
+                  <Icon size={20} />
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs font-bold text-[#6f4b32]">{stat.label}</p>
+                  <p className="mt-0.5 text-2xl font-black leading-none text-[#2a0f02]">{stat.value}</p>
+                </div>
               </div>
-              {['name', 'email', 'mobile'].map((field) => (
-                <label key={field} className="block">
-                  <span className="student-field-label text-xs font-bold uppercase text-[#8b4a1e]">{field}</span>
-                  <input
-                    type={field === 'email' ? 'email' : field === 'mobile' ? 'tel' : 'text'}
-                    value={profileForm[field]}
-                    onChange={handleProfileChange(field)}
-                    className="student-input mt-1 w-full rounded-md px-3 py-2 font-semibold outline-none transition"
-                    placeholder={field === 'mobile' ? '10-digit mobile number' : field.charAt(0).toUpperCase() + field.slice(1)}
-                    inputMode={field === 'mobile' ? 'numeric' : undefined}
-                    maxLength={field === 'mobile' ? 10 : undefined}
-                    required
-                  />
-                  {field === 'mobile' && (
-                    <span className="mt-1 block text-xs font-semibold text-[#7b6254]">
-                      Used for course updates and consultation contact.
-                    </span>
-                  )}
-                </label>
-              ))}
-              <div className="grid grid-cols-1 gap-2 pt-1 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2">
-                <button type="submit" disabled={savingProfile} className={primaryButton}>
-                  <Save size={16} />
-                  {savingProfile ? 'Saving' : 'Save'}
-                </button>
-                <button type="button" onClick={() => setProfileEditMode(false)} className={outlineButton}>
-                  <X size={16} />
-              Cancel
-                </button>
-              </div>
-            </form>
-          )}
+            );
+          })}
+        </div>
 
-          <section>
-            <div className="mb-3 flex items-center gap-2">
-              <LayoutDashboard size={18} className="text-[#8b4a1e]" />
-              <div className="text-xl font-extrabold tracking-normal">Overview</div>
-            </div>
-            <div className="student-overview-list grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-1">
-              {stats.map((stat) => {
-                const Icon = stat.icon;
-                return (
-                  <div key={stat.label} className={`${panel} student-overview-item flex items-center gap-3 p-3`}>
-                    <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-lg ${stat.tone}`}>
-                      <Icon size={20} />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="text-sm font-extrabold text-[#6f4b32]">{stat.label}</div>
-                      <div className="mt-0.5 text-2xl font-black leading-none tracking-normal">{stat.value}</div>
-                    </div>
+        <div className="sd-body">
+          <aside className="sd-aside">
+            <section className="sd-card p-5">
+              <div className="flex items-center gap-3">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#e5d8c7] bg-[#fffaf4] text-[#8b4a1e]">
+                  <UserRound size={22} />
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="text-xs font-bold uppercase tracking-wide text-[#8b4a1e]">Student Portal</p>
+                  <p className="truncate text-sm font-bold text-[#2a0f02]">{studentName}</p>
+                </div>
+              </div>
+            </section>
+
+            <section className="sd-card p-5">
+              <div className="sd-section-head !mb-3">
+                <h2 className="text-base font-extrabold">My Account</h2>
+                <span className="sd-pill sd-pill--active">Active</span>
+              </div>
+              <dl className="flex flex-col gap-2.5 text-sm">
+                {[
+                  ['Name', profile?.name || '-'],
+                  ['Email', profile?.email || '-'],
+                  ['Mobile', profile?.mobile || '-'],
+                ].map(([label, value]) => (
+                  <div key={label} className="flex flex-col gap-0.5 sm:flex-row sm:gap-3">
+                    <dt className="w-16 shrink-0 font-bold text-[#6f4b32]">{label}</dt>
+                    <dd className="min-w-0 flex-1 break-words font-semibold">{value}</dd>
                   </div>
-                );
-              })}
-            </div>
-          </section>
-        </aside>
-
-        <div className="space-y-5">
-          <section className={`${panel} student-progress-panel p-4`}>
-            <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
-              <div>
-                <div className="text-2xl font-black tracking-normal">Learning Progress</div>
-                <p className="mt-1 text-base font-semibold text-[#6f4b32]">Your current course activity and access summary.</p>
+                ))}
+              </dl>
+              <div className="mt-4 flex flex-col gap-2">
+                <button type="button" onClick={() => setProfileEditMode((open) => !open)} className="sd-btn sd-btn-outline w-full">
+                  <PenLine size={16} />
+                  Edit Profile
+                </button>
+                <button type="button" onClick={handleLogout} className="sd-btn sd-btn-primary hidden w-full lg:inline-flex">
+                  <LogOut size={16} />
+                  Logout
+                </button>
               </div>
-              <span className="student-mini-pill inline-flex w-fit rounded-md px-3 py-1.5 text-xs font-bold">
-                {activeCourses} active / {completedCourses} completed
-              </span>
-            </div>
-            <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1.2fr)_minmax(220px,0.8fr)]">
-              <div className="student-inner-card rounded-lg p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <div>
-                    <div className="text-base font-extrabold">Average Progress</div>
-                    <p className="mt-1 text-sm font-semibold text-[#6f4b32]">
-                      Based on your enrolled courses.
-                    </p>
+            </section>
+
+            {profileEditMode && (
+              <form onSubmit={saveProfile} className="sd-card flex flex-col gap-4 p-5">
+                <div>
+                  <h3 className="text-base font-extrabold">Edit Profile</h3>
+                  <p className="mt-1 text-sm font-semibold text-[#6f4b32]">Update your account details.</p>
+                </div>
+                {['name', 'email', 'mobile'].map((field) => (
+                  <label key={field} className="flex flex-col gap-1.5">
+                    <span className="text-xs font-bold uppercase tracking-wide text-[#8b4a1e]">{field}</span>
+                    <input
+                      type={field === 'email' ? 'email' : field === 'mobile' ? 'tel' : 'text'}
+                      value={profileForm[field]}
+                      onChange={handleProfileChange(field)}
+                      className="sd-input"
+                      placeholder={field === 'mobile' ? '10-digit mobile number' : field.charAt(0).toUpperCase() + field.slice(1)}
+                      inputMode={field === 'mobile' ? 'numeric' : undefined}
+                      maxLength={field === 'mobile' ? 10 : undefined}
+                      required
+                    />
+                  </label>
+                ))}
+                <div className="flex flex-col gap-2 sm:flex-row">
+                  <button type="submit" disabled={savingProfile} className="sd-btn sd-btn-primary flex-1">
+                    {savingProfile ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />}
+                    {savingProfile ? 'Saving…' : 'Save'}
+                  </button>
+                  <button type="button" onClick={() => setProfileEditMode(false)} className="sd-btn sd-btn-outline flex-1">
+                    <X size={16} />
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </aside>
+
+          <div className="sd-content">
+            <section className="sd-card p-5 sm:p-6">
+              <div className="sd-section-head">
+                <SectionTitle icon={GraduationCap} title="Learning Progress" />
+                <span className="sd-pill sd-pill--count !rounded-lg !px-3 !py-1.5 !text-xs">
+                  {activeCourses} active · {completedCourses} completed
+                </span>
+              </div>
+              <div className="sd-progress-row">
+                <div className="sd-progress-main sd-card-muted p-5">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <p className="text-sm font-extrabold">Average Progress</p>
+                      <p className="mt-1 text-xs font-semibold text-[#6f4b32]">Across all enrolled courses</p>
+                    </div>
+                    <p className="text-3xl font-black text-[#8b4a1e]">{averageProgress}%</p>
                   </div>
-                  <div className="text-3xl font-black text-[#8b4a1e]">{averageProgress}%</div>
+                  <div className="sd-progress-track mt-4">
+                    <div className="sd-progress-fill" style={{ width: `${Math.min(Math.max(averageProgress, 0), 100)}%` }} />
+                  </div>
                 </div>
-                <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#ead8c6]">
-                  <div className="h-full rounded-full bg-[#8b4a1e]" style={{ width: `${Math.min(Math.max(averageProgress, 0), 100)}%` }} />
+                <div className="sd-progress-side">
+                  <div className="sd-card-muted p-4">
+                    <p className="text-xs font-bold text-[#6f4b32]">Enrolled</p>
+                    <p className="mt-2 text-2xl font-black">{enrolledCourses.length}</p>
+                  </div>
+                  <div className="sd-card-muted p-4">
+                    <p className="text-xs font-bold text-[#6f4b32]">Materials</p>
+                    <p className="mt-2 text-2xl font-black">{materials.length}</p>
+                  </div>
                 </div>
               </div>
-              <div className="grid grid-cols-2 gap-3">
-                <div className="student-inner-card rounded-lg p-4">
-                  <div className="text-sm font-bold text-[#6f4b32]">Enrolled</div>
-                  <div className="mt-2 text-2xl font-black">{enrolledCourses.length}</div>
-                </div>
-                <div className="student-inner-card rounded-lg p-4">
-                  <div className="text-sm font-bold text-[#6f4b32]">Materials</div>
-                  <div className="mt-2 text-2xl font-black">{materials.length}</div>
-                </div>
-              </div>
-            </div>
-          </section>
+            </section>
 
-          <section className="grid grid-cols-1 gap-5 2xl:grid-cols-[minmax(0,1.3fr)_minmax(420px,0.7fr)]">
-            <div>
-              <div className="mb-3 text-lg font-extrabold tracking-normal">My Courses</div>
-              <div className={`${panel} p-4`}>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="text-base font-extrabold">Purchased Courses</div>
-                  <span className="rounded-full bg-[#eef8f6] px-2.5 py-1 text-xs font-bold text-[#00746f]">{enrolledCourses.length} total</span>
+            <div className="sd-flex-2">
+              <section className="w-full">
+                <div className="sd-section-head">
+                  <SectionTitle icon={BookOpen} title="My Courses" badge={<span className="sd-pill sd-pill--count">{enrolledCourses.length} total</span>} />
                 </div>
-                {enrolledCourses.length === 0 ? (
-                    <div className="student-empty rounded-lg p-5 text-center">
-                      <FolderOpen className="mx-auto text-[#8b4a1e]" size={44} />
-                      <div className="mt-3 font-extrabold">No enrolled courses found</div>
-                      <p className="mt-1 text-sm text-[#5c3d26]">Purchase a recorded course to start learning.</p>
-                      <Link to="/courses" className={`${outlineButton} mt-4`}>
-                        Explore Courses
+                <div className="sd-card p-5">
+                  {enrolledCourses.length === 0 ? (
+                    <div className="sd-card-muted flex flex-col items-center px-6 py-12 text-center">
+                      <FolderOpen className="text-[#8b4a1e]" size={48} />
+                      <p className="mt-4 text-lg font-extrabold">No enrolled courses yet</p>
+                      <p className="mt-2 max-w-sm text-sm text-[#5c3d26]">Purchase a recorded course to unlock lessons and materials.</p>
+                      <Link to="/recorded-courses" className="sd-btn sd-btn-primary mt-6">
+                        Browse Courses
+                        <ChevronRight size={16} />
                       </Link>
                     </div>
-                ) : (
-                  <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                    {enrolledCourses.map((course) => (
-                      <article key={course.id} className="rounded-lg border border-[#e5d8c7] bg-[#fffaf4] p-3">
-                        <div className="grid gap-3 sm:grid-cols-[138px_minmax(0,1fr)]">
-                          <img src={course.thumbnail} alt={course.title} className="h-28 w-full rounded-md object-cover" />
-                          <div className="min-w-0">
-                            <p className="text-xs font-bold text-[#8b4a1e]">{course.courseType}</p>
-                            <div className="line-clamp-1 text-base font-extrabold">{course.title}</div>
-                            <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#5c3d26]">{course.description}</p>
-                          </div>
-                        </div>
-                        <div className="mt-3 grid gap-2 text-xs font-semibold sm:grid-cols-2">
-                          <span>Purchase Date: {formatDate(course.purchaseDate)}</span>
-                          <span>Valid till: {formatDate(course.validTill)}</span>
-                        </div>
-                        <div className="mt-3 flex items-center justify-between text-sm">
-                          <span className="font-bold text-[#b25518]">{courseValidity[course.id]?.daysRemaining ?? computeDaysRemaining(course.validTill)}</span>
-                          <span className="font-bold">{course.progress}%</span>
-                        </div>
-                        <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#e5d8c7]">
-                          <div className="h-full rounded-full bg-[#006d67]" style={{ width: `${Math.min(Math.max(course.progress, 0), 100)}%` }} />
-                        </div>
-                        <Link to={`/student/course/${course.id}`} className={`${primaryButton} mt-3 w-full`}>
-                          Continue Learning
-                        </Link>
-                      </article>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <section className={`${panel} p-4`}>
-              <div className="mb-3 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                <div className="text-lg font-extrabold tracking-normal">My Materials</div>
-                <div className="flex flex-wrap gap-2">
-                  {materialTabs.length === 0 ? (
-                    <span className="student-mini-pill rounded-md px-3 py-1.5 text-xs font-bold">No courses</span>
                   ) : (
-                    materialTabs.map((course) => (
-                      <button
-                        key={course.id}
-                        onClick={() => loadMaterials(course.id)}
-                        className={`student-course-tab rounded-md border px-3 py-1.5 text-xs font-bold transition ${
-                          selectedCourseForMaterials === course.id
-                            ? 'is-active'
-                            : ''
-                        }`}
-                      >
-                        {course.title.length > 10 ? `${course.title.slice(0, 10)}...` : course.title}
-                      </button>
-                    ))
+                    <div className={`sd-courses-wrap ${enrolledCourses.length > 1 ? 'sd-courses-wrap--multi' : ''}`}>
+                      {enrolledCourses.map((course) => (
+                        <article key={course.id} className="sd-card-muted sd-course-card p-4 transition hover:shadow-md">
+                          <div className="sd-course-card__top">
+                            <img src={course.thumbnail} alt={course.title} className="sd-course-card__thumb" />
+                            <div className="sd-course-card__body">
+                              <p className="text-[11px] font-bold uppercase tracking-wide text-[#8b4a1e]">{course.courseType}</p>
+                              <h3 className="mt-1 text-base font-extrabold leading-snug">{course.title}</h3>
+                              <p className="mt-1 line-clamp-2 text-xs leading-5 text-[#5c3d26]">{course.description}</p>
+                            </div>
+                          </div>
+                          <div className="mt-4 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-[#6f4b32]">
+                            <span>Purchased: {formatDate(course.purchaseDate)}</span>
+                            <span>Valid till: {formatDate(course.validTill)}</span>
+                          </div>
+                          <div className="mt-3 flex items-center justify-between text-sm">
+                            <span className="font-bold text-[#b25518]">
+                              {courseValidity[course.id]?.daysRemaining ?? computeDaysRemaining(course.validTill)}
+                            </span>
+                            <span className="font-bold text-[#8b4a1e]">{course.progress}% complete</span>
+                          </div>
+                          <div className="sd-progress-track mt-2">
+                            <div className="sd-progress-fill" style={{ width: `${Math.min(Math.max(course.progress, 0), 100)}%` }} />
+                          </div>
+                          <Link to={`/student/course/${course.id}`} className="sd-btn sd-btn-primary mt-4 w-full">
+                            Continue Learning
+                            <ChevronRight size={16} />
+                          </Link>
+                        </article>
+                      ))}
+                    </div>
                   )}
                 </div>
-              </div>
+              </section>
 
-              <div className="space-y-3">
-                {materials.length > 0 ? (
-                  materials.map((item) => {
-                    const isZip = (item.fileType || '').toLowerCase().includes('zip');
-                    const FileIcon = isZip ? FileArchive : FileText;
-                    return (
-                      <div key={item.materialId || item.id || item.title} className="grid grid-cols-[1fr_auto] gap-3 rounded-lg border border-[#e5d8c7] bg-[#fffaf4] p-3">
-                        <div className="min-w-0">
-                          <p className="line-clamp-1 text-sm font-extrabold">{item.title || 'Course Material'}</p>
-                          <p className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-[#8b4a1e]">
-                            <FileIcon size={14} />
-                            {item.fileType || 'PDF'}
-                          </p>
-                        </div>
-                        {item.fileUrl && (
-                          <a href={item.fileUrl} target="_blank" rel="noreferrer" className={primaryButton}>
-                            <Download size={15} />
-                            Download
-                          </a>
-                        )}
-                      </div>
-                    );
-                  })
-                ) : (
-                  <div className="student-empty flex min-h-52 flex-col items-center justify-center rounded-lg text-center">
-                    {loadingMaterials ? (
-                      <>
-                        <div className="h-8 w-8 animate-spin rounded-full border-2 border-[#d8c9b7] border-t-[#006d67]" />
-                        <p className="mt-3 text-sm font-bold">Loading...</p>
-                      </>
+              <section className="w-full">
+                <div className="sd-section-head">
+                  <SectionTitle icon={FolderOpen} title="My Materials" />
+                </div>
+                <div className="sd-card p-5">
+                  <div className="mb-4 flex flex-wrap gap-2">
+                    {materialTabs.length === 0 ? (
+                      <span className="sd-pill sd-pill--count">No courses</span>
                     ) : (
-                      <>
-                        <FileText className="text-[#b9a58d]" size={42} />
-                        <p className="mt-3 text-sm font-bold">Select a course to see materials.</p>
-                      </>
+                      materialTabs.map((course) => (
+                        <button
+                          key={course.id}
+                          type="button"
+                          onClick={() => loadMaterials(course.id)}
+                          className={`sd-tab ${selectedCourseForMaterials === course.id ? 'is-active' : ''}`}
+                        >
+                          {course.title.length > 18 ? `${course.title.slice(0, 18)}…` : course.title}
+                        </button>
+                      ))
                     )}
                   </div>
-                )}
-              </div>
-            </section>
-          </section>
 
-          <section className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_minmax(420px,1fr)]">
-            <div>
-              <div className="mb-3 text-lg font-extrabold tracking-normal">Promotions</div>
-              <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-                <div className={`${panel} p-4`}>
-                  <div className="mb-3 text-base font-extrabold">Promotional Banners</div>
-                  {banners.length === 0 ? (
-                    <p className="student-empty rounded-lg p-5 text-center text-sm font-semibold">No banners available yet.</p>
+                  {materials.length > 0 ? (
+                    <div className="flex flex-col gap-3">
+                      {materials.map((item) => {
+                        const isZip = (item.fileType || '').toLowerCase().includes('zip');
+                        const FileIcon = isZip ? FileArchive : FileText;
+                        return (
+                          <div key={item.materialId || item.id || item.title} className="sd-card-muted sd-material-item p-3">
+                            <div className="min-w-0 flex-1">
+                              <p className="line-clamp-1 text-sm font-extrabold">{item.title || 'Course Material'}</p>
+                              <p className="mt-1 inline-flex items-center gap-1 text-xs font-bold text-[#8b4a1e]">
+                                <FileIcon size={14} />
+                                {item.fileType || 'PDF'}
+                              </p>
+                            </div>
+                            {item.fileUrl && (
+                              <a href={item.fileUrl} target="_blank" rel="noreferrer" className="sd-btn sd-btn-primary !min-h-[36px] !px-3 !text-xs shrink-0">
+                                <Download size={14} />
+                                Download
+                              </a>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
                   ) : (
-                    banners.slice(0, 2).map((banner) => (
-                      <a key={banner.bannerId || banner.id || banner.title} href={banner.redirectLink || banner.link || '#'} target="_blank" rel="noreferrer" className="student-inner-card block rounded-lg p-3 text-[#2a0f02]">
-                        <img src={banner.image || '/images/vedic_thumbnail.png'} alt={banner.title} className="h-32 w-full rounded-md object-cover" />
-                        <p className="mt-2 font-extrabold">{banner.title || 'Promotion'}</p>
-                        {(banner.description || banner.subtitle) && <p className="mt-1 line-clamp-2 text-sm text-[#5c3d26]">{banner.description || banner.subtitle}</p>}
-                      </a>
-                    ))
+                    <div className="sd-card-muted flex min-h-56 flex-col items-center justify-center px-6 py-10 text-center">
+                      {loadingMaterials ? (
+                        <>
+                          <Loader2 size={36} className="animate-spin text-[#8b4a1e]" />
+                          <p className="mt-4 text-sm font-bold text-[#6f4b32]">Loading materials…</p>
+                        </>
+                      ) : (
+                        <>
+                          <FileText className="text-[#c4a88a]" size={44} />
+                          <p className="mt-4 text-sm font-bold text-[#6f4b32]">Select a course above to view downloadable materials.</p>
+                        </>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </section>
+            </div>
+
+            <section className="w-full">
+              <div className="sd-section-head">
+                <SectionTitle icon={Rocket} title="Promotions & Offers" />
+              </div>
+              <div className="sd-promo-row">
+                <div className="sd-card p-5">
+                  <p className="mb-4 text-sm font-extrabold">Promotional Banners</p>
+                  {banners.length === 0 ? (
+                    <p className="sd-card-muted px-4 py-10 text-center text-sm font-semibold text-[#6f4b32]">No banners available yet.</p>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {banners.slice(0, 3).map((banner) => (
+                        <a
+                          key={banner.bannerId || banner.id || banner.title}
+                          href={banner.redirectLink || banner.link || '#'}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="sd-card-muted block overflow-hidden p-3 transition hover:shadow-md"
+                        >
+                          <img src={banner.image || '/images/vedic_thumbnail.png'} alt={banner.title} className="h-32 w-full rounded-lg object-cover" />
+                          <p className="mt-2 text-sm font-extrabold">{banner.title || 'Promotion'}</p>
+                          {(banner.description || banner.subtitle) && (
+                            <p className="mt-1 line-clamp-2 text-xs text-[#5c3d26]">{banner.description || banner.subtitle}</p>
+                          )}
+                        </a>
+                      ))}
+                    </div>
                   )}
                 </div>
 
-                <div className={`${panel} p-4`}>
-                  <div className="mb-3 text-base font-extrabold">Merchandise & Launches</div>
-                  <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1 2xl:grid-cols-2">
-                    {[...merchandise.slice(0, 2), ...newCourses.slice(0, 2)].map((item, index) => (
-                      <div key={item.productId || item.courseId || item.id || item.title || index} className="student-inner-card flex gap-3 rounded-lg p-3">
-                        {item.image ? (
-                          <img src={item.image} alt={item.title} className="h-14 w-14 rounded-md object-cover" />
-                        ) : (
-                          <div className="flex h-14 w-14 items-center justify-center rounded-md bg-[#e5d8c7] text-[#8b4a1e]">
-                            {item.price ? <Package size={22} /> : <Rocket size={22} />}
-                          </div>
-                        )}
-                        <div className="min-w-0">
-                          <p className="line-clamp-1 text-sm font-extrabold">{item.title || item.name || 'Untitled item'}</p>
-                          {item.price ? (
-                            <p className="text-xs font-semibold text-[#5c3d26]">Price: {item.price}</p>
+                <div className="sd-card p-5">
+                  <p className="mb-4 text-sm font-extrabold">Merchandise & Launches</p>
+                  {promoItems.length === 0 ? (
+                    <p className="sd-card-muted px-4 py-10 text-center text-sm font-semibold text-[#6f4b32]">Nothing new right now.</p>
+                  ) : (
+                    <div className="sd-merch-list">
+                      {promoItems.map((item, index) => (
+                        <div key={item.productId || item.courseId || item.id || item.title || index} className="sd-card-muted flex items-center gap-3 p-3">
+                          {item.image ? (
+                            <img src={item.image} alt={item.title} className="h-14 w-14 shrink-0 rounded-lg object-cover" />
                           ) : (
-                            <p className="text-xs font-semibold text-[#5c3d26]">Launch: {formatDate(item.launchDate)}</p>
+                            <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-lg bg-[#ead8c6] text-[#8b4a1e]">
+                              {item.price ? <Package size={22} /> : <Rocket size={22} />}
+                            </div>
                           )}
+                          <div className="min-w-0 flex-1">
+                            <p className="line-clamp-1 text-sm font-extrabold">{item.title || item.name || 'Untitled item'}</p>
+                            <p className="mt-1 text-xs font-semibold text-[#5c3d26]">
+                              {item.price ? `Price: ${item.price}` : `Launch: ${formatDate(item.launchDate)}`}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    ))}
-                    {merchandise.length === 0 && newCourses.length === 0 && (
-                      <p className="student-empty rounded-lg p-5 text-center text-sm font-semibold sm:col-span-2 lg:col-span-1 2xl:col-span-2">No promotions found.</p>
-                    )}
-                  </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                <div className="sd-card p-5">
+                  <p className="mb-4 text-sm font-extrabold">Available Offers</p>
+                  {offers.length === 0 ? (
+                    <p className="sd-card-muted px-4 py-10 text-center text-sm font-semibold text-[#6f4b32]">No special offers at the moment.</p>
+                  ) : (
+                    <div className="sd-offers-wrap">
+                      {offers.map((offer) => (
+                        <article key={offer.offerId || offer.id || offer.title} className="sd-card-muted p-4">
+                          <p className="text-sm font-extrabold">{offer.title || offer.name || 'Offer'}</p>
+                          {offer.discount && <p className="mt-1 text-xs font-bold">{offer.discount}</p>}
+                          {(offer.code || offer.couponCode) && (
+                            <p className="mt-1 text-xs font-bold text-[#8b4a1e]">Code: {offer.code || offer.couponCode}</p>
+                          )}
+                          <p className="mt-2 text-xs text-[#5c3d26]">Valid till: {formatDate(offer.validTill)}</p>
+                        </article>
+                      ))}
+                    </div>
+                  )}
                 </div>
               </div>
-            </div>
-
-            <section>
-              <div className="mb-3 text-lg font-extrabold tracking-normal">Offers & Discounts</div>
-              <div className={`${panel} p-4`}>
-                <div className="mb-3 text-base font-extrabold">Available Offers</div>
-                {offers.length === 0 ? (
-                  <p className="student-empty rounded-lg p-5 text-center text-sm font-semibold">There are no special offers at the moment.</p>
-                ) : (
-                  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 2xl:grid-cols-3">
-                    {offers.map((offer) => (
-                      <article key={offer.offerId || offer.id || offer.title} className="rounded-lg border border-[#e5d8c7] bg-[#fffaf4] p-3">
-                        <div className="text-sm font-extrabold">{offer.title || offer.name || 'Offer'}</div>
-                        {offer.discount && <p className="mt-1 text-xs font-bold text-[#2a0f02]">{offer.discount}</p>}
-                        {(offer.code || offer.couponCode) && <p className="mt-1 text-xs font-bold text-[#8b4a1e]">Code: {offer.code || offer.couponCode}</p>}
-                        <p className="mt-2 text-xs text-[#5c3d26]">Valid till: {formatDate(offer.validTill)}</p>
-                        {(offer.description || offer.details) && <p className="mt-1 line-clamp-3 text-xs leading-4 text-[#5c3d26]">{offer.description || offer.details}</p>}
-                      </article>
-                    ))}
-                  </div>
-                )}
-              </div>
             </section>
-          </section>
+          </div>
         </div>
-      </main>
-      <style>{`
-        .student-portal {
-          background:
-            radial-gradient(circle at 8% 4%, rgba(200, 131, 42, 0.12), transparent 30%),
-            linear-gradient(180deg, #fff8ef 0%, #f4eadc 48%, #efe4d5 100%);
-          color: #2a0f02;
-          font-size: 16px;
-          line-height: 1.55;
-        }
-
-        .student-portal,
-        .student-portal button,
-        .student-portal input,
-        .student-portal a,
-        .student-portal p,
-        .student-portal label,
-        .student-portal dt,
-        .student-portal dd,
-        .student-portal span {
-          font-family: var(--font-body) !important;
-          letter-spacing: 0 !important;
-        }
-
-        .student-portal-brand {
-          color: #8b4a1e !important;
-        }
-
-        .student-header-title,
-        .student-header-value {
-          color: #2a0f02 !important;
-        }
-
-        .student-header-label {
-          color: #7b6254 !important;
-          font-size: 0.82rem !important;
-          letter-spacing: 0 !important;
-        }
-
-        .student-header-value {
-          font-size: 0.98rem !important;
-          line-height: 1.25 !important;
-        }
-
-        .student-header-title {
-          font-size: 1.45rem !important;
-          line-height: 1.15 !important;
-        }
-
-        .student-avatar {
-          background: #ffffff !important;
-          color: #8b4a1e !important;
-          border: 1px solid rgba(139, 74, 30, 0.18);
-          box-shadow: 0 8px 18px rgba(73, 39, 15, 0.1);
-        }
-
-        .student-header-divider {
-          background: rgba(139, 74, 30, 0.18) !important;
-        }
-
-        .student-main {
-          align-items: start;
-        }
-
-        .student-left-rail {
-          min-width: 0;
-        }
-
-        .student-rail-card {
-          background: linear-gradient(180deg, #fffaf4 0%, #f8ead8 100%);
-          border: 1px solid rgba(139, 74, 30, 0.16);
-          box-shadow: 0 14px 32px rgba(73, 39, 15, 0.08);
-          padding: 18px;
-        }
-
-        .student-rail-divider {
-          height: 1px;
-          margin: 16px 0;
-          background: rgba(139, 74, 30, 0.16);
-        }
-
-        .student-overview-item {
-          min-height: 72px;
-        }
-
-        .student-panel {
-          background: #ffffff !important;
-          border: 1px solid rgba(139, 74, 30, 0.16) !important;
-          box-shadow: 0 14px 32px rgba(73, 39, 15, 0.08) !important;
-        }
-
-        .student-panel,
-        .student-rail-card,
-        .student-inner-card,
-        .student-empty {
-          font-size: 1rem;
-        }
-
-        .student-portal dl {
-          font-size: 0.98rem !important;
-        }
-
-        .student-portal dt,
-        .student-portal dd {
-          line-height: 1.45 !important;
-        }
-
-        .student-inner-card,
-        .student-empty {
-          background: #fffaf4 !important;
-          border: 1px solid rgba(139, 74, 30, 0.18) !important;
-        }
-
-        .student-empty {
-          color: #5b3219 !important;
-        }
-
-        .student-field-label {
-          display: inline-flex;
-          margin-bottom: 0.25rem;
-          font-size: 0.78rem !important;
-          letter-spacing: 0.08em !important;
-        }
-
-        .student-input {
-          min-height: 42px;
-          background: #fffaf4 !important;
-          border: 1px solid rgba(139, 74, 30, 0.22) !important;
-          color: #2a0f02 !important;
-          font-size: 0.98rem !important;
-          box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
-        }
-
-        .student-input:focus {
-          border-color: #8b4a1e !important;
-          box-shadow: 0 0 0 4px rgba(200, 131, 42, 0.14) !important;
-        }
-
-        .student-profile-editor {
-          border-color: rgba(139, 74, 30, 0.24) !important;
-        }
-
-        .student-status-pill {
-          background: #f2f7ea !important;
-          color: #4f6b1f !important;
-          border: 1px solid rgba(79, 107, 31, 0.14);
-        }
-
-        .student-mini-pill {
-          background: #fff1df !important;
-          color: #8b4a1e !important;
-        }
-
-        .student-stat-icon {
-          border: 1px solid transparent;
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.5);
-        }
-
-        .student-stat-icon--gold {
-          background: #fff0d6 !important;
-          color: #8b4a1e !important;
-          border-color: #f0d2a7;
-        }
-
-        .student-stat-icon--sage {
-          background: #f0f4df !important;
-          color: #5f6f23 !important;
-          border-color: #d9dfb7;
-        }
-
-        .student-stat-icon--copper {
-          background: #fde8d8 !important;
-          color: #b25518 !important;
-          border-color: #f4c3a1;
-        }
-
-        .student-stat-icon--violet {
-          background: #f4e8dd !important;
-          color: #7b3f2a !important;
-          border-color: #e2c7b4;
-        }
-
-        .student-btn {
-          display: inline-flex !important;
-          align-items: center !important;
-          justify-content: center !important;
-          gap: 0.5rem !important;
-          min-height: 42px !important;
-          padding: 0.68rem 1.05rem !important;
-          border-radius: 8px !important;
-          font-size: 0.95rem !important;
-          font-weight: 800 !important;
-          line-height: 1.2 !important;
-          text-decoration: none !important;
-          transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease, box-shadow 0.18s ease !important;
-        }
-
-        .student-btn:hover {
-          transform: translateY(-1px);
-        }
-
-        .student-btn-primary {
-          background: #8b4a1e !important;
-          border: 1px solid #8b4a1e !important;
-          color: #ffffff !important;
-          box-shadow: 0 10px 20px rgba(139, 74, 30, 0.2) !important;
-        }
-
-        .student-btn-primary:hover {
-          background: #6b3514 !important;
-          border-color: #6b3514 !important;
-          color: #ffffff !important;
-        }
-
-        .student-btn-outline {
-          background: #ffffff !important;
-          border: 1px solid rgba(139, 74, 30, 0.28) !important;
-          color: #6b3514 !important;
-        }
-
-        .student-btn-outline:hover {
-          background: #fff1df !important;
-          border-color: #c8832a !important;
-          color: #2a0f02 !important;
-        }
-
-        .student-btn-light {
-          background: #8b4a1e !important;
-          border: 1px solid #8b4a1e !important;
-          color: #ffffff !important;
-          box-shadow: 0 10px 22px rgba(139, 74, 30, 0.18) !important;
-        }
-
-        .student-btn-light:hover {
-          background: #6b3514 !important;
-          border-color: #6b3514 !important;
-          color: #ffffff !important;
-        }
-
-        .student-logout-btn {
-          min-height: 40px !important;
-          padding-inline: 0.9rem !important;
-          white-space: nowrap;
-        }
-
-        .student-portal .text-xs {
-          font-size: 0.82rem !important;
-        }
-
-        .student-portal .text-sm {
-          font-size: 0.96rem !important;
-        }
-
-        .student-portal .text-base {
-          font-size: 1.06rem !important;
-        }
-
-        .student-portal .text-lg {
-          font-size: 1.22rem !important;
-        }
-
-        .student-portal .text-xl {
-          font-size: 1.45rem !important;
-        }
-
-        .student-portal .text-2xl {
-          font-size: 1.75rem !important;
-        }
-
-        .student-portal .text-3xl {
-          font-size: 2.15rem !important;
-        }
-
-        .student-course-tab {
-          background: #ffffff !important;
-          border-color: rgba(139, 74, 30, 0.22) !important;
-          color: #6b3514 !important;
-        }
-
-        .student-course-tab:hover,
-        .student-course-tab.is-active {
-          background: #8b4a1e !important;
-          border-color: #8b4a1e !important;
-          color: #ffffff !important;
-        }
-
-        .student-portal h1,
-        .student-portal h2,
-        .student-portal h3,
-        .student-portal h4,
-        .student-portal h5,
-        .student-portal h6,
-        .student-portal p {
-          color: inherit !important;
-        }
-
-        @media (min-width: 1024px) {
-          .student-left-rail {
-            position: sticky;
-            top: 16px;
-          }
-        }
-
-        @media (min-width: 1200px) {
-          .student-logout-btn {
-            display: none !important;
-          }
-        }
-
-        @media (max-width: 1023px) {
-          .student-overview-list {
-            grid-template-columns: repeat(4, minmax(0, 1fr));
-          }
-        }
-
-        @media (max-width: 767px) {
-          .student-overview-list {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-          }
-
-          .student-rail-card {
-            padding: 16px;
-          }
-
-          .student-header-title {
-            font-size: 1.45rem !important;
-          }
-
-          .student-panel {
-            box-shadow: 0 10px 24px rgba(38, 28, 18, 0.07) !important;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .student-portal-user {
-            align-items: flex-start;
-          }
-
-          .student-overview-list {
-            grid-template-columns: 1fr;
-          }
-
-          .student-logout-btn {
-            width: auto;
-          }
-        }
-      `}</style>
+      </div>
     </div>
   );
 }

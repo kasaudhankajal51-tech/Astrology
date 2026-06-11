@@ -1,7 +1,39 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
+import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
+
+const COURSE_TYPE_CONFIG = {
+  Recorded: {
+    optionLabel: 'Recorded Course — Buy online when payment is enabled',
+    badge: 'Recorded',
+    badgeClass: 'lms-type-badge--recorded',
+    summary: 'Until Razorpay keys are added, visitors see ENQUIRE NOW and leads go to admin for sales callbacks. After keys are added, BUY NOW + payment + student access activate automatically.',
+    flow: 'Now: ENQUIRE NOW → Lead. Later: BUY NOW → Payment → Dashboard',
+    priceLabel: 'Selling price (Rs.)',
+    priceHint: 'Shown on course page. Used at checkout once payment keys are configured.',
+    validityLabel: 'Access validity (days)',
+    validityHint: 'How long enrolled students can watch videos after purchase.',
+    frontendCta: 'BUY NOW (or ENQUIRE NOW until payment live)',
+    videosHint: 'Add lesson videos — unlocked for students after purchase.',
+  },
+  Live: {
+    optionLabel: 'Live Course — Enquiry only (no online payment)',
+    badge: 'Live',
+    badgeClass: 'lms-type-badge--live',
+    summary: 'Instructor-led live batches. No payment gateway — visitors submit an enquiry and your team contacts them.',
+    flow: 'Listing → Course detail → ENQUIRE NOW → Lead in admin panel',
+    priceLabel: 'Indicative price (Rs.)',
+    priceHint: 'Display-only reference price. Payment is not collected online for live courses.',
+    validityLabel: 'Program duration (days)',
+    validityHint: 'Approximate batch length for display (e.g. 30–60 days). Not used for video access.',
+    frontendCta: 'ENQUIRE NOW',
+    videosHint: 'Optional intro/preview clips only. Main delivery is live classes (Zoom/Meet).',
+  },
+};
+
+const getCourseTypeConfig = (type) => COURSE_TYPE_CONFIG[type === 'Live' ? 'Live' : 'Recorded'];
 
 function AdminCourses() {
   const [courses, setCourses] = useState([]);
@@ -11,7 +43,7 @@ function AdminCourses() {
   const [showVideoModal, setShowVideoModal] = useState(false);
   const [videoCourse, setVideoCourse] = useState(null);
   const [courseVideos, setCourseVideos] = useState([]);
-  const [videoForm, setVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
+  const [videoForm, setVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
   const [videoFile, setVideoFile] = useState(null);
   const [videoLoading, setVideoLoading] = useState(false);
   const [videoModalLoading, setVideoModalLoading] = useState(false);
@@ -23,7 +55,9 @@ function AdminCourses() {
   const [previewLoadingId, setPreviewLoadingId] = useState(null);
   const [courseSubmitting, setCourseSubmitting] = useState(false);
   const [courseSubmitMessage, setCourseSubmitMessage] = useState('');
-  
+  const [thumbUploading, setThumbUploading] = useState(false);
+  const thumbInputRef = useRef(null);
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -33,12 +67,19 @@ function AdminCourses() {
     thumbnailUrl: ''
   });
   
-  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
+  const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
   const [initialVideoFile, setInitialVideoFile] = useState(null);
   const [initialVideos, setInitialVideos] = useState([]);
   const [editVideoDrafts, setEditVideoDrafts] = useState([]);
 
   const videoProviders = {
+    supabase: {
+      label: 'Supabase Storage',
+      idLabel: 'Video URL',
+      fieldLabel: 'Supabase Video URL',
+      placeholder: 'Auto-filled after upload, or paste an existing Supabase URL',
+      fileHint: 'Upload the video file first — it goes to Supabase, then the URL is saved in MongoDB.'
+    },
     bunny: {
       label: 'Bunny.net',
       idLabel: 'Bunny Video ID',
@@ -55,13 +96,14 @@ function AdminCourses() {
     }
   };
 
-  const getVideoProvider = (video) => video?.videoProvider || video?.provider || 'bunny';
+  const getVideoProvider = (video) => video?.videoProvider || video?.provider || 'supabase';
   const getProviderConfig = (provider = 'bunny') => videoProviders[provider] || videoProviders.bunny;
   const getProviderLabel = (provider = 'bunny') => getProviderConfig(provider).label;
   const getProviderIdLabel = (provider = 'bunny') => getProviderConfig(provider).idLabel;
 
   const getVideoValue = (video) => {
     return (
+      video?.videoUrl ||
       video?.vdocipherVideoId ||
       video?.vdoCipherVideoId ||
       video?.vdoVideoId ||
@@ -169,6 +211,7 @@ function AdminCourses() {
 
   const totalVideos = courses.reduce((count, course) => count + getCourseVideoCount(course), 0);
   const activeCourses = courses.filter((course) => course.isActive).length;
+  const [supabaseStatus, setSupabaseStatus] = useState({ ready: false, bucket: '', issues: ['Checking upload configuration...'] });
 
   const fetchCourses = async () => {
     try {
@@ -187,6 +230,7 @@ function AdminCourses() {
 
   useEffect(() => {
     fetchCourses();
+    fetchUploadStatus().then(setSupabaseStatus);
   }, []);
 
   const handleInputChange = (e) => {
@@ -202,23 +246,39 @@ function AdminCourses() {
   };
 
   const resetVideoForm = () => {
-    setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
+    setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
     setVideoFile(null);
     setEditingVideoId(null);
   };
 
-  const buildVideoDraft = ({ localId, title, bunnyVideoId, sortOrder, file, fallbackOrder, videoProvider = 'bunny' }) => ({
+  const buildVideoDraft = ({
     localId,
     title,
     bunnyVideoId,
+    sortOrder,
+    file,
+    fallbackOrder,
+    videoProvider = 'supabase',
+    videoUrl = '',
+    storagePath = '',
+    storageBucket = '',
+  }) => ({
+    localId,
+    title,
+    bunnyVideoId: videoUrl || bunnyVideoId,
+    videoUrl: videoUrl || bunnyVideoId || '',
+    storagePath,
+    storageBucket,
     videoProvider,
     sortOrder: Number(sortOrder) || fallbackOrder || 0,
     file,
-    sourceLabel: file ? `${file.name} (${getProviderLabel(videoProvider)})` : `${getProviderLabel(videoProvider)} ID/URL`
+    sourceLabel: file
+      ? `${file.name} (${getProviderLabel(videoProvider)})`
+      : (videoUrl || bunnyVideoId || `${getProviderLabel(videoProvider)} pending upload`)
   });
 
   const resetInitialVideoForm = () => {
-    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
+    setInitialVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
     setInitialVideoFile(null);
   };
 
@@ -291,6 +351,25 @@ function AdminCourses() {
       videoProvider: getVideoProvider(video)
     });
     setVideoFile(null);
+  };
+
+  const resolveSupabaseVideoPayload = async (draftVideo) => {
+    let videoUrl = draftVideo.videoUrl || draftVideo.bunnyVideoId || '';
+    let storagePath = draftVideo.storagePath || '';
+    let storageBucket = draftVideo.storageBucket || '';
+
+    if (draftVideo.file) {
+      const uploaded = await uploadVideo(draftVideo.file, 'videos');
+      videoUrl = uploaded.publicUrl;
+      storagePath = uploaded.path;
+      storageBucket = uploaded.bucket;
+    }
+
+    if (!videoUrl) {
+      throw new Error('Upload a video file or paste a Supabase video URL.');
+    }
+
+    return { videoUrl, storagePath, storageBucket };
   };
 
   const parseApiResponse = async (res) => {
@@ -366,14 +445,38 @@ function AdminCourses() {
 
     try {
       let res;
-      if (videoFile) {
+      const provider = videoForm.videoProvider || 'supabase';
+
+      if (provider === 'supabase') {
+        const { videoUrl, storagePath, storageBucket } = await resolveSupabaseVideoPayload({
+          file: videoFile,
+          bunnyVideoId: videoForm.bunnyVideoId,
+          videoUrl: videoForm.bunnyVideoId,
+        });
+
+        res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : ''}`, {
+          method: videoId ? 'PUT' : 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            title: videoForm.title,
+            videoProvider: 'supabase',
+            videoUrl,
+            storagePath,
+            storageBucket,
+            sortOrder: Number(videoForm.sortOrder) || 0
+          })
+        });
+      } else if (videoFile) {
         const formData = new FormData();
         formData.append('title', videoForm.title);
         formData.append('sortOrder', Number(videoForm.sortOrder) || 0);
-        formData.append('videoProvider', videoForm.videoProvider);
+        formData.append('videoProvider', provider);
         if (videoForm.bunnyVideoId) {
           formData.append('videoId', videoForm.bunnyVideoId);
-          if (videoForm.videoProvider === 'vdocipher') {
+          if (provider === 'vdocipher') {
             formData.append('vdocipherVideoId', videoForm.bunnyVideoId);
           } else {
             formData.append('bunnyVideoId', videoForm.bunnyVideoId);
@@ -391,12 +494,12 @@ function AdminCourses() {
       } else {
         const payload = {
           title: videoForm.title,
-          videoProvider: videoForm.videoProvider,
+          videoProvider: provider,
           sortOrder: Number(videoForm.sortOrder) || 0
         };
 
         payload.videoId = videoForm.bunnyVideoId;
-        if (videoForm.videoProvider === 'vdocipher') {
+        if (provider === 'vdocipher') {
           payload.vdocipherVideoId = videoForm.bunnyVideoId;
         } else {
           payload.bunnyVideoId = videoForm.bunnyVideoId;
@@ -433,15 +536,35 @@ function AdminCourses() {
   };
 
   const submitVideoDraft = async (courseId, draftVideo, token, videoId = null) => {
+    const provider = draftVideo.videoProvider || 'supabase';
     let res;
-    if (draftVideo.file) {
+
+    if (provider === 'supabase') {
+      const { videoUrl, storagePath, storageBucket } = await resolveSupabaseVideoPayload(draftVideo);
+
+      res = await fetch(`${API_BASE}/api/admin/courses/${courseId}/videos${videoId ? `/${videoId}` : ''}`, {
+        method: videoId ? 'PUT' : 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          title: draftVideo.title,
+          videoProvider: 'supabase',
+          videoUrl,
+          storagePath,
+          storageBucket,
+          sortOrder: Number(draftVideo.sortOrder) || 0
+        })
+      });
+    } else if (draftVideo.file) {
       const videoData = new FormData();
       videoData.append('title', draftVideo.title);
       videoData.append('sortOrder', Number(draftVideo.sortOrder) || 0);
-      videoData.append('videoProvider', draftVideo.videoProvider || 'bunny');
+      videoData.append('videoProvider', provider);
       if (draftVideo.bunnyVideoId) {
         videoData.append('videoId', draftVideo.bunnyVideoId);
-        if (draftVideo.videoProvider === 'vdocipher') {
+        if (provider === 'vdocipher') {
           videoData.append('vdocipherVideoId', draftVideo.bunnyVideoId);
         } else {
           videoData.append('bunnyVideoId', draftVideo.bunnyVideoId);
@@ -464,9 +587,9 @@ function AdminCourses() {
         body: JSON.stringify({
           title: draftVideo.title,
           videoId: draftVideo.bunnyVideoId,
-          bunnyVideoId: draftVideo.videoProvider === 'vdocipher' ? undefined : draftVideo.bunnyVideoId,
-          vdocipherVideoId: draftVideo.videoProvider === 'vdocipher' ? draftVideo.bunnyVideoId : undefined,
-          videoProvider: draftVideo.videoProvider || 'bunny',
+          bunnyVideoId: provider === 'vdocipher' ? undefined : draftVideo.bunnyVideoId,
+          vdocipherVideoId: provider === 'vdocipher' ? draftVideo.bunnyVideoId : undefined,
+          videoProvider: provider,
           sortOrder: Number(draftVideo.sortOrder) || 0
         })
       });
@@ -596,8 +719,8 @@ function AdminCourses() {
         body: JSON.stringify({
           ...formData,
           courseType: formData.courseType === 'Live' ? 'Live' : 'Recorded',
-          price: Number(formData.price),
-          validityDays: Number(formData.validityDays)
+          price: Math.round(parseInt(String(formData.price).replace(/[^0-9]/g, ''), 10)) || 0,
+          validityDays: Math.round(parseInt(String(formData.validityDays).replace(/[^0-9]/g, ''), 10)) || 0,
         })
       });
       const data = await parseApiResponse(res);
@@ -693,7 +816,7 @@ function AdminCourses() {
   const openModal = (course = null) => {
     if (course) {
       setEditingCourse(course);
-      setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'bunny' });
+      setVideoForm({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
       setVideoFile(null);
       setEditVideoDrafts([]);
       setFormData({
@@ -740,13 +863,41 @@ function AdminCourses() {
       <div className="lms-hero">
         <div className="lms-hero-copy">
           <span className="lms-eyebrow">Course Operations</span>
-          <h2>LMS Studio</h2>
+          <h2>Course Studio</h2>
           <p>Manage course details, pricing, access validity, and attached class videos from one clean workspace.</p>
         </div>
         <button className="lms-primary-action" onClick={() => openModal()}>
           <i className="fas fa-plus"></i>
           <span>New Course</span>
         </button>
+      </div>
+
+      <div
+        className={`lms-supabase-status ${supabaseStatus.ready ? 'lms-supabase-status--ready' : 'lms-supabase-status--warn'}`}
+        style={{
+          marginBottom: '1rem',
+          padding: '0.85rem 1rem',
+          borderRadius: '10px',
+          border: `1px solid ${supabaseStatus.ready ? 'rgba(34,197,94,0.35)' : 'rgba(239,68,68,0.35)'}`,
+          background: supabaseStatus.ready ? 'rgba(34,197,94,0.08)' : 'rgba(239,68,68,0.08)',
+          fontSize: '0.88rem',
+          lineHeight: 1.5,
+        }}
+      >
+        <strong style={{ display: 'block', marginBottom: '0.25rem' }}>
+          <i className={`fas ${supabaseStatus.ready ? 'fa-check-circle' : 'fa-exclamation-triangle'}`} style={{ marginRight: '0.45rem' }} />
+          Server upload (Supabase) {supabaseStatus.ready ? 'configured' : 'not ready'}
+        </strong>
+        <span>Bucket: <code>{supabaseStatus.bucket}</code></span>
+        {' · '}
+        <span>Backend keys: {supabaseStatus.ready ? 'set' : 'missing in backend .env'}</span>
+        {!supabaseStatus.ready && supabaseStatus.issues.length > 0 && (
+          <ul style={{ margin: '0.5rem 0 0 1.1rem', padding: 0 }}>
+            {supabaseStatus.issues.map((issue) => (
+              <li key={issue}>{issue}</li>
+            ))}
+          </ul>
+        )}
       </div>
 
       <div className="lms-metrics">
@@ -775,6 +926,7 @@ function AdminCourses() {
           <thead>
             <tr>
               <th>Course Title</th>
+              <th>Type</th>
               <th>Price</th>
               <th>Validity</th>
               <th>Videos</th>
@@ -785,7 +937,7 @@ function AdminCourses() {
           <tbody>
             {courses.length === 0 ? (
               <tr>
-                <td colSpan="6">
+                <td colSpan="7">
                   <div className="lms-empty-row">No courses found in the database.</div>
                 </td>
               </tr>
@@ -803,6 +955,11 @@ function AdminCourses() {
                         <span>{course.description || 'No description added yet'}</span>
                       </div>
                     </div>
+                  </td>
+                  <td>
+                    <span className={`lms-type-badge ${getCourseTypeConfig(course.courseType).badgeClass}`}>
+                      {getCourseTypeConfig(course.courseType).badge}
+                    </span>
                   </td>
                   <td className="lms-price">Rs. {course.price}</td>
                   <td>{course.validityDays} days</td>
@@ -857,7 +1014,9 @@ function AdminCourses() {
                   <h3 className="course-modal-title">{editingCourse ? 'Edit Course & Videos' : 'Create New Course'}</h3>
                   <p className="course-modal-subtitle">{editingCourse ? 'Update course details, video list, previews, replacements, and deletes from one place.' : 'Add course details and queue one or more videos before saving.'}</p>
                 </div>
-                <button type="button" className="modal-close-btn" disabled={courseSubmitting} onClick={() => setShowModal(false)}>&times;</button>
+                <button type="button" className="modal-close-btn" disabled={courseSubmitting} onClick={() => setShowModal(false)}>
+                  <i className="fas fa-times" />
+                </button>
               </div>
               
               <form onSubmit={handleSubmit} className="course-form">
@@ -878,39 +1037,151 @@ function AdminCourses() {
                     ></textarea>
                   </div>
 
+                  <div className="form-group">
+                    <label className="form-label">Course Type</label>
+                    <select name="courseType" value={formData.courseType} onChange={handleInputChange} className="form-input" required>
+                      <option value="Recorded">{COURSE_TYPE_CONFIG.Recorded.optionLabel}</option>
+                      <option value="Live">{COURSE_TYPE_CONFIG.Live.optionLabel}</option>
+                    </select>
+                  </div>
+
+                  <div className={`lms-course-type-info ${formData.courseType === 'Live' ? 'lms-course-type-info--live' : 'lms-course-type-info--recorded'}`}>
+                    <strong>{getCourseTypeConfig(formData.courseType).badge} course flow</strong>
+                    <p>{getCourseTypeConfig(formData.courseType).summary}</p>
+                    <p className="lms-course-type-flow">
+                      <span>Frontend CTA:</span> <code>{getCourseTypeConfig(formData.courseType).frontendCta}</code>
+                      <span> · </span>
+                      <span>{getCourseTypeConfig(formData.courseType).flow}</span>
+                    </p>
+                  </div>
+
                   <div className="form-row">
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">Course Type</label>
-                        <select name="courseType" value={formData.courseType} onChange={handleInputChange} className="form-input" required>
-                          <option value="Recorded">Recorded - direct purchase</option>
-                          <option value="Live">Live - direct purchase</option>
-                        </select>
-                        <p className="form-hint">Both Live and Recorded courses use payment and student access.</p>
+                        <label className="form-label">{getCourseTypeConfig(formData.courseType).priceLabel}</label>
+                        <input
+                          type="text"
+                          inputMode="numeric"
+                          pattern="^[0-9]+$"
+                          name="price"
+                          value={formData.price}
+                          onChange={handleInputChange}
+                          onBlur={e => {
+                            const v = parseInt(e.target.value.replace(/[^0-9]/g, ''), 10);
+                            if (!isNaN(v)) setFormData(prev => ({ ...prev, price: String(v) }));
+                          }}
+                          className="form-input"
+                          placeholder={formData.courseType === 'Live' ? 'e.g. 15000 (display only)' : 'e.g. 3000'}
+                          required
+                        />
+                        <p className="form-hint">{getCourseTypeConfig(formData.courseType).priceHint}</p>
                       </div>
                     </div>
                     <div className="form-col">
                       <div className="form-group">
-                        <label className="form-label">Price (Rs.)</label>
-                        <input type="number" name="price" value={formData.price} onChange={handleInputChange} className="form-input" required />
-                      </div>
-                    </div>
-                    <div className="form-col">
-                      <div className="form-group">
-                        <label className="form-label">Validity (Days)</label>
-                        <input type="number" name="validityDays" value={formData.validityDays} onChange={handleInputChange} className="form-input" required />
+                        <label className="form-label">{getCourseTypeConfig(formData.courseType).validityLabel}</label>
+                        <input
+                          type="number"
+                          name="validityDays"
+                          value={formData.validityDays}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder={formData.courseType === 'Live' ? 'e.g. 60' : 'e.g. 365'}
+                          required
+                        />
+                        <p className="form-hint">{getCourseTypeConfig(formData.courseType).validityHint}</p>
                       </div>
                     </div>
                   </div>
 
                   <div className="form-group">
-                    <label className="form-label">Thumbnail Image URL <span className="optional">(Optional)</span></label>
-                    <input type="text" name="thumbnailUrl" value={formData.thumbnailUrl} onChange={handleInputChange} className="form-input" placeholder="/images/your_image.png" />
+                    <label className="form-label">
+                      Thumbnail Image
+                      <span className="optional"> (Optional — uploads via backend to Supabase, URL saved in MongoDB)</span>
+                    </label>
+
+                    {/* File upload row */}
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center', marginBottom: '8px' }}>
+                      <input
+                        ref={thumbInputRef}
+                        type="file"
+                        accept="image/jpeg,image/png,image/webp,image/gif"
+                        style={{ display: 'none' }}
+                        onChange={async (e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          if (file.size > 5 * 1024 * 1024) {
+                            toast.error('Image must be under 5 MB.');
+                            return;
+                          }
+                          setThumbUploading(true);
+                          try {
+                            const url = await uploadImage(file, 'thumbnails');
+                            setFormData(prev => ({ ...prev, thumbnailUrl: url }));
+                            toast.success('Image uploaded successfully!');
+                          } catch (err) {
+                            toast.error('Upload failed: ' + err.message);
+                          } finally {
+                            setThumbUploading(false);
+                            if (thumbInputRef.current) thumbInputRef.current.value = '';
+                          }
+                        }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        style={{ fontSize: '12px', height: '36px', padding: '0 14px', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: '6px' }}
+                        onClick={() => thumbInputRef.current?.click()}
+                        disabled={thumbUploading}
+                      >
+                        {thumbUploading
+                          ? <><span className="lf-spinner" style={{ width: '12px', height: '12px', borderTopColor: 'var(--primary)', borderColor: 'var(--border)' }} /> Uploading…</>
+                          : <><i className="fas fa-cloud-upload-alt" /> Upload Image</>
+                        }
+                      </button>
+                      <span style={{ fontSize: '11px', color: 'var(--text-muted)' }}>or paste a URL below</span>
+                    </div>
+
+                    {/* URL fallback input */}
+                    <input
+                      type="text"
+                      name="thumbnailUrl"
+                      value={formData.thumbnailUrl}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="https://… or /images/your_image.png"
+                    />
+
+                    {/* Preview */}
+                    {formData.thumbnailUrl && (
+                      <div style={{ marginTop: '10px', position: 'relative', display: 'inline-block' }}>
+                        <img
+                          src={formData.thumbnailUrl}
+                          alt="Thumbnail preview"
+                          style={{ height: '80px', width: '130px', objectFit: 'cover', borderRadius: '8px', border: '1px solid var(--border)', display: 'block' }}
+                          onError={e => { e.target.style.display = 'none'; }}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setFormData(prev => ({ ...prev, thumbnailUrl: '' }))}
+                          title="Remove image"
+                          style={{
+                            position: 'absolute', top: '-6px', right: '-6px',
+                            width: '18px', height: '18px', borderRadius: '50%',
+                            background: '#ef4444', border: 'none', color: '#fff',
+                            fontSize: '9px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}
+                        >
+                          <i className="fas fa-times" />
+                        </button>
+                      </div>
+                    )}
                   </div>
                 </div>
 
                 <div className="form-section">
                   <h4 className="section-title">Video Management</h4>
+                  <p className="section-hint">{getCourseTypeConfig(formData.courseType).videosHint}</p>
                   {editingCourse ? (
                     <>
                       <p className="section-hint">Saved videos attached to this course. Preview, edit, replace, or delete them here.</p>
@@ -981,6 +1252,7 @@ function AdminCourses() {
                             onChange={handleVideoInputChange}
                             className="form-input"
                           >
+                            <option value="supabase">Supabase Storage (recommended)</option>
                             <option value="bunny">Bunny.net</option>
                             <option value="vdocipher">VdoCipher</option>
                           </select>
@@ -1088,6 +1360,7 @@ function AdminCourses() {
                           onChange={(e) => setInitialVideoForm({ ...initialVideoForm, videoProvider: e.target.value })}
                           className="form-input"
                         >
+                          <option value="supabase">Supabase Storage (recommended)</option>
                           <option value="bunny">Bunny.net</option>
                           <option value="vdocipher">VdoCipher</option>
                         </select>
@@ -1185,7 +1458,7 @@ function AdminCourses() {
                   <h3 className="video-modal-title">Preview Videos</h3>
                   <p className="video-modal-subtitle">{videoCourse?.title} - open Edit Course to add, replace, update, or delete videos</p>
                 </div>
-                <button type="button" className="modal-close-btn" onClick={closeVideoModal}>&times;</button>
+                <button type="button" className="modal-close-btn" onClick={closeVideoModal}><i className="fas fa-times" /></button>
               </div>
 
               {videoModalLoading ? (
@@ -1294,16 +1567,26 @@ function AdminCourses() {
                   <h3>{previewVideo.title || 'Course video'}</h3>
                   <p>{getProviderLabel(getVideoProvider(previewVideo))} - {getVideoValue(previewVideo)}</p>
                 </div>
-                <button type="button" className="modal-close-btn" onClick={closeVideoPreview}>&times;</button>
+                <button type="button" className="modal-close-btn" onClick={closeVideoPreview}><i className="fas fa-times" /></button>
               </div>
               <div className="lms-preview-frame">
-                <iframe
-                  src={getVideoEmbedUrl(previewVideo)}
-                  title={previewVideo.title || 'Video preview'}
-                  loading="lazy"
-                  allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-                  allowFullScreen
-                />
+                {getVideoProvider(previewVideo) === 'supabase' ? (
+                  <video
+                    src={getVideoEmbedUrl(previewVideo)}
+                    title={previewVideo.title || 'Video preview'}
+                    controls
+                    playsInline
+                    style={{ width: '100%', height: '100%', background: '#000' }}
+                  />
+                ) : (
+                  <iframe
+                    src={getVideoEmbedUrl(previewVideo)}
+                    title={previewVideo.title || 'Video preview'}
+                    loading="lazy"
+                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                    allowFullScreen
+                  />
+                )}
               </div>
             </motion.div>
           </div>

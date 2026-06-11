@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
 import MainLayout from './layouts/MainLayout';
 import StandaloneLayout from './layouts/StandaloneLayout';
-import { Suspense, lazy } from 'react';
+import { Suspense, lazy, useEffect } from 'react';
 const Home = lazy(() => import('./pages/Home'));
 const Consultations = lazy(() => import('./pages/Consultations'));
 const About = lazy(() => import('./pages/About'));
@@ -46,16 +46,48 @@ import CookieConsent from './components/CookieConsent';
 import FloatingChatAssistant from './components/FloatingChatAssistant';
 import { HelmetProvider } from 'react-helmet-async';
 
+function LazyImageLoader() {
+  useEffect(() => {
+    // Apply loading="lazy" to any image that doesn't already have an explicit loading attribute
+    const applyLazy = () => {
+      document.querySelectorAll('img:not([loading]):not([fetchpriority="high"])').forEach(img => {
+        img.loading = 'lazy';
+      });
+    };
+    applyLazy();
+    const observer = new MutationObserver(applyLazy);
+    observer.observe(document.body, { childList: true, subtree: true });
+    return () => observer.disconnect();
+  }, []);
+  return null;
+}
+
 function App() {
   return (
     <HelmetProvider>
       <SettingsProvider>
         <BrowserRouter>
         <ScrollToTop />
+        <LazyImageLoader />
         <Toaster position="top-center" reverseOrder={false} />
         <CookieConsent />
         <FloatingChatAssistant />
-        <Suspense fallback={<div className="d-flex justify-content-center align-items-center" style={{height: '100vh', background: 'var(--bg-color)'}}><div className="spinner-border" style={{color: 'var(--primary-color)'}}></div></div>}>
+        <Suspense fallback={
+          <div style={{
+            height: '100vh', display: 'flex', flexDirection: 'column',
+            alignItems: 'center', justifyContent: 'center',
+            background: '#FDF6EE', gap: '1rem'
+          }}>
+            <img src="/newbg.webp" alt="DS Institute" style={{ height: '56px', width: 'auto', opacity: 0.85 }} />
+            <div style={{
+              width: '36px', height: '36px', borderRadius: '50%',
+              border: '3px solid rgba(139,74,30,0.15)',
+              borderTopColor: '#8B4A1E',
+              animation: 'spin 0.75s linear infinite'
+            }} />
+            <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+          </div>
+        }>
           <Routes>
             <Route path="/test" element={<NewStudentDashboard />} />
 

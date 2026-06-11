@@ -58,8 +58,19 @@ function AdminConsultations() {
         <p className="text-muted small">Manage complimentary consultations booked by students.</p>
       </div>
 
-      <div className="leads-table-wrap">
-        <table className="leads-table">
+      <div className="admin-table-shell">
+        <div className="admin-table-shell__bar">
+          <div>
+            <div className="admin-table-shell__title">Consultation Queue</div>
+            <div className="admin-table-shell__subtitle">Complimentary sessions requested by students</div>
+          </div>
+          <div className="admin-table-shell__count">
+            <strong>{consultations.length}</strong>
+            <span>request{consultations.length !== 1 ? 's' : ''}</span>
+          </div>
+        </div>
+        <div className="admin-table-scroll">
+        <table className="admin-table leads-table">
           <thead>
             <tr>
               <th>Student</th>
@@ -108,6 +119,12 @@ function AdminConsultations() {
             )}
           </tbody>
         </table>
+        </div>
+        {consultations.length > 0 && (
+          <div className="admin-table-footer">
+            <span>Showing <strong>{consultations.length}</strong> consultation request{consultations.length !== 1 ? 's' : ''}</span>
+          </div>
+        )}
       </div>
     </div>
   );

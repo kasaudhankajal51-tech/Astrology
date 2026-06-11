@@ -4,16 +4,18 @@ const jobApplicationSchema = new mongoose.Schema({
   fullName: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },
-  city: { type: String, required: true },
-  totalExperience: { type: String, required: true },
-  specialization: { type: String, required: true },
+  city: { type: String, default: '' },
+  totalExperience: { type: String, default: '' },
+  specialization: { type: String, default: '' },
   languages: { type: String },
+  coverLetter: { type: String },
   resumeUrl: { type: String, required: true },
-  appliedRole: { type: String, required: true }, // The job title or ID
-  status: { 
-    type: String, 
-    enum: ['Pending', 'Reviewed', 'Shortlisted', 'Interviewing', 'Selected', 'Rejected'], 
-    default: 'Pending' 
+  jobId: { type: mongoose.Schema.Types.ObjectId, ref: 'Job', default: null },
+  appliedRole: { type: String, default: '' },
+  status: {
+    type: String,
+    enum: ['New', 'Pending', 'Reviewed', 'Shortlisted', 'Interviewing', 'Selected', 'Rejected', 'Hired'],
+    default: 'New',
   },
   appliedDate: { type: Date, default: Date.now }
 }, { timestamps: true });

@@ -15,7 +15,11 @@ const ConsultationSchema = new mongoose.Schema({
   amount: { type: Number },
   paymentStatus: { type: String, default: 'pending', enum: ['pending', 'completed', 'failed'] },
   transactionId: { type: String },
-  status: { type: String, default: 'pending', enum: ['pending', 'contacted', 'completed', 'cancelled'] },
+  status: {
+    type: String,
+    default: 'Pending',
+    enum: ['pending', 'Pending', 'contacted', 'Confirmed', 'completed', 'Completed', 'cancelled', 'Cancelled'],
+  },
   userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
   preferredDatetime: { type: Date },

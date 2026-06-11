@@ -4,6 +4,7 @@ import logger from './src/config/logger.js';
 import './src/config/env.js';
 import { checkBunnyConnection } from './src/utils/bunnyHelper.js';
 import { getRazorpayConfig } from './src/utils/razorpayConfig.js';
+import { checkSupabaseConnection } from './src/utils/supabaseStorage.js';
 
 const PORT = process.env.PORT || 5000;
 const MONGO_URI = process.env.MONGO_URI || "mongodb://localhost:27017/astrology";
@@ -48,6 +49,16 @@ const logRazorpayConnection = () => {
   }
 };
 
+const logSupabaseConnection = async () => {
+  try {
+    const { bucket, uploads } = await checkSupabaseConnection();
+    logger.info(`✅ Supabase Storage configured for uploads (bucket: ${bucket})`);
+    logger.info(`   Uploads: images → ${uploads.images}, videos → ${uploads.videos}, resumes → ${uploads.resumes}`);
+  } catch (error) {
+    logger.error(`❌ Supabase Storage not configured for uploads: ${error.message}`);
+  }
+};
+
 // Start Server
 const startServer = async () => {
   logger.info('Backend startup: starting HTTP server...');
@@ -56,6 +67,7 @@ const startServer = async () => {
     logger.info(`🚀 Production Server Live on Port ${PORT}`);
     logger.info(`Mode: ${process.env.NODE_ENV || 'development'}`);
     logRazorpayConnection();
+    logSupabaseConnection();
     logBunnyConnection();
   });
 

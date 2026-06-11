@@ -1,521 +1,253 @@
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import SEO from '../components/SEO';
+
+const expertiseTags = ['Vedic Astrology', 'Tarot Reading', 'Numerology', 'Spiritual Guidance'];
+
+const uniquePoints = [
+  { icon: 'fa-moon', text: 'Rooted in classical Vedic principles with practical, modern interpretation' },
+  { icon: 'fa-user-check', text: 'Personalised guidance for education, career, relationships, and life decisions' },
+  { icon: 'fa-shield-alt', text: 'Confidential consultations with an ethical, client-first approach' },
+  { icon: 'fa-graduation-cap', text: 'Structured live and recorded programmes led by experienced mentors' },
+];
+
+const aims = [
+  'Deliver methodical astrology education that removes fear and superstition',
+  'Make quality learning accessible through live batches and recorded courses',
+  'Blend traditional scriptures with techniques students can apply confidently',
+  'Support learners from first enquiry through certification and practice',
+  'Help individuals make clearer, spiritually aware life choices',
+  'Build a trusted institute known for integrity, depth, and results',
+];
 
 function About() {
   useEffect(() => {
-    if (window.AOS) {
-      window.AOS.refresh();
-    }
+    if (window.AOS) window.AOS.refresh();
   }, []);
 
   return (
-    <>
-      <SEO title="About Us" description="Guided by knowledge, driven by purpose. Meet our expert astrologers." url="/about" />
-      {/* Hero Section */}
-      <section className="about-hero">
-        <div className="hero-overlay"></div>
-        <div className="container position-relative z-2">
-          <div className="row align-items-center g-5">
-            <div className="col-lg-6" data-aos="fade-right" data-aos-duration="800">
-              <div className="stats-badge mb-4">
-                <span className="number text-gradient">100K+</span>
-                <span className="text">Trusted Consultations</span>
-              </div>
-              <h1 className="hero-title mb-4">
-                Meet <span className="text-gradient">Damini Ma'am</span>
+    <div className="about-page site-page w-full overflow-x-hidden bg-site-bg text-site-text">
+      <SEO
+        title="About Us"
+        description="Learn about DS Astro Institute — our mission, mentors, and approach to Vedic astrology education and consultations."
+        url="/about"
+      />
+
+      {/* Banner */}
+      <section className="relative overflow-hidden border-b border-site-border bg-site-bg">
+        <div
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(200,131,42,0.12),transparent_55%)]"
+          aria-hidden="true"
+        />
+        <div className="site-container site-about-hero-inner relative z-[1]">
+          <div className="grid items-center gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:gap-10">
+            <div data-aos="fade-right" data-aos-duration="700">
+              <span className="site-mb-3 inline-block text-kicker font-extrabold uppercase tracking-[0.14em] text-site-accent">
+                About Us
+              </span>
+              <h1 className="font-heading text-display font-extrabold leading-[1.12] text-site-text">
+                DS Astro Institute
               </h1>
-              <p className="hero-description mb-5">
-                Guided by knowledge, driven by purpose, and focused on your growth. Discover the cosmic narrative written in your stars.
+              <p className="site-mt-4 max-w-xl text-body leading-relaxed text-site-text-muted">
+                We are an astrology education and consultation platform dedicated to authentic Vedic learning,
+                professional mentorship, and meaningful guidance for students across India and abroad.
               </p>
-              <div className="cta-mystic">
-                <i className="fas fa-award me-2"></i> ⭐ Get Your Star Blessing Today ⭐
+              <div className="site-mt-6 flex flex-wrap gap-3">
+                <div className="site-stat-pad rounded-xl border border-site-border bg-white shadow-[0_8px_20px_rgba(42,15,2,0.06)]">
+                  <p className="font-heading text-2xl font-bold leading-none text-site-primary md:text-[1.65rem]">5000+</p>
+                  <p className="site-mt-3 text-caption font-semibold uppercase tracking-wide text-site-text-muted">Students trained</p>
+                </div>
+                <div className="site-stat-pad rounded-xl border border-site-border bg-white shadow-[0_8px_20px_rgba(42,15,2,0.06)]">
+                  <p className="font-heading text-2xl font-bold leading-none text-site-primary md:text-[1.65rem]">15+</p>
+                  <p className="site-mt-3 text-caption font-semibold uppercase tracking-wide text-site-text-muted">Specialised courses</p>
+                </div>
+              </div>
+              <div className="site-mt-8 flex flex-wrap gap-3">
+                <Link
+                  to="/live-courses"
+                  className="site-btn site-btn-primary site-about-btn-lg inline-flex items-center gap-2"
+                >
+                  <i className="fas fa-chalkboard-teacher" aria-hidden="true" />
+                  Explore our courses
+                </Link>
+                <Link
+                  to="/consultations"
+                  className="site-btn site-btn-outline site-about-btn-lg inline-flex items-center gap-2 bg-white"
+                >
+                  <i className="fas fa-comments" aria-hidden="true" />
+                  Book a consultation
+                </Link>
               </div>
             </div>
-            <div className="col-lg-6" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
-              <div className="hero-img-container">
-                <div className="glow-circle"></div>
-                <img src="/manimage.png" className="hero-img-main" alt="Astrologer Damini Ma'am" />
+
+            <div className="flex justify-center lg:justify-end" data-aos="fade-left" data-aos-duration="700" data-aos-delay="80">
+              <div className="relative w-full max-w-[240px] sm:max-w-[260px] md:max-w-[280px]">
+                <div
+                  className="absolute -inset-3 rounded-2xl bg-site-accent/20 blur-2xl"
+                  aria-hidden="true"
+                />
+                <img
+                  src="/manimage.png"
+                  alt="DS Astro mentor"
+                  className="relative z-[1] h-auto max-h-[300px] w-full rounded-2xl border-4 border-white object-cover object-top shadow-[0_16px_40px_rgba(42,15,2,0.18)] sm:max-h-[320px]"
+                />
+                <p className="site-mt-3 relative z-[1] text-center text-caption text-site-text-muted">
+                  Guided by experienced practitioners and educators
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* About Section */}
-      <section className="about-details py-5">
-        <div className="container">
-          <div className="row g-5 align-items-center">
-            <div className="col-lg-6" data-aos="fade-up" data-aos-duration="800">
-              <h5 className="section-subtitle">🌟 Our Astrologer 🌟</h5>
-              <h2 className="section-title mb-4">A Sacred Science of <span className="text-gradient">Intuition</span></h2>
-              <p className="about-text mb-4">
-                At our platform, astrology is not just a service—it is a sacred science rooted in deep knowledge, intuition, and spiritual wisdom.
+      {/* Our story */}
+      <section className="site-section bg-white">
+        <div className="site-container">
+          <div className="grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
+            <div data-aos="fade-up" data-aos-duration="700">
+              <p className="site-mb-2 text-kicker font-bold uppercase tracking-[0.12em] text-site-accent">Who we are</p>
+              <h2 className="font-heading text-heading font-extrabold text-site-text">
+                A trusted home for <span className="text-site-accent">astrology education</span>
+              </h2>
+              <p className="site-mt-4 text-body leading-relaxed text-site-text-muted">
+                DS Astro Institute was built to make serious astrology training approachable — whether you want to
+                start a professional practice, deepen your spiritual understanding, or seek clarity through
+                personalised consultations.
               </p>
-              <p className="about-text mb-4">
-                Our expert astrologer, <strong className="highlight-name">Damini Ma'am</strong>, is a highly respected and experienced practitioner who combines the timeless principles of Vedic astrology with modern-day insights to offer guidance that is both practical and transformative.
+              <p className="site-mt-4 text-body leading-relaxed text-site-text-muted">
+                Under the guidance of <strong className="font-semibold text-site-primary">Damini Ma&apos;am</strong> and
+                our faculty, we combine classical Vedic frameworks with structured teaching, live mentorship, and
+                self-paced recorded programmes.
               </p>
-              <div className="expertise-tags d-flex flex-wrap gap-3 mt-4">
-                <span className="tag-glass">🔮 Vedic Astrology</span>
-                <span className="tag-glass">🃏 Tarot Reading</span>
-                <span className="tag-glass">🔢 Numerology</span>
-                <span className="tag-glass">💫 Spiritual Healing</span>
+              <div className="site-mt-6 flex flex-wrap gap-2">
+                {expertiseTags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="site-tag-pad rounded-lg border border-site-accent-dark/15 bg-site-bg text-body-sm font-semibold text-site-primary"
+                  >
+                    {tag}
+                  </span>
+                ))}
               </div>
             </div>
-            <div className="col-lg-6" data-aos="zoom-in" data-aos-duration="800" data-aos-delay="100">
-              <div className="video-scroll-wrapper">
-                <div className="glass-card p-4 text-center">
-                  <div className="video-placeholder mb-3">
-                    <iframe 
-                      src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                      title="Astrology Wisdom with Damini Ma'am"
-                      frameBorder="0" 
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                  <p className="video-caption">📺 Watch: Transforming lives through cosmic alignment</p>
+
+            <div data-aos="zoom-in" data-aos-duration="700" data-aos-delay="80">
+              <div className="site-card-pad rounded-2xl border border-site-border bg-site-bg shadow-[0_10px_24px_rgba(42,15,2,0.06)]">
+                <div className="aspect-video overflow-hidden rounded-xl border border-site-border bg-black">
+                  <iframe
+                    src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                    title="About DS Astro Institute"
+                    className="h-full w-full"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
                 </div>
+                <p className="site-mt-3 text-center text-body-sm text-site-text-muted">
+                  Hear how we teach, consult, and support our student community
+                </p>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* Unique Section */}
-      <section className="unique-features py-5">
-        <div className="container">
-          <div className="text-center mb-5" data-aos="fade-up" data-aos-duration="700">
-            <h2 className="section-title text-dark">✨ What Makes Us <span className="text-gradient">Unique?</span> ✨</h2>
-            <p className="unique-subtitle mt-3">Discover why thousands trust us for their cosmic guidance</p>
+      {/* What makes us unique */}
+      <section className="site-section-sm bg-site-bg">
+        <div className="site-container">
+          <div className="site-mb-10 mx-auto max-w-2xl text-center" data-aos="fade-up">
+            <h2 className="font-heading text-heading font-extrabold text-site-text">
+              What makes us <span className="text-site-accent">different</span>
+            </h2>
+            <p className="site-mt-3 text-body text-site-text-muted">
+              Education, ethics, and real-world application — not vague predictions or fear-based advice.
+            </p>
           </div>
-          <div className="row g-4">
-            {[
-              { icon: "🌙", text: "Profound understanding of planetary movements and their real-life impact" },
-              { icon: "⭐", text: "Personalized consultations tailored to each individual's situation" },
-              { icon: "🔒", text: "Honest, confidential, and ethically grounded guidance" },
-              { icon: "🧠", text: "A powerful blend of intuitive insight and scientific methods" }
-            ].map((item, idx) => (
-              <div className="col-md-6 col-lg-3" key={idx} data-aos="fade-up" data-aos-duration="600" data-aos-delay={idx * 100}>
-                <div className="unique-card h-100 p-4 text-center">
-                  <div className="icon-box-lg mb-3">
-                    <span className="feature-icon">{item.icon}</span>
-                  </div>
-                  <p className="unique-card-text m-0">{item.text}</p>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            {uniquePoints.map((item, idx) => (
+              <div
+                key={item.text}
+                className="site-card-pad flex h-full flex-col items-center rounded-2xl border border-site-border bg-white text-center shadow-[0_10px_24px_rgba(42,15,2,0.06)] transition hover:-translate-y-0.5 hover:border-site-accent/40"
+                data-aos="fade-up"
+                data-aos-delay={idx * 80}
+              >
+                <div className="site-mb-3 flex h-14 w-14 items-center justify-center rounded-xl bg-site-accent/10 text-site-accent">
+                  <i className={`fas ${item.icon} text-xl`} aria-hidden="true" />
                 </div>
+                <p className="text-body-sm leading-relaxed text-site-text-muted">{item.text}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Aims Section */}
-      <section className="aims-section py-5">
-        <div className="container">
-          <div className="row g-5 align-items-center">
-            <div className="col-lg-5" data-aos="fade-right" data-aos-duration="800">
-              <h2 className="section-title text-dark mb-4">Our Aims & <br/><span className="text-gradient">Objectives</span></h2>
-              <p className="aims-description mb-4">
-                In today's fast-moving world, astrology is a powerful tool that connects ancient wisdom with modern life.
+      {/* Mission & aims */}
+      <section className="site-section bg-white">
+        <div className="site-container">
+          <div className="grid gap-10 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-14">
+            <div data-aos="fade-right" data-aos-duration="700">
+              <h2 className="font-heading text-heading font-extrabold text-site-text">
+                Our mission & <span className="text-site-accent">objectives</span>
+              </h2>
+              <p className="site-mt-4 text-body leading-relaxed text-site-text-muted">
+                In a fast-changing world, astrology remains a bridge between timeless wisdom and everyday decisions.
+                Our goal is to teach it clearly, responsibly, and with outcomes students can trust.
               </p>
-              <div className="mission-box p-4">
-                <p className="mission-text mb-0">
-                  <i className="fas fa-quote-left me-2 text-gradient"></i> 
-                  "Our mission is to simplify astrology and make it practical, accessible, and result-oriented for everyone."
-                  <i className="fas fa-quote-right ms-2 text-gradient"></i>
+              <blockquote className="site-card-pad site-mt-6 rounded-2xl border border-site-border border-l-4 border-l-site-accent bg-site-bg">
+                <p className="text-body-sm italic leading-relaxed text-site-text">
+                  &ldquo;Our mission is to simplify astrology and make it practical, accessible, and result-oriented
+                  for every sincere learner.&rdquo;
                 </p>
-              </div>
+              </blockquote>
             </div>
-            <div className="col-lg-7" data-aos="fade-left" data-aos-duration="800" data-aos-delay="100">
-              <div className="aims-grid">
-                {[
-                  "🎯 To remove doubts and superstitions and prepare astrologers methodically.",
-                  "📚 To provide the highest quality education in astrology for human welfare.",
-                  "🕉️ To combine traditional Vedic knowledge with modern techniques.",
-                  "💡 To offer clear and practical guidance to overcome life's challenges.",
-                  "⚖️ To solve life problems scientifically while preserving Vedic principles.",
-                  "🌟 To empower individuals to become spiritually aware."
-                ].map((aim, idx) => (
-                  <div className="aim-item d-flex gap-3 mb-4" key={idx}>
-                    <div className="check-icon"><i className="fas fa-check-circle"></i></div>
-                    <p className="aim-text m-0">{aim}</p>
-                  </div>
-                ))}
-              </div>
+
+            <div className="space-y-4" data-aos="fade-left" data-aos-duration="700" data-aos-delay="80">
+              {aims.map((aim) => (
+                <div
+                  key={aim}
+                  className="site-list-row-pad flex gap-3 border-b border-site-border/80 last:border-0 last:pb-0"
+                >
+                  <i className="fas fa-check-circle mt-0.5 shrink-0 text-lg text-site-accent" aria-hidden="true" />
+                  <p className="text-body-sm leading-relaxed text-site-text-muted">{aim}</p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* Call to Action Section */}
-      <section className="cta-section py-5">
-        <div className="container text-center">
-          <div className="cta-card p-5" data-aos="zoom-in" data-aos-duration="800">
-            <h2 className="cta-title mb-3">Ready to Begin Your Cosmic Journey?</h2>
-            <p className="cta-description mb-4">Book a consultation with Damini Ma'am today and unlock the secrets of your stars.</p>
-            <button className="cta-button">
-              <i className="fas fa-calendar-alt me-2"></i> Book Your Consultation Now
-            </button>
+      {/* CTA */}
+      <section className="site-section-sm bg-site-bg">
+        <div className="site-container">
+          <div
+            className="site-card-pad mx-auto max-w-3xl rounded-2xl border border-site-border bg-white text-center shadow-[0_10px_24px_rgba(42,15,2,0.06)]"
+            data-aos="zoom-in"
+          >
+            <h2 className="font-heading text-subheading font-extrabold text-site-text">
+              Ready to learn or consult with us?
+            </h2>
+            <p className="site-mt-3 mx-auto max-w-xl text-body text-site-text-muted">
+              Browse live batches, recorded courses, or book a one-to-one session with our team.
+            </p>
+            <div className="site-mt-6 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/recorded-courses"
+                className="site-btn site-btn-primary site-about-btn-lg inline-flex items-center gap-2"
+              >
+                <i className="fas fa-play-circle" aria-hidden="true" />
+                View recorded courses
+              </Link>
+              <Link
+                to="/contact"
+                className="site-btn site-btn-outline site-about-btn-lg inline-flex items-center gap-2 bg-white"
+              >
+                <i className="fas fa-envelope" aria-hidden="true" />
+                Contact our team
+              </Link>
+            </div>
           </div>
         </div>
       </section>
-
-      <style>{`
-        /* Global Reset */
-        body {
-          overflow-x: hidden !important;
-          margin: 0;
-          padding: 0;
-        }
-        
-        /* Hero Section */
-        .about-hero {
-          position: relative;
-          padding: var(--section-pad-y) var(--page-pad-x);
-          background: var(--site-bg);
-          overflow: hidden;
-          font-family: var(--font-body);
-        }
-
-        .hero-overlay {
-          position: absolute;
-          inset: 0;
-          background: radial-gradient(circle at 70% 30%, rgba(200, 162, 122, 0.1), transparent 60%);
-        }
-
-        .stats-badge {
-          display: inline-flex;
-          flex-direction: column;
-          background: #FFFFFF;
-          padding: 0.85rem 1.3rem;
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          box-shadow: var(--shadow-card);
-        }
-
-        .stats-badge .number { 
-          font-family: var(--font-heading);
-          font-size: clamp(2rem, 5vw, 2.6rem); 
-          font-weight: 700; 
-          line-height: 1.1;
-          color: var(--primary-color);
-        }
-        
-        .stats-badge .text { 
-          font-size: 0.78rem; 
-          text-transform: uppercase; 
-          letter-spacing: 1.5px; 
-          color: var(--text-muted);
-          font-weight: 600;
-        }
-
-        .hero-title {
-          font-family: var(--font-heading);
-          font-size: var(--h1-size);
-          font-weight: 800;
-          color: var(--site-text);
-          line-height: 1.12;
-        }
-
-        .hero-description {
-          font-size: var(--body-size);
-          color: var(--site-text-muted);
-          line-height: 1.6;
-          font-weight: 400;
-          font-family: var(--font-sans);
-        }
-
-        .text-gradient {
-          color: var(--primary-color);
-          font-weight: 700;
-        }
-
-        .cta-mystic {
-          display: inline-block;
-          background: var(--primary-color);
-          color: #FFFFFF;
-          padding: 0.75rem 1.25rem;
-          border-radius: var(--radius-control);
-          border: none;
-          font-weight: 600;
-          font-size: 0.92rem;
-          letter-spacing: 0.5px;
-          transition: all 0.3s ease;
-          cursor: pointer;
-          box-shadow: 0 4px 15px rgba(139, 74, 47, 0.2);
-          text-decoration: none;
-        }
-
-        .cta-mystic:hover {
-          transform: translateY(-3px);
-          background: #723c26;
-          box-shadow: 0 8px 25px rgba(139, 74, 47, 0.3);
-        }
-
-        /* Hero Image */
-        .hero-img-container {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .hero-img-main {
-          width: 85%;
-          border-radius: var(--radius-card);
-          position: relative;
-          z-index: 2;
-          box-shadow: var(--premium-shadow);
-          border: 4px solid #FFFFFF;
-        }
-
-        .glow-circle {
-          position: absolute;
-          width: 400px;
-          height: 400px;
-          background: var(--primary-color);
-          filter: blur(80px);
-          opacity: 0.1;
-          border-radius: 50%;
-        }
-
-        /* About Details Section */
-        .about-details {
-          background: #FFFFFF;
-          padding: var(--section-pad-y) var(--page-pad-x);
-        }
-
-        .section-subtitle {
-          color: var(--primary-color);
-          text-transform: uppercase;
-          letter-spacing: 0.12em;
-          font-weight: 600;
-          font-size: 0.82rem;
-          margin-bottom: 15px;
-          display: block;
-          font-family: var(--font-sans);
-        }
-
-        .section-title {
-          font-family: var(--font-heading) !important;
-          font-size: var(--h2-size) !important;
-          font-weight: 800 !important;
-          color: var(--site-text) !important;
-          line-height: 1.18;
-        }
-
-        @media (max-width: 991px) {
-          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
-        }
-
-        @media (max-width: 767px) {
-          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
-        }
-
-        .about-text {
-          font-size: var(--body-size);
-          color: var(--site-text-muted);
-          line-height: 1.6;
-          font-weight: 400;
-        }
-
-        .highlight-name {
-          color: var(--primary-color);
-          font-weight: 700;
-        }
-
-        .tag-glass {
-          padding: 0.5rem 0.8rem;
-          background: var(--card-color);
-          border: 1px solid var(--glass-border);
-          border-radius: var(--radius-control);
-          color: var(--primary-color);
-          font-size: 0.88rem;
-          font-weight: 600;
-          transition: all 0.3s;
-        }
-
-        .tag-glass:hover {
-          background: var(--primary-color);
-          color: #FFFFFF;
-          transform: translateY(-3px);
-        }
-
-        /* Video Section */
-        .video-placeholder iframe {
-          width: 100%;
-          height: clamp(220px, 38vw, 300px);
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          box-shadow: var(--shadow-card);
-        }
-
-        .glass-card {
-          background: var(--card-color);
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          box-shadow: var(--shadow-card);
-        }
-
-        .video-caption {
-          font-size: 0.9rem;
-          color: var(--text-muted);
-          font-weight: 500;
-          margin-top: 15px;
-        }
-
-        /* Unique Features Section */
-        .unique-features {
-          background: var(--bg-color);
-          padding: var(--section-pad-y) var(--page-pad-x);
-        }
-
-        .unique-subtitle {
-          font-size: var(--body-size);
-          color: var(--site-text-muted);
-          font-weight: 400;
-        }
-
-        .unique-card {
-          background: #FFFFFF;
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          transition: all 0.3s ease;
-          box-shadow: var(--shadow-card);
-        }
-
-        .unique-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--primary-color);
-          box-shadow: 0 15px 35px rgba(139, 74, 47, 0.1);
-        }
-
-        .icon-box-lg {
-          width: 80px;
-          height: 80px;
-          background: rgba(139, 74, 47, 0.1);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          margin: 0 auto;
-        }
-
-        .feature-icon {
-          font-size: 1.6rem;
-        }
-
-        .unique-card-text {
-          font-size: 0.96rem;
-          color: var(--site-text-muted);
-          line-height: 1.5;
-          font-weight: 500;
-        }
-
-        /* Aims Section */
-        .aims-section {
-          background: #FFFFFF;
-          padding: var(--section-pad-y) var(--page-pad-x);
-        }
-
-        .aims-description {
-          font-size: var(--body-size);
-          color: var(--site-text-muted);
-          line-height: 1.6;
-          font-weight: 400;
-        }
-
-        .mission-box {
-          background: var(--card-color);
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          padding: clamp(1rem, 3vw, 1.5rem);
-          border-left: 5px solid var(--primary-color);
-        }
-
-        .mission-text {
-          font-size: 1rem;
-          color: var(--site-text);
-          font-style: italic;
-          font-weight: 600;
-          line-height: 1.6;
-        }
-
-        .aim-item {
-          padding: 0.75rem 0;
-          border-bottom: 1px solid var(--site-border);
-        }
-
-        .check-icon i {
-          color: var(--primary-color);
-          font-size: 1.4rem;
-        }
-
-        .aim-text {
-          font-size: 0.98rem;
-          color: var(--site-text-muted);
-          line-height: 1.5;
-          font-weight: 500;
-        }
-
-        /* CTA Section */
-        .cta-section {
-          background: var(--bg-color);
-          padding: var(--section-pad-y) var(--page-pad-x);
-        }
-
-        .cta-card {
-          background: #FFFFFF;
-          border-radius: var(--radius-card);
-          border: 1px solid var(--site-border);
-          box-shadow: var(--shadow-card);
-          padding: clamp(1.5rem, 5vw, 3rem);
-        }
-
-        .cta-title {
-          font-family: var(--font-heading);
-          font-size: var(--h2-size);
-          font-weight: 800;
-          color: var(--site-text);
-        }
-
-        .cta-description {
-          font-size: var(--body-size);
-          color: var(--site-text-muted);
-          font-weight: 400;
-        }
-
-        .cta-button {
-          background: var(--primary-color);
-          color: white;
-          border: none;
-          padding: 0.8rem 1.35rem;
-          font-size: 0.94rem;
-          font-weight: 600;
-          border-radius: var(--radius-control);
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 10px 25px rgba(139, 74, 47, 0.2);
-        }
-
-        .cta-button:hover {
-          transform: translateY(-3px);
-          background: #723c26;
-          box-shadow: 0 15px 35px rgba(139, 74, 47, 0.3);
-        }
-
-        @media (max-width: 991px) {
-          .about-hero { padding-top: 6rem; text-align: center; }
-          .stats-badge { margin: 0 auto 30px; }
-          .hero-img-main { margin-top: 40px; width: 80%; }
-          .about-details { text-align: center; }
-          .expertise-tags { justify-content: center; }
-          .aims-section { text-align: center; }
-          .mission-box { text-align: center; }
-          .aim-item { justify-content: center; text-align: left; }
-          .cta-card { margin: 0 15px; }
-        }
-      `}</style>
-    </>
+    </div>
   );
 }
 

@@ -26,6 +26,8 @@ const FaqSchema = new mongoose.Schema({
 const CourseSchema = new mongoose.Schema({
   title: { type: String, required: true },
   description: { type: String },
+  longDesc: { type: String },
+  topics: [{ type: String }],
   price: { type: Number, required: true },
   validityDays: { type: Number, required: true },
   thumbnailUrl: { type: String },

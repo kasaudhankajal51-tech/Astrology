@@ -20,6 +20,7 @@ function Header() {
     studentName: ''
   });
   const [openMobileGroup, setOpenMobileGroup] = useState(null);
+  const [desktopDropdownLocked, setDesktopDropdownLocked] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -58,9 +59,11 @@ function Header() {
     navigate('/admin/login');
   };
 
+  const navLinkTypography = 'text-nav font-bold uppercase tracking-wide leading-normal';
+
   const navLinkClass = (path) => {
     const isActive = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
-    return `nav-link${isActive ? ' active' : ''}`;
+    return `nav-link ${navLinkTypography}${isActive ? ' active' : ''}`;
   };
 
   const isStudentLoginPage = location.pathname === '/login';
@@ -69,21 +72,62 @@ function Header() {
     setOpenMobileGroup((current) => (current === group ? null : group));
   };
 
-  const primaryNavLinks = authState.isStudent
+  const closeDesktopDropdown = () => {
+    setDesktopDropdownLocked(true);
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  };
+
+  const unlockDesktopDropdown = () => {
+    setDesktopDropdownLocked(false);
+  };
+
+  // Desktop nav: max 5 items. COURSES is a dropdown to keep the bar clean.
+  const desktopNavItems = authState.isStudent
     ? [
         { label: 'HOME', to: '/', match: '/' },
-        { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
-        { label: 'MY COURSES', to: '/dashboard', match: '/student/course' },
-        { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
-        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' }
-        // { label: 'SHOP', to: '/shop', match: '/shop' }
+        { label: 'MY COURSES', to: '/dashboard', match: '/dashboard' },
+        {
+          label: 'COURSES',
+          dropdown: [
+            { label: 'Live Classes', to: '/live-courses', icon: 'fa-broadcast-tower' },
+            { label: 'Recorded Courses', to: '/recorded-courses', icon: 'fa-play-circle' }
+          ]
+        },
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'SHOP', to: '/shop', match: '/shop' }
       ]
     : [
         { label: 'HOME', to: '/', match: '/' },
-        { label: 'LIVE COURSES', to: '/live-courses', match: '/live-courses' },
+        {
+          label: 'COURSES',
+          dropdown: [
+            { label: 'Live Classes', to: '/live-courses', icon: 'fa-broadcast-tower' },
+            { label: 'Recorded Courses', to: '/recorded-courses', icon: 'fa-play-circle' }
+          ]
+        },
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'SHOP', to: '/shop', match: '/shop' },
+        { label: 'ABOUT', to: '/about', match: '/about' }
+      ];
+
+  // Mobile offcanvas keeps flat links for easy thumb navigation
+  const mobileNavLinks = authState.isStudent
+    ? [
+        { label: 'HOME', to: '/', match: '/' },
+        { label: 'MY COURSES', to: '/dashboard', match: '/dashboard' },
+        { label: 'LIVE CLASSES', to: '/live-courses', match: '/live-courses' },
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
-        // { label: 'SHOP', to: '/shop', match: '/shop' },
+        { label: 'SHOP', to: '/shop', match: '/shop' }
+      ]
+    : [
+        { label: 'HOME', to: '/', match: '/' },
+        { label: 'LIVE CLASSES', to: '/live-courses', match: '/live-courses' },
+        { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
+        { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
+        { label: 'SHOP', to: '/shop', match: '/shop' },
         { label: 'ABOUT', to: '/about', match: '/about' }
       ];
 
@@ -199,6 +243,10 @@ function Header() {
     };
   }, [location.pathname]);
 
+  useEffect(() => {
+    closeDesktopDropdown();
+  }, [location.pathname]);
+
   return (
     <>
       <style>{`
@@ -228,7 +276,7 @@ function Header() {
           padding: 0.45rem 4%;
           white-space: nowrap;
           z-index: 3;
-          font-size: clamp(0.78rem, 1.8vw, 1rem);
+          font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
           text-transform: uppercase;
           letter-spacing: 0.5px;
           flex-shrink: 0;
@@ -256,7 +304,7 @@ function Header() {
         
         .item {
           color: var(--text-content);
-          font-size: clamp(0.78rem, 1.8vw, 1rem);
+          font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
           font-weight: 500;
           font-family: var(--font-sans);
           display: inline-flex;
@@ -368,8 +416,9 @@ function Header() {
         @media (min-width: 1200px) {
           .nav-inner {
             display: grid !important;
-            grid-template-columns: minmax(12rem, 0.8fr) auto minmax(24rem, 1fr);
-            column-gap: clamp(1.25rem, 2.4vw, 3rem);
+            grid-template-columns: auto 1fr auto;
+            column-gap: clamp(1rem, 2vw, 2rem);
+            align-items: center;
           }
 
           .navbar-collapse {
@@ -380,33 +429,37 @@ function Header() {
             justify-self: end;
           }
 
+          .navbar-nav {
+            gap: 0;
+            justify-content: center;
+          }
+
           .navbar-nav .nav-link {
             color: var(--text-main) !important;
-            font-weight: 700;
-            padding: 0.65rem 0.65rem !important;
-            font-size: clamp(0.95rem, 0.95vw, 1rem);
-            text-transform: uppercase;
-            letter-spacing: 0.08rem;
-            transition: all 0.3s ease;
+            padding: 0.5rem 0.65rem !important;
+            transition: color 0.2s ease;
             position: relative;
             white-space: nowrap;
+            background: none;
+            border: none;
           }
 
           .navbar-nav .nav-link::after {
             content: '';
             position: absolute;
-            bottom: 0.2rem;
+            bottom: 0.15rem;
             left: 50%;
             width: 0;
-            height: 0.12rem;
+            height: 2px;
             background: var(--primary-color);
-            transition: all 0.3s ease;
+            transition: width 0.25s ease;
             transform: translateX(-50%);
+            border-radius: 2px;
           }
 
           .navbar-nav .nav-link:hover::after,
           .navbar-nav .nav-link.active::after {
-            width: 80%;
+            width: 70%;
           }
 
           .navbar-nav .nav-link:hover,
@@ -414,60 +467,107 @@ function Header() {
             color: var(--primary-color) !important;
           }
 
-          /* Hover Dropdowns for Desktop */
-          .nav-item.dropdown:hover > .dropdown-menu {
+          /* Hover Dropdown for COURSES */
+          .nav-item.dropdown {
+            position: relative;
+          }
+
+          .nav-item.dropdown:hover > .dropdown-menu,
+          .nav-item.dropdown:focus-within > .dropdown-menu {
             display: block;
-            margin-top: 0;
             opacity: 1;
             visibility: visible;
             transform: translateY(0);
+            pointer-events: all;
           }
 
           .dropdown-menu {
             display: block;
             opacity: 0;
             visibility: hidden;
-            transform: translateY(0.6rem);
-            transition: all 0.3s ease;
+            transform: translateY(6px);
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            pointer-events: none;
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(6px);
             margin-top: 0;
-            border-radius: 0.75rem;
-            padding: 0.75rem;
-            min-width: 12rem;
-            box-shadow: 0 0.6rem 1.9rem rgba(139, 74, 30, 0.12) !important;
+            border-radius: 12px;
+            padding: 0.5rem;
+            min-width: 11rem;
+            background: #fff;
+            border: 1px solid var(--glass-border) !important;
+            box-shadow: 0 8px 24px rgba(139, 74, 30, 0.12) !important;
+            z-index: 1050;
+          }
+
+          .nav-item.dropdown:hover > .dropdown-menu,
+          .nav-item.dropdown:focus-within > .dropdown-menu {
+            transform: translateX(-50%) translateY(0);
+          }
+
+          .nav-item.dropdown.dropdown-locked:hover > .dropdown-menu,
+          .nav-item.dropdown.dropdown-locked:focus-within > .dropdown-menu {
+            display: block;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(-50%) translateY(6px);
+            pointer-events: none;
+          }
+
+          .dropdown-menu .dropdown-item {
+            border-radius: 8px;
+            padding: 0.6rem 0.85rem;
+            font-weight: 600;
+            color: var(--text-main) !important;
+            transition: background 0.15s ease, color 0.15s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+          }
+
+          .dropdown-menu .dropdown-item:hover {
+            background: #fff8ef;
+            color: var(--primary-color) !important;
           }
 
           .btn-consult-header {
-            background: var(--primary-color);
+            background: linear-gradient(135deg, #2A0F02, #8B4A1E);
             color: #fff !important;
-            padding: 0.72rem 1rem;
+            padding: 0.6rem 1.1rem;
             border-radius: 2rem;
-            font-weight: 700;
-            font-size: 0.95rem;
-            box-shadow: 0 0.35rem 0.9rem rgba(139, 74, 47, 0.18);
+            letter-spacing: 0.04rem;
+            text-transform: uppercase;
+            box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2);
             transition: all 0.25s ease;
             white-space: nowrap;
+          }
+
+          .btn-consult-header:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 18px rgba(42, 15, 2, 0.28);
           }
 
           .header-actions {
             display: flex;
             align-items: center;
-            gap: 0.65rem;
+            gap: 0.5rem;
           }
 
           .btn-account-header {
             display: inline-flex;
             align-items: center;
-            gap: 0.45rem;
+            gap: 0.4rem;
             border: 1px solid var(--glass-border);
             background: #fffaf4;
             color: var(--primary-color) !important;
-            padding: 0.68rem 0.95rem;
+            padding: 0.55rem 0.85rem;
             border-radius: 2rem;
-            font-weight: 800;
-            font-size: 0.9rem;
             text-decoration: none;
             white-space: nowrap;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
+            letter-spacing: 0.02rem;
           }
 
           .btn-account-header:hover {
@@ -477,8 +577,8 @@ function Header() {
           }
 
           .btn-logout-header {
-            width: 2.55rem;
-            height: 2.55rem;
+            width: 2.3rem;
+            height: 2.3rem;
             border: 1px solid var(--glass-border);
             border-radius: 50%;
             background: #fff;
@@ -486,7 +586,8 @@ function Header() {
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
           }
 
           .btn-logout-header:hover {
@@ -497,27 +598,13 @@ function Header() {
 
         @media (min-width: 1400px) {
           .navbar-nav .nav-link {
-            padding: 0.75rem 0.85rem !important;
-            font-size: 1rem;
-            letter-spacing: 0.12rem;
+            padding: 0.55rem 0.8rem !important;
           }
           .btn-consult-header {
-            padding: 0.85rem 1.4rem;
-            font-size: 1rem;
+            padding: 0.65rem 1.3rem;
           }
           .btn-account-header {
-            padding: 0.82rem 1.1rem;
-          }
-        }
-
-        @media (min-width: 1600px) {
-          .navbar-nav .nav-link {
-            padding: 0.8rem 1rem !important;
-            font-size: 1.05rem;
-          }
-          .btn-consult-header {
-            padding: 1rem 1.8rem;
-            font-size: 1.05rem;
+            padding: 0.6rem 1rem;
           }
         }
 
@@ -541,7 +628,7 @@ function Header() {
           font-weight: 800;
           padding: 1.15rem 1.25rem;
           border-bottom: 1px solid var(--glass-border);
-          font-size: 1rem;
+          font-size: 1.0625rem;
           letter-spacing: 0.03rem;
           display: flex;
           align-items: center;
@@ -571,7 +658,7 @@ function Header() {
 
         .mobile-offcanvas .dropdown-item {
           padding: 1rem 1.8rem;
-          font-size: 0.95rem;
+          font-size: 1rem;
           color: var(--text-content);
           border-bottom: 1px solid rgba(200, 131, 42, 0.08);
           font-weight: 600;
@@ -594,7 +681,7 @@ function Header() {
           border: 0;
           color: var(--text-main);
           display: flex;
-          font-size: 1rem;
+          font-size: 1.0625rem;
           font-weight: 800;
           justify-content: space-between;
           letter-spacing: 0.03rem;
@@ -804,7 +891,7 @@ function Header() {
           <div className="container-fluid nav-inner px-3 px-md-4 px-lg-5 d-flex align-items-center justify-content-between flex-nowrap">
             <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }} aria-label="DS Institute home">
               <div className="logo-icon-wrapper">
-                <img src="/newbg.webp" alt="DS Institute logo" />
+                <img src="/newbg.webp" alt="DS Institute logo" fetchpriority="high" />
               </div>
             </Link>
              
@@ -814,42 +901,70 @@ function Header() {
 
             <div className="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
               <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
-                {primaryNavLinks.map((item) => (
-                  <li className="nav-item" key={item.to}>
-                    <Link className={navLinkClass(item.match)} to={item.to}>{item.label}</Link>
-                  </li>
+                {desktopNavItems.map((item) => (
+                  item.dropdown ? (
+                    <li
+                      className={`nav-item dropdown${desktopDropdownLocked ? ' dropdown-locked' : ''}`}
+                      key={item.label}
+                      onMouseLeave={unlockDesktopDropdown}
+                    >
+                      <button
+                        type="button"
+                        className={`nav-link ${navLinkTypography}${item.dropdown.some(d => location.pathname.startsWith(d.to)) ? ' active' : ''}`}
+                        style={{ cursor: 'pointer' }}
+                      >
+                        {item.label} <i className="fas fa-chevron-down ms-1 text-[0.65rem] opacity-70"></i>
+                      </button>
+                      <ul className="dropdown-menu list-unstyled m-0" style={{ padding: '0.4rem' }}>
+                        {item.dropdown.map((d) => (
+                          <li key={d.to}>
+                            <Link
+                              className="dropdown-item text-body-sm font-semibold"
+                              to={d.to}
+                              onClick={closeDesktopDropdown}
+                            >
+                              {d.icon && <i className={`fas ${d.icon}`} style={{ width: '16px', opacity: 0.6 }}></i>}
+                              {d.label}
+                            </Link>
+                          </li>
+                        ))}
+                      </ul>
+                    </li>
+                  ) : (
+                    <li className="nav-item" key={item.to}>
+                      <Link className={navLinkClass(item.match)} to={item.to}>{item.label}</Link>
+                    </li>
+                  )
                 ))}
               </ul>
             </div>
 
             <div className="header-actions d-none d-xl-flex ms-auto" style={{ flexShrink: 0 }}>
-              <button className="btn-menu-header" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobile-menu">
-                <i className="fas fa-bars"></i>
-                Menu
-              </button>
               {authState.isAdmin && (
-                <Link to="/admin" className="btn-account-header">
+                <Link to="/admin" className="btn-account-header text-btn font-bold">
                   <i className="fas fa-user-shield"></i>
                   Admin
                 </Link>
               )}
               {authState.isStudent ? (
-                <>
-                  <Link to="/dashboard" className="btn-account-header">
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
+                  <Link to="/dashboard" className="btn-account-header text-btn font-bold" style={{ maxWidth: '9rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     <i className="fas fa-graduation-cap"></i>
-                    Dashboard
+                    <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '7rem' }}>{authState.studentName}</span>
                   </Link>
-                  <button type="button" onClick={handleStudentLogout} className="btn-logout-header" aria-label="Student logout" title="Logout">
+                  <button type="button" onClick={handleStudentLogout} className="btn-logout-header" aria-label="Logout" title="Logout">
                     <i className="fas fa-sign-out-alt"></i>
                   </button>
-                </>
+                </div>
               ) : !isStudentLoginPage ? (
-                <Link to="/login" className="btn-account-header">
+                <Link to="/login" className="btn-account-header text-btn font-bold">
                   <i className="fas fa-user"></i>
-                  Student Login
+                  Login
                 </Link>
               ) : null}
-              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0">BOOK CONSULTATION</button>
+              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0 text-btn font-bold uppercase">
+                Book Consultation
+              </button>
             </div>
           </div>
         </nav>
@@ -865,13 +980,13 @@ function Header() {
         </div>
         <div className="offcanvas-body p-0">
           <ul className="navbar-nav">
-            {primaryNavLinks.map((item) => (
+            {mobileNavLinks.map((item) => (
               <li className="nav-item" key={item.to}>
                 <Link className="nav-link" to={item.to} data-bs-dismiss="offcanvas">{item.label}</Link>
               </li>
             ))}
 
-            {/* <li className="nav-item">
+            <li className="nav-item">
               <div className="mobile-menu-group">
                 <button
                   type="button"
@@ -883,7 +998,7 @@ function Header() {
                   <i className="fas fa-chevron-down"></i>
                 </button>
                 <div className={`mobile-submenu ${openMobileGroup === 'shop' ? '' : 'is-collapsed'}`}>
-                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">All Astro Shop</Link>
+                  <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">All Astro Products</Link>
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Gemstones</Link>
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Rudraksha</Link>
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Yantras</Link>
@@ -891,7 +1006,7 @@ function Header() {
                   <Link className="dropdown-item" to="/shop" data-bs-dismiss="offcanvas">Bracelets</Link>
                 </div>
               </div>
-            </li> */}
+            </li>
 
             <li className="nav-item"><Link className="nav-link" to="/astrologer" data-bs-dismiss="offcanvas">ASTROLOGERS</Link></li>
 

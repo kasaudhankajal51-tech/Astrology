@@ -99,7 +99,7 @@ export default function ConsultationTestimonials() {
         }
         .ct-title {
           font-family: var(--font-serif) !important;
-          font-size: clamp(1.9rem, 4vw, 2.6rem) !important;
+          font-size: var(--h2-size) !important;
           font-weight: 700 !important;
           color: var(--text-heading) !important;
           line-height: 1.25 !important;

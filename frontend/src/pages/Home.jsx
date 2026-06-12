@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 import StudentTestimonials from '../components/StudentTestimonials';
-import ConsultationTestimonials from '../components/ConsultationTestimonials';
+
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
@@ -1232,7 +1232,7 @@ function Home() {
         </section>
 
         {/* Consultation Client Testimonials */}
-        <ConsultationTestimonials />
+
 
         {/* Latest Blogs Section */}
         {/* {blogs.length > 0 && (

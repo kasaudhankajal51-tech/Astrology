@@ -7,7 +7,7 @@ const router = express.Router();
 
 const submitLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 10,
+  max: 100,
   message: { success: false, message: 'Too many submissions, please try again later' }
 });
 

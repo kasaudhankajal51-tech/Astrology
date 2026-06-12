@@ -189,7 +189,7 @@ export const createLead = asyncHandler(async (req, res) => {
     type,
     courseName,
     courseType,
-    courseId: courseId || undefined,
+    courseId: (courseId && /^[0-9a-fA-F]{24}$/.test(courseId)) ? courseId : undefined,
     consultationType: resolvedConsultationType,
     serviceId: serviceId || undefined,
     bookingMode: bookingMode || (consultationCallback ? 'pay_later' : requiresPayment ? 'pay_now' : undefined),

@@ -5,6 +5,7 @@ import User from '../models/User.js';
 import Order from '../models/Order.js';
 import Enrollment from '../models/Enrollment.js';
 import Consultation from '../models/Consultation.js';
+import Newsletter from '../models/Newsletter.js';
 import asyncHandler from 'express-async-handler';
 
 const formatConsultationStatus = (status) => {
@@ -59,6 +60,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   });
   const activeArticles = await Blog.countDocuments({ isPublished: true });
   const jobOpenings = await Job.countDocuments({ isActive: true });
+  const newsletterSubscribers = await Newsletter.countDocuments({ status: 'Subscribed' });
 
   res.json({
     success: true,
@@ -70,6 +72,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
       totalLeads,
       activeArticles,
       jobOpenings,
+      newsletterSubscribers,
     },
   });
 });

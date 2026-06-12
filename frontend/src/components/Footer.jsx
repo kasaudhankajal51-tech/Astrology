@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import API_BASE from '../utils/api';
 
 // --- Pure SVG Components for Payment Methods ---
 
@@ -125,12 +128,33 @@ function Footer() {
   const { settings } = useSettings();
   const currentYear = new Date().getFullYear();
   const [authState, setAuthState] = useState({ isStudent: false, isAdmin: false });
+  const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const syncAuthState = () => {
     setAuthState({
       isStudent: Boolean(localStorage.getItem('studentToken')),
       isAdmin: Boolean(localStorage.getItem('adminToken'))
     });
+  };
+
+  const handleSubscribe = async (e) => {
+    e.preventDefault();
+    if (!email) return;
+    setLoading(true);
+    try {
+      const { data } = await axios.post(`${API_BASE}/api/newsletter/subscribe`, { email });
+      if (data.success) {
+        toast.success(data.message || 'Subscribed successfully!');
+        setEmail('');
+      } else {
+        toast.error(data.message || 'Subscription failed.');
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Network error. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -247,6 +271,23 @@ function Footer() {
           width: 0.42rem;
         }
 
+        /* Newsletter Desktop */
+        .fb-newsletter-head { font-family: var(--font-serif); font-size: 16px; font-weight: 700; color: #2A0F02; margin-bottom: 10px; }
+        .fb-newsletter { margin-top: 10px; max-width: 320px; }
+        .fb-email-row { display: flex; }
+        .fb-email-input {
+          flex: 1; padding: 10px 14px; font-size: 14px;
+          border: 1px solid #D4B896; border-radius: 8px 0 0 8px;
+          background: white; outline: none; color: #333;
+        }
+        .fb-join-btn {
+          padding: 10px 20px; background: #2A0F02; color: white;
+          border: none; border-radius: 0 8px 8px 0; font-size: 14px;
+          font-weight: 600; cursor: pointer; transition: background 0.2s;
+        }
+        .fb-join-btn:hover { background: #5C3D26; }
+        .fb-join-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
         /* ─── Desktop Trust Section ─── */
         .fb-desktop-trust {
           max-width: var(--container-public);
@@ -360,6 +401,7 @@ function Footer() {
             border: none; border-radius: 0 8px 8px 0; font-size: 14px;
             font-weight: 600; cursor: pointer;
           }
+          .phone-join-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
           /* Follow Us On block */
           .phone-follow-block { display: flex; flex-direction: column; gap: 14px; width: 100%; }
@@ -398,7 +440,24 @@ function Footer() {
               <Link to="/" className="fb-logo">
                 <img className="fb-logo-img" src="/newbg.webp" alt="DS Institute" />
               </Link>
-              <p className="fb-desc">India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
+              <p className="fb-desc" style={{ marginBottom: '15px' }}>India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
+              
+              <div className="fb-newsletter">
+                <div className="fb-newsletter-head">Subscribe to our Newsletter</div>
+                <form onSubmit={handleSubscribe} className="fb-email-row">
+                  <input
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="fb-email-input"
+                    required
+                  />
+                  <button type="submit" className="fb-join-btn" disabled={loading}>
+                    {loading ? 'Wait...' : 'Subscribe'}
+                  </button>
+                </form>
+              </div>
             </div>
             <div>
               <h5 className="fb-head">Quick Links</h5>
@@ -510,6 +569,23 @@ function Footer() {
 
           {/* Description */}
           <p className="phone-desc">India's trusted platform for live astrology courses, personalised consultations &amp; astrology products.</p>
+
+          <div className="phone-newsletter">
+            <div className="phone-nav-head" style={{ marginBottom: '4px' }}>Newsletter</div>
+            <form onSubmit={handleSubscribe} className="phone-email-row" style={{ marginTop: '8px' }}>
+              <input
+                type="email"
+                placeholder="Enter your email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className="phone-email-input"
+                required
+              />
+              <button type="submit" className="phone-join-btn" disabled={loading}>
+                {loading ? 'Wait...' : 'Subscribe'}
+              </button>
+            </form>
+          </div>
 
           {/* Divider */}
           <div className="phone-hr" />

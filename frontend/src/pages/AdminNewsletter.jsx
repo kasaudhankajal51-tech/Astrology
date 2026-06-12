@@ -181,8 +181,8 @@ function AdminNewsletter() {
               filteredSubscribers.map((sub) => (
                 <tr key={sub._id}>
                   <td>
-                    <div className="td-value">{new Date(sub.createdAt).toLocaleDateString()}</div>
-                    <div className="td-muted small">{new Date(sub.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                    <div className="td-value">{new Date(sub.subscribedAt || sub.createdAt).toLocaleDateString()}</div>
+                    <div className="td-muted small">{new Date(sub.subscribedAt || sub.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                   </td>
                   <td>
                     <div className="d-flex align-items-center gap-2">

@@ -134,6 +134,7 @@ function AdminDashboard() {
     totalLeads: 0,
     activeBlogs: 0,
     jobOpenings: 0,
+    newsletterSubscribers: 0,
   });
   const [recentLeads, setRecentLeads] = useState([]);
   const [lastRefreshed, setLastRefreshed] = useState(new Date());
@@ -215,6 +216,7 @@ function AdminDashboard() {
     { accent: 'bg-indigo-500',  iconBg: 'bg-indigo-50',  iconColor: 'text-indigo-600',  icon: 'fa-users',               badge: 'All time',   value: stats.totalLeadsDetail?.value || stats.totalLeads?.value || stats.totalLeads || 0,     label: 'Total Leads',      barWidth: '85%', onClick: () => { setActiveTab('leads'); setLeadFilter(''); } },
     { accent: 'bg-emerald-500', iconBg: 'bg-emerald-50', iconColor: 'text-emerald-600', icon: 'fa-newspaper',           badge: 'Published',  value: stats.activeBlogs?.value || stats.activeBlogs || 0,                                   label: 'Active Articles',  barWidth: '65%', onClick: () => setActiveTab('blogs') },
     { accent: 'bg-violet-500',  iconBg: 'bg-violet-50',  iconColor: 'text-violet-600',  icon: 'fa-briefcase',           badge: 'Open',       value: stats.jobOpenings || stats.expertNetwork?.value || stats.expertNetwork || 0,           label: 'Job Openings',     barWidth: '35%', onClick: () => setActiveTab('jobs') },
+    { accent: 'bg-sky-500',     iconBg: 'bg-sky-50',     iconColor: 'text-sky-600',     icon: 'fa-paper-plane',         badge: 'Active',     value: stats.newsletterSubscribers || 0,                                                      label: 'Newsletter Subs',  barWidth: '50%', onClick: () => setActiveTab('newsletter') },
   ];
 
   const pageTitle = PAGE_TITLES[activeTab] || activeTab;

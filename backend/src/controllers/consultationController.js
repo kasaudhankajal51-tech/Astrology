@@ -130,3 +130,11 @@ export const getStats = asyncHandler(async (req, res) => {
   const stats = await consultationService.getConsultationStats();
   res.json({ success: true, data: stats });
 });
+
+import ConsultationCategory from '../models/ConsultationCategory.js';
+
+export const getCategories = asyncHandler(async (req, res) => {
+  const categories = await ConsultationCategory.find({}).sort({ sortOrder: 1 });
+  res.json({ success: true, data: categories });
+});
+

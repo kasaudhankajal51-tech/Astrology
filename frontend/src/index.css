@@ -105,36 +105,29 @@ svg {
   font-family: var(--student-body-font) !important;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
+/* ── Public site shell: heading defaults ────────────────────────────────────
+   Scoped via :where(.site-shell) so specificity = 0-0-1 (element only).
+   Any Tailwind utility — :where(#root) .text-xl = 0-1-0 — beats this.
+   Naked <h1>…<h6> inside .site-shell still gets the design-system type scale.
+   Pages outside .site-shell (admin, new feature pages) are unaffected. */
+:where(.site-shell) h1,
+:where(.site-shell) h2,
+:where(.site-shell) h3,
+:where(.site-shell) h4,
+:where(.site-shell) h5,
+:where(.site-shell) h6 {
+  font-family: var(--font-heading);
+  letter-spacing: 0;
+}
+
+/* Named semantic classes: opt-in, no !important needed */
 .site-title,
 .section-title,
 .card-title,
 .hero-h1,
 .tarot-title {
-  font-family: var(--font-heading) !important;
-  letter-spacing: 0 !important;
-}
-
-p,
-button,
-a,
-input,
-textarea,
-select,
-label,
-.site-copy,
-.site-subtitle,
-.site-btn,
-.btn,
-.form-control,
-.form-select {
-  font-family: var(--font-body) !important;
-  letter-spacing: 0 !important;
+  font-family: var(--font-heading);
+  letter-spacing: 0;
 }
 
 body {
@@ -142,55 +135,47 @@ body {
   line-height: 1.6;
 }
 
-h1 {
-  font-size: var(--h1-size) !important;
-  line-height: 1.12 !important;
+/* Type scale — :where() zeroes specificity so Tailwind text-* classes win */
+:where(.site-shell) h1 {
+  font-size: var(--h1-size);
+  line-height: 1.12;
 }
 
-h2,
+:where(.site-shell) h2 {
+  font-size: var(--h2-size);
+  line-height: 1.18;
+}
+
+:where(.site-shell) h3 {
+  font-size: var(--h3-size);
+  line-height: 1.22;
+}
+
+:where(.site-shell) h4 {
+  font-size: clamp(1.25rem, 1.8vw, 1.625rem);
+  line-height: 1.28;
+}
+
+:where(.site-shell) h5 {
+  font-size: clamp(1.125rem, 1.5vw, 1.25rem);
+  line-height: 1.35;
+}
+
+:where(.site-shell) h6 {
+  font-size: 1rem;
+  line-height: 1.35;
+}
+
+/* Class-based type scale — opt-in, no !important */
 .site-title,
 .section-title {
-  font-size: var(--h2-size) !important;
-  line-height: 1.18 !important;
+  font-size: var(--h2-size);
+  line-height: 1.18;
 }
 
-h3,
 .card-title {
-  font-size: var(--h3-size) !important;
-  line-height: 1.22 !important;
-}
-
-h4 {
-  font-size: clamp(1.25rem, 1.8vw, 1.625rem) !important;
-  line-height: 1.28 !important;
-}
-
-h5 {
-  font-size: clamp(1.125rem, 1.5vw, 1.25rem) !important;
-  line-height: 1.35 !important;
-}
-
-h6 {
-  font-size: 1rem !important;
-  line-height: 1.35 !important;
-}
-
-p {
-  font-size: var(--body-size) !important;
-  line-height: 1.65 !important;
-}
-
-small,
-.small {
-  font-size: var(--small-size) !important;
-  line-height: 1.5 !important;
-}
-
-button,
-.btn,
-.site-btn {
-  font-size: var(--text-btn) !important;
-  line-height: 1.25 !important;
+  font-size: var(--h3-size);
+  line-height: 1.22;
 }
 
 @layer components {
@@ -1707,6 +1692,8 @@ img {
 
 .site-main {
   background: var(--site-bg);
+  width: 100%;
+  max-width: none;
 }
 
 .site-container {
@@ -2405,4 +2392,47 @@ img {
 
 .course-offer-timer__colon.is-on {
   opacity: 1;
+}
+
+/* ── Tailwind surface helper ────────────────────────────────────────────────
+   Add class="tw-surface" on any container to ensure headings fully inherit
+   their styles from Tailwind utilities (font-family, size, weight, etc.).
+   No longer needs !important — global element overrides have been removed. */
+#root .tw-surface {
+  width: 100%;
+  max-width: none;
+  box-sizing: border-box;
+}
+
+#root .tw-surface :where(h1, h2, h3, h4, h5, h6) {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  letter-spacing: inherit;
+  margin: 0;
+}
+
+#root .tw-surface :is(section, article, aside, header, main, footer, div, ul, dl) {
+  box-sizing: border-box;
+}
+
+/* Spacing fallbacks when legacy resets fight flex/grid gap */
+#root .tw-surface .tw-stack > * + * {
+  margin-top: 1.5rem !important;
+}
+
+#root .tw-surface .tw-stack-sm > * + * {
+  margin-top: 1rem !important;
+}
+
+#root .tw-surface .tw-grid-cards {
+  display: grid !important;
+  gap: 1.25rem !important;
+}
+
+@media (min-width: 1024px) {
+  #root .tw-surface .tw-grid-cards {
+    gap: 1.5rem !important;
+  }
 }

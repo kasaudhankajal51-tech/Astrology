@@ -392,6 +392,59 @@ const AstrologyCourses = ({ onEnroll }) => {
   );
 };
 
+const BANNER_SLIDES = [
+  {
+    badge: 'Ancient Wisdom · Modern Guidance',
+    title1: 'Illuminate Your Path With',
+    title2: 'Expert Vedic Astrology',
+    desc: 'Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.',
+    primaryCta: { label: 'Explore Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
+    themeRust: false,
+  },
+  {
+    badge: 'Mystic Insights · Divine Truth',
+    title1: 'Unlock The Secrets Of',
+    title2: 'Your Celestial Destiny',
+    desc: 'Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.',
+    primaryCta: { label: 'Book Consultation', action: 'consultation', icon: 'fas fa-calendar-check' },
+    themeRust: true,
+  },
+  {
+    badge: 'Master Vedic Astrology',
+    title1: 'Ancient Wisdom for',
+    title2: 'A Modern Lifestyle',
+    desc: 'Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.',
+    primaryCta: { label: 'View Live Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
+    themeMustard: true,
+  },
+  {
+    badge: 'Master Vedic Astrology',
+    title1: 'Align Your Life With',
+    title2: 'The Stars & Planets',
+    desc: 'Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.',
+    primaryCta: { label: 'Start Learning', path: '/courses', icon: 'fas fa-arrow-right' },
+    themeTan: true,
+    isPurpleZodiac: true,
+  },
+];
+
+const BANNER_ORBIT_IMAGES = [
+  '/images/as6.png', '/images/as7.png', '/images/as8.png', '/images/as9.png', '/images/as10.png',
+  '/images/as1.png', '/images/as2.png', '/images/as3.png',
+];
+
+const preloadImages = (urls) =>
+  Promise.all(
+    urls.map(
+      (url) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = img.onerror = resolve;
+          img.src = url;
+        })
+    )
+  );
+
 function Home() {
 
   const trackRef = useRef(null);
@@ -519,59 +572,36 @@ function Home() {
 
 
 
-  // --- Unique 5-Slide Banner Carousel State & Data ---
   const [currentSlide, setCurrentSlide] = useState(0);
-
-  const bannerSlides = [
-    {
-      badge: "Ancient Wisdom · Modern Guidance",
-      title1: "Illuminate Your Path With",
-      title2: "Expert Vedic Astrology",
-      desc: "Discover the cosmic blueprints of your life. Get precise readings for career, love, and spiritual growth from world-class experts.",
-      bgImage: "/images/bg-bannerpic.jpg",
-      centerImg: "/images/middle-img.png",
-      primaryCta: { label: "Explore Courses", path: "/courses", icon: "fas fa-graduation-cap" },
-      themeRust: false // Light Theme
-    },
-    {
-      badge: "Mystic Insights · Divine Truth",
-      title1: "Unlock The Secrets Of",
-      title2: "Your Celestial Destiny",
-      desc: "Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.",
-      bgImage: "/images/moon.jpg",
-      centerImg: "/images/mentor-ava.png",
-      primaryCta: { label: "Book Consultation", action: "consultation", icon: "fas fa-calendar-check" },
-      themeRust: true // Dark Theme
-    },
-    {
-      badge: "Master Vedic Astrology",
-      title1: "Ancient Wisdom for",
-      title2: "A Modern Lifestyle",
-      desc: "Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.",
-      bgImage: "/images/premium_tarot.png",
-      centerImg: "/images/homu.png",
-      primaryCta: { label: "View Live Courses", path: "/courses", icon: "fas fa-graduation-cap" },
-      themeMustard: true // Mustard/Rust Theme
-    },
-    {
-      badge: "Master Vedic Astrology",
-      title1: "Align Your Life With",
-      title2: "The Stars & Planets",
-      desc: "Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.",
-      bgImage: "/images/bg-bannerpic.jpg",
-      centerImg: "/images/middle-img.png",
-      primaryCta: { label: "Start Learning", path: "/courses", icon: "fas fa-arrow-right" },
-      themeTan: true, // Replacing Indigo with Tan as per request
-      isPurpleZodiac: true // Specific graphic variant from image
-    }
-  ];
+  const [bannerReady, setBannerReady] = useState(false);
+  const activeSlide = BANNER_SLIDES[currentSlide];
+  const isThemedSlide = Boolean(activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan);
 
   useEffect(() => {
+    let cancelled = false;
+
+    const prepareBanner = async () => {
+      await preloadImages(BANNER_ORBIT_IMAGES);
+      if (!cancelled) {
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => setBannerReady(true));
+        });
+      }
+    };
+
+    prepareBanner();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!bannerReady) return undefined;
     const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % bannerSlides.length);
+      setCurrentSlide((prev) => (prev + 1) % BANNER_SLIDES.length);
     }, 6000);
     return () => clearInterval(timer);
-  }, []);
+  }, [bannerReady]);
 
   useEffect(() => {
     if (window.AOS) {
@@ -609,98 +639,106 @@ function Home() {
     <>
       <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
-      <section className={`banner-section w-100 ${bannerSlides[currentSlide].themeRust ? 'theme-rust' : ''} ${bannerSlides[currentSlide].themeMustard ? 'theme-mustard' : ''} ${bannerSlides[currentSlide].themeTan ? 'theme-tan' : ''}`}>
-        <div className="img-main-banner" key={`bg-${currentSlide}`}>
-          <div className="banner-overlay"></div>
-          <img alt="cosmic background" src={bannerSlides[currentSlide].bgImage} className="animate__animated animate__fadeIn" style={{ animationDuration: '2s' }} />
-        </div>
+      <section
+        className={`banner-section w-100 ${activeSlide.themeRust ? 'theme-rust' : ''} ${activeSlide.themeMustard ? 'theme-mustard' : ''} ${activeSlide.themeTan ? 'theme-tan' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}`}
+        aria-busy={!bannerReady}
+      >
+        {!bannerReady && <div className="banner-preloader" aria-hidden="true" />}
         <div className="container">
           <div className="banner-text-home">
-            <div className="row align-items-center g-5">
-              <div className="col-lg-6 position-relative z-1" key={`text-${currentSlide}`}>
-                {/* Floating Ethereal Elements */}
-                <div className="ethereal-sparkle s-1">✦</div>
-                <div className="ethereal-sparkle s-2">✧</div>
+            <div className="row align-items-center g-5 banner-hero-row">
+              <div className="col-lg-6 position-relative z-1">
+                <div className="banner-copy" key={`banner-copy-${currentSlide}`}>
+                  <div className="ethereal-sparkle s-1">✦</div>
+                  <div className="ethereal-sparkle s-2">✧</div>
 
-                <div className="cosmic-badge animate__animated animate__zoomIn" style={{ animationDelay: '0.1s' }}>
-                  <span className="badge-glow"></span>
-                  <i className="fas fa-moon me-2"></i> {bannerSlides[currentSlide].badge}
-                </div>
+                  <div className="cosmic-badge">
+                    <span className="badge-glow"></span>
+                    <i className="fas fa-moon me-2"></i> {activeSlide.badge}
+                  </div>
 
-                <h1 className="banner-title my-4 animate__animated animate__fadeInLeft" style={{ animationDelay: '0.2s' }}>
-                  {bannerSlides[currentSlide].title1}<br />
-                  <span className="text-gradient drop-glow">{bannerSlides[currentSlide].title2}</span>
-                </h1>
+                  <h1 className="banner-title my-4">
+                    {activeSlide.title1}<br />
+                    <span className="text-gradient drop-glow">{activeSlide.title2}</span>
+                  </h1>
 
-                <p className="banner-desc mb-4 animate__animated animate__fadeInUp" style={{ animationDelay: '0.3s' }}>
-                  {bannerSlides[currentSlide].desc}
-                </p>
+                  <p className="banner-desc mb-4">{activeSlide.desc}</p>
 
-                {bannerSlides[currentSlide].themeRust ? null : (
-                  <ul className="banner-feature-list" data-aos="fade-up" data-aos-delay="400">
+                  <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
                     <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
                     <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
                   </ul>
-                )}
 
-                <div className="banner-btn-row mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.5s' }}>
-                  {bannerSlides[currentSlide].primaryCta?.action === 'consultation' ? (
-                    <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
-                      <i className={bannerSlides[currentSlide].primaryCta.icon}></i>
-                      {bannerSlides[currentSlide].primaryCta.label}
-                    </button>
-                  ) : (
-                    <Link to={bannerSlides[currentSlide].primaryCta?.path || '/courses'} className="btn mystic-btn-primary focus-70">
-                      <i className={bannerSlides[currentSlide].primaryCta?.icon || 'fas fa-graduation-cap'}></i>
-                      {bannerSlides[currentSlide].primaryCta?.label || 'Enroll in Live Course'}
+                  <div className="banner-btn-row mt-5">
+                    {activeSlide.primaryCta?.action === 'consultation' ? (
+                      <button onClick={handleOpenModal} className="btn mystic-btn-primary focus-70">
+                        <i className={activeSlide.primaryCta.icon}></i>
+                        {activeSlide.primaryCta.label}
+                      </button>
+                    ) : (
+                      <Link to={activeSlide.primaryCta?.path || '/courses'} className="btn mystic-btn-primary focus-70">
+                        <i className={activeSlide.primaryCta?.icon || 'fas fa-graduation-cap'}></i>
+                        {activeSlide.primaryCta?.label || 'Enroll in Live Course'}
+                      </Link>
+                    )}
+                    {activeSlide.primaryCta?.action === 'consultation' ? (
+                      <Link to="/courses" className="btn mystic-btn-outline focus-20">
+                        <i className="fas fa-graduation-cap"></i>
+                        View Courses
+                      </Link>
+                    ) : (
+                      <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
+                        <i className="fas fa-calendar-check"></i>
+                        Book Consultation
+                      </button>
+                    )}
+                    <Link to="/shop" className="btn mystic-btn-ghost focus-10">
+                      <i className="fas fa-store"></i>
+                      Astro Shop
                     </Link>
-                  )}
-                  {bannerSlides[currentSlide].primaryCta?.action === 'consultation' ? (
-                    <Link to="/courses" className="btn mystic-btn-outline focus-20">
-                      <i className="fas fa-graduation-cap"></i>
-                      View Courses
-                    </Link>
-                  ) : (
-                    <button onClick={handleOpenModal} className="btn mystic-btn-outline focus-20">
-                      <i className="fas fa-calendar-check"></i>
-                      Book Consultation
-                    </button>
-                  )}
-                  <Link to="/shop" className="btn mystic-btn-ghost focus-10">
-                    <i className="fas fa-store"></i>
-                    Astro Shop
-                  </Link>
-                </div>
-
-                <div className="carousel-dots mt-5 animate__animated animate__fadeInUp" style={{ animationDelay: '0.6s' }}>
-                  {bannerSlides.map((_, idx) => (
-                    <span
-                      key={idx}
-                      className={`c-dot ${idx === currentSlide ? 'active' : ''}`}
-                      onClick={() => setCurrentSlide(idx)}
-                    ></span>
-                  ))}
-                </div>
-
-                <div className="trust-indicator mt-4 animate__animated animate__fadeInUp" style={{ animationDelay: '0.7s' }}>
-                  <div className="trust-avatars">
-                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="user" />
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="user" />
-                    <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="user" />
-                    <div className="avatar-plus">+10k</div>
                   </div>
-                  <div className="trust-text">
-                    <div className="stars">
-                      <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
+
+                  <div className="trust-indicator mt-5">
+                    <div className="trust-avatars">
+                      <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="" loading="lazy" decoding="async" />
+                      <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="" loading="lazy" decoding="async" />
+                      <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="" loading="lazy" decoding="async" />
+                      <div className="avatar-plus">+10k</div>
                     </div>
-                    <span>Trusted by seekers globally</span>
+                    <div className="trust-text">
+                      <div className="stars">
+                        <i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i><i className="fas fa-star"></i>
+                      </div>
+                      <span>Trusted by seekers globally</span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="col-lg-6 d-none d-lg-flex justify-content-center position-relative">
-                {(bannerSlides[currentSlide].themeRust || bannerSlides[currentSlide].themeMustard || bannerSlides[currentSlide].themeTan) ? (
-                  <div className="zodiac-hero-graphic animate__animated animate__fadeInRight" key={`graphic-${currentSlide}`}>
+              <div className="col-lg-6 d-none d-lg-flex banner-graphic-col position-relative">
+                <div className="banner-graphic-stage">
+                  <div className={`banner-graphic-layer ${!isThemedSlide ? 'is-active' : ''}`} aria-hidden={isThemedSlide}>
+                    <div className="cosmic-orbit-container">
+                    <div className="big-circle">
+                      <div className="icon-block"><img alt="" src="/images/as6.png" loading="eager" decoding="async" fetchPriority="high" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as7.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as8.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as9.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as10.png" loading="eager" decoding="async" /></div>
+                    </div>
+                    <div className="small-circle">
+                      <div className="icon-block"><img alt="" src="/images/as1.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as2.png" loading="eager" decoding="async" /></div>
+                      <div className="icon-block"><img alt="" src="/images/as3.png" loading="eager" decoding="async" /></div>
+                    </div>
+                    <div className="center-logo">
+                      <img src="/images/middle-img.png" alt="" loading="eager" decoding="async" />
+                      <div className="glow-orb"></div>
+                    </div>
+                    </div>
+                  </div>
+                  <div className={`banner-graphic-layer ${isThemedSlide ? 'is-active' : ''}`} aria-hidden={!isThemedSlide}>
+                    <div className="zodiac-hero-graphic">
                     <svg className="rotating-zodiac-mandala" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
                       <defs>
                         <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
@@ -735,7 +773,7 @@ function Home() {
                         ))}
                         {['♈', '♉', '♊', '♋', '♌', '♍', '♎', '♏', '♐', '♑', '♒', '♓'].map((sign, i) => (
                           <g key={i} transform={`rotate(${i * 30 + 15} 200 200)`}>
-                            {bannerSlides[currentSlide].isPurpleZodiac ? (
+                            {activeSlide.isPurpleZodiac ? (
                               <>
                                 <rect x="185" y="65" width="30" height="30" rx="4" fill="rgba(147, 112, 219, 0.8)" transform="rotate(-15 200 80)" />
                                 <text x="200" y="86" fill="#ffffff" fontSize="20" textAnchor="middle" transform="rotate(-15 200 80)" style={{ fontFamily: 'sans-serif' }}>
@@ -766,45 +804,9 @@ function Home() {
                       <circle cx="200" cy="200" r="14" fill="rgba(255,255,255,0.95)" filter="url(#glow)" />
                       <circle cx="200" cy="200" r="30" fill="none" stroke="rgba(255,255,255,0.6)" strokeWidth="0.5" strokeDasharray="3 3" />
                     </svg>
-                    {/* Image removed based on user request */}
-
-                    {currentSlide === 0 && (
-                      <>
-                        <div className="float-badge fb-1">
-                          <div className="fb-icon"><i className="fas fa-award"></i></div>
-                          <div className="fb-text"><span>53+ Years</span><br />of Legacy</div>
-                        </div>
-                        <div className="float-badge fb-2">
-                          <div className="fb-icon"><i className="fas fa-users"></i></div>
-                          <div className="fb-text"><span>2 Lakhs +</span> Consultation<br />Completed</div>
-                        </div>
-                        <div className="float-badge fb-3">
-                          <div className="fb-icon"><i className="fas fa-thumbs-up"></i></div>
-                          <div className="fb-text"><span>98% Positive</span><br />Clients Feedback</div>
-                        </div>
-                      </>
-                    )}
-
-                  </div>
-                ) : (
-                  <div className="cosmic-orbit-container animate__animated animate__fadeInRight" key="light-graphic">
-                    <div className="big-circle">
-                      <div className="icon-block"><img alt="planet" src="/images/as6.png" /></div>
-                      <div className="icon-block"><img alt="stars" src="/images/as7.png" /></div>
-                      <div className="icon-block"><img alt="moon" src="/images/as8.png" /></div>
-                      <div className="icon-block"><img alt="sun" src="/images/as9.png" /></div>
-                      <div className="icon-block"><img alt="zodiac" src="/images/as10.png" /></div>
-                    </div>
-                    <div className="small-circle">
-                      <div className="icon-block"><img alt="app" src="/images/as1.png" /></div>
-                      <div className="icon-block"><img alt="constellation" src="/images/as2.png" /></div>
-                      <div className="icon-block"><img alt="galaxy" src="/images/as3.png" /></div>
-                    </div>
-                    <div className="center-logo">
-                      <div className="glow-orb"></div>
                     </div>
                   </div>
-                )}
+                </div>
               </div>
             </div>
           </div>
@@ -819,13 +821,13 @@ function Home() {
               <div className="col-lg-6">
                 <div className="img-box01 position-relative">
                   <figure className="moon-img" data-aos="fade-right" data-aos-once="true">
-                    <img alt="moon" src="/images/moon.jpg" />
+                    <img alt="moon" src="/images/moon.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <figure className="floating-element" data-aos="fade-left" data-aos-once="true" data-aos-delay="100">
-                    <img alt="woman" src="/images/bg-bannerpic.jpg" />
+                    <img alt="woman" src="/images/bg-bannerpic.jpg" loading="lazy" decoding="async" />
                   </figure>
                   <figure className="bottom-img" data-aos="fade-up" data-aos-once="true" data-aos-delay="200">
-                    <img alt="tarot" src="/images/premium_tarot.png" />
+                    <img alt="tarot" src="/images/premium_tarot.png" loading="lazy" decoding="async" />
                   </figure>
                   <div className="experience-badge text-center" data-aos="zoom-in" data-aos-once="true" data-aos-delay="300">
                     <h4>16+</h4>
@@ -1348,11 +1350,120 @@ function Home() {
           align-items: flex-start;
           overflow: hidden;
           background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
+          transition: background 0.55s ease, background-color 0.55s ease;
+        }
+
+        .banner-section.banner-loading {
+          pointer-events: none;
+        }
+
+        .banner-section.banner-loading .banner-copy,
+        .banner-section.banner-loading .banner-graphic-stage {
+          opacity: 0;
+          visibility: hidden;
+        }
+
+        .banner-section.banner-ready .banner-copy,
+        .banner-section.banner-ready .banner-graphic-stage {
+          opacity: 1;
+          visibility: visible;
+          transition: opacity 0.45s ease;
+        }
+
+        .banner-preloader {
+          position: absolute;
+          inset: 0;
+          z-index: 3;
+          background: linear-gradient(110deg, #fff9f2 8%, #f8ead8 18%, #fff9f2 33%);
+          background-size: 200% 100%;
+          animation: bannerPreloadShimmer 1.35s ease-in-out infinite;
+        }
+
+        .banner-section.banner-ready .banner-preloader {
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.35s ease, visibility 0.35s ease;
+          pointer-events: none;
+        }
+
+        @keyframes bannerPreloadShimmer {
+          0% { background-position: 100% 0; }
+          100% { background-position: -100% 0; }
+        }
+
+        .banner-copy {
+          will-change: opacity, transform;
+          animation: bannerContentIn 0.65s ease both;
+        }
+
+        @keyframes bannerContentIn {
+          from {
+            opacity: 0;
+            transform: translateY(12px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .banner-graphic-stage {
+          position: relative;
+          width: min(340px, 100%);
+          height: min(340px, 100%);
+          flex-shrink: 0;
+          overflow: visible;
+        }
+
+        .banner-graphic-layer {
+          position: absolute !important;
+          inset: 0;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity 0.7s ease, visibility 0.7s ease;
+          pointer-events: none;
+        }
+
+        .banner-graphic-layer.is-active {
+          opacity: 1;
+          visibility: visible;
+          pointer-events: auto;
+        }
+
+        @media (min-width: 992px) {
+          .banner-section .banner-graphic-col {
+            display: flex !important;
+            justify-content: center;
+            align-items: center;
+            align-self: center;
+            overflow: visible;
+          }
+
+          .banner-section .banner-graphic-stage {
+            width: 340px;
+            height: 340px;
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .banner-section .banner-graphic-stage {
+            width: 380px;
+            height: 380px;
+          }
         }
 
         .banner-section .row.align-items-center {
           align-items: flex-start !important;
           margin-top: clamp(0.25rem, 0.5vw, 0.5rem);
+        }
+
+        @media (min-width: 992px) {
+          .banner-section .banner-hero-row {
+            align-items: center !important;
+          }
         }
 
         .banner-section::before {
@@ -1372,10 +1483,6 @@ function Home() {
           position: relative;
           z-index: 2;
           width: 100%;
-        }
-
-        .img-main-banner {
-          display: none;
         }
 
         .banner-title {
@@ -1400,32 +1507,6 @@ function Home() {
           font-weight: 500;
           font-family: var(--font-sans);
           margin-bottom: 1.5rem;
-        }
-
-        .carousel-dots {
-          display: flex;
-          gap: 12px;
-          align-items: center;
-        }
-
-        .c-dot {
-          width: 10px;
-          height: 10px;
-          border-radius: 50%;
-          background: rgba(139, 74, 30, 0.2);
-          cursor: pointer;
-          transition: all 0.3s ease;
-          border: none;
-        }
-
-        .c-dot.active {
-          background: #5C2D12;
-          transform: scale(1.3);
-          box-shadow: 0 0 10px rgba(92, 45, 18, 0.3);
-        }
-
-        .c-dot:hover {
-          background: rgba(139, 74, 30, 0.5);
         }
 
         .cosmic-badge {
@@ -1487,10 +1568,18 @@ function Home() {
         .banner-feature-list {
           list-style: none;
           padding: 0;
-          margin: 0;
+          margin: 0 0 0.25rem;
+          min-height: 7.25rem;
           display: flex;
           flex-direction: column;
           gap: 0.75rem;
+          transition: opacity 0.45s ease, visibility 0.45s ease;
+        }
+
+        .banner-section.theme-rust .banner-feature-list {
+          opacity: 0;
+          visibility: hidden;
+          pointer-events: none;
         }
 
         .banner-feature-list li {
@@ -1690,73 +1779,136 @@ function Home() {
         }
 
         /* Cosmic Orbit */
-        .cosmic-orbit-container {
+        .banner-section .cosmic-orbit-container {
           position: relative;
-          width: 500px;
-          height: 500px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          width: 100%;
+          height: 100%;
         }
 
-        .big-circle {
+        .banner-section .big-circle,
+        .banner-section .small-circle {
           position: absolute;
-          width: 480px;
-          height: 480px;
+          top: 50%;
+          left: 50%;
           border-radius: 50%;
-          border: 1px dashed #A67C52;
-          animation: spinRight 40s linear infinite;
+          border: 1.5px dashed #A67C52;
+          transform: translate(-50%, -50%);
         }
 
-        .small-circle {
-          position: absolute;
-          width: 320px;
-          height: 320px;
-          border-radius: 50%;
-          border: 1px dashed #A67C52;
-          opacity: 0.8;
-          animation: spinLeft 25s linear infinite;
+        .banner-section .big-circle {
+          width: 96%;
+          height: 96%;
+          animation: orbitSpinRight 40s linear infinite;
         }
 
-        .icon-block {
+        .banner-section .small-circle {
+          width: 68%;
+          height: 68%;
+          opacity: 0.85;
+          animation: orbitSpinLeft 25s linear infinite;
+        }
+
+        .banner-section .cosmic-orbit-container .icon-block {
           position: absolute;
-          width: 65px;
-          height: 65px;
+          width: 54px;
+          height: 54px;
           background: #5C2D12;
           border: none;
           border-radius: 50%;
           display: flex;
           align-items: center;
           justify-content: center;
-          box-shadow: 0 4px 10px rgba(92, 45, 18, 0.4);
-          transition: all 0.4s;
+          box-shadow: 0 4px 12px rgba(92, 45, 18, 0.35);
+          transition: box-shadow 0.35s ease;
         }
 
-        .icon-block img {
+        .banner-section .big-circle .icon-block:nth-child(1) {
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .banner-section .big-circle .icon-block:nth-child(2) {
+          top: 50%;
+          right: 0;
+          transform: translate(50%, -50%);
+        }
+
+        .banner-section .big-circle .icon-block:nth-child(3) {
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%, 50%);
+        }
+
+        .banner-section .big-circle .icon-block:nth-child(4) {
+          top: 50%;
+          left: 0;
+          transform: translate(-50%, -50%);
+        }
+
+        .banner-section .big-circle .icon-block:nth-child(5) {
+          top: 16%;
+          left: 14%;
+          transform: translate(-50%, -50%);
+        }
+
+        .banner-section .small-circle .icon-block:nth-child(1) {
+          top: 0;
+          left: 50%;
+          transform: translate(-50%, -50%);
+        }
+
+        .banner-section .small-circle .icon-block:nth-child(2) {
+          top: 50%;
+          right: 0;
+          transform: translate(50%, -50%);
+        }
+
+        .banner-section .small-circle .icon-block:nth-child(3) {
+          bottom: 0;
+          left: 50%;
+          transform: translate(-50%, 50%);
+        }
+
+        .banner-section .cosmic-orbit-container .icon-block img {
           width: 50%;
           filter: brightness(0) invert(1);
-          opacity: 0.9;
+          opacity: 0.92;
+          animation: none !important;
         }
 
-        .icon-block:hover {
-          transform: scale(1.2) rotate(10deg);
-          box-shadow: 0 15px 30px rgba(92, 45, 18, 0.6);
+        .banner-section .big-circle .icon-block img {
+          animation: orbitIconSpinLeft 40s linear infinite !important;
         }
 
-        .icon-block:hover img {
+        .banner-section .small-circle .icon-block img {
+          animation: orbitIconSpinRight 25s linear infinite !important;
+        }
+
+        .banner-section .cosmic-orbit-container .icon-block:hover {
+          box-shadow: 0 10px 22px rgba(92, 45, 18, 0.5);
+        }
+
+        .banner-section .cosmic-orbit-container .icon-block:hover img {
           opacity: 1;
         }
 
-        .center-logo {
+        .banner-section .center-logo {
           position: absolute;
           z-index: 10;
-          width: 180px;
-          height: 180px;
+          top: 50%;
+          left: 50%;
+          width: 40%;
+          height: 40%;
+          transform: translate(-50%, -50%);
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
 
-        .center-logo img {
+        .banner-section .center-logo img {
           width: 100%;
-          filter: brightness(0) sepia(1) hue-rotate(-30deg) saturate(2) opacity(0.12);
+          filter: brightness(0) sepia(1) hue-rotate(-30deg) saturate(2) opacity(0.14);
           animation: etherealFloat 6s ease-in-out infinite;
         }
 
@@ -1803,14 +1955,6 @@ function Home() {
           background: rgba(255, 255, 255, 0.12) !important;
           border-color: rgba(255, 255, 255, 0.5) !important;
         }
-        .banner-section.theme-rust .c-dot {
-          background: rgba(255,255,255,0.3);
-        }
-        .banner-section.theme-rust .c-dot.active {
-          background: #ffffff;
-          box-shadow: 0 0 15px rgba(255,255,255,0.8);
-        }
-
         .banner-section.theme-rust .banner-title {
           text-shadow: 0 0 30px rgba(249, 195, 105, 0.2);
         }
@@ -1831,6 +1975,11 @@ function Home() {
         .banner-section.theme-mustard .banner-feature-list li {
           color: #ffffff !important;
         }
+
+        .banner-section.theme-mustard .banner-feature-list i {
+          color: rgba(255, 255, 255, 0.85) !important;
+        }
+
         .banner-section.theme-mustard .cosmic-badge {
           border-color: rgba(255,255,255,0.4);
           color: #ffffff;
@@ -1850,11 +1999,6 @@ function Home() {
           border: 1px solid rgba(255, 255, 255, 0.3) !important;
           background: rgba(255, 255, 255, 0.05) !important;
         }
-        .banner-section.theme-mustard .c-dot.active {
-          background: #ffffff;
-          box-shadow: 0 0 15px rgba(255, 255, 255, 0.8);
-        }
-
         /* Theme Tan (Warm Beige) Specifics */
         .banner-section.theme-tan {
           background: #dfc09e !important; /* The color provided in image */
@@ -1885,11 +2029,6 @@ function Home() {
           border: 1px solid rgba(58, 25, 0, 0.2) !important;
           background: rgba(58, 25, 0, 0.03) !important;
         }
-        .banner-section.theme-tan .c-dot.active {
-          background: #8B4A1E;
-          box-shadow: 0 0 15px rgba(139, 74, 30, 0.5);
-        }
-
         .banner-section.theme-tan .rotating-zodiac-mandala {
           filter: drop-shadow(0 0 40px rgba(139, 74, 30, 0.2));
         }
@@ -1905,22 +2044,20 @@ function Home() {
         }
 
         /* Zodiac Hero Graphic */
-        .zodiac-hero-graphic {
+        .banner-section .zodiac-hero-graphic {
           position: relative;
-          width: 500px;
-          height: 500px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
+          width: 100%;
+          height: 100%;
         }
-        .rotating-zodiac-mandala {
+
+        .banner-section .rotating-zodiac-mandala {
           position: absolute;
-          width: 85%;
-          height: 85%;
+          width: 96%;
+          height: 96%;
           opacity: 0.95;
-          right: 5%;
           top: 50%;
-          transform: translateY(-50%);
+          left: 50%;
+          transform: translate(-50%, -50%);
           filter: drop-shadow(0 0 40px rgba(249, 195, 105, 0.15));
         }
         
@@ -1987,6 +2124,26 @@ function Home() {
 
         @keyframes spinRight { 100% { transform: rotate(360deg); } }
         @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+
+        @keyframes orbitSpinRight {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        @keyframes orbitSpinLeft {
+          from { transform: translate(-50%, -50%) rotate(0deg); }
+          to { transform: translate(-50%, -50%) rotate(-360deg); }
+        }
+
+        @keyframes orbitIconSpinLeft {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(-360deg); }
+        }
+
+        @keyframes orbitIconSpinRight {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
         
         @keyframes etherealFloat { 
           0%, 100% { transform: translateY(0) rotate(0deg); } 
@@ -2461,10 +2618,6 @@ function Home() {
         /* Responsive Breakpoints */
         @media (max-width: 1200px) {
           .banner-title { font-size: clamp(3rem, 6vw, 4rem); }
-          .cosmic-orbit-container, .zodiac-hero-graphic { width: 400px; height: 400px; }
-          .big-circle { width: 380px; height: 380px; }
-          .small-circle { width: 250px; height: 250px; }
-          .rotating-zodiac-mandala { width: 85%; height: 85%; }
         }
 
         @media (max-width: 991px) {
@@ -2472,26 +2625,9 @@ function Home() {
           .banner-desc { margin: 0 auto 30px; }
           .img-box01 { margin-bottom: 80px; height: 450px; }
           .experience-badge { left: 50%; transform: translateX(-50%); bottom: 20px; }
-          .cosmic-orbit-container, .zodiac-hero-graphic { width: 350px; height: 350px; margin: 40px auto 0; }
-          .big-circle { width: 320px; height: 320px; }
-          .small-circle { width: 220px; height: 220px; }
-          .icon-block { width: 45px; height: 45px; }
+          .banner-section .cosmic-orbit-container .icon-block { width: 46px; height: 46px; }
           .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
           .banner-btn-row { justify-content: center; }
-          .zodiac-hero-graphic { 
-            display: block !important; 
-            width: 280px; 
-            height: 280px; 
-            margin: 20px auto; 
-            position: relative;
-            right: auto;
-            top: auto;
-            transform: none;
-          }
-          .rotating-zodiac-mandala {
-            width: 100% !important;
-            height: 100% !important;
-          }
         }
 
         @media (max-width: 767px) {
@@ -2508,10 +2644,7 @@ function Home() {
           .nav-btn { width: 32px; height: 32px; }
           .left-btn { left: 5px; }
           .right-btn { right: 5px; }
-          .cosmic-orbit-container, .zodiac-hero-graphic { width: 260px; height: 260px; }
-          .big-circle { width: 240px; height: 240px; }
-          .small-circle { width: 170px; height: 170px; }
-          .icon-block { width: 40px; height: 40px; }
+          .banner-section .cosmic-orbit-container .icon-block { width: 40px; height: 40px; }
           .experience-badge { padding: 0.75rem 1.125rem; border-radius: 0.9375rem; bottom: 20px; z-index: 5; }
           .experience-badge h4 { font-size: 1.8rem; }
           .banner-btn-row {
@@ -2542,7 +2675,6 @@ function Home() {
           .client-avatar { width: 38px; height: 38px; }
           .client-details h4 { font-size: 1rem; }
           .rating i { font-size: 0.8rem; }
-          .cosmic-orbit-container, .zodiac-hero-graphic { width: 220px; height: 220px; }
           .banner-btn-row {
             max-width: 22rem;
             margin-left: auto;
@@ -2552,9 +2684,7 @@ function Home() {
           .focus-10 {
             gap: 0.45rem;
           }
-          .big-circle { width: 200px; height: 200px; }
-          .small-circle { width: 140px; height: 140px; }
-          .icon-block { width: 32px; height: 32px; }
+          .banner-section .cosmic-orbit-container .icon-block { width: 34px; height: 34px; }
           .mystic-btn-primary { width: 100%; text-align: center; padding: 0 0.85rem !important; font-size: 0.84rem !important; }
           .mystic-btn-outline { 
             width: 100% !important; 
@@ -2610,10 +2740,6 @@ function Home() {
           min-width: 0;
         }
 
-        .carousel-dots .c-dot {
-          flex: 0 0 auto;
-        }
-
         @media (max-width: 991px) {
           .banner-section {
             padding-top: 110px !important;
@@ -2634,17 +2760,10 @@ function Home() {
             justify-content: center;
           }
 
-          .zodiac-hero-graphic,
-          .cosmic-orbit-container {
-            display: flex !important;
-            height: min(72vw, 360px) !important;
-            margin: 2rem auto 0 !important;
-            width: min(72vw, 360px) !important;
-          }
-
-          .rotating-zodiac-mandala {
-            height: 92% !important;
-            width: 92% !important;
+          .banner-graphic-stage {
+            width: min(260px, 72vw) !important;
+            height: min(260px, 72vw) !important;
+            margin: 1.5rem auto 0 !important;
           }
         }
 
@@ -2684,15 +2803,11 @@ function Home() {
             line-height: 1.2;
           }
 
-          .carousel-dots {
-            justify-content: center;
-          }
 
-          .zodiac-hero-graphic,
-          .cosmic-orbit-container {
-            height: min(78vw, 310px) !important;
-            margin-top: 1.5rem !important;
-            width: min(78vw, 310px) !important;
+          .banner-graphic-stage {
+            width: min(240px, 78vw) !important;
+            height: min(240px, 78vw) !important;
+            margin-top: 1.25rem !important;
           }
         }
 
@@ -2750,13 +2865,6 @@ function Home() {
             font-size: 0.95rem !important;
             min-width: 8rem;
             width: auto !important;
-          }
-
-          .banner-section .zodiac-hero-graphic,
-          .banner-section .cosmic-orbit-container {
-            display: flex !important;
-            height: min(82vw, 280px) !important;
-            width: min(82vw, 280px) !important;
           }
 
           .banner-section .rotating-zodiac-mandala {

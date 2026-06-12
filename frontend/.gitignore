@@ -25,3 +25,9 @@ backend/node_modules
 *.sln
 *.sw?
 .env
+
+# Claude Code local config
+.claude/
+
+# Development screenshots
+*.png

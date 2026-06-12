@@ -36,8 +36,9 @@ const Careers = lazy(() => import('./pages/Careers'));
 const BlogDetail = lazy(() => import('./pages/BlogDetail'));
 const AdminLogin = lazy(() => import('./pages/AdminLogin'));
 const StudentLogin = lazy(() => import('./pages/StudentLogin'));
-const StudentDashboard = lazy(() => import('./pages/StudentDashboardNew'));
+const StudentDashboard = lazy(() => import('./pages/StudentDashboardTailwind'));
 const NewStudentDashboard = lazy(() => import('./pages/newstudentdashboard'));
+/* Legacy dashboards (unchanged): StudentDashboard.jsx, StudentDashboardNew.jsx */
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
 import { Toaster } from 'react-hot-toast';

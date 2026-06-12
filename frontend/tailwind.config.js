@@ -1,5 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
+  /* Scope utilities to #root so they win over any unscoped vendor CSS */
+  important: '#root',
   content: [
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",

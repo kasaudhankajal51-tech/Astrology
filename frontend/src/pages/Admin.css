@@ -56,13 +56,16 @@
   --t: 0.2s ease;
 }
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* box-sizing reset is fine globally; margin/padding reset already in Tailwind preflight */
+*, *::before, *::after { box-sizing: border-box; }
 
-body {
+/* Admin font — scoped so it doesn't override public pages */
+.app-shell,
+.login-root,
+.student-login-root,
+.admin-loading {
   font-family: var(--font-body);
-  background: var(--main-bg);
   color: var(--text-primary);
-  min-height: 100vh;
 }
 
 /* ============================================================

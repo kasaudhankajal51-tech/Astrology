@@ -63,7 +63,7 @@ function Skel({ className = '' }) {
 function DashboardLoading() {
   return (
     <div className="tw-surface min-h-screen w-full bg-[#fdf6ee]">
-      <div className="bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-[#7a3d16] px-4 py-10 sm:px-6 lg:px-8">
+      <div className="px-4 py-10 sm:px-6 lg:px-8" style={{ background: 'linear-gradient(to bottom right, #1e0c02, #3a1c0c, #7a3d16)' }}>
         <Skel className="mb-3 h-3 w-24 bg-white/10" />
         <Skel className="mb-2 h-9 w-72 max-w-full bg-white/10" />
         <Skel className="h-4 w-96 max-w-full bg-white/10" />
@@ -147,11 +147,10 @@ function SectionHead({ icon: Icon, title, badge }) {
 function Pill({ children, active }) {
   return (
     <span
-      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ${
-        active
+      className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-[11px] font-bold ${active
           ? 'border border-[#e8c98a] bg-[#fff0d6] text-[#8b4a1e]'
           : 'bg-[#f4eadc] text-[#5c3d26]'
-      }`}
+        }`}
     >
       {children}
     </span>
@@ -219,9 +218,9 @@ export default function StudentDashboardTailwind() {
   ).length;
   const avgProgress = enrolledCourses.length
     ? Math.round(
-        enrolledCourses.reduce((t, c) => t + (Number(c.progress) || 0), 0) /
-          enrolledCourses.length,
-      )
+      enrolledCourses.reduce((t, c) => t + (Number(c.progress) || 0), 0) /
+      enrolledCourses.length,
+    )
     : 0;
 
   const stats = [
@@ -262,7 +261,7 @@ export default function StudentDashboardTailwind() {
     <div className="tw-surface min-h-screen w-full bg-[#fdf6ee] font-body text-[#2a0f02]">
 
       {/* ── Hero header ─────────────────────────────────────────────────────── */}
-      <header className="relative w-full overflow-hidden bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-[#7a3d16]">
+      <header className="relative w-full overflow-hidden" style={{ background: 'linear-gradient(to bottom right, #1e0c02, #3a1c0c, #7a3d16)' }}>
         {/* subtle dot pattern */}
         <div
           aria-hidden
@@ -314,7 +313,7 @@ export default function StudentDashboardTailwind() {
       </header>
 
       {/* ── Stat strip ──────────────────────────────────────────────────────── */}
-      <div className={`py-6 ${PAD}`}>
+      <div className={`mt-16 pb-8 ${PAD}`}>
         <div className="grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
           {stats.map((s) => (
             <StatCard key={s.label} {...s} />
@@ -323,7 +322,7 @@ export default function StudentDashboardTailwind() {
       </div>
 
       {/* ── Main body ───────────────────────────────────────────────────────── */}
-      <main className={`pb-12 ${PAD}`}>
+      <main className={`pt-8 pb-12 ${PAD}`}>
         <div className="grid gap-6 lg:grid-cols-[300px_minmax(0,1fr)] lg:gap-8 lg:items-start">
 
           {/* ── Sidebar ─────────────────────────────────────────────────────── */}
@@ -552,11 +551,10 @@ export default function StudentDashboardTailwind() {
                             key={course.id}
                             type="button"
                             onClick={() => loadMaterials(course.id)}
-                            className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold transition ${
-                              selectedCourseForMaterials === course.id
+                            className={`shrink-0 whitespace-nowrap rounded-full px-3 py-1.5 text-xs font-bold transition ${selectedCourseForMaterials === course.id
                                 ? 'bg-[#2a0f02] text-white shadow-sm'
                                 : 'bg-[#f4eadc] text-[#5c3d26] hover:bg-[#ead8c6]'
-                            }`}
+                              }`}
                           >
                             {course.title.length > 18
                               ? `${course.title.slice(0, 18)}…`

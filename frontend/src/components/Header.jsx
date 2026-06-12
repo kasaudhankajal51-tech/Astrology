@@ -59,7 +59,7 @@ function Header() {
     navigate('/admin/login');
   };
 
-  const navLinkTypography = 'text-nav font-bold uppercase tracking-wide leading-normal';
+  const navLinkTypography = 'type-nav';
 
   const navLinkClass = (path) => {
     const isActive = path === '/' ? location.pathname === '/' : location.pathname.startsWith(path);
@@ -198,7 +198,7 @@ function Header() {
 
     // Scroll effect
     const handleScroll = () => {
-      const header = document.querySelector('header');
+      const header = document.querySelector('.site-header');
       if (header) {
         if (window.scrollY > 20) {
           header.classList.add('scrolled');
@@ -276,11 +276,9 @@ function Header() {
           padding: 0.45rem 4%;
           white-space: nowrap;
           z-index: 3;
-          font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
           text-transform: uppercase;
-          letter-spacing: 0.5px;
+          letter-spacing: 0.04em;
           flex-shrink: 0;
-          font-family: var(--font-sans);
           box-shadow: 2px 0 8px rgba(0,0,0,0.02);
         }
         
@@ -304,9 +302,7 @@ function Header() {
         
         .item {
           color: var(--text-content);
-          font-size: clamp(0.875rem, 1.8vw, 1.0625rem);
           font-weight: 500;
-          font-family: var(--font-sans);
           display: inline-flex;
           align-items: center;
           gap: 6px;
@@ -317,10 +313,8 @@ function Header() {
           color: #fff;
           padding: 2px 8px;
           border-radius: 30px;
-          font-size: clamp(8px, 1.8vw, 10px);
           text-transform: uppercase;
           font-weight: 800;
-          line-height: 1.3;
         }
 
         @media (min-width: 1200px) {
@@ -335,8 +329,8 @@ function Header() {
           100% { transform: translateX(-48%); }
         }
 
-        /* Navbar */
-        header {
+        /* Navbar — scoped to .site-header (never bare "header"; page heroes use <div>) */
+        .site-header {
           background: rgba(253, 246, 238, 0.9) !important;
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
@@ -345,26 +339,26 @@ function Header() {
           top: 0;
           z-index: 1020;
           width: 100%;
-          min-height: clamp(4.5rem, 6vw, 5.4rem);
+          min-height: clamp(3.5rem, 5vw, 4.25rem);
           display: flex;
           align-items: center;
           transition: all 0.3s ease;
-          padding: 0.35rem 0;
+          padding: 0.25rem 0;
         }
 
-        header.scrolled {
+        .site-header.scrolled {
           background: rgba(253, 246, 238, 0.98) !important;
           box-shadow: 0 0.25rem 1.25rem rgba(139, 74, 30, 0.1);
-          min-height: clamp(4rem, 5vw, 5rem);
+          min-height: clamp(3.25rem, 4.5vw, 4rem);
         }
 
-        header .container-fluid {
+        .site-header .container-fluid {
           gap: 1rem;
           align-items: center;
           width: 100%;
         }
 
-        header > nav {
+        .site-header > nav {
           width: 100%;
         }
 
@@ -391,8 +385,6 @@ function Header() {
 
         .logo-icon-wrapper img {
           width: auto;
-          height: clamp(4rem, 6.2vw, 6rem);
-          max-width: min(18rem, 48vw);
           object-fit: contain;
           display: block;
         }
@@ -436,7 +428,7 @@ function Header() {
 
           .navbar-nav .nav-link {
             color: var(--text-main) !important;
-            padding: 0.5rem 0.65rem !important;
+            padding: 0.4rem 0.55rem !important;
             transition: color 0.2s ease;
             position: relative;
             white-space: nowrap;
@@ -518,8 +510,7 @@ function Header() {
 
           .dropdown-menu .dropdown-item {
             border-radius: 8px;
-            padding: 0.6rem 0.85rem;
-            font-weight: 600;
+            padding: 0.5rem 0.75rem;
             color: var(--text-main) !important;
             transition: background 0.15s ease, color 0.15s ease;
             display: flex;
@@ -535,9 +526,9 @@ function Header() {
           .btn-consult-header {
             background: linear-gradient(135deg, #2A0F02, #8B4A1E);
             color: #fff !important;
-            padding: 0.6rem 1.1rem;
+            padding: 0.5rem 0.95rem;
             border-radius: 2rem;
-            letter-spacing: 0.04rem;
+            letter-spacing: 0.04em;
             text-transform: uppercase;
             box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2);
             transition: all 0.25s ease;
@@ -558,16 +549,16 @@ function Header() {
           .btn-account-header {
             display: inline-flex;
             align-items: center;
-            gap: 0.4rem;
+            gap: 0.35rem;
             border: 1px solid var(--glass-border);
             background: #fffaf4;
             color: var(--primary-color) !important;
-            padding: 0.55rem 0.85rem;
+            padding: 0.45rem 0.75rem;
             border-radius: 2rem;
             text-decoration: none;
             white-space: nowrap;
             transition: all 0.2s ease;
-            letter-spacing: 0.02rem;
+            letter-spacing: 0.02em;
           }
 
           .btn-account-header:hover {
@@ -598,13 +589,13 @@ function Header() {
 
         @media (min-width: 1400px) {
           .navbar-nav .nav-link {
-            padding: 0.55rem 0.8rem !important;
+            padding: 0.45rem 0.7rem !important;
           }
           .btn-consult-header {
-            padding: 0.65rem 1.3rem;
+            padding: 0.55rem 1.1rem;
           }
           .btn-account-header {
-            padding: 0.6rem 1rem;
+            padding: 0.5rem 0.9rem;
           }
         }
 
@@ -619,17 +610,10 @@ function Header() {
           padding: 1.1rem 1.2rem;
         }
 
-        .mobile-offcanvas .offcanvas-title {
-          font-size: 1.15rem;
-        }
-
         .mobile-offcanvas .nav-link {
           color: var(--text-main);
-          font-weight: 800;
-          padding: 1.15rem 1.25rem;
+          padding: 0.9rem 1.1rem;
           border-bottom: 1px solid var(--glass-border);
-          font-size: 1.0625rem;
-          letter-spacing: 0.03rem;
           display: flex;
           align-items: center;
           justify-content: space-between;
@@ -657,11 +641,9 @@ function Header() {
         }
 
         .mobile-offcanvas .dropdown-item {
-          padding: 1rem 1.8rem;
-          font-size: 1rem;
+          padding: 0.75rem 1.25rem;
           color: var(--text-content);
           border-bottom: 1px solid rgba(200, 131, 42, 0.08);
-          font-weight: 600;
           background: #FFFDFB;
           display: block;
         }
@@ -681,10 +663,7 @@ function Header() {
           border: 0;
           color: var(--text-main);
           display: flex;
-          font-size: 1.0625rem;
-          font-weight: 800;
           justify-content: space-between;
-          letter-spacing: 0.03rem;
           margin-bottom: 0;
           padding: 0;
           text-transform: uppercase;
@@ -715,9 +694,7 @@ function Header() {
           border: 1px solid rgba(200, 131, 42, 0.12);
           border-radius: 0.55rem;
           color: var(--text-content) !important;
-          font-size: 0.92rem;
-          font-weight: 700;
-          padding: 0.72rem 0.85rem;
+          padding: 0.65rem 0.8rem;
         }
 
         .mobile-submenu .dropdown-item:hover {
@@ -727,12 +704,10 @@ function Header() {
 
         .btn-mobile-cta {
           border-radius: 0.9rem !important;
-          font-weight: 800;
-          padding: 1rem 0;
+          padding: 0.85rem 0;
           text-align: center;
-          font-size: 1rem;
           text-transform: uppercase;
-          letter-spacing: 0.08rem;
+          letter-spacing: 0.06em;
           transition: all 0.3s ease;
           display: flex;
           align-items: center;
@@ -744,16 +719,14 @@ function Header() {
         .btn-menu-header {
           display: inline-flex;
           align-items: center;
-          gap: 0.55rem;
+          gap: 0.5rem;
           border: 1px solid var(--glass-border);
           background: #fffaf4;
           color: var(--text-main);
           border-radius: 2rem;
-          font-size: 0.9rem;
-          font-weight: 800;
-          padding: 0.68rem 0.95rem;
+          padding: 0.5rem 0.85rem;
           text-transform: uppercase;
-          letter-spacing: 0.06rem;
+          letter-spacing: 0.05em;
           transition: all 0.25s ease;
           white-space: nowrap;
         }
@@ -795,11 +768,11 @@ function Header() {
 
         .navbar-toggler {
           border: 0.08rem solid var(--glass-border) !important;
-          padding: 0.85rem 0.95rem;
+          padding: 0.65rem 0.75rem;
           color: #fff !important;
           background: var(--primary-color) !important;
-          border-radius: 0.9rem;
-          font-size: 1.1rem;
+          border-radius: 0.75rem;
+          font-size: var(--text-nav);
           box-shadow: 0 0.25rem 0.75rem rgba(139, 74, 30, 0.15);
           display: flex;
           align-items: center;
@@ -822,13 +795,14 @@ function Header() {
         }
 
         @media (max-width: 1199px) {
-          header, nav {
+          .site-header,
+          .site-header > nav {
             width: 100% !important;
             flex-grow: 1 !important;
             display: flex !important;
-            min-height: 4.5rem !important;
+            min-height: 3.75rem !important;
           }
-          header .container-fluid {
+          .site-header .container-fluid {
             display: flex !important;
             flex-wrap: wrap !important;
             justify-content: space-between !important;
@@ -853,7 +827,7 @@ function Header() {
             flex: 1 1 auto;
           }
           .navbar-brand .fb-logo-name {
-            font-size: clamp(1rem, 4vw, 1.3rem);
+            font-size: var(--h5-size);
           }
           .navbar-collapse {
             width: 100%;
@@ -886,7 +860,7 @@ function Header() {
         </div>
       </section>
 
-      <header className="w-100 mb-0">
+      <header className="site-header w-100 mb-0">
         <nav className="navbar navbar-expand-xl navbar-light py-2">
           <div className="container-fluid nav-inner px-3 px-md-4 px-lg-5 d-flex align-items-center justify-content-between flex-nowrap">
             <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }} aria-label="DS Institute home">
@@ -919,7 +893,7 @@ function Header() {
                         {item.dropdown.map((d) => (
                           <li key={d.to}>
                             <Link
-                              className="dropdown-item text-body-sm font-semibold"
+                              className="dropdown-item type-body-sm"
                               to={d.to}
                               onClick={closeDesktopDropdown}
                             >
@@ -941,14 +915,14 @@ function Header() {
 
             <div className="header-actions d-none d-xl-flex ms-auto" style={{ flexShrink: 0 }}>
               {authState.isAdmin && (
-                <Link to="/admin" className="btn-account-header text-btn font-bold">
+                <Link to="/admin" className="btn-account-header type-btn">
                   <i className="fas fa-user-shield"></i>
                   Admin
                 </Link>
               )}
               {authState.isStudent ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.4rem' }}>
-                  <Link to="/dashboard" className="btn-account-header text-btn font-bold" style={{ maxWidth: '9rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+                  <Link to="/dashboard" className="btn-account-header type-btn" style={{ maxWidth: '9rem', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                     <i className="fas fa-graduation-cap"></i>
                     <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '7rem' }}>{authState.studentName}</span>
                   </Link>
@@ -957,12 +931,12 @@ function Header() {
                   </button>
                 </div>
               ) : !isStudentLoginPage ? (
-                <Link to="/login" className="btn-account-header text-btn font-bold">
+                <Link to="/login" className="btn-account-header type-btn">
                   <i className="fas fa-user"></i>
                   Login
                 </Link>
               ) : null}
-              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0 text-btn font-bold uppercase">
+              <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0 type-btn uppercase">
                 Book Consultation
               </button>
             </div>

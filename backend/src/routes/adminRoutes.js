@@ -31,6 +31,15 @@ import {
   updateBanner,
   updateMaterial
 } from '../controllers/adminContentController.js';
+import {
+  getAdminCatalog,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  createService,
+  updateService,
+  deleteService,
+} from '../controllers/consultationCatalogAdminController.js';
 
 const router = express.Router();
 const videoUpload = multer({
@@ -80,6 +89,15 @@ router.delete('/course-materials/:id', adminAuth, deleteMaterial);
 // Consultation Management (Admin)
 router.get('/consultations', adminAuth, getConsultations);
 router.put('/consultations/:id', adminAuth, updateConsultation);
+
+// Consultation service catalog (Admin)
+router.get('/consultation-catalog', adminAuth, getAdminCatalog);
+router.post('/consultation-categories', adminAuth, createCategory);
+router.put('/consultation-categories/:slug', adminAuth, updateCategory);
+router.delete('/consultation-categories/:slug', adminAuth, deleteCategory);
+router.post('/consultation-services', adminAuth, createService);
+router.put('/consultation-services/:slug', adminAuth, updateService);
+router.delete('/consultation-services/:slug', adminAuth, deleteService);
 
 // Notifications (Admin)
 router.get('/notifications/unread-count', adminAuth, getUnreadCount);

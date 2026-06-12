@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
+import StudentTestimonials from '../components/StudentTestimonials';
+import ConsultationTestimonials from '../components/ConsultationTestimonials';
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
@@ -225,7 +227,7 @@ const AstrologyCourses = ({ onEnroll }) => {
         .ah { text-align: center; margin-bottom: 2.5rem; }
         .ah h2 {
           font-family: var(--font-serif) !important;
-          font-size: clamp(42px, 5vw, 48px) !important;
+          font-size: var(--h2-size) !important;
           font-weight: 700 !important;
           color: var(--text-heading) !important;
           line-height: 1.2;
@@ -267,10 +269,10 @@ const AstrologyCourses = ({ onEnroll }) => {
         .svgd { position: absolute; opacity: .07; pointer-events: none; }
 
         @media (max-width: 991px) {
-          .ah h2 { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
+          .ah h2 { font-size: var(--h2-size) !important; }
         }
         @media (max-width: 767px) {
-          .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
+          .ah h2 { font-size: var(--h2-size) !important; }
         }
         @media (max-width: 575px) {
           .cc { max-width: 360px; margin-left: auto; margin-right: auto; }
@@ -278,7 +280,7 @@ const AstrologyCourses = ({ onEnroll }) => {
         }
         @media (max-width: 480px) {
           .aw { padding: 3rem 1rem; }
-          .ah h2 { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
+          .ah h2 { font-size: var(--h2-size) !important; }
           .cb { text-align: left; padding: 1.5rem 1rem 1rem; }
           .clvl { justify-content: flex-start; }
           .ctitle { text-align: left; font-size: 1.6rem; margin-bottom: 0.6rem; }
@@ -425,6 +427,33 @@ const BANNER_SLIDES = [
     primaryCta: { label: 'Start Learning', path: '/courses', icon: 'fas fa-arrow-right' },
     themeTan: true,
     isPurpleZodiac: true,
+  },
+];
+
+const SERVICE_CARDS = [
+  {
+    alt: 'horoscope', src: '/images/3013143.png',
+    title: 'Personal Horoscope',
+    desc: 'Uncover the cosmic blueprint written in the stars the moment you were born.',
+    features: ['Birth chart & planetary analysis', 'Monthly & yearly forecasts', 'Daily transit alerts'],
+  },
+  {
+    alt: 'marriage', src: '/images/8596897.png',
+    title: 'Relationships',
+    desc: 'Decode compatibility patterns and karmic bonds to build lasting, meaningful connections.',
+    features: ['Compatibility & synastry charts', 'Marriage timing & muhurat', 'Relationship remedies'],
+  },
+  {
+    alt: 'career', src: '/images/867780.png',
+    title: 'Career & Business',
+    desc: 'Align your professional path with planetary strengths for focused, confident growth.',
+    features: ['Career direction & timing', 'Finance & business predictions', 'Auspicious launch dates'],
+  },
+  {
+    alt: 'muhurat', src: '/images/9289285.png',
+    title: 'Muhurat Timing',
+    desc: 'Start every important venture under the most auspicious planetary alignment.',
+    features: ['Weddings & naming ceremonies', 'Property & business launches', 'Travel & medical timing'],
   },
 ];
 
@@ -664,11 +693,11 @@ function Home() {
 
                   <p className="banner-desc mb-4">{activeSlide.desc}</p>
 
-                  <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
+                  {/* <ul className="banner-feature-list" aria-hidden={activeSlide.themeRust ? 'true' : undefined}>
                     <li><i className="fas fa-check-circle"></i> Precise Chart Analysis</li>
                     <li><i className="fas fa-check-circle"></i> Karma & Destiny Decoding</li>
                     <li><i className="fas fa-check-circle"></i> Personalized Remedies</li>
-                  </ul>
+                  </ul> */}
 
                   <div className="banner-btn-row mt-5">
                     {activeSlide.primaryCta?.action === 'consultation' ? (
@@ -858,52 +887,67 @@ function Home() {
             <div className="text-center mb-5">
               <h5 className="section-subtitle expertise-subtitle" data-aos="fade-up">⭐ Our Expertise ⭐</h5>
               <h2 className="section-title mt-2" data-aos="fade-up">Guiding You <span className="text-gradient">Through Life</span></h2>
-              <p className="mx-auto mt-3" style={{ maxWidth: '650px', fontSize: '1.2rem', fontWeight: '500', color: 'var(--text-content)' }} data-aos="fade-down">
+              <p className="section-desc mx-auto mt-3" style={{ maxWidth: '650px' }} data-aos="fade-down">
                 Our Astrologers Are Dedicated to Providing Clarity and Direction
               </p>
             </div>
 
             <div className="row g-4 align-items-center mt-4">
+
+              {/* Left 2 cards */}
               <div className="col-md-6 col-lg-4">
-                <div className="service-card" data-aos="fade-up" data-aos-delay="100">
-                  <div className="service-card-header">
-                    <div className="icon-wrapper"><img alt="horoscope" src="/images/3013143.png" /></div>
-                    <h4 className="">Personal Horoscope</h4>
+                {SERVICE_CARDS.slice(0, 2).map((card, i) => (
+                  <div
+                    key={card.title}
+                    className={`service-card${i > 0 ? ' mt-4' : ''}`}
+                    data-aos="fade-up"
+                    data-aos-delay={`${(i + 1) * 100}`}
+                  >
+                    <div className="service-card-header">
+                      <div className="icon-wrapper"><img alt={card.alt} src={card.src} /></div>
+                      <h4>{card.title}</h4>
+                    </div>
+                    <p className="service-card-desc">{card.desc}</p>
+                    <ul className="service-card-features">
+                      {card.features.map((f) => (
+                        <li key={f}><i className="fas fa-circle-check" />{f}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="mt-3">Learn astrology from experienced and trusted mentors for life clarity.</p>
-                </div>
-                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="200">
-                  <div className="service-card-header">
-                    <div className="icon-wrapper"><img alt="marriage" src="/images/8596897.png" /></div>
-                    <h4 className="">Relationships</h4>
-                  </div>
-                  <p className="mt-3">Gain practical knowledge with real-life case studies and guidance.</p>
-                </div>
+                ))}
               </div>
 
-              <div className="col-lg-4 text-center" data-aos="zoom-in">
-                <div className="service-center-img position-relative">
-                  <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid" /></div>
+              {/* Center image — DOM order puts it between the two card columns */}
+              <div className="col-lg-4 text-center d-none d-lg-flex align-items-center justify-content-center" data-aos="zoom-in">
+                <div className="service-center-img position-relative w-100">
+                  <div className="img-anim"><img alt="zodiac wheel" src="/images/service_img2.png" className="img-fluid mx-auto d-block" /></div>
                   <img alt="meditation" src="/images/sop.png" className="img-fluid center-overlay" />
                 </div>
               </div>
 
+              {/* Right 2 cards */}
               <div className="col-md-6 col-lg-4">
-                <div className="service-card" data-aos="fade-up" data-aos-delay="300">
-                  <div className="service-card-header">
-                    <div className="icon-wrapper"><img alt="career" src="/images/867780.png" /></div>
-                    <h4 className="">Career & Business</h4>
+                {SERVICE_CARDS.slice(2, 4).map((card, i) => (
+                  <div
+                    key={card.title}
+                    className={`service-card${i > 0 ? ' mt-4' : ''}`}
+                    data-aos="fade-up"
+                    data-aos-delay={`${(i + 3) * 100}`}
+                  >
+                    <div className="service-card-header">
+                      <div className="icon-wrapper"><img alt={card.alt} src={card.src} /></div>
+                      <h4>{card.title}</h4>
+                    </div>
+                    <p className="service-card-desc">{card.desc}</p>
+                    <ul className="service-card-features">
+                      {card.features.map((f) => (
+                        <li key={f}><i className="fas fa-circle-check" />{f}</li>
+                      ))}
+                    </ul>
                   </div>
-                  <p className="mt-3">Understand career and financial predictions deeply with experts.</p>
-                </div>
-                <div className="service-card mt-4" data-aos="fade-up" data-aos-delay="400">
-                  <div className="service-card-header">
-                    <div className="icon-wrapper"><img alt="muhurat" src="/images/9289285.png" /></div>
-                    <h4 className="">Muhurat Timing</h4>
-                  </div>
-                  <p className="mt-3">Find the most auspicious time for your life's important endeavors.</p>
-                </div>
+                ))}
               </div>
+
             </div>
           </div>
         </section>
@@ -1099,6 +1143,9 @@ function Home() {
         {/* Astrology Courses Section */}
         <AstrologyCourses onEnroll={handleOpenModal} />
 
+        {/* Student Testimonials */}
+        <StudentTestimonials />
+
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">
           <div className="container">
@@ -1184,6 +1231,9 @@ function Home() {
           </div>
         </section>
 
+        {/* Consultation Client Testimonials */}
+        <ConsultationTestimonials />
+
         {/* Latest Blogs Section */}
         {/* {blogs.length > 0 && (
           <section className="home-blog-section py-5" style={{ background: '#fff' }}>
@@ -1248,7 +1298,6 @@ function Home() {
         
         .section-title {
           font-family: var(--font-serif) !important;
-          font-size: clamp(42px, 5vw, 48px) !important;
           font-weight: 700 !important;
           color: var(--text-heading) !important;
           line-height: 1.2;
@@ -1256,11 +1305,10 @@ function Home() {
 
         .section-subtitle {
           font-family: var(--font-sans) !important;
-          font-size: 18px !important;
           font-weight: 500 !important;
           color: var(--text-muted) !important;
           text-transform: none !important;
-          letter-spacing: 0.5px !important;
+          letter-spacing: 0.04em !important;
           font-style: normal !important;
           margin-bottom: 15px;
           display: block;
@@ -1268,18 +1316,18 @@ function Home() {
 
         .expertise-subtitle {
           color: var(--primary-color) !important;
-          font-size: clamp(1.4rem, 4vw, 2rem) !important;
+          font-size: var(--text-kicker) !important;
           font-weight: 700 !important;
-          letter-spacing: 2px !important;
+          letter-spacing: 0.08em !important;
           text-transform: uppercase !important;
           font-family: var(--font-sans) !important;
         }
 
         .section-desc {
           color: var(--text-content) !important;
-          font-size: 1.1rem;
-          line-height: 1.7;
-          font-weight: 400;
+          font-size: var(--body-size);
+          line-height: 1.6;
+          font-weight: 500;
           font-family: var(--font-sans);
         }
 
@@ -1487,13 +1535,13 @@ function Home() {
 
         .banner-title {
           font-family: var(--font-serif) !important;
-          font-size: clamp(3rem, 6vw, 5rem);
           font-weight: 700;
-          line-height: 1.05;
+          line-height: 1.1;
           color: #3A1900;
         }
 
         .banner-title .text-gradient {
+          font-family: var(--font-serif) !important;
           background: linear-gradient(135deg, #B36B22, #D4903D);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
@@ -2265,60 +2313,100 @@ function Home() {
 
         /* Services */
         .services-section {
-          padding: 120px 0;
+          padding: clamp(3rem, 6vw, 5rem) 0;
           background: var(--bg-color);
         }
 
         .service-card {
           background: var(--card-color);
-          padding: 25px 20px;
-          border-radius: 20px;
+          padding: 1.1rem 1rem 1rem;
+          border-radius: 16px;
           border: 1px solid var(--glass-border);
           box-shadow: 0 8px 25px rgba(139, 74, 30, 0.05);
           transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
           display: flex;
           flex-direction: column;
-          justify-content: center;
-          height: auto;
-          min-height: 140px;
-          margin-bottom: 10px;
           position: relative;
           overflow: hidden;
         }
 
+        /* Top accent line — fades in on hover */
+        .service-card::before {
+          content: '';
+          position: absolute;
+          top: 0; left: 18px; right: 18px;
+          height: 2px;
+          background: linear-gradient(90deg, var(--accent-color), var(--primary-color));
+          border-radius: 0 0 3px 3px;
+          opacity: 0;
+          transition: opacity 0.35s;
+        }
+
+        .service-card:hover::before { opacity: 1; }
+
+        /* Left bar — slides down on hover */
         .service-card::after {
           content: '';
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 4px;
-          height: 0;
+          top: 0; left: 0;
+          width: 3px; height: 0;
           background: linear-gradient(to bottom, var(--accent-color), var(--primary-color));
-          transition: 0.4s ease;
+          transition: height 0.4s ease;
         }
 
-        .service-card:hover::after {
-          height: 100%;
-        }
+        .service-card:hover::after { height: 100%; }
 
         .service-card:hover {
-          transform: translateY(-8px);
+          transform: translateY(-6px);
           border-color: var(--accent-color);
           box-shadow: 0 20px 40px rgba(200, 131, 42, 0.15);
+        }
+
+        .service-card-desc {
+          font-size: var(--text-body-sm);
+          color: var(--text-content);
+          line-height: 1.55;
+          margin: 0.5rem 0 0.75rem;
+        }
+
+        .service-card-features {
+          list-style: none;
+          padding: 0;
+          margin: 0;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+        }
+
+        .service-card-features li {
+          display: flex;
+          align-items: flex-start;
+          gap: 0.45rem;
+          font-size: var(--text-caption);
+          color: var(--text-muted);
+          font-weight: 500;
+          line-height: 1.45;
+        }
+
+        .service-card-features li i {
+          color: var(--accent-color);
+          font-size: 0.65rem;
+          margin-top: 0.2rem;
+          flex-shrink: 0;
         }
 
         .service-card-header {
           display: flex;
           align-items: center;
-          gap: 15px;
-          margin-bottom: 10px;
+          gap: 0.75rem;
+          margin-bottom: 0;
         }
 
         .icon-wrapper {
-          width: 55px;
-          height: 55px;
+          width: 2.75rem;
+          height: 2.75rem;
           background: linear-gradient(135deg, rgba(200, 131, 42, 0.15), rgba(139, 74, 30, 0.05));
-          border-radius: 14px;
+          border-radius: 10px;
           display: flex;
           align-items: center;
           justify-content: center;
@@ -2333,8 +2421,8 @@ function Home() {
         }
 
         .icon-wrapper img {
-          width: 35px;
-          height: 35px;
+          width: 1.5rem;
+          height: 1.5rem;
           object-fit: contain;
           filter: brightness(0) saturate(100%) invert(18%) sepia(13%) saturate(2258%) hue-rotate(318deg) brightness(91%) contrast(93%);
           transition: 0.4s;
@@ -2346,19 +2434,11 @@ function Home() {
 
         .service-card h4 {
           font-family: var(--font-serif);
-          font-size: 1.4rem;
+          font-size: var(--h4-size);
           font-weight: 600;
           color: var(--text-card-heading);
+          line-height: 1.3;
           margin: 0;
-        }
-
-        .service-card p {
-          font-size: 1rem;
-          font-weight: 400;
-          color: var(--text-content);
-          line-height: 1.6;
-          margin-bottom: 0;
-          font-family: var(--font-sans);
         }
 
         /* Testimonials Section */
@@ -2616,26 +2696,18 @@ function Home() {
         }
 
         /* Responsive Breakpoints */
-        @media (max-width: 1200px) {
-          .banner-title { font-size: clamp(3rem, 6vw, 4rem); }
-        }
-
         @media (max-width: 991px) {
           .banner-section { text-align: center; padding: 120px 0 80px; }
           .banner-desc { margin: 0 auto 30px; }
           .img-box01 { margin-bottom: 80px; height: 450px; }
           .experience-badge { left: 50%; transform: translateX(-50%); bottom: 20px; }
           .banner-section .cosmic-orbit-container .icon-block { width: 46px; height: 46px; }
-          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
           .banner-btn-row { justify-content: center; }
         }
 
         @media (max-width: 767px) {
           .banner-section { padding-top: 100px; min-height: auto; }
-          .banner-title { font-size: clamp(2rem, 8vw, 2.5rem); }
-          .banner-desc { font-size: 1.05rem; }
           .about-part-section, .services-section, .testimonial-section { padding: 60px 0; }
-          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
           .testimonial-card { flex: 0 0 280px; }
           .video-container { height: 160px; }
           .testimonial-text { font-size: 1rem; min-height: 80px; }
@@ -2668,7 +2740,6 @@ function Home() {
         }
 
         @media (max-width: 576px) {
-          .banner-title { font-size: clamp(1.8rem, 10vw, 2.2rem); }
           .testimonial-card { flex: 0 0 250px; }
           .video-container { height: 140px; }
           .testimonial-content { padding: 16px; }
@@ -3666,6 +3737,7 @@ function Home() {
           0% { width: 40px; opacity: 0.5; }
           100% { width: 100px; opacity: 1; }
         }
+
       `}</style>
     </>
   );

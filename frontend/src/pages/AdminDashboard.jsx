@@ -11,6 +11,7 @@ import AdminSettings from './AdminSettings';
 import AdminNewsletter from './AdminNewsletter';
 import AdminCourses from './AdminCourses';
 import AdminConsultations from './AdminConsultations';
+import AdminConsultationServices from './AdminConsultationServices';
 import AdminStudents from './AdminStudents';
 import AdminOrders from './AdminOrders';
 import './Admin.css';
@@ -20,6 +21,7 @@ const PAGE_TITLES = {
   leads: 'Lead Management',
   lms: 'Course Studio',
   consultations: 'Consultation Requests',
+  'consultation-catalog': 'Consultation Catalog',
   students: 'Students',
   orders: 'Orders',
   blogs: 'Blog & Articles',
@@ -42,6 +44,7 @@ const PAGE_ICONS = {
   leads: 'fa-filter',
   lms: 'fa-graduation-cap',
   consultations: 'fa-handshake',
+  'consultation-catalog': 'fa-th-large',
   students: 'fa-user-graduate',
   orders: 'fa-receipt',
   blogs: 'fa-pen-nib',
@@ -75,7 +78,8 @@ const NAV_SECTIONS = [
       { id: 'students', icon: 'fa-user-graduate', label: 'Students', accent: 'blue' },
       { id: 'orders', icon: 'fa-receipt', label: 'Orders', accent: 'emerald' },
       { id: 'lms', icon: 'fa-graduation-cap', label: 'Course Studio', accent: 'cyan' },
-      { id: 'consultations', icon: 'fa-handshake', label: 'Consultations', accent: 'violet' },
+      { id: 'consultation-catalog', icon: 'fa-th-large', label: 'Consultation Catalog', accent: 'orange' },
+      { id: 'consultations', icon: 'fa-handshake', label: 'Student Consultations', accent: 'violet' },
       { id: 'blogs', icon: 'fa-pen-nib', label: 'Blog & Articles', accent: 'amber' },
       { id: 'jobs', icon: 'fa-briefcase', label: 'Job Postings', accent: 'indigo' },
       { id: 'coupons', icon: 'fa-percent', label: 'Promo Codes', accent: 'rose' },
@@ -449,6 +453,7 @@ function AdminDashboard() {
 
           {activeTab === 'leads'         && <AdminLeads activeFilter={leadFilter} />}
           {activeTab === 'lms'           && <AdminCourses />}
+          {activeTab === 'consultation-catalog' && <AdminConsultationServices />}
           {activeTab === 'consultations' && <AdminConsultations />}
           {activeTab === 'students'      && <AdminStudents />}
           {activeTab === 'orders'        && <AdminOrders />}

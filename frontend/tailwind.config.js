@@ -9,8 +9,8 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        heading: ['fh-regular', 'sans-serif'],
-        body: ['Be Vietnam', 'Be Vietnam Pro', 'sans-serif'],
+        heading: ['Playfair Display', 'serif'],
+        body: ['Be Vietnam Pro', 'Be Vietnam', 'sans-serif'],
       },
       colors: {
         astro: {

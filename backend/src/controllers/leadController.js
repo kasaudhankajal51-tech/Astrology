@@ -6,6 +6,7 @@ import Joi from 'joi';
 import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
 import { sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
 import { notify } from '../utils/notify.js';
+import { getActiveServiceBySlug, seedCatalogFromStaticIfEmpty } from '../services/consultationCatalogDb.js';
 
 const leadSchema = Joi.object({
   name: Joi.string().required().min(2).max(100),
@@ -27,6 +28,9 @@ const leadSchema = Joi.object({
   interest: Joi.string().allow('', null),
   message: Joi.string().allow('', null),
   amount: Joi.number().allow(null),
+  bookingMode: Joi.string().valid('pay_now', 'pay_later').allow('', null),
+  serviceId: Joi.string().allow('', null),
+  quotedAmount: Joi.number().allow(null),
 }).unknown(true);
 
 const getSubmittedAt = (lead) => lead.submittedAt || lead.createdAt;
@@ -68,9 +72,13 @@ const applySubmittedDateFilter = (filter, startDate, endDate) => {
   ];
 };
 
-const isPaidLeadType = (type, amount) =>
-  type === 'Webinar' || type === 'Recorded-Course' || type === 'Course-Inquiry' ||
-  (type === 'Consultation' && Boolean(amount)) || Boolean(amount);
+const isPaidLeadType = (type, amount, bookingMode) =>
+  bookingMode !== 'pay_later' &&
+  (type === 'Webinar' || type === 'Recorded-Course' || type === 'Course-Inquiry' ||
+  (type === 'Consultation' && Boolean(amount)) || Boolean(amount));
+
+const isConsultationCallback = (body) =>
+  body.type === 'Consultation' && body.bookingMode === 'pay_later';
 
 // A LIVE course enquiry has no payment — it's a manual follow-up lead.
 // Recorded-Course / Course-Inquiry types are NOT live enquiries even if they have no amount yet.
@@ -147,10 +155,29 @@ export const createLead = asyncHandler(async (req, res) => {
   const {
     name, email, phone, type, courseName, courseType, courseId,
     consultationType, dob, tob, pob, city, age, interest, message, amount,
-    leadType, status, paymentStatus,
+    leadType, status, paymentStatus, bookingMode, serviceId, quotedAmount,
   } = req.body;
 
-  const requiresPayment = isPaidLeadType(type, amount);
+  let resolvedAmount = amount;
+  let resolvedQuotedAmount = quotedAmount;
+  let resolvedConsultationType = consultationType;
+
+  if (type === 'Consultation' && serviceId) {
+    await seedCatalogFromStaticIfEmpty();
+    const svc = await getActiveServiceBySlug(serviceId);
+    if (!svc) {
+      res.status(404);
+      throw new Error('Consultation service not found');
+    }
+    resolvedConsultationType = svc.title;
+    resolvedQuotedAmount = svc.price;
+    if (bookingMode === 'pay_now') {
+      resolvedAmount = svc.price;
+    }
+  }
+
+  const consultationCallback = isConsultationCallback(req.body);
+  const requiresPayment = isPaidLeadType(type, resolvedAmount, bookingMode);
   const liveEnquiry = isLiveCourseEnquiry(req.body);
   const enquiryOnly = isEnquiryOnlyLead(req.body);
   const recordedEnquiry = enquiryOnly && !liveEnquiry;
@@ -163,7 +190,10 @@ export const createLead = asyncHandler(async (req, res) => {
     courseName,
     courseType,
     courseId: courseId || undefined,
-    consultationType,
+    consultationType: resolvedConsultationType,
+    serviceId: serviceId || undefined,
+    bookingMode: bookingMode || (consultationCallback ? 'pay_later' : requiresPayment ? 'pay_now' : undefined),
+    quotedAmount: resolvedQuotedAmount || undefined,
     dob,
     tob,
     pob,
@@ -171,10 +201,24 @@ export const createLead = asyncHandler(async (req, res) => {
     age,
     interest,
     message,
-    amount: amount || undefined,
+    amount: resolvedAmount || undefined,
     leadType: leadType || (liveEnquiry ? 'LIVE COURSE LEAD' : recordedEnquiry ? 'RECORDED COURSE LEAD' : undefined),
-    status: status || (enquiryOnly ? 'ENQUIRY RECEIVED' : requiresPayment ? 'Pending' : 'Pending'),
-    paymentStatus: paymentStatus || (enquiryOnly ? 'NOT REQUIRED' : requiresPayment ? 'PENDING' : 'NOT REQUIRED'),
+    status: status || (consultationCallback
+      ? 'Consultation Lead - Callback Requested'
+      : enquiryOnly
+        ? 'ENQUIRY RECEIVED'
+        : requiresPayment
+          ? 'Pending'
+          : type === 'Consultation'
+            ? 'Consultation Lead - Callback Requested'
+            : 'Pending'),
+    paymentStatus: paymentStatus || (consultationCallback || (type === 'Consultation' && !requiresPayment)
+      ? 'NOT REQUIRED'
+      : enquiryOnly
+        ? 'NOT REQUIRED'
+        : requiresPayment
+          ? 'PENDING'
+          : 'NOT REQUIRED'),
     submittedAt: new Date(),
   };
 
@@ -218,7 +262,7 @@ export const createLead = asyncHandler(async (req, res) => {
   });
 
   if (requiresPayment && !enquiryOnly) {
-    const payableAmount = amount || (type === 'Webinar' ? 99 : 0);
+    const payableAmount = resolvedAmount || (type === 'Webinar' ? 99 : 0);
     if (!payableAmount) {
       res.status(400);
       throw new Error('Amount is required for paid lead types');

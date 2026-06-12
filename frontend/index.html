@@ -1,4 +1,4 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -60,8 +60,8 @@
         --premium-shadow:      0 4px 24px rgba(139, 74, 30, 0.08);
 
         /* ── Typography ── */
-        --font-heading:        'fh-regular', sans-serif;
-        --font-body:           'Be Vietnam', 'Be Vietnam Pro', sans-serif;
+        --font-heading:        'Playfair Display', serif;
+        --font-body:           'Be Vietnam Pro', 'Be Vietnam', sans-serif;
         --font-sans:           var(--font-body);
         --font-serif:          var(--font-heading);
       }
@@ -69,92 +69,9 @@
       body {
         background-color: var(--bg-color) !important;
         color: var(--text-content) !important;
-        font-family: var(--font-body);
-        font-size: 16px;
-        line-height: 1.6;
         overflow-x: hidden;
       }
-      
-      h1 {
-        font-family: var(--font-heading) !important;
-        font-size: clamp(2.25rem, 4.5vw, 3.5rem) !important;
-        font-weight: 600 !important;
-        color: var(--text-heading) !important;
-        letter-spacing: 0 !important;
-        line-height: 1.12;
-        margin-bottom: 1rem;
-      }
 
-      h2, .section-title {
-        font-family: var(--font-heading) !important;
-        font-size: clamp(1.875rem, 3vw, 2.5rem) !important;
-        font-weight: 600 !important;
-        color: var(--text-heading) !important;
-        letter-spacing: 0 !important;
-        line-height: 1.18 !important;
-      }
-
-      h3, .card-title {
-        font-family: var(--font-heading) !important;
-        font-size: clamp(1.35rem, 2vw, 1.875rem) !important;
-        font-weight: 600 !important;
-        color: var(--text-card-heading) !important;
-        letter-spacing: 0 !important;
-        line-height: 1.22 !important;
-      }
-
-      h4 {
-        font-family: var(--font-heading) !important;
-        font-size: clamp(1.15rem, 1.6vw, 1.5rem) !important;
-        font-weight: 600 !important;
-        letter-spacing: 0 !important;
-        line-height: 1.28 !important;
-      }
-
-      h5 {
-        font-family: var(--font-heading) !important;
-        font-size: clamp(1rem, 1.3vw, 1.125rem) !important;
-        font-weight: 600 !important;
-        letter-spacing: 0 !important;
-        line-height: 1.35 !important;
-      }
-
-      h6 {
-        font-family: var(--font-heading) !important;
-        font-size: 0.9rem !important;
-        font-weight: 600 !important;
-        letter-spacing: 0 !important;
-        line-height: 1.35 !important;
-      }
-
-      .section-subtitle, .sub-heading {
-        font-family: var(--font-body) !important;
-        font-size: clamp(0.92rem, 1.4vw, 1rem) !important;
-        font-weight: 500 !important;
-        color: var(--text-muted) !important;
-        text-transform: none !important;
-        letter-spacing: 0 !important;
-        font-style: normal !important;
-      }
-
-      p {
-        font-family: var(--font-body) !important;
-        font-size: clamp(0.9rem, 1.5vw, 1rem) !important;
-        font-weight: 400 !important;
-        color: var(--text-content) !important;
-        letter-spacing: 0 !important;
-        line-height: 1.65 !important;
-      }
-
-      small, .small {
-        font-size: 0.82rem !important;
-        line-height: 1.5 !important;
-      }
-
-      .text-xs {
-        font-size: 0.75rem !important;
-      }
-  
       /* Global Card / Glass Panel */
       .card, .glass-panel, .sidebar-widget, .t-card {
         background: var(--card-color) !important;

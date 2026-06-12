@@ -2,71 +2,39 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
+import BookConsultationCTA from '../components/BookConsultationCTA';
+import ConsultationServiceCard from '../components/ConsultationServiceCard';
 import SuccessModal from '../components/SuccessModal';
-import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
+import { useConsultationCatalog } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
-import { reportPaymentFailure } from '../utils/paymentUtils';
+import {
+  BOOKING_MODES,
+  submitConsultationBooking,
+  getEmptyConsultationForm,
+} from '../utils/consultationBooking';
+
+const SEARCH_HINTS = ['Tarot', 'Marriage', 'Career', 'Remedies'];
+
+const GUIDELINES = [
+  { icon: 'fa-lock', title: 'Confidentiality', text: 'All sessions are private & confidential' },
+  { icon: 'fa-calendar-check', title: 'Prior Booking', text: 'Mandatory for all consultation types' },
+  { icon: 'fa-ban', title: 'Refund Policy', text: 'No refund after booking completion' },
+  { icon: 'fa-balance-scale', title: 'Divine Balance', text: 'Results depend on karma & planetary timing' },
+  { icon: 'fa-vial', title: 'Remedies', text: 'Suggested only after proper analysis' },
+];
 
 function Consultations() {
   const navigate = useNavigate();
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    phone: '',
-    consultationType: '',
-    dob: '',
-    tob: '',
-    pob: '',
-    message: '',
-    price: ''
-  });
+  const [formData, setFormData] = useState(getEmptyConsultationForm());
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [bookingMode, setBookingMode] = useState(BOOKING_MODES.PAY_LATER);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [categories, setCategories] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    if (window.AOS) {
-      window.AOS.refresh();
-    }
-  }, []);
-
-  useEffect(() => {
-    const fetchCategories = async () => {
-      try {
-        const res = await fetch(`${API_BASE}/api/consultations/categories`);
-        const data = await res.json();
-        if (data.success) {
-          setCategories(data.data);
-        }
-      } catch (err) {
-        console.error('Failed to fetch categories:', err);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchCategories();
-  }, []);
 
   const handleChange = (e) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const loadRazorpayScript = () => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -79,868 +47,258 @@ function Consultations() {
 
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
     setIsSubmitting(true);
-    
-    // If there is no price (e.g. general enquiry), use the old free flow
-    if (!formData.price) {
-      try {
-        const response = await fetch(`${API_BASE}/api/leads`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            ...formData,
-            name: formData.name.trim(),
-            email: formData.email.trim(),
-            phone: sanitizedPhone,
-            type: 'Consultation',
-            courseName: formData.consultationType || 'General Consultation'
-          })
-        });
-        const data = await response.json();
-        if (data.success) {
-          setIsModalOpen(false);
-          setIsSuccessOpen(true);
-          setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
-        } else {
-          toast.error(data.error || 'Error submitting booking');
-        }
-      } catch (error) {
-        toast.error('Connection Error: ' + error.message);
-      } finally {
-        setIsSubmitting(false);
-      }
-      return;
-    }
 
-    // Razorpay Paid Flow
     try {
-      const isLoaded = await loadRazorpayScript();
-      if (!isLoaded) {
-        toast.error('Razorpay SDK failed to load. Check your connection.');
-        setIsSubmitting(false);
-        return;
-      }
-
-      const amount = parseInt(formData.price.replace('₹', '').replace(',', ''), 10);
-      const payload = {
-        ...formData,
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: sanitizedPhone,
-        amount,
-        type: 'Consultation',
-        consultationType: formData.consultationType
-      };
-
-      const response = await fetch(`${API_BASE}/api/leads`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
-      
-      if (!data.success) {
-        toast.error(data.error || data.message || 'Failed to initiate booking');
-        setIsSubmitting(false);
-        return;
-      }
-
-      const options = {
-        key: data.keyId,
-        amount: data.amount,
-        currency: data.currency,
-        name: "DS Institute",
-        description: `Consultation Booking: ${formData.consultationType}`,
-        image: "/images/logo.png",
-        order_id: data.orderId,
-        handler: async function (response) {
-          try {
-            const verifyRes = await fetch(`${API_BASE}/api/leads/verify-payment`, {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                razorpay_payment_id: response.razorpay_payment_id,
-                razorpay_order_id: response.razorpay_order_id,
-                razorpay_signature: response.razorpay_signature,
-                leadId: data.leadId
-              })
-            });
-            const verifyData = await verifyRes.json();
-            
-            if (verifyData.success) {
-              setIsModalOpen(false);
-              setIsSuccessOpen(true); // Reusing the same success modal for consistency
-              setFormData({ name: '', email: '', phone: '', consultationType: '', dob: '', tob: '', pob: '', message: '', price: '' });
-            } else {
-              toast.error('Payment verification failed.');
-            }
-          } catch (err) {
-            toast.error('Error verifying payment.');
+      const service = formData.serviceId
+        ? {
+            id: formData.serviceId,
+            title: formData.consultationType,
+            price: parseInt(String(formData.price).replace(/[₹,]/g, ''), 10) || undefined,
+            priceLabel: formData.priceLabel,
           }
-        },
-        prefill: {
-          name: data.name,
-          email: data.email,
-          contact: data.phone
-        },
-        theme: {
-          color: "#8B4A1E"
-        }
-      };
+        : null;
 
-      if (data.isMock) {
-        toast.success("Test Mode: Simulating Payment Success...");
-        options.handler({
-          razorpay_payment_id: `pay_mock_${Date.now()}`,
-          razorpay_order_id: data.orderId,
-          razorpay_signature: "mock_signature"
-        });
-      } else {
-        const rzp = new window.Razorpay(options);
-        rzp.on('payment.failed', function (response) {
-          toast.error(`Payment Failed: ${response.error.description}`);
-          reportPaymentFailure({
-            leadId: data.leadId,
-            orderId: data.orderId,
-            consultationType: formData.consultationType,
-            paymentFor: 'Consultation',
-            error: response.error,
-          });
-        });
-        rzp.open();
-      }
-
+      await submitConsultationBooking({
+        formData,
+        service,
+        bookingMode,
+        sanitizedPhone,
+        onSuccess: ({ mode }) => {
+          setIsModalOpen(false);
+          if (mode === BOOKING_MODES.PAY_NOW) {
+            navigate('/payment-success?type=consultation');
+            return;
+          }
+          setIsSuccessOpen(true);
+          setFormData(getEmptyConsultationForm());
+        },
+        onDismiss: () => setIsSubmitting(false),
+      });
     } catch (err) {
-      toast.error('Error: ' + err.message);
+      toast.error(`Error: ${err.message}`);
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const openModal = (type = '', price = '') => {
-    if (type) setFormData(prev => ({ ...prev, consultationType: type, price }));
+  const openGeneralEnquiry = () => {
+    setBookingMode(BOOKING_MODES.PAY_LATER);
+    setFormData(getEmptyConsultationForm());
     setIsModalOpen(true);
   };
 
-  const goToDetails = (slug) => {
-    navigate(`/consultations/${slug}`);
-  };
+  const { categories: consultationCategories, loading: catalogLoading, error: catalogError } =
+    useConsultationCatalog();
 
-  const filteredCategories = categories.map(cat => ({
-    ...cat,
-    cards: cat.cards.filter(card => 
-      card.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-      card.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-    )
-  })).filter(cat => cat.cards.length > 0);
+  useEffect(() => {
+    if (catalogError) toast.error(catalogError);
+  }, [catalogError]);
+
+  const filteredCategories = consultationCategories
+    .map((cat) => ({
+      ...cat,
+      cards: cat.cards.filter(
+        (card) =>
+          card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          card.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          cat.name.toLowerCase().includes(searchQuery.toLowerCase())
+      ),
+    }))
+    .filter((cat) => cat.cards.length > 0);
+
+  const totalResults = filteredCategories.reduce((sum, cat) => sum + cat.cards.length, 0);
 
   return (
     <>
-      <SEO title="Consultation Services" description="Understand your life path, remove confusion, and make decisions with confidence." url="/book-consultation" />
-      <section className="consultation-page">
-        <div className="page-header-bg"></div>
-        <div className="container position-relative">
-          <div className="text-center mb-5 pb-4">
-            <h5 className="section-subtitle" data-aos="fade-down">Divine Guidance & Transformation</h5>
-            <h2 className="section-title mt-2" data-aos="fade-up">Consultation <span className="text-gradient">Services</span></h2>
-            <p className="header-desc mx-auto" data-aos="fade-up" data-aos-delay="100">
-              Understand your life path, remove confusion, and make decisions with confidence. Every session is conducted with complete dedication and confidentiality.
-            </p>
-            
-            <div className="search-container-v2 mt-5 mx-auto" data-aos="zoom-in" data-aos-delay="200">
-              <div className="search-box-v2">
-                <i className="fas fa-search search-icon"></i>
-                <input 
-                  type="text" 
-                  placeholder="Search for services (e.g., Career, Tarot, Marriage...)" 
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                {searchQuery && (
-                  <button className="clear-search" onClick={() => setSearchQuery('')}>
-                    <i className="fas fa-times"></i>
-                  </button>
-                )}
-              </div>
-              <div className="search-badges mt-3">
-                <span className="search-hint">Try searching:</span>
-                <button className="badge-hint" onClick={() => setSearchQuery('Tarot')}>Tarot</button>
-                <button className="badge-hint" onClick={() => setSearchQuery('Marriage')}>Marriage</button>
-                <button className="badge-hint" onClick={() => setSearchQuery('Career')}>Career</button>
-                <button className="badge-hint" onClick={() => setSearchQuery('Spell')}>Remedies</button>
-              </div>
-            </div>
-            
-            <div className="title-underline mx-auto"></div>
-          </div>
+      <SEO
+        title="Consultation Services"
+        description="Understand your life path, remove confusion, and make decisions with confidence."
+        url="/book-consultation"
+      />
 
-          {isLoading ? (
-            <div className="text-center py-5">
-              <div className="spinner-border text-primary" role="status" style={{ color: 'var(--cosmic-accent-pink)' }}>
-                <span className="visually-hidden">Loading...</span>
-              </div>
-              <p className="mt-3" style={{ color: 'var(--cosmic-text-muted)' }}>Loading services...</p>
-            </div>
-          ) : filteredCategories.length > 0 ? (
-            filteredCategories.map((cat, idx) => (
-              <div key={idx} className="category-section mb-5 pb-5">
-                <div className="category-header d-flex flex-column mb-5" data-aos="fade-right">
-                  <div className="d-flex align-items-center mb-3">
-                    <div className="category-icon-box">
-                      <i className={`fas ${cat.icon}`}></i>
-                    </div>
-                    <h3 className="category-name ms-3 mb-0">{cat.name}</h3>
-                    <div className="category-line-flex ms-4"></div>
-                  </div>
-                  <p className="category-description">{cat.description}</p>
+      <div className="consultations-page">
+        {/* Hero */}
+        <div className="cp-hero">
+          <div className="cp-wrap">
+            <div className="cp-center">
+              <span className="cp-kicker">Divine Guidance &amp; Transformation</span>
+              <h1 className="cp-title">
+                Consultation{' '}
+                <span className="text-gradient">Services</span>
+              </h1>
+              <p className="cp-lead">
+                Understand your life path, remove confusion, and make decisions with confidence. Every
+                session is conducted with complete dedication and confidentiality.
+              </p>
+
+              <div className="cp-search-block">
+                <label htmlFor="consult-search" className="sr-only">
+                  Search consultation services
+                </label>
+                <div className="cp-search-box">
+                  <i className="fas fa-search text-site-accent-dark" aria-hidden="true" />
+                  <input
+                    id="consult-search"
+                    type="text"
+                    role="searchbox"
+                    inputMode="search"
+                    enterKeyHint="search"
+                    autoComplete="off"
+                    placeholder="Search services (Career, Tarot, Marriage…)"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                  />
+                  {searchQuery ? (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery('')}
+                      className="cp-search-clear"
+                      aria-label="Clear search"
+                    >
+                      <i className="fas fa-times" aria-hidden="true" />
+                    </button>
+                  ) : null}
                 </div>
-                
-                <div className="consult-grid">
-                  {cat.cards.map((card, cIdx) => (
-                    <div className="consult-card-wrapper" key={cIdx} data-aos="fade-up" data-aos-delay={cIdx * 50}>
-                      <div className="consult-card">
-                        <div className="card-image-box" onClick={() => goToDetails(card.id)} style={{ cursor: 'pointer' }}>
-                          <img src={card.img} alt={card.title} />
-                          <div className="card-overlay-gradient"></div>
-                          <div className={`status-badge ${card.badgeColor}`}>
-                            {card.badge}
-                          </div>
-                          <div className="card-price-tag">{card.price}</div>
-                        </div>
-                        <div className="card-info">
-                          <h4 onClick={() => goToDetails(card.id)} style={{ cursor: 'pointer' }}>{card.short}</h4>
-                          <p className="card-preview-text">{card.desc.substring(0, 100)}...</p>
-                          {card.duration && (
-                            <div className="duration-info mb-3">
-                              <i className="far fa-clock me-2"></i> {card.duration}
-                            </div>
-                          )}
-                          <div className="card-actions mt-auto">
-                            <button className="btn-action secondary" onClick={() => goToDetails(card.id)}>
-                              <i className="fas fa-eye me-2"></i> View Page
-                            </button>
-                            <button className="btn-action primary" onClick={() => openModal(card.title, card.price)}>
-                              Book Now <i className="fas fa-arrow-right ms-2"></i>
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
+
+                <div className="cp-hint-row">
+                  <span className="cp-category-desc" style={{ margin: 0, fontSize: '0.8125rem' }}>
+                    Try searching:
+                  </span>
+                  {SEARCH_HINTS.map((hint) => (
+                    <button
+                      key={hint}
+                      type="button"
+                      className="cp-hint-btn"
+                      onClick={() => setSearchQuery(hint === 'Remedies' ? 'Spell' : hint)}
+                    >
+                      {hint}
+                    </button>
                   ))}
                 </div>
               </div>
-            ))
-          ) : (
-            <div className="text-center py-5 no-results" data-aos="fade-up">
-              <div className="no-results-icon mb-4">
-                <i className="fas fa-search-minus"></i>
-              </div>
-              <h3>No services found for "{searchQuery}"</h3>
-              <p>Try different keywords or browse our categories below.</p>
-              <button className="btn-action primary mx-auto mt-4" style={{ maxWidth: '200px' }} onClick={() => setSearchQuery('')}>
-                Show All Services
-              </button>
             </div>
-          )}
-
-          {!searchQuery && (
-            <>
-              <div className="guidelines-section mt-5" data-aos="fade-up">
-                <div className="glass-panel p-4 p-md-5">
-                  <h3 className="category-name small mb-4"><i className="fas fa-star-of-david me-3"></i> Important Guidelines</h3>
-                  <div className="guidelines-grid">
-                    <div className="guideline-item">
-                      <div className="guide-icon"><i className="fas fa-lock"></i></div>
-                      <div className="guide-text">
-                        <strong>Confidentiality</strong>
-                        <span>All sessions are private & confidential</span>
-                      </div>
-                    </div>
-                    <div className="guideline-item">
-                      <div className="guide-icon"><i className="fas fa-calendar-check"></i></div>
-                      <div className="guide-text">
-                        <strong>Prior Booking</strong>
-                        <span>Mandatory for all consultation types</span>
-                      </div>
-                    </div>
-                    <div className="guideline-item">
-                      <div className="guide-icon"><i className="fas fa-ban"></i></div>
-                      <div className="guide-text">
-                        <strong>Refund Policy</strong>
-                        <span>No refund after booking completion</span>
-                      </div>
-                    </div>
-                    <div className="guideline-item">
-                      <div className="guide-icon"><i className="fas fa-balance-scale"></i></div>
-                      <div className="guide-text">
-                        <strong>Divine Balance</strong>
-                        <span>Results depend on karma & planetary timing</span>
-                      </div>
-                    </div>
-                    <div className="guideline-item">
-                      <div className="guide-icon"><i className="fas fa-vial"></i></div>
-                      <div className="guide-text">
-                        <strong>Remedies</strong>
-                        <span>Suggested only after proper analysis</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div className="booking-cta-section mt-5 pt-4 mb-5" data-aos="zoom-in">
-                <div className="booking-card-new p-4 p-md-5">
-                  <div className="row align-items-center">
-                    <div className="col-lg-8">
-                      <h3 className="cta-title">Ready to start your journey?</h3>
-                      <p className="cta-desc">Contact us with your Name, Date, Time, and Place of Birth to book your session.</p>
-                      <div className="detail-tags-container mt-4">
-                        <span className="detail-pill">Name</span>
-                        <span className="detail-pill">DOB</span>
-                        <span className="detail-pill">Time of Birth</span>
-                        <span className="detail-pill">Place of Birth</span>
-                        <span className="detail-pill">Consultation Type</span>
-                      </div>
-                    </div>
-                    <div className="col-lg-4 text-lg-end mt-4 mt-lg-0">
-                      <button className="premium-booking-btn" onClick={() => openModal()}>
-                        Book Your Session <i className="fas fa-paper-plane ms-2"></i>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </>
-          )}
+          </div>
         </div>
-      </section>
 
-      <ConsultationModal 
+        {/* Main */}
+        <div className="cp-main">
+          <div className="cp-wrap">
+            {catalogLoading ? (
+              <div className="cp-center" style={{ padding: '4rem 0' }}>
+                <div
+                  className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent-dark"
+                  aria-hidden="true"
+                />
+                <p className="cp-category-desc">Loading consultation services…</p>
+              </div>
+            ) : filteredCategories.length > 0 ? (
+              <>
+                {searchQuery ? (
+                  <p className="cp-category-desc" style={{ marginBottom: '1.5rem' }}>
+                    Showing <strong>{totalResults}</strong> result{totalResults !== 1 ? 's' : ''} for
+                    &ldquo;{searchQuery}&rdquo;
+                  </p>
+                ) : null}
+
+                <div className="cp-category-stack">
+                  {filteredCategories.map((cat, idx) => (
+                    <section key={cat.name ?? idx} className="cp-category-block" aria-labelledby={`category-${idx}`}>
+                      <div className="cp-category-head">
+                        <h2 id={`category-${idx}`} className="cp-category-title">
+                          {cat.name}
+                        </h2>
+                        {cat.description ? (
+                          <p className="cp-category-desc">{cat.description}</p>
+                        ) : null}
+                      </div>
+
+                      <ul className="cp-grid">
+                        {cat.cards.map((card, cIdx) => (
+                          <li key={card.id ?? cIdx}>
+                            <ConsultationServiceCard card={card} detailPath="/book-consultation" />
+                          </li>
+                        ))}
+                      </ul>
+                    </section>
+                  ))}
+                </div>
+              </>
+            ) : (
+              <div className="cp-empty">
+                <div
+                  className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl"
+                  style={{ background: 'rgba(200, 131, 42, 0.1)', color: '#8b4a1e', fontSize: '1.25rem' }}
+                  aria-hidden="true"
+                >
+                  <i className="fas fa-search-minus" />
+                </div>
+                <h2 className="cp-category-title">No services found</h2>
+                <p className="cp-category-desc" style={{ marginTop: '0.5rem' }}>
+                  No results for &ldquo;{searchQuery}&rdquo;. Try different keywords or browse all
+                  categories.
+                </p>
+                <button
+                  type="button"
+                  className="cp-service-card__btn consult-btn--auto"
+                  style={{ marginTop: '1.5rem', maxWidth: '14rem', marginInline: 'auto' }}
+                  onClick={() => setSearchQuery('')}
+                >
+                  Show All Services
+                </button>
+              </div>
+            )}
+
+            {!searchQuery && !catalogLoading && filteredCategories.length > 0 && (
+              <>
+                <section className="cp-guidelines" aria-labelledby="consult-guidelines">
+                  <div className="cp-section-head">
+                    <span className="cp-section-head__icon" aria-hidden="true">
+                      <i className="fas fa-star-of-david" />
+                    </span>
+                    <h2 id="consult-guidelines" className="cp-section-title">
+                      Important Guidelines
+                    </h2>
+                  </div>
+                  <ul className="cp-guidelines-grid">
+                    {GUIDELINES.map((item) => (
+                      <li key={item.title} className="cp-guideline-item">
+                        <span className="cp-guideline-icon" aria-hidden="true">
+                          <i className={`fas ${item.icon}`} />
+                        </span>
+                        <div>
+                          <p className="cp-guideline-title">{item.title}</p>
+                          <p className="cp-guideline-text">{item.text}</p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <BookConsultationCTA onBookClick={openGeneralEnquiry} />
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <ConsultationModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         formData={formData}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         isSubmitting={isSubmitting}
-        isFixedService={!!formData.consultationType}
+        isFixedService={!!formData.consultationType && !!formData.serviceId}
+        bookingMode={bookingMode}
+        priceLabel={formData.priceLabel}
       />
 
-      <SuccessModal 
-        isOpen={isSuccessOpen} 
-        onClose={() => setIsSuccessOpen(false)} 
+      <SuccessModal
+        isOpen={isSuccessOpen}
+        onClose={() => setIsSuccessOpen(false)}
         title="Consultation Request Received!"
         message="Your details have been securely sent to our experts. We will contact you on your provided phone number within 24 hours to schedule the session."
       />
-
-      <style jsx>{`
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;800;900&family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap');
-
-        :root {
-          --cosmic-bg: #FDF6EE;
-          --cosmic-text: #2A0F02;
-          --cosmic-text-muted: #5C3D26;
-          --cosmic-white: #ffffff;
-          --cosmic-accent-pink: #8B4A1E;
-          --cosmic-accent-soft: rgba(139, 74, 30, 0.08);
-          --cosmic-gradient: linear-gradient(135deg, #8B4A1E, #C8832A);
-          --glass-border: rgba(139, 74, 30, 0.15);
-          --premium-shadow: 0 15px 40px rgba(139, 74, 30, 0.1);
-        }
-
-        .consultation-page {
-          padding: clamp(6rem, 10vw, 8.5rem) clamp(0.85rem, 3vw, 2rem) clamp(3rem, 6vw, 5rem);
-          background: var(--cosmic-bg);
-          min-height: 100vh;
-          position: relative;
-          overflow: visible;
-        }
-
-        .page-header-bg {
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 420px;
-          background: radial-gradient(circle at 50% 0%, rgba(139, 74, 30, 0.08), transparent 70%);
-          opacity: 1;
-          pointer-events: none;
-        }
-
-        .section-subtitle {
-          color: var(--cosmic-accent-pink);
-          text-transform: uppercase;
-          letter-spacing: 0.14em;
-          font-weight: 800;
-          font-size: 0.82rem;
-          margin-bottom: 10px;
-          display: block;
-        }
-
-        .section-title {
-          font-family: 'Playfair Display', serif !important;
-          font-size: clamp(2.2rem, 5vw, 3.25rem) !important;
-          font-weight: 800 !important;
-          color: var(--cosmic-text) !important;
-          margin-bottom: 14px;
-        }
-
-        .text-gradient {
-          background: var(--cosmic-gradient);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-        }
-
-        .header-desc {
-          max-width: 800px;
-          color: var(--cosmic-text-muted);
-          font-size: clamp(1rem, 1.7vw, 1.12rem);
-          line-height: 1.65;
-          font-weight: 500;
-          font-family: var(--font-sans);
-        }
-
-        .search-container-v2 {
-          max-width: 640px;
-          position: relative;
-          z-index: 10;
-        }
-
-        .search-box-v2 {
-          background: var(--cosmic-white);
-          border: 1px solid var(--glass-border);
-          border-radius: 12px;
-          padding: 0.78rem 1rem;
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
-          transition: all 0.3s ease;
-        }
-
-        .search-box-v2:focus-within {
-          border-color: var(--cosmic-accent-pink);
-          box-shadow: 0 14px 30px rgba(139, 74, 30, 0.12);
-        }
-
-        .search-icon {
-          color: var(--cosmic-accent-pink);
-          font-size: 1.2rem;
-        }
-
-        .search-box-v2 input {
-          border: none;
-          outline: none;
-          flex-grow: 1;
-          font-size: 1rem;
-          font-weight: 500;
-          background: transparent;
-          color: var(--cosmic-text);
-        }
-
-        .clear-search {
-          background: var(--cosmic-accent-soft);
-          border: none;
-          color: var(--cosmic-accent-pink);
-          width: 30px;
-          height: 30px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          cursor: pointer;
-        }
-
-        .search-badges {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 12px;
-        }
-
-        .search-hint {
-          font-size: 0.9rem;
-          font-weight: 700;
-          color: var(--cosmic-text-muted);
-        }
-
-        .badge-hint {
-          background: var(--cosmic-white);
-          border: 1px solid var(--glass-border);
-          padding: 0.42rem 0.85rem;
-          border-radius: 9px;
-          font-size: 0.9rem;
-          font-weight: 700;
-          color: var(--cosmic-accent-pink);
-          cursor: pointer;
-          transition: 0.2s;
-        }
-
-        .badge-hint:hover {
-          background: var(--cosmic-accent-pink);
-          color: #fff;
-          border-color: var(--cosmic-accent-pink);
-        }
-
-        .title-underline {
-          width: 64px;
-          height: 3px;
-          background: var(--cosmic-gradient);
-          border-radius: 10px;
-          margin-top: 30px;
-        }
-
-        .category-name {
-          font-family: var(--font-serif);
-          font-size: clamp(1.8rem, 4vw, 2.55rem);
-          color: var(--cosmic-text);
-          font-weight: 800;
-        }
-        
-        .category-name.small { font-size: clamp(1.5rem, 3vw, 1.85rem); }
-
-        .category-icon-box {
-          width: 46px;
-          height: 46px;
-          background: var(--cosmic-white);
-          border-radius: 12px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 1.1rem;
-          color: var(--cosmic-accent-pink);
-          box-shadow: var(--premium-shadow);
-          border: 1px solid var(--glass-border);
-        }
-
-        .category-line-flex {
-          flex-grow: 1;
-          height: 1px;
-          background: linear-gradient(to right, var(--glass-border), transparent);
-        }
-        
-        .category-description {
-          max-width: 900px;
-          color: var(--cosmic-text-muted);
-          font-size: 1rem;
-          font-weight: 500;
-          margin-top: 10px;
-          font-family: 'Be Vietnam Pro', sans-serif;
-        }
-
-        .category-section {
-          margin-bottom: clamp(2.25rem, 5vw, 3.5rem) !important;
-          padding-bottom: clamp(1rem, 3vw, 2rem) !important;
-        }
-
-        .category-header {
-          margin-bottom: clamp(1.25rem, 3vw, 2rem) !important;
-        }
-
-        .consult-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
-          gap: clamp(1rem, 2vw, 1.35rem);
-        }
-
-        .consult-card {
-          background: var(--cosmic-white);
-          border: 1px solid var(--glass-border);
-          border-radius: 14px;
-          overflow: hidden;
-          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .consult-card:hover {
-          transform: translateY(-4px);
-          border-color: var(--cosmic-accent-pink);
-          box-shadow: 0 18px 36px rgba(139, 74, 30, 0.12);
-        }
-
-        .card-image-box {
-          position: relative;
-          height: 176px;
-          overflow: hidden;
-        }
-
-        .card-image-box img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s ease;
-        }
-
-        .consult-card:hover .card-image-box img {
-          transform: scale(1.04);
-        }
-
-        .card-overlay-gradient {
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to top, rgba(0,0,0,0.5), transparent 60%);
-        }
-
-        .status-badge {
-          position: absolute;
-          top: 15px;
-          right: 15px;
-          padding: 6px 14px;
-          border-radius: 8px;
-          font-size: 0.65rem;
-          font-weight: 800;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          color: #fff;
-          backdrop-filter: blur(6px);
-          box-shadow: 0 4px 10px rgba(0,0,0,0.15);
-        }
-        
-        .card-price-tag {
-          position: absolute;
-          bottom: 15px;
-          left: 15px;
-          background: var(--cosmic-white);
-          color: var(--cosmic-text);
-          padding: 6px 16px;
-          border-radius: 8px;
-          font-weight: 800;
-          font-size: 0.95rem;
-          box-shadow: 0 6px 16px rgba(0,0,0,0.16);
-        }
-
-        .status-badge.purple { background: rgba(107, 33, 168, 0.85); }
-        .status-badge.pink { background: rgba(227, 27, 122, 0.85); }
-        .status-badge.orange { background: rgba(234, 88, 12, 0.85); }
-        .status-badge.red { background: rgba(220, 38, 38, 0.85); }
-
-        .card-info {
-          padding: 1.15rem;
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .card-info h4 {
-          font-family: var(--font-serif);
-          font-size: clamp(1.28rem, 2.5vw, 1.55rem);
-          font-weight: 800;
-          color: var(--cosmic-text);
-          margin-bottom: 0.55rem;
-        }
-
-        .card-preview-text {
-          color: var(--cosmic-text-muted);
-          font-size: 0.94rem;
-          line-height: 1.55;
-          margin-bottom: 0.9rem;
-          font-family: var(--font-sans);
-        }
-        
-        .duration-info {
-          font-size: 0.9rem;
-          font-weight: 600;
-          color: var(--cosmic-accent-pink);
-          background: var(--cosmic-accent-soft);
-          padding: 5px 12px;
-          border-radius: 8px;
-          display: inline-flex;
-          align-items: center;
-          width: fit-content;
-        }
-
-        .card-actions {
-          display: grid;
-          grid-template-columns: 1fr 1fr;
-          gap: 0.6rem;
-        }
-
-        .btn-action {
-          padding: 0.6rem 0.55rem;
-          border-radius: 9px;
-          font-weight: 700;
-          font-size: 0.9rem;
-          text-transform: none;
-          letter-spacing: 0;
-          transition: 0.3s;
-          border: none;
-          cursor: pointer;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .btn-action.secondary {
-          background: #FDF6EE;
-          color: var(--cosmic-text);
-          border: 1px solid var(--cosmic-text);
-        }
-
-        .btn-action.primary {
-          background: var(--cosmic-text);
-          color: #fff;
-        }
-
-        .btn-action:hover {
-          transform: translateY(-2px);
-        }
-
-        .btn-action.primary:hover {
-          background: var(--cosmic-accent-pink);
-          box-shadow: 0 5px 15px rgba(139, 74, 30, 0.2);
-        }
-
-        .glass-panel {
-          background: rgba(255, 255, 255, 0.6);
-          backdrop-filter: blur(15px);
-          border-radius: 16px;
-          border: 1px solid var(--glass-border);
-          box-shadow: var(--premium-shadow);
-        }
-        
-        .guidelines-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-          gap: 1rem;
-        }
-        
-        .guideline-item {
-          display: flex;
-          gap: 15px;
-        }
-        
-        .guide-icon {
-          width: 40px;
-          height: 40px;
-          background: var(--cosmic-accent-soft);
-          border-radius: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          color: var(--cosmic-accent-pink);
-          font-size: 1.2rem;
-          flex-shrink: 0;
-        }
-        
-        .guide-text strong {
-          display: block;
-          font-size: 1.1rem;
-          color: var(--cosmic-text);
-          margin-bottom: 2px;
-        }
-        
-        .guide-text span {
-          font-size: 0.95rem;
-          color: var(--cosmic-text-muted);
-          font-weight: 500;
-        }
-
-        .booking-card-new {
-          background: var(--cosmic-gradient);
-          border-radius: 18px;
-          color: white;
-          box-shadow: 0 20px 50px rgba(139, 74, 30, 0.3);
-          position: relative;
-          overflow: hidden;
-        }
-        
-        .booking-card-new::before {
-          content: '';
-          position: absolute;
-          top: -50%;
-          right: -10%;
-          width: 400px;
-          height: 400px;
-          background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-          border-radius: 50%;
-        }
-        
-        .cta-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(1.75rem, 4vw, 2.2rem);
-          font-weight: 800;
-          margin-bottom: 10px;
-        }
-        
-        .cta-desc {
-          font-size: 1rem;
-          opacity: 0.9;
-          font-weight: 400;
-        }
-        
-        .detail-tags-container {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-        }
-        
-        .detail-pill {
-          background: rgba(255,255,255,0.15);
-          padding: 6px 18px;
-          border-radius: 8px;
-          font-size: 0.9rem;
-          font-weight: 700;
-          border: 1px solid rgba(255,255,255,0.2);
-          backdrop-filter: blur(5px);
-        }
-        
-        .premium-booking-btn {
-          background: white;
-          color: var(--cosmic-accent-pink);
-          border: none;
-          padding: 0.9rem 1.35rem;
-          border-radius: 10px;
-          font-weight: 800;
-          font-size: 0.95rem;
-          text-transform: none;
-          letter-spacing: 0;
-          box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-          transition: 0.3s;
-          cursor: pointer;
-          white-space: nowrap;
-        }
-        
-        .premium-booking-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 15px 30px rgba(0,0,0,0.2);
-        }
-
-        @media (max-width: 1200px) {
-          .consult-grid { grid-template-columns: repeat(2, 1fr); }
-        }
-
-        @media (max-width: 991px) {
-          .consultation-page { padding-top: 6.75rem; }
-          .category-name { font-size: 2.2rem; }
-          .category-icon-box { width: 45px; height: 45px; font-size: 1.2rem; }
-          .cta-title { font-size: 2rem; }
-          .section-title { font-size: clamp(2.2rem, 5vw, 2.8rem) !important; }
-        }
-
-        @media (max-width: 767px) {
-          .consult-grid { grid-template-columns: 1fr; }
-          .section-title { font-size: clamp(1.8rem, 6vw, 2.2rem) !important; }
-          .card-info h4 { font-size: 1.5rem; }
-          .category-name { font-size: 1.8rem; }
-          .guidelines-grid { grid-template-columns: 1fr; }
-          .premium-booking-btn { width: 100%; padding: 15px; }
-          .category-header .d-flex {
-            align-items: flex-start !important;
-          }
-          .category-line-flex {
-            display: none;
-          }
-          .search-badges {
-            justify-content: flex-start;
-          }
-          .card-actions {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
     </>
   );
 }

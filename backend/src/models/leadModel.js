@@ -21,6 +21,12 @@ const leadSchema = new mongoose.Schema({
   courseType: { type: String },
   courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
   consultationType: { type: String },
+  serviceId: { type: String },
+  bookingMode: {
+    type: String,
+    enum: ['pay_now', 'pay_later'],
+  },
+  quotedAmount: { type: Number },
   dob: { type: String },
   tob: { type: String },
   pob: { type: String },

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
-import StudentTestimonials from '../components/StudentTestimonials';
+
 
 import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
@@ -1143,8 +1143,7 @@ function Home() {
         {/* Astrology Courses Section */}
         <AstrologyCourses onEnroll={handleOpenModal} />
 
-        {/* Student Testimonials */}
-        <StudentTestimonials />
+
 
         {/* Expert Consultations Section */}
         <section className="consultation-home-section py-5">

@@ -88,14 +88,14 @@ function DashboardLoading() {
   );
 }
 
-function StatCard({ label, value, icon: Icon, iconBg }) {
+function StatCard({ label, value, icon: Icon, iconBg, cardBg = 'bg-white' }) {
   return (
-    <div className={`${CARD} p-5 transition hover:shadow-md sm:p-6`}>
-      <div className={`mb-3 flex h-10 w-10 items-center justify-center rounded-xl ${iconBg}`}>
-        <Icon size={18} />
+    <div className={`rounded-2xl border border-black/5 ${cardBg} p-3 sm:p-4 transition hover:shadow-md`}>
+      <div className={`mb-2 flex h-8 w-8 items-center justify-center rounded-lg ${iconBg}`}>
+        <Icon size={16} />
       </div>
-      <p className="text-[11px] font-bold uppercase tracking-wide text-site-muted">{label}</p>
-      <p className="mt-1 font-heading text-2xl font-extrabold leading-none text-site-primary sm:text-3xl">
+      <p className="text-[10px] font-bold uppercase tracking-wide text-gray-600">{label}</p>
+      <p className="mt-0.5 font-heading text-xl font-extrabold leading-none text-gray-900 sm:text-2xl">
         {value}
       </p>
     </div>
@@ -216,25 +216,29 @@ export default function StudentDashboardTailwind() {
       label: 'Enrolled',
       value: enrolledCourses.length,
       icon: BookOpen,
-      iconBg: 'bg-site-accent/10 text-site-accent-dark',
+      iconBg: 'bg-pink-100 text-pink-700',
+      cardBg: 'bg-pink-50',
     },
     {
       label: 'Active',
       value: activeCourses,
       icon: GraduationCap,
-      iconBg: 'bg-green-50 text-green-700',
+      iconBg: 'bg-green-100 text-green-700',
+      cardBg: 'bg-green-50',
     },
     {
       label: 'Completed',
       value: completedCourses,
       icon: Sparkles,
-      iconBg: 'bg-site-accent/15 text-site-accent',
+      iconBg: 'bg-red-100 text-red-700',
+      cardBg: 'bg-red-50',
     },
     {
       label: 'Avg Progress',
       value: `${avgProgress}%`,
       icon: TrendingUp,
-      iconBg: 'bg-orange-50 text-orange-700',
+      iconBg: 'bg-purple-100 text-purple-700',
+      cardBg: 'bg-purple-50',
     },
   ];
 
@@ -247,28 +251,28 @@ export default function StudentDashboardTailwind() {
       <SEO title="Student Dashboard" description="Your courses, materials, and account." url="/dashboard" />
 
       {/* Hero */}
-      <header className="relative w-full overflow-hidden bg-gradient-to-br from-[#1e0c02] via-[#3a1c0c] to-site-accent-dark">
+      <header className="relative w-full overflow-hidden bg-gradient-to-br from-orange-50 via-[#fffaf4] to-orange-100 border-b border-site-accent-dark/10">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+          className="pointer-events-none absolute inset-0 opacity-20"
           style={{
-            backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.8) 1px, transparent 1px)',
+            backgroundImage: 'radial-gradient(circle, rgba(139, 74, 30, 0.4) 1px, transparent 1px)',
             backgroundSize: '22px 22px',
           }}
         />
-        <div className={`relative z-10 flex flex-col gap-4 py-10 sm:py-12 lg:flex-row lg:items-end lg:justify-between lg:py-14 ${WRAP}`}>
+        <div className={`relative z-10 flex flex-col gap-4 py-8 sm:py-10 lg:flex-row lg:items-end lg:justify-between lg:py-12 ${WRAP}`}>
           <div className="min-w-0 flex-1">
-            <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-white/20 bg-white/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-[#f5c98d] backdrop-blur-sm">
+            <span className="mb-2 inline-flex items-center gap-1.5 rounded-full border border-site-accent/20 bg-site-accent/10 px-3 py-1 text-[11px] font-bold uppercase tracking-widest text-site-accent-dark backdrop-blur-sm">
               <Sparkles size={11} />
               {greeting}
             </span>
-            <h1 className="font-heading text-2xl font-extrabold text-white sm:text-3xl lg:text-4xl">
+            <h1 className="font-heading text-2xl font-extrabold text-site-primary sm:text-3xl lg:text-4xl">
               Welcome back,{' '}
-              <span className="bg-gradient-to-r from-[#f5c98d] to-[#e8a855] bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-site-accent-dark to-site-accent bg-clip-text text-transparent">
                 {studentName}
               </span>
             </h1>
-            <p className="mt-2 max-w-xl text-sm leading-relaxed text-[#f5d9b8]/85 sm:text-base">
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-site-muted sm:text-base">
               {enrolledCourses.length > 0
                 ? `Track progress, download materials, and continue learning.`
                 : 'Browse recorded courses to start your Vedic astrology journey.'}
@@ -277,7 +281,7 @@ export default function StudentDashboardTailwind() {
           <div className="flex shrink-0 flex-wrap items-center gap-2">
             <Link
               to="/recorded-courses"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/25 bg-white/10 px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-white/20"
+              className="inline-flex items-center gap-2 rounded-xl border border-site-accent/20 bg-site-primary px-4 py-2.5 text-sm font-bold text-white backdrop-blur-sm transition hover:bg-black"
             >
               <Plus size={15} />
               Explore Courses
@@ -285,7 +289,7 @@ export default function StudentDashboardTailwind() {
             <button
               type="button"
               onClick={handleLogout}
-              className="inline-flex items-center gap-2 rounded-xl border border-white/15 bg-white/5 px-4 py-2.5 text-sm font-bold text-white/80 backdrop-blur-sm transition hover:bg-white/15 hover:text-white lg:hidden"
+              className="inline-flex items-center gap-2 rounded-xl border border-site-accent/20 bg-white px-4 py-2.5 text-sm font-bold text-site-primary backdrop-blur-sm transition hover:bg-site-bg lg:hidden"
             >
               <LogOut size={15} />
               Logout

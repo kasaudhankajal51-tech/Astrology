@@ -30,12 +30,25 @@ export const createRazorpayInstance = () => {
   });
 };
 
-/** True when live Razorpay keys are configured — enables online checkout flows */
+/** Dev/test checkout without live Razorpay keys */
+export const isMockPaymentAllowed = () =>
+  process.env.ALLOW_MOCK_PAYMENT === 'true' || process.env.NODE_ENV === 'development';
+
+/** True when checkout is available (live keys or mock test mode) */
 export const isPaymentEnabled = () => {
   try {
     getRazorpayConfig();
     return true;
   } catch {
-    return false;
+    return isMockPaymentAllowed();
+  }
+};
+
+export const getPaymentMode = () => {
+  try {
+    const { keyId } = getRazorpayConfig();
+    return keyId.startsWith('rzp_live_') ? 'live' : 'test';
+  } catch {
+    return isMockPaymentAllowed() ? 'mock' : 'disabled';
   }
 };

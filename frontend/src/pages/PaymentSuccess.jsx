@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function PaymentSuccess() {
   const [searchParams] = useSearchParams();
@@ -31,7 +32,11 @@ function PaymentSuccess() {
       background: 'linear-gradient(135deg, #FDF6EE 0%, #f4ead8 100%)',
       padding: 'clamp(1rem, 4vw, 2rem)'
     }}>
-      <div style={{
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        style={{
         width: '100%',
         maxWidth: '480px',
         background: '#ffffff',
@@ -170,7 +175,7 @@ function PaymentSuccess() {
           <i className="fas fa-envelope me-1"></i>
           A confirmation has been sent to your email.
         </p>
-      </div>
+      </motion.div>
 
       <style>{`
         @keyframes scaleIn {

@@ -2,6 +2,38 @@ import asyncHandler from 'express-async-handler';
 import Coupon from '../models/Coupon.js';
 import { calculateCouponDiscount } from '../utils/couponHelper.js';
 
+// @desc    List active coupons applicable to a course (public teaser for checkout UI)
+// @route   GET /api/coupons/available/:courseId
+// @access  Public
+export const getAvailableCouponsForCourse = asyncHandler(async (req, res) => {
+  const { courseId } = req.params;
+
+  const coupons = await Coupon.find({
+    active: true,
+    $or: [{ courseId: null }, { courseId: { $exists: false } }, { courseId }],
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+
+  const applicable = coupons.filter((coupon) => {
+    if (coupon.usageLimit > 0 && coupon.usageCount >= coupon.usageLimit) return false;
+    if (coupon.courseId && String(coupon.courseId) !== String(courseId)) return false;
+    return true;
+  });
+
+  res.json({
+    success: true,
+    count: applicable.length,
+    coupons: applicable.map((coupon) => ({
+      code: coupon.code,
+      discountType: coupon.discountType,
+      discountValue: coupon.discountValue,
+      minPurchase: coupon.minPurchase || 0,
+      courseSpecific: Boolean(coupon.courseId),
+    })),
+  });
+});
+
 // @desc    Validate coupon code
 // @route   POST /api/coupons/validate
 // @access  Public

@@ -1,6 +1,6 @@
 import API_BASE from './api';
 import toast from 'react-hot-toast';
-import { loadRazorpayScript, reportPaymentFailure } from './paymentUtils';
+import { loadRazorpayScript, reportPaymentFailure, buildPaymentSuccessPath } from './paymentUtils';
 
 export const BOOKING_MODES = {
   PAY_NOW: 'pay_now',
@@ -59,8 +59,10 @@ const buildLeadPayload = ({ formData, service, bookingMode, sanitizedPhone }) =>
 const openRazorpayCheckout = async ({
   data,
   formData,
+  service,
   onSuccess,
   onDismiss,
+  navigate,
 }) => {
   const isLoaded = await loadRazorpayScript();
   if (!isLoaded) {
@@ -99,11 +101,30 @@ const openRazorpayCheckout = async ({
           const verifyData = await verifyRes.json();
 
           if (verifyData.success) {
-            onSuccess?.({ leadId: data.leadId, mode: BOOKING_MODES.PAY_NOW });
+            if (navigate) {
+              navigate(buildPaymentSuccessPath({
+                type: 'consultation',
+                txn: response.razorpay_payment_id,
+              }));
+            } else {
+              onSuccess?.({ leadId: data.leadId, mode: BOOKING_MODES.PAY_NOW });
+            }
             resolve(true);
           } else {
             toast.error('Payment verification failed.');
             onDismiss?.();
+            if (navigate) {
+              reportPaymentFailure({
+                leadId: data.leadId,
+                orderId: data.orderId,
+                consultationType: formData.consultationType,
+                paymentFor: 'Consultation',
+                error: { description: 'Payment verification failed' },
+                navigate,
+                type: 'consultation',
+                serviceId: service?.id || formData.serviceId,
+              });
+            }
             resolve(false);
           }
         } catch {
@@ -138,13 +159,15 @@ const openRazorpayCheckout = async ({
 
     const rzp = new window.Razorpay(options);
     rzp.on('payment.failed', (response) => {
-      toast.error(`Payment failed: ${response.error.description}`);
       reportPaymentFailure({
         leadId: data.leadId,
         orderId: data.orderId,
         consultationType: formData.consultationType,
         paymentFor: 'Consultation',
         error: response.error,
+        navigate,
+        type: 'consultation',
+        serviceId: service?.id || formData.serviceId,
       });
       onDismiss?.();
       resolve(false);
@@ -163,6 +186,7 @@ export async function submitConsultationBooking({
   sanitizedPhone,
   onSuccess,
   onDismiss,
+  navigate,
 }) {
   const payload = buildLeadPayload({ formData, service, bookingMode, sanitizedPhone });
 
@@ -180,7 +204,7 @@ export async function submitConsultationBooking({
   }
 
   if (bookingMode === BOOKING_MODES.PAY_NOW && data.orderId) {
-    return openRazorpayCheckout({ data, formData, onSuccess, onDismiss });
+    return openRazorpayCheckout({ data, formData, service, onSuccess, onDismiss, navigate });
   }
 
   onSuccess?.({ leadId: data.leadId, mode: BOOKING_MODES.PAY_LATER });

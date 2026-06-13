@@ -3,15 +3,14 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { CheckCircle2, Tag, Percent } from 'lucide-react';
 import { coursesData } from '../data/coursesData';
-import SuccessModal from '../components/SuccessModal';
 import CourseTimer from '../components/CourseTimer';
 import API_BASE from '../utils/api';
 import toast from 'react-hot-toast';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
-import { reportPaymentFailure } from '../utils/paymentUtils';
+import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
 
-/** Recorded-course Razorpay checkout — disabled until keys are configured in production */
-const RECORDED_PAYMENT_ENABLED = false;
+/** Recorded-course Razorpay checkout — uses test/mock mode until live keys are added */
+const RECORDED_PAYMENT_ENABLED = true;
 
 function CourseDetail() {
   const { courseId } = useParams();
@@ -21,7 +20,6 @@ function CourseDetail() {
   const [showEnquiryModal, setShowEnquiryModal] = useState(false);
 
   const [loading, setLoading] = useState(true);
-  const [isSuccessOpen, setIsSuccessOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -42,6 +40,7 @@ function CourseDetail() {
   const [appliedCoupon, setAppliedCoupon] = useState(null);
   const [couponLoading, setCouponLoading] = useState(false);
   const [paymentEnabled, setPaymentEnabled] = useState(false);
+  const [availableCoupons, setAvailableCoupons] = useState([]);
 
   const isLiveCourse = course?.courseType === 'Live';
   const isRecordedCourse = course?.courseType === 'Recorded';
@@ -49,6 +48,7 @@ function CourseDetail() {
     && isRecordedCourse
     && paymentEnabled
     && Number(course?.price) > 0;
+  const hasAvailableCoupons = availableCoupons.length > 0;
   /* Payment gateway status — kept for when RECORDED_PAYMENT_ENABLED is turned on */
   useEffect(() => {
     if (!RECORDED_PAYMENT_ENABLED) return;
@@ -70,19 +70,30 @@ function CourseDetail() {
         if (data.success && data.course) {
           const dbCourse = data.course;
           const courseType = dbCourse.courseType || 'Live';
+          const instructorName = typeof dbCourse.instructor === 'string'
+            ? dbCourse.instructor
+            : dbCourse.instructor?.name || '';
           const mappedCourse = {
             id: dbCourse._id,
             title: dbCourse.title,
             shortDesc: dbCourse.description,
-            longDesc: dbCourse.description, // using description for longDesc too
+            longDesc: dbCourse.longDesc || dbCourse.description,
             image: dbCourse.thumbnailUrl || '/images/vedic_thumbnail.png',
-            duration: `${dbCourse.validityDays} Days`,
-            schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
-            level: 'Professional',
+            duration: dbCourse.duration || `${dbCourse.validityDays} Days`,
+            schedule: courseType === 'Recorded' ? 'Self-Paced' : (dbCourse.batchDetails?.startDate ? `Starts ${dbCourse.batchDetails.startDate}` : 'Upcoming Batch'),
+            level: dbCourse.level || 'Beginner',
             category: 'Astrology',
             price: dbCourse.price,
             courseType,
-            topics: ['Fundamentals', 'Advanced Techniques', 'Practical Application'] // placeholder topics
+            modulesCount: dbCourse.modulesCount || 0,
+            instructor: instructorName,
+            instructorBio: typeof dbCourse.instructor === 'object' ? dbCourse.instructor?.bio : '',
+            instructorImage: typeof dbCourse.instructor === 'object' ? dbCourse.instructor?.image : '',
+            topics: dbCourse.learningOutcomes?.length ? dbCourse.learningOutcomes : (dbCourse.topics?.length ? dbCourse.topics : ['Fundamentals', 'Advanced Techniques', 'Practical Application']),
+            curriculum: dbCourse.curriculum || [],
+            batchDetails: dbCourse.batchDetails || null,
+            faqs: dbCourse.faqs || [],
+            testimonials: dbCourse.testimonials || [],
           };
           setCourse(mappedCourse);
           document.title = `${mappedCourse.title} | DS Institute`;
@@ -111,6 +122,52 @@ function CourseDetail() {
     
     fetchCourse();
   }, [courseId, navigate]);
+
+  useEffect(() => {
+    if (!course?.id || !isRecordedCourse || !paymentEnabled) {
+      setAvailableCoupons([]);
+      return;
+    }
+    fetch(`${API_BASE}/api/coupons/available/${course.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success && Array.isArray(data.coupons)) {
+          setAvailableCoupons(data.coupons);
+        }
+      })
+      .catch(() => setAvailableCoupons([]));
+  }, [course?.id, isRecordedCourse, paymentEnabled]);
+
+  const openCheckoutModal = async () => {
+    const token = localStorage.getItem('studentToken');
+    if (token) {
+      try {
+        const res = await fetch(`${API_BASE}/api/student/profile`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        const data = await res.json();
+        const profile = data.profile || data.user || data.student;
+        if (profile) {
+          setFormData({
+            name: profile.name || '',
+            email: profile.email || '',
+            phone: (profile.mobile || profile.phone || '').replace(/\D/g, '').slice(0, 10),
+          });
+        }
+      } catch {
+        // Guest checkout still works with manual entry.
+      }
+    }
+
+    setShowCheckoutModal(true);
+
+    if (hasAvailableCoupons && !appliedCoupon) {
+      toast('Apply your coupon code first, then proceed to payment.', {
+        icon: '🏷️',
+        duration: 4500,
+      });
+    }
+  };
 
   const handleInputChange = (e) => {
     if (e.target.name === 'phone') {
@@ -180,13 +237,7 @@ function CourseDetail() {
       openEnquiryModal();
       return;
     }
-
-    const token = localStorage.getItem('studentToken');
-    if (token) {
-      handlePayment();
-    } else {
-      setShowCheckoutModal(true);
-    }
+    openCheckoutModal();
   };
 
   const loadRazorpayScript = () => {
@@ -290,9 +341,23 @@ function CourseDetail() {
               const verifyData = await verifyRes.json();
               if (verifyData.success) {
                 setShowCheckoutModal(false);
-                setIsSuccessOpen(true);
+                navigate(buildPaymentSuccessPath({
+                  type: 'course',
+                  txn: response.razorpay_payment_id,
+                  courseName: course.title,
+                }));
               } else {
                 toast.error('Payment verification failed.');
+                reportPaymentFailure({
+                  leadId: orderData.leadId,
+                  orderId: orderData.orderId,
+                  courseId: course.id,
+                  courseName: course.title,
+                  paymentFor: 'Recorded Course',
+                  error: { description: 'Payment verification failed' },
+                  navigate,
+                  type: 'course',
+                });
               }
             } catch (err) {
               toast.error('Error verifying payment.');
@@ -325,7 +390,6 @@ function CourseDetail() {
         } else {
           const rzp = new window.Razorpay(options);
           rzp.on('payment.failed', function (response) {
-            toast.error(`Payment Failed: ${response.error.description}`);
             reportPaymentFailure({
               leadId: orderData.leadId,
               orderId: orderData.orderId,
@@ -333,6 +397,8 @@ function CourseDetail() {
               courseName: course.title,
               paymentFor: 'Recorded Course',
               error: response.error,
+              navigate,
+              type: 'course',
             });
             setIsProcessingPayment(false);
           });
@@ -350,11 +416,13 @@ function CourseDetail() {
     }
   };
 
-  const handleCouponApply = async () => {
-    if (!couponCode.trim()) {
+  const handleCouponApply = async (overrideCode) => {
+    const codeToApply = String(overrideCode || couponCode).trim();
+    if (!codeToApply) {
       toast.error('Enter a coupon code to apply.');
       return;
     }
+    if (overrideCode) setCouponCode(String(overrideCode).toUpperCase());
     setCouponLoading(true);
     setCouponStatus(null);
 
@@ -362,12 +430,13 @@ function CourseDetail() {
       const res = await fetch(`${API_BASE}/api/coupons/validate`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ code: couponCode.trim(), courseId: course?.id, purchaseAmount: getCoursePrice() }),
+        body: JSON.stringify({ code: codeToApply, courseId: course?.id, purchaseAmount: getCoursePrice() }),
       });
       const data = await res.json();
       if (data.success && data.coupon) {
-        setAppliedCoupon(data.coupon);
+        setAppliedCoupon({ ...data.coupon, code: data.coupon.code || codeToApply.toUpperCase() });
         setCouponStatus({ type: 'success', message: `Applied ${data.coupon.discountType === 'fixed' ? `₹${data.coupon.discountValue}` : `${data.coupon.discountValue}%`} discount` });
+        toast.success('Coupon applied! Proceed to payment when ready.');
       } else {
         setAppliedCoupon(null);
         setCouponStatus({ type: 'error', message: data.message || 'Invalid coupon code' });
@@ -400,6 +469,68 @@ function CourseDetail() {
   };
 
   const getPayableAmount = () => Math.max(getCoursePrice() - getDiscountAmount(), 1);
+
+  const formatCouponOffer = (coupon) =>
+    coupon.discountType === 'fixed'
+      ? `₹${coupon.discountValue} off`
+      : `${coupon.discountValue}% off`;
+
+  const renderCouponControls = (variant = 'sidebar') => {
+    const isSidebar = variant === 'sidebar';
+    return (
+      <div className={isSidebar ? 'coupon-box' : 'ce-modal-coupon'}>
+        <div className={isSidebar ? 'coupon-box-head' : 'ce-modal-coupon-head'}>
+          <Tag size={18} />
+          <span>{isSidebar ? 'Apply Coupon' : 'Step 1 — Apply coupon'}</span>
+        </div>
+
+        {!isSidebar && hasAvailableCoupons && !appliedCoupon && (
+          <p className="ce-coupon-available-note">
+            {availableCoupons.length} active coupon{availableCoupons.length !== 1 ? 's' : ''} available
+            {availableCoupons[0]?.code ? ` — try ${availableCoupons.slice(0, 2).map((c) => c.code).join(' or ')}` : ''}
+          </p>
+        )}
+
+        <div className={isSidebar ? 'coupon-input-row' : 'ce-modal-coupon-row'}>
+          <input
+            type="text"
+            value={couponCode}
+            onChange={(e) => setCouponCode(e.target.value.toUpperCase())}
+            placeholder={appliedCoupon ? 'Coupon applied' : 'Enter coupon code'}
+            disabled={Boolean(appliedCoupon)}
+          />
+          <button
+            type="button"
+            className={isSidebar ? 'coupon-apply-btn' : 'ce-modal-coupon-btn'}
+            onClick={() => (appliedCoupon ? removeCoupon() : handleCouponApply())}
+            disabled={couponLoading}
+          >
+            {couponLoading ? 'Checking...' : appliedCoupon ? 'Remove' : 'Apply'}
+          </button>
+        </div>
+
+        {couponStatus && (
+          <div className={`${isSidebar ? 'coupon-status' : 'ce-modal-coupon-status'} ${couponStatus.type}`}>
+            <CheckCircle2 size={16} />
+            <span>{couponStatus.message}</span>
+          </div>
+        )}
+
+        {appliedCoupon && (
+          <div className={isSidebar ? 'coupon-chip' : 'ce-modal-coupon-chip'}>
+            <Percent size={16} />
+            <span>Coupon {appliedCoupon.code} applied — you pay ₹{getPayableAmount()}</span>
+          </div>
+        )}
+
+        {!appliedCoupon && isSidebar && hasAvailableCoupons && (
+          <p className="ce-coupon-sidebar-hint">
+            Apply a coupon here, then click Buy Now to checkout.
+          </p>
+        )}
+      </div>
+    );
+  };
 
   if (loading) {
     return (
@@ -1162,6 +1293,205 @@ function CourseDetail() {
           cursor: not-allowed;
         }
 
+        .ce-modal-form .submit-btn:disabled {
+          opacity: 0.7;
+          cursor: not-allowed;
+        }
+
+        .ce-checkout-steps {
+          display: flex;
+          gap: 0.5rem;
+          margin-bottom: 1.25rem;
+          flex-wrap: wrap;
+        }
+
+        .ce-checkout-step {
+          flex: 1;
+          min-width: 8.5rem;
+          text-align: center;
+          padding: 0.55rem 0.65rem;
+          border-radius: 10px;
+          font-size: 0.72rem;
+          font-weight: 800;
+          letter-spacing: 0.04em;
+          text-transform: uppercase;
+          border: 1.5px solid rgba(139, 74, 30, 0.12);
+          color: #9B6640;
+          background: #fffbf5;
+        }
+
+        .ce-checkout-step.is-active {
+          border-color: #C8832A;
+          background: rgba(200, 131, 42, 0.12);
+          color: #8B4A1E;
+        }
+
+        .ce-checkout-step.is-done {
+          border-color: rgba(16, 185, 129, 0.35);
+          background: #ecfdf5;
+          color: #047857;
+        }
+
+        .ce-modal-coupon {
+          background: #fffbf5;
+          border: 1.5px dashed rgba(200, 131, 42, 0.35);
+          border-radius: 12px;
+          padding: 1rem;
+          margin-bottom: 1.1rem;
+        }
+
+        .ce-modal-coupon-head {
+          display: flex;
+          align-items: center;
+          gap: 0.55rem;
+          margin-bottom: 0.65rem;
+          font-weight: 800;
+          color: #8B4A1E;
+          font-size: 0.85rem;
+        }
+
+        .ce-coupon-available-note,
+        .ce-coupon-sidebar-hint {
+          margin: 0 0 0.65rem;
+          font-size: 0.82rem;
+          line-height: 1.45;
+          color: #9B6640;
+        }
+
+        .ce-coupon-sidebar-hint {
+          margin-top: 0.65rem;
+          margin-bottom: 0;
+        }
+
+        .ce-modal-coupon-row {
+          display: grid;
+          grid-template-columns: 1fr auto;
+          gap: 0.55rem;
+          margin-bottom: 0.65rem;
+        }
+
+        .ce-modal-coupon-row input {
+          width: 100%;
+          border: 1.5px solid rgba(139, 74, 30, 0.14);
+          border-radius: 10px;
+          padding: 0.72rem 0.85rem;
+          background: #fff;
+          outline: none;
+          font-size: 0.95rem;
+          color: #2A0F02;
+          text-transform: uppercase;
+        }
+
+        .ce-modal-coupon-btn {
+          background: #C8832A;
+          color: #fff;
+          border: none;
+          border-radius: 10px;
+          padding: 0.72rem 0.95rem;
+          font-weight: 700;
+          cursor: pointer;
+          white-space: nowrap;
+        }
+
+        .ce-modal-coupon-btn:disabled {
+          opacity: 0.75;
+          cursor: not-allowed;
+        }
+
+        .ce-modal-coupon-status {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          font-size: 0.88rem;
+          padding: 0.6rem 0.75rem;
+          border-radius: 10px;
+          margin-bottom: 0.5rem;
+        }
+
+        .ce-modal-coupon-status.success {
+          color: #047857;
+          background: #ecfdf5;
+          border: 1px solid rgba(16, 185, 129, 0.25);
+        }
+
+        .ce-modal-coupon-status.error {
+          color: #b91c1c;
+          background: #fef2f2;
+          border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .ce-modal-coupon-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 0.55rem 0.75rem;
+          border-radius: 999px;
+          background: rgba(200, 131, 42, 0.12);
+          color: #8B4A1E;
+          font-weight: 700;
+          font-size: 0.82rem;
+          border: 1px solid rgba(200, 131, 42, 0.25);
+        }
+
+        .ce-order-summary {
+          background: #f8f0e6;
+          border: 1px solid rgba(139, 74, 30, 0.12);
+          border-radius: 12px;
+          padding: 0.95rem 1rem;
+          margin-bottom: 1.1rem;
+        }
+
+        .ce-order-summary-row {
+          display: flex;
+          justify-content: space-between;
+          gap: 1rem;
+          font-size: 0.9rem;
+          color: #5C3D26;
+          padding: 0.35rem 0;
+        }
+
+        .ce-order-summary-row.is-discount {
+          color: #047857;
+          font-weight: 700;
+        }
+
+        .ce-order-summary-row.is-total {
+          border-top: 1px dashed rgba(139, 74, 30, 0.2);
+          margin-top: 0.35rem;
+          padding-top: 0.65rem;
+          font-weight: 800;
+          color: #2A0F02;
+          font-size: 1rem;
+        }
+
+        .ce-coupon-promo-pills {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.45rem;
+          margin-bottom: 1rem;
+        }
+
+        .ce-coupon-promo-pill {
+          border: 1px solid rgba(255, 255, 255, 0.28);
+          background: rgba(255, 255, 255, 0.1);
+          color: #fff;
+          border-radius: 999px;
+          padding: 0.35rem 0.65rem;
+          font-size: 0.72rem;
+          font-weight: 700;
+          cursor: pointer;
+          transition: background 0.2s ease;
+        }
+
+        .ce-coupon-promo-pill:hover:not(:disabled) {
+          background: rgba(200, 131, 42, 0.35);
+        }
+
+        .ce-coupon-promo-pill:disabled {
+          opacity: 0.55;
+          cursor: not-allowed;
+        }
+
         @media (max-width: 576px) {
           .ce-modal-panel {
             padding: 1.5rem 1.1rem 1.25rem;
@@ -1272,6 +1602,18 @@ function CourseDetail() {
                   <i className="fas fa-layer-group"></i>
                   {course.level}
                 </div>
+                {course.instructor && (
+                  <div className="hero-meta-item" data-aos="zoom-in" data-aos-delay="350">
+                    <i className="fas fa-chalkboard-teacher"></i>
+                    {course.instructor}
+                  </div>
+                )}
+                {isRecordedCourse && course.modulesCount > 0 && (
+                  <div className="hero-meta-item" data-aos="zoom-in" data-aos-delay="400">
+                    <i className="fas fa-book"></i>
+                    {course.modulesCount} Modules
+                  </div>
+                )}
               </div>
             </div>
             <div className="col-lg-4 text-center d-none d-lg-block" data-aos="zoom-in" data-aos-delay="400">
@@ -1300,13 +1642,79 @@ function CourseDetail() {
                 ))}
               </div>
 
+              {course.curriculum?.length > 0 && (
+                <>
+                  <h2 className="section-title" data-aos="fade-up">Course <span className="text-gradient">Curriculum</span></h2>
+                  <div className="topics-grid mb-4">
+                    {course.curriculum.map((module, i) => (
+                      <div key={i} className="topic-item" data-aos="fade-up" data-aos-delay={i * 50} style={{ flexDirection: 'column', alignItems: 'flex-start' }}>
+                        <span style={{ fontWeight: 800, color: '#8B4A1E' }}>{module.title}</span>
+                        {module.lessons?.length > 0 && (
+                          <ul style={{ margin: '0.5rem 0 0', paddingLeft: '1.1rem', fontSize: '0.9rem', color: '#5C3D26' }}>
+                            {module.lessons.map((lesson, j) => (
+                              <li key={j}>{lesson}</li>
+                            ))}
+                          </ul>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {isLiveCourse && course.batchDetails && (
+                <>
+                  <h2 className="section-title" data-aos="fade-up">Batch <span className="text-gradient">Details</span></h2>
+                  <div className="why-choose-box mb-4" data-aos="fade-up">
+                    <div className="row g-3">
+                      {course.batchDetails.startDate && (
+                        <div className="col-md-6"><strong>Start Date:</strong> {course.batchDetails.startDate}</div>
+                      )}
+                      {course.batchDetails.classCount && (
+                        <div className="col-md-6"><strong>Classes:</strong> {course.batchDetails.classCount}</div>
+                      )}
+                      {course.batchDetails.classDuration && (
+                        <div className="col-md-6"><strong>Duration:</strong> {course.batchDetails.classDuration}</div>
+                      )}
+                      {course.batchDetails.platform && (
+                        <div className="col-md-6"><strong>Platform:</strong> {course.batchDetails.platform}</div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {course.instructor && (
+                <>
+                  <h2 className="section-title" data-aos="fade-up">Meet Your <span className="text-gradient">Instructor</span></h2>
+                  <div className="why-choose-box mb-4" data-aos="fade-up">
+                    <div className="d-flex gap-3 align-items-start flex-wrap">
+                      {course.instructorImage && (
+                        <img src={course.instructorImage} alt={course.instructor} style={{ width: 80, height: 80, borderRadius: '50%', objectFit: 'cover' }} />
+                      )}
+                      <div>
+                        <h5 className="fw-bold mb-2">{course.instructor}</h5>
+                        <p className="small mb-0 text-muted">{course.instructorBio || 'Expert astrologer and mentor at DS Institute.'}</p>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              )}
+
               <h2 className="section-title" data-aos="fade-up">Course <span className="text-gradient">Features</span></h2>
               <div className="row g-4 mb-4 course-features-row">
-                {[
-                  { icon: 'broadcast-tower', title: 'Live Interactive Classes', desc: 'Step-by-step teaching method' },
-                  { icon: 'user-graduate', title: 'Practical Training', desc: 'Real-world prediction techniques' },
-                  { icon: 'headset', title: 'Ongoing Support', desc: 'Guidance even after course completion' }
-                ].map((f, i) => (
+                {(isRecordedCourse
+                  ? [
+                      { icon: 'video', title: 'Secure Video Access', desc: 'Watch anytime from your dashboard' },
+                      { icon: 'certificate', title: 'Certification', desc: 'Professional course completion certificate' },
+                      { icon: 'headset', title: 'Student Support', desc: 'Guidance throughout your learning journey' },
+                    ]
+                  : [
+                      { icon: 'broadcast-tower', title: 'Live Interactive Classes', desc: 'Step-by-step teaching method' },
+                      { icon: 'user-graduate', title: 'Practical Training', desc: 'Real-world prediction techniques' },
+                      { icon: 'headset', title: 'Ongoing Support', desc: 'Guidance even after course completion' },
+                    ]
+                ).map((f, i) => (
                   <div key={i} className="col-md-4 text-center" data-aos="zoom-in" data-aos-delay={i * 100}>
                     <div className="feature-icon-circle">
                       <i className={`fas fa-${f.icon}`}></i>
@@ -1341,6 +1749,36 @@ function CourseDetail() {
                   </div>
                 </div>
               </div>
+
+              {course.faqs?.length > 0 && (
+                <>
+                  <h2 className="section-title" data-aos="fade-up">Frequently Asked <span className="text-gradient">Questions</span></h2>
+                  <div className="why-choose-box mb-4" data-aos="fade-up">
+                    {course.faqs.map((faq, i) => (
+                      <div key={i} className="mb-3 pb-3" style={{ borderBottom: i < course.faqs.length - 1 ? '1px solid rgba(200,131,42,0.15)' : 'none' }}>
+                        <h6 className="fw-bold">{faq.question}</h6>
+                        <p className="small mb-0 text-muted">{faq.answer}</p>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {course.testimonials?.length > 0 && (
+                <>
+                  <h2 className="section-title" data-aos="fade-up">Student <span className="text-gradient">Testimonials</span></h2>
+                  <div className="row g-3 mb-4">
+                    {course.testimonials.map((t, i) => (
+                      <div key={i} className="col-md-6" data-aos="fade-up" data-aos-delay={i * 80}>
+                        <div className="why-choose-box h-100">
+                          <p className="small mb-2 fst-italic">&ldquo;{t.quote || t.text || t.message}&rdquo;</p>
+                          <p className="small fw-bold mb-0">{t.name || t.author || 'Student'}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
 
@@ -1358,10 +1796,16 @@ function CourseDetail() {
                 )}
                 <p className="enroll-sub">
                   {canPayOnline
-                    ? 'Full access to course contents after payment.'
+                    ? hasAvailableCoupons && !appliedCoupon
+                      ? 'Apply your coupon below, then proceed to secure checkout.'
+                      : appliedCoupon
+                        ? `Coupon applied — checkout at ₹${getPayableAmount()}.`
+                        : 'Full access to course contents after payment.'
                     : isLiveCourse
                       ? 'No online payment. Submit enquiry — sales team shares batch timing and fees.'
-                      : 'Payment gateway coming soon. Submit enquiry now — our counsellor will call you to complete enrollment.'}
+                      : paymentEnabled
+                        ? 'Buy now for instant access. Login credentials will be emailed after payment.'
+                        : 'Online checkout loading… submit enquiry if payment is unavailable.'}
                 </p>
 
                 {(isRecordedCourse || canPayOnline) && (
@@ -1377,49 +1821,22 @@ function CourseDetail() {
                   </motion.div>
                 )}
 
-                {canPayOnline && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 14 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    className="coupon-box"
-                  >
-                    <div className="coupon-box-head">
-                      <Tag size={18} />
-                      <span>Apply Coupon</span>
-                    </div>
+                {canPayOnline && renderCouponControls('sidebar')}
 
-                    <div className="coupon-input-row">
-                      <input
-                        type="text"
-                        value={couponCode}
-                        onChange={(e) => setCouponCode(e.target.value)}
-                        placeholder={appliedCoupon ? 'Coupon applied' : 'Enter coupon code'}
-                        disabled={Boolean(appliedCoupon)}
-                      />
+                {canPayOnline && hasAvailableCoupons && (
+                  <div className="ce-coupon-promo-pills">
+                    {availableCoupons.slice(0, 3).map((c) => (
                       <button
+                        key={c.code}
                         type="button"
-                        className="coupon-apply-btn"
-                        onClick={appliedCoupon ? removeCoupon : handleCouponApply}
-                        disabled={couponLoading}
+                        className="ce-coupon-promo-pill"
+                        onClick={() => handleCouponApply(c.code)}
+                        disabled={couponLoading || Boolean(appliedCoupon)}
                       >
-                        {couponLoading ? 'Checking...' : appliedCoupon ? 'Remove' : 'Apply'}
+                        {c.code} · {formatCouponOffer(c)}
                       </button>
-                    </div>
-
-                    {couponStatus && (
-                      <div className={`coupon-status ${couponStatus.type}`}>
-                        <CheckCircle2 size={16} />
-                        <span>{couponStatus.message}</span>
-                      </div>
-                    )}
-
-                    {appliedCoupon && (
-                      <div className="coupon-chip">
-                        <Percent size={16} />
-                        <span>Coupon {appliedCoupon.code} active</span>
-                      </div>
-                    )}
-                  </motion.div>
+                    ))}
+                  </div>
                 )}
 
                 <button
@@ -1427,7 +1844,9 @@ function CourseDetail() {
                   onClick={() => (canPayOnline ? initiateCheckout() : openEnquiryModal())}
                   disabled={isProcessingPayment}
                 >
-                  {isProcessingPayment ? 'WAIT...' : (canPayOnline ? 'Buy Now' : 'Enquire Now')}
+                  {isProcessingPayment
+                    ? 'WAIT...'
+                    : (canPayOnline ? (appliedCoupon ? 'Checkout & Pay' : 'Buy Now') : 'Enquire Now')}
                   <i className="fas fa-chevron-right ms-2" />
                 </button>
 
@@ -1504,8 +1923,36 @@ function CourseDetail() {
               <i className="fas fa-times" aria-hidden="true" />
             </button>
             <div className="ce-modal-header">
-              <h3>Complete Checkout</h3>
-              <p>Enter your details to proceed to secure payment.</p>
+              <h3>Secure Checkout</h3>
+              <p>Apply your coupon first, review the total, then proceed to payment.</p>
+            </div>
+
+            <div className="ce-checkout-steps">
+              <div className={`ce-checkout-step ${appliedCoupon || !hasAvailableCoupons ? 'is-done' : 'is-active'}`}>
+                1. Apply coupon
+              </div>
+              <div className="ce-checkout-step is-active">
+                2. Pay securely
+              </div>
+            </div>
+
+            {renderCouponControls('modal')}
+
+            <div className="ce-order-summary">
+              <div className="ce-order-summary-row">
+                <span>Course price</span>
+                <span>₹{getCoursePrice()}</span>
+              </div>
+              {appliedCoupon && (
+                <div className="ce-order-summary-row is-discount">
+                  <span>Coupon ({appliedCoupon.code})</span>
+                  <span>- ₹{getDiscountAmount()}</span>
+                </div>
+              )}
+              <div className="ce-order-summary-row is-total">
+                <span>Amount to pay</span>
+                <span>₹{getPayableAmount()}</span>
+              </div>
             </div>
 
             <form className="ce-modal-form" onSubmit={handlePayment}>
@@ -1536,7 +1983,7 @@ function CourseDetail() {
                 <input type="email" name="email" value={formData.email} onChange={handleInputChange} placeholder="your@email.com" required />
               </div>
               <button type="submit" className="submit-btn" disabled={isProcessingPayment}>
-                {isProcessingPayment ? 'Initializing...' : `Pay ₹${getPayableAmount()}`}
+                {isProcessingPayment ? 'Initializing...' : `Proceed to Pay ₹${getPayableAmount()}`}
               </button>
             </form>
           </div>
@@ -1597,12 +2044,6 @@ function CourseDetail() {
         </div>
       )}
 
-      <SuccessModal 
-        isOpen={isSuccessOpen} 
-        onClose={() => setIsSuccessOpen(false)} 
-        title="Payment Successful!"
-        message={`Welcome to Cosmic Light Academy! You have been successfully enrolled in ${course?.title}. We've sent your login credentials to your email. Redirecting to your dashboard...`}
-      />
     </div>
   );
 }

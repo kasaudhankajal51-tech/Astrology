@@ -3,7 +3,7 @@ import asyncHandler from 'express-async-handler';
 import exceljs from 'exceljs';
 import logger from '../config/logger.js';
 import Joi from 'joi';
-import { createRazorpayInstance, getRazorpayConfig } from '../utils/razorpayConfig.js';
+import { createRazorpayInstance, getRazorpayConfig, getPaymentMode } from '../utils/razorpayConfig.js';
 import { sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
 import { notify } from '../utils/notify.js';
 import { getActiveServiceBySlug, seedCatalogFromStaticIfEmpty } from '../services/consultationCatalogDb.js';
@@ -124,7 +124,7 @@ const createRazorpayOrderForLead = async (lead, amount) => {
       keyId,
     };
   } catch (err) {
-    if (process.env.NODE_ENV === 'development') {
+    if (getPaymentMode() === 'mock') {
       logger.warn('Razorpay keys missing/invalid. Falling back to mock order for testing.');
       const mockOrderId = `order_mock_${Date.now()}`;
       lead.orderId = mockOrderId;
@@ -295,16 +295,19 @@ export const createLead = asyncHandler(async (req, res) => {
 // @route   POST /api/leads/verify-payment
 export const verifyPayment = asyncHandler(async (req, res) => {
   const { razorpay_order_id, razorpay_payment_id, razorpay_signature, leadId } = req.body;
-  const { keySecret } = getRazorpayConfig();
+
+  const isMockPayment = getPaymentMode() === 'mock' && razorpay_signature === 'mock_signature';
 
   const crypto = await import('crypto');
-  const hmac = crypto.createHmac('sha256', keySecret);
-  hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
-  const generated_signature = hmac.digest('hex');
+  let isValid = isMockPayment;
+  if (!isMockPayment) {
+    const { keySecret } = getRazorpayConfig();
+    const hmac = crypto.createHmac('sha256', keySecret);
+    hmac.update(razorpay_order_id + '|' + razorpay_payment_id);
+    isValid = hmac.digest('hex') === razorpay_signature;
+  }
 
-  const isMockPayment = process.env.NODE_ENV === 'development' && razorpay_signature === 'mock_signature';
-
-  if (generated_signature !== razorpay_signature && !isMockPayment) {
+  if (!isValid) {
     res.status(400);
     throw new Error('Invalid payment signature');
   }

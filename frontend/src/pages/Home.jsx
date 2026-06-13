@@ -410,7 +410,8 @@ const BANNER_SLIDES = [
     title2: 'Your Celestial Destiny',
     desc: 'Step into the mystical realm of planetary energies. Personalized remedies and deep karmic analysis to transform your future.',
     primaryCta: { label: 'Book Consultation', action: 'consultation', icon: 'fas fa-calendar-check' },
-    themeRust: true,
+    bgImage: '/banner.jpg',
+    overlayGlass: true,
   },
   {
     badge: 'Master Vedic Astrology',
@@ -418,7 +419,8 @@ const BANNER_SLIDES = [
     title2: 'A Modern Lifestyle',
     desc: 'Deepen your understanding of planetary movements and their profound influence on your daily life and long-term success.',
     primaryCta: { label: 'View Live Courses', path: '/courses', icon: 'fas fa-graduation-cap' },
-    themeMustard: true,
+    bgImage: '/banner1.jpg',
+    overlayGlass: true,
   },
   {
     badge: 'Master Vedic Astrology',
@@ -426,8 +428,9 @@ const BANNER_SLIDES = [
     title2: 'The Stars & Planets',
     desc: 'Discover the ancient wisdom of Vedic Astrology. Make confident decisions in your career, relationships, and spiritual journey.',
     primaryCta: { label: 'Start Learning', path: '/courses', icon: 'fas fa-arrow-right' },
-    themeTan: true,
-    isPurpleZodiac: true,
+    bgImage: '/banner2.webp',
+    overlayGlass: true,
+    glassOverall: true,
   },
 ];
 
@@ -462,6 +465,8 @@ const BANNER_ORBIT_IMAGES = [
   '/images/as6.png', '/images/as7.png', '/images/as8.png', '/images/as9.png', '/images/as10.png',
   '/images/as1.png', '/images/as2.png', '/images/as3.png',
 ];
+
+const BANNER_BG_IMAGES = ['/banner.jpg', '/banner1.jpg', '/banner2.webp'];
 
 const preloadImages = (urls) =>
   Promise.all(
@@ -605,13 +610,15 @@ function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [bannerReady, setBannerReady] = useState(false);
   const activeSlide = BANNER_SLIDES[currentSlide];
-  const isThemedSlide = Boolean(activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan);
+  const isThemedSlide = Boolean(
+    (activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan) && !activeSlide.bgImage,
+  );
 
   useEffect(() => {
     let cancelled = false;
 
     const prepareBanner = async () => {
-      await preloadImages(BANNER_ORBIT_IMAGES);
+      await preloadImages([...BANNER_ORBIT_IMAGES, ...BANNER_BG_IMAGES]);
       if (!cancelled) {
         requestAnimationFrame(() => {
           requestAnimationFrame(() => setBannerReady(true));
@@ -670,15 +677,27 @@ function Home() {
       <SEO title="Home" description="Learn astrology with live courses from expert astrologers." url="/" />
       {/* Banner Section */}
       <section
-        className={`banner-section w-100 ${activeSlide.themeRust ? 'theme-rust' : ''} ${activeSlide.themeMustard ? 'theme-mustard' : ''} ${activeSlide.themeTan ? 'theme-tan' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}`}
+        className={`banner-section w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}`}
         aria-busy={!bannerReady}
       >
+        {activeSlide.bgImage && (
+          <>
+            <div
+              className="banner-bg-image"
+              style={{ backgroundImage: `url(${activeSlide.bgImage})` }}
+              aria-hidden="true"
+            />
+            {activeSlide.glassOverall && (
+              <div className="banner-bg-overlay banner-bg-overlay--glass-overall" aria-hidden="true" />
+            )}
+          </>
+        )}
         {!bannerReady && <div className="banner-preloader" aria-hidden="true" />}
         <div className="container">
           <div className="banner-text-home">
             <div className="row align-items-center g-5 banner-hero-row">
-              <div className="col-lg-6 position-relative z-1">
-                <div className="banner-copy" key={`banner-copy-${currentSlide}`}>
+              <div className={`position-relative z-1 ${activeSlide.bgImage ? 'col-lg-7 col-xl-6' : 'col-lg-6'}`}>
+                <div className={`banner-copy${activeSlide.overlayGlass ? ' banner-copy--glass' : ''}`} key={`banner-copy-${currentSlide}`}>
                   <div className="ethereal-sparkle s-1">✦</div>
                   <div className="ethereal-sparkle s-2">✧</div>
 
@@ -745,6 +764,7 @@ function Home() {
                   </div>
                 </div>
               </div>
+              {!activeSlide.bgImage && (
               <div className="col-lg-6 d-none d-lg-flex banner-graphic-col position-relative">
                 <div className="banner-graphic-stage">
                   <div className={`banner-graphic-layer ${!isThemedSlide ? 'is-active' : ''}`} aria-hidden={isThemedSlide}>
@@ -838,6 +858,7 @@ function Home() {
                   </div>
                 </div>
               </div>
+              )}
             </div>
           </div>
         </div>
@@ -1399,6 +1420,122 @@ function Home() {
           overflow: hidden;
           background: radial-gradient(circle at center, #FFFDF8 0%, #FFF2E1 100%);
           transition: background 0.55s ease, background-color 0.55s ease;
+        }
+
+        .banner-section.banner-has-bg {
+          background: transparent !important;
+        }
+
+        .banner-bg-image {
+          position: absolute;
+          inset: 0;
+          z-index: 0;
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+        }
+
+        .banner-bg-overlay {
+          position: absolute;
+          inset: 0;
+          z-index: 1;
+          pointer-events: none;
+        }
+
+        .banner-bg-overlay--glass-overall {
+          background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.14) 0%,
+            rgba(255, 252, 248, 0.08) 45%,
+            rgba(255, 255, 255, 0.12) 100%
+          );
+          backdrop-filter: blur(10px) saturate(130%);
+          -webkit-backdrop-filter: blur(10px) saturate(130%);
+        }
+
+        .banner-section.banner-has-bg .container {
+          position: relative;
+          z-index: 2;
+        }
+
+        .banner-copy--glass {
+          padding: clamp(1.25rem, 3vw, 2rem);
+          border-radius: 20px;
+          border: 1px solid rgba(255, 255, 255, 0.22);
+          background: rgba(255, 255, 255, 0.12);
+          backdrop-filter: blur(16px) saturate(140%);
+          -webkit-backdrop-filter: blur(16px) saturate(140%);
+          box-shadow:
+            0 8px 32px rgba(0, 0, 0, 0.18),
+            inset 0 1px 0 rgba(255, 255, 255, 0.25);
+        }
+
+        .banner-section.banner-glass-overlay .banner-title,
+        .banner-section.banner-glass-overlay .banner-desc,
+        .banner-section.banner-glass-overlay .banner-feature-list li,
+        .banner-section.banner-glass-overlay .trust-text span {
+          color: #ffffff !important;
+          text-shadow: 0 1px 8px rgba(0, 0, 0, 0.35);
+        }
+
+        .banner-section.banner-glass-overlay .banner-title .text-gradient {
+          background: linear-gradient(135deg, #f5c98d 0%, #e8a855 100%) !important;
+          -webkit-background-clip: text !important;
+          background-clip: text !important;
+          -webkit-text-fill-color: transparent !important;
+          color: transparent !important;
+          filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
+        }
+
+        .banner-section.banner-glass-overlay .cosmic-badge {
+          border-color: rgba(255, 255, 255, 0.35) !important;
+          color: #f5c98d !important;
+          background: rgba(255, 255, 255, 0.1) !important;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+          box-shadow: none !important;
+        }
+
+        .banner-section.banner-glass-overlay .focus-70 {
+          background: rgba(255, 255, 255, 0.95) !important;
+          color: #2a0f02 !important;
+          box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2) !important;
+        }
+
+        .banner-section.banner-glass-overlay .focus-20 {
+          color: #ffffff !important;
+          border-color: rgba(255, 255, 255, 0.55) !important;
+          background: rgba(255, 255, 255, 0.08) !important;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        .banner-section.banner-glass-overlay .focus-10 {
+          color: #ffffff !important;
+          border: 1px solid rgba(255, 255, 255, 0.3) !important;
+          background: rgba(255, 255, 255, 0.06) !important;
+          backdrop-filter: blur(8px);
+          -webkit-backdrop-filter: blur(8px);
+        }
+
+        .banner-section.banner-glass-overlay .ethereal-sparkle {
+          color: rgba(245, 201, 141, 0.55) !important;
+        }
+
+        .banner-section.banner-glass-overlay .trust-text .stars i {
+          color: #f5c98d !important;
+        }
+
+        @media (max-width: 991px) {
+          .banner-bg-overlay--glass-overall {
+            backdrop-filter: blur(8px) saturate(120%);
+            -webkit-backdrop-filter: blur(8px) saturate(120%);
+          }
+
+          .banner-copy--glass {
+            border-radius: 16px;
+            padding: 1.25rem;
+          }
         }
 
         .banner-section.banner-loading {
@@ -1969,6 +2106,9 @@ function Home() {
           background: #1a0b02 !important; /* Deeper Dark */
           background: radial-gradient(circle at 70% 30%, #3d1a08 0%, #1a0b02 100%) !important;
         }
+        .banner-section.theme-rust.banner-has-bg {
+          background: transparent !important;
+        }
         .banner-section.theme-rust::before { display: none; }
         .banner-section.theme-rust .banner-title,
         .banner-section.theme-rust .banner-desc,
@@ -2016,6 +2156,9 @@ function Home() {
         .banner-section.theme-mustard {
           background: #975427 !important;
           background: linear-gradient(135deg, #975427 0%, #723c18 100%) !important;
+        }
+        .banner-section.theme-mustard.banner-has-bg {
+          background: transparent !important;
         }
         .banner-section.theme-mustard::before { display: none; }
         .banner-section.theme-mustard .banner-title,

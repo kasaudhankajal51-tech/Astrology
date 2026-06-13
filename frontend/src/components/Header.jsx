@@ -96,7 +96,8 @@ function Header() {
           ]
         },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
-        { label: 'SHOP', to: '/shop', match: '/shop' }
+        { label: 'SHOP', to: '/shop', match: '/shop' },
+        { label: 'CONTACT', to: '/contact', match: '/contact' }
       ]
     : [
         { label: 'HOME', to: '/', match: '/' },
@@ -109,7 +110,8 @@ function Header() {
         },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
         { label: 'SHOP', to: '/shop', match: '/shop' },
-        { label: 'ABOUT', to: '/about', match: '/about' }
+        { label: 'ABOUT', to: '/about', match: '/about' },
+        { label: 'CONTACT', to: '/contact', match: '/contact' }
       ];
 
   // Mobile offcanvas keeps flat links for easy thumb navigation
@@ -120,7 +122,8 @@ function Header() {
         { label: 'LIVE CLASSES', to: '/live-courses', match: '/live-courses' },
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
-        { label: 'SHOP', to: '/shop', match: '/shop' }
+        { label: 'SHOP', to: '/shop', match: '/shop' },
+        { label: 'CONTACT', to: '/contact', match: '/contact' }
       ]
     : [
         { label: 'HOME', to: '/', match: '/' },
@@ -128,7 +131,8 @@ function Header() {
         { label: 'RECORDED COURSES', to: '/recorded-courses', match: '/recorded-courses' },
         { label: 'CONSULTATIONS', to: '/book-consultation', match: '/book-consultation' },
         { label: 'SHOP', to: '/shop', match: '/shop' },
-        { label: 'ABOUT', to: '/about', match: '/about' }
+        { label: 'ABOUT', to: '/about', match: '/about' },
+        { label: 'CONTACT', to: '/contact', match: '/contact' }
       ];
 
   const handleConsultSubmit = async (e) => {
@@ -935,7 +939,7 @@ function Header() {
               ) : !isStudentLoginPage ? (
                 <Link to="/login" className="btn-account-header type-btn">
                   <i className="fas fa-user"></i>
-                  Login
+                  Student Login
                 </Link>
               ) : null}
               <button onClick={() => setIsConsultModalOpen(true)} className="btn btn-consult-header border-0 type-btn uppercase">

@@ -14,6 +14,7 @@ import {
   createCourse,
   updateCourse,
   deleteCourse,
+  getAdminCourses,
   addCourseVideo,
   uploadCourseVideo,
   updateCourseVideo,
@@ -63,6 +64,7 @@ router.get('/users', adminAuth, getAdminUsers);
 router.get('/orders', adminAuth, getAdminOrders);
 
 // Course Management (Admin)
+router.get('/courses', adminAuth, getAdminCourses);
 router.post('/courses', adminAuth, createCourse);
 router.put('/courses/:id', adminAuth, updateCourse);
 router.delete('/courses/:id', adminAuth, deleteCourse);

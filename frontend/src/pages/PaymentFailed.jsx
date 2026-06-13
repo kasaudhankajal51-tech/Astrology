@@ -1,4 +1,5 @@
 import { Link, useSearchParams } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
 function PaymentFailed() {
   const [searchParams] = useSearchParams();
@@ -9,6 +10,8 @@ function PaymentFailed() {
   const reason = searchParams.get('reason');
 
   const getRetryPath = () => {
+    const service = searchParams.get('service');
+    if (type === 'consultation' && service) return `/book-consultation/${service}`;
     if (type === 'consultation') return '/book-consultation';
     if (type === 'course' || courseName) return '/recorded-courses';
     return '/';
@@ -29,7 +32,11 @@ function PaymentFailed() {
       background: 'linear-gradient(135deg, #FDF6EE 0%, #f4ead8 100%)',
       padding: 'clamp(1rem, 4vw, 2rem)'
     }}>
-      <div style={{
+      <motion.div
+        initial={{ opacity: 0, y: 24, scale: 0.96 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.45, ease: 'easeOut' }}
+        style={{
         width: '100%',
         maxWidth: '480px',
         background: '#ffffff',
@@ -170,7 +177,7 @@ function PaymentFailed() {
           <i className="fas fa-headset me-1"></i>
           Need help? <Link to="/contact" style={{ color: '#8B4A1E', fontWeight: 700 }}>Contact Support</Link>
         </p>
-      </div>
+      </motion.div>
 
       <style>{`
         @keyframes scaleIn {

@@ -110,6 +110,28 @@ export const getCourseById = async (req, res) => {
   }
 };
 
+// @desc    Get all courses for admin (includes inactive)
+// @route   GET /api/admin/courses
+export const getAdminCourses = async (req, res) => {
+  try {
+    const courses = await Course.find().sort({ createdAt: -1 }).lean();
+    const videoCounts = await CourseVideo.aggregate([
+      { $match: { courseId: { $in: courses.map((course) => course._id) } } },
+      { $group: { _id: '$courseId', count: { $sum: 1 } } },
+    ]);
+    const videoCountByCourseId = new Map(videoCounts.map((item) => [String(item._id), item.count]));
+    res.json({
+      success: true,
+      courses: courses.map((course) => {
+        const count = videoCountByCourseId.get(String(course._id)) || course.modulesCount || 0;
+        return formatCourseListItem(course, count, count);
+      }),
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
 // @desc    Create a new course (Admin)
 // @route   POST /api/admin/courses
 export const createCourse = async (req, res) => {

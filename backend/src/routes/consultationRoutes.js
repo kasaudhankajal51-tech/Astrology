@@ -1,5 +1,5 @@
 import express from 'express';
-import { submitConsultation, getConsultations, getStats, verifyPayment } from '../controllers/consultationController.js';
+import { submitConsultation, verifyPayment } from '../controllers/consultationController.js';
 import {
   getConsultationServices,
   getConsultationService,
@@ -13,7 +13,5 @@ router.get('/services/:serviceId', getConsultationService);
 router.get('/payment-config', getConsultationPaymentConfig);
 router.post('/', submitConsultation);
 router.post('/verify-payment', verifyPayment);
-router.get('/', getConsultations);
-router.get('/stats', getStats);
 
 export default router;

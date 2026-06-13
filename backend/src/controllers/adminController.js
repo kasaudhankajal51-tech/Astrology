@@ -77,7 +77,7 @@ export const getDashboardStats = asyncHandler(async (req, res) => {
   });
 });
 
-// @desc    Get all consultations
+// @desc    Get all consultations (student bookings + paid consultation leads)
 // @route   GET /api/admin/consultations
 export const getConsultations = asyncHandler(async (req, res) => {
   const rows = await Consultation.find()
@@ -85,18 +85,55 @@ export const getConsultations = asyncHandler(async (req, res) => {
     .populate('userId', 'name email')
     .sort('-createdAt');
 
-  const consultations = rows.map((c) => ({
+  const studentConsultations = rows.map((c) => ({
     _id: c._id,
+    source: 'student',
     studentId: c.userId?._id || c.userId || null,
     studentName: c.userId?.name || c.name || '',
+    email: c.userId?.email || c.email || '',
     courseId: c.courseId?._id || c.courseId || null,
     courseName: c.courseId?.title || '',
+    consultationType: c.consultationType || 'Free Consultation',
     mobile: c.mobile || c.phone || '',
     preferredDatetime: c.preferredDatetime || null,
     notes: c.notes || c.message || '',
+    amount: c.amount || null,
+    paymentStatus: c.paymentStatus || 'NOT REQUIRED',
     status: formatConsultationStatus(c.status),
     createdAt: c.createdAt,
   }));
+
+  const paidLeadRows = await Lead.find({
+    type: 'Consultation',
+    $or: [
+      { status: 'Consultation Lead - Paid' },
+      { paymentStatus: 'PAID' },
+      { status: 'Consultation Lead - Not Paid' },
+      { status: 'Consultation Lead - Callback Requested' },
+    ],
+  }).sort('-submittedAt -createdAt');
+
+  const leadConsultations = paidLeadRows.map((lead) => ({
+    _id: lead._id,
+    source: 'lead',
+    studentId: null,
+    studentName: lead.name || '',
+    email: lead.email || '',
+    courseId: lead.courseId || null,
+    courseName: lead.courseName || '',
+    consultationType: lead.consultationType || 'Consultation',
+    mobile: lead.phone || '',
+    preferredDatetime: null,
+    notes: lead.message || '',
+    amount: lead.amount || lead.quotedAmount || null,
+    paymentStatus: lead.paymentStatus || 'NOT REQUIRED',
+    status: lead.status || 'Pending',
+    bookingMode: lead.bookingMode,
+    createdAt: lead.submittedAt || lead.createdAt,
+  }));
+
+  const consultations = [...leadConsultations, ...studentConsultations]
+    .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
 
   res.json({ success: true, consultations });
 });

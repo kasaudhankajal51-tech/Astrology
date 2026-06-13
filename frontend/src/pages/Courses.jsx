@@ -22,15 +22,20 @@ function Courses({ mode = 'all' }) {
           // Map DB fields to UI fields
           const mappedCourses = data.courses.map(course => {
             const courseType = course.courseType || 'Live';
+            const instructorName = typeof course.instructor === 'string'
+              ? course.instructor
+              : course.instructor?.name || '';
             return ({
             id: course._id,
             title: course.title,
             shortDesc: course.description,
             image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
-            duration: `${course.validityDays} Days`,
+            duration: course.duration || `${course.validityDays} Days`,
             schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
-            level: 'Professional',
-            category: 'Astrology', // Defaulting since we didn't add category to DB yet
+            level: course.level || 'Beginner',
+            instructor: instructorName,
+            modulesCount: course.modulesCount || course.videoCount || 0,
+            category: 'Astrology',
             price: course.price,
             courseType,
             isPremium: courseType !== 'Live' && Number(course.price) > 0
@@ -107,6 +112,18 @@ function Courses({ mode = 'all' }) {
               <i className="fas fa-clock"></i>
               {course.duration}
             </div>
+            {course.instructor && (
+              <div className="meta-item">
+                <i className="fas fa-chalkboard-teacher"></i>
+                {course.instructor}
+              </div>
+            )}
+            {course.courseType === 'Recorded' && course.modulesCount > 0 && (
+              <div className="meta-item">
+                <i className="fas fa-book"></i>
+                {course.modulesCount} Modules
+              </div>
+            )}
             <div className="meta-item">
               <i className="fas fa-calendar-alt"></i>
               {course.schedule}

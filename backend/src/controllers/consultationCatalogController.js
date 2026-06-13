@@ -4,7 +4,7 @@ import {
   getActiveServiceBySlug,
   seedCatalogFromStaticIfEmpty,
 } from '../services/consultationCatalogDb.js';
-import { isPaymentEnabled, getRazorpayConfig } from '../utils/razorpayConfig.js';
+import { isPaymentEnabled, getRazorpayConfig, getPaymentMode } from '../utils/razorpayConfig.js';
 
 /** @route GET /api/consultations/services */
 export const getConsultationServices = asyncHandler(async (req, res) => {
@@ -27,16 +27,14 @@ export const getConsultationService = asyncHandler(async (req, res) => {
 /** @route GET /api/consultations/payment-config */
 export const getConsultationPaymentConfig = asyncHandler(async (req, res) => {
   const enabled = isPaymentEnabled();
-  let mode = 'mock';
+  const mode = getPaymentMode();
   let keyId = '';
 
-  if (enabled) {
+  if (mode === 'live' || mode === 'test') {
     try {
-      const config = getRazorpayConfig();
-      keyId = config.keyId;
-      mode = keyId.startsWith('rzp_live_') ? 'live' : 'test';
+      keyId = getRazorpayConfig().keyId;
     } catch {
-      mode = 'mock';
+      // ignore
     }
   }
 
@@ -44,9 +42,11 @@ export const getConsultationPaymentConfig = asyncHandler(async (req, res) => {
     success: true,
     paymentEnabled: enabled,
     mode,
-    keyId: enabled ? keyId : '',
+    keyId: keyId || (mode === 'mock' ? 'rzp_test_mock' : ''),
     message: enabled
-      ? `Payment active (${mode} mode). Set live keys in RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET when ready.`
-      : 'Mock payment mode — add Razorpay keys to backend .env to enable checkout.',
+      ? mode === 'mock'
+        ? 'Test payment mode — mock checkout active until live Razorpay keys are added.'
+        : `Payment active (${mode} mode). Set live keys in RAZORPAY_KEY_ID / RAZORPAY_KEY_SECRET when ready.`
+      : 'Payment disabled — add Razorpay keys to backend .env to enable checkout.',
   });
 });

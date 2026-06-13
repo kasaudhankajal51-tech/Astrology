@@ -7,15 +7,17 @@ import Enrollment from '../models/Enrollment.js';
 import Lead from '../models/leadModel.js';
 import Coupon from '../models/Coupon.js';
 import { sendCredentialsEmail, sendPaidLeadAdminEmail } from '../utils/sendEmail.js';
-import { createRazorpayInstance, getRazorpayConfig, isPaymentEnabled } from '../utils/razorpayConfig.js';
+import { createRazorpayInstance, getRazorpayConfig, isPaymentEnabled, getPaymentMode } from '../utils/razorpayConfig.js';
 import { calculateCouponDiscount } from '../utils/couponHelper.js';
+import { notify } from '../utils/notify.js';
 
 // @desc    Payment gateway availability (public)
 // @route   GET /api/payment/status
 export const getPaymentStatus = async (req, res) => {
   const enabled = isPaymentEnabled();
+  const mode = getPaymentMode();
   let keyId = '';
-  if (enabled) {
+  if (mode === 'live' || mode === 'test') {
     try {
       keyId = getRazorpayConfig().keyId;
     } catch {
@@ -25,10 +27,12 @@ export const getPaymentStatus = async (req, res) => {
   res.json({
     success: true,
     paymentEnabled: enabled,
-    mode: enabled ? 'checkout' : 'lead_capture',
-    keyId: enabled ? keyId : '',
+    mode,
+    keyId: keyId || (mode === 'mock' ? 'rzp_test_mock' : ''),
     message: enabled
-      ? 'Online payment is active for recorded courses and consultations.'
+      ? mode === 'mock'
+        ? 'Test payment mode — mock checkout active until live Razorpay keys are added.'
+        : 'Online payment is active for recorded courses and consultations.'
       : 'Lead capture mode — add RAZORPAY_KEY_ID and RAZORPAY_KEY_SECRET to backend .env to enable checkout.',
   });
 };
@@ -135,7 +139,7 @@ export const createOrder = async (req, res) => {
       order.razorpayOrderId = razorpayOrder.id;
       await order.save();
     } catch (err) {
-      if (process.env.NODE_ENV === 'development') {
+      if (getPaymentMode() === 'mock') {
         const mockOrderId = `order_mock_${Date.now()}`;
         razorpayOrder = { id: mockOrderId, amount: amountInPaise };
         order.razorpayOrderId = mockOrderId;
@@ -164,6 +168,16 @@ export const createOrder = async (req, res) => {
         orderId: razorpayOrder.id,
         amount: payableAmount,
         paymentFor: 'Recorded Course',
+      });
+
+      notify({
+        title: 'Recorded Course Checkout Started',
+        message: `${studentName} initiated payment for ${course.title} (₹${payableAmount})`,
+        type: 'lead',
+        icon: 'fa-play-circle',
+        color: 'blue',
+        link: 'leads',
+        meta: { leadId: lead._id, courseId: course._id, orderId: razorpayOrder.id },
       });
     }
 
@@ -194,17 +208,20 @@ export const createOrder = async (req, res) => {
 export const verifyPayment = async (req, res) => {
   try {
     const { razorpay_order_id, razorpay_payment_id, razorpay_signature, email, name } = req.body;
-    const { keySecret } = getRazorpayConfig();
 
-    const body = razorpay_order_id + '|' + razorpay_payment_id;
-    const expectedSignature = crypto
-      .createHmac('sha256', keySecret)
-      .update(body.toString())
-      .digest('hex');
-
-    const isMockPayment = process.env.NODE_ENV === 'development'
+    const isMockPayment = getPaymentMode() === 'mock'
       && (razorpay_signature === 'mock_signature' || razorpay_signature?.startsWith('sig_mock_'));
-    const isAuthentic = expectedSignature === razorpay_signature || isMockPayment;
+
+    let isAuthentic = isMockPayment;
+    if (!isMockPayment) {
+      const { keySecret } = getRazorpayConfig();
+      const body = razorpay_order_id + '|' + razorpay_payment_id;
+      const expectedSignature = crypto
+        .createHmac('sha256', keySecret)
+        .update(body.toString())
+        .digest('hex');
+      isAuthentic = expectedSignature === razorpay_signature;
+    }
 
     if (!isAuthentic) {
       await Order.findOneAndUpdate(

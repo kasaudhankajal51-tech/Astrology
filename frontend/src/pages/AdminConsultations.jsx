@@ -55,7 +55,7 @@ function AdminConsultations() {
     <div className="dash-home">
       <div className="mb-4">
         <h2 className="dash-section-title mb-1">Consultation Requests</h2>
-        <p className="text-muted small">Manage complimentary consultations booked by students.</p>
+        <p className="text-muted small">Paid bookings, callback requests, and complimentary student consultations.</p>
       </div>
 
       <div className="admin-table-shell">
@@ -73,10 +73,11 @@ function AdminConsultations() {
         <table className="admin-table leads-table">
           <thead>
             <tr>
-              <th>Student</th>
-              <th>Course</th>
+              <th>Customer</th>
+              <th>Service</th>
               <th>Mobile</th>
-              <th>Requested Date</th>
+              <th>Payment</th>
+              <th>Date</th>
               <th>Status</th>
               <th>Actions</th>
             </tr>
@@ -90,29 +91,47 @@ function AdminConsultations() {
               consultations.map(consult => (
                 <tr key={consult._id}>
                   <td>
-                    <div className="fw-bold" style={{ color: '#2A0F02' }}>{consult.name}</div>
+                    <div className="fw-bold" style={{ color: '#2A0F02' }}>{consult.studentName || consult.name}</div>
                     <div className="small text-muted">{consult.email}</div>
+                    {consult.source === 'lead' && (
+                      <span className="badge bg-info text-dark mt-1">Paid Booking Lead</span>
+                    )}
                   </td>
-                  <td>{consult.courseId?.title || 'Unknown Course'}</td>
-                  <td>{consult.mobile}</td>
-                  <td>{new Date(consult.preferredDatetime).toLocaleString()}</td>
                   <td>
-                    <span className={`status-badge ${consult.status === 'pending' ? 'status-new' : consult.status === 'completed' ? 'status-contacted' : 'status-spam'}`}>
-                      {consult.status.charAt(0).toUpperCase() + consult.status.slice(1)}
+                    <div>{consult.consultationType || 'Consultation'}</div>
+                    {consult.courseName && (
+                      <div className="small text-muted">Course: {consult.courseName}</div>
+                    )}
+                  </td>
+                  <td>{consult.mobile}</td>
+                  <td>
+                    <span className={`status-badge ${consult.paymentStatus === 'PAID' ? 'status-contacted' : 'status-new'}`}>
+                      {consult.paymentStatus || 'NOT REQUIRED'}
+                    </span>
+                    {consult.amount ? <div className="small text-muted">₹{consult.amount}</div> : null}
+                  </td>
+                  <td>{consult.preferredDatetime ? new Date(consult.preferredDatetime).toLocaleString() : new Date(consult.createdAt).toLocaleString()}</td>
+                  <td>
+                    <span className={`status-badge ${String(consult.status).toLowerCase().includes('paid') ? 'status-contacted' : 'status-new'}`}>
+                      {consult.status}
                     </span>
                   </td>
                   <td>
-                    <select 
-                      className="form-select form-select-sm" 
-                      value={consult.status}
-                      onChange={(e) => handleStatusChange(consult._id, e.target.value)}
-                      style={{ width: '120px', borderRadius: '8px' }}
-                    >
-                      <option value="pending">Pending</option>
-                      <option value="contacted">Contacted</option>
-                      <option value="completed">Completed</option>
-                      <option value="cancelled">Cancelled</option>
-                    </select>
+                    {consult.source === 'student' ? (
+                      <select 
+                        className="form-select form-select-sm" 
+                        value={consult.status?.toLowerCase?.() || consult.status}
+                        onChange={(e) => handleStatusChange(consult._id, e.target.value)}
+                        style={{ width: '120px', borderRadius: '8px' }}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    ) : (
+                      <span className="small text-muted">Manage in Leads</span>
+                    )}
                   </td>
                 </tr>
               ))

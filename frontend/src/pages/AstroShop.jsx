@@ -38,20 +38,23 @@ function AstroShop() {
   }, []);
 
   const handleAddToCart = (product) => {
-    openShopifyStore({
+    const opened = openShopifyStore({
+      path: product.shopifyHandle ? `products/${product.shopifyHandle}` : 'collections/all',
       storeUrl: settings?.shopifyStoreUrl,
       toast: toast.error,
-      message: `Shopify URL is pending. ${product.name} will be managed from Shopify checkout.`,
+      message: `Shopify URL is pending. Configure VITE_SHOPIFY_STORE_URL or admin Settings → Shopify Store URL.`,
     });
+    if (opened) toast.success(`Opening ${product.name} on Shopify…`);
   };
 
   const handleBuyNow = (product) => {
-    openShopifyStore({
-      path: 'collections/all',
+    const opened = openShopifyStore({
+      path: product.shopifyHandle ? `products/${product.shopifyHandle}` : 'collections/all',
       storeUrl: settings?.shopifyStoreUrl,
       toast: toast.error,
-      message: `Shopify URL is pending. ${product.name} checkout will open from Shopify.`,
+      message: `Shopify URL is pending. Configure VITE_SHOPIFY_STORE_URL or admin Settings → Shopify Store URL.`,
     });
+    if (opened) toast.success(`Redirecting to Shopify checkout for ${product.name}…`);
   };
 
   const categoryFiltered = useMemo(() => {
@@ -94,6 +97,14 @@ function AstroShop() {
           <p className="mx-auto m-0 max-w-xl p-0 text-base leading-relaxed text-white/85">
             Your gateway to genuine spiritual remedies and celestial enhancements
           </p>
+          <button
+            type="button"
+            onClick={() => openShopifyStore({ storeUrl: settings?.shopifyStoreUrl, toast: toast.error })}
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white backdrop-blur transition hover:bg-white hover:text-site-primary"
+          >
+            <i className="fas fa-external-link-alt" aria-hidden="true" />
+            Open Full Shopify Store
+          </button>
         </div>
       </div>
 

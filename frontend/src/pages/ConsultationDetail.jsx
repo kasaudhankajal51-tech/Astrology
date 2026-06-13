@@ -86,10 +86,10 @@ function ConsultationDetail() {
         service,
         bookingMode,
         sanitizedPhone,
+        navigate,
         onSuccess: ({ mode }) => {
           setIsModalOpen(false);
           if (mode === BOOKING_MODES.PAY_NOW) {
-            navigate('/payment-success?type=consultation');
             return;
           }
           setSuccessMessage(

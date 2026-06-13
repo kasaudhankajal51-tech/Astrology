@@ -180,10 +180,10 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
               }
             }
 
-            const existingLead = await Lead.findOne({ transactionId: razorpay_order_id });
+            const existingLead = await Lead.findOne({ orderId: razorpay_order_id });
             if (existingLead) {
-              existingLead.paymentStatus = 'Completed';
-              existingLead.status = 'Done';
+              existingLead.paymentStatus = 'PAID';
+              existingLead.status = 'Recorded Course Lead - Paid';
               existingLead.transactionId = razorpay_payment_id;
               if (order.couponCode) {
                 existingLead.message = `${existingLead.message || ''}${existingLead.message ? '\n' : ''}Coupon used: ${order.couponCode}`;
@@ -194,12 +194,18 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
                 name: studentName || 'Unknown Student',
                 email: studentEmail || 'N/A',
                 phone: order.guestDetails?.mobile || 'N/A',
-                type: 'Course',
+                type: 'Recorded-Course',
                 courseName: course.title,
+                courseId: course._id,
+                courseType: 'Recorded',
+                leadType: 'RECORDED COURSE LEAD',
                 message: order.couponCode ? `Coupon used: ${order.couponCode}` : '',
-                paymentStatus: 'Completed',
-                status: 'Done',
-                transactionId: razorpay_payment_id
+                paymentStatus: 'PAID',
+                status: 'Recorded Course Lead - Paid',
+                orderId: razorpay_order_id,
+                transactionId: razorpay_payment_id,
+                amount: order.amount,
+                paymentFor: 'Recorded Course',
               });
             }
           }
@@ -212,8 +218,8 @@ router.post('/razorpay', express.raw({ type: 'application/json' }), async (req, 
         order.paymentStatus = 'failed';
         await order.save();
         await Lead.findOneAndUpdate(
-          { transactionId: razorpay_order_id },
-          { paymentStatus: 'Failed', status: 'Pending' }
+          { orderId: razorpay_order_id },
+          { paymentStatus: 'FAILED', status: 'Recorded Course Lead - Failed Payment' }
         );
         break;
 

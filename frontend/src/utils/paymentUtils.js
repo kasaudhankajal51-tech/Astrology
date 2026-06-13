@@ -15,6 +15,36 @@ export const loadRazorpayScript = () => {
   });
 };
 
+export const buildPaymentFailedPath = ({
+  type = 'payment',
+  reason = '',
+  leadId = '',
+  txn = '',
+  courseName = '',
+  serviceId = '',
+} = {}) => {
+  const params = new URLSearchParams();
+  if (type) params.set('type', type);
+  if (reason) params.set('reason', reason);
+  if (leadId) params.set('leadId', leadId);
+  if (txn) params.set('txn', txn);
+  if (courseName) params.set('course', courseName);
+  if (serviceId) params.set('service', serviceId);
+  return `/payment-failed?${params.toString()}`;
+};
+
+export const buildPaymentSuccessPath = ({
+  type = 'payment',
+  txn = '',
+  courseName = '',
+} = {}) => {
+  const params = new URLSearchParams();
+  if (type) params.set('type', type);
+  if (txn) params.set('txn', txn);
+  if (courseName) params.set('course', courseName);
+  return `/payment-success?${params.toString()}`;
+};
+
 export const reportPaymentFailure = async ({
   leadId,
   orderId,
@@ -23,7 +53,13 @@ export const reportPaymentFailure = async ({
   consultationType,
   paymentFor = 'Consultation',
   error,
+  navigate,
+  type,
+  serviceId,
 }) => {
+  const reason = error?.description || error?.reason || error?.message || 'Payment failed or was cancelled';
+  const failedType = type || (paymentFor === 'Recorded Course' ? 'course' : paymentFor === 'Consultation' ? 'consultation' : 'payment');
+
   try {
     await fetch(`${API_BASE}/api/leads/payment-failed`, {
       method: 'POST',
@@ -40,16 +76,29 @@ export const reportPaymentFailure = async ({
             ? 'Recorded Course Lead - Failed Payment'
             : 'Consultation Lead - Not Paid',
         paymentStatus: 'FAILED',
-        failureReason: error?.description || error?.reason || error?.message || 'Payment failed or was cancelled',
+        failureReason: reason,
         razorpayError: error || null,
       }),
     });
   } catch (err) {
     console.warn('Unable to report payment failure', err);
   }
+
+  if (navigate) {
+    navigate(buildPaymentFailedPath({
+      type: failedType,
+      reason,
+      leadId: leadId || '',
+      txn: orderId || error?.metadata?.payment_id || '',
+      courseName: courseName || '',
+      serviceId: serviceId || '',
+    }));
+  } else {
+    toast.error(reason);
+  }
 };
 
-export const handleRazorpayPayment = async (formData, onSuccess) => {
+export const handleRazorpayPayment = async (formData, onSuccess, navigate) => {
   try {
     const isLoaded = await loadRazorpayScript();
     if (!isLoaded) {
@@ -93,9 +142,24 @@ export const handleRazorpayPayment = async (formData, onSuccess) => {
           const verifyData = await verifyRes.json();
           
           if (verifyData.success) {
-            onSuccess();
+            if (navigate) {
+              navigate(buildPaymentSuccessPath({
+                type: 'consultation',
+                txn: response.razorpay_payment_id,
+              }));
+            } else {
+              onSuccess?.();
+            }
           } else {
             toast.error('Payment verification failed.');
+            if (navigate) {
+              navigate(buildPaymentFailedPath({
+                type: 'consultation',
+                reason: 'Payment verification failed',
+                leadId: data.leadId,
+                txn: response.razorpay_payment_id,
+              }));
+            }
           }
         } catch (err) {
           toast.error('Error verifying payment.');
@@ -121,18 +185,19 @@ export const handleRazorpayPayment = async (formData, onSuccess) => {
     } else {
       const rzp = new window.Razorpay(options);
       rzp.on('payment.failed', function (response) {
-        toast.error(`Payment Failed: ${response.error.description}`);
         reportPaymentFailure({
           leadId: data.leadId,
           orderId: data.orderId,
           consultationType: formData.consultationType,
           paymentFor: 'Consultation',
           error: response.error,
+          navigate,
+          type: 'consultation',
         });
       });
       rzp.open();
     }
-    return true; // Indicates payment flow started
+    return true;
   } catch (err) {
     toast.error('Error: ' + err.message);
     return false;

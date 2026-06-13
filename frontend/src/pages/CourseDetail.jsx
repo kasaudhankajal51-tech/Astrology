@@ -22,6 +22,7 @@ import {
 import { BTN, TYPE } from '../components/consultation/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
+import CountdownTimer from '../components/webinar/CountdownTimer';
 
 const RECORDED_PAYMENT_ENABLED = true;
 const PAGE_WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
@@ -202,6 +203,10 @@ function CourseDetail() {
   const handleEnquiryChange = (e) => {
     if (e.target.name === 'phone') {
       setEnquiryData({ ...enquiryData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) });
+      return;
+    }
+    if (e.target.name === 'age') {
+      setEnquiryData({ ...enquiryData, age: e.target.value.replace(/\D/g, '').slice(0, 3) });
       return;
     }
     setEnquiryData({ ...enquiryData, [e.target.name]: e.target.value });
@@ -486,7 +491,7 @@ function CourseDetail() {
             {isLiveCourse ? 'All live classes' : 'All recorded courses'}
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_19rem]">
+          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_24rem]">
             <div className="min-w-0">
               <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">
                 {course.category ? <span className={TYPE.kicker}>{course.category}</span> : null}
@@ -677,7 +682,7 @@ function CourseDetail() {
                 <div className="relative aspect-[16/10] overflow-hidden">
                   <img src={course.image} alt={course.title} className="block h-full w-full object-cover" />
                 </div>
-                <div className="p-4">
+                <div className="p-5 xl:p-6">
                   <EnrollPanel
                     course={course}
                     canPayOnline={canPayOnline}
@@ -784,6 +789,10 @@ function EnrollPanel({
       </div>
 
       {couponProps ? <CouponControls {...couponProps} compact /> : null}
+
+      <div className="my-3 flex justify-center w-full">
+        <CountdownTimer compactCard={true} hours={5} storageKey="course_detail_timer" />
+      </div>
 
       <button
         type="button"

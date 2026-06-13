@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 
-const CountdownTimer = ({ minimal = false }) => {
+const CountdownTimer = ({ minimal = false, compactCard = false, hours = 24, storageKey = 'webinar_timer_v4' }) => {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
   useEffect(() => {
-    // 24 Hour Persistence Logic
+    // Dynamic Hour Persistence Logic
     const getTargetTime = () => {
-      const stored = localStorage.getItem('webinar_timer_v4');
+      const stored = localStorage.getItem(storageKey);
       if (stored) {
         const target = parseInt(stored);
         if (target > Date.now()) return target;
       }
       
-      const newTarget = Date.now() + 24 * 60 * 60 * 1000;
-      localStorage.setItem('webinar_timer_v4', newTarget.toString());
+      const newTarget = Date.now() + hours * 60 * 60 * 1000;
+      localStorage.setItem(storageKey, newTarget.toString());
       return newTarget;
     };
 
@@ -24,9 +24,9 @@ const CountdownTimer = ({ minimal = false }) => {
       let difference = targetTime - now;
 
       if (difference <= 0) {
-        // Reset for another 24 hours
-        targetTime = Date.now() + 24 * 60 * 60 * 1000;
-        localStorage.setItem('webinar_timer_v4', targetTime.toString());
+        // Reset for another X hours
+        targetTime = Date.now() + hours * 60 * 60 * 1000;
+        localStorage.setItem(storageKey, targetTime.toString());
         difference = targetTime - Date.now();
       }
 
@@ -38,7 +38,7 @@ const CountdownTimer = ({ minimal = false }) => {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [hours, storageKey]);
 
   if (minimal) {
     return (
@@ -142,7 +142,7 @@ const CountdownTimer = ({ minimal = false }) => {
   }
 
   return (
-    <div className="countdown-timer-container">
+    <div className={`countdown-timer-container ${compactCard ? 'is-compact-card' : ''}`}>
       <div className="timer-title">OFFER EXPIRES IN</div>
       <div className="timer-display">
         <div className="timer-unit">
@@ -188,10 +188,49 @@ const CountdownTimer = ({ minimal = false }) => {
         .unit-value { font-size: 2.8rem; font-weight: 900; color: #fff; line-height: 1; }
         .unit-label { font-size: 0.65rem; font-weight: 800; color: rgba(255, 255, 255, 0.6); margin-top: 5px; }
         .timer-separator { font-size: 2rem; font-weight: 900; color: #EE6662; }
+        
+        .countdown-timer-container.is-compact-card {
+          padding: 15px 20px;
+          border-radius: 16px;
+          border: 1.5px solid rgba(139, 74, 30, 0.2);
+          margin: 0;
+          width: 100%;
+          max-width: 100%;
+          gap: 10px;
+          background: linear-gradient(135deg, #ffffff 0%, #fdf6ee 100%);
+          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.08);
+        }
+        .is-compact-card .timer-title { 
+          font-size: 0.75rem; 
+          letter-spacing: 1px; 
+          color: #8b4a1e; 
+        }
+        .is-compact-card .timer-display { gap: 8px; }
+        .is-compact-card .timer-unit { 
+          padding: 8px 12px; 
+          min-width: 65px; 
+          border-radius: 12px; 
+          background: #2a0f02;
+          box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        .is-compact-card .unit-value { 
+          font-size: 1.8rem; 
+          color: #ffffff; 
+        }
+        .is-compact-card .unit-label { 
+          font-size: 0.55rem; 
+          margin-top: 3px; 
+          color: rgba(255, 255, 255, 0.7);
+        }
+        .is-compact-card .timer-separator { 
+          font-size: 1.5rem; 
+          color: #c8832a;
+        }
+
         @media (max-width: 576px) {
-          .countdown-timer-container { padding: 20px 30px; }
-          .unit-value { font-size: 2rem; }
-          .timer-unit { min-width: 70px; padding: 10px; }
+          .countdown-timer-container:not(.is-compact-card) { padding: 20px 30px; }
+          .countdown-timer-container:not(.is-compact-card) .unit-value { font-size: 2rem; }
+          .countdown-timer-container:not(.is-compact-card) .timer-unit { min-width: 70px; padding: 10px; }
         }
       `}</style>
     </div>

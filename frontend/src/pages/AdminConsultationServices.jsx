@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import toast from '@/utils/toast';
 import { Plus, Edit2, Trash2, UploadCloud, Layers, LayoutGrid, CheckCircle2, RefreshCw, X, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -46,6 +46,7 @@ export default function AdminConsultationServices() {
   const [categoryForm, setCategoryForm] = useState(EMPTY_CATEGORY);
   const [serviceForm, setServiceForm] = useState(EMPTY_SERVICE);
   const [activePanel, setActivePanel] = useState('services');
+  const topRef = useRef(null);
 
   const loadCatalog = useCallback(async () => {
     setLoading(true);
@@ -168,7 +169,9 @@ export default function AdminConsultationServices() {
       isActive: cat.isActive !== false,
     });
     setActivePanel('categories');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   };
 
   const editService = (svc) => {
@@ -189,7 +192,9 @@ export default function AdminConsultationServices() {
       isActive: svc.isActive !== false,
     });
     setActivePanel('services');
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      topRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 50);
   };
 
   const deleteCategory = async (slug) => {
@@ -258,7 +263,7 @@ export default function AdminConsultationServices() {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-100px)] overflow-hidden bg-slate-50">
+    <div ref={topRef} className="relative min-h-[calc(100vh-100px)] overflow-hidden bg-slate-50">
       {/* Background glowing orbs */}
       <div className="absolute top-0 left-0 w-[500px] h-[500px] bg-violet-300/30 rounded-full blur-[100px] -translate-x-1/2 -translate-y-1/2 pointer-events-none" />
       <div className="absolute bottom-0 right-0 w-[600px] h-[600px] bg-orange-200/30 rounded-full blur-[120px] translate-x-1/3 translate-y-1/3 pointer-events-none" />
@@ -696,6 +701,7 @@ export default function AdminConsultationServices() {
                               </div>
                               <div className="flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity translate-x-4 group-hover:translate-x-0 duration-300">
                                 <button
+                                  type="button"
                                   onClick={() => editCategory(cat)}
                                   className="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-sm"
                                   title="Edit"
@@ -703,6 +709,7 @@ export default function AdminConsultationServices() {
                                   <Edit2 className="w-4 h-4" />
                                 </button>
                                 <button
+                                  type="button"
                                   onClick={() => deleteCategory(cat.slug || cat.id)}
                                   className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl transition-colors shadow-sm"
                                   title="Delete"
@@ -761,6 +768,7 @@ export default function AdminConsultationServices() {
 
                               <div className="flex items-center gap-2">
                                 <button
+                                  type="button"
                                   onClick={() => editService(svc)}
                                   className="p-2 bg-indigo-50 text-indigo-600 hover:bg-indigo-600 hover:text-white rounded-xl transition-colors shadow-sm"
                                   title="Edit"
@@ -768,6 +776,7 @@ export default function AdminConsultationServices() {
                                   <Edit2 className="w-4 h-4" />
                                 </button>
                                 <button
+                                  type="button"
                                   onClick={() => deleteService(svc.slug || svc.id)}
                                   className="p-2 bg-rose-50 text-rose-600 hover:bg-rose-600 hover:text-white rounded-xl transition-colors shadow-sm"
                                   title="Delete"

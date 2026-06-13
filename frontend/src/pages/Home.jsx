@@ -482,7 +482,7 @@ const preloadImages = (urls) =>
 
 const BANNER_SLIDE_COUNT = BANNER_SLIDES.length;
 const BANNER_FADE_MS = 550;
-const BANNER_AUTO_MS = 6500;
+const BANNER_AUTO_MS = 4000;
 
 function Home() {
 
@@ -1534,8 +1534,6 @@ function Home() {
             rgba(255, 252, 248, 0.08) 45%,
             rgba(255, 255, 255, 0.12) 100%
           );
-          backdrop-filter: blur(10px) saturate(130%);
-          -webkit-backdrop-filter: blur(10px) saturate(130%);
         }
 
         .banner-section.banner-has-bg .container {
@@ -1613,8 +1611,7 @@ function Home() {
 
         @media (max-width: 991px) {
           .banner-bg-overlay--glass-overall {
-            backdrop-filter: blur(8px) saturate(120%);
-            -webkit-backdrop-filter: blur(8px) saturate(120%);
+            /* no blur */
           }
 
           .banner-copy--glass {

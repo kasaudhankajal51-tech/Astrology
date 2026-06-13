@@ -33,6 +33,8 @@ const formatCourseListItem = (course, modulesCount, videoCount) => ({
   level: course.level || 'Beginner',
   instructor: formatInstructor(course.instructor),
   duration: course.duration || '',
+  topics: course.topics || [],
+  longDesc: course.longDesc || '',
   modulesCount: modulesCount ?? course.modulesCount ?? 0,
   videoCount: videoCount ?? modulesCount ?? course.modulesCount ?? 0,
   isActive: course.isActive,

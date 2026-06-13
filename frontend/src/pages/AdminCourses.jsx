@@ -850,7 +850,7 @@ function AdminCourses() {
         courseType: course.courseType || 'Recorded',
         level: course.level || 'Beginner',
         duration: course.duration || '',
-        instructor: course.instructor || '',
+        instructor: typeof course.instructor === 'object' && course.instructor !== null ? course.instructor.name || '' : course.instructor || '',
         topics: Array.isArray(course.topics) ? course.topics : [],
         price: course.price,
         validityDays: course.validityDays,

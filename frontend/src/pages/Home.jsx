@@ -482,7 +482,7 @@ const preloadImages = (urls) =>
 
 const BANNER_SLIDE_COUNT = BANNER_SLIDES.length;
 const BANNER_FADE_MS = 550;
-const BANNER_AUTO_MS = 6500;
+const BANNER_AUTO_MS = 4000;
 
 function Home() {
 

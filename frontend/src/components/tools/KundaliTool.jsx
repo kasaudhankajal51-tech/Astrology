@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import KundaliChart from './KundaliChart';
 import { DateTime } from 'luxon';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import API_BASE from '../../utils/api.js';
 
 function KundaliTool({ onBack }) {

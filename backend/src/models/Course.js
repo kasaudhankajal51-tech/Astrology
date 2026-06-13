@@ -25,6 +25,8 @@ const FaqSchema = new mongoose.Schema({
 
 const CourseSchema = new mongoose.Schema({
   title: { type: String, required: true },
+  slug: { type: String, unique: true, sparse: true, lowercase: true, trim: true },
+  category: { type: String, default: 'Astrology' },
   description: { type: String },
   longDesc: { type: String },
   topics: [{ type: String }],

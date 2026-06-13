@@ -2,7 +2,170 @@ import ConsultationCategory from '../models/ConsultationCategory.js';
 import ConsultationService from '../models/ConsultationService.js';
 import { CONSULTATION_CATEGORIES } from '../data/consultationCatalog.js';
 
+let catalogSchemaReady = false;
+
+/** Migrate legacy categoryId/cards schema and drop stale indexes before sync. */
+async function ensureConsultationCatalogSchema() {
+  if (catalogSchemaReady) return;
+
+  const collection = ConsultationCategory.collection;
+  const indexes = await collection.indexes();
+
+  if (indexes.some((idx) => idx.name === 'categoryId_1')) {
+    await collection.dropIndex('categoryId_1');
+  }
+
+  await collection.updateMany(
+    {
+      categoryId: { $exists: true, $ne: null },
+      $or: [{ slug: { $exists: false } }, { slug: null }, { slug: '' }],
+    },
+    [{ $set: { slug: '$categoryId' } }]
+  );
+
+  const duplicateSlugs = await collection.aggregate([
+    { $match: { slug: { $exists: true, $nin: [null, ''] } } },
+    { $group: { _id: '$slug', ids: { $push: '$_id' }, count: { $sum: 1 } } },
+    { $match: { count: { $gt: 1 } } },
+  ]).toArray();
+
+  for (const group of duplicateSlugs) {
+    const [, ...duplicateIds] = group.ids.sort((a, b) => String(a).localeCompare(String(b)));
+    if (duplicateIds.length) {
+      await collection.deleteMany({ _id: { $in: duplicateIds } });
+    }
+  }
+
+  await collection.deleteMany({
+    $or: [{ slug: { $exists: false } }, { slug: null }, { slug: '' }],
+  });
+
+  await ConsultationCategory.syncIndexes();
+  catalogSchemaReady = true;
+}
+
 export const formatPriceLabel = (price) => `₹${Number(price).toLocaleString('en-IN')}`;
+
+export const parseMultiQueryParam = (value) => {
+  if (value == null || value === '') return [];
+  if (Array.isArray(value)) return value.map(String).map((v) => v.trim()).filter(Boolean);
+  return String(value).split(',').map((v) => v.trim()).filter(Boolean);
+};
+
+const matchesSearch = (service, search) => {
+  if (!search) return true;
+  const needle = search.toLowerCase();
+  return [service.title, service.short, service.desc, service.category, service.badge]
+    .some((field) => String(field || '').toLowerCase().includes(needle));
+};
+
+export const applyServiceFilters = (services, filters = {}) => {
+  const {
+    categorySlugs = [],
+    durations = [],
+    badges = [],
+    minPrice,
+    maxPrice,
+    search = '',
+  } = filters;
+
+  return services.filter((svc) => {
+    if (categorySlugs.length && !categorySlugs.includes(svc.categoryId)) return false;
+    if (durations.length && !durations.includes(svc.duration)) return false;
+    if (badges.length && !badges.includes(svc.badge)) return false;
+    if (minPrice != null && Number(svc.price) < Number(minPrice)) return false;
+    if (maxPrice != null && Number(svc.price) > Number(maxPrice)) return false;
+    if (!matchesSearch(svc, search)) return false;
+    return true;
+  });
+};
+
+export const sortServices = (services, sortBy = 'sortOrder', sortOrder = 'asc') => {
+  const dir = sortOrder === 'desc' ? -1 : 1;
+  const list = [...services];
+  list.sort((a, b) => {
+    if (sortBy === 'price') {
+      return (Number(a.price) - Number(b.price)) * dir;
+    }
+    if (sortBy === 'title') {
+      return String(a.title).localeCompare(String(b.title)) * dir;
+    }
+    const orderDiff = (a.sortOrder ?? 0) - (b.sortOrder ?? 0);
+    if (orderDiff !== 0) return orderDiff * dir;
+    return String(a.title).localeCompare(String(b.title)) * dir;
+  });
+  return list;
+};
+
+export const buildFilterMeta = (services, categories) => {
+  const durationCounts = {};
+  const badgeCounts = {};
+
+  for (const svc of services) {
+    if (svc.duration) {
+      durationCounts[svc.duration] = (durationCounts[svc.duration] || 0) + 1;
+    }
+    if (svc.badge) {
+      badgeCounts[svc.badge] = (badgeCounts[svc.badge] || 0) + 1;
+    }
+  }
+
+  const prices = services.map((s) => Number(s.price)).filter((p) => !Number.isNaN(p));
+  const min = prices.length ? Math.min(...prices) : 0;
+  const max = prices.length ? Math.max(...prices) : 0;
+
+  return {
+    categories: categories
+      .map((cat) => ({
+        id: cat.slug,
+        name: cat.name,
+        count: services.filter((s) => s.categoryId === cat.slug).length,
+      }))
+      .filter((c) => c.count > 0),
+    durations: Object.entries(durationCounts)
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
+    badges: Object.entries(badgeCounts)
+      .map(([value, count]) => ({ value, label: value, count }))
+      .sort((a, b) => a.label.localeCompare(b.label)),
+    priceRange: { min, max },
+  };
+};
+
+const groupServicesByCategory = (services, categories) => {
+  const byCategory = services.reduce((acc, svc) => {
+    if (!acc[svc.categoryId]) acc[svc.categoryId] = [];
+    acc[svc.categoryId].push({
+      id: svc.id,
+      title: svc.title,
+      short: svc.short,
+      desc: svc.desc,
+      price: svc.price,
+      priceLabel: svc.priceLabel,
+      duration: svc.duration,
+      badge: svc.badge,
+      badgeColor: svc.badgeColor,
+      img: svc.img,
+      highlights: svc.highlights,
+      sortOrder: svc.sortOrder,
+      isActive: svc.isActive,
+    });
+    return acc;
+  }, {});
+
+  return categories
+    .filter((cat) => byCategory[cat.slug]?.length > 0)
+    .map((cat) => ({
+      id: cat.slug,
+      slug: cat.slug,
+      name: cat.name,
+      icon: cat.icon,
+      description: cat.description,
+      sortOrder: cat.sortOrder ?? 0,
+      isActive: cat.isActive !== false,
+      cards: byCategory[cat.slug] || [],
+    }));
+};
 
 export const formatServiceDoc = (service, categoryName = '') => ({
   id: service.slug,
@@ -23,7 +186,17 @@ export const formatServiceDoc = (service, categoryName = '') => ({
   isActive: service.isActive !== false,
 });
 
-export const buildPublicCatalog = async ({ includeInactive = false } = {}) => {
+export const buildPublicCatalog = async ({
+  includeInactive = false,
+  categorySlugs = [],
+  durations = [],
+  badges = [],
+  minPrice,
+  maxPrice,
+  search = '',
+  sortBy = 'sortOrder',
+  sortOrder = 'asc',
+} = {}) => {
   const catFilter = includeInactive ? {} : { isActive: true };
   const svcFilter = includeInactive ? {} : { isActive: true };
 
@@ -38,40 +211,39 @@ export const buildPublicCatalog = async ({ includeInactive = false } = {}) => {
     formatServiceDoc(s, categoryNameBySlug[s.categorySlug] || '')
   );
 
-  const servicesByCategory = formattedServices.reduce((acc, svc) => {
-    if (!acc[svc.categoryId]) acc[svc.categoryId] = [];
-    acc[svc.categoryId].push({
-      id: svc.id,
-      title: svc.title,
-      short: svc.short,
-      desc: svc.desc,
-      price: svc.price,
-      priceLabel: svc.priceLabel,
-      duration: svc.duration,
-      badge: svc.badge,
-      badgeColor: svc.badgeColor,
-      img: svc.img,
-      highlights: svc.highlights,
-      sortOrder: svc.sortOrder,
-      isActive: svc.isActive,
-    });
-    return acc;
-  }, {});
+  const filterMeta = buildFilterMeta(formattedServices, categories);
 
-  const publicCategories = categories
-    .filter((cat) => includeInactive || (servicesByCategory[cat.slug]?.length > 0))
-    .map((cat) => ({
-      id: cat.slug,
-      slug: cat.slug,
-      name: cat.name,
-      icon: cat.icon,
-      description: cat.description,
-      sortOrder: cat.sortOrder ?? 0,
-      isActive: cat.isActive !== false,
-      cards: servicesByCategory[cat.slug] || [],
-    }));
+  const filteredServices = sortServices(
+    applyServiceFilters(formattedServices, {
+      categorySlugs,
+      durations,
+      badges,
+      minPrice,
+      maxPrice,
+      search,
+    }),
+    sortBy,
+    sortOrder
+  );
 
-  return { categories: publicCategories, services: formattedServices };
+  const publicCategories = groupServicesByCategory(filteredServices, categories);
+
+  return {
+    categories: publicCategories,
+    services: filteredServices,
+    total: filteredServices.length,
+    filters: filterMeta,
+    appliedFilters: {
+      category: categorySlugs,
+      duration: durations,
+      badge: badges,
+      minPrice: minPrice ?? null,
+      maxPrice: maxPrice ?? null,
+      search: search || '',
+      sortBy,
+      sortOrder,
+    },
+  };
 };
 
 export const getActiveServiceBySlug = async (slug) => {
@@ -82,19 +254,24 @@ export const getActiveServiceBySlug = async (slug) => {
 };
 
 export const syncCatalogFromStatic = async () => {
+  await ensureConsultationCatalogSchema();
+
   for (let ci = 0; ci < CONSULTATION_CATEGORIES.length; ci += 1) {
     const cat = CONSULTATION_CATEGORIES[ci];
     await ConsultationCategory.findOneAndUpdate(
       { slug: cat.id },
       {
-        slug: cat.id,
-        name: cat.name,
-        icon: cat.icon,
-        description: cat.description,
-        sortOrder: ci,
-        isActive: true,
+        $set: {
+          slug: cat.id,
+          name: cat.name,
+          icon: cat.icon,
+          description: cat.description,
+          sortOrder: ci,
+          isActive: true,
+        },
+        $unset: { categoryId: '', cards: '' },
       },
-      { upsert: true, new: true }
+      { upsert: true, new: true, strict: false }
     );
 
     for (let si = 0; si < cat.cards.length; si += 1) {

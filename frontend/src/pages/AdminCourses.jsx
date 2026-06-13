@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from 'react';
 import API_BASE from '../utils/api';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
+import { invalidateCoursesCache } from '../hooks/useCourses';
+import AdminCourseCategories from './AdminCourseCategories';
 import { motion, AnimatePresence } from 'framer-motion';
 import { uploadImage, uploadVideo, fetchUploadStatus } from '../utils/uploadMedia';
 
@@ -60,12 +62,22 @@ function AdminCourses() {
 
   const [formData, setFormData] = useState({
     title: '',
+    slug: '',
+    category: 'Astrology',
     description: '',
+    longDesc: '',
     courseType: 'Recorded',
+    level: 'Beginner',
+    duration: '',
+    instructor: '',
+    topics: [],
     price: '',
     validityDays: '',
     thumbnailUrl: ''
   });
+  const [topicInput, setTopicInput] = useState('');
+  const [courseCategories, setCourseCategories] = useState([]);
+  const [showCategoryPanel, setShowCategoryPanel] = useState(false);
   
   const [initialVideoForm, setInitialVideoForm] = useState({ title: '', bunnyVideoId: '', sortOrder: '', videoProvider: 'supabase' });
   const [initialVideoFile, setInitialVideoFile] = useState(null);
@@ -231,6 +243,15 @@ function AdminCourses() {
   useEffect(() => {
     fetchCourses();
     fetchUploadStatus().then(setSupabaseStatus);
+    const token = localStorage.getItem('adminToken');
+    fetch(`${API_BASE}/api/admin/course-categories`, {
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) setCourseCategories(data.categories?.filter((c) => c.isActive) || []);
+      })
+      .catch(() => setCourseCategories([]));
   }, []);
 
   const handleInputChange = (e) => {
@@ -764,6 +785,7 @@ function AdminCourses() {
         }
         setInitialVideos([]);
         setShowModal(false);
+        invalidateCoursesCache();
         fetchCourses();
       } else {
         toast.error(data.message || `Operation failed (${res.status})`);
@@ -821,12 +843,20 @@ function AdminCourses() {
       setEditVideoDrafts([]);
       setFormData({
         title: course.title,
-        description: course.description,
+        slug: course.slug || '',
+        category: course.category || 'Astrology',
+        description: course.description || '',
+        longDesc: course.longDesc || '',
         courseType: course.courseType || 'Recorded',
+        level: course.level || 'Beginner',
+        duration: course.duration || '',
+        instructor: course.instructor || '',
+        topics: Array.isArray(course.topics) ? course.topics : [],
         price: course.price,
         validityDays: course.validityDays,
         thumbnailUrl: course.thumbnailUrl || ''
       });
+      setTopicInput('');
       // Fetch videos for this course
       setEditingCourseVideosLoading(true);
       fetch(`${API_BASE}/api/courses/${course._id}`)
@@ -845,7 +875,8 @@ function AdminCourses() {
         });
     } else {
       setEditingCourse(null);
-      setFormData({ title: '', description: '', courseType: 'Recorded', price: '', validityDays: '', thumbnailUrl: '' });
+      setFormData({ title: '', slug: '', category: 'Astrology', description: '', longDesc: '', courseType: 'Recorded', level: 'Beginner', duration: '', instructor: '', topics: [], price: '', validityDays: '', thumbnailUrl: '' });
+      setTopicInput('');
       resetInitialVideoForm();
       setInitialVideos([]);
       setEditVideoDrafts([]);
@@ -913,7 +944,22 @@ function AdminCourses() {
           <span className="lms-metric-label">Attached Videos</span>
           <strong>{totalVideos}</strong>
         </div>
+        <button
+          type="button"
+          className="lms-primary-action"
+          style={{ marginLeft: 'auto', alignSelf: 'center' }}
+          onClick={() => setShowCategoryPanel((v) => !v)}
+        >
+          <i className={`fas fa-${showCategoryPanel ? 'chevron-up' : 'tags'}`}></i>
+          <span>{showCategoryPanel ? 'Hide Categories' : 'Manage Categories'}</span>
+        </button>
       </div>
+
+      {showCategoryPanel && (
+        <div className="lms-table-card" style={{ marginBottom: '1rem' }}>
+          <AdminCourseCategories embedded />
+        </div>
+      )}
 
       <div className="lms-table-card">
         <div className="lms-table-head">
@@ -1025,16 +1071,157 @@ function AdminCourses() {
                     <label className="form-label">Course Title</label>
                     <input type="text" name="title" value={formData.title} onChange={handleInputChange} className="form-input" required />
                   </div>
+
+                  <div className="form-row">
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">URL Slug</label>
+                        <input
+                          type="text"
+                          name="slug"
+                          value={formData.slug}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder="auto-generated-from-title if empty"
+                        />
+                        <p className="form-hint">Public URL: /courses/{formData.slug || 'your-slug'}</p>
+                      </div>
+                    </div>
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">Subject Category</label>
+                        <select name="category" value={formData.category} onChange={handleInputChange} className="form-input">
+                          {courseCategories.length > 0 ? (
+                            courseCategories.map((cat) => (
+                              <option key={cat._id} value={cat.name}>{cat.name}</option>
+                            ))
+                          ) : (
+                            <>
+                              <option value="Astrology">Astrology</option>
+                              <option value="Vedic Astrology">Vedic Astrology</option>
+                              <option value="Tarot">Tarot</option>
+                            </>
+                          )}
+                        </select>
+                        <p className="form-hint">Live vs Recorded is set below as Course Type.</p>
+                      </div>
+                    </div>
+                  </div>
                   
                   <div className="form-group">
-                    <label className="form-label">Description</label>
-                    <textarea 
-                      name="description" 
-                      value={formData.description} 
-                      onChange={handleInputChange} 
+                    <label className="form-label">Short Description</label>
+                    <textarea
+                      name="description"
+                      value={formData.description}
+                      onChange={handleInputChange}
                       className="form-textarea"
+                      rows={2}
+                      placeholder="Brief summary shown on course listing cards"
                       required
-                    ></textarea>
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Course Overview <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(shown on detail page)</span></label>
+                    <textarea
+                      name="longDesc"
+                      value={formData.longDesc}
+                      onChange={handleInputChange}
+                      className="form-textarea"
+                      rows={4}
+                      placeholder="Detailed description of the course, goals, and outcomes…"
+                    />
+                  </div>
+
+                  <div className="form-row">
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">Level</label>
+                        <select name="level" value={formData.level} onChange={handleInputChange} className="form-input">
+                          <option value="Beginner">Beginner</option>
+                          <option value="Intermediate">Intermediate</option>
+                          <option value="Advanced">Advanced</option>
+                          <option value="All Levels">All Levels</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div className="form-col">
+                      <div className="form-group">
+                        <label className="form-label">Duration</label>
+                        <input
+                          type="text"
+                          name="duration"
+                          value={formData.duration}
+                          onChange={handleInputChange}
+                          className="form-input"
+                          placeholder="e.g. 3 Months, 45 Hours"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">Instructor Name <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(optional)</span></label>
+                    <input
+                      type="text"
+                      name="instructor"
+                      value={formData.instructor}
+                      onChange={handleInputChange}
+                      className="form-input"
+                      placeholder="e.g. Pankaj Soni"
+                    />
+                  </div>
+
+                  <div className="form-group">
+                    <label className="form-label">What You Will Learn <span style={{ fontWeight: 400, color: 'var(--text-muted)', fontSize: '0.82rem' }}>(array list)</span></label>
+                    <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+                      <input
+                        type="text"
+                        value={topicInput}
+                        onChange={e => setTopicInput(e.target.value)}
+                        onKeyDown={e => {
+                          if (e.key === 'Enter') {
+                            e.preventDefault();
+                            const t = topicInput.trim();
+                            if (t) { setFormData(prev => ({ ...prev, topics: [...prev.topics, t] })); setTopicInput(''); }
+                          }
+                        }}
+                        className="form-input"
+                        placeholder="Type a topic and press Enter or click Add"
+                        style={{ flex: 1 }}
+                      />
+                      <button
+                        type="button"
+                        className="btn btn-secondary"
+                        style={{ whiteSpace: 'nowrap', padding: '0 14px', fontSize: '0.85rem' }}
+                        onClick={() => {
+                          const t = topicInput.trim();
+                          if (t) { setFormData(prev => ({ ...prev, topics: [...prev.topics, t] })); setTopicInput(''); }
+                        }}
+                      >
+                        + Add
+                      </button>
+                    </div>
+                    {formData.topics.length > 0 && (
+                      <ul style={{ listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                        {formData.topics.map((topic, i) => (
+                          <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 8, background: 'var(--bg-surface, #f8f9fa)', borderRadius: 8, padding: '6px 10px', fontSize: '0.88rem' }}>
+                            <i className="fas fa-check-circle" style={{ color: '#C8832A', fontSize: '0.8rem', flexShrink: 0 }} />
+                            <span style={{ flex: 1 }}>{topic}</span>
+                            <button
+                              type="button"
+                              onClick={() => setFormData(prev => ({ ...prev, topics: prev.topics.filter((_, j) => j !== i) }))}
+                              style={{ background: 'none', border: 'none', color: 'var(--text-muted)', cursor: 'pointer', padding: '0 4px', fontSize: '0.8rem', lineHeight: 1 }}
+                            >
+                              <i className="fas fa-times" />
+                            </button>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {formData.topics.length === 0 && (
+                      <p className="form-hint">No topics added yet. Add items students will learn in this course.</p>
+                    )}
                   </div>
 
                   <div className="form-group">

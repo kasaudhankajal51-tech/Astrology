@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useSettings } from '../context/SettingsContext';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 
 // --- Pure SVG Components for Payment Methods ---

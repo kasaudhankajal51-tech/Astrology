@@ -3,13 +3,32 @@ import {
   buildPublicCatalog,
   getActiveServiceBySlug,
   seedCatalogFromStaticIfEmpty,
+  parseMultiQueryParam,
 } from '../services/consultationCatalogDb.js';
 import { isPaymentEnabled, getRazorpayConfig, getPaymentMode } from '../utils/razorpayConfig.js';
+
+const parseOptionalNumber = (value) => {
+  if (value == null || value === '') return undefined;
+  const num = Number(value);
+  return Number.isFinite(num) ? num : undefined;
+};
 
 /** @route GET /api/consultations/services */
 export const getConsultationServices = asyncHandler(async (req, res) => {
   await seedCatalogFromStaticIfEmpty();
-  const catalog = await buildPublicCatalog({ includeInactive: false });
+
+  const catalog = await buildPublicCatalog({
+    includeInactive: false,
+    categorySlugs: parseMultiQueryParam(req.query.category),
+    durations: parseMultiQueryParam(req.query.duration),
+    badges: parseMultiQueryParam(req.query.badge),
+    minPrice: parseOptionalNumber(req.query.minPrice),
+    maxPrice: parseOptionalNumber(req.query.maxPrice),
+    search: req.query.q || req.query.search || '',
+    sortBy: req.query.sortBy || 'sortOrder',
+    sortOrder: req.query.sortOrder === 'desc' ? 'desc' : 'asc',
+  });
+
   res.json({ success: true, ...catalog });
 });
 

@@ -1,62 +1,64 @@
 import { Link } from 'react-router-dom';
+import { ArrowRight, Clock } from 'lucide-react';
+import { BTN, CARD, TYPE } from './consultation/tokens';
 
-const BADGE_CLASS = {
-  purple: 'border-purple-200 bg-purple-100 text-purple-800',
-  pink: 'border-pink-200 bg-pink-100 text-pink-800',
-  orange: 'border-orange-200 bg-orange-100 text-orange-800',
-  red: 'border-red-200 bg-red-100 text-red-800',
-  green: 'border-green-200 bg-green-100 text-green-800',
+const BADGE_STYLES = {
+  purple: 'bg-violet-600/95 text-white',
+  pink: 'bg-rose-500/95 text-white',
+  orange: 'bg-amber-600/95 text-white',
+  red: 'bg-red-600/95 text-white',
+  green: 'bg-emerald-600/95 text-white',
 };
 
 export default function ConsultationServiceCard({ card, detailPath = '/book-consultation' }) {
-  const badgeClass = BADGE_CLASS[card.badgeColor] || BADGE_CLASS.purple;
-  const detailUrl = `${detailPath}/${card.id}`;
+  const badgeStyle = BADGE_STYLES[card.badgeColor] || BADGE_STYLES.purple;
+  const url = `${detailPath}/${card.id}`;
 
   return (
-    <article className="flex h-full m-0 flex-col overflow-hidden rounded-2xl border border-site-accent-dark/12 bg-site-surface p-0 shadow-[0_8px_22px_rgba(42,15,2,0.06)]">
-      <Link
-        to={detailUrl}
-        className="relative m-0 block aspect-[16/10] overflow-hidden p-0 no-underline"
-      >
+    <article className={CARD}>
+      <Link to={url} className="relative block aspect-[2/1] overflow-hidden no-underline" tabIndex={-1} aria-hidden>
         <img
           src={card.img}
-          alt={card.title}
-          className="m-0 h-full w-full border-none object-cover p-0"
+          alt=""
+          className="block h-full w-full object-cover transition duration-300 group-hover:scale-[1.02]"
+          loading="lazy"
         />
-        <div
-          className="pointer-events-none absolute inset-0 m-0 bg-gradient-to-t from-site-primary/70 via-site-primary/10 to-transparent p-0"
-          aria-hidden="true"
-        />
-        <span
-          className={`absolute left-3 top-3 m-0 rounded-lg border px-2.5 py-1 text-sm font-bold uppercase tracking-wide ${badgeClass}`}
-        >
-          {card.badge}
-        </span>
-        <span className="absolute bottom-3 right-3 m-0 rounded-lg bg-white/95 px-3 py-1.5 text-[0.9375rem] font-extrabold text-site-accent-dark shadow-[0_2px_8px_rgba(42,15,2,0.08)]">
-          {card.priceLabel}
-        </span>
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-site-primary/30 to-transparent" aria-hidden />
+        {card.badge ? (
+          <span
+            className={`absolute left-2 top-2 rounded px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase tracking-wide shadow-sm sm:left-2.5 sm:top-2.5 sm:px-2 sm:text-[0.625rem] ${badgeStyle}`}
+          >
+            {card.badge}
+          </span>
+        ) : null}
+        {card.duration ? (
+          <span className="absolute bottom-2 left-2 inline-flex items-center gap-0.5 rounded-full bg-white/95 px-1.5 py-0.5 text-[0.625rem] font-semibold text-site-muted shadow-sm sm:bottom-2.5 sm:left-2.5 sm:gap-1 sm:px-2 sm:text-[0.6875rem]">
+            <Clock size={10} className="text-site-accent" aria-hidden />
+            {card.duration}
+          </span>
+        ) : null}
       </Link>
 
-      <div className="flex flex-1 flex-col m-0 px-[1.1rem] pb-[1.15rem] pt-4">
-        <Link
-          to={detailUrl}
-          className="mb-2 m-0 p-0 font-heading text-[1.0625rem] font-bold leading-snug text-site-primary no-underline"
-        >
-          {card.short || card.title}
-        </Link>
-        <p className="mb-3 m-0 flex-1 p-0 text-sm leading-[1.55] text-site-muted">{card.desc}</p>
-        {card.duration ? (
-          <p className="mb-4 m-0 inline-flex w-fit items-center gap-2 rounded-lg bg-site-accent/10 px-[0.65rem] py-[0.35rem] text-[0.8125rem] font-semibold text-site-accent-dark">
-            <i className="far fa-clock" aria-hidden="true" /> {card.duration}
+      <div className="flex flex-1 flex-col gap-2 p-2.5 sm:p-3">
+        <div className="min-w-0 flex-1">
+          <Link
+            to={url}
+            className={`${TYPE.h3} !mb-0.5 block truncate no-underline transition group-hover:!text-site-accent-dark`}
+          >
+            {card.short || card.title}
+          </Link>
+          <p className={`${TYPE.bodySm} line-clamp-1 !text-[0.75rem] !leading-snug sm:line-clamp-2 sm:!text-xs`}>{card.desc}</p>
+        </div>
+
+        <div className="flex items-center justify-between gap-2 border-t border-site-accent-dark/8 pt-2">
+          <p className="!m-0 truncate font-heading text-sm font-bold leading-none text-site-accent-dark sm:text-[0.9375rem]">
+            {card.priceLabel}
           </p>
-        ) : null}
-        <Link
-          to={detailUrl}
-          className="inline-flex w-full cursor-pointer items-center justify-center gap-2 m-0 rounded-lg border-none bg-site-primary px-4 py-[0.65rem] text-[0.9375rem] font-bold text-white no-underline hover:bg-site-accent-dark hover:text-white"
-        >
-          View Details
-          <i className="fas fa-arrow-right" aria-hidden="true" />
-        </Link>
+          <Link to={url} className={`${BTN.pill} shrink-0`}>
+            Book
+            <ArrowRight size={11} strokeWidth={2.5} aria-hidden />
+          </Link>
+        </div>
       </div>
     </article>
   );

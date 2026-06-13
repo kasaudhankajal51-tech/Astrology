@@ -5,6 +5,11 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig({
   root: fileURLToPath(new URL('.', import.meta.url)),
+  resolve: {
+    alias: {
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
+  },
   plugins: [
     react(),
     tailwindcss(),
@@ -33,7 +38,7 @@ export default defineConfig({
             if (id.includes('react') || id.includes('react-dom') || id.includes('react-router-dom')) {
               return 'vendor';
             }
-            if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('react-hot-toast')) {
+            if (id.includes('framer-motion') || id.includes('lucide-react') || id.includes('react-toastify')) {
               return 'ui';
             }
             return 'modules';

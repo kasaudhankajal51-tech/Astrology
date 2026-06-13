@@ -1,12 +1,16 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import { Ban, CalendarCheck, FlaskConical, Lock, Scale, SearchX, Sparkles } from 'lucide-react';
+import toast from '@/utils/toast';
 import ConsultationModal from '../components/ConsultationModal';
+import { OverlayLoader } from '../components/PageLoader';
 import BookConsultationCTA from '../components/BookConsultationCTA';
 import ConsultationServiceCard from '../components/ConsultationServiceCard';
+import { ConsultationFilterBar } from '../components/ConsultationFilters';
 import SuccessModal from '../components/SuccessModal';
 import SEO from '../components/SEO';
-import { useConsultationCatalog } from '../utils/consultationApi';
+import { PAGE, PAGE_WRAP, TYPE, BTN, CHIP, CHIP_GHOST } from '../components/consultation/tokens';
+import { useConsultationCatalog, toggleInList } from '../utils/consultationApi';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import {
   BOOKING_MODES,
@@ -14,15 +18,66 @@ import {
   getEmptyConsultationForm,
 } from '../utils/consultationBooking';
 
-const SEARCH_HINTS = ['Tarot', 'Marriage', 'Career', 'Remedies'];
-
 const GUIDELINES = [
-  { icon: 'fa-lock', title: 'Confidentiality', text: 'All sessions are private & confidential' },
-  { icon: 'fa-calendar-check', title: 'Prior Booking', text: 'Mandatory for all consultation types' },
-  { icon: 'fa-ban', title: 'Refund Policy', text: 'No refund after booking completion' },
-  { icon: 'fa-balance-scale', title: 'Divine Balance', text: 'Results depend on karma & planetary timing' },
-  { icon: 'fa-vial', title: 'Remedies', text: 'Suggested only after proper analysis' },
+  { icon: Lock, title: 'Confidentiality', text: 'All sessions are private & confidential' },
+  { icon: CalendarCheck, title: 'Prior Booking', text: 'Mandatory for all consultation types' },
+  { icon: Ban, title: 'Refund Policy', text: 'No refund after booking completion' },
+  { icon: Scale, title: 'Divine Balance', text: 'Results depend on karma & planetary timing' },
+  { icon: FlaskConical, title: 'Remedies', text: 'Suggested only after proper analysis' },
 ];
+
+const SORT_OPTIONS = [
+  { value: 'sortOrder:asc', label: 'Recommended' },
+  { value: 'price:asc', label: 'Price: Low to High' },
+  { value: 'price:desc', label: 'Price: High to Low' },
+  { value: 'title:asc', label: 'Name: A–Z' },
+];
+
+const GRID =
+  'm-0 grid list-none grid-cols-1 gap-3 p-0 min-[480px]:grid-cols-2 sm:gap-3.5 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5';
+
+function ResultsSkeleton() {
+  return (
+    <ul className={GRID}>
+      {Array.from({ length: 8 }).map((_, i) => (
+        <li key={i}>
+          <div className="animate-pulse overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-sm">
+            <div className="aspect-[2/1] bg-site-accent-dark/10" />
+            <div className="space-y-2 p-3">
+              <div className="h-4 w-3/4 rounded-full bg-site-accent-dark/10" />
+              <div className="h-3 w-full rounded-full bg-site-accent-dark/8" />
+              <div className="mt-3 flex justify-between border-t border-site-accent-dark/8 pt-3">
+                <div className="h-5 w-16 rounded-full bg-site-accent-dark/10" />
+                <div className="h-8 w-20 rounded-full bg-site-accent-dark/10" />
+              </div>
+            </div>
+          </div>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+function ActiveChip({ label, onRemove }) {
+  return (
+    <button type="button" onClick={onRemove} className={CHIP}>
+      {label}
+      <span className="text-[0.625rem] opacity-50">✕</span>
+    </button>
+  );
+}
+
+function CardGrid({ cards }) {
+  return (
+    <ul className={GRID}>
+      {cards.map((card, i) => (
+        <li key={card.id ?? i} className="min-w-0">
+          <ConsultationServiceCard card={card} detailPath="/book-consultation" />
+        </li>
+      ))}
+    </ul>
+  );
+}
 
 function Consultations() {
   const navigate = useNavigate();
@@ -31,23 +86,79 @@ function Consultations() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [bookingMode, setBookingMode] = useState(BOOKING_MODES.PAY_LATER);
   const [isSuccessOpen, setIsSuccessOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [selectedDurations, setSelectedDurations] = useState([]);
+  const [selectedBadges, setSelectedBadges] = useState([]);
+  const [priceMin, setPriceMin] = useState(null);
+  const [priceMax, setPriceMax] = useState(null);
+  const [sortValue, setSortValue] = useState('sortOrder:asc');
+
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedSearch(searchQuery), 350);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+
+  const [sortBy, sortOrder] = sortValue.split(':');
+
+  const catalogFilters = useMemo(
+    () => ({
+      categories: selectedCategories,
+      durations: selectedDurations,
+      badges: selectedBadges,
+      minPrice: priceMin,
+      maxPrice: priceMax,
+      search: debouncedSearch,
+      sortBy,
+      sortOrder,
+    }),
+    [selectedCategories, selectedDurations, selectedBadges, priceMin, priceMax, debouncedSearch, sortBy, sortOrder]
+  );
+
+  const {
+    categories: consultationCategories,
+    filterMeta,
+    total,
+    loading: catalogLoading,
+    error: catalogError,
+  } = useConsultationCatalog(catalogFilters);
+
+  useEffect(() => {
+    if (catalogError) toast.error(catalogError);
+  }, [catalogError]);
+
+  const activeFilterCount =
+    selectedCategories.length +
+    selectedDurations.length +
+    selectedBadges.length +
+    (priceMin != null ? 1 : 0) +
+    (priceMax != null ? 1 : 0);
+
+  const clearAllFilters = () => {
+    setSelectedCategories([]);
+    setSelectedDurations([]);
+    setSelectedBadges([]);
+    setPriceMin(null);
+    setPriceMax(null);
+    setSearchQuery('');
   };
+
+  const hasActiveFilters = activeFilterCount > 0 || debouncedSearch.trim().length > 0;
+  const showGrouped = selectedCategories.length <= 1 && !debouncedSearch.trim();
+
+  const handleChange = (e) => setFormData((p) => ({ ...p, [e.target.name]: e.target.value }));
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const validationError = getContactValidationError(formData);
-    if (validationError) {
-      toast.error(validationError);
+    const err = getContactValidationError(formData);
+    if (err) {
+      toast.error(err);
       return;
     }
-
     const sanitizedPhone = normalizeIndianMobile(formData.phone);
     setIsSubmitting(true);
-
     try {
       const service = formData.serviceId
         ? {
@@ -57,7 +168,6 @@ function Consultations() {
             priceLabel: formData.priceLabel,
           }
         : null;
-
       await submitConsultationBooking({
         formData,
         service,
@@ -66,9 +176,7 @@ function Consultations() {
         navigate,
         onSuccess: ({ mode }) => {
           setIsModalOpen(false);
-          if (mode === BOOKING_MODES.PAY_NOW) {
-            return;
-          }
+          if (mode === BOOKING_MODES.PAY_NOW) return;
           setIsSuccessOpen(true);
           setFormData(getEmptyConsultationForm());
         },
@@ -87,29 +195,28 @@ function Consultations() {
     setIsModalOpen(true);
   };
 
-  const { categories: consultationCategories, loading: catalogLoading, error: catalogError } =
-    useConsultationCatalog();
-
-  useEffect(() => {
-    if (catalogError) toast.error(catalogError);
-  }, [catalogError]);
-
-  const filteredCategories = consultationCategories
-    .map((cat) => ({
-      ...cat,
-      cards: cat.cards.filter(
-        (card) =>
-          card.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          card.desc.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          cat.name.toLowerCase().includes(searchQuery.toLowerCase())
-      ),
-    }))
-    .filter((cat) => cat.cards.length > 0);
-
-  const totalResults = filteredCategories.reduce((sum, cat) => sum + cat.cards.length, 0);
-
-  const wrapClass =
-    'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
+  const filterBarProps = {
+    filterMeta,
+    selectedCategories,
+    selectedDurations,
+    selectedBadges,
+    priceMin,
+    priceMax,
+    onToggleCategory: (id) => setSelectedCategories((p) => toggleInList(p, id)),
+    onClearCategories: () => setSelectedCategories([]),
+    onToggleDuration: (value) => setSelectedDurations((p) => toggleInList(p, value)),
+    onToggleBadge: (value) => setSelectedBadges((p) => toggleInList(p, value)),
+    onPriceMinChange: setPriceMin,
+    onPriceMaxChange: setPriceMax,
+    onClearAll: clearAllFilters,
+    activeFilterCount,
+    sortValue,
+    onSortChange: setSortValue,
+    sortOptions: SORT_OPTIONS,
+    total,
+    loading: catalogLoading,
+    hasActiveFilters,
+  };
 
   return (
     <>
@@ -119,197 +226,118 @@ function Consultations() {
         url="/book-consultation"
       />
 
-      <div className="w-full min-h-screen m-0 overflow-x-clip bg-site-bg p-0 font-body text-site-text">
-        {/* Hero */}
-        <div className="m-0 border-b border-site-accent-dark/8 bg-gradient-to-b from-white/65 to-site-bg/85 py-[clamp(2rem,5vw,3rem)]">
-          <div className={wrapClass}>
-            <div className="mx-auto max-w-3xl p-0 text-center">
-              <span className="mb-3 inline-block m-0 rounded-full border border-site-accent-dark/15 bg-site-surface px-3 py-1 text-[0.8125rem] font-bold uppercase tracking-[0.06em] text-site-accent-dark">
-                Divine Guidance &amp; Transformation
-              </span>
-              <h1 className="m-0 p-0 font-heading text-[clamp(1.75rem,4vw,2.25rem)] font-bold leading-tight text-site-primary">
-                Consultation{' '}
-                <span className="bg-gradient-to-br from-site-accent-dark to-site-accent bg-clip-text text-transparent">
-                  Services
-                </span>
-              </h1>
-              <p className="mx-auto mt-4 max-w-[42rem] p-0 text-base leading-relaxed text-site-muted">
-                Understand your life path, remove confusion, and make decisions with confidence. Every
-                session is conducted with complete dedication and confidentiality.
-              </p>
+      <div className={PAGE}>
+        <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-4 pt-6 sm:pb-5 sm:pt-7`}>
+          <h1 className={TYPE.h1}>Book a Consultation</h1>
+          <p className={`${TYPE.bodySm} !mt-1.5 max-w-xl !text-[0.8125rem]`}>
+            Browse sessions by category, filter by duration or price, and book online.
+          </p>
+        </header>
 
-              <div className="mx-auto mt-8 w-full max-w-xl p-0">
-                <label htmlFor="consult-search" className="sr-only">
-                  Search consultation services
-                </label>
-                <div className="flex items-center gap-3 m-0 rounded-xl border border-site-accent-dark/12 bg-site-surface px-4 py-3 shadow-[0_4px_14px_rgba(42,15,2,0.06)]">
-                  <i className="fas fa-search text-site-accent-dark" aria-hidden="true" />
-                  <input
-                    id="consult-search"
-                    type="text"
-                    role="searchbox"
-                    inputMode="search"
-                    enterKeyHint="search"
-                    autoComplete="off"
-                    placeholder="Search services (Career, Tarot, Marriage…)"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="min-w-0 flex-1 m-0 border-0 bg-transparent p-0 text-base text-site-text outline-none"
-                  />
-                  {searchQuery ? (
-                    <button
-                      type="button"
-                      onClick={() => setSearchQuery('')}
-                      className="flex h-8 w-8 shrink-0 cursor-pointer items-center justify-center m-0 rounded-full border-none bg-site-accent/12 p-0 text-xs text-site-accent-dark hover:bg-site-accent/22"
-                      aria-label="Clear search"
-                    >
-                      <i className="fas fa-times" aria-hidden="true" />
-                    </button>
-                  ) : null}
-                </div>
+        <ConsultationFilterBar {...filterBarProps} />
 
-                <div className="mt-3 flex flex-wrap items-center justify-center gap-2 m-0 p-0">
-                  <span className="m-0 p-0 text-[0.8125rem] text-site-muted">Try searching:</span>
-                  {SEARCH_HINTS.map((hint) => (
-                    <button
-                      key={hint}
-                      type="button"
-                      className="cursor-pointer m-0 rounded-lg border border-site-accent-dark/12 bg-site-surface px-3 py-[0.35rem] text-sm font-semibold text-site-accent-dark"
-                      onClick={() => setSearchQuery(hint === 'Remedies' ? 'Spell' : hint)}
-                    >
-                      {hint}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Main */}
-        <div className="m-0 py-[clamp(2rem,5vw,3rem)]">
-          <div className={wrapClass}>
-            {catalogLoading ? (
-              <div className="mx-auto max-w-3xl py-16 text-center">
-                <div
-                  className="mx-auto mb-4 h-10 w-10 animate-spin rounded-full border-2 border-site-accent-dark/20 border-t-site-accent-dark"
-                  aria-hidden="true"
+        <div className={`${PAGE_WRAP} py-4 sm:py-5`}>
+          {hasActiveFilters && (
+            <div className="mb-4 flex flex-wrap items-center gap-1.5 sm:mb-5 sm:gap-2">
+              {selectedCategories.map((id) => {
+                const label = filterMeta?.categories?.find((c) => c.id === id)?.name || id;
+                return (
+                  <ActiveChip key={`cat-${id}`} label={label} onRemove={() => setSelectedCategories((p) => toggleInList(p, id))} />
+                );
+              })}
+              {selectedDurations.map((dur) => (
+                <ActiveChip key={`dur-${dur}`} label={dur} onRemove={() => setSelectedDurations((p) => toggleInList(p, dur))} />
+              ))}
+              {selectedBadges.map((badge) => (
+                <ActiveChip key={`badge-${badge}`} label={badge} onRemove={() => setSelectedBadges((p) => toggleInList(p, badge))} />
+              ))}
+              {(priceMin != null || priceMax != null) && (
+                <ActiveChip
+                  label={`₹${priceMin ?? filterMeta?.priceRange?.min} – ₹${priceMax ?? filterMeta?.priceRange?.max}`}
+                  onRemove={() => {
+                    setPriceMin(null);
+                    setPriceMax(null);
+                  }}
                 />
-                <p className="m-0 p-0 text-base leading-relaxed text-site-muted">
-                  Loading consultation services…
-                </p>
+              )}
+              {debouncedSearch && <ActiveChip label={`"${debouncedSearch}"`} onRemove={() => setSearchQuery('')} />}
+              <button type="button" onClick={clearAllFilters} className={CHIP_GHOST}>
+                Clear all
+              </button>
+            </div>
+          )}
+
+          {catalogLoading ? (
+            <ResultsSkeleton />
+          ) : total > 0 ? (
+            showGrouped ? (
+              <div className="flex flex-col gap-7 sm:gap-8">
+                {consultationCategories.map((cat, idx) => (
+                  <section key={cat.slug ?? idx} aria-labelledby={`cat-${idx}`}>
+                    <div className="mb-3 sm:mb-4">
+                      <h2 id={`cat-${idx}`} className={`${TYPE.h2} flex flex-wrap items-baseline gap-x-2 gap-y-0.5`}>
+                        <span className="inline-flex min-w-[1.25rem] items-center justify-center rounded-md bg-site-accent/15 px-1.5 py-0.5 font-body text-xs font-bold tabular-nums text-site-accent-dark">
+                          {cat.cards.length}
+                        </span>
+                        <span>{cat.name}</span>
+                      </h2>
+                      {cat.description && (
+                        <p className={`${TYPE.bodySm} !mt-1 line-clamp-2 max-w-3xl !text-[0.8125rem]`}>{cat.description}</p>
+                      )}
+                    </div>
+                    <CardGrid cards={cat.cards} />
+                  </section>
+                ))}
               </div>
-            ) : filteredCategories.length > 0 ? (
-              <>
-                {searchQuery ? (
-                  <p className="mb-6 m-0 p-0 text-base leading-relaxed text-site-muted">
-                    Showing <strong>{totalResults}</strong> result{totalResults !== 1 ? 's' : ''} for
-                    &ldquo;{searchQuery}&rdquo;
-                  </p>
-                ) : null}
-
-                <div className="space-y-10 sm:space-y-12 lg:space-y-14">
-                  {filteredCategories.map((cat, idx) => (
-                    <section key={cat.name ?? idx} aria-labelledby={`category-${idx}`}>
-                      <div className="mb-5 m-0 p-0">
-                        <h2
-                          id={`category-${idx}`}
-                          className="m-0 p-0 font-heading text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold leading-tight text-site-primary"
-                        >
-                          {cat.name}
-                        </h2>
-                        {cat.description ? (
-                          <p className="mt-1.5 m-0 p-0 text-base leading-relaxed text-site-muted">
-                            {cat.description}
-                          </p>
-                        ) : null}
-                      </div>
-
-                      <ul className="grid list-none grid-cols-1 gap-4 m-0 p-0 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
-                        {cat.cards.map((card, cIdx) => (
-                          <li key={card.id ?? cIdx} className="m-0 min-w-0 p-0">
-                            <ConsultationServiceCard card={card} detailPath="/book-consultation" />
-                          </li>
-                        ))}
-                      </ul>
-                    </section>
-                  ))}
-                </div>
-              </>
             ) : (
-              <div className="mx-auto max-w-md rounded-2xl border border-site-accent-dark/10 bg-site-surface px-6 py-12 text-center">
-                <div
-                  className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-site-accent/10 text-xl text-site-accent-dark"
-                  aria-hidden="true"
-                >
-                  <i className="fas fa-search-minus" />
-                </div>
-                <h2 className="m-0 p-0 font-heading text-[clamp(1.25rem,2.5vw,1.75rem)] font-bold leading-tight text-site-primary">
-                  No services found
-                </h2>
-                <p className="mt-2 m-0 p-0 text-base leading-relaxed text-site-muted">
-                  No results for &ldquo;{searchQuery}&rdquo;. Try different keywords or browse all
-                  categories.
-                </p>
-                <button
-                  type="button"
-                  className="mx-auto mt-6 inline-flex w-auto max-w-56 cursor-pointer items-center justify-center gap-2 rounded-lg border-none bg-site-primary px-4 py-[0.65rem] text-[0.9375rem] font-bold text-white hover:bg-site-accent-dark hover:text-white"
-                  onClick={() => setSearchQuery('')}
-                >
-                  Show All Services
-                </button>
+              <CardGrid cards={consultationCategories.flatMap((c) => c.cards)} />
+            )
+          ) : (
+            <div className="py-20 text-center">
+              <div className="mx-auto mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-site-accent/12 text-site-accent-dark">
+                <SearchX size={28} />
               </div>
-            )}
+              <h2 className={TYPE.h2}>No consultations found</h2>
+              <p className={`${TYPE.bodySm} !mt-2`}>Adjust your filters or clear them to see all sessions.</p>
+              <button type="button" onClick={clearAllFilters} className={`${BTN.primary} ${BTN.static} !mt-8`}>
+                Clear filters
+              </button>
+            </div>
+          )}
 
-            {!searchQuery && !catalogLoading && filteredCategories.length > 0 && (
-              <>
-                <section
-                  className="mt-10 rounded-2xl border border-site-accent-dark/10 bg-site-surface p-5 shadow-[0_4px_16px_rgba(42,15,2,0.05)] md:mt-12 md:px-8 md:py-6"
-                  aria-labelledby="consult-guidelines"
-                >
-                  <div className="mb-5 flex items-center gap-[0.65rem] m-0 p-0">
-                    <span
-                      className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-site-accent/12 text-[0.9rem] text-site-accent-dark"
-                      aria-hidden="true"
-                    >
-                      <i className="fas fa-star-of-david" />
+          {!catalogLoading && total > 0 && (
+            <>
+              <section
+                className="mt-10 overflow-hidden rounded-xl border border-site-accent-dark/12 bg-white shadow-sm sm:mt-12"
+                aria-labelledby="consult-guidelines"
+              >
+                <div className="border-b border-site-accent-dark/8 bg-gradient-to-r from-site-bg to-site-surface px-6 py-5 sm:px-8 sm:py-6">
+                  <div className="flex items-center gap-3.5">
+                    <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-site-accent/12 text-site-accent-dark">
+                      <Sparkles size={18} aria-hidden />
                     </span>
-                    <h2
-                      id="consult-guidelines"
-                      className="m-0 p-0 font-heading text-[clamp(1.35rem,2.2vw,1.625rem)] font-bold leading-tight text-site-primary"
-                    >
+                    <h2 id="consult-guidelines" className={TYPE.h2}>
                       Important Guidelines
                     </h2>
                   </div>
-                  <ul className="mt-5 grid list-none grid-cols-1 gap-4 m-0 p-0 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
-                    {GUIDELINES.map((item) => (
-                      <li
-                        key={item.title}
-                        className="flex gap-3 rounded-xl border border-site-accent-dark/8 bg-site-bg/60 p-[0.85rem] m-0"
-                      >
-                        <span
-                          className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-site-accent/10 text-[0.85rem] text-site-accent-dark"
-                          aria-hidden="true"
-                        >
-                          <i className={`fas ${item.icon}`} />
-                        </span>
-                        <div>
-                          <p className="m-0 p-0 font-body text-[0.9375rem] font-bold leading-snug text-site-primary">
-                            {item.title}
-                          </p>
-                          <p className="mt-[0.2rem] m-0 p-0 font-body text-[0.8125rem] leading-normal text-site-soft">
-                            {item.text}
-                          </p>
-                        </div>
-                      </li>
-                    ))}
-                  </ul>
-                </section>
-
-                <BookConsultationCTA onBookClick={openGeneralEnquiry} />
-              </>
-            )}
-          </div>
+                </div>
+                <ul className="m-0 grid list-none grid-cols-1 divide-y divide-site-accent-dark/6 p-0 sm:grid-cols-2 sm:divide-x sm:divide-y-0 lg:grid-cols-5 lg:divide-x lg:divide-y-0">
+                  {GUIDELINES.map(({ icon: Icon, title, text }) => (
+                    <li key={title} className="flex gap-3.5 p-5 sm:p-6">
+                      <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-site-accent/10 text-site-accent-dark">
+                        <Icon size={16} strokeWidth={2} aria-hidden />
+                      </span>
+                      <div>
+                        <p className="!m-0 font-body text-sm font-bold text-site-primary">{title}</p>
+                        <p className={`${TYPE.caption} !mt-1`}>{text}</p>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <BookConsultationCTA onBookClick={openGeneralEnquiry} />
+            </>
+          )}
         </div>
       </div>
 
@@ -331,6 +359,8 @@ function Consultations() {
         title="Consultation Request Received!"
         message="Your details have been securely sent to our experts. We will contact you on your provided phone number within 24 hours to schedule the session."
       />
+
+      <OverlayLoader visible={isSubmitting} label="Submitting your request…" />
     </>
   );
 }

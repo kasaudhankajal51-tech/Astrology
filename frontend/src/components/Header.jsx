@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import ConsultationModal from './ConsultationModal';
 import SuccessModal from './SuccessModal';
 import API_BASE from '../utils/api';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 
@@ -261,6 +261,16 @@ function Header() {
           --premium-shadow: 0 4px 24px rgba(139, 74, 30, 0.08);
         }
 
+        /* Fixed header wrapper — holds ticker + navbar together */
+        .header-fixed-wrapper {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          z-index: 1020;
+          width: 100%;
+        }
+
         /* Report Bar */
         .report-bar {
           display: flex;
@@ -339,9 +349,9 @@ function Header() {
           backdrop-filter: blur(12px);
           -webkit-backdrop-filter: blur(12px);
           border-bottom: 1px solid var(--glass-border);
-          position: sticky;
+          position: relative;
           top: 0;
-          z-index: 1020;
+          z-index: 10;
           width: 100%;
           min-height: clamp(3.5rem, 5vw, 4.25rem);
           display: flex;
@@ -388,6 +398,7 @@ function Header() {
         }
 
         .logo-icon-wrapper img {
+          height: clamp(52px, 7vw, 80px);
           width: auto;
           object-fit: contain;
           display: block;
@@ -852,6 +863,7 @@ function Header() {
         }
       `}</style>
 
+      <div className="header-fixed-wrapper">
       <section className="report-bar">
         <div className="label">Popular Reports</div>
         <div className="scroll-wrapper" id="reportScrollWrapper">
@@ -949,6 +961,7 @@ function Header() {
           </div>
         </nav>
       </header>
+      </div>{/* /header-fixed-wrapper */}
 
       <div className="offcanvas offcanvas-end mobile-offcanvas" tabIndex="-1" id="mobile-menu">
         <div className="offcanvas-header border-bottom">

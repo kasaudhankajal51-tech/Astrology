@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Plus, Trash2, Edit3, CheckCircle2, XCircle } from 'lucide-react';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 
 const defaultCoupon = {

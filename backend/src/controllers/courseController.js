@@ -1,6 +1,7 @@
 import Course from '../models/Course.js';
 import CourseVideo from '../models/CourseVideo.js';
 import mongoose from 'mongoose';
+import { uniqueSlug } from '../utils/slugify.js';
 import {
   createBunnyVideo,
   extractBunnyVideoId,
@@ -21,11 +22,13 @@ const formatInstructor = (instructor) => {
 
 const formatCourseListItem = (course, modulesCount, videoCount) => ({
   _id: course._id,
+  slug: course.slug || String(course._id),
   title: course.title,
   description: course.description || '',
   thumbnailUrl: course.thumbnailUrl || '',
   price: course.price,
   courseType: course.courseType === 'Live' ? 'Live' : 'Recorded',
+  category: course.category || 'Astrology',
   validityDays: course.validityDays,
   level: course.level || 'Beginner',
   instructor: formatInstructor(course.instructor),
@@ -37,11 +40,13 @@ const formatCourseListItem = (course, modulesCount, videoCount) => ({
 
 const formatCourseDetail = (course, modulesCount) => ({
   _id: course._id,
+  slug: course.slug || String(course._id),
   title: course.title,
   description: course.description || '',
   thumbnailUrl: course.thumbnailUrl || '',
   price: course.price,
   courseType: course.courseType === 'Live' ? 'Live' : 'Recorded',
+  category: course.category || 'Astrology',
   validityDays: course.validityDays,
   level: course.level || 'Beginner',
   instructor: formatInstructor(course.instructor),
@@ -67,10 +72,26 @@ const formatPublicVideo = (video) => ({
 });
 
 // @desc    Get all active courses (Public)
-// @route   GET /api/courses
+// @route   GET /api/courses?courseType=Live|Recorded&category=slug&limit=8
 export const getActiveCourses = async (req, res) => {
   try {
-    const courses = await Course.find({ isActive: true }).sort({ createdAt: -1 }).lean();
+    const filter = { isActive: true };
+    const { courseType, category, limit } = req.query;
+
+    if (courseType === 'Live' || courseType === 'Recorded') {
+      filter.courseType = courseType;
+    }
+    if (category && category !== 'All') {
+      filter.category = category;
+    }
+
+    let query = Course.find(filter).sort({ createdAt: -1 }).lean();
+    if (limit) {
+      const parsed = Math.min(Math.max(parseInt(limit, 10) || 0, 1), 50);
+      query = query.limit(parsed);
+    }
+
+    const courses = await query;
     const videoCounts = await CourseVideo.aggregate([
       { $match: { courseId: { $in: courses.map((course) => course._id) } } },
       { $group: { _id: '$courseId', count: { $sum: 1 } } }
@@ -87,14 +108,19 @@ export const getActiveCourses = async (req, res) => {
   }
 };
 
-// @desc    Get course by ID (Public)
-// @route   GET /api/courses/:id
+// @desc    Get course by ID or slug (Public)
+// @route   GET /api/courses/:idOrSlug
 export const getCourseById = async (req, res) => {
   try {
-    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
-      return res.status(404).json({ success: false, message: 'Course not found (Invalid ID)' });
+    const idOrSlug = req.params.id;
+    let course;
+
+    if (mongoose.Types.ObjectId.isValid(idOrSlug)) {
+      course = await Course.findById(idOrSlug).lean();
     }
-    const course = await Course.findById(req.params.id).lean();
+    if (!course) {
+      course = await Course.findOne({ slug: idOrSlug.toLowerCase(), isActive: true }).lean();
+    }
     if (!course) {
       return res.status(404).json({ success: false, message: 'Course not found' });
     }
@@ -140,10 +166,14 @@ export const createCourse = async (req, res) => {
       title, description, price, validityDays, thumbnailUrl, courseType,
       level, instructor, duration, modulesCount, curriculum,
       learningOutcomes, batchDetails, faqs, testimonials, topics, longDesc,
+      slug: rawSlug, category,
     } = req.body;
     const normalizedCourseType = courseType === 'Live' ? 'Live' : 'Recorded';
+    const slug = await uniqueSlug(Course, rawSlug || title);
     const course = await Course.create({
       title,
+      slug,
+      category: category?.trim() || 'Astrology',
       description,
       longDesc,
       topics,
@@ -171,10 +201,30 @@ export const createCourse = async (req, res) => {
 // @route   PUT /api/admin/courses/:id
 export const updateCourse = async (req, res) => {
   try {
-    const course = await Course.findByIdAndUpdate(req.params.id, req.body, { new: true });
-    if (!course) return res.status(404).json({ success: false, message: 'Course not found' });
+    const existing = await Course.findById(req.params.id);
+    if (!existing) return res.status(404).json({ success: false, message: 'Course not found' });
+
+    const updates = { ...req.body };
+    if (updates.courseType) {
+      updates.courseType = updates.courseType === 'Live' ? 'Live' : 'Recorded';
+    }
+    if (updates.slug !== undefined || updates.title !== undefined) {
+      updates.slug = await uniqueSlug(
+        Course,
+        updates.slug || updates.title || existing.title,
+        existing._id
+      );
+    }
+    if (updates.category !== undefined) {
+      updates.category = updates.category?.trim() || 'Astrology';
+    }
+
+    const course = await Course.findByIdAndUpdate(req.params.id, updates, { new: true });
     res.json({ success: true, course });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(400).json({ success: false, message: 'Course slug already exists' });
+    }
     res.status(500).json({ success: false, message: 'Server error' });
   }
 };

@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { toast } from 'react-hot-toast';
+import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 import { isValidEmail } from '../utils/validation';
 

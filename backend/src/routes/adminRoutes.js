@@ -34,13 +34,19 @@ import {
 } from '../controllers/adminContentController.js';
 import {
   getAdminCatalog,
-  createCategory,
-  updateCategory,
-  deleteCategory,
+  createCategory as createConsultationCategory,
+  updateCategory as updateConsultationCategory,
+  deleteCategory as deleteConsultationCategory,
   createService,
   updateService,
   deleteService,
 } from '../controllers/consultationCatalogAdminController.js';
+import {
+  getAdminCategories as getAdminCourseCategories,
+  createCategory as createCourseCategory,
+  updateCategory as updateCourseCategory,
+  deleteCategory as deleteCourseCategory,
+} from '../controllers/courseCategoryController.js';
 
 const router = express.Router();
 const videoUpload = multer({
@@ -92,11 +98,17 @@ router.delete('/course-materials/:id', adminAuth, deleteMaterial);
 router.get('/consultations', adminAuth, getConsultations);
 router.put('/consultations/:id', adminAuth, updateConsultation);
 
+// Course subject categories (Admin)
+router.get('/course-categories', adminAuth, getAdminCourseCategories);
+router.post('/course-categories', adminAuth, createCourseCategory);
+router.put('/course-categories/:id', adminAuth, updateCourseCategory);
+router.delete('/course-categories/:id', adminAuth, deleteCourseCategory);
+
 // Consultation service catalog (Admin)
 router.get('/consultation-catalog', adminAuth, getAdminCatalog);
-router.post('/consultation-categories', adminAuth, createCategory);
-router.put('/consultation-categories/:slug', adminAuth, updateCategory);
-router.delete('/consultation-categories/:slug', adminAuth, deleteCategory);
+router.post('/consultation-categories', adminAuth, createConsultationCategory);
+router.put('/consultation-categories/:slug', adminAuth, updateConsultationCategory);
+router.delete('/consultation-categories/:slug', adminAuth, deleteConsultationCategory);
 router.post('/consultation-services', adminAuth, createService);
 router.put('/consultation-services/:slug', adminAuth, updateService);
 router.delete('/consultation-services/:slug', adminAuth, deleteService);

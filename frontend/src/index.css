@@ -133,6 +133,8 @@ html {
   --body-size: 1rem;
   --small-size: 0.875rem;
 
+  --header-h: calc(clamp(3.5rem, 5vw, 4.25rem) + 2.75rem);
+
   --radius-card: 14px;
   --radius-control: 9px;
   --shadow-card: 0 10px 24px rgba(42, 15, 2, 0.06);
@@ -143,7 +145,7 @@ html, body {
   margin: 0;
   padding: 0;
   width: 100%;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 body {

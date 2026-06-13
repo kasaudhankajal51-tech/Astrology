@@ -1,5 +1,5 @@
 import API_BASE from './api';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 
 export const loadRazorpayScript = () => {
   return new Promise((resolve) => {

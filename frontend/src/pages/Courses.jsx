@@ -1,799 +1,235 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import { coursesData } from '../data/coursesData';
+import { useState, useEffect, useMemo } from 'react';
+import { Search, SearchX } from 'lucide-react';
 import SEO from '../components/SEO';
-import API_BASE from '../utils/api';
+import CourseListingCard from '../components/CourseListingCard';
+import { CourseGridSkeleton } from '../components/PageLoader';
+import { useCourses, useCourseCategories } from '../hooks/useCourses';
+import toast from '@/utils/toast';
+
+const PAGE_WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
+
+const SCROLL_HIDE = '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden';
+
+const PAGE_META = {
+  live: {
+    title: 'Live Astrology Courses',
+    description: 'Instructor-led live batches — browse programs, submit an enquiry, and get batch timing and pricing from our team.',
+    url: '/live-courses',
+    heading: 'Live classes',
+    subtitle: 'Interactive batches with expert mentors. Enquire to confirm schedule and fees.',
+    typeLabel: 'live class',
+  },
+  recorded: {
+    title: 'Recorded Astrology Courses',
+    description: 'Self-paced recorded programs — purchase online, unlock student access, and learn from your dashboard.',
+    url: '/recorded-courses',
+    heading: 'Recorded courses',
+    subtitle: 'Learn at your own pace with structured modules and lifetime dashboard access.',
+    typeLabel: 'recorded course',
+  },
+  all: {
+    title: 'Professional Astrology Courses',
+    description: 'Explore live classes and recorded programs from beginner fundamentals to advanced prediction.',
+    url: '/courses',
+    heading: 'All courses',
+    subtitle: 'Live batches and self-paced recordings in one place.',
+    typeLabel: 'course',
+  },
+};
+
+function CategoryChip({ active, count, label, onClick }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={
+        active
+          ? 'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-site-primary bg-site-primary px-2.5 py-1.5 font-body text-xs font-semibold text-white shadow-sm sm:px-3 sm:py-2'
+          : 'm-0 inline-flex shrink-0 cursor-pointer items-center gap-1.5 whitespace-nowrap rounded-lg border border-site-accent-dark/12 bg-site-bg px-2.5 py-1.5 font-body text-xs font-semibold text-site-muted transition hover:border-site-accent/40 hover:bg-site-surface hover:text-site-primary sm:px-3 sm:py-2'
+      }
+    >
+      {count != null && (
+        <span
+          className={
+            active
+              ? 'inline-flex min-w-[1rem] items-center justify-center rounded bg-white/20 px-1 py-0.5 text-[0.625rem] font-bold tabular-nums leading-none'
+              : 'inline-flex min-w-[1rem] items-center justify-center rounded bg-site-accent-dark/10 px-1 py-0.5 text-[0.625rem] font-bold tabular-nums leading-none text-site-accent-dark'
+          }
+        >
+          {count}
+        </span>
+      )}
+      {label}
+    </button>
+  );
+}
 
 function Courses({ mode = 'all' }) {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
-  const [dbCourses, setDbCourses] = useState(coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false })));
-  const [filteredCourses, setFilteredCourses] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  // Fetch courses from backend
+  const meta = PAGE_META[mode] || PAGE_META.all;
+  const apiCourseType = mode === 'live' ? 'Live' : mode === 'recorded' ? 'Recorded' : undefined;
+
+  const { courses: dbCourses, loading, error } = useCourses({
+    courseType: apiCourseType,
+  });
+  const { categories: adminCategories } = useCourseCategories();
+
   useEffect(() => {
-    const fetchCourses = async () => {
-      try {
-        const response = await fetch(`${API_BASE}/api/courses`);
-        const data = await response.json();
-        
-        if (data.success) {
-          // Map DB fields to UI fields
-          const mappedCourses = data.courses.map(course => {
-            const courseType = course.courseType || 'Live';
-            const instructorName = typeof course.instructor === 'string'
-              ? course.instructor
-              : course.instructor?.name || '';
-            return ({
-            id: course._id,
-            title: course.title,
-            shortDesc: course.description,
-            image: course.thumbnailUrl || '/images/vedic_thumbnail.png',
-            duration: course.duration || `${course.validityDays} Days`,
-            schedule: courseType === 'Recorded' ? 'Self-Paced' : 'Upcoming Batch',
-            level: course.level || 'Beginner',
-            instructor: instructorName,
-            modulesCount: course.modulesCount || course.videoCount || 0,
-            category: 'Astrology',
-            price: course.price,
-            courseType,
-            isPremium: courseType !== 'Live' && Number(course.price) > 0
-          });
-          });
-          const staticCourses = coursesData.map((course) => ({ ...course, courseType: 'Recorded', isPremium: false }));
-          setDbCourses([...staticCourses, ...mappedCourses]);
-        }
-      } catch (err) {
-        console.error('Failed to fetch courses:', err);
-        setDbCourses(coursesData.map((course) => ({ ...course, courseType: 'Live', isPremium: false })));
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchCourses();
-  }, []);
-
-  const categories = ['All', ...new Set(dbCourses.map(course => course.category))];
+    if (error) toast.error(error);
+  }, [error]);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-    const filtered = dbCourses.filter(course => {
-      const matchesSearch = course.title.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                           course.shortDesc.toLowerCase().includes(searchTerm.toLowerCase());
-      const matchesCategory = selectedCategory === 'All' || course.category === selectedCategory;
-      const matchesMode = mode === 'all'
-        || (mode === 'live' && course.courseType === 'Live')
-        || (mode === 'recorded' && course.courseType !== 'Live');
-      return matchesSearch && matchesCategory && matchesMode;
+    setSelectedCategory('All');
+    setSearchTerm('');
+  }, [mode]);
+
+  const categoryCounts = useMemo(() => {
+    const counts = {};
+    dbCourses.forEach((c) => {
+      if (c.category) counts[c.category] = (counts[c.category] || 0) + 1;
     });
-    setFilteredCourses(filtered);
-  }, [searchTerm, selectedCategory, dbCourses, mode]);
+    return counts;
+  }, [dbCourses]);
 
-  const recordedCourses = filteredCourses.filter(c => c.courseType !== 'Live');
-  const liveCourses = filteredCourses.filter(c => c.courseType === 'Live');
-  const pageCopy = {
-    all: {
-      title: 'Master Ancient Wisdom',
-      subtitle: 'Explore live classes and recorded learning programs from beginner fundamentals to advanced prediction techniques.'
-    },
-    live: {
-      title: 'Live Astrology Courses',
-      subtitle: 'Browse instructor-led batches and submit an enquiry. Our team will share timing, pricing and batch details.'
-    },
-    recorded: {
-      title: 'Recorded Courses',
-      subtitle: 'Buy self-paced recorded courses, unlock student access and continue learning from your dashboard.'
-    }
-  }[mode] || {};
+  const categoryFilters = useMemo(() => {
+    const names = adminCategories.length
+      ? adminCategories.map((c) => c.name).filter((name) => categoryCounts[name])
+      : Object.keys(categoryCounts);
 
-  const renderCourseCard = (course, i) => (
-    <div key={course.id} className="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay={(i % 3) * 100}>
-      <div className="course-card">
-        {course.courseType === 'Recorded' && (
-          <div className="premium-badge">
-            <i className="fas fa-play-circle"></i> Recorded
-          </div>
-        )}
-        {course.courseType === 'Live' && (
-          <div className="premium-badge live-badge">
-            <i className="fas fa-video"></i> Live Batch
-          </div>
-        )}
-        <div className="course-badge">{course.level}</div>
-        <div className="course-icon-wrapper">
-          <img src={course.image} alt={course.title} className="course-img" />
-        </div>
-        <div className="course-info">
-          <h3>{course.title}</h3>
-          <p>{course.shortDesc}</p>
-          <div className="course-meta">
-            <div className="meta-item">
-              <i className="fas fa-clock"></i>
-              {course.duration}
-            </div>
-            {course.instructor && (
-              <div className="meta-item">
-                <i className="fas fa-chalkboard-teacher"></i>
-                {course.instructor}
-              </div>
-            )}
-            {course.courseType === 'Recorded' && course.modulesCount > 0 && (
-              <div className="meta-item">
-                <i className="fas fa-book"></i>
-                {course.modulesCount} Modules
-              </div>
-            )}
-            <div className="meta-item">
-              <i className="fas fa-calendar-alt"></i>
-              {course.schedule}
-            </div>
-          </div>
-          <div className="course-footer">
-            {course.price ? (
-              <div className="price-tag">
-                ₹{course.price}
-              </div>
-            ) : null}
-            <Link to={course.customUrl || `/courses/${course.id}`} className="view-btn">
-              Learn More <i className="fas fa-arrow-right ms-2"></i>
-            </Link>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
+    const unique = [...new Set(names)].sort();
+    return [
+      { label: 'All', count: dbCourses.length },
+      ...unique.map((name) => ({ label: name, count: categoryCounts[name] || 0 })),
+    ];
+  }, [dbCourses, adminCategories, categoryCounts]);
+
+  const filteredCourses = useMemo(() => {
+    const q = searchTerm.trim().toLowerCase();
+    return dbCourses.filter((course) => {
+      const matchesCategory = selectedCategory === 'All' || course.category === selectedCategory;
+      const matchesSearch =
+        !q ||
+        course.title.toLowerCase().includes(q) ||
+        course.shortDesc.toLowerCase().includes(q) ||
+        (course.category || '').toLowerCase().includes(q);
+      return matchesCategory && matchesSearch;
+    });
+  }, [dbCourses, searchTerm, selectedCategory]);
+
+  const resultLabel =
+    filteredCourses.length === 1 ? meta.typeLabel : `${meta.typeLabel}s`;
 
   return (
-    <div className="courses-page">
-      <SEO title="Professional Astrology Courses" description="Explore our comprehensive range of professional astrology and occult science courses." url="/courses" />
-      <style>{`
-        .courses-page {
-          background: #FDF6EE;
-          padding-bottom: clamp(1.5rem, 3vw, 2.5rem);
-        }
-
-        .hero-section {
-          background: linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%);
-          padding: clamp(2.75rem, 5vw, 4.25rem) clamp(1rem, 3vw, 2rem) clamp(2.5rem, 5vw, 3.5rem);
-          text-align: center;
-          position: relative;
-          overflow: visible;
-        }
-
-        .hero-section::before {
-          content: '';
-          position: absolute;
-          top: 0; left: 0; right: 0; bottom: 0;
-          background: radial-gradient(circle at 20% 15%, rgba(255,255,255,0.12), transparent 28%),
-                      radial-gradient(circle at 80% 30%, rgba(200,131,42,0.18), transparent 30%);
-          opacity: 0.8;
-        }
-
-        .hero-content {
-          position: relative;
-          z-index: 1;
-        }
-
-        .hero-section h1 {
-          font-family: 'Playfair Display', serif;
-          color: #FFFFFF !important;
-          font-size: clamp(2.15rem, 5vw, 3.45rem);
-          font-weight: 700;
-          margin-bottom: 16px;
-          animation: fadeInUp 1s ease-out;
-        }
-
-        .hero-section p {
-          color: #FFFFFF !important;
-          font-size: clamp(1rem, 1.6vw, 1.12rem);
-          line-height: 1.65;
-          max-width: 660px;
-          margin: 0 auto 24px;
-          animation: fadeInUp 1.2s ease-out;
-        }
-
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .search-container {
-          max-width: 560px;
-          margin: 0 auto;
-          position: relative;
-          z-index: 10;
-        }
-
-        .search-box {
-          background: rgba(255, 255, 255, 0.1);
-          backdrop-filter: blur(10px);
-          border: 1px solid rgba(255, 255, 255, 0.2);
-          border-radius: 14px;
-          padding: 0.76rem 1rem;
-          display: flex;
-          align-items: center;
-          gap: 15px;
-          box-shadow: 0 10px 24px rgba(0,0,0,0.16);
-          transition: all 0.3s ease;
-        }
-
-        .search-box:focus-within {
-          background: rgba(255, 255, 255, 0.15);
-          border-color: #C8832A;
-          transform: none;
-        }
-
-        .search-box i {
-          color: #C8832A;
-          font-size: 1.2rem;
-        }
-
-        .search-box input {
-          background: none;
-          border: none;
-          color: #FFF;
-          font-size: 1rem;
-          width: 100%;
-          outline: none;
-        }
-
-        .search-box input::placeholder {
-          color: rgba(255, 255, 255, 0.5);
-        }
-
-        .hero-stats {
-          display: flex;
-          justify-content: center;
-          gap: 28px;
-          margin-top: 34px;
-          color: #FFF;
-        }
-
-        .stat-item {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-        }
-
-        .stat-num {
-          font-size: 1.55rem;
-          font-weight: 800;
-          color: #C8832A;
-          font-family: 'Playfair Display', serif;
-        }
-
-        .stat-label {
-          font-size: 0.76rem;
-          text-transform: uppercase;
-          letter-spacing: 1px;
-          opacity: 0.8;
-        }
-
-        .stat-divider {
-          width: 1px;
-          height: 32px;
-          background: rgba(255, 255, 255, 0.1);
-          align-self: center;
-        }
-
-        .filter-container {
-          margin-top: clamp(1.25rem, 3vw, 2rem);
-          margin-bottom: clamp(1.75rem, 4vw, 2.5rem);
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          flex-wrap: wrap;
-          padding: 0 var(--page-pad-x);
-        }
-
-        .filter-btn {
-          background: #FFF;
-          border: 1px solid rgba(139, 74, 30, 0.1);
-          color: #8B4A1E;
-          padding: 0.5rem 0.95rem;
-          border-radius: 10px;
-          font-weight: 600;
-          cursor: pointer;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .filter-btn:hover {
-          transform: translateY(-1px);
-          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.1);
-        }
-
-        .filter-btn.active {
-          background: #C8832A;
-          color: #FFF;
-          border-color: #C8832A;
-        }
-
-        .section-title {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(2rem, 4vw, 2.45rem);
-          color: #2A0F02;
-          margin-bottom: 30px;
-          text-align: center;
-          position: relative;
-        }
-        .section-title::after {
-          content: '';
-          position: absolute;
-          bottom: -15px;
-          left: 50%;
-          transform: translateX(-50%);
-          width: 80px;
-          height: 2px;
-          background: #C8832A;
-        }
-
-        .course-section {
-          margin-bottom: clamp(2rem, 4vw, 3rem);
-        }
-
-        .course-section:last-child {
-          margin-bottom: 0;
-        }
-
-        .courses-grid {
-          position: relative;
-          z-index: 0;
-          padding: clamp(1.75rem, 4vw, 2.75rem) var(--page-pad-x) clamp(1rem, 2.5vw, 1.75rem);
-          max-width: var(--container-public);
-        }
-
-        .course-card {
-          background: #FFF;
-          border-radius: 14px;
-          overflow: hidden;
-          height: 100%;
-          display: flex;
-          flex-direction: column;
-          transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
-          border: 1px solid rgba(139, 74, 30, 0.08);
-          position: relative;
-          box-shadow: 0 10px 24px rgba(42, 15, 2, 0.06);
-        }
-
-        .course-card:hover {
-          transform: translateY(-4px);
-          box-shadow: 0 18px 36px rgba(139, 74, 30, 0.12);
-          border-color: #C8832A;
-        }
-
-        .course-icon-wrapper {
-          height: 168px;
-          background: #000;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          overflow: hidden;
-        }
-
-        .course-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover;
-          transition: transform 0.6s ease;
-        }
-
-        .course-card:hover .course-img {
-          transform: scale(1.04);
-        }
-
-        .course-badge {
-          position: absolute;
-          top: 14px;
-          right: 14px;
-          background: rgba(139, 74, 30, 0.1);
-          color: #8B4A1E;
-          padding: 0.32rem 0.7rem;
-          border-radius: 8px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          z-index: 2;
-        }
-
-        .premium-badge {
-          position: absolute;
-          top: 14px;
-          left: 14px;
-          background: linear-gradient(135deg, #FFD700 0%, #F5A623 100%);
-          color: #2A0F02;
-          padding: 0.32rem 0.7rem;
-          border-radius: 8px;
-          font-size: 0.72rem;
-          font-weight: 700;
-          z-index: 2;
-          box-shadow: 0 4px 10px rgba(42, 15, 2, 0.12);
-          display: flex;
-          align-items: center;
-          gap: 5px;
-        }
-
-        .premium-badge.live-badge {
-          background: linear-gradient(135deg, #8B4A1E 0%, #C8832A 100%);
-          color: #fff;
-        }
-
-        .price-tag {
-          font-size: 1rem;
-          font-weight: 800;
-          color: #2A0F02;
-          margin-bottom: 0;
-          display: inline-flex;
-          align-items: center;
-          gap: 5px;
-          background: rgba(200, 131, 42, 0.08);
-          border: 1px solid rgba(200, 131, 42, 0.16);
-          border-radius: 9px;
-          padding: 0.4rem 0.65rem;
-        }
-
-        .course-info {
-          padding: clamp(1rem, 2vw, 1.2rem);
-          flex-grow: 1;
-          display: flex;
-          flex-direction: column;
-        }
-
-        .course-info h3 {
-          font-family: 'Playfair Display', serif;
-          font-size: clamp(1.16rem, 2vw, 1.28rem);
-          font-weight: 700;
-          color: #2A0F02;
-          margin-bottom: 10px;
-          line-height: 1.32;
-        }
-
-        .course-info p {
-          color: #6b6b8a;
-          font-size: 0.9rem;
-          margin-bottom: 14px;
-          line-height: 1.55;
-          display: -webkit-box;
-          -webkit-line-clamp: 3;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-
-        .course-meta {
-          display: flex;
-          gap: 10px;
-          margin-bottom: 14px;
-          padding-top: 12px;
-          border-top: 1px solid rgba(139, 74, 30, 0.05);
-          flex-wrap: wrap;
-        }
-
-        .meta-item {
-          display: flex;
-          align-items: center;
-          gap: 6px;
-          font-size: 0.78rem;
-          color: #8B4A1E;
-          font-weight: 600;
-        }
-
-        .course-footer {
-          margin-top: auto;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 0.75rem;
-        }
-
-        .view-btn {
-          display: inline-flex;
-          width: auto;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          background: #2A0F02;
-          color: #FFF;
-          padding: 0.58rem 0.85rem;
-          border-radius: 9px;
-          font-weight: 700;
-          font-size: 0.84rem;
-          text-decoration: none;
-          transition: all 0.3s ease;
-        }
-
-        .view-btn:hover {
-          background: #8B4A1E;
-          color: #FFF;
-          transform: translateY(-2px);
-          box-shadow: 0 5px 15px rgba(42, 15, 2, 0.2);
-        }
-
-        .no-results {
-          text-align: center;
-          padding: 60px 0;
-          color: #8B4A1E;
-        }
-
-        .no-results i {
-          font-size: 4rem;
-          margin-bottom: 20px;
-          opacity: 0.5;
-        }
-
-        @media (max-width: 768px) {
-          .hero-section {
-            padding: clamp(2rem, 4vw, 3rem) 1rem clamp(2rem, 4vw, 2.75rem);
-          }
-          .filter-container {
-            margin-top: clamp(1rem, 2vw, 1.5rem);
-            margin-bottom: clamp(1.5rem, 3vw, 2rem);
-            gap: 10px;
-          }
-          .course-icon-wrapper {
-            height: 150px;
-            font-size: 4rem;
-          }
-          .filter-btn {
-            padding: 8px 18px;
-            font-size: 0.9rem;
-          }
-          .course-info {
-            padding: 1rem;
-          }
-          .course-info h3 {
-            font-size: 1.2rem;
-          }
-          .course-info p {
-            font-size: 0.9rem;
-            margin-bottom: 1rem;
-          }
-
-          .courses-grid {
-            padding-left: var(--page-pad-x);
-            padding-right: var(--page-pad-x);
-          }
-
-          .course-card {
-            max-width: 390px;
-            margin-left: auto;
-            margin-right: auto;
-          }
-
-          .course-footer {
-            align-items: flex-start;
-            flex-direction: column;
-            gap: 0.65rem;
-          }
-
-          .view-btn {
-            width: auto;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .hero-section h1 {
-            font-size: clamp(1.9rem, 9vw, 2.4rem);
-          }
-
-          .search-box {
-            gap: 0.65rem;
-            padding: 0.7rem 0.85rem;
-          }
-
-          .filter-container {
-            justify-content: flex-start;
-          }
-
-          .course-icon-wrapper {
-            height: 142px;
-          }
-
-          .course-footer {
-            flex-direction: row;
-            align-items: center;
-            flex-wrap: wrap;
-          }
-        }
-
-        /* Consistent page rhythm */
-        .hero-section h1,
-        .section-title,
-        .course-info h3 {
-          letter-spacing: 0;
-        }
-
-        .hero-section h1 {
-          font-size: clamp(2.2rem, 5vw, 3.25rem) !important;
-          line-height: 1.12;
-          margin-bottom: 0.75rem !important;
-        }
-
-        .hero-section p {
-          font-size: clamp(0.98rem, 1.5vw, 1.08rem) !important;
-          line-height: 1.58 !important;
-          margin-bottom: 1.35rem !important;
-        }
-
-        .section-title {
-          font-size: clamp(1.8rem, 3.5vw, 2.25rem) !important;
-          line-height: 1.18;
-          margin-bottom: 2.1rem !important;
-        }
-
-        .section-title::after {
-          bottom: -0.65rem !important;
-          width: 3.5rem !important;
-        }
-
-        .courses-grid {
-          padding-top: clamp(1.75rem, 4vw, 2.75rem) !important;
-          padding-bottom: clamp(1rem, 2.5vw, 1.75rem) !important;
-        }
-
-        .course-section {
-          margin-bottom: clamp(2rem, 4vw, 3rem) !important;
-        }
-
-        .course-section:last-child {
-          margin-bottom: 0 !important;
-        }
-
-        .row.g-4 {
-          --bs-gutter-x: 1.15rem;
-          --bs-gutter-y: 1.15rem;
-        }
-
-        .course-info h3 {
-          font-size: clamp(1.18rem, 1.9vw, 1.3rem) !important;
-          line-height: 1.28 !important;
-          margin-bottom: 0.55rem !important;
-        }
-
-        .course-info p {
-          color: #5f5149 !important;
-          font-size: 0.9rem !important;
-          line-height: 1.5 !important;
-          margin-bottom: 0.9rem !important;
-        }
-
-        .filter-btn,
-        .meta-item,
-        .view-btn,
-        .price-tag,
-        .course-badge,
-        .premium-badge {
-          font-family: inherit;
-          line-height: 1.2;
-        }
-
-        .filter-btn {
-          font-size: 0.88rem !important;
-        }
-
-        .course-meta {
-          gap: 0.55rem !important;
-          margin-bottom: 0.9rem !important;
-          padding-top: 0.75rem !important;
-        }
-
-        .price-tag,
-        .view-btn {
-          min-height: 2.35rem;
-        }
-
-        @media (max-width: 768px) {
-          .hero-section h1 {
-            font-size: clamp(1.9rem, 8vw, 2.5rem) !important;
-          }
-
-          .hero-section p {
-            font-size: 0.98rem !important;
-          }
-
-          .section-title {
-            font-size: clamp(1.6rem, 7vw, 2rem) !important;
-          }
-
-          .filter-container {
-            justify-content: center;
-          }
-        }
-
-        @media (max-width: 480px) {
-          .course-info h3 {
-            font-size: 1.18rem !important;
-          }
-
-          .course-footer {
-            gap: 0.55rem !important;
-          }
-        }
-      `}</style>
-
-      <section className="hero-section">
-        <div className="container hero-content">
-          <h1 data-aos="fade-down">{pageCopy.title}</h1>
-          <p data-aos="fade-up" data-aos-delay="100">
-            {pageCopy.subtitle}
+    <div className="min-h-screen w-full bg-site-bg font-body text-site-text antialiased">
+      <SEO title={meta.title} description={meta.description} url={meta.url} />
+
+      <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-4 pt-6 sm:pb-5 sm:pt-7`}>
+        <h1 className="!m-0 font-heading text-[clamp(1.5rem,3.2vw,2.125rem)] font-bold leading-tight text-site-primary">
+          {meta.heading}
+        </h1>
+        <p className="!mt-1.5 max-w-2xl font-body text-sm leading-relaxed text-site-muted">{meta.subtitle}</p>
+        {!loading && (
+          <p className="!mt-2 font-body text-xs font-medium text-site-muted">
+            <strong className="font-bold tabular-nums text-site-primary">{dbCourses.length}</strong>
+            {' '}
+            {dbCourses.length === 1 ? meta.typeLabel : `${meta.typeLabel}s`}
+            {' '}
+            available
+            {categoryFilters.length > 1 && (
+              <>
+                {' '}
+                ·{' '}
+                <strong className="font-bold tabular-nums text-site-primary">{categoryFilters.length - 1}</strong>
+                {' '}
+                categories
+              </>
+            )}
           </p>
-          <div className="search-container" data-aos="zoom-in" data-aos-delay="200">
-            <div className="search-box">
-              <i className="fas fa-search"></i>
-              <input 
-                type="text" 
-                placeholder="Search courses (e.g. Vedic, Tarot, Palmistry...)" 
-                value={searchTerm}
-                onChange={(e) => setSearchTerm(e.target.value)}
-              />
-            </div>
-          </div>
-          
-          <div className="hero-stats d-none d-md-flex" data-aos="fade-up" data-aos-delay="300">
-            <div className="stat-item">
-              <span className="stat-num">5000+</span>
-              <span className="stat-label">Students Trained</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-num">15+</span>
-              <span className="stat-label">Specialized Courses</span>
-            </div>
-            <div className="stat-divider"></div>
-            <div className="stat-item">
-              <span className="stat-num">4.9/5</span>
-              <span className="stat-label">Rating</span>
-            </div>
-          </div>
-        </div>
-      </section>
+        )}
+      </header>
 
-      <div className="filter-container">
-        {categories.map((cat, i) => (
-          <button 
-            key={i}
-            className={`filter-btn ${selectedCategory === cat ? 'active' : ''}`}
-            onClick={() => setSelectedCategory(cat)}
-            data-aos="fade-up"
-            data-aos-delay={i * 50}
-          >
-            {cat}
-          </button>
-        ))}
+      <div className="sticky top-[var(--header-h)] z-[100] border-b border-site-accent-dark/10 bg-site-surface/95 shadow-sm backdrop-blur-md">
+        <div className={`${PAGE_WRAP} flex flex-col gap-2.5 py-2.5 sm:gap-3 sm:py-3`}>
+          <div className="relative">
+            <Search
+              size={15}
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-site-accent-dark/50"
+              aria-hidden
+            />
+            <input
+              type="search"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              placeholder={`Search ${mode === 'live' ? 'live classes' : mode === 'recorded' ? 'recorded courses' : 'courses'}…`}
+              className="m-0 w-full rounded-lg border border-site-accent-dark/15 bg-site-bg py-2 pl-9 pr-3 font-body text-sm text-site-primary placeholder:text-site-soft outline-none transition focus:border-site-accent focus:ring-2 focus:ring-site-accent/15"
+            />
+          </div>
+
+          {categoryFilters.length > 1 && (
+            <div className={`flex items-center gap-1.5 overflow-x-auto sm:gap-2 ${SCROLL_HIDE}`}>
+              {categoryFilters.map(({ label, count }) => (
+                <CategoryChip
+                  key={label}
+                  label={label}
+                  count={count}
+                  active={selectedCategory === label}
+                  onClick={() => setSelectedCategory(label)}
+                />
+              ))}
+            </div>
+          )}
+
+          <p className="!m-0 font-body text-[0.6875rem] font-medium text-site-muted">
+            {loading ? (
+              'Loading courses…'
+            ) : (
+              <>
+                <strong className="font-bold tabular-nums text-site-primary">{filteredCourses.length}</strong>
+                {' '}
+                {searchTerm.trim() || selectedCategory !== 'All' ? `${resultLabel} matched` : `${resultLabel} shown`}
+              </>
+            )}
+          </p>
+        </div>
       </div>
 
-      <div className="container courses-grid">
-        {liveCourses.length > 0 && (
-          <div className="course-section">
-            <h2 className="section-title">Live Courses</h2>
-            <div className="row g-4">
-              {liveCourses.map(renderCourseCard)}
+      <div className={`${PAGE_WRAP} py-5 sm:py-6`}>
+        {loading ? (
+          <CourseGridSkeleton count={mode === 'all' ? 6 : 6} />
+        ) : filteredCourses.length > 0 ? (
+          <ul className="m-0 grid list-none grid-cols-1 gap-4 p-0 min-[480px]:grid-cols-2 sm:gap-5 lg:grid-cols-3 xl:grid-cols-4">
+            {filteredCourses.map((course) => (
+              <li key={course.id} className="min-w-0">
+                <CourseListingCard course={course} />
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <div className="py-16 text-center sm:py-20">
+            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl bg-site-accent/12 text-site-accent-dark">
+              <SearchX size={26} aria-hidden />
             </div>
-          </div>
-        )}
-
-        {recordedCourses.length > 0 && (
-          <div className="course-section">
-            <h2 className="section-title">Recorded Courses</h2>
-            <div className="row g-4">
-              {recordedCourses.map(renderCourseCard)}
-            </div>
-          </div>
-        )}
-
-        {filteredCourses.length === 0 && (
-          <div className="col-12">
-            <div className="no-results">
-              <i className="fas fa-search"></i>
-              <h3>No courses found</h3>
-              <p>Try searching with different keywords or category.</p>
-            </div>
+            <h2 className="!m-0 font-heading text-lg font-bold text-site-primary">No courses found</h2>
+            <p className="!mt-2 font-body text-sm text-site-muted">
+              {dbCourses.length === 0
+                ? 'Courses will appear here once they are published from the admin panel.'
+                : 'Try a different search term or category.'}
+            </p>
+            {(searchTerm || selectedCategory !== 'All') && (
+              <button
+                type="button"
+                onClick={() => {
+                  setSearchTerm('');
+                  setSelectedCategory('All');
+                }}
+                className="!mt-5 inline-flex cursor-pointer items-center justify-center rounded-xl border-0 bg-site-primary px-5 py-2.5 font-body text-sm font-bold text-white transition hover:bg-site-accent-dark"
+              >
+                Clear filters
+              </button>
+            )}
           </div>
         )}
       </div>

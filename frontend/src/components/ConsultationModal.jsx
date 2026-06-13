@@ -1,37 +1,51 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import { X, Check, Phone, Lock, CreditCard, Loader2 } from 'lucide-react';
 import { BOOKING_MODES } from '../utils/consultationBooking';
+import { BTN, TYPE } from './consultation/tokens';
 
-/* All sizing uses px not rem because style.min.css sets html{font-size:68.75%}
-   making 1rem = 11px, which would shrink all Tailwind rem utilities. */
+const INPUT =
+  'm-0 w-full rounded-lg border border-site-accent-dark/15 bg-site-bg px-3 py-2.5 font-body text-sm text-site-primary placeholder:text-site-soft outline-none transition focus:border-site-accent focus:bg-white focus:ring-2 focus:ring-site-accent/15 disabled:cursor-not-allowed disabled:bg-site-surface disabled:text-site-muted';
 
-const baseInput =
-  'w-full px-[14px] py-[11px] rounded-[10px] border text-stone-800 text-[14px] leading-[1.4] placeholder:text-stone-400 focus:outline-none focus:ring-2 focus:bg-white transition-all';
+const INPUT_ERROR =
+  '!border-red-400 !bg-red-50 focus:!border-red-400 focus:!ring-red-400/15';
 
-const fieldCls = (err) =>
-  `${baseInput} ${err
-    ? 'border-red-400 bg-red-50 focus:border-red-400 focus:ring-red-400/10'
-    : 'border-stone-200 bg-stone-50 focus:border-[#8B4A1E] focus:ring-[#8B4A1E]/10'}`;
+const LABEL =
+  '!mb-1.5 block font-body text-[0.625rem] !font-bold uppercase tracking-wider !text-site-primary';
 
-const labelCls = 'block text-[10px] font-bold text-[#2A0F02] uppercase tracking-widest mb-[6px]';
-const errMsg   = (msg) => msg ? <p style={{ fontSize: '11px', color: '#ef4444', marginTop: '4px' }}>{msg}</p> : null;
+const SIDE_POINTS = [
+  'Birth chart analysis',
+  'Career & relationship guidance',
+  'Remedies & predictions',
+];
+
+function fieldClass(hasError) {
+  return hasError ? `${INPUT} ${INPUT_ERROR}` : INPUT;
+}
+
+function FieldError({ message }) {
+  if (!message) return null;
+  return <p className="!mt-1 font-body text-[0.6875rem] leading-snug text-red-500">{message}</p>;
+}
 
 function validate(data, isFixedService) {
   const e = {};
-  if (!data.name.trim())                                     e.name  = 'Full name is required';
-  else if (data.name.trim().length < 2)                      e.name  = 'Enter a valid name';
+  if (!data.name.trim()) e.name = 'Full name is required';
+  else if (data.name.trim().length < 2) e.name = 'Enter a valid name';
 
-  const ph = data.phone.replace(/[\s\-]/g, '');
-  if (!ph)                                                   e.phone = 'Phone number is required';
-  else if (!/^\d{10}$/.test(ph))                             e.phone = 'Enter a valid 10-digit number';
+  const ph = data.phone.replace(/[\s-]/g, '');
+  if (!ph) e.phone = 'Phone number is required';
+  else if (!/^\d{10}$/.test(ph)) e.phone = 'Enter a valid 10-digit number';
 
-  if (!data.email.trim())                                    e.email = 'Email is required';
-  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email))  e.email = 'Enter a valid email address';
+  if (!data.email.trim()) e.email = 'Email is required';
+  else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(data.email)) e.email = 'Enter a valid email';
 
-  if (!data.dob)                                             e.dob   = 'Date of birth is required';
-  if (!data.tob)                                             e.tob   = 'Time of birth is required';
-  if (!data.pob?.trim())                                     e.pob   = 'Place of birth is required';
+  if (!data.dob) e.dob = 'Date of birth is required';
+  if (!data.tob) e.tob = 'Time of birth is required';
+  if (!data.pob?.trim()) e.pob = 'Place of birth is required';
 
-  if (!isFixedService && !data.consultationType?.trim())     e.consultationType = 'Please specify consultation type';
+  if (!isFixedService && !data.consultationType?.trim()) {
+    e.consultationType = 'Please specify consultation type';
+  }
 
   return e;
 }
@@ -51,19 +65,24 @@ function ConsultationModal({
 
   if (!isOpen) return null;
 
+  const isPayNow = bookingMode === BOOKING_MODES.PAY_NOW;
+
   const submitLabel = (() => {
     if (isSubmitting) return 'Processing…';
-    if (bookingMode === BOOKING_MODES.PAY_NOW)
-      return priceLabel ? `Pay Now — ${priceLabel}` : 'Pay Now';
-    if (bookingMode === BOOKING_MODES.PAY_LATER && priceLabel)
-      return `Request a Call — Pay Later (${priceLabel})`;
-    return 'Request a Call';
+    if (isPayNow) return priceLabel ? `Pay now · ${priceLabel}` : 'Pay now';
+    if (priceLabel) return `Request callback · ${priceLabel}`;
+    return 'Request callback';
   })();
 
-  /* Clear a field's error as soon as the user starts editing it */
   const onChange = (e) => {
     const { name } = e.target;
-    if (errors[name]) setErrors((prev) => { const n = { ...prev }; delete n[name]; return n; });
+    if (errors[name]) {
+      setErrors((prev) => {
+        const next = { ...prev };
+        delete next[name];
+        return next;
+      });
+    }
     handleChange(e);
   };
 
@@ -80,229 +99,268 @@ function ConsultationModal({
 
   return (
     <div
-      className="fixed inset-0 z-[100001] flex items-center justify-center bg-[#2A0F02]/50 backdrop-blur-md"
-      style={{ padding: '16px' }}
+      className="fixed inset-0 z-[100001] flex items-end justify-center bg-site-primary/55 p-0 backdrop-blur-sm sm:items-center sm:p-4"
       onClick={(e) => e.target === e.currentTarget && onClose()}
+      role="presentation"
     >
       <div
-        className="relative w-full bg-white overflow-hidden flex flex-col"
-        style={{ maxWidth: '900px', maxHeight: '95vh', borderRadius: '28px', boxShadow: '0 40px 100px rgba(0,0,0,0.3)' }}
+        className="relative flex max-h-[94dvh] w-full max-w-[52rem] flex-col overflow-hidden rounded-t-2xl bg-white shadow-[0_24px_64px_rgba(42,15,2,0.22)] sm:max-h-[92dvh] sm:rounded-2xl"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="consultation-modal-title"
       >
-        {/* Close */}
         <button
+          type="button"
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-[14px] right-[14px] z-20 flex items-center justify-center rounded-full bg-[#8B4A1E] border-2 border-white/30 text-white hover:bg-[#C8832A] transition-colors duration-200"
-          style={{ width: '34px', height: '34px', fontSize: '13px', flexShrink: 0 }}
+          className="absolute right-3 top-3 z-20 m-0 flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border border-white/25 bg-site-primary text-white shadow-sm transition hover:bg-site-accent-dark sm:right-3.5 sm:top-3.5"
         >
-          <i className="fa fa-times" aria-hidden="true" />
+          <X size={15} strokeWidth={2.5} aria-hidden />
         </button>
 
-        {/* Scroll area */}
-        <div className="overflow-y-auto flex-1">
-          <div className="grid lg:grid-cols-[38%_62%]">
-
-            {/* ── Left panel ── */}
-            <div
-              className="relative flex flex-col text-white overflow-hidden"
-              style={{ background: '#8B4A1E' }}
-            >
+        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+          <div className="grid grid-cols-1 lg:grid-cols-[minmax(0,13.5rem)_minmax(0,1fr)] xl:grid-cols-[minmax(0,15rem)_minmax(0,1fr)]">
+            <aside className="relative overflow-hidden bg-site-primary text-white lg:min-h-full">
               <img
                 src="/images/premium_tarot.png"
-                alt="Consultation"
-                className="w-full object-cover flex-shrink-0"
-                style={{ height: '160px', objectPosition: 'center 30%' }}
+                alt=""
+                className="hidden h-28 w-full object-cover object-[center_30%] lg:block xl:h-32"
+                aria-hidden
               />
 
-              <div className="absolute rounded-full bg-white/5 pointer-events-none"
-                style={{ width: '180px', height: '180px', top: '-48px', left: '-48px' }} />
-              <div className="absolute rounded-full bg-black/10 pointer-events-none"
-                style={{ width: '240px', height: '240px', bottom: '-60px', right: '-60px' }} />
-
-              <div className="relative z-10" style={{ padding: '24px 28px 32px' }}>
-                <span
-                  className="inline-flex items-center bg-white/10 text-white/90 font-bold uppercase"
-                  style={{ fontSize: '10px', letterSpacing: '0.1em', padding: '6px 12px', borderRadius: '999px', marginBottom: '20px' }}
-                >
-                  Expert Consultation
+              <div className="relative z-10 space-y-3 p-4 sm:p-5 lg:p-5 lg:pt-4 xl:p-6">
+                <span className="inline-flex items-center rounded-full bg-white/10 px-2.5 py-0.5 font-body text-[0.625rem] font-bold uppercase tracking-wider text-white/90">
+                  {isPayNow ? 'Secure checkout' : 'Book a session'}
                 </span>
 
-                <h4
-                  className="font-black leading-tight font-heading text-white"
-                  style={{ fontSize: '28px', marginBottom: '14px' }}
-                >
-                  Book Your<br />
-                  <span style={{ color: '#C8832A' }}>Consultation</span>
-                </h4>
+                <div>
+                  <h4 className="!m-0 font-heading text-lg font-bold leading-tight text-white sm:text-xl">
+                    {isPayNow ? 'Complete booking' : 'Request consultation'}
+                  </h4>
+                  <p className="!mt-1.5 font-body text-xs leading-relaxed text-white/75">
+                    Share your birth details for an accurate chart reading.
+                  </p>
+                </div>
 
-                <p
-                  className="font-medium font-body"
-                  style={{ fontSize: '13px', lineHeight: '1.7', color: 'rgba(255,255,255,0.8)', marginBottom: '22px' }}
-                >
-                  Get personalized insights and life guidance from India&apos;s leading astrology mentor.
-                </p>
-
-                <ul className="list-none p-0" style={{ marginBottom: '22px' }}>
-                  {[
-                    'Detailed Birth Chart Analysis',
-                    'Career & Relationship Guidance',
-                    'Remedies & Future Predictions',
-                  ].map((item) => (
-                    <li key={item} className="flex items-center font-semibold font-body" style={{ gap: '10px', marginBottom: '10px', fontSize: '13px' }}>
-                      <span
-                        className="flex items-center justify-center flex-shrink-0 rounded-full"
-                        style={{ width: '20px', height: '20px', background: 'rgba(200,131,42,0.25)' }}
-                      >
-                        <i className="fa fa-check text-[#C8832A]" style={{ fontSize: '9px' }} />
+                <ul className="m-0 hidden list-none space-y-2 p-0 lg:block">
+                  {SIDE_POINTS.map((item) => (
+                    <li key={item} className="flex items-start gap-2 font-body text-xs font-medium text-white/90">
+                      <span className="mt-0.5 flex h-4 w-4 shrink-0 items-center justify-center rounded-full bg-site-accent/25">
+                        <Check size={9} className="text-site-accent" strokeWidth={3} aria-hidden />
                       </span>
                       {item}
                     </li>
                   ))}
                 </ul>
 
-                {bookingMode === BOOKING_MODES.PAY_LATER && (
-                  <div
-                    className="font-body"
-                    style={{ background: 'rgba(255,255,255,0.1)', borderRadius: '10px', padding: '12px 14px', fontSize: '12px', lineHeight: '1.6', color: 'rgba(255,255,255,0.75)' }}
-                  >
-                    <i className="fas fa-phone-alt text-[#C8832A]" style={{ marginRight: '8px' }} />
-                    Our team will call you within 24 hours to confirm your session. Pay online anytime before the appointment.
-                  </div>
+                {!isPayNow && (
+                  <p className="!m-0 flex items-start gap-2 rounded-lg bg-white/10 p-2.5 font-body text-[0.6875rem] leading-relaxed text-white/75">
+                    <Phone size={13} className="mt-0.5 shrink-0 text-site-accent" aria-hidden />
+                    We will call within 24 hours to confirm your slot. Pay online anytime before the session.
+                  </p>
                 )}
               </div>
-            </div>
+            </aside>
 
-            {/* ── Right panel ── */}
-            <div className="bg-white flex flex-col" style={{ padding: '28px 32px' }}>
-              <div style={{ marginBottom: '18px' }}>
-                <h3 className="font-black text-[#2A0F02] font-heading" style={{ fontSize: '20px', marginBottom: '4px' }}>
-                  Consultation Details
+            <div className="flex flex-col bg-white p-4 sm:p-5 lg:p-6">
+              <header className="mb-4 pr-8 sm:mb-5">
+                <h3 id="consultation-modal-title" className={`${TYPE.h2} !text-base sm:!text-lg`}>
+                  Consultation details
                 </h3>
-                <p className="font-bold uppercase font-body" style={{ fontSize: '10px', letterSpacing: '0.1em', color: '#C8832A' }}>
-                  Please provide your birth details for accurate analysis
+                <p className={`${TYPE.caption} !mt-1 !text-[0.6875rem] !font-semibold uppercase !tracking-wider !text-site-accent-dark`}>
+                  Birth details required for analysis
                 </p>
-              </div>
+              </header>
 
-              <form onSubmit={onSubmit} noValidate className="flex flex-col" style={{ gap: '14px' }}>
-
-                {/* Name + Phone */}
-                <div className="grid grid-cols-2" style={{ gap: '12px' }}>
+              <form onSubmit={onSubmit} noValidate className="flex flex-col gap-3.5 sm:gap-4">
+                <div className="grid grid-cols-1 gap-3.5 sm:grid-cols-2 sm:gap-3">
                   <div>
-                    <label className={labelCls}>Full Name</label>
-                    <input type="text" name="name" value={formData.name} onChange={onChange}
-                      placeholder="Your Full Name" className={fieldCls(errors.name)} />
-                    {errMsg(errors.name)}
+                    <label htmlFor="consult-name" className={LABEL}>
+                      Full name
+                    </label>
+                    <input
+                      id="consult-name"
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={onChange}
+                      placeholder="Your full name"
+                      className={fieldClass(errors.name)}
+                      autoComplete="name"
+                    />
+                    <FieldError message={errors.name} />
                   </div>
                   <div>
-                    <label className={labelCls}>Phone</label>
-                    <input type="tel" name="phone" value={formData.phone} onChange={onChange}
-                      placeholder="10-digit number" maxLength={10} className={fieldCls(errors.phone)} />
-                    {errMsg(errors.phone)}
+                    <label htmlFor="consult-phone" className={LABEL}>
+                      Phone
+                    </label>
+                    <input
+                      id="consult-phone"
+                      type="tel"
+                      name="phone"
+                      value={formData.phone}
+                      onChange={onChange}
+                      placeholder="10-digit mobile"
+                      maxLength={10}
+                      className={fieldClass(errors.phone)}
+                      autoComplete="tel"
+                    />
+                    <FieldError message={errors.phone} />
                   </div>
                 </div>
 
-                {/* Email */}
                 <div>
-                  <label className={labelCls}>Email Address</label>
-                  <input type="email" name="email" value={formData.email} onChange={onChange}
-                    placeholder="Your Email Address" className={fieldCls(errors.email)} />
-                  {errMsg(errors.email)}
+                  <label htmlFor="consult-email" className={LABEL}>
+                    Email
+                  </label>
+                  <input
+                    id="consult-email"
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={onChange}
+                    placeholder="you@email.com"
+                    className={fieldClass(errors.email)}
+                    autoComplete="email"
+                  />
+                  <FieldError message={errors.email} />
                 </div>
 
-                {/* Birth details */}
-                <div className="grid grid-cols-3" style={{ gap: '10px' }}>
+                <div className="grid grid-cols-1 gap-3 sm:grid-cols-3 sm:gap-2.5">
                   <div>
-                    <label className={labelCls}>Date of Birth</label>
-                    <input type="date" name="dob" value={formData.dob || ''} onChange={onChange}
-                      className={fieldCls(errors.dob)} />
-                    {errMsg(errors.dob)}
+                    <label htmlFor="consult-dob" className={LABEL}>
+                      Date of birth
+                    </label>
+                    <input
+                      id="consult-dob"
+                      type="date"
+                      name="dob"
+                      value={formData.dob || ''}
+                      onChange={onChange}
+                      className={fieldClass(errors.dob)}
+                    />
+                    <FieldError message={errors.dob} />
                   </div>
                   <div>
-                    <label className={labelCls}>Time of Birth</label>
-                    <input type="time" name="tob" value={formData.tob || ''} onChange={onChange}
-                      className={fieldCls(errors.tob)} />
-                    {errMsg(errors.tob)}
+                    <label htmlFor="consult-tob" className={LABEL}>
+                      Time of birth
+                    </label>
+                    <input
+                      id="consult-tob"
+                      type="time"
+                      name="tob"
+                      value={formData.tob || ''}
+                      onChange={onChange}
+                      className={fieldClass(errors.tob)}
+                    />
+                    <FieldError message={errors.tob} />
                   </div>
                   <div>
-                    <label className={labelCls}>Place of Birth</label>
-                    <input type="text" name="pob" value={formData.pob || ''} onChange={onChange}
-                      placeholder="City, State" className={fieldCls(errors.pob)} />
-                    {errMsg(errors.pob)}
+                    <label htmlFor="consult-pob" className={LABEL}>
+                      Place of birth
+                    </label>
+                    <input
+                      id="consult-pob"
+                      type="text"
+                      name="pob"
+                      value={formData.pob || ''}
+                      onChange={onChange}
+                      placeholder="City, state"
+                      className={fieldClass(errors.pob)}
+                    />
+                    <FieldError message={errors.pob} />
                   </div>
                 </div>
 
-                {/* Consultation type */}
                 <div>
-                  <label className={labelCls}>Consultation Type</label>
+                  <label htmlFor="consult-type" className={LABEL}>
+                    Consultation type
+                  </label>
                   {isFixedService ? (
-                    <input type="text" name="consultationType" value={formData.consultationType} readOnly
-                      className={`${baseInput} border-stone-200 bg-stone-100 text-stone-400 cursor-not-allowed`} />
+                    <input
+                      id="consult-type"
+                      type="text"
+                      name="consultationType"
+                      value={formData.consultationType}
+                      readOnly
+                      className={`${INPUT} cursor-not-allowed !bg-site-surface !text-site-muted`}
+                    />
                   ) : (
                     <>
-                      <input type="text" name="consultationType" value={formData.consultationType}
-                        onChange={onChange} placeholder="e.g. Career, Marriage, Tarot…"
-                        className={fieldCls(errors.consultationType)} />
-                      {errMsg(errors.consultationType)}
+                      <input
+                        id="consult-type"
+                        type="text"
+                        name="consultationType"
+                        value={formData.consultationType}
+                        onChange={onChange}
+                        placeholder="e.g. Career, marriage, tarot"
+                        className={fieldClass(errors.consultationType)}
+                      />
+                      <FieldError message={errors.consultationType} />
                     </>
                   )}
                 </div>
 
-                {/* Message */}
                 <div>
-                  <label className={labelCls}>
-                    Your Message{' '}
-                    <span className="normal-case font-normal text-stone-400" style={{ letterSpacing: 0 }}>(optional)</span>
+                  <label htmlFor="consult-message" className={LABEL}>
+                    Message{' '}
+                    <span className="normal-case font-normal tracking-normal text-site-soft">(optional)</span>
                   </label>
-                  <textarea name="message" value={formData.message} onChange={onChange}
-                    placeholder="Describe your concern briefly…" rows={2}
-                    className={`${baseInput} border-stone-200 bg-stone-50 focus:border-[#8B4A1E] focus:ring-[#8B4A1E]/10 resize-none`} />
+                  <textarea
+                    id="consult-message"
+                    name="message"
+                    value={formData.message}
+                    onChange={onChange}
+                    placeholder="Briefly describe your concern…"
+                    rows={2}
+                    className={`${INPUT} resize-none`}
+                  />
                 </div>
 
-                {/* Consent */}
-                <div className="flex items-start" style={{ gap: '10px' }}>
-                  <input type="checkbox" id="consent-consultation" name="consent" required
-                    className="flex-shrink-0 accent-[#8B4A1E] cursor-pointer"
-                    style={{ width: '15px', height: '15px', marginTop: '2px' }} />
-                  <label htmlFor="consent-consultation" className="font-body cursor-pointer"
-                    style={{ fontSize: '12px', color: '#6b7280', lineHeight: '1.5', fontWeight: 400 }}>
+                <div className="flex items-start gap-2.5">
+                  <input
+                    type="checkbox"
+                    id="consent-consultation"
+                    name="consent"
+                    required
+                    className="mt-0.5 h-3.5 w-3.5 shrink-0 cursor-pointer accent-site-primary"
+                  />
+                  <label
+                    htmlFor="consent-consultation"
+                    className="cursor-pointer font-body text-xs leading-relaxed text-site-muted"
+                  >
                     I agree to the{' '}
-                    <a href="/privacy-policy" className="text-[#8B4A1E] underline hover:text-[#C8832A] transition-colors">
+                    <a
+                      href="/privacy-policy"
+                      className="font-semibold text-site-accent-dark underline-offset-2 hover:text-site-accent hover:underline"
+                    >
                       Privacy Policy
-                    </a>
-                    {' '}and consent to DS Institute LLP contacting me via phone, email, and WhatsApp.
+                    </a>{' '}
+                    and consent to DS Institute LLP contacting me by phone, email, or WhatsApp.
                   </label>
                 </div>
 
-                {/* Submit */}
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full flex items-center justify-center font-bold font-body disabled:opacity-60 disabled:cursor-not-allowed transition-all duration-300 hover:-translate-y-0.5 disabled:translate-y-0"
-                  style={{
-                    gap: '8px',
-                    padding: '14px 24px',
-                    borderRadius: '10px',
-                    fontSize: '14px',
-                    background: 'linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%)',
-                    color: '#fff',
-                    border: 'none',
-                    boxShadow: '0 6px 20px rgba(139,74,30,0.3)',
-                    cursor: isSubmitting ? 'not-allowed' : 'pointer',
-                  }}
-                  onMouseEnter={(e) => !isSubmitting && (e.currentTarget.style.background = 'linear-gradient(135deg, #8B4A1E 0%, #C8832A 100%)')}
-                  onMouseLeave={(e) => !isSubmitting && (e.currentTarget.style.background = 'linear-gradient(135deg, #2A0F02 0%, #8B4A1E 100%)')}
+                  className={`${BTN.primary} w-full !min-h-[2.625rem] disabled:!translate-y-0`}
                 >
+                  {isSubmitting ? (
+                    <Loader2 size={16} className="animate-spin" aria-hidden />
+                  ) : isPayNow ? (
+                    <CreditCard size={16} aria-hidden />
+                  ) : (
+                    <Phone size={16} aria-hidden />
+                  )}
                   {submitLabel}
                 </button>
 
-                <p className="text-center font-medium font-body" style={{ fontSize: '11px', color: '#9ca3af', marginTop: '2px' }}>
-                  <i className="fas fa-lock text-[#8B4A1E]" style={{ marginRight: '6px' }} />
-                  Private &amp; Encrypted Consultation
+                <p className="!m-0 flex items-center justify-center gap-1.5 text-center font-body text-[0.6875rem] font-medium text-site-soft">
+                  <Lock size={11} className="text-site-accent-dark" aria-hidden />
+                  Private &amp; encrypted
                 </p>
-
               </form>
             </div>
-
           </div>
         </div>
       </div>

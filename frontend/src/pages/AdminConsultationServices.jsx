@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import { Plus, Edit2, Trash2, UploadCloud, Layers, LayoutGrid, CheckCircle2, RefreshCw, X, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import API_BASE from '../utils/api';

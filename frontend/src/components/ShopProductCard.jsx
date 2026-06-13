@@ -1,4 +1,4 @@
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import { openShopifyStore } from '../utils/shopify';
 
 export default function ShopProductCard({ product, onBuy, onAddToCart, showTag = false }) {

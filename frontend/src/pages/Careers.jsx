@@ -3,10 +3,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Briefcase, MapPin, Clock, IndianRupee, ChevronRight,
   Upload, CheckCircle2, Star, Sparkles, Send,
-  User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter
+  User, Mail, Phone, Home, BookOpen, Globe, Zap, Search, Filter, X, RefreshCw
 } from 'lucide-react';
 import axios from 'axios';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import API_BASE from '../utils/api';
 import { uploadResume } from '../utils/uploadMedia';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
@@ -164,6 +164,44 @@ const S = {
     borderRadius: 'var(--radius-control)', padding: '20px', textAlign: 'center', cursor: 'pointer',
   },
   uploadText: { fontSize: 12.5, color: '#9a8f85', marginTop: 4 },
+  resumeUploaded: {
+    background: '#f4faf0',
+    border: '1px solid #b8ddb0',
+    borderRadius: 'var(--radius-control)',
+    padding: '14px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 12,
+    flexWrap: 'wrap',
+  },
+  resumeFileName: {
+    flex: '1 1 180px',
+    fontSize: 13,
+    fontWeight: 600,
+    color: '#3B6D11',
+    wordBreak: 'break-all',
+    display: 'flex',
+    alignItems: 'center',
+    gap: 8,
+  },
+  resumeActions: {
+    display: 'flex',
+    gap: 8,
+    flexWrap: 'wrap',
+  },
+  resumeActionBtn: (variant = 'outline') => ({
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    padding: '8px 12px',
+    borderRadius: 8,
+    fontSize: 12,
+    fontWeight: 700,
+    cursor: 'pointer',
+    border: variant === 'danger' ? '1px solid #f5c2c2' : '1px solid var(--site-border-strong)',
+    background: variant === 'danger' ? '#fef2f2' : '#fff',
+    color: variant === 'danger' ? '#b91c1c' : '#5C3D26',
+  }),
   submitBtn: {
     width: '100%', background: 'var(--site-primary)', color: '#fff',
     border: 'none', borderRadius: 'var(--radius-control)', padding: '13px',
@@ -252,6 +290,7 @@ export default function Careers() {
   const [resumeUrl, setResumeUrl] = useState('');
   const [resumeUploading, setResumeUploading] = useState(false);
   const detailRef = useRef(null);
+  const resumeInputRef = useRef(null);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
@@ -310,6 +349,54 @@ export default function Careers() {
     setFormData((p) => ({ ...p, [name]: value }));
   };
 
+  const clearResume = () => {
+    setResume(null);
+    setResumeUrl('');
+    setResumeUploading(false);
+    if (resumeInputRef.current) resumeInputRef.current.value = '';
+  };
+
+  const triggerReplaceResume = () => {
+    if (resumeUploading) return;
+    if (resumeInputRef.current) resumeInputRef.current.value = '';
+    resumeInputRef.current?.click();
+  };
+
+  const handleResumeFileChange = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('File size must be less than 5MB');
+      e.target.value = '';
+      return;
+    }
+    const validTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    ];
+    if (!validTypes.includes(file.type)) {
+      toast.error('Please upload only PDF, DOC, or DOCX files');
+      e.target.value = '';
+      return;
+    }
+
+    setResume(file);
+    setResumeUrl('');
+    setResumeUploading(true);
+    try {
+      const url = await uploadResume(file);
+      setResumeUrl(url);
+      toast.success('Resume uploaded successfully');
+    } catch (err) {
+      toast.error(err.message || 'Resume upload failed');
+      clearResume();
+    } finally {
+      setResumeUploading(false);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!resumeUrl) return toast.error('Please upload your resume and wait for it to finish');
@@ -341,8 +428,7 @@ export default function Careers() {
       if (data.success) {
         toast.success('Application submitted! Our team will contact you soon.');
         setFormData(EMPTY_FORM);
-        setResume(null);
-        setResumeUrl('');
+        clearResume();
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to submit application');
@@ -670,61 +756,64 @@ export default function Careers() {
                           (PDF, DOC, DOCX – max 5MB)
                         </span>
                       </label>
-                      <label
-                        className="careers-upload"
-                        style={S.uploadZone}
-                        htmlFor="resume-upload"
-                      >
-                        <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
-                        <div style={S.uploadText}>
-                          {resumeUploading ? (
+
+                      {resumeUploading ? (
+                        <div style={S.uploadZone}>
+                          <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
+                          <div style={S.uploadText}>
                             <span style={{ color: '#8a6e1e', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                              <span style={{ ...S.spinner, border: '2px solid #e0d9d1', borderTop: '2px solid #C9A84C' }} /> Uploading to secure storage…
+                              <span style={{ ...S.spinner, border: '2px solid #e0d9d1', borderTop: '2px solid #C9A84C' }} />
+                              Uploading {resume?.name ? `"${resume.name}"` : 'resume'}…
                             </span>
-                          ) : resume ? (
-                            <span style={{ color: resumeUrl ? '#3B6D11' : '#8a6e1e', fontWeight: 500, wordBreak: 'break-all' }}>
-                              {resumeUrl ? '✓ ' : ''}{resume.name}
-                            </span>
-                          ) : (
-                            'Click to upload or drag & drop'
-                          )}
+                          </div>
                         </div>
-                      </label>
+                      ) : resumeUrl && resume ? (
+                        <div style={S.resumeUploaded}>
+                          <div style={S.resumeFileName}>
+                            <CheckCircle2 size={18} style={{ flexShrink: 0 }} />
+                            <span>{resume.name}</span>
+                          </div>
+                          <div style={S.resumeActions}>
+                            <button
+                              type="button"
+                              style={S.resumeActionBtn('outline')}
+                              onClick={triggerReplaceResume}
+                            >
+                              <RefreshCw size={14} />
+                              Replace
+                            </button>
+                            <button
+                              type="button"
+                              style={S.resumeActionBtn('danger')}
+                              onClick={() => {
+                                clearResume();
+                                toast.success('Resume removed');
+                              }}
+                            >
+                              <X size={14} />
+                              Remove
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <label
+                          className="careers-upload"
+                          style={S.uploadZone}
+                          htmlFor="resume-upload"
+                        >
+                          <Upload size={22} style={{ color: '#C9A84C', marginBottom: 4 }} />
+                          <div style={S.uploadText}>Click to upload or drag & drop</div>
+                        </label>
+                      )}
+
                       <input
-                        id="resume-upload" type="file" accept=".pdf,.doc,.docx"
+                        ref={resumeInputRef}
+                        id="resume-upload"
+                        type="file"
+                        accept=".pdf,.doc,.docx"
                         style={{ display: 'none' }}
                         disabled={resumeUploading}
-                        onChange={async (e) => {
-                          const file = e.target.files[0];
-                          if (!file) return;
-
-                          if (file.size > 5 * 1024 * 1024) {
-                            toast.error('File size must be less than 5MB');
-                            e.target.value = '';
-                            return;
-                          }
-                          const validTypes = ['application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-                          if (!validTypes.includes(file.type)) {
-                            toast.error('Please upload only PDF, DOC, or DOCX files');
-                            e.target.value = '';
-                            return;
-                          }
-
-                          setResume(file);
-                          setResumeUrl('');
-                          setResumeUploading(true);
-                          try {
-                            const url = await uploadResume(file);
-                            setResumeUrl(url);
-                            toast.success('Resume uploaded successfully');
-                          } catch (err) {
-                            toast.error(err.message || 'Resume upload failed');
-                            setResume(null);
-                            e.target.value = '';
-                          } finally {
-                            setResumeUploading(false);
-                          }
-                        }}
+                        onChange={handleResumeFileChange}
                       />
                     </div>
 

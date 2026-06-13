@@ -1,84 +1,102 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import API_BASE from './api';
-import { getConsultationServiceById } from '../data/consultationCatalog';
 
-export async function fetchConsultationCatalog() {
-  try {
-    const res = await fetch(`${API_BASE}/api/consultations/services`);
-    const data = await res.json();
-    if (data.success) {
-      return {
-        categories: data.categories || [],
-        services: data.services || [],
-      };
-    }
-  } catch {
-    /* fall through to static catalog */
+function buildCatalogQuery(filters = {}) {
+  const params = new URLSearchParams();
+  const {
+    categories = [],
+    durations = [],
+    badges = [],
+    minPrice,
+    maxPrice,
+    search = '',
+    sortBy = 'sortOrder',
+    sortOrder = 'asc',
+  } = filters;
+
+  if (categories.length) params.set('category', categories.join(','));
+  if (durations.length) params.set('duration', durations.join(','));
+  if (badges.length) params.set('badge', badges.join(','));
+  if (minPrice != null && minPrice !== '') params.set('minPrice', String(minPrice));
+  if (maxPrice != null && maxPrice !== '') params.set('maxPrice', String(maxPrice));
+  if (search.trim()) params.set('q', search.trim());
+  if (sortBy) params.set('sortBy', sortBy);
+  if (sortOrder) params.set('sortOrder', sortOrder);
+
+  const qs = params.toString();
+  return qs ? `?${qs}` : '';
+}
+
+export async function fetchConsultationCatalog(filters = {}) {
+  const res = await fetch(`${API_BASE}/api/consultations/services${buildCatalogQuery(filters)}`);
+  const data = await res.json();
+  if (!data.success) {
+    throw new Error(data.message || data.error || 'Failed to load consultation catalog');
   }
-
-  const { getAllConsultationServices, CONSULTATION_CATEGORIES } = await import('../data/consultationCatalog');
-  const services = getAllConsultationServices();
-  const categories = CONSULTATION_CATEGORIES.map((cat) => ({
-    id: cat.id,
-    slug: cat.id,
-    name: cat.name,
-    icon: cat.icon,
-    description: cat.description,
-    cards: cat.cards.map((card) => ({
-      ...card,
-      priceLabel: `₹${Number(card.price).toLocaleString('en-IN')}`,
-    })),
-  }));
-  return { categories, services: services.map((s) => ({ ...s, priceLabel: s.priceLabel || `₹${Number(s.price).toLocaleString('en-IN')}` })) };
+  return {
+    categories: data.categories || [],
+    services: data.services || [],
+    total: data.total ?? (data.services || []).length,
+    filters: data.filters || null,
+    appliedFilters: data.appliedFilters || null,
+  };
 }
 
 export async function fetchConsultationService(serviceId) {
-  try {
-    const res = await fetch(`${API_BASE}/api/consultations/services/${serviceId}`);
-    const data = await res.json();
-    if (res.ok && data.success) {
-      return data.service;
-    }
-  } catch {
-    /* fall through */
+  const res = await fetch(`${API_BASE}/api/consultations/services/${encodeURIComponent(serviceId)}`);
+  const data = await res.json();
+  if (!res.ok || !data.success) {
+    throw new Error(data.message || 'Service not found');
   }
-
-  const fallback = getConsultationServiceById(serviceId);
-  if (fallback) {
-    return {
-      ...fallback,
-      priceLabel: fallback.priceLabel || `₹${Number(fallback.price).toLocaleString('en-IN')}`,
-    };
-  }
-
-  throw new Error('Service not found');
+  return data.service;
 }
 
-export function useConsultationCatalog() {
+export function useConsultationCatalog(filters = {}) {
   const [categories, setCategories] = useState([]);
   const [services, setServices] = useState([]);
+  const [filterMeta, setFilterMeta] = useState(null);
+  const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  const filterKey = useMemo(
+    () => JSON.stringify(filters),
+    [
+      filters.categories,
+      filters.durations,
+      filters.badges,
+      filters.minPrice,
+      filters.maxPrice,
+      filters.search,
+      filters.sortBy,
+      filters.sortOrder,
+    ]
+  );
 
   const reload = useCallback(async () => {
     setLoading(true);
     setError(null);
     try {
-      const data = await fetchConsultationCatalog();
+      const data = await fetchConsultationCatalog(filters);
       setCategories(data.categories);
       setServices(data.services);
+      setFilterMeta(data.filters);
+      setTotal(data.total);
     } catch (err) {
       setError(err.message);
+      setCategories([]);
+      setServices([]);
+      setTotal(0);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filterKey]);
 
   useEffect(() => {
     reload();
   }, [reload]);
 
-  return { categories, services, loading, error, reload };
+  return { categories, services, filterMeta, total, loading, error, reload };
 }
 
 export function useConsultationService(serviceId) {
@@ -107,4 +125,8 @@ export function useConsultationService(serviceId) {
   }, [serviceId]);
 
   return { service, loading, error };
+}
+
+export function toggleInList(list, value) {
+  return list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 }

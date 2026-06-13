@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import toast from 'react-hot-toast';
+import toast from '@/utils/toast';
 import ConsultationModal from '../components/ConsultationModal';
 import SuccessModal from '../components/SuccessModal';
 
@@ -480,6 +480,10 @@ const preloadImages = (urls) =>
     )
   );
 
+const BANNER_SLIDE_COUNT = BANNER_SLIDES.length;
+const BANNER_FADE_MS = 550;
+const BANNER_AUTO_MS = 6500;
+
 function Home() {
 
   const trackRef = useRef(null);
@@ -608,11 +612,43 @@ function Home() {
 
 
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [contentHidden, setContentHidden] = useState(false);
   const [bannerReady, setBannerReady] = useState(false);
+  const [carouselPaused, setCarouselPaused] = useState(false);
+  const slideIndexRef = useRef(0);
+  const transitioningRef = useRef(false);
   const activeSlide = BANNER_SLIDES[currentSlide];
   const isThemedSlide = Boolean(
     (activeSlide.themeRust || activeSlide.themeMustard || activeSlide.themeTan) && !activeSlide.bgImage,
   );
+
+  const goToSlide = useCallback((targetIndex) => {
+    const next =
+      ((targetIndex % BANNER_SLIDE_COUNT) + BANNER_SLIDE_COUNT) % BANNER_SLIDE_COUNT;
+    if (transitioningRef.current || next === slideIndexRef.current) return;
+
+    transitioningRef.current = true;
+    setContentHidden(true);
+
+    window.setTimeout(() => {
+      slideIndexRef.current = next;
+      setCurrentSlide(next);
+      window.requestAnimationFrame(() => {
+        setContentHidden(false);
+        window.setTimeout(() => {
+          transitioningRef.current = false;
+        }, BANNER_FADE_MS);
+      });
+    }, BANNER_FADE_MS);
+  }, []);
+
+  const nextSlide = useCallback(() => {
+    goToSlide(slideIndexRef.current + 1);
+  }, [goToSlide]);
+
+  const prevSlide = useCallback(() => {
+    goToSlide(slideIndexRef.current - 1);
+  }, [goToSlide]);
 
   useEffect(() => {
     let cancelled = false;
@@ -633,12 +669,10 @@ function Home() {
   }, []);
 
   useEffect(() => {
-    if (!bannerReady) return undefined;
-    const timer = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % BANNER_SLIDES.length);
-    }, 6000);
-    return () => clearInterval(timer);
-  }, [bannerReady]);
+    if (!bannerReady || carouselPaused) return undefined;
+    const timer = window.setInterval(nextSlide, BANNER_AUTO_MS);
+    return () => window.clearInterval(timer);
+  }, [bannerReady, carouselPaused, nextSlide]);
 
   useEffect(() => {
     if (window.AOS) {
@@ -679,25 +713,38 @@ function Home() {
       <section
         className={`banner-section w-100 ${!activeSlide.bgImage && activeSlide.themeRust ? 'theme-rust' : ''} ${!activeSlide.bgImage && activeSlide.themeMustard ? 'theme-mustard' : ''} ${!activeSlide.bgImage && activeSlide.themeTan ? 'theme-tan' : ''} ${activeSlide.bgImage ? 'banner-has-bg' : ''} ${activeSlide.overlayGlass ? 'banner-glass-overlay' : ''} ${activeSlide.glassOverall ? 'banner-glass-overall' : ''} ${bannerReady ? 'banner-ready' : 'banner-loading'}`}
         aria-busy={!bannerReady}
+        aria-roledescription="carousel"
+        aria-label="Featured highlights"
+        onMouseEnter={() => setCarouselPaused(true)}
+        onMouseLeave={() => setCarouselPaused(false)}
+        onFocusCapture={() => setCarouselPaused(true)}
+        onBlurCapture={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget)) setCarouselPaused(false);
+        }}
       >
-        {activeSlide.bgImage && (
-          <>
-            <div
-              className="banner-bg-image"
-              style={{ backgroundImage: `url(${activeSlide.bgImage})` }}
-              aria-hidden="true"
-            />
-            {activeSlide.glassOverall && (
-              <div className="banner-bg-overlay banner-bg-overlay--glass-overall" aria-hidden="true" />
-            )}
-          </>
-        )}
+        <div className="banner-bg-layers" aria-hidden="true">
+          <div className={`banner-bg-layer banner-bg-layer--gradient ${currentSlide === 0 ? 'is-active' : ''}`} />
+          {BANNER_SLIDES.map((slide, index) =>
+            slide.bgImage ? (
+              <div
+                key={slide.bgImage}
+                className={`banner-bg-layer banner-bg-image ${index === currentSlide ? 'is-active' : ''}`}
+                style={{ backgroundImage: `url(${slide.bgImage})` }}
+              />
+            ) : null,
+          )}
+          {activeSlide.glassOverall ? (
+            <div className="banner-bg-overlay banner-bg-overlay--glass-overall is-active" />
+          ) : null}
+        </div>
         {!bannerReady && <div className="banner-preloader" aria-hidden="true" />}
         <div className="container">
           <div className="banner-text-home">
             <div className="row align-items-center g-5 banner-hero-row">
               <div className={`position-relative z-1 ${activeSlide.bgImage ? 'col-lg-7 col-xl-6' : 'col-lg-6'}`}>
-                <div className={`banner-copy${activeSlide.overlayGlass ? ' banner-copy--glass' : ''}`} key={`banner-copy-${currentSlide}`}>
+                <div
+                  className={`banner-copy${activeSlide.overlayGlass ? ' banner-copy--glass' : ''}${contentHidden ? ' banner-copy--hidden' : ''}`}
+                >
                   <div className="ethereal-sparkle s-1">✦</div>
                   <div className="ethereal-sparkle s-2">✧</div>
 
@@ -765,7 +812,7 @@ function Home() {
                 </div>
               </div>
               {!activeSlide.bgImage && (
-              <div className="col-lg-6 d-none d-lg-flex banner-graphic-col position-relative">
+              <div className={`col-lg-6 d-none d-lg-flex banner-graphic-col position-relative${contentHidden ? ' banner-graphic-col--hidden' : ''}`}>
                 <div className="banner-graphic-stage">
                   <div className={`banner-graphic-layer ${!isThemedSlide ? 'is-active' : ''}`} aria-hidden={isThemedSlide}>
                     <div className="cosmic-orbit-container">
@@ -861,6 +908,38 @@ function Home() {
               )}
             </div>
           </div>
+        </div>
+
+        <div className="banner-carousel-controls">
+          <button
+            type="button"
+            className="banner-carousel-arrow banner-carousel-arrow--prev"
+            onClick={prevSlide}
+            aria-label="Previous slide"
+          >
+            <i className="fas fa-chevron-left" aria-hidden="true" />
+          </button>
+          <div className="banner-carousel-dots" role="tablist" aria-label="Choose slide">
+            {BANNER_SLIDES.map((slide, index) => (
+              <button
+                key={slide.title1}
+                type="button"
+                role="tab"
+                aria-selected={index === currentSlide}
+                aria-label={`Slide ${index + 1} of ${BANNER_SLIDE_COUNT}`}
+                className={`banner-carousel-dot${index === currentSlide ? ' is-active' : ''}`}
+                onClick={() => goToSlide(index)}
+              />
+            ))}
+          </div>
+          <button
+            type="button"
+            className="banner-carousel-arrow banner-carousel-arrow--next"
+            onClick={nextSlide}
+            aria-label="Next slide"
+          >
+            <i className="fas fa-chevron-right" aria-hidden="true" />
+          </button>
         </div>
       </section>
 
@@ -1433,6 +1512,12 @@ function Home() {
           background-size: cover;
           background-position: center;
           background-repeat: no-repeat;
+          opacity: 0;
+          transition: opacity 0.7s ease;
+        }
+
+        .banner-bg-image.is-active {
+          opacity: 1;
         }
 
         .banner-bg-overlay {

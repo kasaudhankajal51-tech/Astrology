@@ -63,48 +63,57 @@ function badgeBg(color) {
 function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback, className = '', compact = false }) {
   return (
     <div
-      className={`overflow-hidden rounded-xl border border-site-accent-dark/10 bg-white shadow-[0_2px_12px_rgba(74,44,42,0.06)] ${className}`}
+      className={`overflow-hidden rounded-2xl border border-site-accent-dark/15 bg-white shadow-[0_4px_24px_rgba(74,44,42,0.08)] ${className}`}
     >
       {!compact ? (
-        <div className="relative h-28 overflow-hidden xl:h-32">
-          <img src={service.img} alt={displayTitle} className="block h-full w-full object-cover" />
+        <div className="relative h-48 overflow-hidden xl:h-56 group bg-[#1e0c02]">
+          <img src={service.img} alt={displayTitle} className="block h-full w-full object-contain transition-transform duration-700 group-hover:scale-105" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1e0c02]/95 via-[#1e0c02]/20 to-transparent opacity-90 pointer-events-none" />
           {service.badge ? (
             <span
-              className={`absolute left-2 top-2 rounded px-1.5 py-0.5 text-[0.5625rem] font-bold uppercase tracking-wide text-white shadow-sm ${badgeBg(service.badgeColor)}`}
+              className={`absolute left-3 top-3 rounded-md px-2 py-1 text-[0.6875rem] font-extrabold uppercase tracking-wider text-white shadow-sm backdrop-blur-md ${badgeBg(service.badgeColor)}`}
             >
               {service.badge}
             </span>
           ) : null}
+          <div className="absolute bottom-4 left-4 right-4">
+            <p className="font-heading text-lg font-bold tracking-tight text-white drop-shadow-md sm:text-xl">
+              {displayTitle}
+            </p>
+          </div>
         </div>
       ) : null}
 
-      <div className={`space-y-2.5 ${compact ? 'p-3.5 sm:p-4' : 'p-4'}`}>
-        <div className={compact ? 'flex flex-wrap items-end justify-between gap-3' : ''}>
+      <div className={`space-y-4 ${compact ? 'p-4 sm:p-5' : 'p-5 sm:p-6 xl:p-7'}`}>
+        <div className={compact ? 'flex flex-wrap items-end justify-between gap-4' : ''}>
           <div>
-            <p className="!m-0 font-body text-[0.625rem] font-bold uppercase tracking-wider text-site-soft">
+            <p className="!m-0 font-body text-xs font-bold uppercase tracking-widest text-site-muted">
               Session fee
             </p>
-            <p className={`${TYPE.price} !mt-0.5 !text-[clamp(1.25rem,2.5vw,1.625rem)]`}>{service.priceLabel}</p>
+            <p className={`${TYPE.price} !mt-1 !text-[2rem] text-site-primary xl:!text-[2.25rem]`}>{service.priceLabel}</p>
             {service.duration ? (
-              <p className={`${TYPE.caption} !mt-0.5 !text-[0.75rem]`}>{service.duration} consultation</p>
+              <p className={`${TYPE.caption} !mt-1.5 flex items-center gap-1.5 !text-[0.875rem] font-medium text-site-soft`}>
+                <Clock size={15} className="text-site-accent" aria-hidden />
+                {service.duration} consultation
+              </p>
             ) : null}
           </div>
           {compact ? (
-            <div className="flex flex-1 flex-col gap-2 min-[480px]:max-w-[16rem] min-[480px]:flex-none">
+            <div className="mt-3 flex flex-1 flex-col gap-3 min-[480px]:max-w-[18rem] min-[480px]:flex-none">
               <button
                 type="button"
                 onClick={onPayNow}
-                className={`${BTN.primary} w-full !min-h-[2.375rem] !py-2 !text-xs`}
+                className="inline-flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl bg-site-primary px-5 py-3 font-body text-sm font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-black hover:shadow-lg disabled:opacity-60"
               >
-                <CreditCard size={14} aria-hidden />
+                <CreditCard size={16} aria-hidden />
                 Pay &amp; Book
               </button>
               <button
                 type="button"
                 onClick={onCallback}
-                className={`${BTN.outline} w-full !min-h-[2.375rem] !py-2 !text-xs`}
+                className="inline-flex min-h-[3rem] w-full items-center justify-center gap-2 rounded-xl border-2 border-site-primary bg-white px-5 py-3 font-body text-sm font-bold text-site-primary transition hover:!bg-amber-900 hover:!border-amber-900 hover:!text-white"
               >
-                <Phone size={14} aria-hidden />
+                <Phone size={16} aria-hidden />
                 Request callback
               </button>
             </div>
@@ -112,31 +121,33 @@ function BookingPanel({ service, displayTitle, paymentNote, onPayNow, onCallback
         </div>
 
         {!compact ? (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col gap-3 pt-3">
             <button
               type="button"
               onClick={onPayNow}
-              className={`${BTN.primary} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
+              className="inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl bg-site-primary px-6 py-3.5 font-body text-[0.9375rem] font-bold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-black hover:shadow-lg disabled:opacity-60"
             >
-              <CreditCard size={15} aria-hidden />
+              <CreditCard size={18} aria-hidden />
               Pay &amp; Book
             </button>
             <button
               type="button"
               onClick={onCallback}
-              className={`${BTN.outline} w-full !min-h-[2.5rem] !py-2.5 !text-xs`}
+              className="inline-flex min-h-[3.25rem] w-full items-center justify-center gap-2 rounded-xl border-2 border-site-primary bg-white px-6 py-3.5 font-body text-[0.9375rem] font-bold text-site-primary transition hover:!bg-amber-900 hover:!border-amber-900 hover:!text-white"
             >
-              <Phone size={15} aria-hidden />
+              <Phone size={18} aria-hidden />
               Request callback
             </button>
           </div>
         ) : null}
 
         {paymentNote ? (
-          <p className={`${TYPE.caption} !flex items-start gap-1.5 !text-[0.6875rem]`}>
-            <Info size={12} className="mt-0.5 shrink-0 text-site-accent-dark" aria-hidden />
-            {paymentNote}
-          </p>
+          <div className="mt-2 rounded-lg bg-orange-50 p-3">
+            <p className={`${TYPE.caption} !flex items-start gap-2 !text-xs text-orange-800`}>
+              <Info size={14} className="mt-0.5 shrink-0 text-orange-600" aria-hidden />
+              {paymentNote}
+            </p>
+          </div>
         ) : null}
       </div>
     </div>
@@ -266,7 +277,7 @@ function ConsultationDetail() {
             All consultations
           </Link>
 
-          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_17.5rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_19rem] xl:gap-10">
+          <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1fr)_22rem] lg:gap-8 xl:grid-cols-[minmax(0,1fr)_25rem] xl:gap-12">
             {/* Main content — always first column on desktop */}
             <div className="min-w-0">
               <div className="mb-3 flex flex-wrap items-center gap-1.5 sm:gap-2">

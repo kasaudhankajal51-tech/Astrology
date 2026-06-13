@@ -1,25 +1,57 @@
 import { useState, useEffect, useCallback } from 'react';
 import API_BASE from './api';
+import { getConsultationServiceById } from '../data/consultationCatalog';
 
 export async function fetchConsultationCatalog() {
-  const res = await fetch(`${API_BASE}/api/consultations/services`);
-  const data = await res.json();
-  if (!data.success) {
-    throw new Error(data.message || data.error || 'Failed to load consultation services');
+  try {
+    const res = await fetch(`${API_BASE}/api/consultations/services`);
+    const data = await res.json();
+    if (data.success) {
+      return {
+        categories: data.categories || [],
+        services: data.services || [],
+      };
+    }
+  } catch {
+    /* fall through to static catalog */
   }
-  return {
-    categories: data.categories || [],
-    services: data.services || [],
-  };
+
+  const { getAllConsultationServices, CONSULTATION_CATEGORIES } = await import('../data/consultationCatalog');
+  const services = getAllConsultationServices();
+  const categories = CONSULTATION_CATEGORIES.map((cat) => ({
+    id: cat.id,
+    slug: cat.id,
+    name: cat.name,
+    icon: cat.icon,
+    description: cat.description,
+    cards: cat.cards.map((card) => ({
+      ...card,
+      priceLabel: `₹${Number(card.price).toLocaleString('en-IN')}`,
+    })),
+  }));
+  return { categories, services: services.map((s) => ({ ...s, priceLabel: s.priceLabel || `₹${Number(s.price).toLocaleString('en-IN')}` })) };
 }
 
 export async function fetchConsultationService(serviceId) {
-  const res = await fetch(`${API_BASE}/api/consultations/services/${serviceId}`);
-  const data = await res.json();
-  if (!data.success) {
-    throw new Error(data.message || data.error || 'Service not found');
+  try {
+    const res = await fetch(`${API_BASE}/api/consultations/services/${serviceId}`);
+    const data = await res.json();
+    if (res.ok && data.success) {
+      return data.service;
+    }
+  } catch {
+    /* fall through */
   }
-  return data.service;
+
+  const fallback = getConsultationServiceById(serviceId);
+  if (fallback) {
+    return {
+      ...fallback,
+      priceLabel: fallback.priceLabel || `₹${Number(fallback.price).toLocaleString('en-IN')}`,
+    };
+  }
+
+  throw new Error('Service not found');
 }
 
 export function useConsultationCatalog() {

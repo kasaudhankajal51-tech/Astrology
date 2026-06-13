@@ -1,35 +1,33 @@
 /* ============================================================
-   CSS ARCHITECTURE — read before editing
-   ============================================================
-   Scoping shells:
-     .site-shell   — public-facing pages (Home, Consultations, Tools…)
-     .app-shell    — admin dashboard (src/pages/Admin.css)
-     .student-dashboard — student portal
-
-   Specificity budget:
-     Tailwind utilities:  #root .utility   → (1,1,0)  NO !important
-     @layer components:   .site-shell .foo !important  → beats style.min.css
-     html 87.5% root + #root font inherit → beats style.min.css 68.75% root
-
-   Why !important in @layer components:
-     public/css/style.min.css resets margin/padding on every block element.
-     Rules inside @layer components use !important to beat that legacy file
-     while still losing to any inline style or Tailwind utility.
-
-   Color systems (three exist — keep in sync):
-     1. index.html <style> :root   — legacy variables used by older components
-     2. index.css :root            — canonical site design system (source of truth)
-     3. tailwind.config.js theme   — Tailwind token aliases (site.*, astro.*)
+   CSS ARCHITECTURE
+   - Tailwind utilities (important: true in tailwind.config.js) are the default
+     for layout, spacing, typography on all new and migrated pages.
+   - @layer components below = shared site tokens (header, legal pages, careers).
+   - Legacy style.min.css was removed from index.html (it zeroed all padding/margin).
    ============================================================ */
 
 @import "tailwindcss";
 @config "../tailwind.config.js";
-@import "./styles/consultation.css";
 
-/* Override legacy public/css/style.min.css (loads before this bundle):
-   - html { font-size: 68.75% } shrinks every rem-based size by ~31%
-   - universal selector forces Josefin Sans on all elements
-   87.5% = 14px root — balanced site-wide standard (not 68.75% tiny, not 100% oversized) */
+/* Bootstrap class-name safety (Tailwind must not override these) */
+#root .navbar-collapse.collapse:not(.show) {
+  display: none !important;
+  visibility: visible !important;
+}
+
+@media (min-width: 1200px) {
+  #root .navbar-expand-xl .navbar-collapse.collapse {
+    display: flex !important;
+    visibility: visible !important;
+  }
+}
+
+#root .site-shell .container,
+#root .site-shell .container-fluid {
+  width: 100%;
+}
+
+/* 87.5% root = 14px — standard readable base for rem-based Tailwind spacing */
 html {
   font-size: 87.5%;
   text-size-adjust: 100%;
@@ -566,28 +564,8 @@ svg {
     margin-top: 2rem !important;
   }
 
-  .site-shell .site-about-hero-inner {
-    padding-block: clamp(2.5rem, 5vw, 3.5rem) !important;
-  }
-
-  .site-shell .site-stat-pad {
-    padding: 0.75rem 1rem !important;
-  }
-
-  .site-shell .site-tag-pad {
-    padding: 0.375rem 0.75rem !important;
-  }
-
-  .site-shell .site-list-row-pad {
-    padding-bottom: 1rem !important;
-  }
-
   .site-shell .site-btn {
     padding: 0.65rem 1.05rem !important;
-  }
-
-  .site-shell .about-page .site-about-btn-lg {
-    padding: 0.75rem 1.5rem !important;
   }
 
   /* Gradient page heroes (Contact, etc.) — explicit sizes beat legacy body/h1 inheritance */

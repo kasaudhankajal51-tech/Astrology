@@ -9,9 +9,9 @@ import API_BASE from '../utils/api';
 import SEO from '../components/SEO';
 import { handleRazorpayPayment } from '../utils/paymentUtils';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
+import AstrologyCoursesSection from '../components/AstrologyCoursesSection';
 
-
-
+/* Legacy AstrologyCourses — inline styles replaced by Tailwind component
 const AstrologyCourses = ({ onEnroll }) => {
   const navigate = useNavigate();
   const features = [
@@ -393,6 +393,7 @@ const AstrologyCourses = ({ onEnroll }) => {
     </>
   );
 };
+*/
 
 const BANNER_SLIDES = [
   {
@@ -1140,8 +1141,8 @@ function Home() {
 
 
 
-        {/* Astrology Courses Section */}
-        <AstrologyCourses onEnroll={handleOpenModal} />
+        {/* Astrology Courses Section — Tailwind */}
+        <AstrologyCoursesSection />
 
 
 
@@ -1165,7 +1166,7 @@ function Home() {
                   icon: 'magic',
                   price: '₹5400',
                   badge: 'INTUITION EXPERT',
-                  link: '/consultations/tarot'
+                  link: '/consultations/phone-session'
                 },
                 {
                   title: 'Career Consultation',
@@ -2438,6 +2439,46 @@ function Home() {
           color: var(--text-card-heading);
           line-height: 1.3;
           margin: 0;
+        }
+
+        /* Services center — zodiac wheel + portrait overlay (was in legacy style.min.css) */
+        .service-center-img {
+          position: relative;
+          min-height: 500px;
+          width: 100%;
+        }
+
+        .service-center-img .img-anim {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translateX(-50%);
+          width: 72%;
+          max-width: 380px;
+          z-index: 1;
+          margin: 0;
+          text-align: center;
+        }
+
+        .service-center-img .img-anim img {
+          animation: serviceWheelSpin 7s linear infinite;
+        }
+
+        .service-center-img .center-overlay {
+          position: absolute;
+          left: 50%;
+          top: 0;
+          transform: translateX(-50%);
+          width: 80%;
+          max-width: 330px;
+          z-index: 2;
+          margin: 0;
+          pointer-events: none;
+        }
+
+        @keyframes serviceWheelSpin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
         }
 
         /* Testimonials Section */

@@ -1,225 +1,196 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useEffect, useMemo, useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import SEO from '../components/SEO';
+import ShopFilters, { ShopBreadcrumb } from '../components/ShopFilters';
 import { openShopifyStore } from '../utils/shopify';
 import { useSettings } from '../context/SettingsContext';
+import { SHOP_CATALOG, filterShopProducts } from '../data/shopCatalog';
 
-const ShopCategory = () => {
+const WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
+
+const DEFAULT_FILTERS = {
+  search: '',
+  sort: 'featured',
+  priceRange: 'all',
+  minRating: 0,
+  inStockOnly: false,
+};
+
+function ShopCategory() {
   const { category } = useParams();
   const { settings } = useSettings();
-  const [categoryData, setCategoryData] = useState(null);
+  const [filters, setFilters] = useState(DEFAULT_FILTERS);
 
-  const shopData = {
-    gemstones: {
-      title: 'Premium Gemstones',
-      desc: 'Authentic and certified gemstones for planetary balance and prosperity.',
-      banner: '/images/shop-gemstones.png',
-      products: [
-        { id: 1, name: 'Natural Blue Sapphire (Neelam)', price: '₹12,500', rating: 5, image: 'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=400' },
-        { id: 2, name: 'Panna (Emerald) - Zambian', price: '₹8,400', rating: 4, image: 'https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&fit=crop&q=80&w=400' },
-        { id: 3, name: 'Red Coral (Moonga)', price: '₹4,200', rating: 5, image: 'https://images.unsplash.com/photo-1588444839799-eb00f490a6d8?auto=format&fit=crop&q=80&w=400' },
-        { id: 4, name: 'Yellow Sapphire (Pukhraj)', price: '₹15,000', rating: 5, image: 'https://images.unsplash.com/photo-1615655406736-b37c4fabf923?auto=format&fit=crop&q=80&w=400' },
-      ]
-    },
-    rudraksha: {
-      title: 'Sacred Rudraksha',
-      desc: 'Divine beads from the Himalayas for protection and spiritual growth.',
-      banner: '/images/shop-rudraksha.png',
-      products: [
-        { id: 1, name: '5 Mukhi Rudraksha Mala', price: '₹450', rating: 5, image: 'https://images.unsplash.com/photo-1605000797439-75a150088f44?auto=format&fit=crop&q=80&w=400' },
-        { id: 2, name: '7 Mukhi Rudraksha Bead', price: '₹2,500', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
-        { id: 3, name: '12 Mukhi Surya Rudraksha', price: '₹5,500', rating: 5, image: 'https://images.unsplash.com/photo-1605000797439-75a150088f44?auto=format&fit=crop&q=80&w=400' },
-        { id: 4, name: "Gauri Shankar Rudraksha", price: "₹8,000", rating: 5, image: "https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400" },
-      ]
-    },
-    yantras: {
-      title: 'Vedic Yantras',
-      desc: 'Sacred geometrical diagrams for attracting positive cosmic energy.',
-      banner: '/images/shop-yantras.png',
-      products: [
-        { id: 1, name: 'Shree Yantra - 24k Gold Plated', price: '₹3,999', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 2, name: 'Kuber Yantra for Wealth', price: '₹1,500', rating: 4, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 3, name: 'Mahamrityunjay Yantra', price: '₹2,100', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 4, name: "Vyapar Vriddhi Yantra", price: "₹2,500", rating: 5, image: "https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400" },
-      ]
-    },
-    'puja-kits': {
-      title: 'Premium Puja Kits',
-      desc: 'Complete ceremonial sets for rituals, festivals, and spiritual practices.',
-      banner: '/images/shop-puja.png',
-      products: [
-        { id: 1, name: 'Diwali Maha Puja Kit', price: '₹4,500', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
-        { id: 2, name: 'Navratri Durga Puja Set', price: '₹3,200', rating: 5, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
-        { id: 3, name: 'Daily Morning Puja Box', price: '₹1,200', rating: 4, image: 'https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400' },
-        { id: 4, name: "Havan Samagri Premium", price: "₹850", rating: 5, image: "https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=400" },
-      ]
-    },
-    bracelets: {
-      title: 'Cosmic Bracelets',
-      desc: 'Fashionable healing jewelry energized with planetary vibrations.',
-      banner: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=1200',
-      products: [
-        { id: 1, name: 'Amethyst Healing Bracelet', price: '₹899', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 2, name: 'Rose Quartz Love Bracelet', price: '₹750', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 3, name: 'Evil Eye Protection Bracelet', price: '₹650', rating: 5, image: 'https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400' },
-        { id: 4, name: "7 Chakra Balance Bracelet", price: "₹1,100", rating: 5, image: "https://images.unsplash.com/photo-1590736962100-36940a08e16a?auto=format&fit=crop&q=80&w=400" },
-      ]
-    }
-  };
+  const categoryData = SHOP_CATALOG[category] || SHOP_CATALOG.gemstones;
 
   useEffect(() => {
-    if (category && shopData[category]) {
-      setCategoryData(shopData[category]);
-    } else {
-      setCategoryData(shopData.gemstones); // Fallback
-    }
+    setFilters(DEFAULT_FILTERS);
     window.scrollTo(0, 0);
   }, [category]);
 
-  if (!categoryData) return null;
+  const visibleProducts = useMemo(
+    () => filterShopProducts(categoryData.products, filters),
+    [categoryData.products, filters]
+  );
+
+  const resetFilters = () => setFilters(DEFAULT_FILTERS);
+  const patchFilter = (key, value) => setFilters((prev) => ({ ...prev, [key]: value }));
+
+  const openStore = (product, mode) => {
+    openShopifyStore({
+      path: `collections/${category || 'all'}`,
+      storeUrl: settings?.shopifyStoreUrl,
+      toast: toast.error,
+      message: `Shopify URL is pending. ${product.name} ${mode} will open from Shopify.`,
+    });
+  };
 
   return (
-    <div className="category-page" style={{ background: '#FFFDFB', minHeight: '100vh' }}>
-      <style>{`
-        .cat-hero {
-          background: linear-gradient(rgba(42, 15, 2, 0.7), rgba(42, 15, 2, 0.7)), url(${categoryData.banner});
-          background-size: cover;
-          background-position: center;
-          padding: clamp(3rem, 7vw, 5.5rem) 0;
-          color: #fff;
-          text-align: center;
-        }
-        .cat-title {
-          font-family: var(--font-serif);
-          font-size: clamp(2.5rem, 6vw, 4rem);
-          font-weight: 700;
-          margin-bottom: 15px;
-          color: #fff !important;
-        }
-        .cat-desc {
-          max-width: 600px;
-          margin: 0 auto;
-          font-size: 1.1rem;
-          opacity: 0.9;
-          color: #fff !important;
-        }
-        .product-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-          gap: 24px;
-          margin-top: 32px;
-        }
-        .product-card {
-          background: #fff;
-          border-radius: 15px;
-          overflow: hidden;
-          box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-          transition: all 0.3s ease;
-          border: 1px solid rgba(200, 131, 42, 0.08);
-        }
-        .product-card:hover {
-          transform: translateY(-5px);
-          box-shadow: 0 15px 40px rgba(139, 74, 30, 0.1);
-        }
-        .product-img {
-          width: 100%;
-          height: 250px;
-          object-fit: cover;
-        }
-        .product-info {
-          padding: 20px;
-        }
-        .product-name {
-          font-family: var(--font-serif);
-          font-size: 1.2rem;
-          margin-bottom: 8px;
-          color: #2A0F02;
-          height: 3rem;
-          overflow: hidden;
-        }
-        .product-price {
-          font-weight: 700;
-          font-size: 1.1rem;
-          color: var(--primary-color);
-        }
-        .btn-add {
-          background: var(--primary-color);
-          color: #fff;
-          border: none;
-          padding: 12px;
-          border-radius: 10px;
-          font-weight: 700;
-          width: 100%;
-          margin-top: 15px;
-          transition: 0.3s;
-          text-transform: uppercase;
-          font-size: 0.85rem;
-          letter-spacing: 0.5px;
-        }
-        .btn-add:hover {
-          background: #2A0F02;
-          transform: scale(1.02);
-        }
-        .rating i {
-          color: #F59E0B;
-          font-size: 0.8rem;
-          margin-right: 2px;
-        }
-      `}</style>
+    <div className="m-0 min-h-screen w-full overflow-x-clip bg-site-bg p-0 font-body text-site-text">
+      <SEO
+        title={categoryData.title}
+        description={categoryData.desc}
+        url={`/shop/${category || 'gemstones'}`}
+      />
 
-      <section className="cat-hero">
-        <div className="container">
-          <h1 className="cat-title">{categoryData.title}</h1>
-          <p className="cat-desc">{categoryData.desc}</p>
+      <div
+        className="relative m-0 py-[clamp(2.5rem,6vw,4rem)] text-center"
+        style={{
+          background: `linear-gradient(rgba(42, 15, 2, 0.75), rgba(42, 15, 2, 0.75)), url(${categoryData.banner}) center/cover`,
+        }}
+      >
+        <div className={WRAP}>
+          <h1 className="m-0 mb-[0.65rem] p-0 font-heading text-[clamp(2rem,5vw,3rem)] font-bold leading-[1.15] text-white">
+            {categoryData.title}
+          </h1>
+          <p className="mx-auto m-0 max-w-xl p-0 text-base leading-relaxed text-white/85">{categoryData.desc}</p>
         </div>
-      </section>
+      </div>
 
-      <div className="container py-4 py-lg-5">
-        <div className="d-flex justify-content-between align-items-center mb-4">
-          <h2 style={{ fontFamily: 'var(--font-serif)', color: '#2A0F02' }}>Explore Products</h2>
-          <div className="text-muted small">Showing {categoryData.products.length} Items</div>
-        </div>
+      <div className="m-0 py-[clamp(2rem,4vw,2.5rem)] pb-[clamp(3rem,6vw,4rem)]">
+        <div className={WRAP}>
+          <ShopBreadcrumb
+            items={[
+              { label: 'Shop', to: '/shop' },
+              { label: categoryData.title },
+            ]}
+          />
 
-        <div className="product-grid">
-          {categoryData.products.map((prod) => (
-            <div key={prod.id} className="product-card">
-              <img src={prod.image} alt={prod.name} className="product-img" />
-              <div className="product-info">
-                <div className="rating mb-2">
-                  {[...Array(prod.rating)].map((_, i) => <i key={i} className="fas fa-star"></i>)}
-                </div>
-                <h4 className="product-name">{prod.name}</h4>
-                <div className="d-flex justify-content-between align-items-center">
-                  <p className="product-price m-0">{prod.price}</p>
-                  <span className="text-success small fw-bold">In Stock</span>
-                </div>
-                <div className="d-flex gap-2 mt-3">
-                  <button
-                    className="btn-add"
-                    style={{ flex: 1, background: '#f8f9fa', color: '#2A0F02', border: '1px solid #2A0F02' }}
-                    onClick={() => openShopifyStore({ path: `collections/${category || 'all'}`, storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${prod.name} cart will be handled in Shopify.` })}
-                  >
-                    Shopify Cart
-                  </button>
-                  <button
-                    className="btn-add"
-                    style={{ flex: 1 }}
-                    onClick={() => openShopifyStore({ path: `collections/${category || 'all'}`, storeUrl: settings?.shopifyStoreUrl, toast: toast.error, message: `Shopify URL is pending. ${prod.name} checkout will open from Shopify.` })}
-                  >
-                    Open Store
-                  </button>
-                </div>
-              </div>
+          <div className="m-0 mb-5 p-0 text-left">
+            <h2 className="m-0 mb-[0.35rem] p-0 font-heading text-[clamp(1.5rem,3vw,2rem)] font-bold text-site-primary">
+              Explore Products
+            </h2>
+            <p className="m-0 p-0 text-[0.9375rem] text-site-muted">Filter by price, rating, and availability</p>
+          </div>
+
+          <ShopFilters
+            search={filters.search}
+            onSearchChange={(v) => patchFilter('search', v)}
+            sort={filters.sort}
+            onSortChange={(v) => patchFilter('sort', v)}
+            priceRange={filters.priceRange}
+            onPriceRangeChange={(v) => patchFilter('priceRange', v)}
+            minRating={filters.minRating}
+            onMinRatingChange={(v) => patchFilter('minRating', v)}
+            inStockOnly={filters.inStockOnly}
+            onInStockOnlyChange={(v) => patchFilter('inStockOnly', v)}
+            resultCount={visibleProducts.length}
+            onReset={resetFilters}
+          />
+
+          {visibleProducts.length > 0 ? (
+            <div className="m-0 grid grid-cols-1 gap-5 p-0 min-[540px]:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+              {visibleProducts.map((prod) => (
+                <article
+                  key={prod.id}
+                  className="m-0 overflow-hidden rounded-2xl border border-site-accent/10 bg-site-surface p-0 transition duration-250 hover:-translate-y-[3px] hover:shadow-[0_16px_32px_rgba(139,74,30,0.1)]"
+                >
+                  <div className="relative m-0 h-[13.5rem] overflow-hidden p-0">
+                    <img
+                      src={prod.image}
+                      alt={prod.name}
+                      className="block h-full w-full object-cover"
+                      loading="lazy"
+                    />
+                    {prod.inStock === false ? (
+                      <span className="absolute right-3 top-3 m-0 rounded-md bg-site-primary/75 px-[0.6rem] py-[0.3rem] text-[0.65rem] font-bold text-white">
+                        Out of Stock
+                      </span>
+                    ) : null}
+                  </div>
+                  <div className="m-0 p-4">
+                    <div className="m-0 mb-2 p-0 text-[0.8rem]" aria-label={`${prod.rating} out of 5 stars`}>
+                      {[...Array(5)].map((_, i) => (
+                        <i
+                          key={i}
+                          className={`fas fa-star ${i < prod.rating ? 'text-amber-500' : 'text-gray-200'}`}
+                          aria-hidden="true"
+                        />
+                      ))}
+                    </div>
+                    <h3 className="m-0 mb-3 min-h-[2.75rem] p-0 font-heading text-base font-semibold leading-[1.35] text-site-primary">
+                      {prod.name}
+                    </h3>
+                    <div className="m-0 flex items-center justify-between gap-[0.65rem] p-0">
+                      <span className="m-0 p-0 text-[1.05rem] font-extrabold text-site-accent-dark">{prod.price}</span>
+                      <span
+                        className={`text-xs font-bold ${prod.inStock === false ? 'text-red-600' : 'text-green-600'}`}
+                      >
+                        {prod.inStock === false ? 'Out of Stock' : 'In Stock'}
+                      </span>
+                    </div>
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        type="button"
+                        className="m-0 flex-1 cursor-pointer rounded-lg border border-site-primary bg-[#f8f9fa] px-3 py-[0.65rem] text-xs font-bold text-site-primary disabled:cursor-not-allowed disabled:opacity-55"
+                        onClick={() => openStore(prod, 'cart')}
+                        disabled={prod.inStock === false}
+                      >
+                        Shopify Cart
+                      </button>
+                      <button
+                        type="button"
+                        className="m-0 flex-1 cursor-pointer rounded-lg border-none bg-site-primary px-3 py-[0.65rem] text-xs font-bold text-white disabled:cursor-not-allowed disabled:opacity-55"
+                        onClick={() => openStore(prod, 'checkout')}
+                        disabled={prod.inStock === false}
+                      >
+                        Open Store
+                      </button>
+                    </div>
+                  </div>
+                </article>
+              ))}
             </div>
-          ))}
-        </div>
+          ) : (
+            <p className="m-0 rounded-2xl border border-dashed border-site-accent-dark/20 bg-site-surface px-4 py-10 text-center text-site-muted">
+              No products match your filters. Try adjusting search or reset filters.
+            </p>
+          )}
 
-        <div className="mt-5 p-4 rounded-4 bg-light text-center border">
-          <p className="m-0 text-muted">All products are certified for authenticity and purity. <b>Free shipping</b> on orders above ₹2000.</p>
+          <p className="mt-8 rounded-xl border border-site-accent-dark/12 bg-site-surface px-5 py-4 text-center text-sm text-site-muted">
+            All products are certified for authenticity and purity. <b className="text-site-primary">Free shipping</b>{' '}
+            on orders above ₹2000.
+          </p>
+
+          <div className="mt-10 grid grid-cols-1 items-center gap-5 rounded-2xl bg-[linear-gradient(135deg,#2a0f02,#5c2d12)] p-6 lg:grid-cols-[1fr_auto] lg:px-7">
+            <div>
+              <h3 className="m-0 mb-2 p-0 font-heading text-[1.375rem] font-bold text-white">Browse More Categories</h3>
+              <p className="m-0 p-0 text-[0.9375rem] leading-relaxed text-white/90">
+                Explore gemstones, rudraksha, yantras, and puja essentials in our full shop.
+              </p>
+            </div>
+            <Link
+              to="/shop"
+              className="inline-flex items-center justify-center rounded-full bg-site-accent px-6 py-3 text-[0.9375rem] font-bold text-white no-underline transition duration-200 hover:bg-white hover:text-site-primary"
+            >
+              Back to Shop
+            </Link>
+          </div>
         </div>
       </div>
     </div>
   );
-};
+}
 
 export default ShopCategory;

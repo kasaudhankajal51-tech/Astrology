@@ -41,6 +41,7 @@ const NewStudentDashboard = lazy(() => import('./pages/newstudentdashboard'));
 /* Legacy dashboards (unchanged): StudentDashboard.jsx, StudentDashboardNew.jsx */
 const CoursePlayer = lazy(() => import('./pages/CoursePlayer'));
 const NotFound = lazy(() => import('./pages/NotFound'));
+const TailwindTest = lazy(() => import('./pages/TailwindTest'));
 import { Toaster } from 'react-hot-toast';
 import { SettingsProvider } from './context/SettingsContext';
 import CookieConsent from './components/CookieConsent';
@@ -122,6 +123,7 @@ function App() {
               <Route path="shop/checkout" element={<ShopCheckout />} />
               <Route path="shop/:category" element={<ShopCategory />} />
               <Route path="careers" element={<Careers />} />
+              <Route path="tailwind" element={<TailwindTest />} />
               <Route path="login" element={<StudentLogin />} />
               <Route path="dashboard" element={<StudentDashboard />} />
               <Route path="student/course/:id" element={<CoursePlayer />} />

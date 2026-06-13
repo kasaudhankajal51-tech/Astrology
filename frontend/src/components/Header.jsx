@@ -415,6 +415,8 @@ function Header() {
 
           .navbar-collapse {
             justify-self: center;
+            display: flex !important;
+            visibility: visible !important;
           }
 
           .header-actions {

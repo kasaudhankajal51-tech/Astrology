@@ -6,7 +6,7 @@ function MainLayout() {
   return (
     <div className="site-shell">
       <Header />
-      <main className="site-main w-full max-w-none" style={{ minHeight: '80vh' }}>
+      <main className="site-main tw-surface w-full max-w-none min-h-[80vh]">
         <Outlet />
       </main>
       <Footer />

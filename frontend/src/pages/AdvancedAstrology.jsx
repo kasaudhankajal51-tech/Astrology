@@ -1,32 +1,82 @@
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
+import SEO from '../components/SEO';
+
+const highlights = [
+  { num: '40+', label: 'Hours Content', icon: '⏱️' },
+  { num: '12', label: 'Weeks Duration', icon: '📅' },
+  { num: '2K+', label: 'Students', icon: '👥' },
+  { num: '4.8', label: 'Rating', icon: '⭐' },
+];
+
+const courseSteps = [
+  { icon: '📊', title: 'Chart Mastery', desc: 'Advanced chart patterns' },
+  { icon: '📂', title: 'Divisionals', desc: 'Varga charts deep dive' },
+  { icon: '⚖️', title: 'Shadbala', desc: 'Planetary strengths' },
+  { icon: '🔥', title: 'Special Lagnas', desc: 'Advanced techniques' },
+  { icon: '🌑', title: 'Rahu-Ketu', desc: 'Nodes mastery' },
+  { icon: '💎', title: 'Remedies', desc: 'Practical solutions' },
+];
+
+const stepDetails = [
+  "Master complex chart patterns and learn to identify subtle yogas and combinations that reveal deep insights about a person's life path and potential.",
+  'Explore Navamsa, Dasamsa, Dwadasamsa and other divisional charts that provide detailed insights into marriage, career, and spiritual matters.',
+  'Understand Shadbala - the six sources of planetary strength. Learn to calculate and interpret planetary powers for accurate predictions.',
+  'Master special ascendants like Bhava Lagna, Hora Lagna, and Ghatika Lagna used in specific predictive techniques and timing methods.',
+  'Deep dive into Rahu and Ketu - the shadow planets. Understand their karmic significance, dasha effects, and remedies for nodal afflictions.',
+  'Learn practical remedial measures including gemstone recommendations, mantras, rituals, and lifestyle modifications to strengthen weak planets.',
+];
+
+const features = [
+  { icon: 'video', title: 'Expert Sessions', desc: '30-35 intensive live classes with Guru Ji' },
+  { icon: 'book-open', title: 'Case Studies', desc: 'Real chart analysis and practical templates' },
+  { icon: 'infinity', title: 'Elite Access', desc: 'Lifetime access to all masterclass recordings' },
+  { icon: 'certificate', title: 'Pro Certificate', desc: 'Industry-recognized expert certification' },
+  { icon: 'users', title: 'Mastermind Group', desc: 'Collaborate with advanced practitioners' },
+  { icon: 'headset', title: 'Direct Mentorship', desc: 'Get your complex doubts cleared instantly' },
+];
+
+const reviews = [
+  { name: 'Vikram Mehta', rating: 5, text: 'This advanced course opened new dimensions in my astrological practice. Highly recommended!', avatar: '/images/10350949.png' },
+  { name: 'Sneha Rao', rating: 5, text: 'The divisional charts section alone is worth the entire course fee. Excellent teaching.', avatar: '/images/10350961.png' },
+  { name: 'Arjun Nair', rating: 4, text: 'Great advanced content. Assumes you know basics well. Very practical approach.', avatar: '/images/10350969.png' },
+];
+
+const faqs = [
+  { q: 'Do I need to know basic astrology?', a: 'Yes, this course requires foundation knowledge of signs, planets, and houses.' },
+  { q: 'How is this different from basic courses?', a: 'We focus on divisional charts, advanced dashas, and complex yogas not covered in basics.' },
+  { q: 'Will I be able to predict after this?', a: 'Yes, you will learn professional-level predictive techniques.' },
+];
 
 function AdvancedAstrology() {
   const [showModal, setShowModal] = useState(false);
+  const [currentStep, setCurrentStep] = useState(0);
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
     city: '',
-    experience: 'intermediate'
+    experience: 'intermediate',
   });
 
   const { hash } = useLocation();
 
   useEffect(() => {
-    if (hash) {
-      const element = document.getElementById(hash.replace('#', ''));
-      if (element) {
-        setTimeout(() => {
-          element.scrollIntoView({ behavior: 'smooth' });
-        }, 100);
-      }
+    if (window.AOS) window.AOS.refresh();
+  }, []);
+
+  useEffect(() => {
+    if (!hash) return;
+    const element = document.getElementById(hash.replace('#', ''));
+    if (element) {
+      setTimeout(() => element.scrollIntoView({ behavior: 'smooth' }), 100);
     }
   }, [hash]);
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = (e) => {
@@ -38,771 +88,345 @@ function AdvancedAstrology() {
     alert('Redirecting to secure payment gateway...\nCourse Fee: ₹999');
   };
 
-  const highlights = [
-    { num: '40+', label: 'Hours Content', icon: '⏱️' },
-    { num: '12', label: 'Weeks Duration', icon: '📅' },
-    { num: '2K+', label: 'Students', icon: '👥' },
-    { num: '4.8', label: 'Rating', icon: '⭐' }
-  ];
-
-  const courseSteps = [
-    { icon: '📊', title: 'Chart Mastery', desc: 'Advanced chart patterns' },
-    { icon: '📂', title: 'Divisionals', desc: 'Varga charts deep dive' },
-    { icon: '⚖️', title: 'Shadbala', desc: 'Planetary strengths' },
-    { icon: '🔥', title: 'Special Lagnas', desc: 'Advanced techniques' },
-    { icon: '🌑', title: 'Rahu-Ketu', desc: 'Nodes mastery' },
-    { icon: '💎', title: 'Remedies', desc: 'Practical solutions' }
-  ];
-
-  const [currentStep, setCurrentStep] = useState(0);
-
-  const reviews = [
-    { name: 'Vikram Mehta', rating: 5, text: 'This advanced course opened new dimensions in my astrological practice. Highly recommended!', avatar: '/images/10350949.png' },
-    { name: 'Sneha Rao', rating: 5, text: 'The divisional charts section alone is worth the entire course fee. Excellent teaching.', avatar: '/images/10350961.png' },
-    { name: 'Arjun Nair', rating: 4, text: 'Great advanced content. Assumes you know basics well. Very practical approach.', avatar: '/images/10350969.png' }
-  ];
-
-  const faqs = [
-    { q: 'Do I need to know basic astrology?', a: 'Yes, this course requires foundation knowledge of signs, planets, and houses.' },
-    { q: 'How is this different from basic courses?', a: 'We focus on divisional charts, advanced dashas, and complex yogas not covered in basics.' },
-    { q: 'Will I be able to predict after this?', a: 'Yes, you will learn professional-level predictive techniques.' }
-  ];
-
   return (
-    <section className="advanced-unique-page">
-      {/* Dynamic Hero Section */}
-      <div className="hero-v2">
-        <div className="hero-bg-accent"></div>
-        <div className="container">
-          <div className="row align-items-center min-vh-80 py-5">
-            <div className="col-xl-7 col-lg-6 text-lg-start text-center">
-              <div className="hero-glass-card" data-aos="fade-right">
-                <div className="unique-badge">
-                  <span className="pulse-dot"></span>
-                  Advanced Level Mastery
-                </div>
-                <h1 className="display-3 fw-bold mb-4">
-                  Master <span className="text-gradient">Advanced Predictive</span> Astrology
-                </h1>
-                <p className="lead mb-5 opacity-75">
-                  Take your knowledge to professional heights. Explore divisional charts, 
-                  planetary strengths (Shadbala), and advanced karmic analysis of Rahu-Ketu.
-                </p>
-                
-                <div className="stats-grid mb-5">
-                  {highlights.map((h, i) => (
-                    <div key={i} className="stat-pill">
-                      <span className="fs-3">{h.icon}</span>
-                      <div>
-                        <div className="stat-num">{h.num}</div>
-                        <div className="stat-label">{h.label}</div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
+    <div className="w-full overflow-x-clip bg-[#fdf6ee] font-body text-[#3d1a08]">
+      <SEO
+        title="Advanced Predictive Astrology Course"
+        description="Master divisional charts, Shadbala, Rahu-Ketu analysis, and professional predictive techniques with DS Astro Institute."
+        url="/advanced-astrology"
+      />
 
-                <div className="d-flex flex-column flex-sm-row gap-3 justify-content-lg-start justify-content-center">
-                  <button className="btn-v2-primary" onClick={() => setShowModal(true)}>
-                    Enroll Now for ₹999
-                  </button>
-                  <button className="btn-v2-outline" onClick={() => setShowModal(true)}>
-                    <i className="fas fa-play me-2"></i> Watch Preview
-                  </button>
+      {/* Hero */}
+      <section className="relative border-b border-[#8b4a1e]/10 bg-gradient-to-b from-[#fdf6ee] to-[#fffbf5] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="pointer-events-none absolute -right-16 -top-16 h-80 w-80 rounded-full bg-[#c8832a]/10 blur-3xl" aria-hidden="true" />
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-[1.1fr_0.9fr]">
+          <div data-aos="fade-right">
+            <span className="mb-5 inline-flex items-center gap-2.5 rounded-full border border-[#c8832a]/15 bg-[#fffbf5] px-4 py-2 text-sm font-bold text-[#8b4a1e] shadow-sm">
+              <span className="h-2.5 w-2.5 animate-pulse rounded-full bg-green-500" aria-hidden="true" />
+              Advanced Level Mastery
+            </span>
+            <h1 className="font-heading text-4xl font-extrabold leading-tight text-[#2a0f02] sm:text-5xl">
+              Master{' '}
+              <span className="bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-transparent">
+                Advanced Predictive
+              </span>{' '}
+              Astrology
+            </h1>
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-[#714626] sm:text-lg">
+              Take your knowledge to professional heights. Explore divisional charts,
+              planetary strengths (Shadbala), and advanced karmic analysis of Rahu-Ketu.
+            </p>
+
+            <div className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {highlights.map((h) => (
+                <div key={h.label} className="flex items-center gap-3 rounded-xl border border-[#c8832a]/10 bg-[#fffbf5] p-3 shadow-sm">
+                  <span className="text-xl" aria-hidden="true">{h.icon}</span>
+                  <div>
+                    <p className="text-lg font-extrabold text-[#8b4a1e]">{h.num}</p>
+                    <p className="text-[0.65rem] font-bold uppercase tracking-wide text-[#9b6640]">{h.label}</p>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-            
-            <div className="col-xl-5 col-lg-6 mt-5 mt-lg-0">
-              <div className="hero-visual-v2" data-aos="zoom-in">
-                <div className="image-stack">
-                  <img src="/images/horocurty.jpg" alt="Advanced Study" className="img-main" />
-                  <div className="floating-badge top-right">
-                    <span className="fs-4">🪐</span>
-                    <span>Expert Techniques</span>
-                  </div>
-                  <div className="floating-badge bottom-left">
-                    <span className="fs-4">📜</span>
-                    <span>Pro Certification</span>
-                  </div>
-                </div>
-              </div>
+
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="rounded-xl bg-[#2a0f02] px-6 py-3 text-sm font-extrabold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-black"
+              >
+                Enroll Now for ₹999
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowModal(true)}
+                className="inline-flex items-center justify-center gap-2 rounded-xl border-2 border-[#8b4a1e] px-6 py-3 text-sm font-extrabold text-[#8b4a1e] transition hover:bg-[#8b4a1e] hover:text-white"
+              >
+                <i className="fas fa-play" aria-hidden="true" />
+                Watch Preview
+              </button>
+            </div>
+          </div>
+
+          <div className="relative p-4" data-aos="zoom-in">
+            <img
+              src="/images/horocurty.jpg"
+              alt="Advanced astrology study"
+              className="h-[clamp(18rem,45vw,34rem)] w-full rounded-3xl border-4 border-white object-cover shadow-2xl"
+            />
+            <div className="absolute -right-2 -top-2 flex flex-col items-center gap-1 rounded-2xl border border-[#c8832a]/15 bg-[#fffbf5] px-4 py-3 text-xs font-bold text-[#2a0f02] shadow-lg animate-[bounce_4s_ease-in-out_infinite]">
+              <span aria-hidden="true">🪐</span>
+              <span>Expert Techniques</span>
+            </div>
+            <div className="absolute -bottom-2 -left-2 flex flex-col items-center gap-1 rounded-2xl border border-[#c8832a]/15 bg-[#fffbf5] px-4 py-3 text-xs font-bold text-[#2a0f02] shadow-lg animate-[bounce_4s_ease-in-out_infinite_2s]">
+              <span aria-hidden="true">📜</span>
+              <span>Pro Certification</span>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Unique Learning Path Section */}
-      <div className="path-section py-5">
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="display-5 fw-bold mb-3">Professional Learning Path</h2>
-            <p className="text-muted fs-5">6 intensive modules for deep astrological expertise</p>
+      {/* Learning path */}
+      <section className="bg-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-6xl">
+          <div className="text-center">
+            <h2 className="font-heading text-3xl font-extrabold text-[#2a0f02] sm:text-4xl">Professional Learning Path</h2>
+            <p className="mt-2 text-base text-[#9b6640] sm:text-lg">6 intensive modules for deep astrological expertise</p>
           </div>
 
-          <div className="roadmap-container">
+          <div className="mt-8 flex gap-5 overflow-x-auto pb-4 [-ms-overflow-style:none] [scrollbar-width:none] lg:flex-wrap lg:justify-between lg:overflow-visible lg:pb-0 [&::-webkit-scrollbar]:hidden">
             {courseSteps.map((step, idx) => (
-              <div 
-                key={idx} 
-                className={`roadmap-item ${currentStep === idx ? 'active' : ''}`}
+              <button
+                key={step.title}
+                type="button"
                 onClick={() => setCurrentStep(idx)}
+                className={`min-w-[8.75rem] flex-1 text-center transition ${currentStep === idx ? 'scale-105' : ''}`}
               >
-                <div className="roadmap-line"></div>
-                <div className="roadmap-circle">
-                  <span className="step-icon">{step.icon}</span>
-                  <span className="step-num">{idx + 1}</span>
+                <div
+                  className={`relative mx-auto mb-3 flex h-14 w-14 items-center justify-center rounded-full border-2 transition ${
+                    currentStep === idx
+                      ? 'border-[#8b4a1e] bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] text-white shadow-lg'
+                      : 'border-[#c8832a]/20 bg-[#fffbf5] text-[#2a0f02]'
+                  }`}
+                >
+                  <span className="text-xl" aria-hidden="true">{step.icon}</span>
+                  <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#2a0f02] text-[0.625rem] font-extrabold text-white">
+                    {idx + 1}
+                  </span>
                 </div>
-                <div className="roadmap-text">
-                  <h4>{step.title}</h4>
-                  <p>{step.desc}</p>
-                </div>
-              </div>
+                <p className="font-heading text-sm font-bold text-[#2a0f02]">{step.title}</p>
+                <p className="mt-1 hidden text-xs text-[#6b6b8a] lg:block">{step.desc}</p>
+              </button>
             ))}
           </div>
 
-          <div className="step-details-card mt-5" data-aos="fade-up">
-            <div className="row g-0">
-              <div className="col-md-2 d-flex align-items-center justify-content-center bg-gradient-v2 text-white p-4 rounded-start">
-                <span className="display-1 opacity-25">{currentStep + 1}</span>
+          <div className="mt-8 overflow-hidden rounded-2xl border border-[#c8832a]/15 bg-[#fffbf5] shadow-lg" data-aos="fade-up">
+            <div className="grid md:grid-cols-[5rem_1fr]">
+              <div className="flex items-center justify-center bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] p-5">
+                <span className="font-heading text-6xl font-extrabold text-white/25">{currentStep + 1}</span>
               </div>
-              <div className="col-md-10 p-4 p-lg-5">
-                <h3 className="mb-3 text-gradient d-inline-block">Stage {currentStep + 1}: {courseSteps[currentStep].title}</h3>
-                <p className="fs-5 leading-relaxed">
-                  {currentStep === 0 && 'Master complex chart patterns and learn to identify subtle yogas and combinations that reveal deep insights about a person\'s life path and potential.'}
-                  {currentStep === 1 && 'Explore Navamsa, Dasamsa, Dwadasamsa and other divisional charts that provide detailed insights into marriage, career, and spiritual matters.'}
-                  {currentStep === 2 && 'Understand Shadbala - the six sources of planetary strength. Learn to calculate and interpret planetary powers for accurate predictions.'}
-                  {currentStep === 3 && 'Master special ascendants like Bhava Lagna, Hora Lagna, and Ghatika Lagna used in specific predictive techniques and timing methods.'}
-                  {currentStep === 4 && 'Deep dive into Rahu and Ketu - the shadow planets. Understand their karmic significance, dasha effects, and remedies for nodal afflictions.'}
-                  {currentStep === 5 && 'Learn practical remedial measures including gemstone recommendations, mantras, rituals, and lifestyle modifications to strengthen weak planets.'}
-                </p>
-                <button className="btn btn-link p-0 text-gradient fw-bold" onClick={() => setShowModal(true)}>
-                  Master this module <i className="fas fa-arrow-right ms-2"></i>
+              <div className="p-5 sm:p-8">
+                <h3 className="font-heading text-xl font-extrabold sm:text-2xl">
+                  <span className="bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-transparent">
+                    Stage {currentStep + 1}: {courseSteps[currentStep].title}
+                  </span>
+                </h3>
+                <p className="mt-3 text-base leading-relaxed text-[#5c3d26]">{stepDetails[currentStep]}</p>
+                <button
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                  className="mt-4 inline-flex items-center gap-2 bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-sm font-extrabold text-transparent"
+                >
+                  Master this module
+                  <i className="fas fa-arrow-right" aria-hidden="true" />
                 </button>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Grid Features */}
-      <div className="features-v2 py-5 bg-light-soft">
-        <div className="container">
-          <div className="row g-4">
-            {[
-              { icon: 'video', title: 'Expert Sessions', desc: '30-35 intensive live classes with Guru Ji' },
-              { icon: 'book-open', title: 'Case Studies', desc: 'Real chart analysis and practical templates' },
-              { icon: 'infinity', title: 'Elite Access', desc: 'Lifetime access to all masterclass recordings' },
-              { icon: 'certificate', title: 'Pro Certificate', desc: 'Industry-recognized expert certification' },
-              { icon: 'users', title: 'Mastermind Group', desc: 'Collaborate with advanced practitioners' },
-              { icon: 'headset', title: 'Direct Mentorship', desc: 'Get your complex doubts cleared instantly' }
-            ].map((f, i) => (
-              <div key={i} className="col-lg-4 col-md-6">
-                <div className="feature-card-v2" data-aos="fade-up" data-aos-delay={i * 100}>
-                  <div className="feature-icon-box">
-                    <i className={`fas fa-${f.icon}`}></i>
-                  </div>
-                  <h4>{f.title}</h4>
-                  <p>{f.desc}</p>
-                </div>
+      {/* Features */}
+      <section className="bg-[#fdf6ee] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto grid max-w-6xl gap-4 sm:grid-cols-2 lg:grid-cols-3 lg:gap-5">
+          {features.map((f, i) => (
+            <div
+              key={f.title}
+              className="h-full rounded-2xl border border-[#c8832a]/10 bg-[#fffbf5] p-7 shadow-sm transition hover:-translate-y-2 hover:border-[#c8832a] hover:shadow-lg"
+              data-aos="fade-up"
+              data-aos-delay={i * 100}
+            >
+              <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-xl bg-[#c8832a]/10 text-xl text-[#8b4a1e]">
+                <i className={`fas fa-${f.icon}`} aria-hidden="true" />
               </div>
-            ))}
-          </div>
+              <h3 className="font-heading text-lg font-bold text-[#2a0f02]">{f.title}</h3>
+              <p className="mt-2 text-sm leading-relaxed text-[#714626]">{f.desc}</p>
+            </div>
+          ))}
         </div>
-      </div>
+      </section>
 
-      {/* Instructor Spotlight */}
-      <div className="instructor-v2 py-5 overflow-hidden">
-        <div className="container">
-          <div className="row align-items-center g-5">
-            <div className="col-lg-5 order-2 order-lg-1">
-              <div className="instructor-content" data-aos="fade-right">
-                <span className="text-gradient fw-bold text-uppercase ls-1">Master Instructor</span>
-                <h2 className="display-4 fw-bold mb-4">Guru Devanand Ji</h2>
-                <p className="fs-5 text-muted mb-5 leading-relaxed">
-                  Spiritual master with 20+ years of deep Vedic practice. Specializes in 
-                  advanced divisional charts, Rahu-Ketu analysis, and spiritual astrology. 
-                  Guide to 5,000+ students worldwide.
-                </p>
-                <div className="d-flex gap-4">
+      {/* Instructor */}
+      <section className="bg-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 lg:grid-cols-2">
+          <div className="order-2 lg:order-1" data-aos="fade-right">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-[#8b4a1e]">Master Instructor</span>
+            <h2 className="mt-2 font-heading text-4xl font-extrabold text-[#2a0f02]">Guru Devanand Ji</h2>
+            <p className="mt-4 text-base leading-relaxed text-[#9b6640] sm:text-lg">
+              Spiritual master with 20+ years of deep Vedic practice. Specializes in
+              advanced divisional charts, Rahu-Ketu analysis, and spiritual astrology.
+              Guide to 5,000+ students worldwide.
+            </p>
+            <div className="mt-6 flex flex-wrap items-center justify-center gap-6 lg:justify-start">
+              {[
+                { val: '5k+', label: 'Students' },
+                { val: '20+', label: 'Years Exp' },
+                { val: '4.9/5', label: 'Rating' },
+              ].map((s, i) => (
+                <div key={s.label} className="flex items-center gap-6">
+                  {i > 0 && <span className="hidden h-10 w-px bg-[#8b4a1e]/15 sm:block" aria-hidden="true" />}
                   <div className="text-center">
-                    <div className="fs-2 fw-bold text-gradient">5k+</div>
-                    <small className="text-muted">Students</small>
-                  </div>
-                  <div className="vr"></div>
-                  <div className="text-center">
-                    <div className="fs-2 fw-bold text-gradient">20+</div>
-                    <small className="text-muted">Years Exp</small>
-                  </div>
-                  <div className="vr"></div>
-                  <div className="text-center">
-                    <div className="fs-2 fw-bold text-gradient">4.9/5</div>
-                    <small className="text-muted">Rating</small>
+                    <p className="bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-2xl font-extrabold text-transparent">{s.val}</p>
+                    <p className="text-sm text-[#9b6640]">{s.label}</p>
                   </div>
                 </div>
-              </div>
-            </div>
-            <div className="col-lg-7 order-1 order-lg-2">
-              <div className="instructor-visual-v2" data-aos="fade-left">
-                <div className="circle-bg"></div>
-                <img src="/images/spiritual-man-india-traditional-clothing-39495501.jpg" alt="Instructor" className="img-fluid rounded-circle shadow-lg" />
-              </div>
+              ))}
             </div>
           </div>
+          <div className="relative order-1 flex justify-center lg:order-2" data-aos="fade-left">
+            <div className="absolute h-[110%] w-[110%] rounded-full bg-[#c8832a]/15 blur-2xl" aria-hidden="true" />
+            <img
+              src="/images/spiritual-man-india-traditional-clothing-39495501.jpg"
+              alt="Guru Devanand Ji"
+              className="relative z-10 h-64 w-64 rounded-full border-[10px] border-white object-cover shadow-xl sm:h-80 sm:w-80 lg:h-96 lg:w-96"
+            />
+          </div>
         </div>
-      </div>
+      </section>
 
       {/* Testimonials */}
-      <div className="testimonials-v2 py-5 bg-gradient-v2 text-white text-center">
-        <div className="container py-4">
-          <h2 className="mb-5">Master Students' Experiences</h2>
-          <div className="row g-4 justify-content-center">
+      <section className="bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-6xl text-center">
+          <h2 className="font-heading text-3xl font-extrabold text-[#fff7ed] sm:text-4xl">Master Students&apos; Experiences</h2>
+          <div className="mt-8 grid gap-4 lg:grid-cols-3 lg:gap-5">
             {reviews.map((r, i) => (
-              <div key={i} className="col-lg-4">
-                <div className="review-card-v2" data-aos="zoom-in" data-aos-delay={i * 100}>
-                  <img src={r.avatar} alt={r.name} className="review-avatar" />
-                  <p className="fst-italic mb-3">"{r.text}"</p>
-                  <h6 className="fw-bold mb-0">{r.name}</h6>
-                  <div className="stars mt-2">{'★'.repeat(r.rating)}</div>
-                </div>
-              </div>
+              <article
+                key={r.name}
+                className="rounded-2xl border border-white/30 bg-white/15 p-6 text-left text-[#fff7ed] backdrop-blur-md"
+                data-aos="zoom-in"
+                data-aos-delay={i * 100}
+              >
+                <img src={r.avatar} alt={r.name} className="mb-4 h-14 w-14 rounded-full border-2 border-white object-cover" />
+                <p className="mb-3 italic leading-relaxed">&ldquo;{r.text}&rdquo;</p>
+                <p className="font-extrabold">{r.name}</p>
+                <p className="mt-1 tracking-widest text-[#f5c98d]" aria-label={`${r.rating} out of 5 stars`}>
+                  {'★'.repeat(r.rating)}
+                </p>
+              </article>
             ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Final CTA */}
-      <div className="final-cta-v2 py-5 text-center" id="enroll">
-        <div className="container">
-          <div className="cta-glass-box p-5 rounded-5 shadow-lg" data-aos="flip-up">
-            <h2 className="display-5 fw-bold mb-3">Achieve Professional Mastery</h2>
-            <p className="fs-5 mb-4 opacity-75">Limited seats available for the advanced batch</p>
-            <div className="price-tag mb-5">
-              <span className="text-muted text-decoration-line-through fs-4 me-2">₹5100</span>
-              <span className="display-4 fw-bold text-gradient">₹999</span>
+      {/* CTA */}
+      <section className="bg-white px-4 py-12 sm:px-6 lg:px-8 lg:py-16" id="enroll">
+        <div className="mx-auto max-w-3xl">
+          <div className="rounded-3xl border border-[#c8832a]/15 bg-[#fffbf5] p-8 text-center shadow-xl sm:p-10" data-aos="flip-up">
+            <h2 className="font-heading text-3xl font-extrabold text-[#2a0f02] sm:text-4xl">Achieve Professional Mastery</h2>
+            <p className="mt-2 text-base text-[#714626] sm:text-lg">Limited seats available for the advanced batch</p>
+            <div className="mt-4 flex items-baseline justify-center gap-2">
+              <span className="text-xl text-[#9b6640] line-through">₹5100</span>
+              <span className="font-heading text-4xl font-extrabold bg-gradient-to-br from-[#8b4a1e] to-[#c8832a] bg-clip-text text-transparent sm:text-5xl">
+                ₹999
+              </span>
             </div>
-            <button className="btn-v2-primary btn-lg px-5 py-3" onClick={() => setShowModal(true)}>
+            <button
+              type="button"
+              onClick={() => setShowModal(true)}
+              className="mt-6 rounded-xl bg-[#2a0f02] px-8 py-3.5 text-base font-extrabold text-white shadow-md transition hover:-translate-y-0.5 hover:bg-black"
+            >
               Secure Your Spot
             </button>
           </div>
         </div>
-      </div>
+      </section>
 
       {/* FAQ */}
-      <div className="faq-v2 py-5 bg-light">
-        <div className="container">
-          <div className="text-center mb-5">
-            <h2 className="fw-bold">Frequently Asked Questions</h2>
-          </div>
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              {faqs.map((f, i) => (
-                <details key={i} className="faq-item-v2 mb-3">
-                  <summary className="fw-bold p-3 bg-white rounded-3 shadow-sm">{f.q}</summary>
-                  <div className="p-3 bg-white border-top">{f.a}</div>
-                </details>
-              ))}
-            </div>
+      <section className="bg-[#fdf6ee] px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
+        <div className="mx-auto max-w-3xl">
+          <h2 className="text-center font-heading text-3xl font-extrabold text-[#2a0f02]">Frequently Asked Questions</h2>
+          <div className="mt-8 space-y-3">
+            {faqs.map((f) => (
+              <details key={f.q} className="overflow-hidden rounded-xl border border-[#8b4a1e]/10 bg-white shadow-sm">
+                <summary className="cursor-pointer list-none px-4 py-3 text-sm font-extrabold text-[#2a0f02] [&::-webkit-details-marker]:hidden">
+                  {f.q}
+                </summary>
+                <p className="border-t border-[#8b4a1e]/10 px-4 py-3 text-sm leading-relaxed text-[#5c3d26]">{f.a}</p>
+              </details>
+            ))}
           </div>
         </div>
-      </div>
+      </section>
 
-      {/* Enrollment Modal */}
-      {showModal && (
-        <div className="modal-overlay-v2" onClick={() => setShowModal(false)}>
-          <div className="modal-card-v2" onClick={e => e.stopPropagation()}>
-            <div className="modal-header-v2">
-              <h3>Advanced Course Enrollment</h3>
-              <button className="close-btn" onClick={() => setShowModal(false)}>&times;</button>
-            </div>
-            <form onSubmit={handleSubmit} className="modal-body-v2">
-              <div className="mb-3">
-                <label className="form-label">Full Name</label>
-                <input type="text" className="form-control-v2" name="name" value={formData.name} onChange={handleInputChange} required />
+      {/* Modal */}
+      <AnimatePresence>
+        {showModal && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/70 p-5 backdrop-blur-sm"
+            onClick={() => setShowModal(false)}
+            role="presentation"
+          >
+            <motion.div
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: 40 }}
+              className="w-full max-w-md overflow-hidden rounded-2xl border border-[#c8832a]/20 bg-[#fffbf5]"
+              onClick={(e) => e.stopPropagation()}
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="aa-enroll-title"
+            >
+              <div className="flex items-center justify-between border-b border-[#c8832a]/15 bg-[#fdf6ee] px-5 py-4">
+                <h3 id="aa-enroll-title" className="font-heading text-xl font-extrabold text-[#2a0f02]">
+                  Advanced Course Enrollment
+                </h3>
+                <button type="button" onClick={() => setShowModal(false)} className="text-2xl leading-none text-[#5c3d26]" aria-label="Close">
+                  &times;
+                </button>
               </div>
-              <div className="mb-3">
-                <label className="form-label">Email</label>
-                <input type="email" className="form-control-v2" name="email" value={formData.email} onChange={handleInputChange} required />
-              </div>
-              <div className="mb-3">
-                <label className="form-label">Phone</label>
-                <input type="tel" className="form-control-v2" name="phone" value={formData.phone} onChange={handleInputChange} required />
-              </div>
-              <div className="mb-4">
-                <label className="form-label">Experience Level</label>
-                <select className="form-select-v2" name="experience" value={formData.experience} onChange={handleInputChange}>
-                  <option value="intermediate">Intermediate</option>
-                  <option value="advanced">Advanced</option>
-                  <option value="expert">Professional</option>
-                </select>
-              </div>
-              <button type="submit" className="btn-v2-primary w-100" onClick={handlePayment}>
-                Proceed to Payment (₹999)
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
-
-      <style>{`
-        .advanced-unique-page {
-          --primary-grad: linear-gradient(135deg, #8B4A1E, #C8832A);
-          --soft-bg: #FDF6EE;
-          --card-bg: #FFFBF5;
-          --text-deep: #2A0F02;
-          --text-main: #3D1A08;
-          --text-light: #9B6640;
-          font-family: 'Inter', sans-serif;
-          color: var(--text-main);
-          overflow-x: hidden;
-          background-color: var(--soft-bg);
-        }
-
-        h1, h2, h3, .roadmap-text h4, .display-3, .display-4, .display-5 {
-          font-family: 'Playfair Display', serif !important;
-          color: var(--text-deep);
-        }
-
-        .text-gradient {
-          background: var(--primary-grad);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          background-clip: text;
-        }
-
-        .bg-gradient-v2 {
-          background: var(--primary-grad);
-        }
-
-        .btn-v2-primary {
-          background: #2A0F02;
-          color: white;
-          border: none;
-          padding: 14px 35px;
-          border-radius: 12px;
-          font-weight: 700;
-          transition: all 0.3s ease;
-          box-shadow: 0 4px 12px rgba(42, 15, 2, 0.2);
-        }
-
-        .btn-v2-primary:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(42, 15, 2, 0.3);
-          background-color: #000000;
-          color: white;
-        }
-
-        .btn-v2-outline {
-          background: transparent;
-          border: 2px solid #8B4A1E;
-          color: #8B4A1E;
-          padding: 12px 35px;
-          border-radius: 12px;
-          font-weight: 700;
-          transition: all 0.3s;
-        }
-
-        .btn-v2-outline:hover {
-          background: #8B4A1E;
-          color: white;
-        }
-
-        /* Hero V2 */
-        .hero-v2 {
-          position: relative;
-          padding-top: 80px;
-          background: linear-gradient(180deg, #FDF6EE 0%, #FFFBF5 100%);
-        }
-
-        .hero-bg-accent {
-          position: absolute;
-          top: -10%;
-          right: -5%;
-          width: 500px;
-          height: 500px;
-          background: radial-gradient(circle, rgba(200, 131, 42, 0.08) 0%, transparent 70%);
-          z-index: 0;
-        }
-
-        .hero-glass-card {
-          position: relative;
-          z-index: 1;
-        }
-
-        .unique-badge {
-          display: inline-flex;
-          align-items: center;
-          gap: 10px;
-          padding: 8px 20px;
-          background: #FFFBF5;
-          border-radius: 50px;
-          box-shadow: 0 5px 15px rgba(139, 74, 30, 0.08);
-          font-size: 14px;
-          font-weight: 600;
-          margin-bottom: 25px;
-          border: 1px solid rgba(200, 131, 42, 0.15);
-          color: #8B4A1E;
-        }
-
-        .pulse-dot {
-          width: 10px;
-          height: 10px;
-          background: #28a745;
-          border-radius: 50%;
-          animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-          0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.7); }
-          70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(40, 167, 69, 0); }
-          100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(40, 167, 69, 0); }
-        }
-
-        .stats-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-          gap: 15px;
-        }
-
-        .stat-pill {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          background: #FFFBF5;
-          padding: 10px 15px;
-          border-radius: 15px;
-          border: 1px solid rgba(200, 131, 42, 0.1);
-          box-shadow: 0 4px 10px rgba(139, 74, 30, 0.05);
-        }
-
-        .stat-num { font-weight: 800; color: #8B4A1E; font-size: 18px; }
-        .stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-light); }
-
-        .image-stack {
-          position: relative;
-          padding: 20px;
-          perspective: 1000px;
-        }
-
-        .img-main {
-          width: 100%;
-          height: clamp(350px, 45vw, 550px);
-          object-fit: cover;
-          border-radius: 30px;
-          box-shadow: 0 30px 60px rgba(139, 74, 30, 0.15);
-          border: 4px solid white;
-        }
-
-        .floating-badge {
-          position: absolute;
-          background: #FFFBF5;
-          padding: 15px 25px;
-          border-radius: 20px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          border: 1px solid rgba(200, 131, 42, 0.15);
-          box-shadow: 0 15px 30px rgba(0,0,0,0.1);
-          animation: float 4s ease-in-out infinite;
-          z-index: 2;
-          color: #2A0F02;
-          font-weight: 600;
-        }
-
-        .top-right { top: -10px; right: -20px; }
-        .bottom-left { bottom: -10px; left: -20px; animation-delay: 2s; }
-
-        @keyframes float {
-          0%, 100% { transform: translateY(0); }
-          50% { transform: translateY(-15px); }
-        }
-
-        /* Roadmap */
-        .roadmap-container {
-          display: flex;
-          justify-content: space-between;
-          position: relative;
-          margin-top: 50px;
-          flex-wrap: wrap;
-          gap: 20px;
-        }
-
-        .roadmap-item {
-          flex: 1;
-          min-width: 140px;
-          text-align: center;
-          cursor: pointer;
-          position: relative;
-          z-index: 1;
-        }
-
-        .roadmap-line {
-          position: absolute;
-          top: 30px;
-          left: 50%;
-          width: 100%;
-          height: 2px;
-          background: #e0e0e8;
-          z-index: -1;
-        }
-
-        .roadmap-item:last-child .roadmap-line { display: none; }
-
-        .roadmap-circle {
-          width: 60px;
-          height: 60px;
-          background: #FFFBF5;
-          border: 2px solid rgba(200, 131, 42, 0.2);
-          border-radius: 50%;
-          margin: 0 auto 15px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          transition: all 0.3s;
-        }
-
-        .roadmap-item.active .roadmap-circle {
-          border-color: #8B4A1E;
-          background: var(--primary-grad);
-          color: white;
-          transform: scale(1.1);
-          box-shadow: 0 0 20px rgba(139, 74, 30, 0.2);
-        }
-
-        .step-icon { font-size: 24px; }
-        .step-num {
-          position: absolute;
-          top: -5px;
-          right: -5px;
-          width: 20px;
-          height: 20px;
-          background: #2A0F02;
-          color: white;
-          border-radius: 50%;
-          font-size: 10px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        }
-
-        .roadmap-text h4 { font-size: 16px; font-weight: 700; margin-bottom: 5px; }
-        .roadmap-text p { font-size: 12px; color: #6b6b8a; display: none; }
-
-        @media (min-width: 992px) {
-           .roadmap-text p { display: block; }
-        }
-
-        .step-details-card {
-          background: #FFFBF5;
-          border-radius: 20px;
-          overflow: hidden;
-          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.05);
-          border: 1px solid rgba(200, 131, 42, 0.15);
-        }
-
-        /* Feature Cards */
-        .feature-card-v2 {
-          background: #FFFBF5;
-          padding: 35px;
-          border-radius: 25px;
-          height: 100%;
-          transition: all 0.3s;
-          border: 1px solid rgba(200, 131, 42, 0.1);
-          box-shadow: 0 10px 30px rgba(139, 74, 30, 0.03);
-        }
-
-        .feature-card-v2:hover {
-          transform: translateY(-10px);
-          box-shadow: 0 20px 40px rgba(139, 74, 30, 0.08);
-          border-color: #C8832A;
-        }
-
-        .feature-icon-box {
-          width: 60px;
-          height: 60px;
-          background: rgba(200, 131, 42, 0.1);
-          color: #8B4A1E;
-          border-radius: 15px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          font-size: 24px;
-          margin-bottom: 25px;
-        }
-
-        /* Instructor Visual */
-        .instructor-visual-v2 {
-          position: relative;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-        }
-
-        .circle-bg {
-          position: absolute;
-          width: 110%;
-          height: 110%;
-          background: radial-gradient(circle, rgba(200, 131, 42, 0.15) 0%, transparent 70%);
-          z-index: -1;
-          border-radius: 50%;
-        }
-
-        .instructor-visual-v2 img {
-          width: 400px;
-          height: 400px;
-          object-fit: cover;
-          border: 10px solid white;
-        }
-
-        /* Testimonials */
-        .review-card-v2 {
-          background: rgba(255, 255, 255, 0.15);
-          backdrop-filter: blur(10px);
-          padding: 30px;
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.3);
-          height: 100%;
-        }
-
-        .review-avatar {
-          width: 60px;
-          height: 60px;
-          border-radius: 50%;
-          margin-bottom: 15px;
-          border: 2px solid white;
-        }
-
-        /* CTA Box */
-        .cta-glass-box {
-          background: #FFFBF5;
-          border: 1px solid rgba(200, 131, 42, 0.15);
-          box-shadow: 0 30px 60px rgba(139, 74, 30, 0.1);
-        }
-
-        /* Modal V2 */
-        .modal-overlay-v2 {
-          position: fixed;
-          top: 0; left: 0; width: 100%; height: 100%;
-          background: rgba(0,0,0,0.7);
-          backdrop-filter: blur(5px);
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          z-index: 9999;
-          padding: 20px;
-        }
-
-        .modal-card-v2 {
-          background: #FFFBF5;
-          width: 100%;
-          max-width: 500px;
-          border-radius: 25px;
-          overflow: hidden;
-          animation: slideUp 0.3s ease-out;
-          border: 1px solid rgba(200, 131, 42, 0.2);
-        }
-
-        @keyframes slideUp {
-          from { transform: translateY(50px); opacity: 0; }
-          to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header-v2 {
-          background: #FDF6EE;
-          padding: 25px;
-          display: flex;
-          justify-content: space-between;
-          align-items: center;
-          border-bottom: 1px solid rgba(200, 131, 42, 0.15);
-        }
-
-        .close-btn {
-          background: none;
-          border: none;
-          font-size: 28px;
-          line-height: 1;
-        }
-
-        .modal-body-v2 { padding: 30px; }
-
-        .form-control-v2, .form-select-v2 {
-          width: 100%;
-          padding: 12px 15px;
-          border-radius: 10px;
-          background: #FFFFFF;
-          border: 1.5px solid rgba(200, 131, 42, 0.2);
-          transition: border-color 0.3s;
-          color: #3D1A08;
-        }
-
-        .form-control-v2:focus {
-          border-color: #8B4A1E;
-          outline: none;
-          box-shadow: 0 0 0 4px rgba(139, 74, 30, 0.1);
-        }
-
-        /* Responsive Fixes */
-        @media (max-width: 991px) {
-          .display-3 { font-size: 2.8rem; }
-          .hero-v2 { padding-top: 60px; }
-          .image-stack { padding: 10px; }
-          .instructor-visual-v2 img { width: 320px; height: 320px; }
-        }
-
-        @media (max-width: 768px) {
-          .display-3 { font-size: 2.2rem; }
-          .hero-v2 { padding-top: 40px; text-align: center; }
-          .stats-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-          .stat-pill { padding: 8px 12px; }
-          .img-main { height: 300px; border-radius: 20px; }
-          .floating-badge { padding: 10px 15px; font-size: 12px; }
-          .top-right { top: -5px; right: -5px; }
-          .bottom-left { bottom: -5px; left: -5px; }
-          
-          .roadmap-container { 
-            display: flex !important;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-            overflow-x: auto !important;
-            gap: 20px;
-            padding: 20px 10px 40px;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none; 
-          }
-          .roadmap-container::-webkit-scrollbar { display: none; }
-
-          .roadmap-item { 
-            flex: 0 0 140px !important;
-            text-align: center;
-            display: block;
-          }
-          .roadmap-line { 
-            display: none; 
-          }
-          .roadmap-circle { margin: 0 auto 15px; flex-shrink: 0; }
-          .roadmap-text h4 { font-size: 14px; }
-          .roadmap-text p { display: none; } 
-          
-          .instructor-v2 { text-align: center; }
-          .instructor-visual-v2 img { width: 250px; height: 250px; }
-          
-          .cta-glass-box { padding: 30px 20px; border-radius: 30px; }
-        }
-
-        @media (max-width: 480px) {
-          .display-3 { font-size: 1.8rem; }
-          .stats-grid { grid-template-columns: 1fr; }
-          .btn-v2-primary, .btn-v2-outline { width: 100%; }
-          .roadmap-container { 
-            padding-left: 15px;
-            padding-right: 15px;
-            flex-direction: row !important;
-            flex-wrap: nowrap !important;
-          }
-          .roadmap-item { flex: 0 0 130px !important; }
-          .roadmap-text h4 { font-size: 13px; }
-        }
-      `}</style>
-    </section>
+              <form onSubmit={handleSubmit} className="space-y-4 p-5">
+                {[
+                  { id: 'aa-name', label: 'Full Name', name: 'name', type: 'text' },
+                  { id: 'aa-email', label: 'Email', name: 'email', type: 'email' },
+                  { id: 'aa-phone', label: 'Phone', name: 'phone', type: 'tel' },
+                ].map((field) => (
+                  <div key={field.id}>
+                    <label htmlFor={field.id} className="mb-1 block text-sm font-bold text-[#5c3d26]">
+                      {field.label}
+                    </label>
+                    <input
+                      id={field.id}
+                      type={field.type}
+                      name={field.name}
+                      value={formData[field.name]}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full rounded-lg border border-[#c8832a]/20 bg-white px-3 py-2.5 text-[#3d1a08] outline-none focus:border-[#8b4a1e] focus:ring-4 focus:ring-[#8b4a1e]/10"
+                    />
+                  </div>
+                ))}
+                <div>
+                  <label htmlFor="aa-experience" className="mb-1 block text-sm font-bold text-[#5c3d26]">
+                    Experience Level
+                  </label>
+                  <select
+                    id="aa-experience"
+                    name="experience"
+                    value={formData.experience}
+                    onChange={handleInputChange}
+                    className="w-full rounded-lg border border-[#c8832a]/20 bg-white px-3 py-2.5 text-[#3d1a08] outline-none focus:border-[#8b4a1e] focus:ring-4 focus:ring-[#8b4a1e]/10"
+                  >
+                    <option value="intermediate">Intermediate</option>
+                    <option value="advanced">Advanced</option>
+                    <option value="expert">Professional</option>
+                  </select>
+                </div>
+                <button
+                  type="submit"
+                  onClick={handlePayment}
+                  className="w-full rounded-xl bg-[#2a0f02] py-3 text-sm font-extrabold text-white transition hover:bg-black"
+                >
+                  Proceed to Payment (₹999)
+                </button>
+              </form>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
   );
 }
 

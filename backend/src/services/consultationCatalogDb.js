@@ -81,10 +81,7 @@ export const getActiveServiceBySlug = async (slug) => {
   return formatServiceDoc(service, category?.name || '');
 };
 
-export const seedCatalogFromStaticIfEmpty = async () => {
-  const count = await ConsultationService.countDocuments();
-  if (count > 0) return { seeded: false, count };
-
+export const syncCatalogFromStatic = async () => {
   for (let ci = 0; ci < CONSULTATION_CATEGORIES.length; ci += 1) {
     const cat = CONSULTATION_CATEGORIES[ci];
     await ConsultationCategory.findOneAndUpdate(
@@ -124,6 +121,9 @@ export const seedCatalogFromStaticIfEmpty = async () => {
     }
   }
 
-  const newCount = await ConsultationService.countDocuments();
-  return { seeded: true, count: newCount };
+  const count = await ConsultationService.countDocuments();
+  return { synced: true, count };
 };
+
+/** @deprecated use syncCatalogFromStatic — kept for callers */
+export const seedCatalogFromStaticIfEmpty = syncCatalogFromStatic;

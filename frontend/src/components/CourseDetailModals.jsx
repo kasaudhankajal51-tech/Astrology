@@ -317,7 +317,19 @@ export function EnquiryModal({ open, onClose, course, enquiryData, onChange, onS
             <label htmlFor="enq-age" className={LABEL}>
               Age
             </label>
-            <IconInput icon={Calendar} id="enq-age" type="number" name="age" value={enquiryData.age} onChange={onChange} placeholder="Your age" required />
+            <IconInput 
+              icon={Calendar} 
+              id="enq-age" 
+              type="text" 
+              inputMode="numeric" 
+              pattern="[0-9]*" 
+              name="age" 
+              value={enquiryData.age} 
+              onChange={onChange} 
+              placeholder="Your age" 
+              maxLength={3}
+              required 
+            />
           </div>
           <div>
             <label htmlFor="enq-interest" className={LABEL}>

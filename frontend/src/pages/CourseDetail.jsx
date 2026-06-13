@@ -205,6 +205,10 @@ function CourseDetail() {
       setEnquiryData({ ...enquiryData, phone: e.target.value.replace(/\D/g, '').slice(0, 10) });
       return;
     }
+    if (e.target.name === 'age') {
+      setEnquiryData({ ...enquiryData, age: e.target.value.replace(/\D/g, '').slice(0, 3) });
+      return;
+    }
     setEnquiryData({ ...enquiryData, [e.target.name]: e.target.value });
   };
 

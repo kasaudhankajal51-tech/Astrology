@@ -24,7 +24,7 @@ import {
 import { BTN, TYPE } from '../components/consultation/tokens';
 import { getContactValidationError, normalizeIndianMobile } from '../utils/validation';
 import { reportPaymentFailure, buildPaymentSuccessPath } from '../utils/paymentUtils';
-import CountdownTimer from '../components/webinar/CountdownTimer';
+import CourseTimer from '../components/CourseTimer';
 
 const RECORDED_PAYMENT_ENABLED = true;
 const PAGE_WRAP = 'mx-auto w-full max-w-[var(--container-public)] px-[var(--page-pad-x)]';
@@ -758,6 +758,7 @@ function CourseDetail() {
 }
 
 function EnrollPanel({
+  course,
   canPayOnline,
   isLiveCourse,
   getCoursePrice,
@@ -800,9 +801,11 @@ function EnrollPanel({
 
       {couponProps ? <CouponControls {...couponProps} compact /> : null}
 
-      <div className="my-3 flex justify-center w-full">
-        <CountdownTimer compactCard={true} hours={5} storageKey="course_detail_timer" />
-      </div>
+      {!isLiveCourse && getCoursePrice() > 0 && (
+        <div className="rounded-xl bg-gradient-to-br from-site-primary to-[#3a1c0c] px-4 pb-3 pt-2.5">
+          <CourseTimer courseId={course?.id} label="Offer expires in" />
+        </div>
+      )}
 
       <button
         type="button"

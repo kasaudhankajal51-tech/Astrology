@@ -18,6 +18,7 @@ const PAGE_META = {
     heading: 'Live classes',
     subtitle: 'Interactive batches with expert mentors. Enquire to confirm schedule and fees.',
     typeLabel: 'live class',
+    heroImg: '/live.jpg',
   },
   recorded: {
     title: 'Recorded Astrology Courses',
@@ -26,6 +27,7 @@ const PAGE_META = {
     heading: 'Recorded courses',
     subtitle: 'Learn at your own pace with structured modules and lifetime dashboard access.',
     typeLabel: 'recorded course',
+    heroImg: '/recorded.jpg',
   },
   all: {
     title: 'Professional Astrology Courses',
@@ -126,30 +128,68 @@ function Courses({ mode = 'all' }) {
     <div className="min-h-screen w-full bg-site-bg font-body text-site-text antialiased">
       <SEO title={meta.title} description={meta.description} url={meta.url} />
 
-      <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-4 pt-6 sm:pb-5 sm:pt-7`}>
-        <h1 className="!m-0 font-heading text-[clamp(1.5rem,3.2vw,2.125rem)] font-bold leading-tight text-site-primary">
-          {meta.heading}
-        </h1>
-        <p className="!mt-1.5 max-w-2xl font-body text-sm leading-relaxed text-site-muted">{meta.subtitle}</p>
-        {!loading && (
-          <p className="!mt-2 font-body text-xs font-medium text-site-muted">
-            <strong className="font-bold tabular-nums text-site-primary">{dbCourses.length}</strong>
-            {' '}
-            {dbCourses.length === 1 ? meta.typeLabel : `${meta.typeLabel}s`}
-            {' '}
-            available
-            {categoryFilters.length > 1 && (
-              <>
+      {meta.heroImg ? (
+        <header className="relative w-full overflow-hidden border-b border-site-accent-dark/8">
+          <img
+            src={meta.heroImg}
+            alt={meta.heading}
+            className="block w-full object-cover object-top"
+            style={{ maxHeight: '320px' }}
+          />
+          {/* dark gradient overlay for text readability */}
+          <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/20" />
+          <div className={`${PAGE_WRAP} absolute inset-0 z-10 flex flex-col justify-end pb-6 sm:pb-8`}>
+            <h1 className="!m-0 font-heading text-[clamp(1.75rem,4vw,2.75rem)] font-bold leading-tight !text-white drop-shadow-md">
+              {meta.heading}
+            </h1>
+            <p className="!mt-2 max-w-2xl font-body text-sm leading-relaxed !text-white/80 sm:text-base">
+              {meta.subtitle}
+            </p>
+            {!loading && (
+              <p className="!mt-3 font-body text-xs font-medium !text-white/60">
+                <strong className="font-bold tabular-nums !text-white/90">{dbCourses.length}</strong>
                 {' '}
-                ·{' '}
-                <strong className="font-bold tabular-nums text-site-primary">{categoryFilters.length - 1}</strong>
+                {dbCourses.length === 1 ? meta.typeLabel : `${meta.typeLabel}s`}
                 {' '}
-                categories
-              </>
+                available
+                {categoryFilters.length > 1 && (
+                  <>
+                    {' · '}
+                    <strong className="font-bold tabular-nums !text-white/90">{categoryFilters.length - 1}</strong>
+                    {' '}
+                    categories
+                  </>
+                )}
+              </p>
             )}
-          </p>
-        )}
-      </header>
+          </div>
+        </header>
+      ) : (
+        <header className={`${PAGE_WRAP} border-b border-site-accent-dark/8 pb-4 pt-6 sm:pb-5 sm:pt-7`}>
+          <h1 className="!m-0 font-heading text-[clamp(1.5rem,3.2vw,2.125rem)] font-bold leading-tight text-site-primary">
+            {meta.heading}
+          </h1>
+          <p className="!mt-1.5 max-w-2xl font-body text-sm leading-relaxed text-site-muted">{meta.subtitle}</p>
+          {!loading && (
+            <p className="!mt-2 font-body text-xs font-medium text-site-muted">
+              <strong className="font-bold tabular-nums text-site-primary">{dbCourses.length}</strong>
+              {' '}
+              {dbCourses.length === 1 ? meta.typeLabel : `${meta.typeLabel}s`}
+              {' '}
+              available
+              {categoryFilters.length > 1 && (
+                <>
+                  {' '}
+                  ·{' '}
+                  <strong className="font-bold tabular-nums text-site-primary">{categoryFilters.length - 1}</strong>
+                  {' '}
+                  categories
+                </>
+              )}
+            </p>
+          )}
+        </header>
+      )}
 
       <div className="sticky top-[var(--header-h)] z-[100] border-b border-site-accent-dark/10 bg-site-surface/95 shadow-sm backdrop-blur-md">
         <div className={`${PAGE_WRAP} flex flex-col gap-2.5 py-2.5 sm:gap-3 sm:py-3`}>

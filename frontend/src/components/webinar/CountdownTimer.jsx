@@ -1,7 +1,93 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const CountdownTimer = ({ minimal = false, compactCard = false, hours = 24, storageKey = 'webinar_timer_v4' }) => {
+// ─── PURE SVG 7-SEGMENT DISPLAY ───────────────────────────────────────────────
+const W = 15, H = 26, T = 3.2, G = 1.2, SK = 0;
+const SEG_POINTS = {
+  a: [[G+SK,G],[W-G+SK,G],[W-G-T+SK,G+T],[G+T+SK,G+T]],
+  b: [[W-G+SK,G*2],[W-G,H/2-G],[W-G-T,H/2-G-T],[W-G-T+SK,G*2+T]],
+  c: [[W-G,H/2+G],[W-G-SK,H-G*2],[W-G-T-SK,H-G*2-T],[W-G-T,H/2+G+T]],
+  d: [[G+T-SK,H-G-T],[W-G-T-SK,H-G-T],[W-G-SK,H-G],[G-SK,H-G]],
+  e: [[G,H/2+G],[G+T,H/2+G+T],[G+T-SK,H-G*2-T],[G-SK,H-G*2]],
+  f: [[G+SK,G*2],[G+T+SK,G*2+T],[G+T,H/2-G-T],[G,H/2-G]],
+  g: [[G+T,H/2-T/2],[W-G-T,H/2-T/2],[W-G-T,H/2+T/2],[G+T,H/2+T/2]],
+};
+
+const DIGIT_MAP = {
+  "0":["a","b","c","d","e","f"],
+  "1":["b","c"],
+  "2":["a","b","g","e","d"],
+  "3":["a","b","g","c","d"],
+  "4":["f","g","b","c"],
+  "5":["a","f","g","c","d"],
+  "6":["a","f","g","e","c","d"],
+  "7":["a","b","c"],
+  "8":["a","b","c","d","e","f","g"],
+  "9":["a","b","c","d","f","g"],
+};
+
+const pts = (arr) => arr.map(([x, y]) => `${x},${y}`).join(" ");
+const SEGS = Object.fromEntries(Object.entries(SEG_POINTS).map(([k, v]) => [k, pts(v)]));
+
+const ON_COLOR  = "#ffaa22";
+const OFF_COLOR = "rgba(255,90,0,0.09)";
+const ON_FILTER =
+  "drop-shadow(0 0 2px rgba(255,180,30,1)) " +
+  "drop-shadow(0 0 6px rgba(255,130,0,0.85)) " +
+  "drop-shadow(0 0 14px rgba(255,80,0,0.55))";
+
+function Digit({ char }) {
+  const on = new Set(DIGIT_MAP[char] || []);
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} className="w-full h-full" style={{ overflow: "visible", display: "block" }}>
+      {Object.entries(SEGS).map(([key, points]) => {
+        const lit = on.has(key);
+        return (
+          <polygon
+            key={key}
+            points={points}
+            fill={lit ? ON_COLOR : OFF_COLOR}
+            style={{ filter: lit ? ON_FILTER : "none", transition: "fill 0.1s" }}
+          />
+        );
+      })}
+    </svg>
+  );
+}
+
+function SegColon({ visible }) {
+  const DW = 3.2, DH = 7, CX = 6;
+  const color = visible ? "#ff8c00" : "rgba(255,90,0,0.09)";
+  const glow  = visible
+    ? "drop-shadow(0 0 3px rgba(255,160,0,0.95)) drop-shadow(0 0 8px rgba(255,90,0,0.7))"
+    : "none";
+  return (
+    <svg viewBox={`0 0 12 ${H}`} className="w-full h-full" style={{ overflow: "visible", display: "block" }}>
+      <rect x={CX-DW/2} y={H*0.28-DH/2} width={DW} height={DH} rx={1.5} fill={color} style={{ filter: glow, transition: "fill 0.1s" }} />
+      <rect x={CX-DW/2} y={H*0.72-DH/2} width={DW} height={DH} rx={1.5} fill={color} style={{ filter: glow, transition: "fill 0.1s" }} />
+    </svg>
+  );
+}
+
+function DigitPair({ value, label }) {
+  const str = String(value).padStart(2, "0");
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <div className="flex gap-1 h-8 sm:h-9 md:h-11 w-[2.2rem] sm:w-[2.4rem] md:w-[3.0rem]">
+        <Digit char={str[0]} />
+        <Digit char={str[1]} />
+      </div>
+      <span className="text-[8px] sm:text-[9px] font-bold text-white/40 tracking-[1.5px] uppercase font-['Poppins',sans-serif]">
+        {label}
+      </span>
+    </div>
+  );
+}
+
+// ─── Main Timer Component ─────────────────────────────────────────────────────
+
+const CountdownTimer = ({ compactCard = false, hours = 24, storageKey = 'webinar_timer_v4' }) => {
   const [timeLeft, setTimeLeft] = useState({ hours: 0, minutes: 0, seconds: 0 });
+  const [colonOn, setColonOn] = useState(true);
 
   useEffect(() => {
     // Dynamic Hour Persistence Logic
@@ -19,7 +105,7 @@ const CountdownTimer = ({ minimal = false, compactCard = false, hours = 24, stor
 
     let targetTime = getTargetTime();
 
-    const timer = setInterval(() => {
+    const tick = () => {
       const now = Date.now();
       let difference = targetTime - now;
 
@@ -35,204 +121,35 @@ const CountdownTimer = ({ minimal = false, compactCard = false, hours = 24, stor
         minutes: Math.floor((difference / 1000 / 60) % 60),
         seconds: Math.floor((difference / 1000) % 60)
       });
-    }, 1000);
+      setColonOn(prev => !prev);
+    };
 
+    tick();
+    const timer = setInterval(tick, 1000);
     return () => clearInterval(timer);
   }, [hours, storageKey]);
 
-  if (minimal) {
-    return (
-      <div className="digital-timer-minimal">
-        <div className="timer-header-mini">OFFER ENDS IN</div>
-        <div className="timer-box-wrapper">
-          <div className="timer-display-mini">
-            <div className="timer-slot">
-              <span className="slot-val">{String(timeLeft.hours).padStart(2, '0')}</span>
-              <span className="slot-label">HRS</span>
-            </div>
-            <span className="slot-sep">:</span>
-            <div className="timer-slot">
-              <span className="slot-val">{String(timeLeft.minutes).padStart(2, '0')}</span>
-              <span className="slot-label">MINS</span>
-            </div>
-            <span className="slot-sep">:</span>
-            <div className="timer-slot">
-              <span className="slot-val">{String(timeLeft.seconds).padStart(2, '0')}</span>
-              <span className="slot-label">SECS</span>
-            </div>
-          </div>
-        </div>
-        <style>{`
-          @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700&display=swap');
-          
-          .digital-timer-minimal {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 10px;
-          }
-          .timer-header-mini {
-            font-size: 0.7rem;
-            font-weight: 700;
-            color: #ffffff;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            text-align: center;
-            width: 100%;
-            opacity: 0.8;
-          }
-          .timer-box-wrapper {
-            background: #000000;
-            padding: 12px 25px;
-            border-radius: 12px;
-            border: 1px solid rgba(255, 157, 0, 0.4);
-            box-shadow: 0 0 25px rgba(0, 0, 0, 1);
-          }
-          .timer-display-mini {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-          }
-          .timer-slot {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 50px;
-          }
-          .slot-val {
-            font-size: 2.8rem;
-            font-weight: 700;
-            color: #ff9d00;
-            line-height: 1;
-            font-family: 'Orbitron', sans-serif;
-            text-shadow: 0 0 25px rgba(255, 157, 0, 0.9);
-          }
-          .slot-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            color: #ffffff;
-            margin-top: 8px;
-            letter-spacing: 1.5px;
-            opacity: 0.6;
-          }
-          .slot-sep {
-            color: #ff9d00;
-            font-weight: 700;
-            font-size: 2.2rem;
-            margin-top: -20px;
-            text-shadow: 0 0 25px rgba(255, 157, 0, 0.9);
-          }
-          @media (max-width: 600px) {
-            .slot-val { font-size: 2.2rem; }
-            .slot-sep { font-size: 1.8rem; margin-top: -15px; }
-            .timer-box-wrapper { padding: 10px 18px; }
-            .timer-slot { min-width: 40px; }
-            .timer-display-mini { gap: 10px; }
-          }
-          @media (max-width: 480px) {
-            .slot-val { font-size: 1.8rem; }
-            .slot-sep { font-size: 1.5rem; margin-top: -12px; }
-            .timer-box-wrapper { padding: 8px 15px; }
-            .timer-slot { min-width: 35px; }
-            .timer-display-mini { gap: 8px; }
-          }
-        `}</style>
-      </div>
-    );
-  }
-
   return (
-    <div className={`countdown-timer-container ${compactCard ? 'is-compact-card' : ''}`}>
-      <div className="timer-title">OFFER EXPIRES IN</div>
-      <div className="timer-display">
-        <div className="timer-unit">
-          <span className="unit-value">{String(timeLeft.hours).padStart(2, '0')}</span>
-          <span className="unit-label">HOURS</span>
-        </div>
-        <span className="timer-separator">:</span>
-        <div className="timer-unit">
-          <span className="unit-value">{String(timeLeft.minutes).padStart(2, '0')}</span>
-          <span className="unit-label">MINS</span>
-        </div>
-        <span className="timer-separator">:</span>
-        <div className="timer-unit">
-          <span className="unit-value">{String(timeLeft.seconds).padStart(2, '0')}</span>
-          <span className="unit-label">SECS</span>
+    <div className={`flex flex-col items-center gap-2 p-1.5 w-full mx-auto max-w-[320px] ${compactCard ? 'my-0' : 'my-4'}`}>
+      <p className={`m-0 text-[11px] font-black tracking-[3px] uppercase ${compactCard ? 'text-[#8b4a1e]' : 'text-white/80'}`}>
+        OFFER ENDS IN
+      </p>
+      <div className="relative w-full overflow-hidden rounded-2xl border border-orange-500/30 bg-black/85 px-4 py-3 shadow-[inset_0_2px_15px_rgba(0,0,0,0.8),0_0_20px_rgba(255,100,0,0.15)] backdrop-blur-md flex items-center justify-center">
+        {/* Scanlines overlay */}
+        <div className="pointer-events-none absolute inset-0 z-10 opacity-30 mix-blend-overlay" style={{ background: "repeating-linear-gradient(0deg, transparent, transparent 3px, rgba(0,0,0,0.4) 3px, rgba(0,0,0,0.4) 4px)" }} />
+        
+        <div className="relative z-20 flex items-center gap-2 sm:gap-3">
+          <DigitPair value={timeLeft.hours} label="HRS" />
+          <div className="h-6 sm:h-7 md:h-9 w-2.5 sm:w-3 -mt-3 sm:-mt-3.5">
+            <SegColon visible={colonOn} />
+          </div>
+          <DigitPair value={timeLeft.minutes} label="MINS" />
+          <div className="h-6 sm:h-7 md:h-9 w-2.5 sm:w-3 -mt-3 sm:-mt-3.5">
+            <SegColon visible={colonOn} />
+          </div>
+          <DigitPair value={timeLeft.seconds} label="SECS" />
         </div>
       </div>
-      <style>{`
-        .countdown-timer-container {
-          background: #fff;
-          border: 2px solid #3B2261;
-          padding: 30px 50px;
-          border-radius: 24px;
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 15px;
-          max-width: max-content;
-          margin: 40px auto;
-          box-shadow: 0 15px 35px rgba(59, 34, 97, 0.1);
-        }
-        .timer-title { font-size: 0.9rem; font-weight: 900; color: #3B2261; letter-spacing: 2px; }
-        .timer-display { display: flex; align-items: center; gap: 15px; }
-        .timer-unit {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          background: #3B2261;
-          padding: 12px 20px;
-          border-radius: 15px;
-          min-width: 85px;
-        }
-        .unit-value { font-size: 2.8rem; font-weight: 900; color: #fff; line-height: 1; }
-        .unit-label { font-size: 0.65rem; font-weight: 800; color: rgba(255, 255, 255, 0.6); margin-top: 5px; }
-        .timer-separator { font-size: 2rem; font-weight: 900; color: #EE6662; }
-        
-        .countdown-timer-container.is-compact-card {
-          padding: 15px 20px;
-          border-radius: 16px;
-          border: 1.5px solid rgba(139, 74, 30, 0.2);
-          margin: 0;
-          width: 100%;
-          max-width: 100%;
-          gap: 10px;
-          background: linear-gradient(135deg, #ffffff 0%, #fdf6ee 100%);
-          box-shadow: 0 8px 20px rgba(139, 74, 30, 0.08);
-        }
-        .is-compact-card .timer-title { 
-          font-size: 0.75rem; 
-          letter-spacing: 1px; 
-          color: #8b4a1e; 
-        }
-        .is-compact-card .timer-display { gap: 8px; }
-        .is-compact-card .timer-unit { 
-          padding: 8px 12px; 
-          min-width: 65px; 
-          border-radius: 12px; 
-          background: #2a0f02;
-          box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
-        }
-        .is-compact-card .unit-value { 
-          font-size: 1.8rem; 
-          color: #ffffff; 
-        }
-        .is-compact-card .unit-label { 
-          font-size: 0.55rem; 
-          margin-top: 3px; 
-          color: rgba(255, 255, 255, 0.7);
-        }
-        .is-compact-card .timer-separator { 
-          font-size: 1.5rem; 
-          color: #c8832a;
-        }
-
-        @media (max-width: 576px) {
-          .countdown-timer-container:not(.is-compact-card) { padding: 20px 30px; }
-          .countdown-timer-container:not(.is-compact-card) .unit-value { font-size: 2rem; }
-          .countdown-timer-container:not(.is-compact-card) .timer-unit { min-width: 70px; padding: 10px; }
-        }
-      `}</style>
     </div>
   );
 };

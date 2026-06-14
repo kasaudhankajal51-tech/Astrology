@@ -115,74 +115,78 @@ function StandaloneLayout() {
   return (
     <div className="contextual-shell min-h-screen bg-[#fff7ed] text-[#2a0f02]">
       <motion.header
-        initial={{ opacity: 0, y: -14 }}
+        initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.35, ease: 'easeOut' }}
-        className="sticky top-0 z-[1030] bg-[#fffaf3]/95 backdrop-blur-xl"
+        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+        className="sticky top-0 z-[1030] bg-[#fffaf3]/80 backdrop-blur-2xl border-b border-[#3D1A08]/5 transition-all duration-300"
       >
-        <div className="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 sm:px-6 lg:px-8">
-          <Link to="/" className="flex min-w-0 items-center gap-3 no-underline">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#2a0f02] text-white shadow-lg shadow-[#8b4a1e]/20">
-              <i className="fas fa-moon text-sm"></i>
-            </span>
-            <span className="min-w-0">
-              <span className="block truncate text-[10px] font-black uppercase tracking-[0.24em] text-[#c8832a]">
+        <div className="mx-auto flex max-w-[90rem] items-center justify-between h-20 px-4 sm:px-6 lg:px-8">
+          {/* Logo & Branding */}
+          <Link to="/" className="flex items-center gap-4 !no-underline group outline-none">
+            <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-[#3D1A08] text-[#FDF6EE] shadow-md shadow-[#3D1A08]/20 transition-transform duration-300 group-hover:scale-[1.03]">
+              <i className="fas fa-moon text-lg"></i>
+            </div>
+            <div className="flex flex-col justify-center">
+              <span className="text-[9px] font-black uppercase tracking-[0.3em] !text-[#C8832A] mb-1">
                 {meta.eyebrow}
               </span>
-              <span className="block truncate font-serif text-lg font-bold text-[#2a0f02] sm:text-xl">
+              <span className="font-serif text-[22px] font-bold !text-[#3D1A08] leading-none tracking-tight">
                 {meta.title}
               </span>
-            </span>
+            </div>
           </Link>
 
-          <nav className="hidden items-center gap-2 md:flex">
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/">
+          {/* Center Navigation - Minimalist */}
+          <nav className="hidden md:flex items-center gap-8">
+            <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/">
               Home
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/courses">
+            <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/courses">
               Courses
             </Link>
-            <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/consultations">
+            <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/consultations">
               Consultation
             </Link>
             {authState.isStudent ? (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/dashboard">
+              <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/dashboard">
                 Dashboard
               </Link>
             ) : (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/login">
+              <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/login">
                 Student Login
               </Link>
             )}
             {authState.isAdmin && (
-              <Link className="rounded-full px-4 py-2 text-sm font-bold text-[#6f4a32] no-underline transition hover:bg-[#f8ead8] hover:text-[#2a0f02]" to="/admin">
+              <Link className="text-[14px] font-semibold tracking-wide !text-[#5C2D12]/80 !no-underline transition-colors duration-200 hover:!text-[#C8832A]" to="/admin">
                 Admin
               </Link>
             )}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-2">
+          {/* Right Action Buttons - High Contrast */}
+          <div className="flex shrink-0 items-center gap-4">
             <Link
               to={meta.secondary.to}
-              className="hidden rounded-full border border-[#ead8c6] px-3 py-2 text-xs font-black text-[#6f4a32] no-underline transition hover:border-[#c8832a] hover:text-[#2a0f02] sm:inline-flex"
+              className="hidden sm:inline-flex items-center justify-center rounded-full border border-[#8B4A1E]/30 bg-transparent px-6 py-2.5 text-[14px] font-bold !text-[#8B4A1E] !no-underline transition-all duration-300 hover:border-[#8B4A1E] hover:bg-[#8B4A1E]/5 outline-none"
             >
               {meta.secondary.label}
             </Link>
             <Link
               to={meta.primary.to}
-              className="inline-flex items-center gap-2 rounded-full bg-[#2a0f02] px-4 py-2 text-xs font-black text-white no-underline shadow-lg shadow-[#8b4a1e]/20 transition hover:bg-[#8b4a1e]"
+              className="group inline-flex items-center gap-2.5 rounded-full bg-[#3D1A08] px-7 py-2.5 text-[14px] font-bold tracking-wide !text-white !no-underline shadow-md shadow-[#3D1A08]/10 transition-all duration-300 hover:bg-[#2A0F02] hover:shadow-lg hover:shadow-[#3D1A08]/20 hover:-translate-y-[1px] outline-none"
             >
               {meta.primary.label}
-              <i className="fas fa-arrow-right text-[11px]"></i>
+              <i className="fas fa-arrow-right text-[11px] opacity-70 group-hover:translate-x-1 group-hover:opacity-100 transition-all duration-300"></i>
             </Link>
             {authState.isStudent && pathname !== '/login' && (
               <button
                 type="button"
                 onClick={handleStudentLogout}
-                className="hidden h-9 w-9 items-center justify-center rounded-full border border-[#ead8c6] text-[#6f4a32] transition hover:border-[#c8832a] hover:bg-[#f8ead8] sm:inline-flex"
+                className="hidden sm:flex h-[42px] w-[42px] items-center justify-center rounded-full border border-[#8B4A1E]/20 bg-transparent !text-[#8B4A1E] transition-all duration-300 hover:bg-[#8B4A1E]/10 outline-none"
                 aria-label="Logout"
+                title="Logout"
               >
-                <i className="fas fa-sign-out-alt text-xs"></i>
+                <i className="fas fa-sign-out-alt text-sm"></i>
               </button>
             )}
           </div>

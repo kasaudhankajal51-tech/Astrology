@@ -8,6 +8,8 @@ import {
   Clock,
   Layers,
   User,
+  Zap,
+  PhoneCall,
 } from 'lucide-react';
 import API_BASE from '../utils/api';
 import toast from '@/utils/toast';
@@ -779,13 +781,21 @@ function EnrollPanel({
             Saved ₹{getDiscountAmount()} · was ₹{getCoursePrice().toLocaleString('en-IN')}
           </p>
         ) : null}
-        <p className="!mt-1 font-body text-xs text-site-muted">
-          {canPayOnline
-            ? 'Instant access after payment.'
-            : isLiveCourse
-              ? 'Submit an enquiry for batch schedule and fees.'
-              : 'Our counsellor will call you with details.'}
-        </p>
+        <div className="!mt-4 flex items-start gap-3 rounded-xl bg-gradient-to-br from-slate-50 to-stone-50 p-3.5 border border-stone-200/60 shadow-[0_2px_10px_rgba(0,0,0,0.02)]">
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white shadow-sm border border-stone-100 text-site-accent">
+            {canPayOnline ? <Zap size={14} /> : isLiveCourse ? <Calendar size={14} /> : <PhoneCall size={14} />}
+          </div>
+          <div className="flex flex-col text-left">
+            <span className="font-heading text-[0.65rem] font-bold uppercase tracking-wider text-site-muted mb-0.5">Note</span>
+            <p className="!m-0 font-body text-[0.875rem] font-medium leading-snug text-site-primary">
+              {canPayOnline
+                ? 'Instant access to all modules after payment.'
+                : isLiveCourse
+                  ? 'Submit an enquiry for batch schedule and fees.'
+                  : 'Our counsellor will call you with details.'}
+            </p>
+          </div>
+        </div>
       </div>
 
       {couponProps ? <CouponControls {...couponProps} compact /> : null}

@@ -86,7 +86,10 @@ function AstroShop() {
         url="/shop"
       />
 
-      <div className="relative m-0 bg-[linear-gradient(rgba(42,15,2,0.82),rgba(42,15,2,0.82)),url('https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=1200')_center/cover] py-[clamp(3rem,7vw,5rem)] pb-[clamp(2.5rem,5vw,3.5rem)] text-center">
+      <div 
+        className="relative m-0 py-[clamp(3rem,7vw,5rem)] pb-[clamp(2.5rem,5vw,3.5rem)] text-center"
+        style={{ background: "linear-gradient(rgba(42,15,2,0.82), rgba(42,15,2,0.82)), url('https://images.unsplash.com/photo-1596944229581-7951ef4957ad?auto=format&fit=crop&q=80&w=1200') center/cover" }}
+      >
         <div className={WRAP}>
           <span className="mb-3 inline-block px-3 py-1 text-xs font-bold uppercase tracking-[0.14em] text-site-accent">
             Authentic & Certified
@@ -100,7 +103,7 @@ function AstroShop() {
           <button
             type="button"
             onClick={() => openShopifyStore({ storeUrl: settings?.shopifyStoreUrl, toast: toast.error })}
-            className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white backdrop-blur transition hover:bg-white hover:text-site-primary"
+            className="mt-6 inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 px-6 py-3 text-sm font-bold uppercase tracking-wide text-white backdrop-blur transition hover:bg-white hover:text-[#3D1A08]"
           >
             <i className="fas fa-external-link-alt" aria-hidden="true" />
             Open Full Shopify Store

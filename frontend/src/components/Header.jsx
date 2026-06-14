@@ -883,7 +883,7 @@ function Header() {
           <div className="container-fluid nav-inner px-3 px-md-4 px-lg-5 d-flex align-items-center justify-content-between flex-nowrap">
             <Link className="navbar-brand d-flex align-items-center p-0 me-0" to="/" style={{ flexShrink: 0 }} aria-label="DS Institute home">
               <div className="logo-icon-wrapper">
-                <img src="/newbg.webp" alt="DS Institute logo" fetchpriority="high" />
+                <img src="/newbg.webp" alt="DS Institute logo" fetchPriority="high" />
               </div>
             </Link>
              
